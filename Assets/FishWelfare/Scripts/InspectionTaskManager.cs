@@ -12,7 +12,6 @@ public class ActivityManager : MonoBehaviour
     void Start()
     {
         taskHolder = GameObject.FindObjectOfType<TaskHolder>();
-        Debug.Log("Lets go");
     }
 
     // Update is called once per frame
