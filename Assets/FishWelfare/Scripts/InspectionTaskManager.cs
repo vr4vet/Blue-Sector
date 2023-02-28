@@ -4,10 +4,11 @@ using UnityEngine;
 using Tablet;
 using BNG;
 
-public class ActivityManager : MonoBehaviour
+public class InspectionTaskManager : MonoBehaviour
 {
-
-    public TaskHolder taskHolder;
+    private int inspectedFish = 0;
+    private int inspectionTarget = 1;
+    private TaskHolder taskHolder;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,5 +24,15 @@ public class ActivityManager : MonoBehaviour
     public void test(string var1)
     {
         Debug.Log(var1);
+    }
+
+    public void ProgressInspection() 
+    {
+        Debug.Log("Progressing task");
+        inspectedFish++;
+        if(inspectedFish == inspectionTarget){
+            taskHolder.GetTaskList()[0].activities[2].AktivitetIsDone(true);
+            taskHolder.GetTaskList()[0].activities[2].SetAchievedPoeng(10);
+        }
     }
 }

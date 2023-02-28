@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class TankController : MonoBehaviour
 {
+    private InspectionTaskManager inspectionTaskManager;
     // Start is called before the first frame update
     void Start()
     {
-        
+        inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
     }
 
     // Update is called once per frame
@@ -18,6 +19,7 @@ public class TankController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        Debug.Log("GIMME FISH");
+        Debug.Log("*TRIGGERED*");
+        inspectionTaskManager.ProgressInspection();
     }
 }
