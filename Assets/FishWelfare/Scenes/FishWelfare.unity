@@ -282,6 +282,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2281686386275440643, guid: f590497235ba9ad4280987c205335075,
         type: 3}
+      propertyPath: _skillList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: ae343a266ec485c4faee02b867c1a5ff,
+        type: 2}
+    - target: {fileID: 2281686386275440643, guid: f590497235ba9ad4280987c205335075,
+        type: 3}
       propertyPath: _taskAndTargerts.Array.data[0].task
       value: 
       objectReference: {fileID: 11400000, guid: b9b29f9b99afbdf439e574296192c41d,
@@ -947,7 +953,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29af342ab4b91f948a6194669d181fc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taskHolder: {fileID: 725523541}
 --- !u!4 &489729445
 Transform:
   m_ObjectHideFlags: 0
@@ -1038,6 +1043,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 507068712}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &512401772 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1945841171025849801, guid: b1a16633da5e8c844a7d1af34372156d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1119900164}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cdea428d48e2bb488d33d5f75c39bb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &575326089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1322,18 +1339,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d78a23d6765cb4488cf21c8fcd9d6b4, type: 3}
---- !u!114 &725523541 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2281686386275440643, guid: f590497235ba9ad4280987c205335075,
-    type: 3}
-  m_PrefabInstance: {fileID: 215999501}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ae5105792e7c4042871fe5abafd7420, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &842976852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1958,6 +1963,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1370469764}
   - component: {fileID: 1370469765}
+  - component: {fileID: 1370469766}
   m_Layer: 0
   m_Name: FishTank
   m_TagString: Untagged
@@ -1999,6 +2005,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2990996, y: 0.6637131, z: 1.2278353}
   m_Center: {x: 0.0068350434, y: 0.33739948, z: 0.004597485}
+--- !u!114 &1370469766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370469763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c957dbac8e50d024b8536c51d73c8ef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1461729774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2146,6 +2164,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4786920997832897282, guid: 4ac7df741a9c0a2418ec19477729ee3d,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6065732222583390601, guid: 4ac7df741a9c0a2418ec19477729ee3d,
         type: 3}
       propertyPath: DefaultLocomotion
@@ -2156,6 +2179,16 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9045774559201997781, guid: 4ac7df741a9c0a2418ec19477729ee3d,
+        type: 3}
+      propertyPath: CanDropItem
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9045774559201997781, guid: 4ac7df741a9c0a2418ec19477729ee3d,
+        type: 3}
+      propertyPath: StartingItem
+      value: 
+      objectReference: {fileID: 512401772}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ac7df741a9c0a2418ec19477729ee3d, type: 3}
 --- !u!1 &1698623133

@@ -8,6 +8,8 @@ public class InspectionTaskManager : MonoBehaviour
 {
     private int inspectedFish = 0;
     private int inspectionTarget = 1;
+    private string activityInspect = "Inspect the fish";
+    private string skill1 = "Observant";
     private TaskHolder taskHolder;
     // Start is called before the first frame update
     void Start()
@@ -31,8 +33,9 @@ public class InspectionTaskManager : MonoBehaviour
         Debug.Log("Progressing task");
         inspectedFish++;
         if(inspectedFish == inspectionTarget){
-            taskHolder.GetTaskList()[0].activities[2].AktivitetIsDone(true);
-            taskHolder.GetTaskList()[0].activities[2].SetAchievedPoeng(10);
+            //taskHolder.GetTaskList()[0].activities[2].AktivitetIsDone(true);
+            //taskHolder.GetTaskList()[0].activities[2].SetAchievedPoeng(10);
+            taskHolder.AddPoints(activityInspect, skill1, 10);
         }
     }
 }
