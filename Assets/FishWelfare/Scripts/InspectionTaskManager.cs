@@ -11,6 +11,9 @@ public class InspectionTaskManager : MonoBehaviour
     private string activityInspect = "Inspect the fish";
     private string skill1 = "Observant";
     private TaskHolder taskHolder;
+    private Fish selectedFish;
+    [SerializeField]
+    private List<Fish> fishList = new List<Fish>();
     // Start is called before the first frame update
     void Start()
     {
@@ -23,19 +26,16 @@ public class InspectionTaskManager : MonoBehaviour
         //Debug.Log(taskHolder.GetTaskList()[0].activities[0].aktivitetName);
     }
 
-    public void test(string var1)
-    {
-        Debug.Log(var1);
-    }
-
     public void ProgressInspection() 
     {
-        Debug.Log("Progressing task");
         inspectedFish++;
         if(inspectedFish == inspectionTarget){
-            //taskHolder.GetTaskList()[0].activities[2].AktivitetIsDone(true);
-            //taskHolder.GetTaskList()[0].activities[2].SetAchievedPoeng(10);
             taskHolder.AddPoints(activityInspect, skill1, 10);
         }
+    }
+
+    public void SetSelectedFish(Fish fish){
+        selectedFish = fish;
+        Debug.Log("Gilldamage: " + selectedFish.GetGillDamage());
     }
 }
