@@ -28,6 +28,10 @@ public class Fish : MonoBehaviour
         inspectionTaskManager.SetSelectedFish(this);
     }
 
+    public void SetgillDamageGuessed(int guess) {
+        gillDamageGuessed = guess;
+    }
+
     public int GetGillDamage() {
         return gillDamage;
     }

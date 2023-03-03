@@ -7,7 +7,7 @@ using BNG;
 public class InspectionTaskManager : MonoBehaviour
 {
     private int inspectedFish = 0;
-    private int inspectionTarget = 1;
+    private int inspectionTarget;
     private string activityInspect = "Inspect the fish";
     private string skill1 = "Observant";
     private TaskHolder taskHolder;
@@ -18,6 +18,7 @@ public class InspectionTaskManager : MonoBehaviour
     void Start()
     {
         taskHolder = GameObject.FindObjectOfType<TaskHolder>();
+        inspectionTarget = fishList.Count;
     }
 
     // Update is called once per frame
@@ -37,5 +38,15 @@ public class InspectionTaskManager : MonoBehaviour
     public void SetSelectedFish(Fish fish){
         selectedFish = fish;
         Debug.Log("Gilldamage: " + selectedFish.GetGillDamage());
+    }
+
+    public void SetGuess (int guess) {
+        if(guess == selectedFish.GetGillDamageGuessed()){
+            selectedFish.SetgillDamageGuessed(0);
+        }
+        else {
+            selectedFish.SetgillDamageGuessed(guess);
+        }
+        Debug.Log("Guess: " + selectedFish.GetGillDamageGuessed());
     }
 }
