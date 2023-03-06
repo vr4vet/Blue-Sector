@@ -8,6 +8,8 @@ public class Fish : MonoBehaviour
     private int gillDamage = 3;
     [SerializeField]
     private int gillDamageGuessed = 0;
+    [SerializeField]
+    private int id;
 
     InspectionTaskManager inspectionTaskManager;
 
@@ -38,5 +40,9 @@ public class Fish : MonoBehaviour
 
     public int GetGillDamageGuessed() {
         return gillDamageGuessed;
+    }
+
+    public int GetId() {
+        return id;
     }
 }

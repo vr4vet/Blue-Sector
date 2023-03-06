@@ -6,32 +6,47 @@ using BNG;
 
 public class InspectionTaskManager : MonoBehaviour
 {
-    private int inspectedFish = 0;
+    private int inspectedFishCount = 0;
     private int inspectionTarget;
     private string activityInspect = "Inspect the fish";
     private string skill1 = "Observant";
     private TaskHolder taskHolder;
     private Fish selectedFish;
+    private List<Fish> inspectedFish = new List<Fish>();
+    private RankingStationController rankingStationController;
     [SerializeField]
     private List<Fish> fishList = new List<Fish>();
+
     // Start is called before the first frame update
     void Start()
     {
         taskHolder = GameObject.FindObjectOfType<TaskHolder>();
+        rankingStationController = GameObject.FindObjectOfType<RankingStationController>();
         inspectionTarget = fishList.Count;
+        selectedFish = fishList[0];
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ProgressInspection(GameObject obj) 
     {
-        //Debug.Log(taskHolder.GetTaskList()[0].activities[0].aktivitetName);
+        if((obj.GetComponent("Fish") as Fish) != null) {
+            if(AddFish(obj.GetComponent("Fish") as Fish)){
+                inspectedFishCount++;
+            if(inspectedFishCount == inspectionTarget){
+                taskHolder.AddPoints(activityInspect, skill1, 10);
+                rankingStationController.DrawScreen(true);
+            } else {
+                rankingStationController.DrawScreen(false);
+            }
+            }
+        }
     }
 
-    public void ProgressInspection() 
+    public void RegressInspection(GameObject obj) 
     {
-        inspectedFish++;
-        if(inspectedFish == inspectionTarget){
-            taskHolder.AddPoints(activityInspect, skill1, 10);
+        if((obj.GetComponent("Fish") as Fish) != null) {
+            RemoveFish(obj.GetComponent("Fish") as Fish);
+            inspectedFishCount--;
+            rankingStationController.DrawScreen(false);
         }
     }
 
@@ -49,4 +64,27 @@ public class InspectionTaskManager : MonoBehaviour
         }
         Debug.Log("Guess: " + selectedFish.GetGillDamageGuessed());
     }
+
+    public List<Fish> GetInspectedFish() {
+        return inspectedFish;
+    }
+
+    private bool AddFish(Fish fish) {
+        foreach(Fish registered in inspectedFish) {
+            if(registered == fish) {
+                return false;
+            }
+        }
+        inspectedFish.Add(fish);
+        return true;
+    }
+
+    private void RemoveFish(Fish fish) {
+        foreach(Fish registered in inspectedFish) {
+            if(registered == fish) {
+                inspectedFish.Remove(registered);
+                break;
+            }
+        }
+    }  
 }
