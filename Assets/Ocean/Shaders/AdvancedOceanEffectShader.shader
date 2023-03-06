@@ -11,9 +11,9 @@ Shader "Nature/OceanAdvanced"
 	}
 
 		CGINCLUDE
-#include "UnityCG.cginc"
+#include "UnityCG.cginc" 
 
-		uniform float4 _BaseColor;
+			uniform float4 _BaseColor;
 		uniform float4 _WaterColor;
 		uniform float4 _ReflectionColor;
 		uniform float4 _SpecularColor;
@@ -245,7 +245,6 @@ Shader "Nature/OceanAdvanced"
 		half4 frag(v2f i) : SV_Target
 		{
 			float3 eye_vector = i.world_position.xyz - _WorldSpaceCameraPos;
-			float eye_distance = length(eye_vector);
 			float3 eye = normalize(eye_vector);
 
 			half3 detail_normal = get_detailed_normal(i.world_position, 0.01 * pow(length(eye_vector), 0.8));
@@ -261,73 +260,70 @@ Shader "Nature/OceanAdvanced"
 			float depthFactor = 1.0 - saturate(abs(sceneZ - objectZ) / 4.0);
 
 			float3 light_direction = normalize(world_light_dir);
+			float3 l = normalize(light_direction);
 			half4 baseColor;
 			baseColor.a = 1.0;
 
-			//baseColor.rgb = getSeaColor(i.world_position, normal, normalize(light_direction), normalize(eye_vector), eye_vector);
+#ifdef REFLECTION
+			{
 
-			#ifdef REFLECTION
-				float3 l = normalize(light_direction);
-
-				float fresnel = clamp(1.0 - pow(dot(normal,-eye), 1.0), 0.0, 1.0);
-				fresnel = pow(fresnel,3.0) * 0.65;
+				float fresnel = clamp(1.0 - pow(dot(normal, -eye), 1.0), 0.0, 1.0);
+				fresnel = pow(fresnel, 3.0) * 0.65;
 				fresnel = pow(fresnel, 0.8) * 0.8;
 
-				float3 reflected = getSkyColor(reflect(eye,normal)) * _ReflectionColor;
-
-				/* SSR test */
-				#ifdef SSR
-					half4 refl = i.ref + distort;
-					float3 decodedNormal;
-					float decodedDepth;
-					DecodeDepthNormal(tex2D(_CameraDepthNormalsTexture, i.uv), decodedDepth, normal);
-					float4 pixelPosition = float4(i.cameraRay * decodedDepth, 0.0);
-					//float3 reflected = tex2Dproj(_RefractionTex, UNITY_PROJ_COORD(pixelPosition)) * _ReflectionColor; 
-				#endif
-
-
+				float3 reflected = getSkyColor(reflect(eye, normal)) * _ReflectionColor;
 				float3 refracted = _BaseColor + diffuse(normal, l, 80.0) * _WaterColor * 0.12;
-
 				baseColor.rgb = lerp(refracted, reflected, fresnel);
-			#endif
+			}
 
-			#ifdef REFRACTION
-				half3 refraction = tex2Dproj(_RefractionTex, UNITY_PROJ_COORD(i.grabPassPos + distort));
-				refraction *= lerp(_ReflectionColor, _BaseColor, 1.0 - depthFactor * 2.0);
-				baseColor.a = 1.0 - (saturate(depthFactor * 2.0) * saturate(1.2 - 0.6));
-			#endif
+#endif // REFLECTION
+
+#ifdef REFRACTION
+			half3 refraction = tex2Dproj(_RefractionTex, UNITY_PROJ_COORD(i.grabPassPos + distort));
+			refraction *= lerp(_ReflectionColor, _BaseColor, 1.0 - depthFactor * 2.0);
+			baseColor.a = 1.0 - (saturate(depthFactor * 2.0) * saturate(1.2 - 0.6));
+#endif // REFRACTION
 
 
-				/* Possible depth color */
+			/* Possible depth color */
+			{
 				float atten = max(1.0 - dot(eye, eye) * 0.001, 0.0);
 				baseColor.rgb += _WaterColor * (i.world_position.y + 0.6) * 0.18 * atten;
+			}
 
-				#ifdef SPECULAR
-					float spec = specular(vertex_normal * 0.2 + detail_normal * 0.8, l, eye, 60.0);
-					baseColor.rgb += sun_color * spec;
-				#endif
+#ifdef SPECULAR
+			{
+				float spec = specular(vertex_normal * 0.2 + detail_normal * 0.8, l, eye, 60.0);
+				baseColor.rgb += sun_color * spec;
+			}
+#endif // SPECULAR
 
 
-				#ifdef FOAM
-					half3 foamColor = tex2D(_Foam, i.world_position.xz * 0.1 + _Time.xx * 0.5 + distort).rgb;
-					//baseColor.rgb += foamColor * smoothstep(0.2, 1.5, depthFactor);
-					baseColor.a += foamColor.r * 0.05;
+#ifdef FOAM
+			{
+				half3 foamColor = tex2D(_Foam, i.world_position.xz * 0.1 + _Time.xx * 0.5 + distort).rgb;
+				baseColor.a += foamColor.r * 0.05;
 
-					float wave_foam = clamp(smoothstep(-0.1, 1.0, 1.0 - detail_normal.y), 0.0, 0.5);
-					baseColor.a += wave_foam;
-					baseColor = saturate(baseColor);
-					baseColor.rgb += foamColor * clamp(wave_foam + smoothstep(0.2, 1.5, depthFactor), 0.0, 0.5);
-				#endif
-
-				UNITY_APPLY_FOG(i.fogCoord, baseColor);
-
+				float wave_foam = clamp(smoothstep(-0.1, 1.0, 1.0 - detail_normal.y), 0.0, 0.5);
+				baseColor.a += wave_foam;
 				baseColor = saturate(baseColor);
-				baseColor.rgb = lerp(refraction.rgb, baseColor.rgb, clamp(baseColor.a, 0.0, 0.8));
-				baseColor.a = 1.0;
-				return saturate(baseColor);
-		}
+				baseColor.rgb += foamColor * clamp(wave_foam + smoothstep(0.2, 1.5, depthFactor), 0.0, 0.5);
+			}
+#endif // FOAM
 
+			UNITY_APPLY_FOG(i.fogCoord, baseColor);
+
+			baseColor = saturate(baseColor);
+
+		#ifdef REFRACTION
+			baseColor.rgb = saturate(lerp(refraction.rgb, baseColor.rgb, clamp(baseColor.a, 0.0, 0.8)));
+		#endif // REFRACTION
+			baseColor.a = 1.0;
+
+			return baseColor;
+		}
 			ENDCG
+
 			Subshader
 		{
 			Tags{ "RenderType" = "Transparent" "Queue" = "Transparent" }
@@ -338,22 +334,22 @@ Shader "Nature/OceanAdvanced"
 
 				Pass
 			{
-				Blend SrcAlpha OneMinusSrcAlpha
-				//ZTest LEqual
-				//ZWrite Off
-				//Cull Off
+			Blend SrcAlpha OneMinusSrcAlpha
+			//ZTest LEqual
+			//ZWrite Off
+			//Cull Off
 
-				CGPROGRAM
+			CGPROGRAM
 
-				#pragma target 3.0
-				#pragma vertex vert
-				#pragma fragment frag
-				#pragma multi_compile_fog
-				#pragma multi_compile_fwdbase
-				#pragma fragmentoption ARB_fog_exp2
-				#pragma fragmentoption ARB_precision_hint_fastest
+			#pragma target 3.0
+			#pragma vertex vert
+			#pragma fragment frag
+			#pragma multi_compile_fog
+			#pragma multi_compile_fwdbase
+			#pragma fragmentoption ARB_fog_exp2
+			#pragma fragmentoption ARB_precision_hint_fastest
 
-				ENDCG
+			ENDCG
 			}
 		}
 		Fallback "Transparent/Diffuse"
