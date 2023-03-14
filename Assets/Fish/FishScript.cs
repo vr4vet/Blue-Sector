@@ -15,9 +15,17 @@ public class FishScript : MonoBehaviour
     private float height;
     private bool dead;
     private float upDownSpeed;
+    public Status status;
 
     public GameObject fishSystem;
     public FishSystemScript fishSystemScript;
+
+    public enum Status
+    {
+        Full,
+        Hungry,
+        Dead
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -33,12 +41,14 @@ public class FishScript : MonoBehaviour
         hungerRate = fishSystemScript.hungerRate;
         upDownSpeed = fishSystemScript.upDownSpeed;
         dead = false;
+        status = Status.Full;
     }
 
     private bool waitingForReturn = false;
     // Update is called once per frame
     void Update()
     {
+        /*Debug.Log(fullness);*/
         if (IsColliding())
         {
             if (!waitingForReturn)
@@ -94,12 +104,13 @@ public class FishScript : MonoBehaviour
         } else if (fullness < 0)
         {
             dead = true;
+            status = Status.Dead;
         }
 
 
         float posY = gameObject.transform.position.y;
-        Debug.Log(fullness);
-        Debug.Log(posY);
+        /*Debug.Log(fullness);
+        Debug.Log(posY);*/
 
         if (dead)
         {
@@ -121,10 +132,12 @@ public class FishScript : MonoBehaviour
             else if (fullness < 70 && posY < fullnessDivider)
             {
                 randY = upDownSpeed;
+                status = Status.Hungry;
             }
             else if (fullness > 70 && posY > fullnessDivider)
             {
                 randY = -upDownSpeed;
+                status = Status.Full;
             }
 
             // Rotates the fish in the right direction
