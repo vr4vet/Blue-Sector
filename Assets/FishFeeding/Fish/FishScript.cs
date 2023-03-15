@@ -28,7 +28,7 @@ public class FishScript : MonoBehaviour
     void Start()
     {   
         InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 5.0f), 3.0f);
-        fishSystem = GameObject.Find("FishSystem");
+        fishSystem = gameObject.transform.parent.gameObject;//GameObject.Find("FishSystem");
         fishSystemScript = fishSystem.GetComponent<FishSystemScript>();
         fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
         
@@ -42,6 +42,8 @@ public class FishScript : MonoBehaviour
         swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
         fullnessLimit = fishSystemScript.fullnessLimit;
         dead = false;
+
+        //Debug.Log(fishSystem.transform.position);
     }
 
     private bool waitingForReturn = false;
@@ -77,7 +79,9 @@ public class FishScript : MonoBehaviour
 
     bool IsColliding()
     {
-        if ((Mathf.Pow(gameObject.transform.position.x, 2) + Mathf.Pow(gameObject.transform.position.z, 2) - Mathf.Pow(radius, 2)) >= 0)
+        Vector3 fishSystemPosition = fishSystem.transform.position; 
+        Vector3 fishPosition = gameObject.transform.position;
+        if ((Mathf.Pow(fishPosition.x - fishSystemPosition.x, 2) + Mathf.Pow(fishPosition.z - fishSystemPosition.z, 2) - Mathf.Pow(radius, 2)) >= 0)
         {
             return true;
         }
@@ -87,6 +91,7 @@ public class FishScript : MonoBehaviour
     // runs every 3rd second
     void PeriodicUpdates()
     {
+        //Vector3 fishPosition = gameObject.transform.position;
         float posY = gameObject.transform.position.y;
 
         // 1/2 likelihood of getting fed if player is feeding

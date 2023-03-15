@@ -9,22 +9,24 @@ public class FishSystemScript : MonoBehaviour
     private ParticleSystem foodParticles;
     public float radius = 10;
     public float height = 20;
-    public float amountOfFish = 5;
+    public float amountOfFish = 30;
     public float fullnessDivider = 0.7f;
     public float fullnessLimit = 70;
     public float hungerRate = 3.0f;
-    public float swimSpeedVertical = 0.2f;
-    public float swimSpeedHorizontal = 0.1f;
+    public float swimSpeedVertical = 0.5f;
+    public float swimSpeedHorizontal = 1.0f;
     public bool feeding = false;    // all fish in the top part ("hunger zone") will be fed when this is true
 
     // Start is called before the first frame update
     void Start()
     {
+        Vector3 position = gameObject.transform.position;
         foodParticles = gameObject.GetComponent<ParticleSystem>();
         // positioning particles at top of fish system
         for (int i = 0; i < amountOfFish; i++)
         {
-            Instantiate(fish, new Vector3(Random.Range(-radius + 3, radius - 3), Random.Range(-height/2 + 3, height/2- 3), Random.Range(-radius + 3, radius - 3)), fish.transform.rotation);
+            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height/2)+ 3,position.y + (height/2)- 3), Random.Range(position.z -radius + 3, position.z + radius - 3)), fish.transform.rotation);
+            newFish.transform.parent = gameObject.transform;
         }
     }
 
