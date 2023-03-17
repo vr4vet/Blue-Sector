@@ -1,3 +1,4 @@
+// Created by Trym Lund Flogard <trym@flogard.no>
 using BNG;
 using System;
 using System.Collections;
@@ -10,14 +11,10 @@ using UnityEngine.UIElements.Experimental;
 public class Popup : MonoBehaviour
 {
     private const int AnimationDurationMs = 500;
-    private float animationProgress;
     private BNGPlayerController playerController;
     private TextMeshPro textMesh;
     private Renderer currentRenderer;
     private Renderer backgroundRenderer;
-
-    [field: SerializeField]
-    public string Text { get; set; } = string.Empty;
 
     [field: SerializeField]
     public GameObject Background { get; set; }
