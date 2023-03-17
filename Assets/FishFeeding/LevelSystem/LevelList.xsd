@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="levels">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="arcadelevels">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="level" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="tutorial" type="xs:boolean" />
+                                        <xs:element name="threshold" type="xs:float" />
+                                        <xs:element name="unlock" type="xs:integer" />
+                                        <xs:element name="modifier" type="xs:float" />
+                                        <xs:element name="prev" type="xs:boolean" />
+                                        <xs:element name="next" type="xs:boolean" />
+                                        <xs:element name="beaten" type="xs:boolean" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="realismlevels">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="level" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="tutorial" type="xs:boolean" />
+                                        <xs:element name="threshold" type="xs:float" />
+                                        <xs:element name="unlock" type="xs:integer" />
+                                        <xs:element name="modifier" type="xs:float" />
+                                        <xs:element name="prev" type="xs:boolean" />
+                                        <xs:element name="next" type="xs:boolean" />
+                                        <xs:element name="beaten" type="xs:boolean" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
