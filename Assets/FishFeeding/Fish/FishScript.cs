@@ -9,7 +9,7 @@ public class FishScript : MonoBehaviour
     private float randZ;
     private Vector3 movement;
     private float radius;
-    private float fullness;
+    public float fullness;
     private float fullnessDivider;
     private float fullnessLimit;
     private float hungerRate;
@@ -19,6 +19,7 @@ public class FishScript : MonoBehaviour
     private float swimSpeedVertical;
     private float swimSpeedHorizontal;
     public Status status;
+
 
     public GameObject fishSystem;
     public FishSystemScript fishSystemScript;
@@ -81,6 +82,8 @@ public class FishScript : MonoBehaviour
         {
             gameObject.transform.position += movement * Time.deltaTime;
         }  
+
+
     }
 
     bool IsColliding()
@@ -97,20 +100,7 @@ public class FishScript : MonoBehaviour
     {
         float posY = gameObject.transform.position.y;
 
-        // 1/2 likelihood of getting fed if player is feeding
-        if (fishSystemScript.feeding && posY > fullnessDivider)
-        {
-            if (Random.Range(0, 100) <= 50)
-            {
-                if (fullness >= 100)
-                {
-                    fullness = 100;
-                } else
-                {
-                    fullness += 20;
-                }
-            }
-        }
+        
 
         if (IsColliding())
         {

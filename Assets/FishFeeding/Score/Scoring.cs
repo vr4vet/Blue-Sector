@@ -6,6 +6,7 @@ public class Scoring : MonoBehaviour
 {
     private int score = 0;
     private GameObject[] fishes;
+    private GameObject[] merds;
     private bool startGame = false;
     [SerializeField]
     private float time = 60.0f;
@@ -14,13 +15,14 @@ public class Scoring : MonoBehaviour
     void Start()
     {
         fishes = GameObject.FindGameObjectsWithTag("Fish");
+        merds = GameObject.FindGameObjectsWithTag("Fish System");
     }
 
     /* Update is called once per frame. If the key 's' is pressed and the game hasn't started, start the game and
      * the coroutine GiveScore and update the score every second. */
     void Update()
     {
-        if (Input.GetKeyDown("s") && !startGame)
+        if (Input.GetKeyDown(KeyCode.S) && !startGame)
         {
             score = 0;
             startGame = true;
@@ -58,6 +60,18 @@ public class Scoring : MonoBehaviour
             {
                 score -= 2;
             }
+
+        }
+
+        foreach (GameObject i in merds)
+        {
+            Debug.Log("Score before food waste: " + score);
+            FishSystemScript script = i.GetComponent<FishSystemScript>();
+            float wastedFoodPercentage = script.foodWasted / 10;
+            Debug.Log("Wasted food: " + script.foodWasted + "wastedFoodPercentage: " + wastedFoodPercentage);
+            score -= (int)(wastedFoodPercentage + 0.5f); // Rounds wastedFoodPercentage to the nearest int.
+            script.foodWasted = 0;
+            Debug.Log("Score after food waste: " + score);
         }
     }
 
