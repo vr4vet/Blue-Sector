@@ -22,7 +22,9 @@ public class FishSystemScript : MonoBehaviour
     {
         Vector3 position = gameObject.transform.position;
         foodParticles = gameObject.GetComponent<ParticleSystem>();
+        var shape = foodParticles.shape;
         // positioning particles at top of fish system
+        //shape.position = new Vector3(shape.position.x, gameObject.transform.position.y + (height / 2), shape.position.z);
         for (int i = 0; i < amountOfFish; i++)
         {
             GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height/2)+ 3,position.y + (height/2)- 3), Random.Range(position.z -radius + 3, position.z + radius - 3)), fish.transform.rotation);
@@ -76,8 +78,8 @@ public class FishSystemVisualization : Editor
         Handles.DrawWireDisc(position + new Vector3(0, fullnessDivider, 0), transform.up, radius);
 
         // moving food particle system to the top of fish system
-        var foorParticlesShape = GameObject.Find("FishSystem").GetComponent<ParticleSystem>().shape;
-        foorParticlesShape.position = new Vector3(foorParticlesShape.position.x, GameObject.Find("FishSystem").transform.position.y + (height / 2), foorParticlesShape.position.z);
+        var foodParticlesShape = GameObject.Find("FishSystem").GetComponent<ParticleSystem>().shape;
+        foodParticlesShape.position = new Vector3(foodParticlesShape.position.x, GameObject.Find("FishSystem").transform.position.y + (height / 2), foodParticlesShape.position.z);
 
     }
 
