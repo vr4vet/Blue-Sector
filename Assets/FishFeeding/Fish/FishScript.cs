@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class FishScript : MonoBehaviour
@@ -20,7 +21,7 @@ public class FishScript : MonoBehaviour
     private float swimSpeedHorizontal;
     public Status status;
 
-
+    private Animation fishAnimation;
     public GameObject fishSystem;
     public FishSystemScript fishSystemScript;
 
@@ -34,15 +35,15 @@ public class FishScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 5.0f), 3.0f);
-        //fishSystem = GameObject.FindGameObjectWithTag("Fish System");
-        fishSystem = GameObject.Find("FishSystem");
+        fishSystem = gameObject.transform.parent.gameObject;//GameObject.Find("FishSystem");
         fishSystemScript = fishSystem.GetComponent<FishSystemScript>();
+        fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
+        
         radius = fishSystemScript.radius;
         fullness = 100.0f; //Random.Range(0.0f, 100.0f);
-        top = (fishSystem.transform.position.y + (fishSystemScript.height / 2)) - 1;  // top of merd/water surface
-        bottom = (fishSystem.transform.position.y - (fishSystemScript.height / 2)) + 1; // bottom of merd
+        top = (fishSystem.transform.position.y + (fishSystemScript.height / 2)) - 1.5f;  // top of merd/water surface
+        bottom = (fishSystem.transform.position.y - (fishSystemScript.height / 2)) + 1.5f; // bottom of merd
         fullnessDivider = bottom + (((bottom - top) * (fishSystemScript.fullnessDivider)) * -1); // border between hungry and full fish
         hungerRate = fishSystemScript.hungerRate;
         swimSpeedVertical = fishSystemScript.swimSpeedVertical;
@@ -50,9 +51,7 @@ public class FishScript : MonoBehaviour
         fullnessLimit = fishSystemScript.fullnessLimit;
         dead = false;
         status = Status.Full;
-        //Debug.Log(fishSystemScript.height);
-        //Debug.Log(top);
-        //Debug.Log(fishSystemScript.swimSpeedVertical);
+        //Debug.Log(fishSystem.transform.position);
     }
 
     private bool waitingForReturn = false;
@@ -60,12 +59,15 @@ public class FishScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*Debug.Log(fullness);*/
+        if (dead)
+        {
+            fishAnimation.Stop();
+        }
+
         if (IsColliding())
         {
             if (!waitingForReturn)
             {
-                //movement = new Vector3(0 - gameObject.transform.position.x, 0 - gameObject.transform.position.y, 0 - gameObject.transform.position.z);
                 movement.x *= -1;
                 movement.z *= -1;
                 Quaternion target = Quaternion.LookRotation(movement);
@@ -88,7 +90,9 @@ public class FishScript : MonoBehaviour
 
     bool IsColliding()
     {
-        if ((Mathf.Pow(gameObject.transform.position.x, 2) + Mathf.Pow(gameObject.transform.position.z, 2) - Mathf.Pow(radius, 2)) >= 0)
+        Vector3 fishSystemPosition = fishSystem.transform.position; 
+        Vector3 fishPosition = gameObject.transform.position;
+        if ((Mathf.Pow(fishPosition.x - fishSystemPosition.x, 2) + Mathf.Pow(fishPosition.z - fishSystemPosition.z, 2) - Mathf.Pow(radius, 2)) >= 0)
         {
             return true;
         }
@@ -98,6 +102,7 @@ public class FishScript : MonoBehaviour
     // runs every 3rd second
     void PeriodicUpdates()
     {
+        //Vector3 fishPosition = gameObject.transform.position;
         float posY = gameObject.transform.position.y;
 
         
@@ -115,9 +120,6 @@ public class FishScript : MonoBehaviour
             dead = true;
             status = Status.Dead;
         }
-
-        /*Debug.Log(fullness);
-        Debug.Log(posY);*/
 
         if (dead)
         {
@@ -150,7 +152,6 @@ public class FishScript : MonoBehaviour
             // Rotates the fish in the right direction
             randX = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
             randZ = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
-            //randY = Random.Range(-0.3f, 0.3f);
 
             movement = new Vector3(randX, randY, randZ);
             Quaternion target = Quaternion.LookRotation(movement);
