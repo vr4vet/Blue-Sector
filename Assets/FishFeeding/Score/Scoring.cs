@@ -65,10 +65,10 @@ public class Scoring : MonoBehaviour
 
         foreach (GameObject i in merds)
         {
-            Debug.Log("Score before food waste: " + score);
+            /*Debug.Log("Score before food waste: " + score);*/
             FishSystemScript script = i.GetComponent<FishSystemScript>();
             float wastedFoodPercentage = script.foodWasted / 10;
-            Debug.Log("Wasted food: " + script.foodWasted + "wastedFoodPercentage: " + wastedFoodPercentage);
+            /*Debug.Log("Wasted food: " + script.foodWasted + "wastedFoodPercentage: " + wastedFoodPercentage);*/
             score -= (int)(wastedFoodPercentage + 0.5f); // Rounds wastedFoodPercentage to the nearest int.
             script.foodWasted = 0;
             Debug.Log("Score after food waste: " + score);

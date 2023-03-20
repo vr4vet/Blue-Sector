@@ -22,8 +22,8 @@ public class FishScript : MonoBehaviour
     public Status status;
 
     private Animation fishAnimation;
-    public GameObject fishSystem;
-    public FishSystemScript fishSystemScript;
+    private GameObject fishSystem;
+    private FishSystemScript fishSystemScript;
 
     public enum Status
     {

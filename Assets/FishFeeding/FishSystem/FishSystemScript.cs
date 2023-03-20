@@ -10,16 +10,16 @@ public class FishSystemScript : MonoBehaviour
     private ParticleSystem foodParticles;
     public float radius = 10;
     public float height = 20;
-    public float amountOfFish = 30;
+    public int amountOfFish = 30;
     public float fullnessDivider = 0.7f;
     public float fullnessLimit = 70;
     public float hungerRate = 3.0f;
     public float swimSpeedVertical = 0.5f;
     public float swimSpeedHorizontal = 1.0f;
-    public bool feeding = false;    // all fish in the top part ("hunger zone") will be fed when this is true
+    private bool feeding = false;    // all fish in the top part ("hunger zone") will be fed when this is true
     public float foodWasted = 0;
-    private int foodGivenFish = 3;
-    public int foodGivenPerSec = 1500;
+    private int eatingAmount = 3;
+    private int foodGivenPerSec;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +35,7 @@ public class FishSystemScript : MonoBehaviour
             newFish.transform.parent = gameObject.transform;
         }
         fishes = GameObject.FindGameObjectsWithTag("Fish");
+        foodGivenPerSec = amountOfFish * eatingAmount;
         InvokeRepeating(nameof(FeedFish), 0.0f, 1.0f);
     }
 
@@ -52,6 +53,7 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
+    /* Feeds each fish if they can eat and computes the food wasted. */
     void FeedFish()
     {
         // Return if we're not feeding
@@ -67,19 +69,14 @@ public class FishSystemScript : MonoBehaviour
         {
             FishScript script = i.GetComponent<FishScript>();
             float posY = i.transform.position.y;
-            // 1/2 likelihood of getting fed if player is feeding
             if (posY > fullnessDivider)
             {
-                /*if (Random.Range(0, 100) <= 50)
-                {*/
                 if (script.fullness < 100)
                 {
-                    /*fullness = 100;*/
-                    script.fullness += foodGivenFish;
-                    foodWasted -= foodGivenFish;
-                    foodEaten += foodGivenFish;
+                    script.fullness += eatingAmount;
+                    foodWasted -= eatingAmount;
+                    foodEaten += eatingAmount;
                 }
-                /* }*/
             }
 
         }
