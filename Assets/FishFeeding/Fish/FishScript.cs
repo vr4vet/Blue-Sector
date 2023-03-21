@@ -10,10 +10,7 @@ public class FishScript : MonoBehaviour
     private float randZ;
     private Vector3 movement;
     private float radius;
-    public float fullness;
     private float fullnessDivider;
-    private float fullnessLimit;
-    private float hungerRate;
     private float top;
     private float bottom;
     private bool dead;
@@ -41,14 +38,11 @@ public class FishScript : MonoBehaviour
         fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
         
         radius = fishSystemScript.radius;
-        fullness = 100.0f; //Random.Range(0.0f, 100.0f);
         top = (fishSystem.transform.position.y + (fishSystemScript.height / 2)) - 1.5f;  // top of merd/water surface
         bottom = (fishSystem.transform.position.y - (fishSystemScript.height / 2)) + 1.5f; // bottom of merd
         fullnessDivider = bottom + (((bottom - top) * (fishSystemScript.fullnessDivider)) * -1); // border between hungry and full fish
-        hungerRate = fishSystemScript.hungerRate;
         swimSpeedVertical = fishSystemScript.swimSpeedVertical;
         swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
-        fullnessLimit = fishSystemScript.fullnessLimit;
         dead = false;
         status = Status.Full;
         //Debug.Log(fishSystem.transform.position);
@@ -104,21 +98,12 @@ public class FishScript : MonoBehaviour
     {
         //Vector3 fishPosition = gameObject.transform.position;
         float posY = gameObject.transform.position.y;
+        FishSystemScript.FishState state = fishSystemScript.state;
 
-        
 
         if (IsColliding())
         {
             return;
-        }
-        
-        if (fullness >= 0)
-        {
-            fullness -= hungerRate;
-        } else if (fullness < 0)
-        {
-            dead = true;
-            status = Status.Dead;
         }
 
         if (dead)
@@ -138,12 +123,12 @@ public class FishScript : MonoBehaviour
             {
                 randY = swimSpeedVertical;
             }
-            else if (fullness < fullnessLimit && posY < fullnessDivider)
+            else if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
             {
                 randY = swimSpeedVertical;
                 status = Status.Hungry;
             }
-            else if (fullness >= fullnessLimit && posY > fullnessDivider)
+            else if (state == FishSystemScript.FishState.Full && posY > fullnessDivider)
             {
                 randY = -swimSpeedVertical;
                 status = Status.Full;
@@ -158,5 +143,10 @@ public class FishScript : MonoBehaviour
             target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
             gameObject.transform.rotation = target;
         }
+    }
+
+    public void Kill()
+    {
+        dead = true;
     }
 }
