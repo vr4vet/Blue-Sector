@@ -10,10 +10,7 @@ public class FishScript : MonoBehaviour
     private float randZ;
     private Vector3 movement;
     private float radius;
-    private float fullness;
     private float fullnessDivider;
-    private float fullnessLimit;
-    private float hungerRate;
     private float top;
     private float bottom;
     private bool dead;
@@ -33,14 +30,11 @@ public class FishScript : MonoBehaviour
         fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
         
         radius = fishSystemScript.radius;
-        fullness = 100.0f; //Random.Range(0.0f, 100.0f);
         top = (fishSystem.transform.position.y + (fishSystemScript.height / 2)) - 1.5f;  // top of merd/water surface
         bottom = (fishSystem.transform.position.y - (fishSystemScript.height / 2)) + 1.5f; // bottom of merd
         fullnessDivider = bottom + (((bottom - top) * (fishSystemScript.fullnessDivider)) * -1); // border between hungry and full fish
-        hungerRate = fishSystemScript.hungerRate;
         swimSpeedVertical = fishSystemScript.swimSpeedVertical;
         swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
-        fullnessLimit = fishSystemScript.fullnessLimit;
         dead = false;
 
         //Debug.Log(fishSystem.transform.position);

@@ -12,8 +12,6 @@ public class FishSystemScript : MonoBehaviour
     public float height = 20;
     public int amountOfFish = 30;
     public float fullnessDivider = 0.7f;
-    public float fullnessLimit = 70;
-    public float hungerRate = 3.0f;
     public float swimSpeedVertical = 0.5f;
     public float swimSpeedHorizontal = 1.0f;
     
