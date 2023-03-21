@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Scoring : MonoBehaviour
@@ -10,12 +11,14 @@ public class Scoring : MonoBehaviour
     private bool startGame = false;
     [SerializeField]
     private float time = 60.0f;
+    private TextMeshProUGUI scoreText;
 
     // Start is called before the first frame update
     void Start()
     {
         fishes = GameObject.FindGameObjectsWithTag("Fish");
         merds = GameObject.FindGameObjectsWithTag("Fish System");
+        scoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
     }
 
     /* Update is called once per frame. If the key 's' is pressed and the game hasn't started, start the game and
@@ -39,6 +42,7 @@ public class Scoring : MonoBehaviour
         yield return new WaitForSeconds(time);
         CancelInvoke("UpdateScore");
         startGame = false;
+        scoreText.text = "YOUR SCORE:\n" + score;
         Debug.Log("End of game");
         Debug.Log("Score: " + score);
     }
