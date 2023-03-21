@@ -93,9 +93,10 @@ public class FishScript : MonoBehaviour
     {
         //Vector3 fishPosition = gameObject.transform.position;
         float posY = gameObject.transform.position.y;
+        FishSystemScript.FishState state = fishSystemScript.state;
 
         // 1/2 likelihood of getting fed if player is feeding
-        if (fishSystemScript.feeding && posY > fullnessDivider)
+/*        if (fishSystemScript.feeding && posY > fullnessDivider)
         {
             if (Random.Range(0, 100) <= 50)
             {
@@ -107,20 +108,20 @@ public class FishScript : MonoBehaviour
                     fullness += 20;
                 }
             }
-        }
+        }*/
 
         if (IsColliding())
         {
             return;
         }
         
-        if (fullness >= 0)
+/*        if (fullness >= 0)
         {
             fullness -= hungerRate;
         } else if (fullness < 0)
         {
             dead = true;
-        }
+        }*/
 
         if (dead)
         {
@@ -139,11 +140,11 @@ public class FishScript : MonoBehaviour
             {
                 randY = swimSpeedVertical;
             }
-            else if (fullness < fullnessLimit && posY < fullnessDivider)
+            else if (state == FishSystemScript.FishState.Hungry && posY < fullnessDivider)
             {
                 randY = swimSpeedVertical;
             }
-            else if (fullness >= fullnessLimit && posY > fullnessDivider)
+            else if (state == FishSystemScript.FishState.Full && posY > fullnessDivider)
             {
                 randY = -swimSpeedVertical;
             }
@@ -157,5 +158,10 @@ public class FishScript : MonoBehaviour
             target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
             gameObject.transform.rotation = target;
         }
+    }
+
+    public void Kill()
+    {
+        dead = true;
     }
 }
