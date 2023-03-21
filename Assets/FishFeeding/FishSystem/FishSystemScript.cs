@@ -6,6 +6,7 @@ using UnityEditor;
 public class FishSystemScript : MonoBehaviour
 {
     public GameObject fish;
+    private GameObject[] fishes;
     private ParticleSystem foodParticles;
     private ParticleSystem.EmissionModule emission;
     public float radius = 10;
@@ -14,9 +15,12 @@ public class FishSystemScript : MonoBehaviour
     public float fullnessDivider = 0.7f;
     public float swimSpeedVertical = 0.5f;
     public float swimSpeedHorizontal = 1.0f;
-    
+
     [HideInInspector]
-    public bool feeding = false;    // all fish in the top part ("hunger zone") will be fed when this is true
+    private bool feeding = false;    // all fish in the top part ("hunger zone") will be fed when this is true
+    public float foodWasted = 0;
+    private int eatingAmount = 3;
+    private int foodGivenPerSec;
 
     [HideInInspector]
     public enum FishState   // state of fish within this fish system
@@ -25,6 +29,7 @@ public class FishSystemScript : MonoBehaviour
         Hungry,
         Dying
     }
+
     [HideInInspector]
     public FishState state;
 
@@ -59,8 +64,10 @@ public class FishSystemScript : MonoBehaviour
             newFish.GetComponent<FishScript>().Kill();
         }
 
-
         InvokeRepeating(nameof(HandleFishState), 0.0f, 1.0f);
+        fishes = GameObject.FindGameObjectsWithTag("Fish");
+        foodGivenPerSec = amountOfFish * eatingAmount;
+        /*InvokeRepeating(nameof(FeedFish), 0.0f, 1.0f);*/
     }
 
     // Update is called once per frame
@@ -200,6 +207,36 @@ public class FishSystemScript : MonoBehaviour
             fishKilled++;
         }
     }
+
+    /* Feeds each fish if they can eat and computes the food wasted. */
+/*    void FeedFish()
+    {
+        // Return if we're not feeding
+        if (!feeding)
+        {
+            return;
+        }
+        *//*Debug.Log("foodWasted: " + foodWasted);*//*
+        foodWasted = foodGivenPerSec;
+        int foodEaten = 0;
+
+        foreach (GameObject i in fishes)
+        {
+            FishScript script = i.GetComponent<FishScript>();
+            float posY = i.transform.position.y;
+            if (posY > fullnessDivider)
+            {
+                if (script.fullness < 100)
+                {
+                    script.fullness += eatingAmount;
+                    foodWasted -= eatingAmount;
+                    foodEaten += eatingAmount;
+                }
+            }
+
+        }
+        Debug.Log("foodWasted: " + foodWasted + "FoodEaten: " + foodEaten);
+    }*/
 }
 
 [CustomEditor(typeof(FishSystemScript))]

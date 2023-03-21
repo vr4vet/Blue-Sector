@@ -16,14 +16,22 @@ public class FishScript : MonoBehaviour
     private bool dead;
     private float swimSpeedVertical;
     private float swimSpeedHorizontal;
+    public Status status;
 
     private Animation fishAnimation;
     private GameObject fishSystem;
     private FishSystemScript fishSystemScript;
+
+    public enum Status
+    {
+        Full,
+        Hungry,
+        Dead
+    }
     
     // Start is called before the first frame update
     void Start()
-    {   
+    {
         InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 5.0f), 3.0f);
         fishSystem = gameObject.transform.parent.gameObject;//GameObject.Find("FishSystem");
         fishSystemScript = fishSystem.GetComponent<FishSystemScript>();
@@ -36,11 +44,12 @@ public class FishScript : MonoBehaviour
         swimSpeedVertical = fishSystemScript.swimSpeedVertical;
         swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
         dead = false;
-
+        status = Status.Full;
         //Debug.Log(fishSystem.transform.position);
     }
 
     private bool waitingForReturn = false;
+
     // Update is called once per frame
     void Update()
     {
@@ -69,6 +78,8 @@ public class FishScript : MonoBehaviour
         {
             gameObject.transform.position += movement * Time.deltaTime;
         }  
+
+
     }
 
     bool IsColliding()
@@ -89,33 +100,11 @@ public class FishScript : MonoBehaviour
         float posY = gameObject.transform.position.y;
         FishSystemScript.FishState state = fishSystemScript.state;
 
-        // 1/2 likelihood of getting fed if player is feeding
-/*        if (fishSystemScript.feeding && posY > fullnessDivider)
-        {
-            if (Random.Range(0, 100) <= 50)
-            {
-                if (fullness >= 100)
-                {
-                    fullness = 100;
-                } else
-                {
-                    fullness += 20;
-                }
-            }
-        }*/
 
         if (IsColliding())
         {
             return;
         }
-        
-/*        if (fullness >= 0)
-        {
-            fullness -= hungerRate;
-        } else if (fullness < 0)
-        {
-            dead = true;
-        }*/
 
         if (dead)
         {
@@ -137,10 +126,12 @@ public class FishScript : MonoBehaviour
             else if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
             {
                 randY = swimSpeedVertical;
+                status = Status.Hungry;
             }
             else if (state == FishSystemScript.FishState.Full && posY > fullnessDivider)
             {
                 randY = -swimSpeedVertical;
+                status = Status.Full;
             }
 
             // Rotates the fish in the right direction
