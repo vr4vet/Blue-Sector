@@ -140,7 +140,7 @@ public class FishScript : MonoBehaviour
             {
                 randY = swimSpeedVertical;
             }
-            else if (state == FishSystemScript.FishState.Hungry && posY < fullnessDivider)
+            else if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
             {
                 randY = swimSpeedVertical;
             }
