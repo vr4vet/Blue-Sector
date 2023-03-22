@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
 [DisallowMultipleComponent]
@@ -35,48 +36,16 @@ public class Popup : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        textMesh = GetComponent<TextMeshPro>();
-        currentRenderer = GetComponent<Renderer>();
-        if (Background)
-        {
-            backgroundRenderer = Background.GetComponent<Renderer>();
-        }
-        enabled = currentRenderer.enabled = false;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        enabled = currentRenderer.enabled = true;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // Make the popup face the player
-        Vector3 playerPosition = Player != null ? Player.transform.position : Camera.main.transform.position;
-        var playerToSelf = transform.position - playerPosition;
-        transform.rotation = Quaternion.LookRotation(playerToSelf);
-
-        // Update the rounded rect background
-        var size = textMesh.textBounds.size;
-        backgroundRenderer.sharedMaterial.SetVector("_Size", size);
-        Background.transform.localScale = new Vector3(size.x / size.y, size.y / size.x, 1);
-    }
-
     /// <summary>
     /// Fades the popup into view
     /// </summary>
     public void Show()
     {
         StopAllCoroutines();
-        var material = currentRenderer.material;
+        enabled = currentRenderer.enabled = backgroundRenderer.enabled = true;
+        var material = backgroundRenderer.material;
         Color color = material.color;
-        color.a = 1;
         StartCoroutine(Fade(static progress => Easing.InCubic(progress)).GetEnumerator());
-        enabled = currentRenderer.enabled = true;
     }
 
     /// <summary>
@@ -94,25 +63,63 @@ public class Popup : MonoBehaviour
                 yield return null;
             }
 
-            enabled = currentRenderer.enabled = false;
+            SetEnabled(value: false);
         }
+    }
+
+    private void Awake()
+    {
+        textMesh = GetComponent<TextMeshPro>();
+        currentRenderer = GetComponent<Renderer>();
+        if (Background)
+        {
+            backgroundRenderer = Background.GetComponent<Renderer>();
+        }
+        SetEnabled(false);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        SetEnabled(true);
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        // Make the popup face the player
+        Vector3 playerPosition = Player != null ? Player.transform.position : Camera.main.transform.position;
+        var playerToSelf = transform.position - playerPosition;
+        transform.rotation = Quaternion.LookRotation(playerToSelf);
+        Background.transform.rotation = Quaternion.Euler(transform.localRotation.eulerAngles + new Vector3(90, 0, 0));
+
+        // Update the rounded rect background
+        var textSize = textMesh.textBounds.size;
+        backgroundRenderer.sharedMaterial.SetVector("_Size", textSize);
+        var backgroundSize = Background.GetComponent<MeshFilter>().sharedMesh.bounds.size;
+        Background.transform.localScale = new Vector3(textSize.x / backgroundSize.x, 1, textSize.y / backgroundSize.z) * 1.25f;
     }
 
     private IEnumerable Fade(Func<float, float> interpolate)
     {
-        var material = currentRenderer.material;
+        var backgroundMaterial = backgroundRenderer.material;
         float start = Time.time;
-        Color color = material.color;
+        Color color = backgroundMaterial.color;
         float targetAlpha = color.a;
         color.a = interpolate(0);
-        material.color = color;
+        backgroundMaterial.color = color;
         float progress = 0;
         while (progress < 1)
         {
-            progress = (Time.time - start) / (AnimationDurationMs / 1000);
+            progress = (Time.time - start) / (AnimationDurationMs / 1000f);
             color.a = targetAlpha * interpolate(progress);
-            material.color = color;
+            backgroundMaterial.color = color;
             yield return null;
         }
+        color.a = targetAlpha;
+    }
+
+    private void SetEnabled(bool value)
+    {
+        enabled = currentRenderer.enabled = backgroundRenderer.enabled = value;
     }
 }
