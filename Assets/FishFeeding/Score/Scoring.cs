@@ -47,34 +47,30 @@ public class Scoring : MonoBehaviour
         Debug.Log("Score: " + score);
     }
 
-    /* Goes through every fish and checks if it is full, hungry or dead. Based on the status to the fish add or 
-     * subtract from the total score of the game. */
+    /* Goes through every merd and checks if it is full, hungry or dead. Based on the status to the merd 
+     * add or subtract from the total score of the game. */
     void UpdateScore()
     {
-        foreach (GameObject i in fishes)
-        {
-            FishScript script = i.GetComponent<FishScript>();
-            if (script.status == FishScript.Status.Full)
-            {
-                score += 1;
-            } else if (script.status == FishScript.Status.Hungry)
-            {
-                score -= 1;
-            } else
-            {
-                score -= 2;
-            }
-
-        }
-
         foreach (GameObject i in merds)
         {
-            /*Debug.Log("Score before food waste: " + score);*/
             FishSystemScript script = i.GetComponent<FishSystemScript>();
-            float wastedFoodPercentage = script.foodWasted / 10;
-            /*Debug.Log("Wasted food: " + script.foodWasted + "wastedFoodPercentage: " + wastedFoodPercentage);*/
-            score -= (int)(wastedFoodPercentage + 0.5f); // Rounds wastedFoodPercentage to the nearest int.
-            script.foodWasted = 0;
+            if (script.state == FishSystemScript.FishState.Full)
+            {
+                score += 1 * script.amountOfFish;
+            }
+            else if (script.state == FishSystemScript.FishState.Hungry)
+            {
+                score -= (int)(0.5 * script.amountOfFish);
+            }
+            else
+            {
+                score -= 1 * script.fishKilled;
+            }
+
+            /*Debug.Log("Score before food waste: " + score);*/
+            float wastedFoodPoints = script.foodWasted / 10;
+            score -= (int)(wastedFoodPoints + 0.5f); // Rounds wastedFoodPoints to the nearest int.
+            /*script.foodWasted = 0;*/
             Debug.Log("Score after food waste: " + score);
         }
     }
