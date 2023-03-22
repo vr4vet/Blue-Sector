@@ -26,6 +26,9 @@ public class Scoring : MonoBehaviour
         {
             score = 0;
             startGame = true;
+            for (merd in merds) {
+                merd.fishes.fishIdle = false;
+            }
             Debug.Log("Started the game");
             Debug.Log("Score: " + score);
             StartCoroutine(GiveScore());
@@ -39,6 +42,7 @@ public class Scoring : MonoBehaviour
         yield return new WaitForSeconds(time);
         CancelInvoke("UpdateScore");
         startGame = false;
+        fishIdle = true;
         Debug.Log("End of game");
         Debug.Log("Score: " + score);
     }
