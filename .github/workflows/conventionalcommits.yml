@@ -14,8 +14,9 @@ jobs:
       - name: Setup node and commitlint
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: '14.x'
           cache: 'npm'
+          cache-dependency-path: '.github/workflows/dependencies/package-lock.json'
       - run: npm CI
 
       - name: Validate current commit with commitlint
