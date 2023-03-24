@@ -17,7 +17,7 @@ jobs:
           node-version: '14.x'
           cache: 'npm'
           cache-dependency-path: '.github/workflows/dependencies/package-lock.json'
-      - run: npm CI
+      - run: npm ci
 
       - name: Validate current commit with commitlint
         if: github.event_name == 'push'
