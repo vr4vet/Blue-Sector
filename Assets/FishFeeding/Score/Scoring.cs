@@ -2,23 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Scoring : MonoBehaviour
 {
     private int score = 0;
-    private GameObject[] fishes;
     private GameObject[] merds;
     private bool startGame = false;
     [SerializeField]
-    private float time = 60.0f;
-    private TextMeshProUGUI scoreText;
+    private int time = 60;
+    private float gameTimeLeft;
+    private int deadFish;
+    private float foodWasted;
+    private float foodWastedPercentage;
+    private TextMeshProUGUI endScoreText;
+    private TextMeshProUGUI timeLeft;
+    private TextMeshProUGUI currentScore;
+    private TextMeshProUGUI deadFishText;
+    private TextMeshProUGUI foodWasteText;
+    private Slider foodWasteSlider;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        fishes = GameObject.FindGameObjectsWithTag("Fish");
         merds = GameObject.FindGameObjectsWithTag("Fish System");
-        scoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
+        endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
+        GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerd").transform.GetChild(1).gameObject;
+        timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+        currentScore = canvas.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
+        deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
+        foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
+        foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<Slider>();
     }
 
     /* Update is called once per frame. If the key 's' is pressed and the game hasn't started, start the game and
@@ -31,18 +46,25 @@ public class Scoring : MonoBehaviour
             startGame = true;
             Debug.Log("Started the game");
             Debug.Log("Score: " + score);
-            StartCoroutine(GiveScore());
             InvokeRepeating(nameof(UpdateScore), 1.0f, 1.0f);
+            StartCoroutine(GiveScore());
+        }
+        if (startGame)
+        {
+            UpdateScreenStats();
         }
     }
 
      /* Gives the score after a certain amount of time. */
     IEnumerator GiveScore()
     {
-        yield return new WaitForSeconds(time);
+        for (gameTimeLeft = time; gameTimeLeft > 0; gameTimeLeft -= Time.deltaTime)
+        {
+            yield return null;
+        }
         CancelInvoke("UpdateScore");
         startGame = false;
-        scoreText.text = "YOUR SCORE:\n" + score;
+        endScoreText.text = "YOUR SCORE:\n" + score;
         Debug.Log("End of game");
         Debug.Log("Score: " + score);
     }
@@ -67,12 +89,26 @@ public class Scoring : MonoBehaviour
                 score -= 1 * script.fishKilled;
             }
 
-            /*Debug.Log("Score before food waste: " + score);*/
             float wastedFoodPoints = script.foodWasted / 10;
             score -= (int)(wastedFoodPoints + 0.5f); // Rounds wastedFoodPoints to the nearest int.
-            /*script.foodWasted = 0;*/
             Debug.Log("Score after food waste: " + score);
+
+            foodWasted = script.foodWasted;
+            foodWastedPercentage = script.foodWasted / (script.foodBase * 5 / 3);
+
         }
+        Debug.Log("Time left: " + gameTimeLeft);
+    }
+
+    /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */
+    void UpdateScreenStats()
+    {
+        timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
+            Mathf.FloorToInt(gameTimeLeft % 60).ToString("00");
+        currentScore.text = "Score: " + score;
+        foodWasteText.text = "Food wastage: " + foodWasted + " / Sec.";
+        foodWasteSlider.value = foodWastedPercentage;
+        deadFishText.text = "Dead fish: " + deadFish;
     }
 
 }

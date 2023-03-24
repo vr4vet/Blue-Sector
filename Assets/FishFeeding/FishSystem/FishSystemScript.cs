@@ -15,12 +15,9 @@ public class FishSystemScript : MonoBehaviour
     public float fullnessDivider = 0.7f;
     public float swimSpeedVertical = 0.5f;
     public float swimSpeedHorizontal = 1.0f;
-
-    /*[HideInInspector]
-    private bool feeding = false;*/    // all fish in the top part ("hunger zone") will be fed when this is true
     public float foodWasted;
     private readonly int eatingAmount = 3;
-    private int foodBase;
+    public int foodBase;
     private int foodGivenPerSec;
 
     [HideInInspector]
