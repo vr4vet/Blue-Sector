@@ -7,7 +7,6 @@ using TMPro;
 public class RankingStationController : MonoBehaviour
 {
 
-    private List<ButtonText> buttons = new List<ButtonText>();
     private InspectionTaskManager inspectionTaskManager;
     private TMP_Text screen;
 
@@ -16,23 +15,6 @@ public class RankingStationController : MonoBehaviour
     {
         inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
         screen = GameObject.FindGameObjectWithTag("Display").GetComponent("TMP_Text") as TMP_Text;
-        foreach(ButtonText button in GetComponentsInChildren<ButtonText>()){
-            buttons.Add(button);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SyncButtons(ButtonText clicked) {
-        foreach(ButtonText button in buttons) {
-            if(button != clicked) {
-                button.SetColor(false);
-            }
-        }
     }
 
     public void DrawScreen(bool complete) {
