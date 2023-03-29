@@ -6,9 +6,8 @@ using UnityEngine.UI;
 public class ButtonController : MonoBehaviour
 {
     private bool selected = false;
-    private string text;
     private RatingInterfaceController ratingInterfaceController;
-    Color unselectedColor = new Color(0,35,154);
+    Color unselectedColor = new Color(0f, 0.1377f, 0.6037f);
 
     void Start()
     {
