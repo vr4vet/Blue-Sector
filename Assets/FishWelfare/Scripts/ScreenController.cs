@@ -4,7 +4,7 @@ using UnityEngine;
 using BNG;
 using TMPro;
 
-public class RankingStationController : MonoBehaviour
+public class ScreenController : MonoBehaviour
 {
 
     private InspectionTaskManager inspectionTaskManager;

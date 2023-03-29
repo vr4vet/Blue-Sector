@@ -13,7 +13,7 @@ public class InspectionTaskManager : MonoBehaviour
     private TaskHolder taskHolder;
     private Fish selectedFish;
     private List<Fish> inspectedFish = new List<Fish>();
-    private RankingStationController rankingStationController;
+    private ScreenController screenController;
     [SerializeField]
     private List<Fish> fishList = new List<Fish>();
 
@@ -21,7 +21,7 @@ public class InspectionTaskManager : MonoBehaviour
     void Start()
     {
         taskHolder = GameObject.FindObjectOfType<TaskHolder>();
-        rankingStationController = GameObject.FindObjectOfType<RankingStationController>();
+        screenController = GameObject.FindObjectOfType<ScreenController>();
         inspectionTarget = fishList.Count;
         selectedFish = fishList[0];
     }
@@ -33,9 +33,9 @@ public class InspectionTaskManager : MonoBehaviour
                 inspectedFishCount++;
             if(inspectedFishCount == inspectionTarget){
                 taskHolder.AddPoints(activityInspect, skill1, 10);
-                rankingStationController.DrawScreen(true);
+                screenController.DrawScreen(true);
             } else {
-                rankingStationController.DrawScreen(false);
+                screenController.DrawScreen(false);
             }
             }
         }
@@ -46,7 +46,7 @@ public class InspectionTaskManager : MonoBehaviour
         if((obj.GetComponent("Fish") as Fish) != null) {
             RemoveFish(obj.GetComponent("Fish") as Fish);
             inspectedFishCount--;
-            rankingStationController.DrawScreen(false);
+            screenController.DrawScreen(false);
         }
     }
 
