@@ -9,12 +9,8 @@ public class RatingInterfaceController : MonoBehaviour
 
     private bool active = false;
     private List<ButtonController> buttons = new List<ButtonController>();
-    private InspectionTaskManager inspectionTaskManager;
-    private TMP_Text screen;
 
     void Start() {
-        inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
-        screen = GameObject.FindGameObjectWithTag("Display").GetComponent("TMP_Text") as TMP_Text;
         foreach(ButtonController button in GetComponentsInChildren<ButtonController>()){
             if(button.GetComponent<Image>() != null) {
                 buttons.Add(button);
