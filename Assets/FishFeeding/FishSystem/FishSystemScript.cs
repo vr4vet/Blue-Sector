@@ -239,6 +239,7 @@ public class FishSystemScript : MonoBehaviour
     }*/
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(FishSystemScript))]
 public class FishSystemVisualization : Editor
 {
@@ -276,3 +277,4 @@ public class FishSystemVisualization : Editor
     }
 
 }
+#endif
