@@ -1,7 +1,10 @@
 using BNG;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,6 +14,7 @@ public class TutorialEntry : MonoBehaviour
     private bool isActive;
     private GameObject currentHint;
     private Popup currentPopup;
+    private Popup popupGizmo;
 
     public bool IsActive
     {
@@ -27,6 +31,7 @@ public class TutorialEntry : MonoBehaviour
                     tmp.text = Text;
                     currentPopup = currentHint.GetComponent<Popup>();
                     currentPopup.transform.position = transform.position;
+                    currentPopup.transform.localScale = Vector3.Scale(currentPopup.transform.localScale, transform.localScale);
                     currentPopup.Show();
                 }
                 else

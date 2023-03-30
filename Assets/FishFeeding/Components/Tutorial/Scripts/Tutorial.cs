@@ -10,9 +10,14 @@ public class Tutorial : MonoBehaviour
     public GameObject PopupHint;
 
     /// <summary>
-    /// Fired when all the tutorial entires have been completed.
+    /// Gets an event which is fired when all the tutorial entires have been completed.
     /// </summary>
     public UnityEvent OnCompleted;
+
+    /// <summary>
+    /// Gets an event which is fired when the tutorial is triggered.
+    /// </summary>
+    public UnityEvent OnTriggered;
 
     private int indexOfCurrentItem = -1;
     private bool triggered;
@@ -59,6 +64,14 @@ public class Tutorial : MonoBehaviour
                 IndexOfCurrentItem = 0;
             }
         }
+    }
+
+    /// <summary>
+    /// Starts the tutorial if it has not already been started.
+    /// </summary>
+    public void Trigger()
+    {
+        Triggered = true;
     }
 
     /// <summary>

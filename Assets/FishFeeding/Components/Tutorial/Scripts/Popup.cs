@@ -87,14 +87,14 @@ public class Popup : MonoBehaviour
     private void Update()
     {
         // Make the popup face the player
-        Vector3 playerPosition = Player != null ? Player.transform.position : Camera.main.transform.position;
+        Vector3 playerPosition = Camera.main.transform.position;
         var playerToSelf = transform.position - playerPosition;
         transform.rotation = Quaternion.LookRotation(playerToSelf);
         Background.transform.rotation = Quaternion.Euler(transform.localRotation.eulerAngles + new Vector3(90, 0, 0));
 
         // Update the rounded rect background
         var textSize = textMesh.textBounds.size;
-        backgroundRenderer.sharedMaterial.SetVector("_Size", textSize);
+        backgroundRenderer.material.SetVector("_Size", textSize);
         var backgroundSize = Background.GetComponent<MeshFilter>().sharedMesh.bounds.size;
         Background.transform.localScale = new Vector3(textSize.x / backgroundSize.x, 1, textSize.y / backgroundSize.z) * 1.25f;
     }

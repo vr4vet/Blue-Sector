@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5368546135761574818}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.3152864, y: -0.012188911, z: 8.28143}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,8 +44,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9.18249, y: 7.9177375, z: 14.751625}
-  m_Center: {x: -2.1293874, y: -2.6696594, z: -6.8758125}
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3449700678857636150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,6 +58,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27a09a303e3a4494d9399e3dc5c26be7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3944049767300309894}
+        m_TargetAssemblyTypeName: Tutorial, Assembly-CSharp
+        m_MethodName: Trigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5623583580499549745
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,5 +122,8 @@ MonoBehaviour:
   PopupHint: {fileID: 7527018641805051373, guid: d2b4d578b73a2bb428bb8fea17aea331,
     type: 3}
   OnCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTriggered:
     m_PersistentCalls:
       m_Calls: []
