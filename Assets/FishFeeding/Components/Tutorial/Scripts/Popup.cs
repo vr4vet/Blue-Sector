@@ -12,29 +12,12 @@ using UnityEngine.UIElements.Experimental;
 public class Popup : MonoBehaviour
 {
     private const int AnimationDurationMs = 500;
-    private BNGPlayerController playerController;
     private TextMeshPro textMesh;
     private Renderer currentRenderer;
     private Renderer backgroundRenderer;
 
     [field: SerializeField]
     public GameObject Background { get; set; }
-
-    private BNGPlayerController Player
-    {
-        get
-        {
-            if (playerController == null)
-            {
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                playerController = player != null
-                    ? player.GetComponentInChildren<BNGPlayerController>()
-                    : FindObjectOfType<BNGPlayerController>();
-            }
-
-            return playerController;
-        }
-    }
 
     /// <summary>
     /// Fades the popup into view
