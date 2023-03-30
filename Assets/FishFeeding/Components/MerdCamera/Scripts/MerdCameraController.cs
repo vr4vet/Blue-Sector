@@ -1,11 +1,13 @@
 #nullable enable
+using BNG;
 using System;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public sealed class MerdCameraController : MonoBehaviour
 {
-    private const float DefaultTrackLength = 50_000;
+    private const float DefaultTrackLength = 40;
     private static readonly (Vector3 Min, Vector3 Max) DefaultTrackRange = (default, Vector3.forward * DefaultTrackLength);
 
     private (Vector3 Min, Vector3 Max) localTrackRange = DefaultTrackRange;
@@ -35,12 +37,11 @@ public sealed class MerdCameraController : MonoBehaviour
             }
 
             var scale = value.localScale;
-            var trackAxis = scale.x > scale.y // get the dominant axis based on scale
+            // get the dominant axis in the x-z plane based on scale
+            var trackAxis = Vector3.up + (scale.x > scale.z
                 ? Vector3.right
-                : scale.y > scale.z
-                    ? Vector3.up
-                    : Vector3.forward;
-            var min = Vector3.Scale(trackAxis, value.localPosition);
+                : Vector3.forward);
+            var min = Vector3.Scale(trackAxis, value.position - (trackAxis * scale.magnitude) / 2f);
             localTrackRange = (min, min + trackAxis * scale.magnitude);
             movementTrack = value;
         }
@@ -62,14 +63,25 @@ public sealed class MerdCameraController : MonoBehaviour
             }
 
             selectedCamera = value;
-            MovementTrack = value == null ? null : value.GetComponent<Transform>();
+            MovementTrack = value == null ? null : value
+                .GetComponentsInChildren<Transform>()
+                .First(x => x.parent == value.transform);
 
             if (value != null)
             {
                 value.targetTexture = TargetTexture;
             }
+
+            SelectedFishSystemChanged.Invoke(SelectedFishSystem);
         }
     }
+
+    public FishSystemScript? SelectedFishSystem
+    {
+        get => selectedCamera == null ? null : selectedCamera.GetComponentInParent<FishSystemScript>();
+    }
+
+    public UnityEvent<FishSystemScript?> SelectedFishSystemChanged { get; } = new();
 
     // Start is called before the first frame update
     void Start()
@@ -84,22 +96,7 @@ public sealed class MerdCameraController : MonoBehaviour
 
     void Update()
     {
-        Vector3 trackAxis;
-        if (MovementTrack == null)
-        {
-            localTrackRange = DefaultTrackRange;
-        }
-        else
-        {
-            var scale = MovementTrack.localScale;
-            trackAxis = scale.x > scale.y // get the dominant axis based on scale
-                ? Vector3.right
-                : scale.y > scale.z
-                    ? Vector3.up
-                    : Vector3.forward;
-            localTrackRange = (MovementTrack.localPosition, MovementTrack.localPosition + Vector3.Scale(scale, trackAxis));
-        }
-        Look(90 /* degrees */, .01f);
+        //Look(90 /* degrees */, .01f);
     }
 
     /// <summary>
@@ -135,21 +132,17 @@ public sealed class MerdCameraController : MonoBehaviour
     /// <param name="direction">A normalized value between -1 and 1, indicating the rate of movement along the track.</param>
     public void Move(float direction)
     {
-        const float maxSpeed = .1f; // units/s
-        direction = Math.Clamp(direction, -1f, 1f);
+        // Select away the up-down axis
+        Transform(direction, Vector3.forward + Vector3.right);
+    }
 
-        if (selectedCamera == null)
-        {
-            return;
-        }
-
-        var target = selectedCamera.transform;
-        var axis = localTrackRange.Max - localTrackRange.Min;
-        var trackLength = axis.magnitude;
-        var unit = axis.normalized;
-        var offset = (Vector3.Dot(target.localPosition, unit) - Vector3.Dot(localTrackRange.Min, unit)) / trackLength;
-        var newOffset = Math.Clamp(offset + direction * maxSpeed / trackLength, 0f, 1f);
-        target.localPosition = localTrackRange.Min + newOffset * axis;
+    /// <summary>
+    /// Moves the camera along the track.
+    /// </summary>
+    /// <param name="direction">A normalized value between -1 and 1, indicating the rate of movement along the track.</param>
+    public void Elevate(float direction)
+    {
+        Transform(direction, Vector3.up);
     }
 
     /// <summary>
@@ -168,5 +161,26 @@ public sealed class MerdCameraController : MonoBehaviour
     {
         selectedCameraIndex = (selectedCameraIndex - 1) < 0 ? Cameras.Length - 1 : (selectedCameraIndex - 1);
         SelectedCamera = Cameras[selectedCameraIndex];
+    }
+
+    private void Transform(float direction, Vector3 mask)
+    {
+        const float maxSpeed = .01f; // units/s
+        direction = Math.Clamp(direction, -1f, 1f);
+
+        if (selectedCamera == null)
+        {
+            return;
+        }
+
+        // Select away the up-down axis
+        var axis = Vector3.Scale(localTrackRange.Max - localTrackRange.Min, mask);
+
+        var target = selectedCamera.transform;
+        var trackLength = axis.magnitude;
+        var unit = axis.normalized;
+        var offset = (Vector3.Dot(target.position, unit) - Vector3.Dot(localTrackRange.Min, unit)) / trackLength;
+        var newOffset = Math.Clamp(offset + direction * maxSpeed / trackLength, 0f, 1f);
+        target.position = localTrackRange.Min + newOffset * axis;
     }
 }
