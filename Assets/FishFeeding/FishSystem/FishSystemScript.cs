@@ -221,7 +221,7 @@ public class FishSystemScript : MonoBehaviour
         {
             foodWasted = 0;
         }
-        Debug.Log("foodWasted: " + foodWasted);
+        /*Debug.Log("foodWasted: " + foodWasted);*/
     }
 }
 

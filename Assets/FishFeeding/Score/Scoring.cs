@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using BNG;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class Scoring : MonoBehaviour
     private int score = 0;
     private GameObject[] merds;
     private bool startGame = false;
+    public bool inActivatedArea = false;
     [SerializeField]
     private int time = 60;
     private float gameTimeLeft;
@@ -20,7 +22,7 @@ public class Scoring : MonoBehaviour
     private TextMeshProUGUI currentScore;
     private TextMeshProUGUI deadFishText;
     private TextMeshProUGUI foodWasteText;
-    private Slider foodWasteSlider;
+    private UnityEngine.UI.Slider foodWasteSlider;
 
 
     // Start is called before the first frame update
@@ -33,15 +35,16 @@ public class Scoring : MonoBehaviour
         currentScore = canvas.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
         deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
-        foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<Slider>();
+        foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
     }
 
-    /* Update is called once per frame. If the key 's' is pressed and the game hasn't started, start the game and
+    /* Update is called once per frame. If the key 'g' is pressed and the game hasn't started, start the game and
      * the coroutine GiveScore and update the score every second. */
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S) && !startGame)
+        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && inActivatedArea)
         {
+            /*Debug.Log()*/
             score = 0;
             startGame = true;
             Debug.Log("Started the game");
@@ -95,6 +98,7 @@ public class Scoring : MonoBehaviour
 
             foodWasted = script.foodWasted;
             foodWastedPercentage = script.foodWasted / (script.foodBase * 5 / 3);
+            deadFish = script.fishKilled;
 
         }
         Debug.Log("Time left: " + gameTimeLeft);
