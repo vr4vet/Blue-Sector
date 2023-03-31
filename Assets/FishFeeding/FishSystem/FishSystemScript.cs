@@ -15,11 +15,9 @@ public class FishSystemScript : MonoBehaviour
     public float fullnessDivider = 0.7f;
     public float swimSpeedVertical = 0.5f;
     public float swimSpeedHorizontal = 1.0f;
-
-    [HideInInspector]
-    // private bool feeding = false;    // all fish in the top part ("hunger zone") will be fed when this is true
-    public float foodWasted = 0;
-    private int eatingAmount = 3;
+    public float foodWasted;
+    private readonly int eatingAmount = 3;
+    public int foodBase;
     private int foodGivenPerSec;
 
     [HideInInspector]
@@ -32,6 +30,7 @@ public class FishSystemScript : MonoBehaviour
 
     // [HideInInspector]
     public FishState state;
+    public bool fishIdle;
 
     [HideInInspector]
     public enum FeedingIntensity
@@ -46,8 +45,11 @@ public class FishSystemScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        fishIdle = true; // initiate with idle fish, waiting for round to satart
+        foodBase = amountOfFish * eatingAmount;
         state = FishState.Full;     // initiate with full state
         feedingIntensity = FeedingIntensity.Medium;     // initiate with medium feeding intensity
+        foodGivenPerSec = foodBase; // initiate foodGivenPerSec at medium level when fish is full
 
         // get position for spawning fish within fish system boundaries
         Vector3 position = gameObject.transform.position;
@@ -67,15 +69,38 @@ public class FishSystemScript : MonoBehaviour
         }
 
         InvokeRepeating(nameof(HandleFishState), 0.0f, 1.0f);
-        fishes = GameObject.FindGameObjectsWithTag("Fish");
-        foodGivenPerSec = amountOfFish * eatingAmount;
-        /*InvokeRepeating(nameof(FeedFish), 0.0f, 1.0f);*/
+        InvokeRepeating(nameof(ComputeFoodWaste), 0.0f, 1.0f);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            feedingIntensity = FeedingIntensity.Low;
+            foodGivenPerSec = foodBase * 1 / 3;
+            emission.rateOverTime = 5;
+            Debug.Log(feedingIntensity);
+            //foodParticles.Play();
+        }
 
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            feedingIntensity = FeedingIntensity.Medium;
+            foodGivenPerSec = foodBase * 1;
+            emission.rateOverTime = 20;
+            Debug.Log(feedingIntensity);
+            //foodParticles.Play();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            feedingIntensity = FeedingIntensity.High;
+            foodGivenPerSec = foodBase * 5 / 3;
+            emission.rateOverTime = 40;
+            Debug.Log(feedingIntensity);
+            //foodParticles.Play();
+        }
     }
 
     /* Make fish hungry after som random time between 25-35 seconds when not feeding,
@@ -103,7 +128,6 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
-    
     private int fullTicks = 0;  // gets hungry when this passes timeToHungry.
     void HandleFull()
     {
@@ -185,9 +209,14 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
-    int fishKilled = 0;
+    public int fishKilled = 0;
     void KillFish()
     {
+        if (fishIdle)  {
+            state = FishState.full;
+            hungerStatus = (int)Random.Range(10.0f, 12.0f);
+            return;
+        }
         if (fishKilled < amountOfFish)
         {
             // kill fish one by one
@@ -196,42 +225,21 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
-    public void SetIntensity(FeedingIntensity intensity)
+    /* Gives the wasted food in this second based on the state to the merd and the feeding intensity. */
+   void ComputeFoodWaste()
     {
-        feedingIntensity =  intensity;
+        if (state == FishState.Full)
+        {
+            foodWasted = foodGivenPerSec;
+        } else
+        {
+            foodWasted = 0;
+        }
+        Debug.Log("foodWasted: " + foodWasted);
     }
-
-    /* Feeds each fish if they can eat and computes the food wasted. */
-/*    void FeedFish()
-    {
-        // Return if we're not feeding
-        if (!feeding)
-        {
-            return;
-        }
-        *//*Debug.Log("foodWasted: " + foodWasted);*//*
-        foodWasted = foodGivenPerSec;
-        int foodEaten = 0;
-
-        foreach (GameObject i in fishes)
-        {
-            FishScript script = i.GetComponent<FishScript>();
-            float posY = i.transform.position.y;
-            if (posY > fullnessDivider)
-            {
-                if (script.fullness < 100)
-                {
-                    script.fullness += eatingAmount;
-                    foodWasted -= eatingAmount;
-                    foodEaten += eatingAmount;
-                }
-            }
-
-        }
-        Debug.Log("foodWasted: " + foodWasted + "FoodEaten: " + foodEaten);
-    }*/
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(FishSystemScript))]
 public class FishSystemVisualization : Editor
 {
@@ -269,3 +277,4 @@ public class FishSystemVisualization : Editor
     }
 
 }
+#endif
