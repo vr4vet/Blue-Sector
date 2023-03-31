@@ -17,7 +17,7 @@ public class FishSystemScript : MonoBehaviour
     public float swimSpeedHorizontal = 1.0f;
 
     [HideInInspector]
-    private bool feeding = false;    // all fish in the top part ("hunger zone") will be fed when this is true
+    // private bool feeding = false;    // all fish in the top part ("hunger zone") will be fed when this is true
     public float foodWasted = 0;
     private int eatingAmount = 3;
     private int foodGivenPerSec;
@@ -30,14 +30,16 @@ public class FishSystemScript : MonoBehaviour
         Dying
     }
 
-    [HideInInspector]
+    // [HideInInspector]
     public FishState state;
 
+    [HideInInspector]
     public enum FeedingIntensity
     {
-        High,
-        Medium,
-        Low
+        High = 40,
+        Medium = 20,
+        Low = 5,
+        Off = 0,
     }
 
     public FeedingIntensity feedingIntensity;
@@ -73,27 +75,7 @@ public class FishSystemScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(state);
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            feedingIntensity = FeedingIntensity.Low;
-            emission.rateOverTime = 5;
-            //foodParticles.Play();
-        }
 
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            feedingIntensity = FeedingIntensity.Medium;
-            emission.rateOverTime = 20;
-            //foodParticles.Play();
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            feedingIntensity = FeedingIntensity.High;
-            emission.rateOverTime = 40;
-            //foodParticles.Play();
-        }
     }
 
     /* Make fish hungry after som random time between 25-35 seconds when not feeding,
@@ -145,6 +127,9 @@ public class FishSystemScript : MonoBehaviour
             case FeedingIntensity.Low:
                 fullTicks += 2;  // fish get hungry twice as fast
                 break;
+            case FeedingIntensity.Off:
+                fullTicks += 4; // fish are starvin bruv
+                break;
         }
     }
 
@@ -178,6 +163,9 @@ public class FishSystemScript : MonoBehaviour
             case FeedingIntensity.Low:
                 hungerStatus -= 2;  // quickly starts starving
                 break;
+            case FeedingIntensity.Off:
+                fullTicks += 4; // fish are starvin bruv
+                break;
         }
     }
 
@@ -206,6 +194,11 @@ public class FishSystemScript : MonoBehaviour
             gameObject.transform.GetChild(fishKilled).GetComponent<FishScript>().Kill();
             fishKilled++;
         }
+    }
+
+    public void SetIntensity(FeedingIntensity intensity)
+    {
+        feedingIntensity =  intensity;
     }
 
     /* Feeds each fish if they can eat and computes the food wasted. */
