@@ -18,7 +18,7 @@ public class Activation : MonoBehaviour
         if (other.name == "CameraRig" && !script.inActivatedArea)
         {
             script.inActivatedArea = true;
-            /*Debug.Log("activated true");*/
+            Debug.Log("activated true");
         }
 
     }
@@ -28,7 +28,7 @@ public class Activation : MonoBehaviour
         if (other.name == "CameraRig" && script.inActivatedArea)
         {
             script.inActivatedArea = false;
-            /*Debug.Log("activated false");*/
+            Debug.Log("activated false");
         }
     }
 }

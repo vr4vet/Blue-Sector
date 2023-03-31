@@ -101,7 +101,7 @@ public class Scoring : MonoBehaviour
             Debug.Log("Score after food waste: " + score);
 
             Debug.Log(merdCameraController.SelectedFishSystem);
-            if (merdCameraController.SelectedFishSystem == i)
+            if (merdCameraController.SelectedFishSystem == script)
             {
                 foodWasted = script.foodWasted;
                 foodWastedPercentage = script.foodWasted / (script.foodBase * 5 / 3);
