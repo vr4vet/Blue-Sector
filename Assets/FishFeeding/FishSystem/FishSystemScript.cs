@@ -30,6 +30,7 @@ public class FishSystemScript : MonoBehaviour
 
     [HideInInspector]
     public FishState state;
+    public bool fishIdle;
 
     public enum FeedingIntensity
     {
@@ -42,6 +43,7 @@ public class FishSystemScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        fishIdle = true; // initiate with idle fish, waiting for round to satart
         foodBase = amountOfFish * eatingAmount;
         state = FishState.Full;     // initiate with full state
         feedingIntensity = FeedingIntensity.Medium;     // initiate with medium feeding intensity
@@ -124,7 +126,6 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
-    
     private int fullTicks = 0;  // gets hungry when this passes timeToHungry.
     void HandleFull()
     {
@@ -203,6 +204,11 @@ public class FishSystemScript : MonoBehaviour
     public int fishKilled = 0;
     void KillFish()
     {
+        if (fishIdle)  {
+            state = FishState.full;
+            hungerStatus = (int)Random.Range(10.0f, 12.0f);
+            return;
+        }
         if (fishKilled < amountOfFish)
         {
             // kill fish one by one

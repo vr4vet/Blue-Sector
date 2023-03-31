@@ -44,6 +44,9 @@ public class Scoring : MonoBehaviour
         {
             score = 0;
             startGame = true;
+            for (merd in merds) {
+                merd.fishes.fishIdle = false;
+            }
             Debug.Log("Started the game");
             Debug.Log("Score: " + score);
             InvokeRepeating(nameof(UpdateScore), 1.0f, 1.0f);
@@ -64,6 +67,7 @@ public class Scoring : MonoBehaviour
         }
         CancelInvoke("UpdateScore");
         startGame = false;
+        fishIdle = true;
         endScoreText.text = "YOUR SCORE:\n" + score;
         Debug.Log("End of game");
         Debug.Log("Score: " + score);

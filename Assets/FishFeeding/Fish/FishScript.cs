@@ -24,6 +24,7 @@ public class FishScript : MonoBehaviour
 
     public enum Status
     {
+        Idle,
         Full,
         Hungry,
         Dead
@@ -45,7 +46,6 @@ public class FishScript : MonoBehaviour
         swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
         dead = false;
         status = Status.Full;
-        //Debug.Log(fishSystem.transform.position);
     }
 
     private bool waitingForReturn = false;
@@ -69,8 +69,7 @@ public class FishScript : MonoBehaviour
                 gameObject.transform.rotation = target;
                 waitingForReturn = true;
             }
-        } else
-        {
+        } else {
             waitingForReturn = false;
         }
 
@@ -101,11 +100,7 @@ public class FishScript : MonoBehaviour
         FishSystemScript.FishState state = fishSystemScript.state;
 
 
-        if (IsColliding())
-        {
-            return;
-        }
-
+        if (IsColliding()) return;
         if (dead)
         {
             if (posY > bottom)
