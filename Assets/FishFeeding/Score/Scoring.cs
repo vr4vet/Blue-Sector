@@ -23,6 +23,9 @@ public class Scoring : MonoBehaviour
     private TextMeshProUGUI deadFishText;
     private TextMeshProUGUI foodWasteText;
     private UnityEngine.UI.Slider foodWasteSlider;
+    private MerdCameraController merdCameraController;
+    [SerializeField]
+    private GameObject MerdCameraHost;
 
 
     // Start is called before the first frame update
@@ -30,12 +33,13 @@ public class Scoring : MonoBehaviour
     {
         merds = GameObject.FindGameObjectsWithTag("Fish System");
         endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
-        GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerd").transform.GetChild(1).gameObject;
+        GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
         timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
         currentScore = canvas.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
         deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
+        merdCameraController = MerdCameraHost.GetComponent<MerdCameraController>();
     }
 
     /* Update is called once per frame. If the key 'g' is pressed and the game hasn't started, start the game and
@@ -96,9 +100,13 @@ public class Scoring : MonoBehaviour
             score -= (int)(wastedFoodPoints + 0.5f); // Rounds wastedFoodPoints to the nearest int.
             Debug.Log("Score after food waste: " + score);
 
-            foodWasted = script.foodWasted;
-            foodWastedPercentage = script.foodWasted / (script.foodBase * 5 / 3);
-            deadFish = script.fishKilled;
+            Debug.Log(merdCameraController.SelectedFishSystem);
+            if (merdCameraController.SelectedFishSystem == i)
+            {
+                foodWasted = script.foodWasted;
+                foodWastedPercentage = script.foodWasted / (script.foodBase * 5 / 3);
+                deadFish = script.fishKilled;
+            }
 
         }
         Debug.Log("Time left: " + gameTimeLeft);
