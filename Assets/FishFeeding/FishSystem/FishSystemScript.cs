@@ -28,15 +28,17 @@ public class FishSystemScript : MonoBehaviour
         Dying
     }
 
-    [HideInInspector]
+    // [HideInInspector]
     public FishState state;
     public bool fishIdle;
 
+    [HideInInspector]
     public enum FeedingIntensity
     {
-        High,
-        Medium,
-        Low
+        High = 40,
+        Medium = 20,
+        Low = 5,
+        Off = 0,
     }
 
     public FeedingIntensity feedingIntensity;
@@ -149,6 +151,9 @@ public class FishSystemScript : MonoBehaviour
             case FeedingIntensity.Low:
                 fullTicks += 2;  // fish get hungry twice as fast
                 break;
+            case FeedingIntensity.Off:
+                fullTicks += 4; // fish are starvin bruv
+                break;
         }
     }
 
@@ -181,6 +186,9 @@ public class FishSystemScript : MonoBehaviour
                 break;
             case FeedingIntensity.Low:
                 hungerStatus -= 2;  // quickly starts starving
+                break;
+            case FeedingIntensity.Off:
+                fullTicks += 4; // fish are starvin bruv
                 break;
         }
     }

@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<levels xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<modes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="LevelList.xsd">
     <!-- Arcade mode levels (easier difficulty, lower thresholds, more gameified) -->
-    <arcadelevels>                      
-        <level>                         <!-- A generic level --> 
-            <tutorial>true</tutorial>   <!-- Is this level a tutorial? -->
+        <mode name="arcade">                         <!-- Mode --> 
+            <tutorial>true</tutorial>   <!-- Does this mode have a tutorial -->
+            <time>120</time>
             <threshold>0.1</threshold>  <!-- How low is feed% before failing -->
-            <unlock>0</unlock>          <!-- Score to unlock next level -->
-            <modifier>0.0</modifier>    <!-- Modifier for difficulty level in case certain levels should be extra hard-->
-            <prev>false</prev>          <!-- Does there exist a level before this one? -->
-            <next>true</next>           <!-- Does there exist a level after this one? -->
-            <beaten>false</beaten>      <!-- Has the player beaten the level?-->
-        </level>
-    </arcadelevels>
+            <unlock>0</unlock>          <!-- Score to unlock mode -->
+            <modifier>0.0</modifier>    <!-- Modifier for difficulty level -->
+            <unlocked>true</unlocked>       <!-- Is mode unlocked? -->
+        </mode>
 
     <!-- Realism mode levels (harder difficulty, higher thresholds, more detail) -->
-    <realismlevels>
-        <level>
-            <tutorial>true</tutorial>
-            <threshold>0.1</threshold>
-            <unlock>0</unlock>
-            <modifier>0.0</modifier>
-            <prev>false</prev>
-            <next>true</next>
-            <beaten>false</beaten>
-        </level>
-    </realismlevels>
-</levels>
+    <mode name="realism">
+        <tutorial>true</tutorial>
+        <time>480</time>
+        <threshold>0.1</threshold>
+        <unlock>0</unlock>
+        <modifier>0.0</modifier>
+        <unlocked>false</unlocked>
+    </mode>
+
+    <!-- Sandbox mode -->
+    <mode name="sandbox">
+        <tutorial>false</tutorial>
+        <time>0</time>
+        <threshold>0.1</threshold>
+        <unlock>0</unlock>
+        <modifier>0.0</modifier>
+        <unlocked>true</unlocked>
+    </mode>
+</modes>
