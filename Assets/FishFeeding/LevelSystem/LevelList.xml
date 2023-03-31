@@ -4,6 +4,7 @@
     <!-- Arcade mode levels (easier difficulty, lower thresholds, more gameified) -->
         <mode name="arcade">                         <!-- Mode --> 
             <tutorial>true</tutorial>   <!-- Does this mode have a tutorial -->
+            <time>120</time>
             <threshold>0.1</threshold>  <!-- How low is feed% before failing -->
             <unlock>0</unlock>          <!-- Score to unlock mode -->
             <modifier>0.0</modifier>    <!-- Modifier for difficulty level -->
@@ -13,6 +14,17 @@
     <!-- Realism mode levels (harder difficulty, higher thresholds, more detail) -->
     <mode name="realism">
         <tutorial>true</tutorial>
+        <time>480</time>
+        <threshold>0.1</threshold>
+        <unlock>0</unlock>
+        <modifier>0.0</modifier>
+        <unlocked>false</unlocked>
+    </mode>
+
+    <!-- Sandbox mode -->
+    <mode name="sandbox">
+        <tutorial>false</tutorial>
+        <time>0</time>
         <threshold>0.1</threshold>
         <unlock>0</unlock>
         <modifier>0.0</modifier>
