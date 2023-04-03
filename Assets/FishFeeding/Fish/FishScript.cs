@@ -48,8 +48,11 @@ public class FishScript : MonoBehaviour
         status = Status.Full;
     }
 
+    /*
+     * this bool is needed to override fish movement when returning after leaving fish system (fish cage) boundaries, to ensure it does not 
+     * move about until it has returned safely
+    */
     private bool waitingForReturn = false;
-
     // Update is called once per frame
     void Update()
     {
@@ -92,6 +95,10 @@ public class FishScript : MonoBehaviour
         return false;
     }
 
+    bool IsAtSurface() => gameObject.transform.position.y >= top;
+    bool IsAtBottom() => gameObject.transform.position.y <= bottom;
+
+
     // runs every 3rd second
     void PeriodicUpdates()
     {
@@ -99,35 +106,41 @@ public class FishScript : MonoBehaviour
         float posY = gameObject.transform.position.y;
         FishSystemScript.FishState state = fishSystemScript.state;
 
-
-        if (IsColliding()) return;
+ 
+        if (IsColliding()) return;  // no modifications to movement if returning from outside boundaries
         if (dead)
         {
-            if (posY > bottom)
+            // dead fish continue to sink until hitting bottom
+            if (!IsAtBottom())
             {
                 movement = new Vector3(randX, -swimSpeedVertical, randZ);
             }
         }
         else
         {
-            if (posY >= top)
+            // stay within hunger/full segment (over/under fullnessDivider) of fish cage when not in idle state
+            if (!(state == FishSystemScript.FishState.Idle))    
+            {
+                if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
+                {
+                    randY = swimSpeedVertical;
+                }
+                else if (state == FishSystemScript.FishState.Full && posY > fullnessDivider)
+                {
+                    randY = -swimSpeedVertical;
+                }
+            } 
+
+            // move down/up if hitting upper/lower boundaries of fish cage
+            if (IsAtSurface())
             {
                 randY = -swimSpeedVertical;
             }
-            else if (posY <= bottom)
+            else if (IsAtBottom())
             {
                 randY = swimSpeedVertical;
             }
-            else if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
-            {
-                randY = swimSpeedVertical;
-                status = Status.Hungry;
-            }
-            else if (state == FishSystemScript.FishState.Full && posY > fullnessDivider)
-            {
-                randY = -swimSpeedVertical;
-                status = Status.Full;
-            }
+
 
             // Rotates the fish in the right direction
             randX = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
