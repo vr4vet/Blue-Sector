@@ -34,16 +34,16 @@ public class SlideBridge : MonoBehaviour
         switch(position)
         {
             case > (float) Intensity.Medium:
-            fishSystemScript.SetIntensity(FishSystemScript.FeedingIntensity.High);
+            fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.High;
             break;
                 
             case > (float) Intensity.Low:
-            fishSystemScript.SetIntensity(FishSystemScript.FeedingIntensity.Medium);
-            break;
+                fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.Medium;
+                break;
 
             default:
-            fishSystemScript.SetIntensity(FishSystemScript.FeedingIntensity.Low);
-            break;
+                fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.Low;
+                break;
         }
     }
 }
