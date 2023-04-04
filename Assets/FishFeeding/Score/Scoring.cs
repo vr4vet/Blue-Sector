@@ -51,6 +51,10 @@ public class Scoring : MonoBehaviour
             /*Debug.Log()*/
             score = 0;
             startGame = true;
+            foreach (GameObject merd in merds) {
+                FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
+                merdScript.ReleaseIdle();   // change all fish systems' states from Idle to Full
+            }
             Debug.Log("Started the game");
             Debug.Log("Score: " + score);
             InvokeRepeating(nameof(UpdateScore), 1.0f, 1.0f);
@@ -71,6 +75,11 @@ public class Scoring : MonoBehaviour
         }
         CancelInvoke("UpdateScore");
         startGame = false;
+        foreach (GameObject merd in merds)
+        {
+            FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
+            merdScript.SetIdle();
+        }
         endScoreText.text = "YOUR SCORE:\n" + score;
         Debug.Log("End of game");
         Debug.Log("Score: " + score);
