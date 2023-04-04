@@ -10,16 +10,17 @@ using System.IO;
 
 public class LevelLoader : MonoBehaviour {
     XDocument xmlDoc;
-    IEnumerable<XElement> levels;
-    List<XMLData> data = new List<XMLData>();
+    IEnumerable<XElement> modes;
+    List<Mode> modesList = new List<Mode>();
 
-    int iteration = 0, levelNo = 0, timeLimit = 0, beatenThreshold = 0;
-    float failureThreshold = 0;
-    bool finishedLoading = false, isUnlocked = false, isBeaten = false;
+    int timeLimit;
+    float failureThreshold, modifier;
+    bool finishedLoading = false, isUnlocked, tutorial;
+    string name;
 
     void start () {
         DontDestroyOnLoad(gameObject);
-        LoadXML("arcadelevels");
+        LoadXML();
         StartCoroutine("AssignData");
     }
 
@@ -29,45 +30,41 @@ public class LevelLoader : MonoBehaviour {
         }
     }
 
-    void LoadXML(string levelType) {
+    void LoadXML() {
         xmlDoc = XDocument.Load(@"LevelList.xml");
-        levels = xmlDoc.Descendants(levelType).Elements();
+        modes = xmlDoc.Descendants("modes").Elements();
     }
 
     void AssignData () {
-        foreach (var level in levels) {
-            levelNo = iteration;
-            timeLimit = int.Parse(level.Parent.Element("time").Value);
-            failureThreshold = float.Parse(level.Parent.Element("failure_threshold").Value);
-            beatenThreshold = int.Parse(level.Parent.Element("beaten_threshold").Value);
-            isUnlocked = bool.Parse(level.Parent.Element("is_unlocked").Value);
-            isBeaten = bool.Parse(level.Parent.Element("is_beaten").Value);
+        foreach (var mode in modes) {
+            name = mode.Parent.Attribute("name").Value;
+            tutorial = bool.Parse(mode.Parent.Element("tutorial").Value);
+            timeLimit = int.Parse(mode.Parent.Element("time").Value);
+            failureThreshold = float.Parse(mode.Parent.Element("threshold").Value);
+            isUnlocked = bool.Parse(mode.Parent.Element("unlocked").Value);
+            modifier = float.Parse(mode.Parent.Element("modifier").Value);
 
-            data.Add(new XMLData(levelNo, timeLimit, failureThreshold, beatenThreshold, isUnlocked, isBeaten));
-            Debug.Log(data[iteration].levelNo);
-            iteration ++;
+            modesList.Add(new Mode(name, tutorial, timeLimit, failureThreshold, isUnlocked, modifier));
         }
 
         finishedLoading = true;
     }
-
-
 }
 
-public class XMLData {
-    public int levelNo;
+public class Mode {
+    public string name;
+    public bool tutorial;
     public int timeLimit;
     public float failureThreshold;
-    public int beatenThreshold;
     public bool isUnlocked;
-    public bool isBeaten;
+    public float modifier;
 
-    public XMLData(int level, int time, float failure, int beat, bool unlocked, bool beaten) {
-        levelNo = level;
-        timeLimit = time;
-        failureThreshold = failure;
-        beatenThreshold = beat;
-        isUnlocked = unlocked;
-        isBeaten = beaten;
+    public Mode(string _name, bool _tutorial, int _timeLimit, float _failureThreshold, bool _isUnlocked, float _modifier) {
+        name = _name;
+        tutorial = _tutorial;
+        timeLimit = _timeLimit;
+        failureThreshold = _failureThreshold;
+        isUnlocked = _isUnlocked;
+        modifier = _modifier;
     }
 }

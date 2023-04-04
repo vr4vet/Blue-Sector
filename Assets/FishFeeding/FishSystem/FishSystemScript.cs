@@ -25,17 +25,20 @@ public class FishSystemScript : MonoBehaviour
     {
         Full,
         Hungry,
-        Dying
+        Dying,
+        Idle
     }
 
-    [HideInInspector]
+    // [HideInInspector]
     public FishState state;
 
+    [HideInInspector]
     public enum FeedingIntensity
     {
-        High,
-        Medium,
-        Low
+        High = 40,
+        Medium = 20,
+        Low = 5,
+        Off = 0,
     }
 
     public FeedingIntensity feedingIntensity;
@@ -43,7 +46,7 @@ public class FishSystemScript : MonoBehaviour
     void Start()
     {
         foodBase = amountOfFish * eatingAmount;
-        state = FishState.Full;     // initiate with full state
+        state = FishState.Idle;     // initiate in Idle state
         feedingIntensity = FeedingIntensity.Medium;     // initiate with medium feeding intensity
         foodGivenPerSec = foodBase; // initiate foodGivenPerSec at medium level when fish is full
 
@@ -99,6 +102,10 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
+    // functions for setting idle state
+    public void SetIdle() => state = FishState.Idle;
+    public void ReleaseIdle() => state = FishState.Full;
+
     /* Make fish hungry after som random time between 25-35 seconds when not feeding,
      * full if fed for 10-12 seconds, 
      * dying if not fed while hungry for 25-35 seconds.
@@ -110,21 +117,24 @@ public class FishSystemScript : MonoBehaviour
         switch(state)
         {
             case FishState.Full:
-                main.startLifetime = 5.0f; // should hit/pass through floor
+                main.startLifetime = 5.0f; // food particles should hit/pass through floor
                 HandleFull();
                 break;
             case FishState.Hungry:
-                main.startLifetime = 1.0f; // should dissapear high in water
+                main.startLifetime = 1.0f; // food particles should dissapear high in water
                 HandleHungry();
                 break;
             case FishState.Dying:
-                main.startLifetime = 1.0f; // should dissapear high in water
+                main.startLifetime = 1.0f; // food particles should dissapear high in water
                 HandleDying();
                 break;
-        }
+            case FishState.Idle:
+                HandleIdle();
+                break;
+        }   
+
     }
 
-    
     private int fullTicks = 0;  // gets hungry when this passes timeToHungry.
     void HandleFull()
     {
@@ -147,6 +157,9 @@ public class FishSystemScript : MonoBehaviour
                 break;
             case FeedingIntensity.Low:
                 fullTicks += 2;  // fish get hungry twice as fast
+                break;
+            case FeedingIntensity.Off:
+                fullTicks += 4; // fish are starvin bruv
                 break;
         }
     }
@@ -181,7 +194,15 @@ public class FishSystemScript : MonoBehaviour
             case FeedingIntensity.Low:
                 hungerStatus -= 2;  // quickly starts starving
                 break;
+            case FeedingIntensity.Off:
+                fullTicks += 4; // fish are starvin bruv
+                break;
         }
+    }
+
+    void HandleIdle()
+    {
+        // do nothing
     }
 
     void HandleDying()
@@ -225,6 +246,7 @@ public class FishSystemScript : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(FishSystemScript))]
 public class FishSystemVisualization : Editor
 {
@@ -262,3 +284,4 @@ public class FishSystemVisualization : Editor
     }
 
 }
+#endif

@@ -51,6 +51,10 @@ public class Scoring : MonoBehaviour
             /*Debug.Log()*/
             score = 0;
             startGame = true;
+            foreach (GameObject merd in merds) {
+                FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
+                merdScript.ReleaseIdle();   // change all fish systems' states from Idle to Full
+            }
             Debug.Log("Started the game");
             Debug.Log("Score: " + score);
             InvokeRepeating(nameof(UpdateScore), 1.0f, 1.0f);
@@ -71,6 +75,11 @@ public class Scoring : MonoBehaviour
         }
         CancelInvoke("UpdateScore");
         startGame = false;
+        foreach (GameObject merd in merds)
+        {
+            FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
+            merdScript.SetIdle();
+        }
         endScoreText.text = "YOUR SCORE:\n" + score;
         Debug.Log("End of game");
         Debug.Log("Score: " + score);
@@ -100,20 +109,28 @@ public class Scoring : MonoBehaviour
             score -= (int)(wastedFoodPoints + 0.5f); // Rounds wastedFoodPoints to the nearest int.
             Debug.Log("Score after food waste: " + score);
 
-            Debug.Log(merdCameraController.SelectedFishSystem);
+            UpdateFoodWasteAndDeadFish();
+        }
+        Debug.Log("Time left: " + gameTimeLeft);
+    }
+
+    void UpdateFoodWasteAndDeadFish()
+    {
+        foreach (GameObject i in merds)
+        {
+            FishSystemScript script = i.GetComponent<FishSystemScript>();
+            Debug.Log("if setning" + (merdCameraController.SelectedFishSystem == script));
             if (merdCameraController.SelectedFishSystem == script)
             {
                 foodWasted = script.foodWasted;
                 foodWastedPercentage = script.foodWasted / (script.foodBase * 5 / 3);
                 deadFish = script.fishKilled;
             }
-
         }
-        Debug.Log("Time left: " + gameTimeLeft);
     }
 
     /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */
-    void UpdateScreenStats()
+    public void UpdateScreenStats()
     {
         timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
             Mathf.FloorToInt(gameTimeLeft % 60).ToString("00");
