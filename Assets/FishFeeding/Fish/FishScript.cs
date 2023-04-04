@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class FishScript : MonoBehaviour
 {
-    private float randX;
-    private float randY;
-    private float randZ;
+    private float directionX;
+    private float directionY;
+    private float directionZ;
     private Vector3 movement;
     private float radius;
     private float fullnessDivider;
@@ -67,9 +67,10 @@ public class FishScript : MonoBehaviour
             {
                 movement.x *= -1;
                 movement.z *= -1;
-                Quaternion target = Quaternion.LookRotation(movement);
+                
+/*                Quaternion target = Quaternion.LookRotation(movement);
                 target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
-                gameObject.transform.rotation = target;
+                gameObject.transform.rotation = target;*/
                 waitingForReturn = true;
             }
         } else {
@@ -79,9 +80,8 @@ public class FishScript : MonoBehaviour
         if (!(dead && gameObject.transform.position.y <= bottom))
         {
             gameObject.transform.position += movement * Time.deltaTime;
-        }  
-
-
+            RotateFish();
+        } 
     }
 
     bool IsColliding()
@@ -98,7 +98,27 @@ public class FishScript : MonoBehaviour
     bool IsAtSurface() => gameObject.transform.position.y >= top;
     bool IsAtBottom() => gameObject.transform.position.y <= bottom;
 
+    void RotateFish()
+    {
+        movement = new Vector3(directionX, directionY, directionZ);
+        Quaternion target;
+        if (directionY > 0.3)
+        {
+            target = Quaternion.LookRotation(new Vector3(directionX, 0.3f, directionZ));
+        }
+        else if (directionY < -0.3)
+        {
+            target = Quaternion.LookRotation(new Vector3(directionX, -0.3f, directionZ));
+        }
+        else
+            target = Quaternion.LookRotation(movement);
 
+
+        //Quaternion target = Quaternion.LookRotation(movement);
+        //Quaternion target = Quaternion.LookRotation(directionY > 0.3 ? new Vector3(directionX, 0.3f, directionZ) : movement);
+        target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
+        gameObject.transform.rotation = target;
+    }
     // runs every 3rd second
     void PeriodicUpdates()
     {
@@ -113,48 +133,65 @@ public class FishScript : MonoBehaviour
             // dead fish continue to sink until hitting bottom
             if (!IsAtBottom())
             {
-                movement = new Vector3(randX, -swimSpeedVertical, randZ);
+                movement = new Vector3(directionX, -swimSpeedVertical, directionZ);
             }
         }
         else
         {
-            // stay within hunger/full segment (over/under fullnessDivider) of fish cage when not in idle state
-            if (!(state == FishSystemScript.FishState.Idle))    
-            {
-                if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
-                {
-                    randY = swimSpeedVertical;
-                }
-                else if (state == FishSystemScript.FishState.Full && posY > fullnessDivider)
-                {
-                    randY = -swimSpeedVertical;
-                }
-            } 
-
-            // move down/up if hitting upper/lower boundaries of fish cage
+            // move down/up if hitting upper/lower boundaries of fish cage, otherwise pick some random fairly horisontal direction
             if (IsAtSurface())
             {
-                randY = -swimSpeedVertical;
+                directionY = -swimSpeedVertical;
             }
             else if (IsAtBottom())
             {
-                randY = swimSpeedVertical;
+                directionY = swimSpeedVertical;
+            }
+            else
+            {
+                directionY = Random.Range(-0.2f, 0.2f);
             }
 
+            // stay within hunger/full segment (over/under fullnessDivider) of fish cage when not in idle state
+            if (state != FishSystemScript.FishState.Idle)    
+            {
+                if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
+                {
+                    directionY = swimSpeedVertical;
+                }
+                else if (state == FishSystemScript.FishState.Full && posY > fullnessDivider)
+                {
+                    directionY = -swimSpeedVertical;
+                }
+            } 
+
+            // new random direction horisontally
+            directionX = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
+            directionZ = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
 
             // Rotates the fish in the right direction
-            randX = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
-            randZ = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
+            RotateFish();
+/*            movement = new Vector3(directionX, directionY, directionZ);
+            Quaternion target;
+            if (directionY > 0.3)
+            {
+                target = Quaternion.LookRotation(new Vector3(directionX, 0.3f, directionZ));
+            }
+            else if (directionY < -0.3)
+            {
+                target = Quaternion.LookRotation(new Vector3(directionX, -0.3f, directionZ));
+            }
+            else
+                target = Quaternion.LookRotation(movement);
 
-            movement = new Vector3(randX, randY, randZ);
-            Quaternion target = Quaternion.LookRotation(movement);
+
+            //Quaternion target = Quaternion.LookRotation(movement);
+            //Quaternion target = Quaternion.LookRotation(directionY > 0.3 ? new Vector3(directionX, 0.3f, directionZ) : movement);
             target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
-            gameObject.transform.rotation = target;
+            gameObject.transform.rotation = target;*/
         }
     }
 
-    public void Kill()
-    {
-        dead = true;
-    }
+    // public function allowing fish system to kill starving fish
+    public void Kill() => dead = true;
 }
