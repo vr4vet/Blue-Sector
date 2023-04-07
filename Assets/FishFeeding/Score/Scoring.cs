@@ -9,7 +9,7 @@ public class Scoring : MonoBehaviour
 {
     private int score = 0;
     private GameObject[] merds;
-    private bool startGame = false;
+    public bool startGame = false;
     public bool inActivatedArea = false;
     [SerializeField]
     private int time = 60;
