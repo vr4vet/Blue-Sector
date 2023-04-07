@@ -227,7 +227,7 @@ public class FishSystemScript : MonoBehaviour
         if (fishKilled < amountOfFish)
         {
             // kill fish one by one
-            gameObject.transform.GetChild(fishKilled).GetComponent<FishScript>().Kill();
+            gameObject.transform.GetChild(1 + fishKilled).GetComponent<FishScript>().Kill();
             fishKilled++;
         }
     }
@@ -242,7 +242,7 @@ public class FishSystemScript : MonoBehaviour
         {
             foodWasted = 0;
         }
-        Debug.Log("foodWasted: " + foodWasted);
+        /*Debug.Log("foodWasted: " + foodWasted);*/
     }
 }
 
