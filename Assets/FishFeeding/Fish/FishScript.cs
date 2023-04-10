@@ -34,7 +34,7 @@ public class FishScript : MonoBehaviour
     void Start()
     {
         InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 5.0f), 3.0f);
-        fishSystem = gameObject.transform.parent.gameObject;//GameObject.Find("FishSystem");
+        fishSystem = gameObject.transform.parent.gameObject;
         fishSystemScript = fishSystem.GetComponent<FishSystemScript>();
         fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
         
@@ -65,29 +65,30 @@ public class FishScript : MonoBehaviour
         {
             if (!waitingForReturn)
             {
-                movement.x *= -1;
-                movement.z *= -1;
-                
-/*                Quaternion target = Quaternion.LookRotation(movement);
-                target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
-                gameObject.transform.rotation = target;*/
-                waitingForReturn = true;
+                directionX *= -1;   // modify vector3 for 180 degrees rotation (towards fish cage)
+                directionZ *= -1;
+                RotateFish();   // perform the rotation
+                waitingForReturn = true;    // stays true (locks movement) until fish has returned
             }
         } else {
             waitingForReturn = false;
         }
 
+        // move fish using the current movement vector, both when dead or living, as the fish should sink until hitting the bottom.
         if (!(dead && gameObject.transform.position.y <= bottom))
         {
             gameObject.transform.position += movement * Time.deltaTime;
-            RotateFish();
-        } 
+        }
+
     }
 
+    // checks if fish is within fish cage boundaries (horisontally)
     bool IsColliding()
     {
         Vector3 fishSystemPosition = fishSystem.transform.position; 
         Vector3 fishPosition = gameObject.transform.position;
+
+        // check if x and z position is within fish cage (cross section of the fish system, a circle)
         if ((Mathf.Pow(fishPosition.x - fishSystemPosition.x, 2) + Mathf.Pow(fishPosition.z - fishSystemPosition.z, 2) - Mathf.Pow(radius, 2)) >= 0)
         {
             return true;
@@ -95,31 +96,33 @@ public class FishScript : MonoBehaviour
         return false;
     }
 
+    // functions for checking if fish is too high or low (outside boundaries)
     bool IsAtSurface() => gameObject.transform.position.y >= top;
     bool IsAtBottom() => gameObject.transform.position.y <= bottom;
 
+    // rotates fish towards its current destination
     void RotateFish()
     {
         movement = new Vector3(directionX, directionY, directionZ);
-        Quaternion target;
-        if (directionY > 0.3)
+        if (movement != Vector3.zero)   // fish spawn with a zero vector, which can not be used for rotation.
         {
-            target = Quaternion.LookRotation(new Vector3(directionX, 0.3f, directionZ));
-        }
-        else if (directionY < -0.3)
-        {
-            target = Quaternion.LookRotation(new Vector3(directionX, -0.3f, directionZ));
-        }
-        else
-            target = Quaternion.LookRotation(movement);
+            // if the upwards/downwards direction is steeper than rotationLimit (fish is angled too vertically), set to limit.
+            float rotationLimit = 0.2f;
+            if (directionY > rotationLimit)
+                movement.y = rotationLimit;
+            else if (directionY < -rotationLimit)
+                movement.y = -rotationLimit;
 
-
-        //Quaternion target = Quaternion.LookRotation(movement);
-        //Quaternion target = Quaternion.LookRotation(directionY > 0.3 ? new Vector3(directionX, 0.3f, directionZ) : movement);
-        target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
-        gameObject.transform.rotation = target;
+            // perform the actual rotation
+            Quaternion target = Quaternion.LookRotation(movement);
+            target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
+            gameObject.transform.rotation = target;
+        }
     }
-    // runs every 3rd second
+    /*
+     * runs every 3rd second
+     * this function handles all main movement logic
+     */
     void PeriodicUpdates()
     {
         //Vector3 fishPosition = gameObject.transform.position;
@@ -130,7 +133,7 @@ public class FishScript : MonoBehaviour
         if (IsColliding()) return;  // no modifications to movement if returning from outside boundaries
         if (dead)
         {
-            // dead fish continue to sink until hitting bottom
+            // dead fish continue to sink until hitting bottom, in the speed of swimSpeedVertical field's value
             if (!IsAtBottom())
             {
                 movement = new Vector3(directionX, -swimSpeedVertical, directionZ);
@@ -149,10 +152,13 @@ public class FishScript : MonoBehaviour
             }
             else
             {
-                directionY = Random.Range(-0.2f, 0.2f);
+                directionY = Random.Range(-0.1f, 0.1f);
             }
 
-            // stay within hunger/full segment (over/under fullnessDivider) of fish cage when not in idle state
+            /* stay within hunger/full segment (over/under fullnessDivider) of fish cage when not in idle state.
+             * hungry fish swim high, as they approach the food comming from above,
+             * full fish swim lower, as they do not approach the food.
+            */
             if (state != FishSystemScript.FishState.Idle)    
             {
                 if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
@@ -167,28 +173,10 @@ public class FishScript : MonoBehaviour
 
             // new random direction horisontally
             directionX = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
-            directionZ = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
+            directionZ = directionX < 0 ? 1 + directionX : 1 - directionX;  //  x + z should be equal to 1 or -1 always, to ensure consistent swimming speed
+            directionZ = Random.Range(0.0f, 1.0f) < 0.5 ? directionZ * -1 : directionZ; // randomly make negative to prevent repetitive patterns  
+            RotateFish(); // Rotates the fish in the right direction
 
-            // Rotates the fish in the right direction
-            RotateFish();
-/*            movement = new Vector3(directionX, directionY, directionZ);
-            Quaternion target;
-            if (directionY > 0.3)
-            {
-                target = Quaternion.LookRotation(new Vector3(directionX, 0.3f, directionZ));
-            }
-            else if (directionY < -0.3)
-            {
-                target = Quaternion.LookRotation(new Vector3(directionX, -0.3f, directionZ));
-            }
-            else
-                target = Quaternion.LookRotation(movement);
-
-
-            //Quaternion target = Quaternion.LookRotation(movement);
-            //Quaternion target = Quaternion.LookRotation(directionY > 0.3 ? new Vector3(directionX, 0.3f, directionZ) : movement);
-            target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
-            gameObject.transform.rotation = target;*/
         }
     }
 

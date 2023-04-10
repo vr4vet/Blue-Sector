@@ -64,7 +64,6 @@ public class FishSystemScript : MonoBehaviour
         {
             GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height/2)+ 3,position.y + (height/2)- 3), Random.Range(position.z -radius + 3, position.z + radius - 3)), fish.transform.rotation);
             newFish.transform.parent = gameObject.transform;
-            newFish.GetComponent<FishScript>().Kill();
         }
 
         InvokeRepeating(nameof(HandleFishState), 0.0f, 1.0f);
@@ -79,8 +78,6 @@ public class FishSystemScript : MonoBehaviour
             feedingIntensity = FeedingIntensity.Low;
             foodGivenPerSec = foodBase * 1 / 3;
             emission.rateOverTime = 5;
-            Debug.Log(feedingIntensity);
-            //foodParticles.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.K))
@@ -88,8 +85,6 @@ public class FishSystemScript : MonoBehaviour
             feedingIntensity = FeedingIntensity.Medium;
             foodGivenPerSec = foodBase * 1;
             emission.rateOverTime = 20;
-            Debug.Log(feedingIntensity);
-            //foodParticles.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.L))
@@ -97,9 +92,8 @@ public class FishSystemScript : MonoBehaviour
             feedingIntensity = FeedingIntensity.High;
             foodGivenPerSec = foodBase * 5 / 3;
             emission.rateOverTime = 40;
-            Debug.Log(feedingIntensity);
-            //foodParticles.Play();
         }
+        //Debug.Log(feedingIntensity);
     }
 
     // functions for setting idle state
@@ -242,7 +236,7 @@ public class FishSystemScript : MonoBehaviour
         {
             foodWasted = 0;
         }
-        Debug.Log("foodWasted: " + foodWasted);
+        //Debug.Log("foodWasted: " + foodWasted);
     }
 }
 
@@ -279,7 +273,7 @@ public class FishSystemVisualization : Editor
 
         // moving food particle system to the top of fish system
         var foodParticlesShape = GameObject.Find("FishSystem").GetComponent<ParticleSystem>().shape;
-        foodParticlesShape.position = new Vector3(foodParticlesShape.position.x, GameObject.Find("FishSystem").transform.position.y + (height / 2), foodParticlesShape.position.z);
+        foodParticlesShape.position = new Vector3(foodParticlesShape.position.x, (height / 2), foodParticlesShape.position.z);
 
     }
 
