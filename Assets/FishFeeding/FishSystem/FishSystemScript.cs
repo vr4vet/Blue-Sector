@@ -11,6 +11,7 @@ public class FishSystemScript : MonoBehaviour
     public float radius = 10;
     public float height = 20;
     public int amountOfFish = 30;
+    private readonly int amountOfRandomFish = 10;
     public float fullnessDivider = 0.7f;
     public float swimSpeedVertical = 0.5f;
     public float swimSpeedHorizontal = 1.0f;
@@ -68,6 +69,14 @@ public class FishSystemScript : MonoBehaviour
         {
             GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height/2), position.y + (height/2)), Random.Range(position.z -radius + 3, position.z + radius - 3)), fish.transform.rotation);
             newFish.transform.parent = gameObject.transform;
+        }
+
+        // spawn random fish
+        for (int i = 0; i < amountOfRandomFish; i++)
+        {
+            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height / 2), position.y + (height / 2)), Random.Range(position.z - radius + 3, position.z + radius - 3)), fish.transform.rotation);
+            newFish.transform.parent = gameObject.transform;
+            newFish.GetComponent<FishScript>().SetRandomFish();
         }
 
         InvokeRepeating(nameof(HandleFishState), 0.0f, 1.0f);
@@ -202,7 +211,8 @@ public class FishSystemScript : MonoBehaviour
 
     void HandleIdle()
     {
-        // do nothing
+        if (IsInvoking(nameof(KillFish)))
+            CancelInvoke(nameof(KillFish));
     }
 
     void HandleDying()

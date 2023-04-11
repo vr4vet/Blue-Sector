@@ -14,6 +14,7 @@ public class FishScript : MonoBehaviour
     private float top;
     private float bottom;
     private bool dead;
+    private bool randomFish;
     private float swimSpeedVertical;
     private float swimSpeedHorizontal;
     public Status status;
@@ -159,11 +160,11 @@ public class FishScript : MonoBehaviour
                 directionY = Random.Range(-0.1f, 0.1f);
             }
 
-            /* stay within hunger/full segment (over/under fullnessDivider) of fish cage when not in idle state.
+            /* stay within hunger/full segment (over/under fullnessDivider) of fish cage when not in idle state and not a randomFish.
              * hungry fish swim high, as they approach the food comming from above,
              * full fish swim lower, as they do not approach the food.
             */
-            if (state != FishSystemScript.FishState.Idle)    
+            if (state != FishSystemScript.FishState.Idle && !randomFish)    
             {
                 if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying) && posY < fullnessDivider)
                 {
@@ -186,4 +187,6 @@ public class FishScript : MonoBehaviour
 
     // public function allowing fish system to kill starving fish
     public void Kill() => dead = true;
+    // public function telling this fish to swim randomly and not get hungry etc. Make the fish stream a bit less monotone.
+    public void SetRandomFish() => randomFish = true;
 }
