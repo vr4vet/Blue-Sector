@@ -5,6 +5,7 @@ using UnityEngine;
 public class TankController : MonoBehaviour
 {
     private InspectionTaskManager inspectionTaskManager;
+    public bool isGoal = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,10 +21,20 @@ public class TankController : MonoBehaviour
     private void OnTriggerEnter(Collider other) 
     {
         Debug.Log("*TRIGGERED*");
-        inspectionTaskManager.ProgressInspection(other.gameObject);
+        if(isGoal){
+            inspectionTaskManager.ProgressInspection(other.gameObject);
+        }
+        if(other.tag == "Floatable"){
+            other.gameObject.GetComponent<Floating>().waterHeight = other.transform.localScale.y + other.transform.position.y;
+        }
     }
 
     private void OnTriggerExit(Collider other) {
-        inspectionTaskManager.RegressInspection(other.gameObject);
+        if(isGoal){
+            inspectionTaskManager.RegressInspection(other.gameObject);
+        }
+        if(other.tag == "Floatable"){
+            other.GetComponent<Floating>().waterHeight = 0f;
+        }
     }
 }
