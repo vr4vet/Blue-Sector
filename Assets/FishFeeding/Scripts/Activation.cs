@@ -6,6 +6,8 @@ public class Activation : MonoBehaviour
 {
     Game script;
     GameObject startGameToolTip;
+    GameObject monitorScore;
+    GameObject player;
     MeshCollider activationCollider; 
 
     // Start is called before the first frame update
@@ -13,13 +15,28 @@ public class Activation : MonoBehaviour
     {
         script = FindObjectOfType<Game>();
         startGameToolTip = GameObject.Find("StartGameToolTip");
+        monitorScore = GameObject.Find("MonitorScore");
+        player = GameObject.Find("XR Rig Advanced");
         activationCollider = GetComponent<MeshCollider>();
-        startGameToolTip.SetActive(false);
+        /*startGameToolTip.SetActive(false);*/
     }
 
     private void Update()
     {
-        if (script.inActivatedArea && !script.startGame)
+        /*Vector3 playerPosition = player.transform.position;
+        Vector3 monitorPosition = monitorScore.transform.position;
+        Debug.Log("playerposition: " + playerPosition);
+        Debug.Log("monitorposition: " + monitorPosition);
+        if ((playerPosition.z < monitorPosition.z ) && (playerPosition.z > monitorPosition.z - 1.5))
+        {
+            script.inActivatedArea = true;
+        }
+        else
+        {
+            script.inActivatedArea = false;
+        }*/
+
+        if (!script.startGame)
         {
             startGameToolTip.SetActive(true);
         }
@@ -27,9 +44,29 @@ public class Activation : MonoBehaviour
         {
             startGameToolTip.SetActive(false);
         }
+
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.name == "CameraRig" && !script.inActivatedArea)
+        {
+            script.inActivatedArea = true;
+            /*startGameToolTip.GetComponent<Renderer>().enabled = true;*/
+            Debug.Log("activated true");
+        }
+
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.name == "CameraRig" && script.inActivatedArea)
+        {
+            script.inActivatedArea = false;
+            /*startGameToolTip.GetComponent<Renderer>().enabled = false;*/
+            Debug.Log("activated false");
+        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         if (other.name == "CameraRig" && !script.inActivatedArea)
         {
@@ -56,16 +93,6 @@ public class Activation : MonoBehaviour
         Debug.Log("closest: " + closest);
         Debug.Log("point: " + point);
         return closest == point;  // If closest == point then point is inside collider
-    }
-
-    /*private void OnTriggerStay(Collider other)
-    {
-        if (other.name == "CameraRig" && !script.inActivatedArea)
-        {
-            script.inActivatedArea = true;
-            *//*startGameToolTip.GetComponent<Renderer>().enabled = true;*//*
-            Debug.Log("activated true");
-        }
     }*/
 
 
