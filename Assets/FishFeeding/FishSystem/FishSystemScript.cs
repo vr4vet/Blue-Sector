@@ -11,6 +11,7 @@ public class FishSystemScript : MonoBehaviour
     public float radius = 10;
     public float height = 20;
     public int amountOfFish = 30;
+    private readonly int amountOfRandomFish = 10;
     public float fullnessDivider = 0.7f;
     public float swimSpeedVertical = 0.5f;
     public float swimSpeedHorizontal = 1.0f;
@@ -58,12 +59,24 @@ public class FishSystemScript : MonoBehaviour
         emission = foodParticles.emission;
         emission.rateOverTime = 20;
 
+        // set particle radius and move to top
+        var foodParticlesShape = gameObject.GetComponent<ParticleSystem>().shape;
+        foodParticlesShape.radius = radius;
+        foodParticlesShape.position = new Vector3(0, height / 2, 0);
+
         // spawn fish
         for (int i = 0; i < amountOfFish; i++)
         {
-            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height/2)+ 3,position.y + (height/2)- 3), Random.Range(position.z -radius + 3, position.z + radius - 3)), fish.transform.rotation);
+            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height/2), position.y + (height/2)), Random.Range(position.z -radius + 3, position.z + radius - 3)), fish.transform.rotation);
             newFish.transform.parent = gameObject.transform;
-            newFish.GetComponent<FishScript>().Kill();
+        }
+
+        // spawn random fish
+        for (int i = 0; i < amountOfRandomFish; i++)
+        {
+            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height / 2), position.y + (height / 2)), Random.Range(position.z - radius + 3, position.z + radius - 3)), fish.transform.rotation);
+            newFish.transform.parent = gameObject.transform;
+            newFish.GetComponent<FishScript>().SetRandomFish();
         }
 
         InvokeRepeating(nameof(HandleFishState), 0.0f, 1.0f);
@@ -73,13 +86,13 @@ public class FishSystemScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(gameObject.transform.position.y);
+        //Debug.Log(height);
         if (Input.GetKeyDown(KeyCode.J))
         {
             feedingIntensity = FeedingIntensity.Low;
             foodGivenPerSec = foodBase * 1 / 3;
             emission.rateOverTime = 5;
-            Debug.Log(feedingIntensity);
-            //foodParticles.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.K))
@@ -87,8 +100,6 @@ public class FishSystemScript : MonoBehaviour
             feedingIntensity = FeedingIntensity.Medium;
             foodGivenPerSec = foodBase * 1;
             emission.rateOverTime = 20;
-            Debug.Log(feedingIntensity);
-            //foodParticles.Play();
         }
 
         if (Input.GetKeyDown(KeyCode.L))
@@ -96,9 +107,8 @@ public class FishSystemScript : MonoBehaviour
             feedingIntensity = FeedingIntensity.High;
             foodGivenPerSec = foodBase * 5 / 3;
             emission.rateOverTime = 40;
-            Debug.Log(feedingIntensity);
-            //foodParticles.Play();
         }
+        //Debug.Log(feedingIntensity);
     }
 
     // functions for setting idle state
@@ -125,11 +135,11 @@ public class FishSystemScript : MonoBehaviour
                 HandleFull();
                 break;
             case FishState.Hungry:
-                main.startLifetime = 1.0f; // food particles should dissapear high in water
+                main.startLifetime = 0.4f; // food particles should dissapear high in water
                 HandleHungry();
                 break;
             case FishState.Dying:
-                main.startLifetime = 1.0f; // food particles should dissapear high in water
+                main.startLifetime = 0.4f; // food particles should dissapear high in water
                 HandleDying();
                 break;
             case FishState.Idle:
@@ -207,7 +217,8 @@ public class FishSystemScript : MonoBehaviour
 
     void HandleIdle()
     {
-        // do nothing
+        if (IsInvoking(nameof(KillFish)))
+            CancelInvoke(nameof(KillFish));
     }
 
     void HandleDying()
@@ -247,7 +258,7 @@ public class FishSystemScript : MonoBehaviour
         {
             foodWasted = 0;
         }
-        /*Debug.Log("foodWasted: " + foodWasted);*/
+        //Debug.Log("foodWasted: " + foodWasted);
     }
 }
 
@@ -265,27 +276,27 @@ public class FishSystemVisualization : Editor
         float radius = t.radius;
 
         // drawing top and bottom of system
-        float top = t.transform.position.y + (height / 2);  // top of merd/water surface
-        float bottom = t.transform.position.y - (height / 2); // bottom of merd
+        float top = position.y + (height / 2);  // top of merd/water surface
+        float bottom = position.y - (height / 2); // bottom of merd
         Handles.color = Color.green;
-        Handles.DrawWireDisc(position + new Vector3(0, top, 0), transform.up, radius);
-        Handles.DrawWireDisc(position + new Vector3(0, bottom, 0), transform.up, radius);
+        Handles.DrawWireDisc(position + new Vector3(0, height/2, 0), transform.up, radius);
+        Handles.DrawWireDisc(position + new Vector3(0, -height/2, 0), transform.up, radius);
         
         // drawing vertical lines form top to bottom
-        Handles.DrawLine(position + new Vector3(radius, top, 0), position + new Vector3(radius, bottom, 0));
-        Handles.DrawLine(position + new Vector3(-radius, top, 0), position + new Vector3(-radius, bottom, 0));
-        Handles.DrawLine(position + new Vector3(0, top, radius), position + new Vector3(0, bottom, radius));
-        Handles.DrawLine(position + new Vector3(0, top, -radius), position + new Vector3(0, bottom, -radius));
+        Handles.DrawLine(position + new Vector3(radius, height/2, 0), position + new Vector3(radius, -height/2, 0));
+        Handles.DrawLine(position + new Vector3(-radius, height/2, 0), position + new Vector3(-radius, -height/2, 0));
+        Handles.DrawLine(position + new Vector3(0, height/2, radius), position + new Vector3(0, -height/2, radius));
+        Handles.DrawLine(position + new Vector3(0, height/2, -radius), position + new Vector3(0, -height/2, -radius));
 
         // drawing the divider between the zones of hungry and full fish
-        float fullnessDivider = bottom + (((bottom - top) * (t.fullnessDivider)) * -1); // border between hungry and full fish
+        float fullnessDivider = bottom + ((top - bottom) * t.fullnessDivider); // border between hungry and full fish
         Handles.color = Color.red;
-        Handles.DrawWireDisc(position + new Vector3(0, fullnessDivider, 0), transform.up, radius);
+        Handles.DrawWireDisc(new Vector3(position.x, fullnessDivider, position.z), transform.up, radius);
 
-        // moving food particle system to the top of fish system
-        var foodParticlesShape = GameObject.Find("FishSystem").GetComponent<ParticleSystem>().shape;
-        foodParticlesShape.position = new Vector3(foodParticlesShape.position.x, GameObject.Find("FishSystem").transform.position.y + (height / 2), foodParticlesShape.position.z);
-
+        // set particle radius and move to top
+        var foodParticlesShape = t.GetComponent<ParticleSystem>().shape;
+        foodParticlesShape.radius = radius;
+        foodParticlesShape.position = new Vector3(0, height/2, 0); 
     }
 
 }
