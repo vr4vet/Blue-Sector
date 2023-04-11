@@ -39,9 +39,9 @@ public class FishScript : MonoBehaviour
         fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
         
         radius = fishSystemScript.radius;
-        top = (fishSystem.transform.position.y + (fishSystemScript.height / 2)) - 1.5f;  // top of merd/water surface
-        bottom = (fishSystem.transform.position.y - (fishSystemScript.height / 2)) + 1.5f; // bottom of merd
-        fullnessDivider = bottom + (((bottom - top) * (fishSystemScript.fullnessDivider)) * -1); // border between hungry and full fish
+        top = (fishSystem.transform.position.y + (fishSystemScript.height / 2));  // top of merd/water surface
+        bottom = (fishSystem.transform.position.y - (fishSystemScript.height / 2)); // bottom of merd
+        fullnessDivider = bottom + ((top - bottom) * fishSystemScript.fullnessDivider); // border between hungry and full fish
         swimSpeedVertical = fishSystemScript.swimSpeedVertical;
         swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
         dead = false;
@@ -97,24 +97,28 @@ public class FishScript : MonoBehaviour
     }
 
     // functions for checking if fish is too high or low (outside boundaries)
-    bool IsAtSurface() => gameObject.transform.position.y >= top;
-    bool IsAtBottom() => gameObject.transform.position.y <= bottom;
+    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.5f;
+    bool IsAtBottom() => gameObject.transform.position.y <= bottom + 0.5f;
 
     // rotates fish towards its current destination
     void RotateFish()
     {
         movement = new Vector3(directionX, directionY, directionZ);
+        Vector3 lookRotation;
         if (movement != Vector3.zero)   // fish spawn with a zero vector, which can not be used for rotation.
         {
             // if the upwards/downwards direction is steeper than rotationLimit (fish is angled too vertically), set to limit.
             float rotationLimit = 0.2f;
             if (directionY > rotationLimit)
-                movement.y = rotationLimit;
+                //movement.y = rotationLimit;
+                lookRotation = new Vector3(directionX, rotationLimit, directionZ);
             else if (directionY < -rotationLimit)
-                movement.y = -rotationLimit;
-
+                //movement.y = -rotationLimit;
+                lookRotation = new Vector3(directionX, -rotationLimit, directionZ);
+            else
+                lookRotation = movement;
             // perform the actual rotation
-            Quaternion target = Quaternion.LookRotation(movement);
+            Quaternion target = Quaternion.LookRotation(lookRotation);
             target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
             gameObject.transform.rotation = target;
         }
