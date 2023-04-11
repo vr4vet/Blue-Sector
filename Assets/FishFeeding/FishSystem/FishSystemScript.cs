@@ -6,7 +6,6 @@ using UnityEditor;
 public class FishSystemScript : MonoBehaviour
 {
     public GameObject fish;
-    private GameObject[] fishes;
     private ParticleSystem foodParticles;
     private ParticleSystem.EmissionModule emission;
     public float radius = 10;
@@ -103,7 +102,12 @@ public class FishSystemScript : MonoBehaviour
     }
 
     // functions for setting idle state
-    public void SetIdle() => state = FishState.Idle;
+    public void SetIdle() 
+    {
+        state = FishState.Idle;
+        hungerStatus = 0;
+    }
+
     public void ReleaseIdle() => state = FishState.Full;
 
     /* Make fish hungry after som random time between 25-35 seconds when not feeding,
@@ -170,6 +174,7 @@ public class FishSystemScript : MonoBehaviour
     {
         int secondsToFull = (int)Random.Range(10.0f, 12.0f);
         int secondsToDying = (int)Random.Range(-25.0f, -35.0f);
+        Debug.Log("hungerstatus: " + hungerStatus);
         if (hungerStatus >= secondsToFull)
         {
             // switch to full state, and reset status

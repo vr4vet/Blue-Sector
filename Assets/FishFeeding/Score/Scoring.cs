@@ -8,21 +8,23 @@ using UnityEngine.UI;
 public class Scoring : MonoBehaviour
 {
     private int score = 0;
+    public int Score => score;
     private GameObject[] merds;
-    public bool startGame = false;
-    public bool inActivatedArea = false;
-    [SerializeField]
+    /*[SerializeField]
     private int time = 60;
-    private float gameTimeLeft;
+    private float gameTimeLeft;*/
     private int deadFish;
+    public int DeadFish => deadFish;
     private float foodWasted;
+    public float FoodWasted => foodWasted;
     private float foodWastedPercentage;
-    private TextMeshProUGUI endScoreText;
+    public float FoodWastedPercentage => foodWastedPercentage;
+/*    private TextMeshProUGUI endScoreText;
     private TextMeshProUGUI timeLeft;
     private TextMeshProUGUI currentScore;
     private TextMeshProUGUI deadFishText;
     private TextMeshProUGUI foodWasteText;
-    private UnityEngine.UI.Slider foodWasteSlider;
+    private UnityEngine.UI.Slider foodWasteSlider;*/
     private MerdCameraController merdCameraController;
     [SerializeField]
     private GameObject MerdCameraHost;
@@ -32,57 +34,26 @@ public class Scoring : MonoBehaviour
     void Start()
     {
         merds = GameObject.FindGameObjectsWithTag("Fish System");
-        endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
+        /*endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
         GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
         timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
         currentScore = canvas.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
         deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
-        foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
+        foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();*/
         merdCameraController = MerdCameraHost.GetComponent<MerdCameraController>();
     }
 
-    /* Update is called once per frame. If the key 'g' is pressed and the game hasn't started, start the game and
-     * the coroutine GiveScore and update the score every second. */
-    void Update()
+    public void StartScoring()
     {
-        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && inActivatedArea)
-        {
-            /*Debug.Log()*/
-            score = 0;
-            startGame = true;
-            foreach (GameObject merd in merds) {
-                FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
-                merdScript.ReleaseIdle();   // change all fish systems' states from Idle to Full
-            }
-            Debug.Log("Started the game");
-            Debug.Log("Score: " + score);
-            InvokeRepeating(nameof(UpdateScore), 1.0f, 1.0f);
-            StartCoroutine(GiveScore());
-        }
-        if (startGame)
-        {
-            UpdateScreenStats();
-        }
+        score = 0;
+        InvokeRepeating(nameof(UpdateScore), 1.0f, 1.0f);
+        Debug.Log("Score: " + score);
     }
 
-     /* Gives the score after a certain amount of time. */
-    IEnumerator GiveScore()
+    public void StopScoring()
     {
-        for (gameTimeLeft = time; gameTimeLeft > 0; gameTimeLeft -= Time.deltaTime)
-        {
-            yield return null;
-        }
         CancelInvoke("UpdateScore");
-        startGame = false;
-        foreach (GameObject merd in merds)
-        {
-            FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
-            merdScript.SetIdle();
-        }
-        endScoreText.text = "YOUR SCORE:\n" + score;
-        Debug.Log("End of game");
-        Debug.Log("Score: " + score);
     }
 
     /* Goes through every merd and checks if it is full, hungry or dead. Based on the status to the merd 
@@ -95,25 +66,31 @@ public class Scoring : MonoBehaviour
             if (script.state == FishSystemScript.FishState.Full)
             {
                 score += 1 * script.amountOfFish;
+                Debug.Log("State Full, amount of fish: " + script.amountOfFish);
             }
             else if (script.state == FishSystemScript.FishState.Hungry)
             {
                 score -= (int)(0.5 * script.amountOfFish);
+                Debug.Log("State Hungry, amount of fish: " + script.amountOfFish);
             }
             else
             {
+                score -= (int)(0.5 * (script.amountOfFish - script.fishKilled));
                 score -= 1 * script.fishKilled;
+                Debug.Log("State Dying, amount of fish: " + script.fishKilled);
             }
 
+            Debug.Log("FishSystemScript status: " + script.state);
             float wastedFoodPoints = script.foodWasted / 10;
             score -= (int)(wastedFoodPoints + 0.5f); // Rounds wastedFoodPoints to the nearest int.
+            Debug.Log("Wasted food points: " + wastedFoodPoints);
             Debug.Log("Score after food waste: " + score);
-
-            UpdateFoodWasteAndDeadFish();
         }
-        Debug.Log("Time left: " + gameTimeLeft);
+
+        UpdateFoodWasteAndDeadFish();
     }
 
+    /* Updates the food waste, food waste percentage and the amount of dead fish depending on which merd is being shown on the screen. */
     void UpdateFoodWasteAndDeadFish()
     {
         foreach (GameObject i in merds)
@@ -129,7 +106,7 @@ public class Scoring : MonoBehaviour
         }
     }
 
-    /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */
+    /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. *//*
     public void UpdateScreenStats()
     {
         timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
@@ -138,6 +115,6 @@ public class Scoring : MonoBehaviour
         foodWasteText.text = "Food wastage: " + foodWasted + " / Sec.";
         foodWasteSlider.value = foodWastedPercentage;
         deadFishText.text = "Dead fish: " + deadFish;
-    }
+    }*/
 
 }
