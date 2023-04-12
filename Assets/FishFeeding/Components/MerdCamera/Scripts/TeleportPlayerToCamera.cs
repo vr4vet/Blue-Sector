@@ -4,14 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class TeleportPlayerToCamera : MonoBehaviour
 {
-    private Transform? cameraRig;
-
-    [SerializeField]
-    public GameObject Player;
-
+    private readonly List<(Camera, LayerMask)> cameraLayers = new();
     private Vector3 playerStartPosition;
     private Quaternion playerStartRotation;
 
@@ -25,16 +22,42 @@ public class TeleportPlayerToCamera : MonoBehaviour
             return;
         }
 
-        var destination = selectedCamera.transform;
-        cameraRig = Player.GetComponentInChildren<BNGPlayerController>().CameraRig;
-        playerStartPosition = cameraRig.position;
-        playerStartRotation = cameraRig.rotation;
-        cameraRig.SetPositionAndRotation(destination.position, playerStartRotation);
+        var playerController = BNGPlayerLocator.Instance.PlayerController;
+        var destination = selectedCamera.transform.position - playerController.CameraRig.localPosition;
+        playerController.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePosition;
+        playerStartPosition = playerController.transform.position;
+        playerStartRotation = playerController.transform.rotation;
+        playerController.transform.SetPositionAndRotation(destination, playerStartRotation);
+
+        var postProcessLayer = selectedCamera.GetComponent<PostProcessLayer>().volumeLayer;
+        var cameras = playerController.CameraRig.GetComponentsInChildren<Camera>();
+        foreach (var camera in cameras)
+        {
+            var layer = camera.GetComponent<PostProcessLayer>();
+            if (layer == null)
+            {
+                continue;
+            }
+
+            cameraLayers.Add((camera, layer.volumeLayer));
+            layer.volumeLayer = postProcessLayer; // water
+        }
     }
 
     // Moves player to original position
     public void TeleportBack()
     {
-        cameraRig!.SetPositionAndRotation(playerStartPosition, playerStartRotation);
+        var playerController = BNGPlayerLocator.Instance.PlayerController;
+        playerController.transform!.SetPositionAndRotation(playerStartPosition, playerStartRotation);
+        playerController.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePosition;
+        foreach (var (camera, layer) in cameraLayers)
+        {
+            camera.GetComponent<PostProcessLayer>().volumeLayer = layer;
+        }
+        //foreach (var component in cameraComponents)
+        //{
+        //    Destroy(component);
+        //}
+        //cameraComponents.Clear();
     }
 }

@@ -5,9 +5,10 @@ using UnityEngine;
 
 public sealed class BNGPlayerLocator
 {
+    public static readonly BNGPlayerLocator Instance = new();
     private BNGPlayerController playerController;
 
-    public BNGPlayerController CurrentPlayerController
+    public BNGPlayerController PlayerController
     {
         get
         {

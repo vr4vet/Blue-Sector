@@ -175,12 +175,14 @@ public sealed class MerdCameraController : MonoBehaviour
 
         // Select away the up-down axis
         var axis = Vector3.Scale(localTrackRange.Max - localTrackRange.Min, mask);
-
         var target = selectedCamera.transform;
         var trackLength = axis.magnitude;
         var unit = axis.normalized;
         var offset = (Vector3.Dot(target.position, unit) - Vector3.Dot(localTrackRange.Min, unit)) / trackLength;
+
+        // keep any other transformations applied to other axes
+        var otherComponent = (Vector3.Scale(target.position, Vector3.one - unit) - Vector3.Scale(localTrackRange.Min, Vector3.one - unit));
         var newOffset = Math.Clamp(offset + direction * maxSpeed / trackLength, 0f, 1f);
-        target.position = localTrackRange.Min + newOffset * axis;
+        target.position = localTrackRange.Min + otherComponent + newOffset * axis;
     }
 }
