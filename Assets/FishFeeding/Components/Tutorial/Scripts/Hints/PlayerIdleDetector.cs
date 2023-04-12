@@ -26,7 +26,7 @@ public class PlayerIdleDetector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var playerController = playerLocator.CurrentPlayerController;
+        var playerController = playerLocator.PlayerController;
         var current = playerController.transform.position;
         if (playerPosition != current)
         {

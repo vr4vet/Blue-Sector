@@ -546,11 +546,6 @@ PrefabInstance:
       propertyPath: ParentHandModel
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2109111115295015119, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2109111115668380363, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
       propertyPath: handPoseType
@@ -650,7 +645,7 @@ PrefabInstance:
     - target: {fileID: 2109111116582765850, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3953080264046479834, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
@@ -1183,12 +1178,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
-      propertyPath: SmoothLookSpeed
-      value: 10
+      propertyPath: AllowPhysicsForces
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
-      propertyPath: AllowPhysicsForces
+      propertyPath: onLeverUp.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
@@ -1198,14 +1193,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
+      propertyPath: onLeverUp.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
+        type: 3}
+      propertyPath: onLeverUp.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 9217146818396417307}
+    - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
+        type: 3}
       propertyPath: onLeverChange.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
+        type: 3}
+      propertyPath: onLeverUp.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
       propertyPath: onLeverChange.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 9217146818396417307}
+    - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
+        type: 3}
+      propertyPath: onLeverUp.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnLeverChanged
+      objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
       propertyPath: onLeverChange.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -1218,54 +1233,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
+      propertyPath: onLeverUp.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: JoystickBridge, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
+        type: 3}
       propertyPath: onLeverChange.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: JoystickBridge, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
-      propertyPath: onLeverChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      propertyPath: onLeverUp.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    - target: {fileID: 2109111115295015116, guid: a2419f9845db03f479057114b6bbbe86,
+    - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
-      propertyPath: ParentToHands
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109111115295015116, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: SnapHandModel
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109111115295015116, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: ParentHandModel
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109111115295015119, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109111115668380363, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: handPoseType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109111115820565801, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: handPoseType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2109111115820565801, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: SelectedHandPose
-      value: 
-      objectReference: {fileID: 11400000, guid: b67209d6bb68afb43b86a98118cc77ba,
-        type: 2}
-    - target: {fileID: 2109111115820565801, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: MaxDegreeDifferenceAllowed
-      value: 277
+      propertyPath: onLeverChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2109111116582765845, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
@@ -1347,29 +1331,7 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3953080264046479834, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3953080264046479834, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3953080264046479834, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3953080264046479834, guid: a2419f9845db03f479057114b6bbbe86,
-        type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2109111116582765851, guid: a2419f9845db03f479057114b6bbbe86, type: 3}
-    - {fileID: 2109111116582765849, guid: a2419f9845db03f479057114b6bbbe86, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2419f9845db03f479057114b6bbbe86, type: 3}
 --- !u!4 &8488530362012547498 stripped
 Transform:
