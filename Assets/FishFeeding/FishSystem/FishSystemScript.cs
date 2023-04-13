@@ -210,7 +210,7 @@ public class FishSystemScript : MonoBehaviour
                 hungerStatus -= 2;  // quickly starts starving
                 break;
             case FeedingIntensity.Off:
-                fullTicks += 4; // fish are starvin bruv
+                hungerStatus -= 4; // fish are starvin bruv
                 break;
         }
     }

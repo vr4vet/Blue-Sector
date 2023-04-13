@@ -79,8 +79,15 @@ public class Game : MonoBehaviour
     /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */
     public void UpdateScreenStats()
     {
-        timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
-            Mathf.FloorToInt(gameTimeLeft % 60).ToString("00");
+        if (time != -1)
+        {
+            timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
+                Mathf.FloorToInt(gameTimeLeft % 60).ToString("00");
+        } else {
+            timeLeft.text = "";
+        }
+        if (mode.hud == false) return; // Downt show hud if in mode defined as such
+
         currentScore.text = "Score: " + scoring.Score;
         foodWasteText.text = "Food wastage: " + scoring.FoodWasted + " / Sec.";
         foodWasteSlider.value = scoring.FoodWastedPercentage;
