@@ -20,8 +20,6 @@ public class SlideBridge : MonoBehaviour
     
     [field: SerializeField]
     public GameObject FishSystem { get; set; }
-    [field: SerializeField]
-    public GameObject Slide { get; set; }
 
     private void start (){}
 
