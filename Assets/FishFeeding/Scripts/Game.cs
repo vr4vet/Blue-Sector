@@ -9,7 +9,7 @@ public class Game : MonoBehaviour
     public bool startGame = false;
     public bool inActivatedArea = false;
     private GameObject[] merds;
-    [SerializeField]
+    [field: SerializeField]
     private int time = 60;
     private float gameTimeLeft;
     private TextMeshProUGUI endScoreText;
@@ -19,6 +19,10 @@ public class Game : MonoBehaviour
     private TextMeshProUGUI foodWasteText;
     private UnityEngine.UI.Slider foodWasteSlider;
     Scoring scoring;
+    Modes modes; 
+    Mode mode;
+    Tutorial[] tutorials;
+    List<GameObject> holders = new List<GameObject>();
 
 
     // Start is called before the first frame update
@@ -33,14 +37,49 @@ public class Game : MonoBehaviour
         deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
+        modes = FindObjectOfType<Modes>();
+        tutorials = FindObjectsOfType<Tutorial>();
+        foreach (Tutorial tut in tutorials)
+        {
+            Debug.Log(tut);
+            holders.Add(tut.gameObject);
+        }
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the game hasn't started, start the game and
      * the coroutine Timer and start scoring. */
     void Update()
     {
+        if (modes.modesList == null) // modes aren't loaded yet
+        {
+            modes = FindObjectOfType<Modes>(); // reload modes (unnecessary?)
+            return; // wait 'till modes are loaded
+        }
+        if ((Input.GetKeyDown(KeyCode.M) || InputBridge.Instance.RightTriggerUp) && !startGame && inActivatedArea)
+        {
+            modes.ChangeToNextMode();
+            mode = modes.mode;
+            time = mode.timeLimit;
+            // Debug.Log("tut?:" + mode.tutorial.ToString());
+        }
+        if ((Input.GetKeyDown(KeyCode.N) || InputBridge.Instance.LeftTriggerUp) && !startGame && inActivatedArea)
+        {
+            modes.ChangeToPreviousMode();
+            mode = modes.mode;
+            time = mode.timeLimit;
+        }
+
         if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && inActivatedArea)
         {
+            if (mode.tutorial.Equals(Tut.NO)) // Disable all tutorials
+            {
+                foreach (GameObject tut in holders)
+                {
+                    // Debug.Log("disabled" + tut);
+                    tut.SetActive(false);
+                }
+            }
+
             startGame = true;
             foreach (GameObject merd in merds)
             {
