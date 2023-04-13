@@ -109,6 +109,7 @@ public class Game : MonoBehaviour
         } else {
             timeLeft.text = "";
         }
+        if (mode.hud == false) return; // Downt show hud if in mode defined as such
 
         currentScore.text = "Score: " + scoring.Score;
         foodWasteText.text = "Food wastage: " + scoring.FoodWasted + " / Sec.";

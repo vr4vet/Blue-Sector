@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using System.Linq;
 using System.IO;
-
+using System;
 
 public class ModeLoader : MonoBehaviour {
     public XDocument xmlDoc;
@@ -17,7 +17,8 @@ public class ModeLoader : MonoBehaviour {
 
     private int timeLimit;
     private float failureThreshold, modifier;
-    private bool isUnlocked, tutorial;
+    private bool isUnlocked, hud;
+    private Tut tutorial;
     private string __name;
 
     void Start() {
@@ -27,7 +28,7 @@ public class ModeLoader : MonoBehaviour {
     }
 
     void LoadXML() {
-        xmlDoc = XDocument.Load(@"Assets/FishFeeding/LevelSystem/LevelList.xml");
+        xmlDoc = XDocument.Load(@"Assets/FishFeeding/Components/Modes/XML/ModeList.xml");
         modes = xmlDoc.Descendants("modes").Elements();
         Debug.Log(modes);
     }
@@ -35,13 +36,14 @@ public class ModeLoader : MonoBehaviour {
     IEnumerator AssignData () {
         foreach (var mode in modes) {
             __name = mode.Attribute("name").Value;
-            tutorial = bool.Parse(mode.Element("tutorial").Value);
+            Enum.TryParse(mode.Element("tutorial").Value, out tutorial);
             timeLimit = int.Parse(mode.Element("time").Value);
             failureThreshold = float.Parse(mode.Element("threshold").Value);
             isUnlocked = bool.Parse(mode.Element("unlocked").Value);
             modifier = float.Parse(mode.Element("modifier").Value);
+            hud = bool.Parse(mode.Element("hud").Value);
 
-            modesList.Add(new Mode(__name, tutorial, timeLimit, failureThreshold, isUnlocked, modifier));
+            modesList.Add(new Mode(__name, tutorial, timeLimit, failureThreshold, isUnlocked, modifier, hud));
             yield return null;
         }
 
@@ -51,18 +53,28 @@ public class ModeLoader : MonoBehaviour {
 
 public class Mode {
     public string name;
-    public bool tutorial;
+    public Tut tutorial;
+    public bool hud;
     public int timeLimit;
     public float failureThreshold;
     public bool isUnlocked;
     public float modifier;
 
-    public Mode(string _name, bool _tutorial, int _timeLimit, float _failureThreshold, bool _isUnlocked, float _modifier) {
+    public Mode(string _name, Tut _tutorial, int _timeLimit, float _failureThreshold, bool _isUnlocked, float _modifier, bool _hud) {
         name = _name;
         tutorial = _tutorial;
         timeLimit = _timeLimit;
         failureThreshold = _failureThreshold;
         isUnlocked = _isUnlocked;
         modifier = _modifier;
+        hud = _hud;
     }
+}
+
+public enum Tut
+{
+    TEXT,
+    FULL,
+    HINT,
+    NO
 }
