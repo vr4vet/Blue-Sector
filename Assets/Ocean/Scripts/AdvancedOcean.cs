@@ -3,7 +3,7 @@ using UnityEngine;
 public class AdvancedOcean : MonoBehaviour
 {
     private const int NB_WAVE = 5;
-    private const int NB_INTERACTIONS = 64;
+    private const int NB_INTERACTIONS = 64 / 8;
 
     public Material ocean;
     public Light sun;
