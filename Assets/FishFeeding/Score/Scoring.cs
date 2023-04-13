@@ -10,21 +10,12 @@ public class Scoring : MonoBehaviour
     private int score = 0;
     public int Score => score;
     private GameObject[] merds;
-    /*[SerializeField]
-    private int time = 60;
-    private float gameTimeLeft;*/
     private int deadFish;
     public int DeadFish => deadFish;
     private float foodWasted;
     public float FoodWasted => foodWasted;
     private float foodWastedPercentage;
     public float FoodWastedPercentage => foodWastedPercentage;
-/*    private TextMeshProUGUI endScoreText;
-    private TextMeshProUGUI timeLeft;
-    private TextMeshProUGUI currentScore;
-    private TextMeshProUGUI deadFishText;
-    private TextMeshProUGUI foodWasteText;
-    private UnityEngine.UI.Slider foodWasteSlider;*/
     private MerdCameraController merdCameraController;
     [SerializeField]
     private GameObject MerdCameraHost;
@@ -34,13 +25,6 @@ public class Scoring : MonoBehaviour
     void Start()
     {
         merds = GameObject.FindGameObjectsWithTag("Fish System");
-        /*endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
-        GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
-        timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-        currentScore = canvas.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
-        deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
-        foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
-        foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();*/
         merdCameraController = MerdCameraHost.GetComponent<MerdCameraController>();
     }
 
@@ -105,16 +89,5 @@ public class Scoring : MonoBehaviour
             }
         }
     }
-
-    /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. *//*
-    public void UpdateScreenStats()
-    {
-        timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
-            Mathf.FloorToInt(gameTimeLeft % 60).ToString("00");
-        currentScore.text = "Score: " + score;
-        foodWasteText.text = "Food wastage: " + foodWasted + " / Sec.";
-        foodWasteSlider.value = foodWastedPercentage;
-        deadFishText.text = "Dead fish: " + deadFish;
-    }*/
 
 }
