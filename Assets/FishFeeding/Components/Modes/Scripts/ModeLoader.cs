@@ -10,7 +10,6 @@ using System.IO;
 using System;
 
 public class ModeLoader : MonoBehaviour {
-    // public TextAsset modeFile;
     public XDocument xmlDoc;
     public IEnumerable<XElement> modes;
     public List<Mode> modesList = new List<Mode>();
@@ -29,7 +28,6 @@ public class ModeLoader : MonoBehaviour {
     }
 
     void LoadXML() {
-        // xmlDoc = XDocument.Load(new MemoryStream(modeFile.bytes)); // Alternative for setting list in unity editor.
         xmlDoc = XDocument.Load(@"Assets/FishFeeding/Components/Modes/XML/ModeList.xml");
         modes = xmlDoc.Descendants("modes").Elements();
         Debug.Log(modes);
