@@ -80,7 +80,6 @@ public class Scoring : MonoBehaviour
         foreach (GameObject i in merds)
         {
             FishSystemScript script = i.GetComponent<FishSystemScript>();
-            Debug.Log("if setning" + (merdCameraController.SelectedFishSystem == script));
             if (merdCameraController.SelectedFishSystem == script)
             {
                 foodWasted = script.foodWasted;
