@@ -85,6 +85,7 @@ public class Game : MonoBehaviour
             foreach (GameObject merd in merds)
             {
                 FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
+                merdScript.modifier = mode.modifier; // Set modifier on timetohungry etc based on mode difficulty
                 merdScript.ReleaseIdle();   // change all fish systems' states from Idle to Full
             }
             Debug.Log("Started the game");
