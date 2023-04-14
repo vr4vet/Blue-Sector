@@ -41,6 +41,8 @@ public class SlideBridge : MonoBehaviour
 
             default:
                 fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.Low;
+                fishSystemScript.foodGivenPerSec = FishsystemScript.foodBase * 1/3;
+                fishSystemScrip.emission.rateOverTime = 5;
                 break;
         }
     }
