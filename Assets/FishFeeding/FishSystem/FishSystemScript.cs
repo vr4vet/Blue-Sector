@@ -19,6 +19,7 @@ public class FishSystemScript : MonoBehaviour
     private readonly int eatingAmount = 3;
     public int foodBase;
     private int foodGivenPerSec;
+    public float modifier = 1.0f;
 
     [HideInInspector]
     public enum FishState   // state of fish within this fish system
@@ -152,7 +153,7 @@ public class FishSystemScript : MonoBehaviour
     private int fullTicks = 0;  // gets hungry when this passes timeToHungry.
     void HandleFull()
     {
-        int timeToHungry = (int)Random.Range(25.0f, 35.0f);
+        int timeToHungry = (int)Random.Range(25.0f * modifier, 35.0f * modifier);
         // switch state to hungry, and reset timer
         if (fullTicks >= timeToHungry)
         {
@@ -183,7 +184,7 @@ public class FishSystemScript : MonoBehaviour
     void HandleHungry()
     {
         int secondsToFull = (int)Random.Range(10.0f, 12.0f);
-        int secondsToDying = (int)Random.Range(-25.0f, -35.0f);
+        int secondsToDying = (int)Random.Range(-25.0f * modifier, -35.0f * modifier);
         Debug.Log("hungerstatus: " + hungerStatus);
         if (hungerStatus >= secondsToFull)
         {
@@ -210,7 +211,7 @@ public class FishSystemScript : MonoBehaviour
                 hungerStatus -= 2;  // quickly starts starving
                 break;
             case FeedingIntensity.Off:
-                fullTicks += 4; // fish are starvin bruv
+                hungerStatus -= 4; // fish are starvin bruv
                 break;
         }
     }
