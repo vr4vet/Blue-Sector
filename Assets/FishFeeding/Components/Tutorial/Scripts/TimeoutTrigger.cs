@@ -21,7 +21,7 @@ public class TimeoutTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (tutorialEntry.IsActive)
+        if (tutorialEntry.IsActive && triggeredAt == default)
         {
             triggeredAt = DateTime.Now;
         }

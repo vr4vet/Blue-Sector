@@ -51,7 +51,7 @@ public class Game : MonoBehaviour
      * game hasn't started, start the game and the coroutine Timer and start scoring. */
     void Update()
     {
-        if (modes.modesList == null) // modes aren't loaded yet
+        if (modes == null || modes.modesList == null) // modes aren't loaded yet
         {
             modes = FindObjectOfType<Modes>(); // reload modes (unnecessary?)
             return; // wait 'till modes are loaded
