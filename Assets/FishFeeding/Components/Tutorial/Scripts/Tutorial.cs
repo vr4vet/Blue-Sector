@@ -89,9 +89,11 @@ public class Tutorial : MonoBehaviour
     public bool MoveNext()
     {
         IndexOfCurrentItem = Math.Min(IndexOfCurrentItem, Items.Length) + 1;
-
+        IndexOfCurrentItem = 6;
+        Debug.Log("index: " + indexOfCurrentItem);
         if (IndexOfCurrentItem == Items.Length && Items.Length > 0)
         {
+            Debug.Log("true");
             OnCompleted.Invoke();
         }
 

@@ -6,13 +6,15 @@ public class StartGameToolTip : MonoBehaviour
 {
     Game script;
     GameObject startGameToolTip;
+    GameObject canvas;
 
     // Start is called before the first frame update
     void Start()
     {
         script = FindObjectOfType<Game>();
         startGameToolTip = GameObject.Find("StartGameToolTip");
-        startGameToolTip.SetActive(false);
+        canvas = GameObject.Find("StartGameToolTip").transform.GetChild(0).gameObject;
+        canvas.GetComponent<Canvas>().enabled = false;
     }
 
     // Update is called once per frame
@@ -20,17 +22,18 @@ public class StartGameToolTip : MonoBehaviour
     {
         if (script.inActivatedArea && !script.startGame)
         {
-            startGameToolTip.SetActive(true);
+            canvas.GetComponent<Canvas>().enabled = true;
         }
         else
         {
-            startGameToolTip.SetActive(false);
+            canvas.GetComponent<Canvas>().enabled = false;
         }
     }
 
     public void GiveStartGameToolTip()
     {
         script.inActivatedArea = true;
-        startGameToolTip.SetActive(true);
+        canvas.GetComponent<Canvas>().enabled = true;
+        /*startGameToolTip.SetActive(true);*/
     }
 }
