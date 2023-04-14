@@ -7,7 +7,7 @@ public class FishSystemScript : MonoBehaviour
 {
     public GameObject fish;
     private ParticleSystem foodParticles;
-    private ParticleSystem.EmissionModule emission;
+    public ParticleSystem.EmissionModule emission;
     public float radius = 10;
     public float height = 20;
     public int amountOfFish = 30;
@@ -18,7 +18,7 @@ public class FishSystemScript : MonoBehaviour
     public float foodWasted;
     private readonly int eatingAmount = 3;
     public int foodBase;
-    private int foodGivenPerSec;
+    public int foodGivenPerSec;
     public float modifier = 1.0f;
 
     [HideInInspector]
