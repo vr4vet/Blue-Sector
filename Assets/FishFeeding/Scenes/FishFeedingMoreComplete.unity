@@ -123,52 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &100986459 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5079109036430693713, guid: 12ee6c50f9832c247a378f804297c417,
-    type: 3}
-  m_PrefabInstance: {fileID: 2121485080}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &100986461 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6311409464202709031, guid: 12ee6c50f9832c247a378f804297c417,
-    type: 3}
-  m_PrefabInstance: {fileID: 2121485080}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100986459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &100986462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100986459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4033a8256efb24d41ab3643fbfb83294, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 100986461}
-        m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
-        m_MethodName: SetCompleted
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  TimeoutSeconds: 8
 --- !u!1 &155552336
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,18 +416,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &513615027 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 583757599307621114, guid: 12ee6c50f9832c247a378f804297c417,
-    type: 3}
-  m_PrefabInstance: {fileID: 2121485080}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &792538446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2070,90 +2012,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6232542661661852881, guid: d05b781b5e49f3942a0371ebc81da938, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d05b781b5e49f3942a0371ebc81da938, type: 3}
---- !u!1 &1905008172 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9087853239208324706, guid: 12ee6c50f9832c247a378f804297c417,
-    type: 3}
-  m_PrefabInstance: {fileID: 2121485080}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1905008184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1905008172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad179a9e83dba5142adaaf7737678e8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onGrab:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomesClosestGrabbable:
-    m_PersistentCalls:
-      m_Calls: []
-  onNoLongerClosestGrabbable:
-    m_PersistentCalls:
-      m_Calls: []
-  onBecomesClosestRemoteGrabbable:
-    m_PersistentCalls:
-      m_Calls: []
-  onNoLongerClosestRemoteGrabbable:
-    m_PersistentCalls:
-      m_Calls: []
-  onGrip:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 513615027}
-        m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
-        m_MethodName: SetCompleted
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onTrigger:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerDown:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerUp:
-    m_PersistentCalls:
-      m_Calls: []
-  onButton1:
-    m_PersistentCalls:
-      m_Calls: []
-  onButton1Down:
-    m_PersistentCalls:
-      m_Calls: []
-  onButton1Up:
-    m_PersistentCalls:
-      m_Calls: []
-  onButton2:
-    m_PersistentCalls:
-      m_Calls: []
-  onButton2Down:
-    m_PersistentCalls:
-      m_Calls: []
-  onButton2Up:
-    m_PersistentCalls:
-      m_Calls: []
-  onSnapZoneEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onSnapZoneExit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &1994209463
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2304,28 +2162,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6232542661661852881, guid: d05b781b5e49f3942a0371ebc81da938, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d05b781b5e49f3942a0371ebc81da938, type: 3}
---- !u!1 &2068161870 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5984325436733633927, guid: 12ee6c50f9832c247a378f804297c417,
-    type: 3}
-  m_PrefabInstance: {fileID: 2121485080}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2068161873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2068161870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4033a8256efb24d41ab3643fbfb83294, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggered:
-    m_PersistentCalls:
-      m_Calls: []
-  TimeoutSeconds: 10
 --- !u!1001 &2120694522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2407,41 +2243,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1251104232891389442, guid: 12ee6c50f9832c247a378f804297c417,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 1660654973569883036, guid: 12ee6c50f9832c247a378f804297c417,
-        type: 3}
-      propertyPath: Text
-      value: "Du f\xE5r poeng ettersom hvor god du er til \xE5 mate fisken. Du kan
-        se poengene dine p\xE5 skjermen."
-      objectReference: {fileID: 0}
     - target: {fileID: 2986825757857562709, guid: 12ee6c50f9832c247a378f804297c417,
         type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5230627866455364812, guid: 12ee6c50f9832c247a378f804297c417,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a90d8aed984a481418cd0aff7b98a2e9, type: 2}
-    - target: {fileID: 5312217252840705029, guid: 12ee6c50f9832c247a378f804297c417,
-        type: 3}
-      propertyPath: time
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 5312217252840705029, guid: 12ee6c50f9832c247a378f804297c417,
-        type: 3}
-      propertyPath: inActivatedArea
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5522882247058564101, guid: 12ee6c50f9832c247a378f804297c417,
-        type: 3}
-      propertyPath: <Cameras>k__BackingField.Array.size
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5522882247058564101, guid: 12ee6c50f9832c247a378f804297c417,
         type: 3}
@@ -2512,11 +2317,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7127149760226932783, guid: 12ee6c50f9832c247a378f804297c417,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7468541916692245203, guid: 12ee6c50f9832c247a378f804297c417,
         type: 3}
