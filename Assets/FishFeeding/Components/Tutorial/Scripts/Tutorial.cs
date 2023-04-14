@@ -88,7 +88,8 @@ public class Tutorial : MonoBehaviour
     /// <returns><see langword="true"/> if there are more entires in the tutorial.</returns>
     public bool MoveNext()
     {
-        IndexOfCurrentItem++;
+        IndexOfCurrentItem = Math.Min(IndexOfCurrentItem, Items.Length) + 1;
+        IndexOfCurrentItem = 6;
         Debug.Log("index: " + indexOfCurrentItem);
         if (IndexOfCurrentItem == Items.Length && Items.Length > 0)
         {
