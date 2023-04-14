@@ -33,18 +33,18 @@ public class SlideBridge : MonoBehaviour
         {
             case > (float) Intensity.Medium:
                 fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.High;
-                fishSystemScript.foodGivenPerSec = FishsystemScript.foodBase * 5/3;
-                fishSystemScrip.emission.rateOverTime = 40;
+                fishSystemScript.foodGivenPerSec = fishSystemScript.foodBase * 5/3;
+                fishSystemScript.emission.rateOverTime = 40;
             break;   
             case > (float) Intensity.Low:
                 fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.Medium;
-                fishSystemScript.foodGivenPerSec = FishsystemScript.foodBase * 1;
-                fishSystemScrip.emission.rateOverTime = 20;
+                fishSystemScript.foodGivenPerSec = fishSystemScript.foodBase * 1;
+                fishSystemScript.emission.rateOverTime = 20;
             break;
             default:
                 fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.Low;
-                fishSystemScript.foodGivenPerSec = FishsystemScript.foodBase * 1/3;
-                fishSystemScrip.emission.rateOverTime = 5;
+                fishSystemScript.foodGivenPerSec = fishSystemScript.foodBase * 1/3;
+                fishSystemScript.emission.rateOverTime = 5;
                 break;
         }
     }
