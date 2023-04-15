@@ -49,14 +49,7 @@ notify one of the project owners. Please do not post it to a public issue or PR.
 
 ### Code of conduct
 
-\[TODO: Update code of conduct\]
-
-This project has adopted [Kardemommeloven][krdmlvn] as the code of conduct. By
-contributing to this project you agree to follow it in all your interactions
-with the project.
-
-For more information or any questions, please contact one of the project
-maintainers.
+See our [code of conduct file][code-of-conduct] for information.
 
 ## Contributing 🤝
 
@@ -196,12 +189,12 @@ either reproduce and fix the bug or implement the requested feature.
 
 ### Documentation
 
-| Question                                     | Reference                                               |
-| -------------------------------------------- | ------------------------------------------------------- |
-| How do I write documentation?                | [Markdown][md]                                          |
-| Formatting prefrences in markdown?           | [GitHub Flavor][gfm], ll within column 80 when possible |
-| How do I write code documentation?           | [XML Documentation][ms-xmldoc]                          |
-| What is the standard for spelling & grammar? | [British English][dict]                                 |
+| Question                                     | Reference                                                       |
+| -------------------------------------------- | --------------------------------------------------------------- |
+| How do I write documentation?                | [Markdown][md]                                                  |
+| Formatting prefrences in markdown?           | [GitHub Flavor][gfm], linelength within column 80 when possible |
+| How do I write code documentation?           | [XML Documentation][ms-xmldoc]                                  |
+| What is the standard for spelling & grammar? | [British English][dict]                                         |
 
 ## Misc 📜
 
@@ -211,7 +204,7 @@ This project is released under the MIT License. We ask that you ensure
 contributions you make also follow this license. For the full license
 information, see our [LICENSE][lcns] file or read more [here][mit].
 
-[krdmlvn]: https://no.wikipedia.org/wiki/Kardemommeloven
+[code-of-conduct]: https://github.com/vr4vet/Blue-Sector/blob/main/CODE_OF_CONDUCT.md
 [open-issues]: https://github.com/vr4vet/Blue-Sector/issues
 [closed-issues]: https://github.com/vr4vet/Blue-Sector/issues?q=is%3Aissue+is%3Aclosed+sort%3Aupdated-desc
 [repo-forking]: https://docs.github.com/en/get-started/quickstart/contributing-to-projects#forking-a-repository
