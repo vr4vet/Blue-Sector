@@ -14,9 +14,14 @@ public class Fish : MonoBehaviour
     //The following variables are used for handeling behaviour with water
     private Vector3 waterBodyCenter;
     private Vector3 targetPosition;
+    private Quaternion lookRotation;
+    public float movementSpeed;
+    public float rotationSpeed;
     private float waterBodyXLength;
     private float waterBodyZLength;
     private bool isInWater;
+    private Rigidbody rigidBody;
+    private Quaternion originalRotation;
 
     InspectionTaskManager inspectionTaskManager;
 
@@ -25,32 +30,48 @@ public class Fish : MonoBehaviour
     void Start()
     {
         //Skamløst kokt fra FishScript.cs:
-        InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 5.0f), 3.0f);
+        InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 5.0f), 1.0f);
         inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
+        targetPosition = transform.position;
+        rigidBody = GetComponent<Rigidbody>();
+        originalRotation = transform.rotation;
     }
 
     // Update is called once per frame
     void Update()
     {
         if(isInWater){
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, 2 * Time.deltaTime);
+            rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            Move();
+        } else {
+            rigidBody.freezeRotation = false;
         }
     }
 
     void PeriodicUpdates() {
-        SetMoveTarget();
+        if(isInWater){
+            SetMoveTarget();    
+        }
+    }
+
+    private void Move() {
+        if( Vector3.Distance(transform.position, targetPosition) > .1 ) {
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+        }
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
     }
 
     private void SetMoveTarget() {
         //Mer Skamløs koking fra FishScript.cs:
-        Debug.Log("Setting movement");
+        //Debug.Log("Setting movement");
         float randX = Random.Range(waterBodyCenter.x -waterBodyXLength / 2,waterBodyCenter.x + waterBodyXLength / 2);
         float randZ = Random.Range(waterBodyCenter.z -waterBodyZLength / 2,waterBodyCenter.z + waterBodyZLength / 2);
         targetPosition = new Vector3(randX, transform.position.y, randZ);
         Debug.Log("xLength: " + randX + " zLength " + randZ);
-        Quaternion target = Quaternion.LookRotation(targetPosition);
-        target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
-        gameObject.transform.rotation = target;
+        lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
+        Debug.Log("lookrotation: " + lookRotation);
+        Debug.Log("transfomrotation: " + transform.rotation);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
     }
 
     public void UpdateWaterBody(float waterheight, Vector3 bodyCenter, float xLength, float zLength, bool isInWater){
@@ -62,12 +83,21 @@ public class Fish : MonoBehaviour
         this.isInWater = isInWater;
     }
 
+    private void OnCollisionEnter(Collision other) {
+        SetMoveTarget();
+        Debug.Log("new target!");
+    }
+
     public void SetAsSelectedFish() {
         inspectionTaskManager.SetSelectedFish(this); 
     }
 
     public void SetgillDamageGuessed(int guess) {
         gillDamageGuessed = guess;
+    }
+
+    public void SetIsInWater( bool isInWater) {
+        this.isInWater = isInWater;
     }
 
     public int GetGillDamage() {
@@ -81,4 +111,5 @@ public class Fish : MonoBehaviour
     public int GetId() {
         return id;
     }
+
 }
