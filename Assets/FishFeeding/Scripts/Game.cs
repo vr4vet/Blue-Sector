@@ -20,7 +20,7 @@ public class Game : MonoBehaviour
     private TextMeshProUGUI foodWasteText;
     private UnityEngine.UI.Slider foodWasteSlider;
     Scoring scoring;
-    Modes modes; 
+    public Modes modes; 
     Mode mode;
     Tutorial[] tutorials;
     List<GameObject> holders = new List<GameObject>();
