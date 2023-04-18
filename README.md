@@ -59,6 +59,21 @@ as saving storage - we utilise git LFS. Please ensure that you install the
 git lfs install
 ```
 
+We have experienced reports of issues with LFS in the project.
+If you get an error resembling:
+
+"Found x files that should have been pointers,
+but werent"
+
+run these commands in order:
+
+```sh
+git lfs uninstall
+git reset --hard
+git lfs install
+git lfs pull
+```
+
 For a more complete explanation of LFS, see [here][lfs].
 
 [lfs]: https://git-lfs.com/
