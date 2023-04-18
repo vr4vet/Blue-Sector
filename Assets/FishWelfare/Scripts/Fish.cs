@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Fish : MonoBehaviour
+public class Fish : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
     private int gillDamage = 3;
@@ -67,10 +68,7 @@ public class Fish : MonoBehaviour
         float randX = Random.Range(waterBodyCenter.x -waterBodyXLength / 2,waterBodyCenter.x + waterBodyXLength / 2);
         float randZ = Random.Range(waterBodyCenter.z -waterBodyZLength / 2,waterBodyCenter.z + waterBodyZLength / 2);
         targetPosition = new Vector3(randX, transform.position.y, randZ);
-        Debug.Log("xLength: " + randX + " zLength " + randZ);
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
-        Debug.Log("lookrotation: " + lookRotation);
-        Debug.Log("transfomrotation: " + transform.rotation);
         //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
     }
 
@@ -81,6 +79,12 @@ public class Fish : MonoBehaviour
         waterBodyXLength = xLength;
         waterBodyZLength = zLength;
         this.isInWater = isInWater;
+    }
+
+    public void OnPointerClick(PointerEventData eventData) {
+        Debug.Log("Clicked!!" + eventData.pressPosition);
+        //bruk physics.raycast event
+
     }
 
     private void OnCollisionEnter(Collision other) {
