@@ -48,9 +48,9 @@ public class Activation : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == "CameraRig" && !script.inActivatedArea)
+        if (other.name == "CameraRig" && !script.InActivatedArea)
         {
-            script.inActivatedArea = true;
+            script.InActivatedArea = true;
             /*startGameToolTip.GetComponent<Renderer>().enabled = true;*/
             Debug.Log("activated true");
         }
@@ -58,9 +58,9 @@ public class Activation : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.name == "CameraRig" && script.inActivatedArea)
+        if (other.name == "CameraRig" && script.InActivatedArea)
         {
-            script.inActivatedArea = false;
+            script.InActivatedArea = false;
             /*startGameToolTip.GetComponent<Renderer>().enabled = false;*/
             Debug.Log("activated false");
         }

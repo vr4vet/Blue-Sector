@@ -20,7 +20,7 @@ public class StartGameToolTip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (script.inActivatedArea && !script.startGame)
+        if (script.InActivatedArea && !script.startGame)
         {
             canvas.GetComponent<Canvas>().enabled = true;
         }
@@ -32,7 +32,7 @@ public class StartGameToolTip : MonoBehaviour
 
     public void GiveStartGameToolTip()
     {
-        script.inActivatedArea = true;
+        script.InActivatedArea = true;
         canvas.GetComponent<Canvas>().enabled = true;
         /*startGameToolTip.SetActive(true);*/
     }
