@@ -40,61 +40,42 @@ public class Game : MonoBehaviour
         foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
         modes = FindObjectOfType<Modes>();
         tutorials = FindObjectsOfType<Tutorial>();
-        foreach (Tutorial tut in tutorials)
-        {
-            Debug.Log(tut);
-            holders.Add(tut.gameObject);
-        }
+
+        foreach (Tutorial tut in tutorials) holders.Add(tut.gameObject);
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
      * game hasn't started, start the game and the coroutine Timer and start scoring. */
     void Update()
     {
-        if (modes.modesList == null) // modes aren't loaded yet
+        if (startGame) // only check for pre game things if not started
         {
-            modes = FindObjectOfType<Modes>(); // reload modes (unnecessary?)
-            return; // wait 'till modes are loaded
+            UpdateScreenStats();
+            return; // skip rest of update
         }
-        if ((Input.GetKeyDown(KeyCode.M) || InputBridge.Instance.RightTriggerUp) && !startGame && inActivatedArea)
-        {
-            modes.ChangeToNextMode();
-            mode = modes.mode;
-            time = mode.timeLimit;
-            // Debug.Log("tut?:" + mode.tutorial.ToString());
-        }
-        if ((Input.GetKeyDown(KeyCode.N) || InputBridge.Instance.LeftTriggerUp) && !startGame && inActivatedArea)
-        {
-            modes.ChangeToPreviousMode();
-            mode = modes.mode;
-            time = mode.timeLimit;
-        }
+
+        if (modes.modesList == null) return; // wait until modes are loaded            
 
         if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && inActivatedArea)
         {
-            if (mode.tutorial.Equals(Tut.NO)) // Disable all tutorials
-            {
-                foreach (GameObject tut in holders)
-                {
-                    // Debug.Log("disabled" + tut);
-                    tut.SetActive(false);
-                }
-            }
+            // Set mode values
+            mode = modes.mode;
+            time = mode.timeLimit;
 
             startGame = true;
+
             foreach (GameObject merd in merds)
             {
                 FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
                 merdScript.modifier = mode.modifier; // Set modifier on timetohungry etc based on mode difficulty
                 merdScript.ReleaseIdle();   // change all fish systems' states from Idle to Full
             }
-            Debug.Log("Started the game");
+
             scoring.StartScoring();
             StartCoroutine(Timer());
-        }
-        if (startGame)
-        {
-            UpdateScreenStats();
+
+            if (!mode.tutorial.Equals(Tut.NO)) return; // Only disable tutorials if defined in mode
+            foreach (GameObject tut in holders) tut.SetActive(false);
         }
     }
 
@@ -128,7 +109,7 @@ public class Game : MonoBehaviour
         } else {
             timeLeft.text = "";
         }
-        if (mode.hud == false) return; // Downt show hud if in mode defined as such
+        if (mode.hud == false) return; // Don't show hud if in mode defined as such
 
         currentScore.text = "Score: " + scoring.Score;
         foodWasteText.text = "Food wastage: " + scoring.FoodWasted + " / Sec.";
