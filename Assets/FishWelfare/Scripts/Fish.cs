@@ -24,6 +24,10 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     private Rigidbody rigidBody;
     private Quaternion originalRotation;
 
+    public BNG.UIPointer uIPointer;
+
+    public GameObject marker;
+
     InspectionTaskManager inspectionTaskManager;
 
 
@@ -82,8 +86,9 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        Debug.Log("Clicked!!" + eventData.pressPosition);
-        //bruk physics.raycast event
+        Debug.Log("Clicked!!" + eventData.pointerCurrentRaycast.worldPosition);
+        GameObject newmarker = Instantiate(marker,eventData.pointerCurrentRaycast.worldPosition, new Quaternion(0,0,0,0));
+        newmarker.transform.parent = transform;
 
     }
 
