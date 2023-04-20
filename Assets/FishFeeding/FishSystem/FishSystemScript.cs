@@ -116,7 +116,15 @@ public class FishSystemScript : MonoBehaviour
     public void SetIdle() 
     {
         state = FishState.Idle;
+        if (IsInvoking(nameof(KillFish)))
+            CancelInvoke(nameof(KillFish));
         hungerStatus = 0;
+
+        for (int i = 0; i < fishKilled; i++)
+        {
+            gameObject.transform.GetChild(1 + i).GetComponent<FishScript>().Revive();
+        }
+        fishKilled = 0;
     }
 
     public void ReleaseIdle() => state = FishState.Full;
@@ -142,9 +150,6 @@ public class FishSystemScript : MonoBehaviour
             case FishState.Dying:
                 main.startLifetime = 0.4f; // food particles should dissapear high in water
                 HandleDying();
-                break;
-            case FishState.Idle:
-                HandleIdle();
                 break;
         }   
 
@@ -214,12 +219,6 @@ public class FishSystemScript : MonoBehaviour
                 hungerStatus -= 4; // fish are starvin bruv
                 break;
         }
-    }
-
-    void HandleIdle()
-    {
-        if (IsInvoking(nameof(KillFish)))
-            CancelInvoke(nameof(KillFish));
     }
 
     void HandleDying()
