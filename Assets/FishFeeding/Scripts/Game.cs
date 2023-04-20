@@ -8,7 +8,6 @@ using System.Linq;
 public class Game : MonoBehaviour
 {
     public bool startGame = false;
-    public bool inActivatedArea = false;
     private GameObject[] merds;
     [field: SerializeField]
     private int time = 60;
@@ -24,6 +23,8 @@ public class Game : MonoBehaviour
     Mode mode;
     Tutorial[] tutorials;
     List<GameObject> holders = new List<GameObject>();
+
+    public bool InActivatedArea { get; set; }
 
 
     // Start is called before the first frame update
@@ -55,24 +56,24 @@ public class Game : MonoBehaviour
         {
             return; // wait 'till modes are loaded
         }
+
         mode = modes.mode;
         time = mode.timeLimit;
-
-        if ((Input.GetKeyDown(KeyCode.M) || InputBridge.Instance.RightTriggerUp) && !startGame && inActivatedArea)
+        if ((Input.GetKeyDown(KeyCode.M) || InputBridge.Instance.RightTriggerUp) && !startGame && InActivatedArea)
         {
             modes.ChangeToNextMode();
             mode = modes.mode;
             time = mode.timeLimit;
             // Debug.Log("tut?:" + mode.tutorial.ToString());
         }
-        if ((Input.GetKeyDown(KeyCode.N) || InputBridge.Instance.LeftTriggerUp) && !startGame && inActivatedArea)
+        if ((Input.GetKeyDown(KeyCode.N) || InputBridge.Instance.LeftTriggerUp) && !startGame && InActivatedArea)
         {
             modes.ChangeToPreviousMode();
             mode = modes.mode;
             time = mode.timeLimit;
         }
 
-        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && inActivatedArea)
+        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && InActivatedArea)
         {
             if (mode.tutorial.Equals(Tut.NO)) // Disable all tutorials
             {
