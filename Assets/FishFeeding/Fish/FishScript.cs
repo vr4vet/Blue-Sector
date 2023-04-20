@@ -15,20 +15,11 @@ public class FishScript : MonoBehaviour
     private bool randomFish;
     private float swimSpeedVertical;
     private float swimSpeedHorizontal;
-    public Status status;
 
     private Animation fishAnimation;
     private GameObject fishSystem;
     private Vector3 fishSystemPosition;
     private FishSystemScript fishSystemScript;
-
-    public enum Status
-    {
-        Idle,
-        Full,
-        Hungry,
-        Dead
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +37,6 @@ public class FishScript : MonoBehaviour
         swimSpeedVertical = fishSystemScript.swimSpeedVertical;
         swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
         dead = false;
-        status = Status.Full;
     }
 
     /*
@@ -57,10 +47,6 @@ public class FishScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (dead)
-        {
-            fishAnimation.Stop();
-        }
 
         var transform = gameObject.transform;
         var fishPosition = transform.position;
@@ -182,7 +168,21 @@ public class FishScript : MonoBehaviour
     }
 
     // public function allowing fish system to kill starving fish
-    public void Kill() => dead = true;
+    public void Kill()
+    {
+        dead = true;
+        fishAnimation.Stop();
+    }
+
+    // public function allowing fish system to kill starving fish
+    public void Revive()
+    {
+        dead = false;
+        fishAnimation.Play();
+        float posY = Random.Range(bottom + 1, top - 1);
+        transform.position = new Vector3(transform.position.x, posY, transform.position.z);
+    }
+
     // public function telling this fish to swim randomly and not get hungry etc. Make the fish stream a bit less monotone.
     public void SetRandomFish() => randomFish = true;
 }
