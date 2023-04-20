@@ -22,7 +22,6 @@ public class TankController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        Debug.Log("*TRIGGERED*");
         if(isGoal){
             inspectionTaskManager.ProgressInspection(other.gameObject);
         }

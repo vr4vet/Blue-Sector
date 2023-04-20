@@ -28,8 +28,14 @@ public class Fish : MonoBehaviour, IPointerClickHandler
 
     public GameObject marker;
 
-    InspectionTaskManager inspectionTaskManager;
+    public GameObject pointerFinger;
+    [SerializeField]
+    private List<GameObject> liceList = new List<GameObject>();
 
+    InspectionTaskManager inspectionTaskManager;
+    public LayerMask layer;
+
+    public GameObject lastMarkedLouse;
 
     // Start is called before the first frame update
     void Start()
@@ -86,15 +92,34 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        Debug.Log("Clicked!!" + eventData.pointerCurrentRaycast.worldPosition);
-        GameObject newmarker = Instantiate(marker,eventData.pointerCurrentRaycast.worldPosition, new Quaternion(0,0,0,0));
-        newmarker.transform.parent = transform;
+        //Debug.Log("Clicked!!" + eventData.pointerCurrentRaycast.worldPosition);
+        lastMarkedLouse = checkForLouse(eventData.pointerCurrentRaycast.worldPosition);
+        if(lastMarkedLouse != null){
+            GameObject newmarker = Instantiate(marker,lastMarkedLouse.transform.position, new Quaternion(0,0,0,0));
+            newmarker.transform.parent = transform;
+        }
+    }
 
+    public GameObject checkForLouse(Vector3 origin) {
+        Debug.Log("raycaster!");
+        if(Physics.SphereCast(origin, 0.01f, pointerFinger.transform.forward, out RaycastHit hitInfo, 10f, layer)) {
+            Debug.Log("inni reycast!");
+            Debug.DrawRay(transform.position, pointerFinger.transform.forward * hitInfo.distance, Color.yellow);
+            GameObject hit = hitInfo.collider.gameObject;
+            GameObject newmarker = Instantiate(marker, hitInfo.transform.position, new Quaternion(0,0,0,0));
+            Debug.Log(hitInfo.collider.tag);
+            foreach(GameObject louse in liceList) {
+                if (hit == louse) {
+                    Debug.Log("fant en!");
+                    return louse;
+                }
+            }
+        }
+        return null;
     }
 
     private void OnCollisionEnter(Collision other) {
         SetMoveTarget();
-        Debug.Log("new target!");
     }
 
     public void SetAsSelectedFish() {
