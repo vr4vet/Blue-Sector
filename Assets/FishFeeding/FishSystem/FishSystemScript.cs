@@ -153,7 +153,7 @@ public class FishSystemScript : MonoBehaviour
     private int fullTicks = 0;  // gets hungry when this passes timeToHungry.
     void HandleFull()
     {
-        int timeToHungry = (int)Random.Range(25.0f * modifier, 35.0f * modifier);
+        int timeToHungry = (int)Random.Range(50.0f * modifier, 70.0f * modifier);
         // switch state to hungry, and reset timer
         if (fullTicks >= timeToHungry)
         {
@@ -183,8 +183,8 @@ public class FishSystemScript : MonoBehaviour
     private int hungerStatus = 0;   // dies if <= secondsToDying, gets full if >= secondsToFull
     void HandleHungry()
     {
-        int secondsToFull = (int)Random.Range(10.0f, 12.0f);
-        int secondsToDying = (int)Random.Range(-25.0f * modifier, -35.0f * modifier);
+        int secondsToFull = (int)Random.Range(20.0f, 22.0f);
+        int secondsToDying = (int)Random.Range(-45.0f * modifier, -55.0f * modifier);
         Debug.Log("hungerstatus: " + hungerStatus);
         if (hungerStatus >= secondsToFull)
         {
