@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BNG;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -21,26 +22,31 @@ public class Game : MonoBehaviour
     private TextMeshProUGUI currentScore;
     private TextMeshProUGUI deadFishText;
     private TextMeshProUGUI foodWasteText;
+
+    [field: SerializeField]
     private UnityEngine.UI.Slider foodWasteSlider;
+
     public Scoring scoring;
-    public Modes modes;
-    public Mode mode;
     public List<MonoBehaviour> tutorials;
+    public Mode currentMode;
+    public Modes modesClass;
+    public List<Mode> modesList;
 
     // Start is called before the first frame update
     private void Start()
     {
         merds = GameObject.FindGameObjectsWithTag("Fish System");
         scoring = FindObjectOfType<Scoring>();
-        //endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
+       // endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
         GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
         timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
         currentScore = canvas.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
         deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
-
-        modes = FindObjectOfType<Modes>();
+        
+        modesClass = FindObjectOfType<Modes>();
+        modesList = modesClass.modesList; // reassign
 
         tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<ITutorial>().Cast<MonoBehaviour>().ToList());
     }
@@ -56,14 +62,18 @@ public class Game : MonoBehaviour
             return; // skip rest of update
         }
 
-        if (modes == null) return; // wait until modes are loaded
+        if (modesList.Count == 0)
+        {
+            modesList = modesClass.modesList;
+            return; // wait until modes are loaded
+        }
 
-        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && inActivatedArea)
+        if (/*(Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) &&*/ !startGame && inActivatedArea)
         {
             // Set mode values
-            mode = modes.mode;
-            time = mode.timeLimit;
-            hud = mode.hud;
+            currentMode = modesClass.mode;
+            time = currentMode.timeLimit;
+            hud = currentMode.hud;
 
             if (!hud)
             {
@@ -78,16 +88,16 @@ public class Game : MonoBehaviour
             foreach (GameObject merd in merds)
             {
                 FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
-                merdScript.modifier = mode.modifier; // Set modifier on timetohungry etc based on mode difficulty
+                merdScript.modifier = currentMode.modifier; // Set modifier on timetohungry etc based on mode difficulty
                 merdScript.ReleaseIdle();   // change all fish systems' states from Idle to Full
             }
 
             scoring.StartScoring();
             StartCoroutine(Timer());
 
-            if (!mode.tutorial.Equals(Tut.NO)) return; // Only disable tutorials if defined in mode
+            if (!currentMode.tutorial.Equals(Tut.NO)) return; // Only disable tutorials if defined in mode
 
-            tutorials.ForEach(tutorial => tutorial.enabled = false);
+            tutorials.ForEach(tutorial => { tutorial.enabled = false; });
         }
     }
 
@@ -100,14 +110,14 @@ public class Game : MonoBehaviour
         {
             yield return null;
         }
-        scoring.StopScoring();
-        startGame = false;
+        // scoring.StopScoring();
+        // startGame = false;
         foreach (GameObject merd in merds)
         {
             FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
             merdScript.SetIdle();
         }
-        endScoreText.text = "YOUR SCORE:\n" + scoring.Score;
+        // endScoreText.text = "YOUR SCORE:\n" + scoring.Score;
     }
 
     /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */

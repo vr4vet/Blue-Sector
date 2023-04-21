@@ -26,10 +26,12 @@ public class ModeBtnBridge : MonoBehaviour
         switch(buttonType)
         {
             case ButtonType.Next:
-                game.modes.ChangeToNextMode();
+                game.modesClass.ChangeToNextMode();
+                game.currentMode = game.modesClass.mode;
             break;
             case ButtonType.Prev:
-                game.modes.ChangeToPreviousMode();
+                game.modesClass.ChangeToPreviousMode();
+                game.currentMode = game.modesClass.mode;
             break;
             default:
                 Debug.LogError("Invalid button-type for modebtn");

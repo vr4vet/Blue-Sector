@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 163052089}
   - component: {fileID: 163052088}
   - component: {fileID: 163052087}
+  - component: {fileID: 163052091}
   m_Layer: 0
   m_Name: Modes_Holder
   m_TagString: Untagged
@@ -157,16 +158,19 @@ MonoBehaviour:
   startGame: 0
   inActivatedArea: 0
   time: 60
+  foodWasteSlider: {fileID: 0}
   scoring: {fileID: 0}
-  modes: {fileID: 0}
-  mode:
-    name: Base
-    tutorial: 3
+  tutorials: []
+  currentMode:
+    name: 
+    tutorial: 0
     hud: 0
-    timeLimit: 60
+    timeLimit: 0
     failureThreshold: 0
-    isUnlocked: 1
-    modifier: 1
+    isUnlocked: 0
+    modifier: 0
+  modesClass: {fileID: 0}
+  modesList: []
 --- !u!114 &163052088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +221,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &163052091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163052086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f305b67359ec7e4ba4916fde808191b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MerdCameraHost: {fileID: 1947310164}
 --- !u!1001 &181186662
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -829,6 +846,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1947310164 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1698565875983136099, guid: 12ee6c50f9832c247a378f804297c417,
+    type: 3}
+  m_PrefabInstance: {fileID: 2125217382}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2125217382
 PrefabInstance:
   m_ObjectHideFlags: 0

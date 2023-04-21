@@ -7,17 +7,14 @@ using System.Linq;
 public class Modes : MonoBehaviour
 {
     private ModeLoader modeLoader;
-    [HideInInspector]
     public List<Mode> modesList;
-    [HideInInspector]
     public Mode mode;
 
     void Start() { modeLoader = FindObjectOfType<ModeLoader>(); }
 
     void Update()
     {
-        if (!modeLoader.finishedLoading || modesList != null) return;
-
+        if (!modeLoader.finishedLoading || modesList.Count() > 0) return;
         modesList = modeLoader.modesList;
         mode = modesList[0];
     }
