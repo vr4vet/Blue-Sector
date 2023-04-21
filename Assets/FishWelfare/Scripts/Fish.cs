@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class Fish : MonoBehaviour, IPointerClickHandler
 {
@@ -29,7 +30,6 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     public GameObject marker;
 
     public GameObject pointerFinger;
-    [SerializeField]
     private List<GameObject> liceList = new List<GameObject>();
 
     InspectionTaskManager inspectionTaskManager;
@@ -46,6 +46,7 @@ public class Fish : MonoBehaviour, IPointerClickHandler
         targetPosition = transform.position;
         rigidBody = GetComponent<Rigidbody>();
         originalRotation = transform.rotation;
+        liceList = FindObjectwithTag("Louse");
     }
 
     // Update is called once per frame
@@ -74,12 +75,10 @@ public class Fish : MonoBehaviour, IPointerClickHandler
 
     private void SetMoveTarget() {
         //Mer Skamløs koking fra FishScript.cs:
-        //Debug.Log("Setting movement");
         float randX = Random.Range(waterBodyCenter.x -waterBodyXLength / 2,waterBodyCenter.x + waterBodyXLength / 2);
         float randZ = Random.Range(waterBodyCenter.z -waterBodyZLength / 2,waterBodyCenter.z + waterBodyZLength / 2);
         targetPosition = new Vector3(randX, transform.position.y, randZ);
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
-        //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
     }
 
     public void UpdateWaterBody(float waterheight, Vector3 bodyCenter, float xLength, float zLength, bool isInWater){
@@ -92,7 +91,7 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        //Debug.Log("Clicked!!" + eventData.pointerCurrentRaycast.worldPosition);
+        Debug.Log("Yuuuuuuuuup1");
         lastMarkedLouse = checkForLouse(eventData.pointerCurrentRaycast.worldPosition);
         if(lastMarkedLouse != null){
             GameObject newmarker = Instantiate(marker,lastMarkedLouse.transform.position, new Quaternion(0,0,0,0));
@@ -101,16 +100,15 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     public GameObject checkForLouse(Vector3 origin) {
-        Debug.Log("raycaster!");
-        if(Physics.SphereCast(origin, 0.01f, pointerFinger.transform.forward, out RaycastHit hitInfo, 10f, layer)) {
-            Debug.Log("inni reycast!");
+        if(Physics.SphereCast(origin - (pointerFinger.transform.forward*.5f), 0.02f, pointerFinger.transform.forward, out RaycastHit hitInfo, 10f, layer)) {
+            Debug.Log("YUUUUUUP");
             Debug.DrawRay(transform.position, pointerFinger.transform.forward * hitInfo.distance, Color.yellow);
             GameObject hit = hitInfo.collider.gameObject;
-            GameObject newmarker = Instantiate(marker, hitInfo.transform.position, new Quaternion(0,0,0,0));
-            Debug.Log(hitInfo.collider.tag);
+            //GameObject newmarker = Instantiate(marker, hitInfo.transform.position, new Quaternion(0,0,0,0));
+            GameObject newmarker2 = Instantiate(marker, origin - (pointerFinger.transform.forward*2), new Quaternion(0,0,0,0));
             foreach(GameObject louse in liceList) {
-                if (hit == louse) {
-                    Debug.Log("fant en!");
+                if (hit == louse && !louse.GetComponent<Louse>().marked) {
+                    louse.GetComponent<Louse>().marked = true;
                     return louse;
                 }
             }
@@ -146,4 +144,26 @@ public class Fish : MonoBehaviour, IPointerClickHandler
         return id;
     }
 
+    //Couple of util functions for finding children by tag
+    public List<GameObject> FindObjectwithTag(string _tag) {
+         List<GameObject> tempList = new List<GameObject>();
+         Transform parent = transform;
+         GetChildObject(parent, _tag, tempList);
+         return tempList;
+    }
+ 
+     public void GetChildObject(Transform parent, string _tag, List<GameObject> list) {
+         for (int i = 0; i < parent.childCount; i++)
+         {
+             Transform child = parent.GetChild(i);
+             if (child.tag == _tag)
+             {
+                 list.Add(child.gameObject);
+             }
+             if (child.childCount > 0)
+             {
+                 GetChildObject(child, _tag, list);
+             }
+         }
+     }
 }
