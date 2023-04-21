@@ -79,7 +79,21 @@ public class Tutorial : MonoBehaviour, ITutorial
     /// </summary>
     public void Dismiss()
     {
+        if (dismissed)
+        {
+            return;
+        }
+
         IndexOfCurrentItem = -1;
+        OnCompleted.Invoke();
+        dismissed = true;
+    }
+
+    public void ResetTutorial()
+    {
+        dismissed = false;
+        IndexOfCurrentItem = -1;
+        Triggered = false;
     }
 
     /// <summary>
