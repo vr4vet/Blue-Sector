@@ -9,8 +9,8 @@ public class ModeBtnBridge : MonoBehaviour
     private Game game;
     public enum ButtonType
     {
-        Next,
-        Prev
+        L1,
+        L2
     }
     public ButtonType buttonType;
 
@@ -22,20 +22,6 @@ public class ModeBtnBridge : MonoBehaviour
     public void OnButton()
     {
         if (game.startGame) return; // Disable button if game is runnig.
-
-        switch(buttonType)
-        {
-            case ButtonType.Next:
-                game.modesClass.ChangeToNextMode();
-                game.currentMode = game.modesClass.mode;
-            break;
-            case ButtonType.Prev:
-                game.modesClass.ChangeToPreviousMode();
-                game.currentMode = game.modesClass.mode;
-            break;
-            default:
-                Debug.LogError("Invalid button-type for modebtn");
-            break;
-        }
+        game.modesClass.ChangeTo(((int)buttonType));
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.Linq;
+using Unity.XR.Oculus.Input;
 
 public class Modes : MonoBehaviour
 {
@@ -19,28 +20,8 @@ public class Modes : MonoBehaviour
         mode = modesList[0];
     }
 
-    public void ChangeToNextMode()
+    public void ChangeTo(int i)
     {
-        int length = modesList.Count() - 1;
-        int index  = modesList.FindIndex(a => a.name == mode.name);
-
-        if (index >= length)
-        {
-            mode = modesList[0];
-        } else {
-            mode = modesList[index + 1];
-        }
-    }
-
-    public void ChangeToPreviousMode()
-    {
-        int length = modesList.Count() - 1;
-        int index = modesList.FindIndex(a => a.name == mode.name);
-        if (index <= 0)
-        {
-            mode = modesList[length];
-        } else {
-            mode = modesList[index - 1];
-        }
+        mode = modesList[i];
     }
 }

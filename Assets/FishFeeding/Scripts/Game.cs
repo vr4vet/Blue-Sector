@@ -27,7 +27,7 @@ public class Game : MonoBehaviour
     private UnityEngine.UI.Slider foodWasteSlider;
 
     public Scoring scoring;
-    public List<MonoBehaviour> tutorials;
+    public List<Tutorial> tutorials;
     public Mode currentMode;
     public Modes modesClass;
     public List<Mode> modesList;
@@ -48,7 +48,7 @@ public class Game : MonoBehaviour
         modesClass = FindObjectOfType<Modes>();
         modesList = modesClass.modesList; // reassign
 
-        tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<ITutorial>().Cast<MonoBehaviour>().ToList());
+        tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<Tutorial>().ToList());
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
@@ -97,7 +97,7 @@ public class Game : MonoBehaviour
 
             if (!currentMode.tutorial.Equals(Tut.NO)) return; // Only disable tutorials if defined in mode
 
-            tutorials.ForEach(tutorial => { tutorial.enabled = false; });
+            tutorials.ForEach(tutorial => { tutorial.enabled = false; tutorial.Dismiss(); });
         }
     }
 
