@@ -32,7 +32,7 @@ public class ModeBtnBridge : MonoBehaviour
                 game.modes.ChangeToPreviousMode();
             break;
             default:
-                Debug.Log("Invalid button-type for modebtn");
+                Debug.LogError("Invalid button-type for modebtn");
             break;
         }
     }

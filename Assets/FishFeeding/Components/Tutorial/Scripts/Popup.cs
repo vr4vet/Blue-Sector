@@ -9,7 +9,7 @@ using UnityEngine.UIElements.Experimental;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(TextMeshPro))]
-public class Popup : MonoBehaviour
+public class Popup : MonoBehaviour, ITutorial
 {
     private const int AnimationDurationMs = 500;
     private TextMeshPro textMesh;

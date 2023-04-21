@@ -1,17 +1,20 @@
-using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using BNG;
 using TMPro;
 using UnityEngine;
-using System.Linq;
 
 public class Game : MonoBehaviour
 {
+    private bool hud;
     public bool startGame = false;
     public bool inActivatedArea = false;
     private GameObject[] merds;
+
     [field: SerializeField]
     private int time = 60;
+
     private float gameTimeLeft;
     private TextMeshProUGUI endScoreText;
     private TextMeshProUGUI timeLeft;
@@ -19,34 +22,33 @@ public class Game : MonoBehaviour
     private TextMeshProUGUI deadFishText;
     private TextMeshProUGUI foodWasteText;
     private UnityEngine.UI.Slider foodWasteSlider;
-    Scoring scoring;
-    public Modes modes; 
-    Mode mode;
-    Tutorial[] tutorials;
-    List<GameObject> holders = new List<GameObject>();
-
+    public Scoring scoring;
+    public Modes modes;
+    public Mode mode;
+    public List<MonoBehaviour> tutorials;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         merds = GameObject.FindGameObjectsWithTag("Fish System");
         scoring = FindObjectOfType<Scoring>();
-        endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
+        //endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
         GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
         timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
         currentScore = canvas.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
         deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
-        modes = FindObjectOfType<Modes>();
-        tutorials = FindObjectsOfType<Tutorial>();
 
-        foreach (Tutorial tut in tutorials) holders.Add(tut.gameObject);
+        modes = FindObjectOfType<Modes>();
+
+        tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<ITutorial>().Cast<MonoBehaviour>().ToList());
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
      * game hasn't started, start the game and the coroutine Timer and start scoring. */
-    void Update()
+
+    private void Update()
     {
         if (startGame) // only check for pre game things if not started
         {
@@ -54,13 +56,22 @@ public class Game : MonoBehaviour
             return; // skip rest of update
         }
 
-        if (modes.modesList == null) return; // wait until modes are loaded            
+        if (modes == null) return; // wait until modes are loaded
 
         if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && inActivatedArea)
         {
             // Set mode values
             mode = modes.mode;
             time = mode.timeLimit;
+            hud = mode.hud;
+
+            if (!hud)
+            {
+                currentScore.enabled = false;
+                foodWasteText.enabled = false;
+                foodWasteSlider.enabled = false;
+                deadFishText.enabled = false;
+            }
 
             startGame = true;
 
@@ -75,12 +86,14 @@ public class Game : MonoBehaviour
             StartCoroutine(Timer());
 
             if (!mode.tutorial.Equals(Tut.NO)) return; // Only disable tutorials if defined in mode
-            foreach (GameObject tut in holders) tut.SetActive(false);
+
+            tutorials.ForEach(tutorial => tutorial.enabled = false);
         }
     }
 
     /* Starts a timer and gives the score after a certain amount of time. */
-    IEnumerator Timer()
+
+    private IEnumerator Timer()
     {
         if (time == -1) yield return null; // return if game mode has endless time limit
         for (gameTimeLeft = time; gameTimeLeft > 0; gameTimeLeft -= Time.deltaTime)
@@ -95,26 +108,26 @@ public class Game : MonoBehaviour
             merdScript.SetIdle();
         }
         endScoreText.text = "YOUR SCORE:\n" + scoring.Score;
-        Debug.Log("End of game");
-        Debug.Log("Score: " + scoring.Score);
     }
 
     /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */
+
     public void UpdateScreenStats()
     {
         if (time != -1)
         {
             timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
                 Mathf.FloorToInt(gameTimeLeft % 60).ToString("00");
-        } else {
+        }
+        else
+        {
             timeLeft.text = "";
         }
-        if (mode.hud == false) return; // Don't show hud if in mode defined as such
+        if (!hud) return; // Don't show hud if in mode defined as such
 
         currentScore.text = "Score: " + scoring.Score;
         foodWasteText.text = "Food wastage: " + scoring.FoodWasted + " / Sec.";
         foodWasteSlider.value = scoring.FoodWastedPercentage;
         deadFishText.text = "Dead fish: " + scoring.DeadFish;
     }
-
 }

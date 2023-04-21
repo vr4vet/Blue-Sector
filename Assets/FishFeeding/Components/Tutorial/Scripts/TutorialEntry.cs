@@ -8,7 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class TutorialEntry : MonoBehaviour
+public class TutorialEntry : MonoBehaviour, ITutorial
 {
     public string Text = string.Empty;
     private bool isActive;

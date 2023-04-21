@@ -6,27 +6,20 @@ using System.Linq;
 
 public class Modes : MonoBehaviour
 {
-    // [field: SerializeField]
-    // public GameObject ModeLoaderParent { get; set; }
     private ModeLoader modeLoader;
-    private TextMeshProUGUI currentModeText;
+    [HideInInspector]
     public List<Mode> modesList;
+    [HideInInspector]
     public Mode mode;
 
-    void Start()
-    {
-        currentModeText = GetComponent<TextMeshProUGUI>();    
-        modeLoader = FindObjectOfType<ModeLoader>();
-    }
+    void Start() { modeLoader = FindObjectOfType<ModeLoader>(); }
 
     void Update()
     {
-        if (modeLoader.finishedLoading == true && modesList == null)
-        {
-            modesList = modeLoader.modesList;
-            mode = modesList[0];
-            updateText();
-        }
+        if (!modeLoader.finishedLoading || modesList != null) return;
+
+        modesList = modeLoader.modesList;
+        mode = modesList[0];
     }
 
     public void ChangeToNextMode()
@@ -40,7 +33,6 @@ public class Modes : MonoBehaviour
         } else {
             mode = modesList[index + 1];
         }
-        updateText();
     }
 
     public void ChangeToPreviousMode()
@@ -53,13 +45,5 @@ public class Modes : MonoBehaviour
         } else {
             mode = modesList[index - 1];
         }
-        updateText();
-    }
-
-    private void updateText()
-    {
-        string text  = "Current mode: " + mode.name;
-        // currentModeText.text = text;
-        Debug.Log(text);
     }
 }
