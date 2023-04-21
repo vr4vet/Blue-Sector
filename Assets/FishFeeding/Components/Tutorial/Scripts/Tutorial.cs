@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Tutorial : MonoBehaviour
+public class Tutorial : MonoBehaviour, ITutorial
 {
     public TutorialEntry[] Items = Array.Empty<TutorialEntry>();
     public GameObject PopupHint;
