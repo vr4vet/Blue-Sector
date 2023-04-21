@@ -1,3 +1,4 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,18 +10,28 @@ public class TutorialAoeTrigger : MonoBehaviour, ITutorial
     /// <summary>
     /// Gets an event that is fired when the player enters the box collider.
     /// </summary>
-    public UnityEvent OnTriggered;
+    public UnityEvent OnPlayerEnter;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+    /// <summary>
+    /// Gets an event that is fired when the player exits the box collider.
+    /// </summary>
+    public UnityEvent OnPlayerExit;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (IsPlayer(other))
         {
-            OnTriggered.Invoke();
+            OnPlayerEnter.Invoke();
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (IsPlayer(other))
+        {
+            OnPlayerExit.Invoke();
+        }
+    }
+
+    private static bool IsPlayer(Collider collider) => collider.gameObject.tag == "Player";
 }

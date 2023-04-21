@@ -10,7 +10,6 @@ public class Game : MonoBehaviour
 {
     private bool hud;
     public bool startGame = false;
-    public bool inActivatedArea = false;
     private GameObject[] merds;
 
     [field: SerializeField]
@@ -25,12 +24,13 @@ public class Game : MonoBehaviour
 
     [field: SerializeField]
     private UnityEngine.UI.Slider foodWasteSlider;
-
+    
     public Scoring scoring;
     public List<Tutorial> tutorials;
     public Mode currentMode;
     public Modes modesClass;
     public List<Mode> modesList;
+    public bool InActivatedArea { get; set; }
 
     // Start is called before the first frame update
     private void Start()
@@ -68,7 +68,7 @@ public class Game : MonoBehaviour
             return; // wait until modes are loaded
         }
 
-        if (/*(Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) &&*/ !startGame && inActivatedArea)
+        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && InActivatedArea)
         {
             // Set mode values
             currentMode = modesClass.mode;

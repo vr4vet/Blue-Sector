@@ -7,7 +7,7 @@ public class FishSystemScript : MonoBehaviour
 {
     public GameObject fish;
     private ParticleSystem foodParticles;
-    private ParticleSystem.EmissionModule emission;
+    public ParticleSystem.EmissionModule emission;
     public float radius = 10;
     public float height = 20;
     public int amountOfFish = 30;
@@ -18,7 +18,7 @@ public class FishSystemScript : MonoBehaviour
     public float foodWasted;
     private readonly int eatingAmount = 3;
     public int foodBase;
-    private int foodGivenPerSec;
+    public int foodGivenPerSec;
     public float modifier = 1.0f;
 
     [HideInInspector]
@@ -116,7 +116,15 @@ public class FishSystemScript : MonoBehaviour
     public void SetIdle() 
     {
         state = FishState.Idle;
+        if (IsInvoking(nameof(KillFish)))
+            CancelInvoke(nameof(KillFish));
         hungerStatus = 0;
+
+        for (int i = 0; i < fishKilled; i++)
+        {
+            gameObject.transform.GetChild(1 + i).GetComponent<FishScript>().Revive();
+        }
+        fishKilled = 0;
     }
 
     public void ReleaseIdle() => state = FishState.Full;
@@ -143,9 +151,6 @@ public class FishSystemScript : MonoBehaviour
                 main.startLifetime = 0.4f; // food particles should dissapear high in water
                 HandleDying();
                 break;
-            case FishState.Idle:
-                HandleIdle();
-                break;
         }   
 
     }
@@ -153,7 +158,7 @@ public class FishSystemScript : MonoBehaviour
     private int fullTicks = 0;  // gets hungry when this passes timeToHungry.
     void HandleFull()
     {
-        int timeToHungry = (int)Random.Range(25.0f * modifier, 35.0f * modifier);
+        int timeToHungry = (int)Random.Range(50.0f * modifier, 70.0f * modifier);
         // switch state to hungry, and reset timer
         if (fullTicks >= timeToHungry)
         {
@@ -183,8 +188,8 @@ public class FishSystemScript : MonoBehaviour
     private int hungerStatus = 0;   // dies if <= secondsToDying, gets full if >= secondsToFull
     void HandleHungry()
     {
-        int secondsToFull = (int)Random.Range(10.0f, 12.0f);
-        int secondsToDying = (int)Random.Range(-25.0f * modifier, -35.0f * modifier);
+        int secondsToFull = (int)Random.Range(20.0f, 22.0f);
+        int secondsToDying = (int)Random.Range(-45.0f * modifier, -55.0f * modifier);
         Debug.Log("hungerstatus: " + hungerStatus);
         if (hungerStatus >= secondsToFull)
         {
@@ -214,12 +219,6 @@ public class FishSystemScript : MonoBehaviour
                 hungerStatus -= 4; // fish are starvin bruv
                 break;
         }
-    }
-
-    void HandleIdle()
-    {
-        if (IsInvoking(nameof(KillFish)))
-            CancelInvoke(nameof(KillFish));
     }
 
     void HandleDying()

@@ -49,26 +49,24 @@ public class Scoring : MonoBehaviour
             FishSystemScript script = i.GetComponent<FishSystemScript>();
             if (script.state == FishSystemScript.FishState.Full)
             {
-                score += 1 * script.amountOfFish;
-                Debug.Log("State Full, amount of fish: " + script.amountOfFish);
+                if (script.feedingIntensity == FishSystemScript.FeedingIntensity.Low)
+                {
+                    score += 10;
+                }
+                else if (script.feedingIntensity == FishSystemScript.FeedingIntensity.Medium)
+                {
+                    score += 5;
+                }
+                Debug.Log("State Full, score: " + score);
             }
             else if (script.state == FishSystemScript.FishState.Hungry)
             {
-                score -= (int)(0.5 * script.amountOfFish);
-                Debug.Log("State Hungry, amount of fish: " + script.amountOfFish);
-            }
-            else
-            {
-                score -= (int)(0.5 * (script.amountOfFish - script.fishKilled));
-                score -= 1 * script.fishKilled;
-                Debug.Log("State Dying, amount of fish: " + script.fishKilled);
+                score += 2;
+                Debug.Log("State Hungry, score: " + score);
             }
 
             Debug.Log("FishSystemScript status: " + script.state);
-            float wastedFoodPoints = script.foodWasted / 10;
-            score -= (int)(wastedFoodPoints + 0.5f); // Rounds wastedFoodPoints to the nearest int.
-            Debug.Log("Wasted food points: " + wastedFoodPoints);
-            Debug.Log("Score after food waste: " + score);
+            Debug.Log("Score: " + score);
         }
 
         UpdateFoodWasteAndDeadFish();
@@ -80,7 +78,6 @@ public class Scoring : MonoBehaviour
         foreach (GameObject i in merds)
         {
             FishSystemScript script = i.GetComponent<FishSystemScript>();
-            Debug.Log("if setning" + (merdCameraController.SelectedFishSystem == script));
             if (merdCameraController.SelectedFishSystem == script)
             {
                 foodWasted = script.foodWasted;
