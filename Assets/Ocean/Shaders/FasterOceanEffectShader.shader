@@ -1,11 +1,10 @@
-Shader "Nature/UnderwaterSurface"
+Shader "Nature/FasterOcean"
 {
 	Properties
 	{
 		_BaseColor("Base color", COLOR) = (.54, .95, .99, 0.5)
 		_WaterColor("Water color", COLOR) = (.54, .95, .99, 0.5)
 		_ReflectionColor("Reflection color", COLOR) = (.54, .95, .99, 0.5)
-		_SpecularColor("Specular color", COLOR) = (.72, .72, .72, 1)
 		[NoScaleOffset] _Foam("Foam texture", 2D) = "white" {}
 		[HideInInspector] world_light_dir("", VECTOR) = (0.0, 1.0, 0.8, 0.0)
 	}
@@ -13,16 +12,15 @@ Shader "Nature/UnderwaterSurface"
 		CGINCLUDE
 #include "UnityCG.cginc" 
 
-		uniform float4 _BaseColor;
+        uniform float4 _BaseColor;
 		uniform float4 _WaterColor;
 		uniform float4 _ReflectionColor;
-		uniform float4 _SpecularColor;
 
-#define NB_WAVE 1
+#define NB_WAVE 5
 		float4 waves_p[NB_WAVE];
 		float4 waves_d[NB_WAVE];
 
-#define NB_INTERACTIONS 1
+#define NB_INTERACTIONS 8
 #define WAVE_DURATION 4.0
 #define WAVE_SPEED 3.0
 #define MAX_WAVE_AMP 0.5
@@ -30,11 +28,6 @@ Shader "Nature/UnderwaterSurface"
 
 		uniform float4 world_light_dir;
 		uniform float4 sun_color;
-
-		uniform sampler2D _Foam;
-		uniform sampler2D _RefractionTex;
-		uniform sampler2D _CameraDepthTexture;
-		uniform sampler2D _CameraDepthNormalsTexture;
 
 #define PI 3.14159234
 
@@ -74,7 +67,7 @@ Shader "Nature/UnderwaterSurface"
 
 		float noise2(in float2 p)
 		{
-			float2 i = floor(p);
+			fixed2 i = floor(p);
 			float2 f = frac(p);
 			float2 u = f * f * (3.0 - 2.0 * f);
 			return -1.0 + 2.0 * lerp(lerp(hash(i + float2(0.0, 0.0)),
@@ -94,9 +87,9 @@ Shader "Nature/UnderwaterSurface"
 
 		float map_detailed(float3 p)
 		{
-			float freq = 0.16;
-			float amp = 0.6;
-			float choppy = 4.0;
+			half freq = 0.16;
+			half amp = 0.6;
+			half choppy = 4.0;
 			float2 uv = p.xz;
 			uv.x *= 0.75;
 
@@ -123,28 +116,6 @@ Shader "Nature/UnderwaterSurface"
 				p.y += power * interactions[j].z;
 			}
 
-			return p.y - h;
-		}
-
-		float map(float3 p)
-		{
-			float freq = 0.16;
-			float amp = 0.6;
-			float choppy = 4.0;
-			float2 uv = p.xz;
-			uv.x *= 0.75;
-
-			float d, h = 0.0;
-			for (int i = 0; i < 3; i++)
-			{
-				d = sea_octave((uv + _Time.yy) * freq, choppy);
-				d += sea_octave((uv - _Time.yy) * freq, choppy);
-				h += d * amp;
-				uv = float2(uv.x * 1.6 + 1.2 * uv.y, uv.x * -1.2 + 1.6 * uv.y);
-				freq *= 1.9;
-				amp *= 0.22;
-				choppy = lerp(choppy, 1.0, 0.2);
-			}
 			return p.y - h;
 		}
 
@@ -237,8 +208,8 @@ Shader "Nature/UnderwaterSurface"
 			return o;
 		}
 
-#define REFRACTION
-#define FOAM
+#define REFLECTION
+#define SPECULAR
 
 		half4 frag(v2f i) : SV_Target
 		{
@@ -249,25 +220,24 @@ Shader "Nature/UnderwaterSurface"
 			half3 vertex_normal = i.normal;
 			half3 normal = normalize(detail_normal * 1.0 + vertex_normal * 0.0);
 
-			float depth = LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.ref)).r);
-			half4 distort = half4(i.normal.xz * 0.5 + detail_normal.xz * 0.6, 0.0, 0.0);
-			distort *= pow(saturate((depth - i.ref.z) * 0.3), 2.0);
-
-			float sceneZ = LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.ref + distort * 0.2)).r);
-			float objectZ = i.ref.z;
-			float depthFactor = 1.0 - saturate(abs(sceneZ - objectZ) / 4.0);
-
 			float3 light_direction = normalize(world_light_dir);
 			float3 l = normalize(light_direction);
 			half4 baseColor;
 			baseColor.a = 1.0;
-			baseColor.rgb = _BaseColor;
 
-#ifdef REFRACTION
-			half3 refraction = tex2Dproj(_RefractionTex, UNITY_PROJ_COORD(i.grabPassPos + distort));
-			refraction *= lerp(_ReflectionColor, _BaseColor, 1.0 - depthFactor * 2.0);
-			baseColor *= .4;
-#endif // REFRACTION
+#ifdef REFLECTION
+			{
+
+				float fresnel = clamp(1.0 - pow(dot(normal, -eye), 1.0), 0.0, 1.0);
+				fresnel = pow(fresnel, 3.0) * 0.65;
+				fresnel = pow(fresnel, 0.8) * 0.8;
+
+				float3 reflected = getSkyColor(reflect(eye, normal)) * _ReflectionColor;
+				float3 refracted = _BaseColor + diffuse(normal, l, 80.0) * _WaterColor * 0.12;
+				baseColor.rgb = lerp(refracted, reflected, fresnel);
+			}
+
+#endif // REFLECTION
 
 
 			/* Possible depth color */
@@ -283,26 +253,10 @@ Shader "Nature/UnderwaterSurface"
 			}
 #endif // SPECULAR
 
-
-#ifdef FOAM
-			{
-				half3 foamColor = tex2D(_Foam, i.world_position.xz * 0.1 + _Time.xx * 0.5 + distort).rgb;
-				baseColor.a += foamColor.r * 0.05;
-
-				float wave_foam = clamp(smoothstep(-0.1, 1.0, 1.0 - detail_normal.y), 0.0, 0.5);
-				baseColor.a += wave_foam;
-				baseColor = saturate(baseColor);
-				baseColor.rgb += foamColor * clamp(wave_foam + smoothstep(0.2, 1.5, depthFactor), 0.0, 0.5);
-			}
-#endif // FOAM
-
 			UNITY_APPLY_FOG(i.fogCoord, baseColor);
 
 			baseColor = saturate(baseColor);
 
-		#ifdef REFRACTION
-			baseColor.rgb = saturate(lerp(refraction.rgb, baseColor.rgb, clamp(baseColor.a, 0.0, 0.8)));
-		#endif // REFRACTION
 			baseColor.a = 1.0;
 
 			return baseColor;
@@ -311,17 +265,13 @@ Shader "Nature/UnderwaterSurface"
 
 			Subshader
 		{
-			Tags{ "RenderType" = "Transparent" "Queue" = "Transparent" }
+			Tags{ "RenderType" = "Opaque" "Queue" = "Transparent" }
 				Lod 300
 				//ColorMask RGBA
-
-				GrabPass{ "_RefractionTex" }
-
 				Pass
 			{
-			Blend SrcAlpha OneMinusSrcAlpha
 			//ZTest LEqual
-			//ZWrite Off
+			ZWrite Off // we're not writing into the depth texture
 			//Cull Off
 
 			CGPROGRAM
