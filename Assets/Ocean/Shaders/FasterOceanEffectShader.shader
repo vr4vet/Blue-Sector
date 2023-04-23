@@ -12,13 +12,13 @@ Shader "Nature/FasterOcean"
 		CGINCLUDE
 #include "UnityCG.cginc" 
 
-        uniform float4 _BaseColor;
-		uniform float4 _WaterColor;
-		uniform float4 _ReflectionColor;
+        uniform half4 _BaseColor;
+		uniform half4 _WaterColor;
+		uniform half4 _ReflectionColor;
 
 #define NB_WAVE 5
-		float4 waves_p[NB_WAVE];
-		float4 waves_d[NB_WAVE];
+		half4 waves_p[NB_WAVE];
+		half4 waves_d[NB_WAVE];
 
 #define NB_INTERACTIONS 8
 #define WAVE_DURATION 4.0
@@ -32,7 +32,7 @@ Shader "Nature/FasterOcean"
 #define PI 3.14159234
 
 
-		float evaluateWave(float4 wave_param, float4 wave_dir, float2 pos, float t)
+		half evaluateWave(half4 wave_param, half4 wave_dir, half2 pos, float t)
 		{
 			return wave_param.y * sin(dot(wave_dir.xy, pos) * wave_param.x + t * wave_param.z);
 		}
@@ -93,7 +93,7 @@ Shader "Nature/FasterOcean"
 			float2 uv = p.xz;
 			uv.x *= 0.75;
 
-			float d, h = 0.0;
+			half d, h = 0.0;
 			for (int i = 0; i < 5; i++)
 			{
 				d = sea_octave((uv + _Time.yy) * freq, choppy);
@@ -103,17 +103,6 @@ Shader "Nature/FasterOcean"
 				freq *= 1.9;
 				amp *= 0.22;
 				choppy = lerp(choppy, 1.0, 0.2);
-			}
-
-			for (int j = 0; j < NB_INTERACTIONS; j++)
-			{
-				half dist = distance(p.xz, interactions[j].xy);
-				half elapsed = (_Time.y - interactions[j].w);
-				half computed_distance = elapsed * WAVE_SPEED;
-				half power = 1.0 - saturate(pow(abs(computed_distance - dist), 2.0) * 0.3);
-				power *= 1.0 - saturate(elapsed / WAVE_DURATION);
-				dist += 2.0;
-				p.y += power * interactions[j].z;
 			}
 
 			return p.y - h;
@@ -133,13 +122,13 @@ Shader "Nature/FasterOcean"
 			return n;
 		}
 
-		float3 getSkyColor(float3 e)
+		const half3 getSkyColor(float e)
 		{
-			e.y = max(e.y, 0.0);
-			return float3(pow(1.0 - e.y, 2.0), 1.0 - e.y, 0.6 + (1.0 - e.y) * 0.4);
+			const float ey = 1.0 - max(e, 0.0);
+			return half3(ey * ey, ey, 0.6 + (ey) * 0.4);
 		}
 
-		float diffuse(float3 n, float3 l, float p)
+		half diffuse(half3 n, half3 l, half p)
 		{
 			return pow(dot(n, l) * 0.4 + 0.6, p);
 		}
@@ -191,7 +180,8 @@ Shader "Nature/FasterOcean"
 				half dist = distance(world_position.xz, interactions[i].xy);
 				half elapsed = (_Time.y - interactions[i].w);
 				half computed_distance = elapsed * WAVE_SPEED;
-				half power = 1.0 - saturate(pow(abs(computed_distance - dist), 2.0) * 0.3);
+				half computed_distance_abs = abs(computed_distance - dist);
+				half power = 1.0 - saturate(computed_distance_abs * computed_distance_abs * 0.3);
 				power *= 1.0 - saturate(elapsed / WAVE_DURATION);
 				dist += 2.0;
 				interactive += power * interactions[i].z;
@@ -217,25 +207,26 @@ Shader "Nature/FasterOcean"
 			float3 eye = normalize(eye_vector);
 
 			half3 detail_normal = get_detailed_normal(i.world_position, 0.01 * pow(length(eye_vector), 0.8));
-			half3 vertex_normal = i.normal;
-			half3 normal = normalize(detail_normal * 1.0 + vertex_normal * 0.0);
+			half3 normal = normalize(detail_normal);
 
 			float3 light_direction = normalize(world_light_dir);
 			float3 l = normalize(light_direction);
 			half4 baseColor;
 			baseColor.a = 1.0;
-
+			//baseColor.rgb=normal;
+			//return baseColor;
 #ifdef REFLECTION
 			{
 
-				float fresnel = clamp(1.0 - pow(dot(normal, -eye), 1.0), 0.0, 1.0);
-				fresnel = pow(fresnel, 3.0) * 0.65;
+				half fresnel = clamp(1.0 - dot(normal, -half3(eye)), 0.0, 1.0);
+				fresnel = (fresnel * fresnel) * (fresnel * 0.65);
 				fresnel = pow(fresnel, 0.8) * 0.8;
 
-				float3 reflected = getSkyColor(reflect(eye, normal)) * _ReflectionColor;
-				float3 refracted = _BaseColor + diffuse(normal, l, 80.0) * _WaterColor * 0.12;
+				const half3 reflected = getSkyColor(reflect(eye, normal).y) * _ReflectionColor;
+				const half3 refracted = _BaseColor + diffuse(normal, l, 80.0) * _WaterColor * 0.12;
 				baseColor.rgb = lerp(refracted, reflected, fresnel);
 			}
+
 
 #endif // REFLECTION
 
@@ -248,7 +239,7 @@ Shader "Nature/FasterOcean"
 
 #ifdef SPECULAR
 			{
-				float spec = specular(vertex_normal * 0.2 + detail_normal * 0.8, l, eye, 60.0);
+				float spec = specular(i.normal * 0.2 + detail_normal * 0.8, l, eye, 60.0);
 				baseColor.rgb += sun_color * spec;
 			}
 #endif // SPECULAR
