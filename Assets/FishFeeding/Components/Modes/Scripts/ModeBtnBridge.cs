@@ -14,7 +14,7 @@ public class ModeBtnBridge : MonoBehaviour
     }
     public ButtonType buttonType;
 
-    void Start()
+    void Awake()
     {
         game = FindObjectOfType<Game>();
     }

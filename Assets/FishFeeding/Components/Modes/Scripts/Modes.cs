@@ -12,6 +12,7 @@ public class Modes : MonoBehaviour
     private ModeLoader modeLoader;
     public List<Mode> modesList;
     public Mode mode;
+    private int modeIndex;
 
     public event EventHandler<Mode> OnModeChanged;
 
@@ -20,12 +21,19 @@ public class Modes : MonoBehaviour
     void Update()
     {
         if (!modeLoader.finishedLoading || modesList.Count() > 0) return;
+
         modesList = modeLoader.modesList;
-        mode = modesList[0];
+        mode = modesList[modeIndex];
     }
 
     public void ChangeTo(int i)
     {
+        modeIndex = i;
+        if (!modeLoader.finishedLoading)
+        {
+            return;
+        }
+
         var newMode = modesList[i];
         if (newMode != mode)
         {
