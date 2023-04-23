@@ -1,17 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class Levels : MonoBehaviour
 {
     /*private GameObject currentLevelObject;*/
+    private Modes modes;
     private TextMeshProUGUI currentLevelText;
     private int currentLevel = 1;
 
     void Start()
     {
         currentLevelText = GetComponent<TextMeshProUGUI>();
+        modes = FindObjectOfType<Modes>();
+        modes.OnModeChanged += Levels_OnModeChanged;
     }
 
     public void ChangeToLevel1()
@@ -32,4 +36,16 @@ public class Levels : MonoBehaviour
         }
     }
 
+    private void Levels_OnModeChanged(object sender, Mode e)
+    {
+        switch(e.name)
+        {
+            case "arcade":
+                ChangeToLevel1();
+                break;
+            case "realism":
+                ChangeToLevel2();
+                break;
+        }
+    }
 }
