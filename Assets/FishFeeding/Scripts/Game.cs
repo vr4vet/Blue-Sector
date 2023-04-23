@@ -32,6 +32,8 @@ public class Game : MonoBehaviour
     public Modes modesClass;
     public List<Mode> modesList;
     public bool InActivatedArea { get; set; }
+    public bool IsTutorialCompleted { get; set; }
+    public bool CanStartGame => InActivatedArea && IsTutorialCompleted;
 
     // Start is called before the first frame update
     private void Start()
@@ -72,7 +74,7 @@ public class Game : MonoBehaviour
             return; // wait until modes are loaded
         }
 
-        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && InActivatedArea)
+        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && CanStartGame)
         {
             // Set mode values
             time = currentMode.timeLimit;
