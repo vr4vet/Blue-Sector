@@ -61,6 +61,12 @@ public sealed class RadioButton : CustomizableButton
         }
     }
 
+    protected override void OnButtonDown()
+    {
+        base.OnButtonDown();
+        IsSelected = true;
+    }
+
     private static IEnumerable<RadioButton> FindButtonsWithTag(string tag)
         => GameObject.FindGameObjectsWithTag(tag)
                     .Select(x => x.GetComponent<RadioButton>())
