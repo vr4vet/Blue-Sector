@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(BoxCollider))]
-public class TutorialAoeTrigger : MonoBehaviour
+public class TutorialAoeTrigger : MonoBehaviour, ITutorial
 {
     /// <summary>
     /// Gets an event that is fired when the player enters the box collider.

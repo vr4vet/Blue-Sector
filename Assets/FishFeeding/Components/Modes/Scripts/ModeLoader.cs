@@ -32,7 +32,6 @@ public class ModeLoader : MonoBehaviour {
         // xmlDoc = XDocument.Load(new MemoryStream(modeFile.bytes)); // Alternative for setting list in unity editor.
         xmlDoc = XDocument.Load(@"Assets/FishFeeding/Components/Modes/XML/ModeList.xml");
         modes = xmlDoc.Descendants("modes").Elements();
-        Debug.Log(modes);
     }
 
     IEnumerator AssignData () {
@@ -53,6 +52,7 @@ public class ModeLoader : MonoBehaviour {
     }
 }
 
+[System.Serializable]
 public class Mode {
     public string name;
     public Tut tutorial;
