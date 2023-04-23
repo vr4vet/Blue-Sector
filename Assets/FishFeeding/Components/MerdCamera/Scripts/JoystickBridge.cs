@@ -7,12 +7,9 @@ using UnityEngine.UIElements.Experimental;
 public sealed class JoystickBridge : MonoBehaviour
 {
     private MerdCameraController merdCameraController;
-    private float previousLeverPercentage;
 
     [field: SerializeField]
     public GameObject MerdCameraHost { get; set; }
-    [field: SerializeField]
-    public GameObject Lever { get; set; }
 
     // Start is called before the first frame update
     void Start()
@@ -37,21 +34,30 @@ public sealed class JoystickBridge : MonoBehaviour
             return;
         }
 
-        //if (float.IsFinite(previousLeverPercentage) && percentage == previousLeverPercentage)
-        //{
-        //    return;
-        //}
+        if (TryGetNormalizedPercentage(percentage, out var normalized))
+        {
+            merdCameraController.Move(normalized);
+        }
+    }
 
-        var position = percentage / 100f;
-        var normalized = (position - .5f) / .5f;
-        const float deadzone = .05f;
-        if (MathF.Abs(normalized) < deadzone)
+    public void OnElevatorChanged(float percentage)
+    {
+        if (merdCameraController == null)
         {
             return;
         }
 
-        merdCameraController.Move(normalized);
+        if (TryGetNormalizedPercentage(percentage, out var normalized))
+        {
+            merdCameraController.Elevate(normalized);
+        }
+    }
 
-        previousLeverPercentage = percentage;
+    private static bool TryGetNormalizedPercentage(float percentage, out float normalized)
+    {
+        var position = percentage / 100f;
+        normalized = (position - .5f) / .5f;
+        const float deadzone = .05f;
+        return MathF.Abs(normalized) >= deadzone;
     }
 }

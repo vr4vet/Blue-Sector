@@ -16,7 +16,6 @@ public class SlideBridge : MonoBehaviour
 
     private FishSystemScript fishSystemScript;
     private Enum intensity;
-    private BNG.Slider slider;
     
     [field: SerializeField]
     public GameObject FishSystem { get; set; }
@@ -32,16 +31,20 @@ public class SlideBridge : MonoBehaviour
         switch(position)
         {
             case > (float) Intensity.Medium:
-            fishSystemScript.SetIntensity(FishSystemScript.FeedingIntensity.High);
-            break;
-                
+                fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.High;
+                fishSystemScript.foodGivenPerSec = fishSystemScript.foodBase * 5/3;
+                fishSystemScript.emission.rateOverTime = 40;
+            break;   
             case > (float) Intensity.Low:
-            fishSystemScript.SetIntensity(FishSystemScript.FeedingIntensity.Medium);
+                fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.Medium;
+                fishSystemScript.foodGivenPerSec = fishSystemScript.foodBase * 1;
+                fishSystemScript.emission.rateOverTime = 20;
             break;
-
             default:
-            fishSystemScript.SetIntensity(FishSystemScript.FeedingIntensity.Low);
-            break;
+                fishSystemScript.feedingIntensity = FishSystemScript.FeedingIntensity.Low;
+                fishSystemScript.foodGivenPerSec = fishSystemScript.foodBase * 1/3;
+                fishSystemScript.emission.rateOverTime = 5;
+                break;
         }
     }
 }
