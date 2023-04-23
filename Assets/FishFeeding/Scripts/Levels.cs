@@ -23,7 +23,7 @@ public class Levels : MonoBehaviour
         if (currentLevel != 1)
         {
             currentLevel = 1;
-            currentLevelText.text = "Current level: Level 1";
+            currentLevelText.text = "Nåværende nivå: GRUNNLEGGENDE";
         }
     }
 
@@ -32,7 +32,7 @@ public class Levels : MonoBehaviour
         if (currentLevel != 2)
         {
             currentLevel = 2;
-            currentLevelText.text = "Current level: Level 2";
+            currentLevelText.text = "Nåværende nivå: AVANSERT";
         }
     }
 
