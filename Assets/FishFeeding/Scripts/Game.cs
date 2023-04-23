@@ -25,6 +25,11 @@ public class Game : MonoBehaviour
 
     [field: SerializeField]
     private UnityEngine.UI.Slider foodWasteSlider;
+    private UnityEngine.UI.Image foodWasteFillImage;
+
+    private Color32 redColor = new Color32(202, 18, 7, 242);
+    private Color32 yellowColor = new Color32(205, 157, 0, 255);
+    private Color32 greenColor = new Color32(1, 159, 28, 255);
 
     public Scoring scoring;
     public List<Tutorial> tutorials;
@@ -45,6 +50,7 @@ public class Game : MonoBehaviour
         deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
+        foodWasteFillImage = foodWasteSlider.GetComponentsInChildren<UnityEngine.UI.Image>()[1];
 
         modesClass = FindObjectOfType<Modes>();
         modesList = modesClass.modesList; // reassign
@@ -138,6 +144,25 @@ public class Game : MonoBehaviour
         currentScore.text = "Score: " + scoring.Score;
         foodWasteText.text = "Food wastage: " + scoring.FoodWasted + " / Sec.";
         foodWasteSlider.value = scoring.FoodWastedPercentage;
+        if (foodWasteSlider.value == 1.0f)
+        {
+            foodWasteFillImage.enabled = true;
+            foodWasteFillImage.color = redColor;
+        }
+        else if (foodWasteSlider.value == 0.6f)
+        {
+            foodWasteFillImage.enabled = true;
+            foodWasteFillImage.color = yellowColor;
+        }
+        else if (foodWasteSlider.value == 0.2f)
+        {
+            foodWasteFillImage.enabled = true;
+            foodWasteFillImage.color = greenColor;
+        }
+        else if (foodWasteSlider.value == 0.0f)
+        {
+            foodWasteFillImage.enabled = false;
+        }
         deadFishText.text = "Dead fish: " + scoring.DeadFish;
     }
 
