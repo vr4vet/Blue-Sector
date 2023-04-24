@@ -20,11 +20,7 @@ public class ScreenController : MonoBehaviour
     public void DrawScreen(bool complete) {
         string output = "";
         foreach(Fish fish in inspectionTaskManager.GetInspectedFish()) {
-            output += "Fish " + fish.GetId() + ": " + "Guess: " + fish.GetGillDamageGuessed();
-            if(complete) {
-                output += "    Answer: " + fish.GetGillDamage();
-            }
-            output += "\n";
+            output += "Fish " + fish.GetId() + ":\nGuess:\nGill Damage: " + fish.GetGillDamageGuessed() + "   Lice: " + fish.GetMarkedLice() + "\nAnswer:\nGill Damage: " + fish.GetGillDamage() + "  Lice: " + fish.GetLiceList().Count + "\nHealth: " + fish.health + "/10";
         }
         screen.text = output;
     }

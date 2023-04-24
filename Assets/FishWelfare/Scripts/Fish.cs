@@ -22,6 +22,8 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     private float waterBodyXLength;
     private float waterBodyZLength;
     private bool isInWater;
+
+    private bool isGrabbed = false;
     private Rigidbody rigidBody;
     private Quaternion originalRotation;
 
@@ -37,6 +39,12 @@ public class Fish : MonoBehaviour, IPointerClickHandler
 
     public GameObject lastMarkedLouse;
 
+    private int markedLice = 0;
+
+    public int health = 10;
+
+    private AudioSource hurtSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,12 +55,13 @@ public class Fish : MonoBehaviour, IPointerClickHandler
         rigidBody = GetComponent<Rigidbody>();
         originalRotation = transform.rotation;
         liceList = FindObjectwithTag("Louse");
+        hurtSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(isInWater){
+        if(isInWater && !isGrabbed){
             rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
             Move();
         } else {
@@ -61,7 +70,7 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     void PeriodicUpdates() {
-        if(isInWater){
+        if(isInWater && !isGrabbed){
             SetMoveTarget();    
         }
     }
@@ -82,7 +91,6 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     public void UpdateWaterBody(float waterheight, Vector3 bodyCenter, float xLength, float zLength, bool isInWater){
-        Debug.Log("Updating body");
         gameObject.GetComponent<Floating>().waterHeight = waterheight;
         waterBodyCenter = bodyCenter;
         waterBodyXLength = xLength;
@@ -91,7 +99,6 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        Debug.Log("Yuuuuuuuuup1");
         lastMarkedLouse = checkForLouse(eventData.pointerCurrentRaycast.worldPosition);
         if(lastMarkedLouse != null){
             GameObject newmarker = Instantiate(marker,lastMarkedLouse.transform.position, new Quaternion(0,0,0,0));
@@ -101,14 +108,11 @@ public class Fish : MonoBehaviour, IPointerClickHandler
 
     public GameObject checkForLouse(Vector3 origin) {
         if(Physics.SphereCast(origin - (pointerFinger.transform.forward*.5f), 0.02f, pointerFinger.transform.forward, out RaycastHit hitInfo, 10f, layer)) {
-            Debug.Log("YUUUUUUP");
-            Debug.DrawRay(transform.position, pointerFinger.transform.forward * hitInfo.distance, Color.yellow);
             GameObject hit = hitInfo.collider.gameObject;
-            //GameObject newmarker = Instantiate(marker, hitInfo.transform.position, new Quaternion(0,0,0,0));
-            GameObject newmarker2 = Instantiate(marker, origin - (pointerFinger.transform.forward*2), new Quaternion(0,0,0,0));
             foreach(GameObject louse in liceList) {
                 if (hit == louse && !louse.GetComponent<Louse>().marked) {
                     louse.GetComponent<Louse>().marked = true;
+                    markedLice++;
                     return louse;
                 }
             }
@@ -116,10 +120,31 @@ public class Fish : MonoBehaviour, IPointerClickHandler
         return null;
     }
 
-    private void OnCollisionEnter(Collision other) {
-        SetMoveTarget();
+    public void checkForDamage(bool hittingWater, float velocity) {
+        float damageThreshold = 2f;
+        if (hittingWater) {
+            damageThreshold = 4f;
+        }
+        else if(isGrabbed){
+            damageThreshold = 0.4f;
+        }
+        if(velocity > damageThreshold) {
+            if(health > 0) {
+                health--;
+            }
+            hurtSound.Play(0);
+        }
     }
 
+    private void OnCollisionEnter(Collision other) {
+        SetMoveTarget();
+        if(other.collider.isTrigger){
+            checkForDamage(true, other.relativeVelocity.magnitude);
+        }
+        else {
+            checkForDamage(false, other.relativeVelocity.magnitude);
+        }
+    }
     public void SetAsSelectedFish() {
         inspectionTaskManager.SetSelectedFish(this); 
     }
@@ -132,6 +157,10 @@ public class Fish : MonoBehaviour, IPointerClickHandler
         this.isInWater = isInWater;
     }
 
+    public void SetIsGrabbed( bool isGrabbed) {
+        this.isGrabbed = isGrabbed;
+    }
+
     public int GetGillDamage() {
         return gillDamage;
     }
@@ -142,6 +171,14 @@ public class Fish : MonoBehaviour, IPointerClickHandler
 
     public int GetId() {
         return id;
+    }
+
+    public int GetMarkedLice() {
+        return markedLice;
+    }
+
+    public List<GameObject> GetLiceList(){
+        return liceList;
     }
 
     //Couple of util functions for finding children by tag
