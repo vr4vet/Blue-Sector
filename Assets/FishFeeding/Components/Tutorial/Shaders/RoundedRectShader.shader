@@ -2,7 +2,6 @@ Shader "Custom/RoundedRectShader"
 {
 	Properties
 	{
-		_MainTex("Texture", 2D) = "white" {}
 		_Color("Color", COLOR) = (.54, .95, .99, 0.5)
 		[ShowAsVector2] _Size("_Size", VECTOR) = (256,256,0,0)
 	}
@@ -12,7 +11,6 @@ Shader "Custom/RoundedRectShader"
 			Tags { "RenderType" = "Opaque" "Queue" = "Transparent" }
 			Cull Off ZWrite Off ZTest LEqual
 			Blend SrcAlpha OneMinusSrcAlpha
-
 
 			Pass
 			{
@@ -63,9 +61,6 @@ Shader "Custom/RoundedRectShader"
 
 				}
 
-				sampler2D _MainTex;
-				float4 _MainTex_TexelSize;
-
 				v2f vert(appdata v)
 				{
 					v2f o;
@@ -83,6 +78,7 @@ Shader "Custom/RoundedRectShader"
 
 					float4 col = _Color;
 					col.a = _Color.w;
+					UNITY_APPLY_FOG(i.vertex, col);
 					return col;
 				}
 				ENDCG
