@@ -77,6 +77,8 @@ public class Tutorial : MonoBehaviour, ITutorial
     /// <summary>
     /// Dismisses the tutorial, removing all UI elements from the scene.
     /// </summary>
+    /// <remarks>This marks the tutorial as completed,
+    /// hence, the <see cref="OnCompleted"/> event is fired.</remarks>
     public void Dismiss()
     {
         if (dismissed)
@@ -87,13 +89,6 @@ public class Tutorial : MonoBehaviour, ITutorial
         IndexOfCurrentItem = -1;
         OnCompleted.Invoke();
         dismissed = true;
-    }
-
-    public void ResetTutorial()
-    {
-        dismissed = false;
-        IndexOfCurrentItem = -1;
-        Triggered = false;
     }
 
     /// <summary>
@@ -121,6 +116,17 @@ public class Tutorial : MonoBehaviour, ITutorial
         IndexOfCurrentItem = Math.Max(IndexOfCurrentItem, 0) - 1;
 
         return IndexOfCurrentItem >= 0;
+    }
+
+    /// <summary>
+    /// Resets the tutorial -- restoring all state -- allowing
+    /// the tuturial to be replayed.
+    /// </summary>
+    public void ResetTutorial()
+    {
+        dismissed = false;
+        IndexOfCurrentItem = -1;
+        Triggered = false;
     }
 
     // Start is called before the first frame update
