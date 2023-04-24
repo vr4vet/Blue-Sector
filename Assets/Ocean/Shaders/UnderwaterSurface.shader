@@ -13,20 +13,15 @@ Shader "Nature/UnderwaterSurface"
 		CGINCLUDE
 #include "UnityCG.cginc" 
 
-			uniform float4 _BaseColor;
+		uniform float4 _BaseColor;
 		uniform float4 _WaterColor;
 		uniform float4 _ReflectionColor;
 		uniform float4 _SpecularColor;
 
-#define NB_WAVE 1
-		float4 waves_p[NB_WAVE];
-		float4 waves_d[NB_WAVE];
-
-#define NB_INTERACTIONS 1
 #define WAVE_DURATION 4.0
 #define WAVE_SPEED 3.0
 #define MAX_WAVE_AMP 0.5
-		float4 interactions[NB_INTERACTIONS];
+		float4 interaction;
 
 		uniform float4 world_light_dir;
 		uniform float4 sun_color;
@@ -46,10 +41,7 @@ Shader "Nature/UnderwaterSurface"
 
 		float get_water_height(float3 p)
 		{
-			float height = 0.0;
-			for (int i = 0; i < NB_WAVE; i++)
-				height += evaluateWave(waves_p[i], waves_d[i], p.xz, _Time.y);
-			return height;
+			return 0;
 		}
 
 		float3 get_water_normal(float3 a)
@@ -110,17 +102,6 @@ Shader "Nature/UnderwaterSurface"
 				freq *= 1.9;
 				amp *= 0.22;
 				choppy = lerp(choppy, 1.0, 0.2);
-			}
-
-			for (int j = 0; j < NB_INTERACTIONS; j++)
-			{
-				half dist = distance(p.xz, interactions[j].xy);
-				half elapsed = (_Time.y - interactions[j].w);
-				half computed_distance = elapsed * WAVE_SPEED;
-				half power = 1.0 - saturate(pow(abs(computed_distance - dist), 2.0) * 0.3);
-				power *= 1.0 - saturate(elapsed / WAVE_DURATION);
-				dist += 2.0;
-				p.y += power * interactions[j].z;
 			}
 
 			return p.y - h;
@@ -215,16 +196,13 @@ Shader "Nature/UnderwaterSurface"
 			world_position.y = get_water_height(world_position.xyz);
 
 			float interactive = 0.0;
-			for (int i = 0; i < NB_INTERACTIONS; i++)
-			{
-				half dist = distance(world_position.xz, interactions[i].xy);
-				half elapsed = (_Time.y - interactions[i].w);
-				half computed_distance = elapsed * WAVE_SPEED;
-				half power = 1.0 - saturate(pow(abs(computed_distance - dist), 2.0) * 0.3);
-				power *= 1.0 - saturate(elapsed / WAVE_DURATION);
-				dist += 2.0;
-				interactive += power * interactions[i].z;
-			}
+			half dist = distance(world_position.xz, interaction.xy);
+			half elapsed = (_Time.y - interaction.w);
+			half computed_distance = elapsed * WAVE_SPEED;
+			half power = 1.0 - saturate(pow(abs(computed_distance - dist), 2.0) * 0.3);
+			power *= 1.0 - saturate(elapsed / WAVE_DURATION);
+			dist += 2.0;
+			interactive += power * interaction.z;
 			world_position.y += clamp(interactive, -MAX_WAVE_AMP, MAX_WAVE_AMP);
 
 			o.world_position = world_position;

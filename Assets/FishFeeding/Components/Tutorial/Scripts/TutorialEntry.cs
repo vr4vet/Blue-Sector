@@ -83,8 +83,8 @@ public class TutorialEntry : MonoBehaviour, ITutorial
         }
 
         var rect = rectTransform.rect;
-        var center = rectTransform.position + (Vector3)rect.center;
-        Gizmos.DrawCube(center, rect.size);
+        var center = rectTransform.position + Vector3.Scale((Vector3)rect.center, transform.lossyScale);
+        Gizmos.DrawCube(center, Vector3.Scale(rect.size, transform.lossyScale));
     }
 
     /// <summary>

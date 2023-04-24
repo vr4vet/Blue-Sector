@@ -16,6 +16,7 @@ public sealed class RadioButton : CustomizableButton
     /// An event that is fired when the button is selected;
     /// </summary>
     public UnityEvent OnSelected;
+    public bool IsSelectedByDefault;
 
     private bool isSelected;
 
@@ -33,7 +34,10 @@ public sealed class RadioButton : CustomizableButton
             }
 
             isSelected = value;
-            OnSelected.Invoke();
+            if (isSelected)
+            {
+                OnSelected.Invoke();
+            }
         }
     }
 
@@ -60,6 +64,12 @@ public sealed class RadioButton : CustomizableButton
         }
     }
 
+    protected override void OnButtonDown()
+    {
+        base.OnButtonDown();
+        IsSelected = true;
+    }
+
     private static IEnumerable<RadioButton> FindButtonsWithTag(string tag)
         => GameObject.FindGameObjectsWithTag(tag)
                     .Select(x => x.GetComponent<RadioButton>())
@@ -70,8 +80,15 @@ public sealed class RadioButton : CustomizableButton
     protected override void Start()
     {
         base.Start();
+
+        Invoke(nameof(LateStart), .1f);
+    }
+
+    private void LateStart()
+    {
         // The first button in the set is selected by default.
-        if (!FindOtherButtons().Any(x => x.IsSelected))
+        IsSelected = IsSelectedByDefault;
+        if (!FindOtherButtons().Any(x => x.IsSelected || x.IsSelectedByDefault))
         {
             IsSelected = true;
         }

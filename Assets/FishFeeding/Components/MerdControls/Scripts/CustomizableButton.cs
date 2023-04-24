@@ -103,7 +103,7 @@ public class CustomizableButton : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         buttonDownPosition = GetButtonDownPosition();
         buttonUpPosition = GetButtonUpPosition();
