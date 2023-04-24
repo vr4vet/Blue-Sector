@@ -77,9 +77,18 @@ public class Tutorial : MonoBehaviour, ITutorial
     /// <summary>
     /// Dismisses the tutorial, removing all UI elements from the scene.
     /// </summary>
+    /// <remarks>This marks the tutorial as completed,
+    /// hence, the <see cref="OnCompleted"/> event is fired.</remarks>
     public void Dismiss()
     {
+        if (dismissed)
+        {
+            return;
+        }
+
         IndexOfCurrentItem = -1;
+        OnCompleted.Invoke();
+        dismissed = true;
     }
 
     /// <summary>
