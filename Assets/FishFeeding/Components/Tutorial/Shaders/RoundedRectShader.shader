@@ -8,9 +8,8 @@ Shader "Custom/RoundedRectShader"
 		SubShader
 		{
 			// No culling or depth
-			Tags { "RenderType" = "Opaque" "Queue" = "Transparent" }
-			Cull Off ZWrite Off ZTest LEqual
-			Blend SrcAlpha OneMinusSrcAlpha
+			Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+			Cull Off
 
 			Pass
 			{
@@ -66,7 +65,6 @@ Shader "Custom/RoundedRectShader"
 					v2f o;
 					o.vertex = UnityObjectToClipPos(v.vertex);
 					o.uv = v.uv;
-					UNITY_TRANSFER_FOG(o, o.vertex);
 					return o;
 				}
 
@@ -78,7 +76,6 @@ Shader "Custom/RoundedRectShader"
 
 					float4 col = _Color;
 					col.a = _Color.w;
-					UNITY_APPLY_FOG(i.vertex, col);
 					return col;
 				}
 				ENDCG

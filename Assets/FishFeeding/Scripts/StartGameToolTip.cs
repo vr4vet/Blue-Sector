@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StartGameToolTip : MonoBehaviour
 {
+    public GameObject Controller;
     Game script;
     GameObject startGameToolTip;
     GameObject canvas;
@@ -15,18 +16,24 @@ public class StartGameToolTip : MonoBehaviour
         startGameToolTip = GameObject.Find("StartGameToolTip");
         canvas = GameObject.Find("StartGameToolTip").transform.GetChild(0).gameObject;
         canvas.GetComponent<Canvas>().enabled = false;
+        foreach (var renderer in Controller.GetComponentsInChildren<Renderer>())
+        {
+            renderer.enabled = false;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (script.CanStartGame && !script.startGame)
+        var canvasComponent = canvas.GetComponent<Canvas>();
+        bool visible = script.CanStartGame && !script.startGame;
+        if (canvasComponent.enabled != visible)
         {
-            canvas.GetComponent<Canvas>().enabled = true;
-        }
-        else
-        {
-            canvas.GetComponent<Canvas>().enabled = false;
+            canvasComponent.enabled = visible;
+            foreach (var renderer in Controller.GetComponentsInChildren<Renderer>())
+            {
+                renderer.enabled = false;
+            }
         }
     }
 

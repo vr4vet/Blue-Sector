@@ -34,7 +34,10 @@ public sealed class RadioButton : CustomizableButton
             }
 
             isSelected = value;
-            OnSelected.Invoke();
+            if (isSelected)
+            {
+                OnSelected.Invoke();
+            }
         }
     }
 
