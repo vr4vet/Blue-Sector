@@ -109,6 +109,17 @@ public class Tutorial : MonoBehaviour, ITutorial
         return IndexOfCurrentItem >= 0;
     }
 
+    /// <summary>
+    /// Resets the tutorial -- restoring all state -- allowing
+    /// the tuturial to be replayed.
+    /// </summary>
+    public void ResetTutorial()
+    {
+        dismissed = false;
+        IndexOfCurrentItem = -1;
+        Triggered = false;
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
