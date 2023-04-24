@@ -13,7 +13,7 @@ public class Levels : MonoBehaviour
 
     void Start()
     {
-        currentLevelText = GetComponent<TextMeshProUGUI>();
+        currentLevelText = GetComponentInChildren<TextMeshProUGUI>();
         modes = FindObjectOfType<Modes>();
         modes.OnModeChanged += Levels_OnModeChanged;
     }
