@@ -13,6 +13,10 @@ public class Game : MonoBehaviour
     public bool startGame = false;
     private GameObject[] merds;
 
+    [SerializeField]
+    private GameObject MerdCameraHost;
+    private MerdCameraController merdCameraController;
+
     [field: SerializeField]
     private int time = 60;
 
@@ -22,6 +26,7 @@ public class Game : MonoBehaviour
     private TextMeshProUGUI currentScore;
     private TextMeshProUGUI deadFishText;
     private TextMeshProUGUI foodWasteText;
+    private TextMeshProUGUI currentMerdText;
 
     [field: SerializeField]
     private UnityEngine.UI.Slider foodWasteSlider;
@@ -44,6 +49,7 @@ public class Game : MonoBehaviour
     private void Start()
     {
         merds = GameObject.FindGameObjectsWithTag("Fish System");
+        merdCameraController = MerdCameraHost.GetComponent<MerdCameraController>();
         scoring = FindObjectOfType<Scoring>();
         endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
         GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
@@ -52,6 +58,7 @@ public class Game : MonoBehaviour
         deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
+        currentMerdText = canvas.transform.GetChild(5).gameObject.GetComponent<TextMeshProUGUI>();
         foodWasteFillImage = foodWasteSlider.GetComponentsInChildren<UnityEngine.UI.Image>()[1];
 
         modesClass = FindObjectOfType<Modes>();
@@ -67,6 +74,7 @@ public class Game : MonoBehaviour
     private void Update()
     {
         currentMode = modesClass.mode;
+        UpdateCurrentMerdText();
 
         if (startGame) // only check for pre game things if not started
         {
@@ -146,6 +154,7 @@ public class Game : MonoBehaviour
         currentScore.text = "Score: " + scoring.Score;
         foodWasteText.text = "Food wastage: " + scoring.FoodWasted + " / Sec.";
         foodWasteSlider.value = scoring.FoodWastedPercentage;
+
         if (foodWasteSlider.value == 1.0f)
         {
             foodWasteFillImage.enabled = true;
@@ -165,7 +174,16 @@ public class Game : MonoBehaviour
         {
             foodWasteFillImage.enabled = false;
         }
+
         deadFishText.text = "Dead fish: " + scoring.DeadFish;
+    }
+
+    private void UpdateCurrentMerdText()
+    {
+        if (merdCameraController.SelectedFishSystem != null)
+        {
+            currentMerdText.text = "Merd " + merdCameraController.SelectedFishSystem.merdNr;
+        }
     }
 
     private void ModesClass_OnModeChanged(object sender, Mode e)

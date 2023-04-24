@@ -5,6 +5,7 @@ using UnityEditor;
 
 public class FishSystemScript : MonoBehaviour
 {
+    public int merdNr;
     public GameObject fish;
     private ParticleSystem foodParticles;
     public ParticleSystem.EmissionModule emission;
