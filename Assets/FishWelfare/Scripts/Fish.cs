@@ -22,7 +22,6 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     private float waterBodyXLength;
     private float waterBodyZLength;
     private bool isInWater;
-
     private bool isGrabbed = false;
     private Rigidbody rigidBody;
     private Quaternion originalRotation;
