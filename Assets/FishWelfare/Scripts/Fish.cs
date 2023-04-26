@@ -17,7 +17,7 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     private Vector3 waterBodyCenter;
     private Vector3 targetPosition;
     private Quaternion lookRotation;
-    public float movementSpeed = 1;
+    public float movementSpeed = .5f;
     public float rotationSpeed = 10;
     private float waterBodyXLength;
     private float waterBodyZLength;
@@ -88,6 +88,7 @@ public class Fish : MonoBehaviour, IPointerClickHandler
         float randX = Random.Range(waterBodyCenter.x -waterBodyXLength / 2,waterBodyCenter.x + waterBodyXLength / 2);
         float randZ = Random.Range(waterBodyCenter.z -waterBodyZLength / 2,waterBodyCenter.z + waterBodyZLength / 2);
         targetPosition = new Vector3(randX, transform.position.y, randZ);
+        //GameObject newmarker = Instantiate(marker,targetPosition, new Quaternion(0,0,0,0));
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
     }
 
@@ -138,7 +139,7 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     private void OnCollisionEnter(Collision other) {
-        SetMoveTarget();
+        //SetMoveTarget();
         if(other.collider.isTrigger){
             checkForDamage(true, other.relativeVelocity.magnitude);
         }
