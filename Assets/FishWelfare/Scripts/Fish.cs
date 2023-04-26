@@ -17,8 +17,8 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     private Vector3 waterBodyCenter;
     private Vector3 targetPosition;
     private Quaternion lookRotation;
-    public float movementSpeed;
-    public float rotationSpeed;
+    public float movementSpeed = 1;
+    public float rotationSpeed = 10;
     private float waterBodyXLength;
     private float waterBodyZLength;
     private bool isInWater;
@@ -30,7 +30,7 @@ public class Fish : MonoBehaviour, IPointerClickHandler
 
     public GameObject marker;
 
-    public GameObject pointerFinger;
+    private GameObject pointerFinger;
     private List<GameObject> liceList = new List<GameObject>();
 
     InspectionTaskManager inspectionTaskManager;
@@ -55,6 +55,8 @@ public class Fish : MonoBehaviour, IPointerClickHandler
         originalRotation = transform.rotation;
         liceList = FindObjectwithTag("Louse");
         hurtSound = GetComponent<AudioSource>();
+        //The point from which the raycast targeting lice on fishbodie will have its origin. In this case it is RightHandPointer in XR Rig Advanced
+        pointerFinger = GameObject.FindGameObjectWithTag("Pointer");
     }
 
     // Update is called once per frame
