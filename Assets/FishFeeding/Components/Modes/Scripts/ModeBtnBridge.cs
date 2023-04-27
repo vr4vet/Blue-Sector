@@ -1,20 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements.Experimental;
 
 public class ModeBtnBridge : MonoBehaviour
-{  
+{
     private Game game;
+
+    [HideInInspector]
     public enum ButtonType
     {
         L1,
         L2
     }
+
+    [Tooltip("Which mode should the button switch to?")]
     public ButtonType buttonType;
 
-    void Awake()
+    private void Awake()
     {
         game = FindObjectOfType<Game>();
     }

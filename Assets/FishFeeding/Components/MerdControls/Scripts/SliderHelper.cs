@@ -13,10 +13,13 @@ public class SliderHelper : GrabbableEvents
 {
     [Tooltip("How many steps along the slider do you want it to snap to? Set to 0 to disable snap-points")]
     public int steps;
+
     [Tooltip("What axis does the slider run along?")]
     public Axis axis;
+
     [Tooltip("What path does the slider follow?")]
     public GameObject sliderPath;
+
     [Tooltip("Offset how far the slider can go in each end")]
     public float offset;
 
@@ -47,11 +50,10 @@ public class SliderHelper : GrabbableEvents
         }
 
         initialPosition = transform.localPosition;
-        length = length - offset;
-
-        /* Likely a way to simlpify this. Result of how LocalPositions are defined in Unity */
-        steps --;
+        length -= offset;
+        steps--;
         interval = length / (float)steps;
+
         snapPositions = Enumerable.Range(0, steps).Select(i => { return (float)(i * interval); }).ToList(); // Positive values
         snapPositions.AddRange((from e in snapPositions where e > 0f select (e * -1f)).ToList()); // Negative Values
     }
