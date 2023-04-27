@@ -4,6 +4,8 @@ This prefab is the implementation of the fish cage. It instantiates Fish compone
 
 The component shaped like a cylinder which is divided into two zones. The lower half is where fish go when full, and the upper half is where they go when hungry.
 
+## Attributes
+
 The FishSystem component has many attributes which can be set in Unity's Inspector:
 
 - Merd Nr: Identificating number
