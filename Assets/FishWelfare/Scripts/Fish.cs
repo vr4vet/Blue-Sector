@@ -84,11 +84,13 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     private void SetMoveTarget() {
+        /*
+        prøv å bruke posisjonen kun til hvor den skal rotere, deretter bare beveg den fremmover. Virker som den blir litt spastic av setMoveTarget i on collision og...
+        */
         //Mer Skamløs koking fra FishScript.cs:
         float randX = Random.Range(waterBodyCenter.x -waterBodyXLength / 2,waterBodyCenter.x + waterBodyXLength / 2);
         float randZ = Random.Range(waterBodyCenter.z -waterBodyZLength / 2,waterBodyCenter.z + waterBodyZLength / 2);
         targetPosition = new Vector3(randX, transform.position.y, randZ);
-        //GameObject newmarker = Instantiate(marker,targetPosition, new Quaternion(0,0,0,0));
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
     }
 
@@ -139,7 +141,7 @@ public class Fish : MonoBehaviour, IPointerClickHandler
     }
 
     private void OnCollisionEnter(Collision other) {
-        //SetMoveTarget();
+        SetMoveTarget();
         if(other.collider.isTrigger){
             checkForDamage(true, other.relativeVelocity.magnitude);
         }

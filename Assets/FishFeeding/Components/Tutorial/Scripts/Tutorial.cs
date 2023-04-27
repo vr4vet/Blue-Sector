@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Tutorial : MonoBehaviour, ITutorial
 {
-    public TutorialEntry[] Items = Array.Empty<TutorialEntry>();
+    public GameObject[] Items = Array.Empty<GameObject>();
     public GameObject PopupHint;
 
     /// <summary>
@@ -19,16 +19,17 @@ public class Tutorial : MonoBehaviour, ITutorial
     /// </summary>
     public UnityEvent OnTriggered;
 
-    private int indexOfCurrentItem = -1;
+    private int indexOfCurrentItem = 0;
     private bool triggered;
     private bool dismissed;
 
-    public TutorialEntry Current
+    //Setting the necessary values and variables needed
+    public GameObject Current
         => IndexOfCurrentItem >= 0 && IndexOfCurrentItem < Items.Length
         ? Items[IndexOfCurrentItem]
         : null;
 
-    private int IndexOfCurrentItem
+   private int IndexOfCurrentItem
     {
         get => indexOfCurrentItem;
         set
@@ -38,18 +39,17 @@ public class Tutorial : MonoBehaviour, ITutorial
 
             if (Current != null)
             {
-                Current.IsActive = false;
+                Current.SetActive(true);
             }
 
             indexOfCurrentItem = value;
 
-            if (Current != null)
+            if (Current == null)
             {
-                Current.IsActive = true;
+                Dismiss();
             }
         }
     }
-
     public bool Triggered
     {
         get => triggered;
@@ -75,36 +75,31 @@ public class Tutorial : MonoBehaviour, ITutorial
     }
 
     /// <summary>
-    /// Dismisses the tutorial, removing all UI elements from the scene.
+    /// Dismisses the tutorial, removing deactivates all tutorial elements in the scene
     /// </summary>
-    /// <remarks>This marks the tutorial as completed,
-    /// hence, the <see cref="OnCompleted"/> event is fired.</remarks>
     public void Dismiss()
     {
-        if (dismissed)
-        {
-            return;
-        }
-
         IndexOfCurrentItem = -1;
-        OnCompleted.Invoke();
-        dismissed = true;
     }
 
     /// <summary>
     /// Advances to the next tutorial entry, or completes the tutorial if all entries are enumerated.
     /// </summary>
     /// <returns><see langword="true"/> if there are more entires in the tutorial.</returns>
-    public bool MoveNext()
+    public void MoveNext()
     {
         IndexOfCurrentItem = Math.Min(IndexOfCurrentItem, Items.Length) + 1;
+        Debug.Log(IndexOfCurrentItem);
+        foreach (var entry in Items)
+        {
+            if(entry != Current) entry.gameObject.SetActive(false);
+            if(entry == Current) entry.gameObject.SetActive(true);
+        }
 
         if (IndexOfCurrentItem == Items.Length && Items.Length > 0)
         {
             OnCompleted.Invoke();
         }
-
-        return IndexOfCurrentItem < Items.Length;
     }
 
     /// <summary>
@@ -118,23 +113,20 @@ public class Tutorial : MonoBehaviour, ITutorial
         return IndexOfCurrentItem >= 0;
     }
 
-    /// <summary>
-    /// Resets the tutorial -- restoring all state -- allowing
-    /// the tuturial to be replayed.
-    /// </summary>
-    public void ResetTutorial()
-    {
-        dismissed = false;
-        IndexOfCurrentItem = -1;
-        Triggered = false;
-    }
-
-    // Start is called before the first frame update
+    //Deactivates all but the starting entry
     private void Start()
     {
         foreach (var entry in Items)
         {
-            entry.Tutorial = this;
+            if(entry != Current) entry.gameObject.SetActive(false);
+            if(entry == Current) entry.gameObject.SetActive(true);
+        }
+
+    }   //For debugging purposes, proceeds to the next tutorial step when the spacebar is pressed
+    private void Update(){
+        if (Input.GetKeyDown("space"))
+        {
+            MoveNext();
         }
     }
 }

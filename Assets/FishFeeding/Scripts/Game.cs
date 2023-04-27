@@ -65,7 +65,7 @@ public class Game : MonoBehaviour
         modesList = modesClass.modesList; // reassign
 
         tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<Tutorial>().ToList());
-        modesClass.OnModeChanged += ModesClass_OnModeChanged;
+        //modesClass.OnModeChanged += ModesClass_OnModeChanged;
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
@@ -185,7 +185,7 @@ public class Game : MonoBehaviour
             currentMerdText.text = "Merd " + merdCameraController.SelectedFishSystem.merdNr;
         }
     }
-
+/*
     private void ModesClass_OnModeChanged(object sender, Mode e)
     {
         currentMode = e;
@@ -205,4 +205,5 @@ public class Game : MonoBehaviour
             }
         });
     }
+    */
 }
