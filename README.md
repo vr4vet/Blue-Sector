@@ -5,7 +5,7 @@ Virtual Reality app for exploring blue sector workplaces and professions.
 [Check out the docs!](https://github.com/vr4vet/Blue-Sector/wiki)
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-[![Build](https://img.shields.io/github/actions/workflow/status/vr4vet/Blue-Sector/buid.yml?style=flat-square)](https://github.com/vr4vet/Blue-Sector/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/vr4vet/Blue-Sector/buid.yml?style=flat-square)](https://github.com/vr4vet/Blue-Sector/actions/workflows/conventionalcommits.yml)
 
 ## Screenshots
 
