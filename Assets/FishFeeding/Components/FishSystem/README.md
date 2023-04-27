@@ -2,7 +2,7 @@
 
 This prefab is the implementation of the fish cage. It instantiates Fish components as children of itself, and contains all the logic for determining the fish's behaviour. This includes hunger state, dimensions of the swimmable area, and so on.  
 
-The component shaped like a cylinder which is divided into two zones. The lower half is where fish go when full, and the upper half is where they go when hungry.
+The component is shaped like a cylinder which is divided into two zones. The lower half is where fish go when full, and the upper half is where they go when hungry.
 
 ## Attributes
 
