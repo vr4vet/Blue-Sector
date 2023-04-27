@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerIdleDetector : MonoBehaviour, ITutorial
+public class PlayerIdleDetector : MonoBehaviour
 {
     [SerializeField]
     public int secondsBeforeIdle;

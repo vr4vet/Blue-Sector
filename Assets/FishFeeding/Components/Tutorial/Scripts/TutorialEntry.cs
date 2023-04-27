@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(RectTransform))]
-public class TutorialEntry : MonoBehaviour, ITutorial
+public class TutorialEntry : MonoBehaviour
 {
     [Tooltip("The text that is shown to the user.")]
     [TextArea]
