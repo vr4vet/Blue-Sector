@@ -8,4 +8,4 @@ The fish component swims randomly when idle (before game is started, or when gam
   
 ## LOD Group
 
-This prafab has LOD (level of detail). There are three levels: 3D-model, sprite, and culled. The exact distances from at which these transition can be adjusted in the LOD Group component.
+This prafab has LOD (level of detail). There are three levels: 3D-model, sprite, and culled. The exact distances from the camera at which these transition can be adjusted in the LOD Group component.
