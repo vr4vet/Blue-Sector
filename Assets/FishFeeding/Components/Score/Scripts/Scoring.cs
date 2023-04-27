@@ -41,7 +41,7 @@ public class Scoring : MonoBehaviour
     }
 
     /* Goes through every merd and checks if it is full, hungry or dead. Based on the status to the merd 
-     * add or subtract from the total score of the game. */
+     * add to the total score of the game. */
     void UpdateScore()
     {
         foreach (GameObject i in merds)
