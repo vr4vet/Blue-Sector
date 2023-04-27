@@ -16,11 +16,16 @@ public sealed class MerdCameraController : MonoBehaviour
     private int selectedCameraIndex = -1;
 
     [field: SerializeField]
+    [field: Tooltip("The array of cameras that this instance controls.")]
     public Camera[] Cameras { get; set; } = Array.Empty<Camera>();
 
     [field: SerializeField]
+    [field: Tooltip("The texture that the active camera renders its output to.")]
     public RenderTexture? TargetTexture { get; set; }
 
+    /// <summary>
+    /// Gets or sets a transform representing the bounds for which the camera is confined to.
+    /// </summary>
     private Transform? MovementTrack
     {
         get => movementTrack;
@@ -47,6 +52,9 @@ public sealed class MerdCameraController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gets or sets the currently selected camera.
+    /// </summary>
     public Camera? SelectedCamera
     {
         get => selectedCamera;
@@ -76,11 +84,17 @@ public sealed class MerdCameraController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gets the closest fish system ancestor that is associated with the selected camera.
+    /// </summary>
     public FishSystemScript? SelectedFishSystem
     {
         get => selectedCamera == null ? null : selectedCamera.GetComponentInParent<FishSystemScript>();
     }
 
+    /// <summary>
+    /// Gets an event which is raised when the selected fish system changed.
+    /// </summary>
     public UnityEvent<FishSystemScript?> SelectedFishSystemChanged { get; } = new();
 
     // Start is called before the first frame update
