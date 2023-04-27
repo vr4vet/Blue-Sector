@@ -1,24 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using System.Linq;
-using Unity.XR.Oculus.Input;
 using System;
-using UnityEngine.Events;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class Modes : MonoBehaviour
 {
-    private ModeLoader modeLoader;
+    [HideInInspector]
     public List<Mode> modesList;
-    public Mode mode;
-    private int modeIndex;
 
+    [HideInInspector]
+    public Mode mode;
+
+    [HideInInspector]
     public event EventHandler<Mode> OnModeChanged;
 
-    void Start() { modeLoader = FindObjectOfType<ModeLoader>(); }
+    private ModeLoader modeLoader;
+    private int modeIndex;
 
-    void Update()
+    private void Start()
+    {
+        modeLoader = FindObjectOfType<ModeLoader>();
+    }
+
+    private void Update()
     {
         if (!modeLoader.finishedLoading || modesList.Count() > 0) return;
 
