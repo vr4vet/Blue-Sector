@@ -15,7 +15,10 @@ public sealed class RadioButton : CustomizableButton
     /// <summary>
     /// An event that is fired when the button is selected;
     /// </summary>
+    [Tooltip("An event which is fired when the radio button is selected.")]
     public UnityEvent OnSelected;
+
+    [Tooltip("A value indicating whether the radio button is selected by default.")]
     public bool IsSelectedByDefault;
 
     private bool isSelected;
@@ -72,8 +75,8 @@ public sealed class RadioButton : CustomizableButton
 
     private static IEnumerable<RadioButton> FindButtonsWithTag(string tag)
         => GameObject.FindGameObjectsWithTag(tag)
-                    .Select(x => x.GetComponent<RadioButton>())
-                    .Where(x => x != null);
+            .Select(x => x.GetComponent<RadioButton>())
+            .Where(x => x != null);
 
     private IEnumerable<RadioButton> FindOtherButtons() => FindButtonsWithTag(tag).Where(x => x != this);
 
