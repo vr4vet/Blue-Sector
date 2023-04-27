@@ -1,5 +1,5 @@
-﻿using BNG;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BNG;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,6 +7,7 @@ public class CustomizableButton : MonoBehaviour
 {
     // These have been hard coded for hand speed
     private const float ButtonSpeed = 15f;
+
     private const float SpringForce = 1500f;
 
     [Tooltip("The Local Y position of the button when it is pushed all the way down. Local Y position will never be less than this.")]
@@ -20,6 +21,7 @@ public class CustomizableButton : MonoBehaviour
 
     [Tooltip("If true the button can be pressed by physical object by utiizing a Spring Joint. Set to false if you don't need / want physics interactions, or are using this on a moving platform.")]
     public bool AllowPhysicsForces = true;
+
     public AudioClip ButtonClick;
     public AudioClip ButtonClickUp;
 

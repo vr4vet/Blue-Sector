@@ -1,5 +1,3 @@
-using BNG;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,6 +14,7 @@ public sealed class RadioButton : CustomizableButton
     /// An event that is fired when the button is selected;
     /// </summary>
     public UnityEvent OnSelected;
+
     public bool IsSelectedByDefault;
 
     private bool isSelected;
