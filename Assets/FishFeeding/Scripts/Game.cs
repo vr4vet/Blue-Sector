@@ -1,11 +1,9 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BNG;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Game : MonoBehaviour
 {
@@ -73,6 +71,7 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
+        modesList = modesClass.modesList; // reassign
         currentMode = modesClass.mode;
         UpdateCurrentMerdText();
 
@@ -82,7 +81,7 @@ public class Game : MonoBehaviour
             return; // skip rest of update
         }
 
-        if (modesList.Count == 0)
+        if (modesList == null || modesList.Count == 0)
         {
             modesList = modesClass.modesList;
             return; // wait until modes are loaded

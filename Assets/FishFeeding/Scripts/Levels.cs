@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class Levels : MonoBehaviour
@@ -38,7 +35,7 @@ public class Levels : MonoBehaviour
 
     private void Levels_OnModeChanged(object sender, Mode e)
     {
-        switch(e.name)
+        switch (e.name)
         {
             case "arcade":
                 ChangeToLevel1();

@@ -5,6 +5,7 @@ using UnityEngine;
 /// </summary>
 public class SlideBridge : MonoBehaviour
 {
+    [field: SerializeField]
     public GameObject FishSystem { get; set; }
 
     private FishSystemScript fishSystemScript;

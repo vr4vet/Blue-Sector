@@ -1,7 +1,7 @@
+using BNG;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BNG;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -52,7 +52,7 @@ public class SliderHelper : GrabbableEvents
         initialPosition = transform.localPosition;
         length -= offset;
         steps--;
-        interval = length / (float)steps;
+        interval = length / steps;
 
         snapPositions = Enumerable.Range(0, steps).Select(i => { return (float)(i * interval); }).ToList(); // Positive values
         snapPositions.AddRange((from e in snapPositions where e > 0f select (e * -1f)).ToList()); // Negative Values

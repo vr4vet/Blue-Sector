@@ -24,7 +24,7 @@ public class Modes : MonoBehaviour
 
     private void Update()
     {
-        if (!modeLoader.finishedLoading || modesList.Count() > 0) return;
+        if (!modeLoader.finishedLoading || modesList == null || modesList.Count() > 0) return;
 
         modesList = modeLoader.modesList;
         mode = modesList[modeIndex];

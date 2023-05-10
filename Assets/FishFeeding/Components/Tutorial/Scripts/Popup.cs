@@ -1,10 +1,8 @@
 // Created by Trym Lund Flogard <trym@flogard.no>
-using BNG;
 using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
 [DisallowMultipleComponent]

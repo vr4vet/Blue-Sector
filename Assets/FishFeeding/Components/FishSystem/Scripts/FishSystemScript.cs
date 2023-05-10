@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 public class FishSystemScript : MonoBehaviour
 {
@@ -54,7 +52,7 @@ public class FishSystemScript : MonoBehaviour
 
         // get position for spawning fish within fish system boundaries
         Vector3 position = gameObject.transform.position;
-        
+
         // initiate particles
         foodParticles = gameObject.GetComponent<ParticleSystem>();
         foodParticles.Play();
@@ -69,7 +67,7 @@ public class FishSystemScript : MonoBehaviour
         // spawn fish
         for (int i = 0; i < amountOfFish; i++)
         {
-            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height/2), position.y + (height/2)), Random.Range(position.z -radius + 3, position.z + radius - 3)), fish.transform.rotation);
+            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height / 2), position.y + (height / 2)), Random.Range(position.z - radius + 3, position.z + radius - 3)), fish.transform.rotation);
             newFish.transform.parent = gameObject.transform;
         }
 
@@ -114,7 +112,7 @@ public class FishSystemScript : MonoBehaviour
     }
 
     // functions for setting idle state
-    public void SetIdle() 
+    public void SetIdle()
     {
         state = FishState.Idle;
         if (IsInvoking(nameof(KillFish)))
@@ -138,7 +136,7 @@ public class FishSystemScript : MonoBehaviour
     void HandleFishState()
     {
         var main = foodParticles.main;    // used for setting particle life time to indiciate if fish are eating
-        switch(state)
+        switch (state)
         {
             case FishState.Full:
                 main.startLifetime = 5.0f; // food particles should hit/pass through floor
@@ -152,7 +150,7 @@ public class FishSystemScript : MonoBehaviour
                 main.startLifetime = 0.4f; // food particles should dissapear high in water
                 HandleDying();
                 break;
-        }   
+        }
 
     }
 
@@ -168,7 +166,7 @@ public class FishSystemScript : MonoBehaviour
             return;
         }
 
-        switch(feedingIntensity)
+        switch (feedingIntensity)
         {
             case FeedingIntensity.High:
                 fullTicks = 0;  // reset when fed, not getting hungry
@@ -196,9 +194,10 @@ public class FishSystemScript : MonoBehaviour
         {
             // switch to full state, and reset status
             state = FishState.Full;
-            hungerStatus = 0;   
+            hungerStatus = 0;
             return;
-        } else if (hungerStatus <= secondsToDying)
+        }
+        else if (hungerStatus <= secondsToDying)
         {
             // switch to dying state
             state = FishState.Dying;
@@ -208,10 +207,10 @@ public class FishSystemScript : MonoBehaviour
         switch (feedingIntensity)
         {
             case FeedingIntensity.High:
-                hungerStatus++;      
+                hungerStatus++;
                 break;
             case FeedingIntensity.Medium:
-                hungerStatus--;  
+                hungerStatus--;
                 break;
             case FeedingIntensity.Low:
                 hungerStatus -= 2;  // quickly starts starving
@@ -223,13 +222,14 @@ public class FishSystemScript : MonoBehaviour
     }
 
     void HandleDying()
-    {           
+    {
         if (feedingIntensity == FeedingIntensity.High)
         {
             CancelInvoke(nameof(KillFish));
             state = FishState.Hungry;
             hungerStatus = -20;     // fish should still be almost starving, requiring high feeding intensity to prevent death
-        } else
+        }
+        else
         {
             if (!IsInvoking(nameof(KillFish)))
             {
@@ -250,12 +250,13 @@ public class FishSystemScript : MonoBehaviour
     }
 
     /* Gives the wasted food in this second based on the state to the merd and the feeding intensity. */
-   void ComputeFoodWaste()
+    void ComputeFoodWaste()
     {
         if (state == FishState.Full)
         {
             foodWasted = foodGivenPerSec;
-        } else
+        }
+        else
         {
             foodWasted = 0;
         }
@@ -280,14 +281,14 @@ public class FishSystemVisualization : Editor
         float top = position.y + (height / 2);  // top of merd/water surface
         float bottom = position.y - (height / 2); // bottom of merd
         Handles.color = Color.green;
-        Handles.DrawWireDisc(position + new Vector3(0, height/2, 0), transform.up, radius);
-        Handles.DrawWireDisc(position + new Vector3(0, -height/2, 0), transform.up, radius);
-        
+        Handles.DrawWireDisc(position + new Vector3(0, height / 2, 0), transform.up, radius);
+        Handles.DrawWireDisc(position + new Vector3(0, -height / 2, 0), transform.up, radius);
+
         // drawing vertical lines form top to bottom
-        Handles.DrawLine(position + new Vector3(radius, height/2, 0), position + new Vector3(radius, -height/2, 0));
-        Handles.DrawLine(position + new Vector3(-radius, height/2, 0), position + new Vector3(-radius, -height/2, 0));
-        Handles.DrawLine(position + new Vector3(0, height/2, radius), position + new Vector3(0, -height/2, radius));
-        Handles.DrawLine(position + new Vector3(0, height/2, -radius), position + new Vector3(0, -height/2, -radius));
+        Handles.DrawLine(position + new Vector3(radius, height / 2, 0), position + new Vector3(radius, -height / 2, 0));
+        Handles.DrawLine(position + new Vector3(-radius, height / 2, 0), position + new Vector3(-radius, -height / 2, 0));
+        Handles.DrawLine(position + new Vector3(0, height / 2, radius), position + new Vector3(0, -height / 2, radius));
+        Handles.DrawLine(position + new Vector3(0, height / 2, -radius), position + new Vector3(0, -height / 2, -radius));
 
         // drawing the divider between the zones of hungry and full fish
         float fullnessDivider = bottom + ((top - bottom) * t.fullnessDivider); // border between hungry and full fish
@@ -297,7 +298,7 @@ public class FishSystemVisualization : Editor
         // set particle radius and move to top
         var foodParticlesShape = t.GetComponent<ParticleSystem>().shape;
         foodParticlesShape.radius = radius;
-        foodParticlesShape.position = new Vector3(0, height/2, 0); 
+        foodParticlesShape.position = new Vector3(0, height / 2, 0);
     }
 
 }

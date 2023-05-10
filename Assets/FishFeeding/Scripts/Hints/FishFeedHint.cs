@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using FeedingIntensity = FishSystemScript.FeedingIntensity;
-using FishState = FishSystemScript.FishState;
 
 public abstract class FishFeedHint : MonoBehaviour
 {
