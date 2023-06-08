@@ -201,6 +201,7 @@ public class Game : MonoBehaviour
             {
                 tutorial.enabled = true;
                 tutorial.ResetTutorial();
+                IsTutorialCompleted = false;
             }
         });
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -46,9 +47,9 @@ public class ModeLoader : MonoBehaviour
             __name = mode.Attribute("name").Value;
             Enum.TryParse(mode.Element("tutorial").Value, out tutorial);
             timeLimit = int.Parse(mode.Element("time").Value);
-            failureThreshold = float.Parse(mode.Element("threshold").Value);
+            failureThreshold = float.Parse(mode.Element("threshold").Value, CultureInfo.InvariantCulture);
             isUnlocked = bool.Parse(mode.Element("unlocked").Value);
-            modifier = float.Parse(mode.Element("modifier").Value);
+            modifier = float.Parse(mode.Element("modifier").Value, CultureInfo.InvariantCulture);
             hud = bool.Parse(mode.Element("hud").Value);
 
             modesList.Add(new Mode(__name, tutorial, timeLimit, failureThreshold, isUnlocked, modifier, hud));
