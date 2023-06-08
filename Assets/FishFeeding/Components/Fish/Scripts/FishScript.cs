@@ -9,9 +9,13 @@ public class FishScript : MonoBehaviour
     private float top;
     private float bottom;
     private bool dead;
+
+    [SerializeField]
     private bool randomFish;
+
     private float swimSpeedVertical;
     private float swimSpeedHorizontal;
+    private float fullDestY;  // Y-coordinate destination when returning when full
 
     private Animation fishAnimation;
     private GameObject fishSystem;
@@ -33,6 +37,7 @@ public class FishScript : MonoBehaviour
         fullnessDivider = bottom + ((top - bottom) * fishSystemScript.fullnessDivider); // border between hungry and full fish
         swimSpeedVertical = fishSystemScript.swimSpeedVertical;
         swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
+        fullDestY = top;
         dead = false;
     }
 
@@ -81,6 +86,17 @@ public class FishScript : MonoBehaviour
     // functions for checking if fish is too high or low (outside boundaries)
     bool IsAtSurface() => gameObject.transform.position.y >= top - 0.5f;
     bool IsAtBottom() => gameObject.transform.position.y <= bottom + 0.5f;
+    
+    // check if fish has reached its destination when swimming downwards when full
+    bool HasReturnedAfterFull()
+    {
+        if (gameObject.transform.position.y <= fullDestY)
+        {
+            fullDestY = top;
+            return true;
+        }
+        return false;
+    }
 
     // rotates fish towards its current destination
     void RotateFish()
@@ -103,7 +119,7 @@ public class FishScript : MonoBehaviour
     /*
      * runs every 3rd second
      * this function handles all main movement logic
-     */
+     */   
     void PeriodicUpdates()
     {
         fishSystemPosition = fishSystem.transform.position;
@@ -113,8 +129,8 @@ public class FishScript : MonoBehaviour
 
         FishSystemScript.FishState state = fishSystemScript.state;
 
-
-        if (IsColliding(fishPosition)) return;  // no modifications to movement if returning from outside boundaries
+        // no modifications to movement if returning from outside boundaries or still swimming downwards after eating
+        if (IsColliding(fishPosition) || !HasReturnedAfterFull()) return;  
         if (dead)
         {
             // dead fish continue to sink until hitting bottom, in the speed of swimSpeedVertical field's value
@@ -151,6 +167,8 @@ public class FishScript : MonoBehaviour
                 }
                 else if (state == FishSystemScript.FishState.Full && posY > fullnessDivider)
                 {
+                    // pick new vertical destination
+                    fullDestY = Random.Range(bottom, fullnessDivider);
                     direction.y = -swimSpeedVertical;
                 }
             }
