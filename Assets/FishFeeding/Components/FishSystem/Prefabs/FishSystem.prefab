@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec6f2c22dd38a534181d6521d2c8f787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  merdNr: 0
   fish: {fileID: 5081597436798597801, guid: 6f756d37aa04869409a98e4db7012114, type: 3}
   radius: 5.7
   height: 10
@@ -56,6 +57,8 @@ MonoBehaviour:
   swimSpeedHorizontal: 1
   foodWasted: 0
   foodBase: 0
+  foodGivenPerSec: 0
+  modifier: 1
   state: 0
   feedingIntensity: 0
   fishKilled: 0
@@ -311,7 +314,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.05
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4812,7 +4815,7 @@ ParticleSystemRenderer:
   m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
-  m_MaxParticleSize: 0.005
+  m_MaxParticleSize: 6
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
