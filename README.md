@@ -62,7 +62,7 @@ git lfs install
 We have experienced reports of issues with LFS in the project.
 If you get an error resembling:
 
-"Found x files that should have been pointers,
+"Encountered x files that should have been pointers,
 but werent"
 
 run these commands in order:
@@ -76,7 +76,20 @@ git lfs pull
 
 For a more complete explanation of LFS, see [here][lfs].
 
+If you get the previous error when running "git reset --hard", then run these commands in order:
+
+```sh
+git rm --cached -r .
+git reset --hard
+git rm .gitattributes
+git reset .
+git checkout .
+```
+
+For more information on this particular problem, see [here][lfs-solution].
+
 [lfs]: https://git-lfs.com/
 [lfs-install]: https://github.com/git-lfs/git-lfs#installing
+[lfs-solution]: https://stackoverflow.com/questions/46704572/git-error-encountered-7-files-that-should-have-been-pointers-but-werent
 [conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
 [BNG]: https://assetstore.unity.com/packages/templates/systems/vr-interaction-framework-161066
