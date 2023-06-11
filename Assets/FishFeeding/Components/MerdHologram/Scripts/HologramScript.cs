@@ -23,10 +23,8 @@ public class HologramScript : MonoBehaviour
 
         currentFishSystem = MerdCameraController.SelectedFishSystem;
         hologramCamera = transform.Find("MerdHologramCamera").gameObject;
-        holoZ = (transform.GetComponent<BoxCollider>().size.z) / 2;
-        holoY = (transform.GetComponent<BoxCollider>().size.y) / 2;
-
-
+        holoZ = (transform.GetComponent<BoxCollider>().size.z) / 2;     // divide by two because we're using radius, not diameter.
+        holoY = (transform.GetComponent<BoxCollider>().size.y);  
     }
 
     // Update is called once per frame
@@ -37,8 +35,6 @@ public class HologramScript : MonoBehaviour
         float tempZ = position.z * holoZ;
         float tempY = (position.y + 1) * holoY;     // +1 on y-axis because merd cam's neutral position is (0, -1, 0)
         hologramCamera.transform.localPosition = new Vector3(0.0f, tempY / currentFishSystem.height, tempZ / currentFishSystem.radius);
-
-        //hologramCamera.transform.localPosition = position;
         hologramCamera.transform.localRotation = currentCamera.transform.localRotation;
     }
 
