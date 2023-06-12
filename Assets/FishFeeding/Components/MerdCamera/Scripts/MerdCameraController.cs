@@ -86,7 +86,7 @@ public sealed class MerdCameraController : MonoBehaviour
             
             if (Hologram != null)
             {
-                Hologram.GetComponent<HologramScript>().SetCameraAndFishSystem(value);
+                Hologram.GetComponent<HologramScript>().SetCameraAndFishSystem(value, SelectedFishSystem);
             }
             else
             {

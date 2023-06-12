@@ -38,11 +38,15 @@ public class HologramScript : MonoBehaviour
         hologramCamera.transform.localRotation = currentCamera.transform.localRotation;
     }
 
-    public void SetCameraAndFishSystem(Camera camera)
+    public void SetCameraAndFishSystem(Camera camera, FishSystemScript script)
     {
+        
         currentCamera = camera;
-        currentFishSystem = MerdCameraController.SelectedFishSystem;
+        currentFishSystem = script;
         Debug.Log("Camera switched");
         Debug.Log(currentFishSystem.radius);
+
     }
+
+
 }
