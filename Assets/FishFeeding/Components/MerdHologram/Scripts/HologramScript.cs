@@ -42,7 +42,7 @@ public class HologramScript : MonoBehaviour
         // getting position between centre and radius (boundary) of active camera
         Vector3 position = currentCamera.transform.localPosition;
         float tempZ = (position.z + offsetZ) * holoZ;
-        float tempY = (position.y + offsetY) * holoY;     // +1 on y-axis because merd cam's neutral position is (0, -1, 0)
+        float tempY = (position.y + offsetY) * holoY;  
         hologramCamera.transform.localPosition = new Vector3(0.0f, tempY / currentFishSystem.height, tempZ / currentFishSystem.radius);
         hologramCamera.transform.localRotation = currentCamera.transform.localRotation;
     }
