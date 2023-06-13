@@ -15,6 +15,8 @@ public sealed class MerdCameraController : MonoBehaviour
     private Transform? movementTrack;
     private int selectedCameraIndex = -1;
 
+    public GameObject? Hologram; 
+
     [field: SerializeField]
     [field: Tooltip("The array of cameras that this instance controls.")]
     public Camera[] Cameras { get; set; } = Array.Empty<Camera>();
@@ -81,6 +83,16 @@ public sealed class MerdCameraController : MonoBehaviour
             }
 
             SelectedFishSystemChanged.Invoke(SelectedFishSystem);
+            
+            if (Hologram != null)
+            {
+                Hologram.GetComponent<HologramScript>().SetCameraAndFishSystem(value, SelectedFishSystem);
+            }
+            else
+            {
+                Debug.Log("Hologram game object not found");
+            }
+            
         }
     }
 
