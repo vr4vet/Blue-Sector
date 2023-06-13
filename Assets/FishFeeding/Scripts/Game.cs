@@ -199,8 +199,9 @@ public class Game : MonoBehaviour
             }
             else
             {
-                tutorial.enabled = true;
-                tutorial.ResetTutorial();
+                //tutorial.enabled = true;
+                tutorial.Dismiss();
+                tutorial.MoveNext();
                 IsTutorialCompleted = false;
             }
         });
