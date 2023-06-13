@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text: "Juster kameraet mot overflaten for \xE5 se om fisken spiser maten."
+  Text: Beveg kamera oppover eller nedover
 --- !u!1 &505655254596381427
 GameObject:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5324572516585851429
 RectTransform:
   m_ObjectHideFlags: 0
@@ -149,9 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text: "Oppgaven din er \xE5 mate fisken slik at den blir saftig og stor. Du m\xE5
-    stoppe matingen hvis fisken ikke lenger er sulten for \xE5 konservere foret.
-    Hvis fisken ikke f\xE5r nok mat begynner de \xE5 d\xF8."
+  Text: "Oppgaven din er \xE5 mate fisken. Observer og pass p\xE5 at det ikke over-
+    eller underf\xF4res"
 --- !u!1 &1404939810119731099
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text: "Ta tak i kontrollspaken med h\xE5nden din"
+  Text: Roter kamera med kontrollspaken
 --- !u!1 &1649575774261918405
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text: "Trykk p\xE5 knappen for \xE5 endre hvilken merd som vises p\xE5 skjermen."
+  Text: "Velg hvilken merd som vises p\xE5 skjermen"
 --- !u!1 &7882100886258977475
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text: Dra spaken i retningen du vil bevege kameraet
+  Text: Beveg kamera forover eller bakover
 --- !u!1001 &2396776277746852065
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -475,10 +474,15 @@ PrefabInstance:
         type: 3}
       propertyPath: Items.Array.data[5]
       value: 
-      objectReference: {fileID: 260729351723947859}
+      objectReference: {fileID: 5383040865453720807}
     - target: {fileID: 3944049767300309894, guid: ffb2c2d1c804318409d2d835dc525a53,
         type: 3}
       propertyPath: Items.Array.data[6]
+      value: 
+      objectReference: {fileID: 260729351723947859}
+    - target: {fileID: 3944049767300309894, guid: ffb2c2d1c804318409d2d835dc525a53,
+        type: 3}
+      propertyPath: Items.Array.data[7]
       value: 
       objectReference: {fileID: 4828771838711497960}
     - target: {fileID: 5356774752490879387, guid: ffb2c2d1c804318409d2d835dc525a53,
