@@ -6,11 +6,10 @@ using UnityEngine.Events;
 using UnityEditor;
 
 public class Tutorial : MonoBehaviour
-{   
-    [SerializeField]private bool StartOnStartup;
-    [SerializeField] private int indexOfCurrentItem = -1;
-
+{
     public GameObject[] Items = Array.Empty<GameObject>();
+    public GameObject PopupHint;
+
     /// <summary>
     /// Gets an event which is fired when all the tutorial entires have been completed.
     /// </summary>
@@ -21,6 +20,7 @@ public class Tutorial : MonoBehaviour
     /// </summary>
     public UnityEvent OnTriggered;
 
+    private int indexOfCurrentItem = 0;
     private bool triggered;
     private bool dismissed;
 
@@ -60,9 +60,9 @@ public class Tutorial : MonoBehaviour
                 return;
 
             triggered = value;
-            if (value && !dismissed && IndexOfCurrentItem < 0)
+            if (value && !dismissed)
             {
-                MoveNext();
+                IndexOfCurrentItem = 0;
             }
         }
     }
@@ -90,6 +90,7 @@ public class Tutorial : MonoBehaviour
     public void MoveNext()
     {
         IndexOfCurrentItem = Math.Min(IndexOfCurrentItem, Items.Length) + 1;
+        Debug.Log(IndexOfCurrentItem);
         foreach (var entry in Items)
         {
             if(entry != Current) entry.gameObject.SetActive(false);
@@ -115,15 +116,12 @@ public class Tutorial : MonoBehaviour
 
     //Deactivates all but the starting entry
     private void Start()
-    {   
-        if(StartOnStartup)IndexOfCurrentItem = 0;
+    {
         foreach (var entry in Items)
         {
-            if(entry.GetComponentsInChildren<TutorialEntry>().Length == 0){
-                 ArrayUtility.Remove(ref Items, entry);
-            }
             if(entry != Current) entry.gameObject.SetActive(false);
             if(entry == Current) entry.gameObject.SetActive(true);
+            if(entry.GetComponents<TutorialEntry>().Length<=0) ArrayUtility.Remove(ref Items, entry);
         }
 
     }   //For debugging purposes, proceeds to the next tutorial step when the spacebar is pressed

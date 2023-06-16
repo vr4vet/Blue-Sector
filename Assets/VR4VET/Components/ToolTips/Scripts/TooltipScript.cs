@@ -32,6 +32,8 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
     public StateOptions StartingState = StateOptions.Open;
 
     // Settings on how the tooltip should behave.
+    public bool RemoveHeader = false;
+    public bool Unclosable = false;
     public bool FacePlayer = true;
     public bool AlwaysAboveParent = true;
     public bool CloseWhenDistant = false;
@@ -111,6 +113,15 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
         {
             Deactivate();
         }
+        if(Unclosable)
+        {
+            _closeButton.gameObject.SetActive(false);
+        }
+        if(RemoveHeader)
+        {
+            _panel.Find("header").gameObject.SetActive(false);
+            _closeButton.gameObject.SetActive(false);
+        }
 
     }
 
@@ -141,7 +152,10 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
         _line.SetPosition(0, transform.position);
 
         // Dynamically update the contents of the tooltip.
-        _panel.Find("header").Find("Text").GetComponent<Text>().text = Header;
+        if(!RemoveHeader)
+        {
+            _panel.Find("header").Find("Text").GetComponent<Text>().text = Header;
+        }
         _panel.Find("TextField").Find("Text").GetComponent<Text>().text = TextContent;
     }
 

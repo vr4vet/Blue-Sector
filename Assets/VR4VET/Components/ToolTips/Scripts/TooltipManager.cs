@@ -11,7 +11,7 @@ public class TooltipManager : MonoBehaviour
     public bool CloseTooltipsOnNewActivation = true;
 
     // Array of all tooltips.
-    List<TooltipScript> Tooltips;
+    [SerializeField] private List<TooltipScript> Tooltips;
 
     // Start is called before the first frame update.
     void Start()
