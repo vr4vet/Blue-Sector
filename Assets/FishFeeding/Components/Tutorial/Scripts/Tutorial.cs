@@ -7,7 +7,7 @@ using UnityEditor;
 
 public class Tutorial : MonoBehaviour
 {
-    public GameObject[] Items = Array.Empty<GameObject>();
+    public TutorialEntry[] Items = Array.Empty<TutorialEntry>();
     public GameObject PopupHint;
 
     /// <summary>
@@ -25,7 +25,7 @@ public class Tutorial : MonoBehaviour
     private bool dismissed;
 
     //Setting the necessary values and variables needed
-    public GameObject Current
+    public TutorialEntry Current
         => IndexOfCurrentItem >= 0 && IndexOfCurrentItem < Items.Length
         ? Items[IndexOfCurrentItem]
         : null;
@@ -40,7 +40,7 @@ public class Tutorial : MonoBehaviour
 
             if (Current != null)
             {
-                Current.SetActive(true);
+                Current.gameObject.SetActive(true);
             }
 
             indexOfCurrentItem = value;
@@ -122,6 +122,7 @@ public class Tutorial : MonoBehaviour
             if(entry != Current) entry.gameObject.SetActive(false);
             if(entry == Current) entry.gameObject.SetActive(true);
             if(entry.GetComponents<TutorialEntry>().Length<=0) ArrayUtility.Remove(ref Items, entry);
+            entry.Tutorial = this;
         }
 
     }   //For debugging purposes, proceeds to the next tutorial step when the spacebar is pressed

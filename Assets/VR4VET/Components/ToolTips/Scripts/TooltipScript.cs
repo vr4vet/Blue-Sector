@@ -99,7 +99,7 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
         }
 
         // Get the location of the players head, and use that for player location moving forward.
-        Player = Player.Find("HeadCollision");
+        Player = Player.Find("PlayerController/CameraRig/TrackingSpace/CenterEyeAnchor");
 
         // Initialize animator.
         _panel = transform.Find("Card");
