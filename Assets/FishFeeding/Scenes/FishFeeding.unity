@@ -27,7 +27,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 4e154bf235e41704bbd6bbc6fd6c63f6, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -503,6 +503,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1700844830}
+    - target: {fileID: 68791125, guid: bcd73c4201a58384d84d73ed781cf7d1, type: 3}
+      propertyPath: SkyboxMat
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e154bf235e41704bbd6bbc6fd6c63f6, type: 2}
+    - target: {fileID: 68791125, guid: bcd73c4201a58384d84d73ed781cf7d1, type: 3}
+      propertyPath: PauseSkyboxMat
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e154bf235e41704bbd6bbc6fd6c63f6, type: 2}
     - target: {fileID: 68791125, guid: bcd73c4201a58384d84d73ed781cf7d1, type: 3}
       propertyPath: _wallsMaterial
       value: 
@@ -1021,32 +1029,32 @@ PrefabInstance:
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[0].time
-      value: 0.013169862
+      value: 0.022996522
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].time
-      value: 0.13496321
+      value: 0.14478987
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[2].time
-      value: 0.26019174
+      value: 0.2700184
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[3].time
-      value: 0.43443602
+      value: 0.44426268
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[4].time
-      value: 0.5678619
+      value: 0.5776886
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[5].time
-      value: 0.64774215
+      value: 0.6575688
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
@@ -1061,32 +1069,32 @@ PrefabInstance:
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[0].value
-      value: 0.6765976
+      value: 0.35053253
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].value
-      value: 0.6825371
+      value: 0.35647202
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[2].value
-      value: 0.6760168
+      value: 0.34995174
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[3].value
-      value: 0.67871094
+      value: 0.35264587
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[4].value
-      value: 0.5946655
+      value: 0.26860046
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
       propertyPath: rolloffCustomCurve.m_Curve.Array.data[5].value
-      value: 0.4228273
+      value: 0.09676224
       objectReference: {fileID: 0}
     - target: {fileID: 4329354873530909177, guid: 09f8ffdf75e77ce4ab1d6687e86dbfa5,
         type: 3}
@@ -2073,21 +2081,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6379561222784967944, guid: 8b129e193c1aa8044a0bed468b8bf3aa,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6379561222784967944, guid: 8b129e193c1aa8044a0bed468b8bf3aa,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6379561222784967944, guid: 8b129e193c1aa8044a0bed468b8bf3aa,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6379561222784967944, guid: 8b129e193c1aa8044a0bed468b8bf3aa,
-        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2134,11 +2127,6 @@ PrefabInstance:
     - target: {fileID: 6379561222784967944, guid: 8b129e193c1aa8044a0bed468b8bf3aa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6379561222784967944, guid: 8b129e193c1aa8044a0bed468b8bf3aa,
-        type: 3}
-      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2418,6 +2406,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -1.4629
+      objectReference: {fileID: 0}
+    - target: {fileID: 3898704502366956171, guid: fe06af38376afbc40a14204b407fd36d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3902814761653743709, guid: fe06af38376afbc40a14204b407fd36d,
         type: 3}
@@ -4588,6 +4581,71 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ac7df741a9c0a2418ec19477729ee3d, type: 3}
+--- !u!1 &2133289807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2133289809}
+  - component: {fileID: 2133289808}
+  m_Layer: 0
+  m_Name: Reflection Probe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!215 &2133289808
+ReflectionProbe:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133289807}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Type: 0
+  m_Mode: 0
+  m_RefreshMode: 0
+  m_TimeSlicingMode: 0
+  m_Resolution: 64
+  m_UpdateFrequency: 0
+  m_BoxSize: {x: 10.121574, y: 2.365964, z: 4.0884104}
+  m_BoxOffset: {x: -0.0607872, y: 0.22677994, z: 0.28603983}
+  m_NearClip: 0.3
+  m_FarClip: 1000
+  m_ShadowDistance: 100
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IntensityMultiplier: 1
+  m_BlendDistance: 1
+  m_HDR: 1
+  m_BoxProjection: 0
+  m_RenderDynamicObjects: 0
+  m_UseOcclusionCulling: 1
+  m_Importance: 1
+  m_CustomBakedTexture: {fileID: 0}
+--- !u!4 &2133289809
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133289807}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.185, y: 5.7401757, z: 4.749}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &429843510057448226
 PrefabInstance:
   m_ObjectHideFlags: 0
