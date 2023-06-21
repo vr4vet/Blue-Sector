@@ -97,7 +97,7 @@ public class Tutorial : MonoBehaviour
             if(entry == Current) entry.gameObject.SetActive(true);
         }
 
-        if (IndexOfCurrentItem == Items.Length && Items.Length > 0)
+        if (IndexOfCurrentItem == -1 && Items.Length > 0)
         {
             OnCompleted.Invoke();
         }
