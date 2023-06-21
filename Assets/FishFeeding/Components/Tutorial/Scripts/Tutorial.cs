@@ -8,7 +8,6 @@ using UnityEditor;
 public class Tutorial : MonoBehaviour
 {
     public TutorialEntry[] Items = Array.Empty<TutorialEntry>();
-    public GameObject PopupHint;
 
     /// <summary>
     /// Gets an event which is fired when all the tutorial entires have been completed.
@@ -81,6 +80,7 @@ public class Tutorial : MonoBehaviour
     public void Dismiss()
     {
         IndexOfCurrentItem = -1;
+        OnCompleted.Invoke();
     }
 
     /// <summary>
@@ -90,17 +90,17 @@ public class Tutorial : MonoBehaviour
     public void MoveNext()
     {
         IndexOfCurrentItem = Math.Min(IndexOfCurrentItem, Items.Length) + 1;
-        Debug.Log(IndexOfCurrentItem);
+        //Debug.Log(IndexOfCurrentItem);
         foreach (var entry in Items)
         {
             if(entry != Current) entry.gameObject.SetActive(false);
             if(entry == Current) entry.gameObject.SetActive(true);
         }
 
-        if (IndexOfCurrentItem == -1 && Items.Length > 0)
+/*        if (IndexOfCurrentItem == Items.Length && Items.Length > 0)
         {
             OnCompleted.Invoke();
-        }
+        }*/
     }
 
     /// <summary>

@@ -29,7 +29,7 @@ public class TimeoutTrigger : MonoBehaviour
         if (tutorialEntry.gameObject.activeSelf && (DateTime.Now - triggeredAt) > TimeSpan.FromSeconds(TimeoutSeconds))
         {
             OnTriggered.Invoke();
-            triggeredAt = DateTime.Now;
+            triggeredAt = default;
         }
     }
 }
