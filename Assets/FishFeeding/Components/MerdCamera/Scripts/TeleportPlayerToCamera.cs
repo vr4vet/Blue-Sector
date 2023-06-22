@@ -21,7 +21,8 @@ public class TeleportPlayerToCamera : MonoBehaviour
 
         var playerController = BNGPlayerLocator.Instance.PlayerController;
         var destination = selectedCamera.transform.position - playerController.CameraRig.localPosition;
-        playerController.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePosition;
+        playerController.transform.parent.Find("HeadCollision").gameObject.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePosition;
+        //GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePosition;
         playerStartPosition = playerController.transform.position;
         playerStartRotation = playerController.transform.rotation;
         playerController.transform.SetPositionAndRotation(destination, playerStartRotation);
@@ -45,8 +46,9 @@ public class TeleportPlayerToCamera : MonoBehaviour
     public void TeleportBack()
     {
         var playerController = BNGPlayerLocator.Instance.PlayerController;
-        playerController.transform!.SetPositionAndRotation(playerStartPosition, playerStartRotation);
-        playerController.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePosition;
+        playerController.transform!.transform.parent.Find("HeadCollision").gameObject.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePosition;
+        //!.SetPositionAndRotation(playerStartPosition, playerStartRotation);
+        //playerController.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePosition;
         foreach (var (camera, layer) in cameraLayers)
         {
             camera.GetComponent<PostProcessLayer>().volumeLayer = layer;

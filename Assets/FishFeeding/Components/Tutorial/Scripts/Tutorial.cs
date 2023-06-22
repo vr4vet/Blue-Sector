@@ -72,6 +72,7 @@ public class Tutorial : MonoBehaviour
     public void Trigger()
     {
         Triggered = true;
+        OnTriggered.Invoke();
     }
 
     /// <summary>

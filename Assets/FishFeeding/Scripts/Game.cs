@@ -197,14 +197,14 @@ public class Game : MonoBehaviour
             if (currentMode.tutorial.Equals(Tut.NO))
             {
                 tutorial.Dismiss();
-                tutorial.gameObject.GetNamedChild("SimpleToolTip").GetComponent<TooltipScript>().Deactivate();
+                //tutorial.gameObject.GetNamedChild("SimpleToolTip").GetComponent<TooltipScript>().Deactivate();
             }
             else
             {
                 tutorial.Dismiss();
                 tutorial.MoveNext();
                 IsTutorialCompleted = false;
-                tutorial.gameObject.GetNamedChild("SimpleToolTip").GetComponent<TooltipScript>().Activate();
+                //tutorial.gameObject.GetNamedChild("SimpleToolTip").GetComponent<TooltipScript>().Activate();
             }
         });
     }
