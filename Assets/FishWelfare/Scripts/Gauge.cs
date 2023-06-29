@@ -11,7 +11,8 @@ public class Gauge : MonoBehaviour
     void Start()
     {
         measuringGauge = GetComponentInChildren<Slider>();
-        tankController = transform.root.gameObject.GetComponent<TankController>();
+        //tankController = transform.root.gameObject.GetComponent<TankController>();
+        tankController = GetComponentInParent<TankController>();
     }
 
     // Update is called once per frame

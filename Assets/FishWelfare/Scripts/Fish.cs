@@ -75,7 +75,7 @@ public class Fish : MonoBehaviour
         originalRotation = transform.rotation;
         liceList = FindObjectwithTag("Louse");
         boneList = FindObjectwithTag("Bone");
-        Debug.Log("number of bones: " + boneList.Count);
+        //Debug.Log("number of bones: " + boneList.Count);
         AudioSource[] sounds = GetComponents<AudioSource>();
         hurtSound = sounds[0];
         markSound = sounds[1];
@@ -90,7 +90,7 @@ public class Fish : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(isGrabbedCount);
+        //Debug.Log(isGrabbedCount);
         followchild();
         if(isGrabbedCount > 0) {
             putInWater = false;
@@ -125,7 +125,7 @@ public class Fish : MonoBehaviour
     }
 
     private void Move() {
-        Debug.Log("Moving");
+        //Debug.Log("Moving");
         if(!kinematicBones) {
             foreach( GameObject bone in boneList) {
                 bone.GetComponent<Rigidbody>().isKinematic = true;
@@ -154,7 +154,7 @@ public class Fish : MonoBehaviour
     }
 
     private void Stop() {
-        Debug.Log("Stopping");
+        //Debug.Log("Stopping");
         if(kinematicBones) {
             foreach( GameObject bone in boneList) {
                 bone.GetComponent<Rigidbody>().isKinematic = false;

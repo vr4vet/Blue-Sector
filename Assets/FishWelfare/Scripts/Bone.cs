@@ -18,7 +18,8 @@ public class Bone : MonoBehaviour, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
-        parent = transform.root.gameObject.GetComponent<Fish>();
+        //parent = transform.root.gameObject.GetComponent<Fish>();
+        parent = GetComponentInParent<Fish>();
         rigidBody = GetComponent<Rigidbody>();
         //The point from which the raycast targeting lice on fishbodie will have its origin. In this case it is RightHandPointer in XR Rig Advanced
         pointerFinger = GameObject.FindGameObjectWithTag("Pointer");
