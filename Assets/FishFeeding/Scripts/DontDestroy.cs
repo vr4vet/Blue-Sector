@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class DontDestroy : MonoBehaviour
 {
-    private void Awake() {
-        DontDestroyOnLoad(this.gameObject);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private GameObject obj;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake() 
     {
-        
+        GameObject[] objs = GameObject.FindGameObjectsWithTag(obj.tag);
+
+        if (objs.Length > 1) {
+            Destroy(this.gameObject);
+        }
+
+        DontDestroyOnLoad(this.gameObject);
+
     }
 }
