@@ -1,8 +1,10 @@
 using BNG;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -194,14 +196,15 @@ public class Game : MonoBehaviour
         {
             if (currentMode.tutorial.Equals(Tut.NO))
             {
-                tutorial.enabled = false;
                 tutorial.Dismiss();
+                //tutorial.gameObject.GetNamedChild("SimpleToolTip").GetComponent<TooltipScript>().Deactivate();
             }
             else
             {
-                tutorial.enabled = true;
-                tutorial.ResetTutorial();
+                tutorial.Dismiss();
+                tutorial.MoveNext();
                 IsTutorialCompleted = false;
+                //tutorial.gameObject.GetNamedChild("SimpleToolTip").GetComponent<TooltipScript>().Activate();
             }
         });
     }

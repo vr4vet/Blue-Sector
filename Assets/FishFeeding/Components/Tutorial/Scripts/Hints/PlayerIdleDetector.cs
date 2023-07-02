@@ -46,6 +46,7 @@ public class PlayerIdleDetector : MonoBehaviour
         if ((DateTime.Now - positionUpdatedAt) > TimeSpan.FromSeconds(secondsBeforeIdle))
         {
             OnPlayerIdle.Invoke();
+            Debug.Log("Timer ended");
             isIdleNotified = true;
         }
     }
