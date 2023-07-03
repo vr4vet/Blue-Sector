@@ -66,7 +66,7 @@ public class Levels : MonoBehaviour
         translatedAdvanced = stringTable.GetEntry("Advanced").GetLocalizedString();
         /*Debug.Log("currentlevel:" + translatedCurrentLevel);
         Debug.Log("basic:" + translatedBasic);*/
-        if(currentLevel == 1)
+        if (currentLevel == 1)
         {
             UpdateLevelText(translatedBasic);
         } else
@@ -77,6 +77,7 @@ public class Levels : MonoBehaviour
 
     private void UpdateLevelText(string translatedLevel)
     {
+        /*Debug.Log("Updated text");*/
         currentLevelText.text = translatedCurrentLevel + " " + translatedLevel.ToUpper();
     }
 
