@@ -6,7 +6,7 @@ using UnityEngine.Localization.Tables;
 
 public class Levels : MonoBehaviour
 {
-    public LocalizedStringTable stringTable = new LocalizedStringTable { TableReference = "My Text" };
+    public LocalizedStringTable stringTable = new LocalizedStringTable { TableReference = "TextFishFeeding" };
     private Modes modes;
     private TextMeshProUGUI currentLevelText;
     private int currentLevel = 1;
