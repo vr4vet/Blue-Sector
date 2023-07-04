@@ -12,6 +12,7 @@ public class PlayAudio : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        TurnOnTutorialAudio = true;
     }
 
     // Update is called once per frame
