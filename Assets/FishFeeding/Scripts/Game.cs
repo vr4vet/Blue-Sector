@@ -183,7 +183,7 @@ public class Game : MonoBehaviour
     {
         if (merdCameraController.SelectedFishSystem != null)
         {
-            currentMerdText.text = "Merd " + merdCameraController.SelectedFishSystem.merdNr;
+            currentMerdText.text = "Cage " + merdCameraController.SelectedFishSystem.merdNr;
         }
     }
 

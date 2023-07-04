@@ -21,7 +21,7 @@ public class PlayAudio : MonoBehaviour
         {
             audioSource.Play();
             Invoke(nameof(ResetTrigger), audioSource.clip.length);
-            Debug.Log(audioSource.clip.length);
+            //Debug.Log(audioSource.clip.length);
         }
     }
 
