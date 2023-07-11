@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="ModeList.xsd">
+    <!-- Arcade mode levels (easier difficulty, lower thresholds, more gameified) -->
+        <mode name="arcade">                         <!-- Mode --> 
+            <tutorial>HINT</tutorial>   <!-- Does this mode have a tutorial: enum -->
+            <time>300</time>
+            <threshold>0.1</threshold>  <!-- How low is feed% before failing -->
+            <unlock>0</unlock>          <!-- Score to unlock mode -->
+            <modifier>1.0</modifier>    <!-- Modifier for difficulty level -->
+            <unlocked>true</unlocked>       <!-- Is mode unlocked? -->
+			<hud>true</hud>
+        </mode>
+
+    <!-- Realism mode levels (harder difficulty, higher thresholds, more detail) -->
+    <mode name="realism">
+        <tutorial>NO</tutorial>
+        <time>300</time>
+        <threshold>0.1</threshold>
+        <unlock>0</unlock>
+        <modifier>0.5</modifier>
+        <unlocked>false</unlocked>
+		<hud>false</hud>
+    </mode>
+
+    <!-- Sandbox mode -->
+    <mode name="sandbox">
+        <tutorial>NO</tutorial>
+        <time>-1</time>
+        <threshold>0.1</threshold>
+        <unlock>0</unlock>
+        <modifier>2.0</modifier>
+        <unlocked>true</unlocked>
+		<hud>false</hud>
+    </mode>
+</modes>
