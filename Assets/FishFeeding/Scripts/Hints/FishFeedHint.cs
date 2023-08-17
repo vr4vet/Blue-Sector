@@ -13,8 +13,6 @@ public abstract class FishFeedHint : MonoBehaviour
     protected virtual void Start()
     {
         tutorial = GetComponentInChildren<Tutorial>();
-        triggerDelay = TimeSpan.FromSeconds(UnityEngine.Random.Range(10, 60));
-        canTriggerAt = DateTime.MaxValue;
         Debug.Assert(tutorial != null);
         if (Merd != null)
         {
@@ -25,11 +23,6 @@ public abstract class FishFeedHint : MonoBehaviour
     protected virtual void Update()
     {
         if (!tutorial.Triggered && ShouldTrigger())
-        {
-            canTriggerAt = DateTime.Now + triggerDelay;
-        }
-
-        if (canTriggerAt < DateTime.Now)
         {
             tutorial.Trigger();
             enabled = false;
