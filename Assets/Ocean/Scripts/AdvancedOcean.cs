@@ -16,17 +16,17 @@ public class AdvancedOcean : MonoBehaviour
         //new Wave(30, 2.0f, 0.4f, 0.4f, new Vector2(-1.0f, 0.0f)),
         //new Wave(10, 3.0f, 0.05f, 0.9f,new Vector2(-1.0f, 1.2f))
         
-        //new Wave(99, 1.0f, .4f * 1.4f, 0.9f, new Vector2(1.0f,  0.2f)),
-        //new Wave(60, 1.2f, .4f * 0.8f, 0.5f, new Vector2(1.0f,  3.0f)),
-        //new Wave(20, 3.5f, .4f * 0.4f, 0.8f, new Vector2(2.0f,  4.0f)),
-        //new Wave(30, 2.0f, .4f * 0.4f, 0.4f, new Vector2(-1.0f, 0.0f)),
-        //new Wave(10, 3.0f, .4f * 0.05f, 0.9f,new Vector2(-1.0f, 1.2f))
+        new Wave(99, 1.0f, .4f * 1.4f, 0.9f, new Vector2(1.0f,  0.2f)),
+        new Wave(60, 1.2f, .4f * 0.8f, 0.5f, new Vector2(1.0f,  3.0f)),
+        new Wave(20, 3.5f, .4f * 0.4f, 0.8f, new Vector2(2.0f,  4.0f)),
+        new Wave(30, 2.0f, .4f * 0.4f, 0.4f, new Vector2(-1.0f, 0.0f)),
+        new Wave(10, 3.0f, .4f * 0.05f, 0.9f,new Vector2(-1.0f, 1.2f))
 
-        new Wave(99, 1.0f, .4f * 0.07f, 0.9f, new Vector2(1.0f,  0.2f)),
+/*        new Wave(99, 1.0f, .4f * 0.07f, 0.9f, new Vector2(1.0f,  0.2f)),
         new Wave(60, 1.2f, .4f * 0.05f, 0.5f, new Vector2(1.0f,  3.0f)),
         new Wave(20, 3.5f, .4f * 0.065f, 0.8f, new Vector2(2.0f,  4.0f)),
         new Wave(30, 2.0f, .4f * 0.05f, 0.4f, new Vector2(-1.0f, 0.0f)),
-        new Wave(10, 3.0f, .4f * 0.055f, 0.9f,new Vector2(-1.0f, 1.2f))
+        new Wave(10, 3.0f, .4f * 0.055f, 0.9f,new Vector2(-1.0f, 1.2f))*/
     };
     private readonly Vector4[] interactions = new Vector4[NB_INTERACTIONS];
     private int interaction_id = 0;
@@ -61,7 +61,7 @@ public class AdvancedOcean : MonoBehaviour
         interaction_id = (interaction_id + 1) % NB_INTERACTIONS;
     }
 
-    public static float GetWaterHeight(Vector3 p)
+    public float GetWaterHeight(Vector3 p)
     {
         float height = 0;
         for (int i = 0; i < NB_WAVE; i++)
