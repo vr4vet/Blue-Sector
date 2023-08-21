@@ -17,7 +17,7 @@ public class SpeedboatScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, advancedOceanScript.GetWaterHeight(transform.position) *0.95f - 0.1f, transform.position.z);
+        transform.position = new Vector3(transform.position.x, advancedOceanScript.GetWaterHeight(transform.position) *0.95f - 0.05f, transform.position.z);
         //new Vector3(transform.position.x, advancedOceanScript.GetWaterHeight(transform.position), transform.position.z);
         //new Vector3(transform.position.x, advancedOceanScript.GetWaterHeight(new Vector3(transform.position.x * 16, transform.position.y, transform.position.z * 16))); 
     }
