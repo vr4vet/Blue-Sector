@@ -46,7 +46,7 @@ public class TeleportPlayerToCamera : MonoBehaviour
     public void TeleportBack()
     {
         var playerController = BNGPlayerLocator.Instance.PlayerController;
-        playerController.transform!.SetPositionAndRotation(playerStartPosition, playerStartRotation);
+        playerController.transform.SetPositionAndRotation(playerStartPosition, playerStartRotation);
         playerController.GetComponent<PlayerGravity>().GravityEnabled = true;
 
         foreach (var (camera, layer) in cameraLayers)

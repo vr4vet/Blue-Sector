@@ -528,6 +528,11 @@ PrefabInstance:
       propertyPath: ParentHandModel
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2109111115295015116, guid: a2419f9845db03f479057114b6bbbe86,
+        type: 3}
+      propertyPath: CanBeSnappedToSnapZone
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015119, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -707,7 +712,7 @@ MonoBehaviour:
   onGrip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1108241858826004222}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
         m_MethodName: SetCompleted
         m_Mode: 1
@@ -1074,7 +1079,7 @@ PrefabInstance:
     - target: {fileID: 3491565099550764308, guid: e4324f2703548f24eb2562d7b849cfed,
         type: 3}
       propertyPath: CanBeSnappedToSnapZone
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7808986497402078423, guid: e4324f2703548f24eb2562d7b849cfed,
         type: 3}
@@ -1122,7 +1127,7 @@ MonoBehaviour:
   onGrip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7114034415607929459}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
         m_MethodName: SetCompleted
         m_Mode: 1
@@ -1177,7 +1182,12 @@ PrefabInstance:
     - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
         type: 3}
       propertyPath: onGrip.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
+        type: 3}
+      propertyPath: onRelease.m_PersistentCalls.m_Calls.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
         type: 3}
@@ -1188,7 +1198,12 @@ PrefabInstance:
         type: 3}
       propertyPath: onGrip.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2214800855043316627}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
+        type: 3}
+      propertyPath: onRelease.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
         type: 3}
       propertyPath: onGrip.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -1196,7 +1211,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
         type: 3}
+      propertyPath: onRelease.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 3061212661439654088}
+    - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
+        type: 3}
       propertyPath: onGrip.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetCompleted
+      objectReference: {fileID: 0}
+    - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
+        type: 3}
+      propertyPath: onRelease.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
+        type: 3}
+      propertyPath: onRelease.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: SetCompleted
       objectReference: {fileID: 0}
     - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
@@ -1206,7 +1236,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
         type: 3}
+      propertyPath: onRelease.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: TutorialEntry, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
+        type: 3}
       propertyPath: onGrip.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1650846086194688364, guid: 0bff4c4331a5d094380912649ba85293,
+        type: 3}
+      propertyPath: onRelease.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2510300888928785696, guid: 0bff4c4331a5d094380912649ba85293,
@@ -1764,155 +1804,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bb95e3cc47628945b87b8318f9ecdbd, type: 3}
---- !u!114 &583757599307621114 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6634091356983344526, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
-    type: 3}
-  m_PrefabInstance: {fileID: 6055347539338682228}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &633360064823039523 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6684132527669725527, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
     type: 3}
   m_PrefabInstance: {fileID: 6055347539338682228}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1108241858826004222 stripped
+--- !u!114 &3061212661439654088 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6586987899766159754, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
-    type: 3}
-  m_PrefabInstance: {fileID: 6055347539338682228}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1660654973569883036 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4828771838711497960, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
-    type: 3}
-  m_PrefabInstance: {fileID: 6055347539338682228}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5984325436733633927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2214800855043316627 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5383040865453720807, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
-    type: 3}
-  m_PrefabInstance: {fileID: 6055347539338682228}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &5079109036430693713 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1329815621130308133, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
-    type: 3}
-  m_PrefabInstance: {fileID: 6055347539338682228}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8317350174182207433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5079109036430693713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4033a8256efb24d41ab3643fbfb83294, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6311409464202709031}
-        m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
-        m_MethodName: SetCompleted
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  TimeoutSeconds: 8
---- !u!1 &5984325436733633927 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 505655254596381427, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
-    type: 3}
-  m_PrefabInstance: {fileID: 6055347539338682228}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2115193329563568958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5984325436733633927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4033a8256efb24d41ab3643fbfb83294, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1660654973569883036}
-        m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
-        m_MethodName: SetCompleted
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  TimeoutSeconds: 10
---- !u!114 &6311409464202709031 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 260729351723947859, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
-    type: 3}
-  m_PrefabInstance: {fileID: 6055347539338682228}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5079109036430693713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7114034415607929459 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3941434840542840071, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
-    type: 3}
-  m_PrefabInstance: {fileID: 6055347539338682228}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff29151ce177c07458d7b38725217ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8613022740161318909 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2562389915282968713, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
+  m_CorrespondingSourceObject: {fileID: 9111756434442860476, guid: 1bb95e3cc47628945b87b8318f9ecdbd,
     type: 3}
   m_PrefabInstance: {fileID: 6055347539338682228}
   m_PrefabAsset: {fileID: 0}
@@ -2193,6 +2093,11 @@ PrefabInstance:
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Camera, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 394337171071851012, guid: 1ed2b9f0db8f94646bc3551925358482,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 1089408208891832055, guid: 1ed2b9f0db8f94646bc3551925358482,
         type: 3}
       propertyPath: OnSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -2227,6 +2132,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1621867882614966556, guid: 1ed2b9f0db8f94646bc3551925358482,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2229551173557229625, guid: 1ed2b9f0db8f94646bc3551925358482,
         type: 3}
@@ -2358,6 +2268,11 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5223243288074044034, guid: 1ed2b9f0db8f94646bc3551925358482,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5315202627171989127, guid: 1ed2b9f0db8f94646bc3551925358482,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -2481,7 +2396,17 @@ PrefabInstance:
     - target: {fileID: 6653907717210104627, guid: 1ed2b9f0db8f94646bc3551925358482,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7100381549096586012, guid: 1ed2b9f0db8f94646bc3551925358482,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7531988772614831170, guid: 1ed2b9f0db8f94646bc3551925358482,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7582204208285797886, guid: 1ed2b9f0db8f94646bc3551925358482,
         type: 3}
@@ -2501,7 +2426,7 @@ PrefabInstance:
     - target: {fileID: 7940285738662993737, guid: 1ed2b9f0db8f94646bc3551925358482,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8071686101915463937, guid: 1ed2b9f0db8f94646bc3551925358482,
         type: 3}
@@ -2579,7 +2504,7 @@ MonoBehaviour:
   onGrip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 583757599307621114}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
         m_MethodName: SetCompleted
         m_Mode: 1
@@ -2663,7 +2588,7 @@ MonoBehaviour:
   onGrip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 583757599307621114}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
         m_MethodName: SetCompleted
         m_Mode: 1
@@ -2753,7 +2678,7 @@ MonoBehaviour:
   onGrip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 583757599307621114}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
         m_MethodName: SetCompleted
         m_Mode: 1
@@ -2879,6 +2804,11 @@ PrefabInstance:
         type: 3}
       propertyPath: onLeverChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2109111115295015116, guid: a2419f9845db03f479057114b6bbbe86,
+        type: 3}
+      propertyPath: CanBeSnappedToSnapZone
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015119, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
@@ -3031,7 +2961,7 @@ MonoBehaviour:
   onGrip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8613022740161318909}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TutorialEntry, Assembly-CSharp
         m_MethodName: SetCompleted
         m_Mode: 1
