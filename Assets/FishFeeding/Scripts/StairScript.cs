@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BNG;
 
 public class StairScript : MonoBehaviour
 {
-    [SerializeField] private TeleportPlayerOnCollide TeleportScript;
+    [SerializeField] private TeleportPlayerOnEnter[] TeleportScript;
     [SerializeField] private Transform Destination;
    void OnTriggerEnter(Collider other){
     if (other.gameObject.tag == "Player"){
-        TeleportScript.Destination = Destination;
+        foreach(TeleportPlayerOnEnter Script in TeleportScript){
+        Script.TeleportDestination = Destination;
+        }
    }}
 }
