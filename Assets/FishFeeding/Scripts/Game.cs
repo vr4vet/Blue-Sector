@@ -6,9 +6,13 @@ using System.Linq;
 using TMPro;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Game : MonoBehaviour
 {
+    [SerializeField]
+    private InputActionReference inputActionReference_StartGame;
+    private bool buttonStartGamePressed = false;
     private bool hud;
     public bool startGame = false;
     private GameObject[] merds;
@@ -28,7 +32,6 @@ public class Game : MonoBehaviour
     private TextMeshProUGUI foodWasteText;
     private TextMeshProUGUI currentMerdText;
 
-    [field: SerializeField]
     private UnityEngine.UI.Slider foodWasteSlider;
     private UnityEngine.UI.Image foodWasteFillImage;
 
@@ -36,6 +39,7 @@ public class Game : MonoBehaviour
     private Color32 yellowColor = new Color32(205, 157, 0, 255);
     private Color32 greenColor = new Color32(1, 159, 28, 255);
 
+    [HideInInspector]
     public Scoring scoring;
     public List<Tutorial> tutorials;
     public Mode currentMode;
@@ -66,6 +70,9 @@ public class Game : MonoBehaviour
 
         tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<Tutorial>().ToList());
         modesClass.OnModeChanged += ModesClass_OnModeChanged;
+
+        inputActionReference_StartGame.action.performed += ButtonStartGamePressed;
+        inputActionReference_StartGame.action.canceled += ButtonStartGameNotPressed;
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
@@ -88,8 +95,8 @@ public class Game : MonoBehaviour
             modesList = modesClass.modesList;
             return; // wait until modes are loaded
         }
-
-        if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && CanStartGame)
+        //InputBridge.Instance.AButtonUp
+        if ((Input.GetKeyDown(KeyCode.G) || buttonStartGamePressed) && !startGame && CanStartGame)
         {
             // Set mode values
             time = currentMode.timeLimit;
@@ -208,4 +215,14 @@ public class Game : MonoBehaviour
             }
         });
     }
+
+    private void ButtonStartGamePressed(InputAction.CallbackContext context) 
+    {
+        buttonStartGamePressed = true;
+    }
+
+    private void ButtonStartGameNotPressed(InputAction.CallbackContext context) {
+        buttonStartGamePressed = false;
+    }
+
 }
