@@ -82,6 +82,10 @@ public class Tutorial : MonoBehaviour
     {
         IndexOfCurrentItem = -1;
         OnCompleted.Invoke();
+        foreach (var entry in Items)
+        {
+            entry.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>

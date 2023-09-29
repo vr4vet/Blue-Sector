@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
+using UnityEditor;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -197,14 +199,12 @@ public class Game : MonoBehaviour
             if (currentMode.tutorial.Equals(Tut.NO))
             {
                 tutorial.Dismiss();
-                //tutorial.gameObject.GetNamedChild("SimpleToolTip").GetComponent<TooltipScript>().Deactivate();
             }
             else
             {
                 tutorial.Dismiss();
                 tutorial.MoveNext();
                 IsTutorialCompleted = false;
-                //tutorial.gameObject.GetNamedChild("SimpleToolTip").GetComponent<TooltipScript>().Activate();
             }
         });
     }
