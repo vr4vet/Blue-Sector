@@ -38,12 +38,7 @@ public class ModeLoader : MonoBehaviour
 
     private void LoadXML()
     {
-        // xmlDoc = XDocument.Load(new MemoryStream(modeFile.bytes)); // Alternative for setting list in unity editor.
-        //xmlDoc = XDocument.Load(@"Assets/FishFeeding/Components/Modes/XML/ModeList.xml");
-
-        //xmlDoc = XDocument.Load(Application.streamingAssetsPath + "/XML/ModeList.xml");
         xmlDoc = XDocument.Load(new MemoryStream(Resources.Load<TextAsset>("XML/ModeList").bytes));
-        //xmlDoc = XDocument.Load(Resources.Load<TextAsset>("XML/ModeList").text);
         modes = xmlDoc.Descendants("modes").Elements();
     }
 
