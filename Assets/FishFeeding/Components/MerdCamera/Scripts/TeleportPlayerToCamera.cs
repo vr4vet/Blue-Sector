@@ -62,7 +62,7 @@ public class TeleportPlayerToCamera : MonoBehaviour
     // Moves player to original position
     public void TeleportBack()
     {
-        Teleport.TeleportPlayer(playerStartPosition + new Vector3(0, 2, 0), playerStartRotation);
+        Teleport.TeleportPlayer(playerStartPosition, playerStartRotation);
         Gravity.GravityEnabled = true;
 
         foreach (var (camera, layer) in cameraLayers)
