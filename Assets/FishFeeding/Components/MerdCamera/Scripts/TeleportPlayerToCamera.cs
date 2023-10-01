@@ -1,11 +1,14 @@
 ﻿#nullable enable
 using BNG;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
 public class TeleportPlayerToCamera : MonoBehaviour
 {
+    //[SerializeField] private PlayerTeleport Teleport;
+    //[SerializeField] private Transform 
     private readonly List<(Camera, LayerMask)> cameraLayers = new();
     private Vector3 playerStartPosition;
     private Quaternion playerStartRotation;
@@ -20,15 +23,14 @@ public class TeleportPlayerToCamera : MonoBehaviour
             return;
         }
 
-        var playerController = BNGPlayerLocator.Instance.PlayerController;
-        var destination = selectedCamera.transform.position - playerController.CameraRig.localPosition;
+        Transform playerController = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerController");
+        Vector3 destination = selectedCamera.transform.parent.position;
         playerController.GetComponent<PlayerGravity>().GravityEnabled = false;
         playerStartPosition = playerController.transform.position;
         playerStartRotation = playerController.transform.rotation;
         playerController.transform.SetPositionAndRotation(destination, playerStartRotation);
-
-        var postProcessLayer = selectedCamera.GetComponent<PostProcessLayer>().volumeLayer;
-        var cameras = playerController.CameraRig.GetComponentsInChildren<Camera>();
+        LayerMask postProcessLayer = selectedCamera.GetComponent<PostProcessLayer>().volumeLayer;
+        Camera[] cameras = playerController.Find("CameraRig").GetComponentsInChildren<Camera>();
         foreach (var camera in cameras)
         {
             var layer = camera.GetComponent<PostProcessLayer>();
