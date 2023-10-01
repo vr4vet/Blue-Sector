@@ -7,8 +7,10 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class TeleportPlayerToCamera : MonoBehaviour
 {
-    //[SerializeField] private PlayerTeleport Teleport;
-    //[SerializeField] private Transform 
+    [SerializeField] private GameObject PlayerController; 
+    [SerializeField] private PlayerTeleport Teleport;
+    [SerializeField] private PlayerGravity Gravity;
+    [SerializeField] private GameObject CameraRig;
     private readonly List<(Camera, LayerMask)> cameraLayers = new();
     private Vector3 playerStartPosition;
     private Quaternion playerStartRotation;
@@ -23,14 +25,22 @@ public class TeleportPlayerToCamera : MonoBehaviour
             return;
         }
 
-        Transform playerController = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerController");
+        
+        playerStartPosition = PlayerController.transform.position;
+        playerStartRotation = PlayerController.transform.rotation;
+
+        Teleport.TeleportPlayer(selectedCamera.transform.position, selectedCamera.transform.rotation);
+        Gravity.GravityEnabled = false;
+        Camera[] cameras = CameraRig.GetComponentsInChildren<Camera>();
+/*        Transform playerController = GameObject.FindGameObjectWithTag("Player").transform.Find("PlayerController");
         Vector3 destination = selectedCamera.transform.parent.position;
         playerController.GetComponent<PlayerGravity>().GravityEnabled = false;
         playerStartPosition = playerController.transform.position;
         playerStartRotation = playerController.transform.rotation;
         playerController.transform.SetPositionAndRotation(destination, playerStartRotation);
+*/
         LayerMask postProcessLayer = selectedCamera.GetComponent<PostProcessLayer>().volumeLayer;
-        Camera[] cameras = playerController.Find("CameraRig").GetComponentsInChildren<Camera>();
+        //Camera[] cameras = playerController.Find("CameraRig").GetComponentsInChildren<Camera>();
         foreach (var camera in cameras)
         {
             var layer = camera.GetComponent<PostProcessLayer>();
@@ -47,9 +57,11 @@ public class TeleportPlayerToCamera : MonoBehaviour
     // Moves player to original position
     public void TeleportBack()
     {
-        var playerController = BNGPlayerLocator.Instance.PlayerController;
-        playerController.transform.SetPositionAndRotation(playerStartPosition, playerStartRotation);
-        playerController.GetComponent<PlayerGravity>().GravityEnabled = true;
+        Teleport.TeleportPlayer(playerStartPosition + new Vector3(0, 2, 0), playerStartRotation);
+        Gravity.GravityEnabled = true;
+        //var playerController = BNGPlayerLocator.Instance.PlayerController;
+        //playerController.transform.SetPositionAndRotation(playerStartPosition, playerStartRotation);
+        //playerController.GetComponent<PlayerGravity>().GravityEnabled = true;
 
         foreach (var (camera, layer) in cameraLayers)
         {
