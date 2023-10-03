@@ -6,29 +6,46 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class TeleportPlayerToCamera : MonoBehaviour
 {
+    [SerializeField] private GameObject PlayerController; 
+
+    private PlayerTeleport Teleport;
+    private PlayerGravity Gravity;
+    private GameObject CameraRig;
+
     private readonly List<(Camera, LayerMask)> cameraLayers = new();
+
     private Vector3 playerStartPosition;
     private Quaternion playerStartRotation;
 
+    private void Start()
+    {
+        // get the necessary parts of the player rig
+        Teleport = PlayerController.GetComponent<PlayerTeleport>();
+        Gravity = PlayerController.GetComponent<PlayerGravity>();
+        CameraRig = PlayerController.transform.Find("CameraRig").gameObject;
+    }
 
+    // Moves player to the fish cage
     public void TeleportToCamera()
     {
-        //save player position for the return trip
-        var selectedCamera = GetComponent<MerdCameraController>().SelectedCamera;
+        // get the currently selected camera
+        Camera? selectedCamera = GetComponent<MerdCameraController>().SelectedCamera;
         if (selectedCamera == null)
         {
             return;
         }
 
-        var playerController = BNGPlayerLocator.Instance.PlayerController;
-        var destination = selectedCamera.transform.position - playerController.CameraRig.localPosition;
-        playerController.GetComponent<PlayerGravity>().GravityEnabled = false;
-        playerStartPosition = playerController.transform.position;
-        playerStartRotation = playerController.transform.rotation;
-        playerController.transform.SetPositionAndRotation(destination, playerStartRotation);
+        // save player position for return trip
+        playerStartPosition = PlayerController.transform.position;
+        playerStartRotation = PlayerController.transform.rotation;
 
-        var postProcessLayer = selectedCamera.GetComponent<PostProcessLayer>().volumeLayer;
-        var cameras = playerController.CameraRig.GetComponentsInChildren<Camera>();
+        // teleport player to the camera's fish cage
+        Teleport.TeleportPlayerToTransform(selectedCamera.transform.parent.transform);
+        Gravity.GravityEnabled = false;
+        
+        // set up underwater shader
+        Camera[] cameras = CameraRig.GetComponentsInChildren<Camera>();
+        LayerMask postProcessLayer = selectedCamera.GetComponent<PostProcessLayer>().volumeLayer;
         foreach (var camera in cameras)
         {
             var layer = camera.GetComponent<PostProcessLayer>();
@@ -45,18 +62,12 @@ public class TeleportPlayerToCamera : MonoBehaviour
     // Moves player to original position
     public void TeleportBack()
     {
-        var playerController = BNGPlayerLocator.Instance.PlayerController;
-        playerController.transform.SetPositionAndRotation(playerStartPosition, playerStartRotation);
-        playerController.GetComponent<PlayerGravity>().GravityEnabled = true;
+        Teleport.TeleportPlayer(playerStartPosition, playerStartRotation);
+        Gravity.GravityEnabled = true;
 
         foreach (var (camera, layer) in cameraLayers)
         {
             camera.GetComponent<PostProcessLayer>().volumeLayer = layer;
         }
-        //foreach (var component in cameraComponents)
-        //{
-        //    Destroy(component);
-        //}
-        //cameraComponents.Clear();
     }
 }

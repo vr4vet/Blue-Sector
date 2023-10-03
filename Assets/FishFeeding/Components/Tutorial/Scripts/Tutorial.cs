@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor;
 
 public class Tutorial : MonoBehaviour
 {
-    public TutorialEntry[] Items = Array.Empty<TutorialEntry>();
+    public List<TutorialEntry> Items = new List<TutorialEntry>();
 
     /// <summary>
     /// Gets an event which is fired when all the tutorial entires have been completed.
@@ -25,11 +24,11 @@ public class Tutorial : MonoBehaviour
 
     //Setting the necessary values and variables needed
     public TutorialEntry Current
-        => IndexOfCurrentItem >= 0 && IndexOfCurrentItem < Items.Length
+        => IndexOfCurrentItem >= 0 && IndexOfCurrentItem < Items.Count
         ? Items[IndexOfCurrentItem]
         : null;
 
-   private int IndexOfCurrentItem
+    private int IndexOfCurrentItem
     {
         get => indexOfCurrentItem;
         set
@@ -82,6 +81,10 @@ public class Tutorial : MonoBehaviour
     {
         IndexOfCurrentItem = -1;
         OnCompleted.Invoke();
+        foreach (var entry in Items)
+        {
+            entry.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -90,18 +93,18 @@ public class Tutorial : MonoBehaviour
     /// <returns><see langword="true"/> if there are more entires in the tutorial.</returns>
     public void MoveNext()
     {
-        IndexOfCurrentItem = Math.Min(IndexOfCurrentItem, Items.Length) + 1;
+        IndexOfCurrentItem = Math.Min(IndexOfCurrentItem, Items.Count) + 1;
         //Debug.Log(IndexOfCurrentItem);
         foreach (var entry in Items)
         {
-            if(entry != Current) entry.gameObject.SetActive(false);
-            if(entry == Current) entry.gameObject.SetActive(true);
+            if (entry != Current) entry.gameObject.SetActive(false);
+            if (entry == Current) entry.gameObject.SetActive(true);
         }
 
-/*        if (IndexOfCurrentItem == Items.Length && Items.Length > 0)
-        {
-            OnCompleted.Invoke();
-        }*/
+        /*        if (IndexOfCurrentItem == Items.Count && Items.Count > 0)
+                {
+                    OnCompleted.Invoke();
+                }*/
     }
 
     /// <summary>
@@ -120,14 +123,15 @@ public class Tutorial : MonoBehaviour
     {
         foreach (var entry in Items)
         {
-            if(entry != Current) entry.gameObject.SetActive(false);
-            if(entry == Current) entry.gameObject.SetActive(true);
-            if(entry.GetComponents<TutorialEntry>().Length<=0) ArrayUtility.Remove(ref Items, entry);
+            if (entry != Current) entry.gameObject.SetActive(false);
+            if (entry == Current) entry.gameObject.SetActive(true);
+            if (entry.GetComponents<TutorialEntry>().Length <= 0) Items.Remove(entry);
             entry.Tutorial = this;
         }
 
     }   //For debugging purposes, proceeds to the next tutorial step when the spacebar is pressed
-    private void Update(){
+    private void Update()
+    {
         if (Input.GetKeyDown("space"))
         {
             MoveNext();
