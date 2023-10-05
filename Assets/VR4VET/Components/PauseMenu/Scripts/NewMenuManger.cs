@@ -1,10 +1,8 @@
-/* Copyright (C) 2022 IMTEL NTNU - All Rights Reserved
- * Developer: Jorge Garcia
- * Ask your questions by email: jorgeega@ntnu.no
+/* Developer: Jorge Garcia
+ * Ask your questions on github: https://github.com/Jorest
  */
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -13,28 +11,22 @@ using UnityEngine.XR;
 
 public class NewMenuManger : MonoBehaviour
 {
-
-    [SerializeField]public GameObject player;
     [SerializeField] public Material PauseSkyboxMat;
     [SerializeField] public Material SkyboxMat;
     [SerializeField] private LayerMask _menuLayers;  //layers mask to put on top when the game is paused
-    [SerializeField] private InputActionAsset _actionAsset; //we need this to block certain actions
     [SerializeField] private Material _wallsMaterial;
     [SerializeField] private bool _holdToOpen;
-
 
     // Defined in Unity, refers to image used in loading animation.
     [SerializeField] private Image LoadingWheel;
 
     private Camera _cam;
-    [SerializeField] private GameObject _aboutCanvas;
     [SerializeField] private GameObject _menuCanvas;
-    public GameObject stateSaverComponent;
+    // public GameObject stateSaverComponent;
 
     private GameObject _savedStates;
     private bool _menuOpen = false;
     private float _holdtime = 1.5f;
-
 
     /// <summary>
     /// This Script manages all aspects of the Pause Menu:
@@ -42,21 +34,17 @@ public class NewMenuManger : MonoBehaviour
     /// Change transparency of material while pausing
     /// </summary>
 
-    void Start()
+    private void Start()
     {
-               
         _cam = Camera.main;
 
         Color c = _wallsMaterial.color;
         c.a = 1f;
         _wallsMaterial.color = c;
-
     }
-
 
     public void ToggleMenu()
     {
-        Debug.Log("norsk");
         _menuOpen = !_menuOpen;
 
         if (_menuOpen)
@@ -65,17 +53,15 @@ public class NewMenuManger : MonoBehaviour
             ResumeGame();
     }
 
-     void PauseGame()
+    private void PauseGame()
     {
         Color c = _wallsMaterial.color;
-        c.a = 0.7f;
+        c.a = 0.8f;
         _wallsMaterial.color = c;
         Time.timeScale = 0; // pauses time events
         RenderSettings.skybox = PauseSkyboxMat;
         _cam.cullingMask = _menuLayers; //show only the chosen menu layers
         _menuCanvas.SetActive(true);
-     
-
     }
 
     public void ResumeGame()
@@ -84,16 +70,10 @@ public class NewMenuManger : MonoBehaviour
         c.a = 1f;
         _wallsMaterial.color = c;
         Time.timeScale = 1;
-        RenderSettings.skybox = SkyboxMat ;
+        RenderSettings.skybox = SkyboxMat;
         _cam.cullingMask = -1; // -1 = "Everything"
         _menuCanvas.SetActive(false);
-        _aboutCanvas.SetActive(false);
-
-
     }
-
-
-  
 
     public void Restart()
     {
@@ -101,22 +81,6 @@ public class NewMenuManger : MonoBehaviour
         Time.timeScale = 1;
         //back to the first scene
         SceneManager.LoadScene(0);
-
-
-
-    }
-
-    public void OpenAbout()
-    {
-        _aboutCanvas.SetActive(true);
-        _menuCanvas.SetActive(false);
-    }
-
-
-    public void CloseAbout()
-    {
-        _aboutCanvas.SetActive(false);
-        _menuCanvas.SetActive(true);
     }
 
     public void OpenSaves()
@@ -144,34 +108,31 @@ public class NewMenuManger : MonoBehaviour
 
     public void ExitGame()
     {
-        stateSaverComponent.GetComponent<stateSaver>().saveObjects();
+        // stateSaverComponent.GetComponent<stateSaver>().saveObjects();
         Application.Quit();
     }
 
-
-
     public void PressHoldMenu(InputAction.CallbackContext context)
-    {
+    {       
+        Debug.Log("opening menu...");
         if (_holdToOpen)
         {
             if (context.started)
             {
                 StartCoroutine(HoldPause());
             }
-        } else
+        }
+        else
         {
             ToggleMenu();
         }
-       
     }
 
     // Loading wheel to open the pause menu
-    public IEnumerator HoldPause()
+    private IEnumerator HoldPause()
     {
-
         for (float I = 0f; I < _holdtime; I += Time.deltaTime)
         {
-
             // Get left-handed device and its current state (pressed or not).
             UnityEngine.XR.InputDevice _rightDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
             _rightDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out bool triggerValue);
@@ -185,9 +146,8 @@ public class NewMenuManger : MonoBehaviour
             // Open menu if it has been continuously pressed.
             if (I >= 1f)
             {
-
                 LoadingWheel.fillAmount = 0f;
-                I = _holdtime+1;
+                I = _holdtime + 1;
 
                 PauseGame();
             }
@@ -195,16 +155,10 @@ public class NewMenuManger : MonoBehaviour
             // If trigger is no longer pressed, reset the LoadingWheel.
             if ((!triggerValue))
             {
-
                 LoadingWheel.fillAmount = 0f;
                 I = 1.6f;
             }
             yield return null;
         }
     }
-
-
-
-
-
 }
