@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Tablet;
 using BNG;
+using Task;
 
 public class InspectionTaskManager : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class InspectionTaskManager : MonoBehaviour
         if(AddFish(fish)){
             inspectedFishCount++;
             if(inspectedFishCount == inspectionTarget){
-                taskHolder.AddPoints(activityInspect, skill1, 10);
+                /*taskHolder.AddPoints(activityInspect, skill1, 10);*/
                 screenController.DrawScreen(fish);
             } else {
                 screenController.DrawScreen(fish);
