@@ -43,12 +43,15 @@ public sealed class MerdCameraController : MonoBehaviour
                 return;
             }
 
+            // get position of movement track's fish system (ad-hoc solution to prevent leaving cage)
+            var cagePosition = value.transform.parent.transform.parent.transform.position;
+            
             var scale = value.localScale;
             // get the dominant axis in the x-z plane based on scale
             var trackAxis = Vector3.up + (scale.x > scale.z
                 ? Vector3.right
                 : Vector3.forward);
-            var min = Vector3.Scale(trackAxis, value.position - (trackAxis * scale.magnitude) / 2f);
+            var min = Vector3.Scale(trackAxis, cagePosition /*value.position*/ - (trackAxis * scale.magnitude) / 2f);
             localTrackRange = (min, min + trackAxis * scale.magnitude);
             movementTrack = value;
         }
