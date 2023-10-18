@@ -14,8 +14,9 @@ public class Levels : MonoBehaviour
     private string translatedBasic;
     private string translatedAdvanced;
 
-    void Start()
+    void Awake()
     {
+        Debug.Log("Test");
         currentLevelText = GetComponentInChildren<TextMeshProUGUI>();
         modes = FindObjectOfType<Modes>();
         modes.OnModeChanged += Levels_OnModeChanged;
