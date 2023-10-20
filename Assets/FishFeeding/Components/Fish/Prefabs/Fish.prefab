@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4545945066944266035}
   - component: {fileID: 4545945066944266036}
-  m_Layer: 6
+  m_Layer: 4
   m_Name: FishSprite(Clone)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4545945066944266037}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1}
-  m_LocalScale: {x: 0.27, y: 0.2, z: 0.24}
+  m_LocalPosition: {x: 0, y: 0, z: -0.15}
+  m_LocalScale: {x: 0.29, y: 0.2, z: 0.29}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5081597436798597803}
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d2143803b5c848945845fd7056505ea3, type: 3}
-  m_Color: {r: 0.24528301, g: 0.23487005, b: 0.23487005, a: 1}
+  m_Color: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5081597436798597803}
   - component: {fileID: 5081597436798597802}
   - component: {fileID: 4545945065992470969}
-  m_Layer: 6
+  m_Layer: 4
   m_Name: Fish
   m_TagString: Fish
   m_Icon: {fileID: 0}
@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79b0135601ded144ab85ba2574e16c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomFish: 0
 --- !u!205 &4545945065992470969
 LODGroup:
   m_ObjectHideFlags: 0
@@ -141,7 +142,7 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: -0.030149132, y: -0.0122906715, z: -0.14157656}
   m_Size: 0.8931647
-  m_FadeMode: 1
+  m_FadeMode: 0
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
@@ -149,7 +150,7 @@ LODGroup:
     fadeTransitionWidth: 0.453
     renderers:
     - renderer: {fileID: 8074297095499593951}
-  - screenRelativeHeight: 0.21797599
+  - screenRelativeHeight: 0.17700364
     fadeTransitionWidth: 0.452
     renderers:
     - renderer: {fileID: 4545945066944266036}
@@ -167,51 +168,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100010, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100012, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100014, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100016, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100018, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100020, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 100022, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d5b11c64f880d5e48a34b0d9b479efac, type: 3}
       propertyPath: m_RootOrder

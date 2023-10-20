@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class HologramScript : MonoBehaviour
@@ -20,7 +17,15 @@ public class HologramScript : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Offset camera on Y-axis")]
-    private float offsetY = 0.5f;
+    private float offsetY = 0f;
+
+    [SerializeField]
+    [Tooltip("Modify Z-axis movement limit. Movement is multiplied with value.")]
+    private float modZ = 1f;
+
+    [SerializeField]
+    [Tooltip("Modify Y-axis movement limit. Movement is multiplied with value.")]
+    private float modY = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +38,7 @@ public class HologramScript : MonoBehaviour
         currentFishSystem = MerdCameraController.SelectedFishSystem;
         hologramCamera = transform.Find("MerdHologramCamera").gameObject;
         holoZ = (transform.GetComponent<BoxCollider>().size.z) / 2;     // divide by two because we're using radius, not diameter.
-        holoY = (transform.GetComponent<BoxCollider>().size.y);  
+        holoY = (transform.GetComponent<BoxCollider>().size.y) / 2;     // divide by two because similair reason regarding height.
     }
 
     // Update is called once per frame
@@ -43,7 +48,7 @@ public class HologramScript : MonoBehaviour
         Vector3 position = currentCamera.transform.localPosition;
         float tempZ = (position.z + offsetZ) * holoZ;
         float tempY = (position.y + offsetY) * holoY;  
-        hologramCamera.transform.localPosition = new Vector3(0.0f, tempY / currentFishSystem.height, tempZ / currentFishSystem.radius);
+        hologramCamera.transform.localPosition = new Vector3(0.0f, tempY * modY, tempZ * modZ);
         hologramCamera.transform.localRotation = currentCamera.transform.localRotation;
     }
 

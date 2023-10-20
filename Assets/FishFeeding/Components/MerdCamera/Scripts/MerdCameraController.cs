@@ -1,7 +1,6 @@
 #nullable enable
 using BNG;
 using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -42,7 +41,7 @@ public sealed class MerdCameraController : MonoBehaviour
             {
                 return;
             }
-
+            
             var scale = value.localScale;
             // get the dominant axis in the x-z plane based on scale
             var trackAxis = Vector3.up + (scale.x > scale.z
@@ -73,9 +72,7 @@ public sealed class MerdCameraController : MonoBehaviour
             }
 
             selectedCamera = value;
-            MovementTrack = value == null ? null : value
-                .GetComponentsInChildren<Transform>()
-                .First(x => x.parent == value.transform);
+            MovementTrack = value == null ? null : value.transform.parent.transform;    // movement track is parent
 
             if (value != null)
             {
