@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class FishScript : MonoBehaviour
 {
+    private Vector3 fishPosition;
     private Vector3 direction;
     private Vector3 movement;
     private float radiusSquared;
@@ -51,8 +52,8 @@ public class FishScript : MonoBehaviour
     void Update()
     {
 
-        var transform = gameObject.transform;
-        var fishPosition = transform.position;
+        //var transform = gameObject.transform;
+        fishPosition = gameObject.transform.position;
         if (IsColliding(fishPosition))
         {
             if (!waitingForReturn)
@@ -123,9 +124,9 @@ public class FishScript : MonoBehaviour
      */   
     void PeriodicUpdates()
     {
-        fishSystemPosition = fishSystem.transform.position;
+        //fishSystemPosition = fishSystem.transform.position;
 
-        Vector3 fishPosition = gameObject.transform.position;
+        //Vector3 fishPosition = gameObject.transform.position;
         float posY = fishPosition.y;
 
         FishSystemScript.FishState state = fishSystemScript.state;
