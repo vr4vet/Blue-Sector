@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Task;
 using TMPro.Examples;
 using UnityEngine;
@@ -41,6 +43,10 @@ public class ScoreTablet : MonoBehaviour
             FishSystemScript fishSystemScript = merd.GetComponent<FishSystemScript>();
             prevFeedingIntensities.Add(fishSystemScript, fishSystemScript.feedingIntensity);
         }
+        /*foreach (KeyValuePair<FishSystemScript, FishSystemScript.FeedingIntensity> ele in prevFeedingIntensities) {
+            Debug.Log( ele.Key);
+            Debug.Log(ele.Value);
+        }*/
 
         foreach (Subtask subTask in fishFeedTask.Subtasks) {
                 subTask.SetCompleated(false);
@@ -72,12 +78,12 @@ public class ScoreTablet : MonoBehaviour
             return;
         }
         selectedFishSystem = fishSystemScript;
-        Subtask firstSubTask = fishFeedTask.GetSubtask("Switch into cage");
-        firstSubTask.SetCompleated(true);
+        Subtask switchSubTask = fishFeedTask.GetSubtask("Switch to another cage");
+        switchSubTask.SetCompleated(true);
         Debug.Log("firstsubtask completed");
 
         foreach (Subtask subTask in fishFeedTask.Subtasks) {
-            if (subTask != firstSubTask)
+            if (subTask != switchSubTask)
                 subTask.SetCompleated(false);
         }
 
@@ -88,7 +94,6 @@ public class ScoreTablet : MonoBehaviour
             return;
         }
         fishFeedTask.GetSubtask("Steer the camera").SetCompleated(true);
-        fishFeedTask.GetSubtask("Observe the situation").SetCompleated(true);
     }
 
     public void FeedingIntensityChanged() {
@@ -96,7 +101,13 @@ public class ScoreTablet : MonoBehaviour
             return;
         }
         if (prevFeedingIntensities[selectedFishSystem] != selectedFishSystem.feedingIntensity) {
+            Debug.Log(prevFeedingIntensities[selectedFishSystem]);
+            Debug.Log(selectedFishSystem.feedingIntensity);
             fishFeedTask.GetSubtask("Adjust feeding intensity").SetCompleated(true);
+            Debug.Log("secondsubtask completed");
+        }
+        foreach (FishSystemScript fishSystemScript in prevFeedingIntensities.Keys.ToList()) {
+            prevFeedingIntensities[fishSystemScript] = fishSystemScript.feedingIntensity;
         }
     }
 

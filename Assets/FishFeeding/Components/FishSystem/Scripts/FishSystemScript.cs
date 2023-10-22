@@ -47,7 +47,7 @@ public class FishSystemScript : MonoBehaviour
     {
         foodBase = amountOfFish * eatingAmount;
         state = FishState.Idle;     // initiate in Idle state
-        feedingIntensity = FeedingIntensity.Medium;     // initiate with medium feeding intensity
+        feedingIntensity = FeedingIntensity.Low;     // initiate with medium feeding intensity
         foodGivenPerSec = foodBase; // initiate foodGivenPerSec at medium level when fish is full
 
         // get position for spawning fish within fish system boundaries
