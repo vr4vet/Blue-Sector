@@ -12,6 +12,7 @@ public sealed class MerdCameraController : MonoBehaviour
     private (Vector3 Min, Vector3 Max) localTrackRange = DefaultTrackRange;
     private Camera? selectedCamera;
     private Transform? movementTrack;
+    private FishSystemScript? selectedFishSystem;
     private int selectedCameraIndex = -1;
 
     public GameObject? Hologram; 
@@ -72,7 +73,7 @@ public sealed class MerdCameraController : MonoBehaviour
             }
 
             selectedCamera = value;
-            MovementTrack = value == null ? null : value.transform.parent.transform;    // movement track is parent
+            MovementTrack = value == null ? null : SelectedFishSystem.transform.Find("CameraTrack");    // movement track is parent
 
             if (value != null)
             {
