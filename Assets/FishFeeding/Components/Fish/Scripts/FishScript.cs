@@ -126,7 +126,7 @@ public class FishScript : MonoBehaviour
     {
         //fishSystemPosition = fishSystem.transform.position;
 
-        //Vector3 fishPosition = gameObject.transform.position;
+        fishPosition = gameObject.transform.position;
         float posY = fishPosition.y;
 
         FishSystemScript.FishState state = fishSystemScript.state;
