@@ -16,6 +16,8 @@ public class OceanSurfaceMobile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       meshRenderer.material.mainTextureOffset += new Vector2(Time.deltaTime * scrollX / 10, Time.deltaTime * scrollY / 10);
+        float sineValue = Mathf.Abs(Mathf.Sin(Time.time)) * 0.005f + 0.005f;
+        Debug.Log(sineValue);
+        meshRenderer.material.mainTextureOffset += new Vector2(sineValue * scrollX / 10, sineValue * scrollY / 10);
     }
 }

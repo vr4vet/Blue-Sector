@@ -52,7 +52,7 @@ public class TeleportPlayerToCamera : MonoBehaviour
         // teleport player to the camera's fish cage
         Teleport.TeleportPlayerToTransform(selectedCamera.transform.parent.transform);
         
-        CameraRig.GetComponentInChildren<UnderwaterFog>().EnableEffects();
+        playerCam.GetComponent<UnderwaterFog>().EnableEffects();
         playerCam.backgroundColor = new Color(0, 255, 255, 255);
         playerCam.clearFlags = CameraClearFlags.SolidColor;
         playerCam.cullingMask = selectedCamera.cullingMask;
@@ -77,7 +77,7 @@ public class TeleportPlayerToCamera : MonoBehaviour
         // teleport player back to original position
         Teleport.TeleportPlayer(playerStartPosition, playerStartRotation);
         
-        CameraRig.GetComponentInChildren<UnderwaterFog>().DisableEffects();
+        playerCam.GetComponentInChildren<UnderwaterFog>().DisableEffects();
         playerCam.backgroundColor = originalBackgroundColor;
         playerCam.clearFlags = originalClearFlags;
         playerCam.cullingMask = originalCullingMask;
