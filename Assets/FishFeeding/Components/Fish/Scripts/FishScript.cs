@@ -124,8 +124,6 @@ public class FishScript : MonoBehaviour
      */   
     void PeriodicUpdates()
     {
-        //fishSystemPosition = fishSystem.transform.position;
-
         fishPosition = gameObject.transform.position;
         float posY = fishPosition.y;
 

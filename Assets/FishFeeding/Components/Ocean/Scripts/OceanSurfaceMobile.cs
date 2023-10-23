@@ -16,8 +16,8 @@ public class OceanSurfaceMobile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // sine wave to scroll texture in a wave-like motion
         float sineValue = Mathf.Abs(Mathf.Sin(Time.time)) * 0.005f + 0.005f;
-        Debug.Log(sineValue);
         meshRenderer.material.mainTextureOffset += new Vector2(sineValue * scrollX / 10, sineValue * scrollY / 10);
     }
 }

@@ -30,20 +30,20 @@ public class TeleportPlayerToCamera : MonoBehaviour
     // Moves player to the fish cage
     public void TeleportToCamera()
     {
-        // get the currently selected camera
+        // get currently selected cage camera and player camera
         Camera? selectedCamera = GetComponent<MerdCameraController>().SelectedCamera;
+        Camera? playerCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 
-        if (selectedCamera == null)
+        if (selectedCamera == null || playerCam == null)
         {
             return;
         }
-
-        Camera? playerCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();//CameraRig.GetComponentInChildren<Camera>();
 
         // save player position for return trip
         playerStartPosition = PlayerController.transform.position;
         playerStartRotation = PlayerController.transform.rotation;
 
+        // save player camera settings for restore trip
         originalBackgroundColor = playerCam.backgroundColor;
         originalClearFlags = playerCam.clearFlags;
         originalCullingMask = playerCam.cullingMask;
@@ -52,6 +52,7 @@ public class TeleportPlayerToCamera : MonoBehaviour
         // teleport player to the camera's fish cage
         Teleport.TeleportPlayerToTransform(selectedCamera.transform.parent.transform);
         
+        // set up underwater effects
         playerCam.GetComponent<UnderwaterFog>().EnableEffects();
         playerCam.backgroundColor = new Color(0, 255, 255, 255);
         playerCam.clearFlags = CameraClearFlags.SolidColor;
@@ -64,19 +65,19 @@ public class TeleportPlayerToCamera : MonoBehaviour
     // Moves player to original position
     public void TeleportBack()
     {
-        // get the currently selected camera
+        // get currently selected cage camera and player camera
         Camera? selectedCamera = GetComponent<MerdCameraController>().SelectedCamera;
-
-        if (selectedCamera == null)
+        Camera? playerCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        
+        if (selectedCamera == null || playerCam == null)
         {
             return;
         }
 
-        Camera? playerCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();//CameraRig.GetComponentInChildren<Camera>();
-
         // teleport player back to original position
         Teleport.TeleportPlayer(playerStartPosition, playerStartRotation);
         
+        // Disable underwater effects and camera restore settings
         playerCam.GetComponentInChildren<UnderwaterFog>().DisableEffects();
         playerCam.backgroundColor = originalBackgroundColor;
         playerCam.clearFlags = originalClearFlags;

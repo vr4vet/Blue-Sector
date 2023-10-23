@@ -21,13 +21,14 @@ public class UnderwaterFog : MonoBehaviour
 
     private void OnPreRender()
     {
-        //previousFog = RenderSettings.fog;
+        // save normal scene fog values so OnPostRender() can make sure it is rendered normally from the player's view
         previousFogColor = RenderSettings.fogColor;
         previousFogDensity = RenderSettings.fogDensity;
         previousAmbientLight = RenderSettings.ambientLight;
         previousHaloStrength = RenderSettings.haloStrength;
         previousFlareStrength = RenderSettings.flareStrength;
 
+        // the player head cam normally returns false here, to prevent underwater aesthetics when not in "immersive view"
         if (enableEffects)
         {
             RenderSettings.fogColor = fogColor;
@@ -41,7 +42,7 @@ public class UnderwaterFog : MonoBehaviour
 
     private void OnPostRender()
     {
-        //RenderSettings.fog = previousFog;
+        // restore fog settings so the world fog is not affected for the player
         RenderSettings.fogColor = previousFogColor;
         RenderSettings.fogDensity = previousFogDensity;
         RenderSettings.ambientLight = previousAmbientLight;
@@ -49,6 +50,7 @@ public class UnderwaterFog : MonoBehaviour
         RenderSettings.flareStrength = previousFlareStrength;
     }
 
+    // used to enable effects on player head cam when teleporting to a fish cage (by grabbing the screen and entering "immersive view")
     public void EnableEffects() => enableEffects = true;
     public void DisableEffects() => enableEffects = false;
 }
