@@ -1,21 +1,23 @@
 ﻿#nullable enable
 using BNG;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 public class TeleportPlayerToCamera : MonoBehaviour
 {
-    [SerializeField] private GameObject PlayerController; 
+    [SerializeField] private GameObject PlayerController = null!; 
 
-    private PlayerTeleport Teleport;
-    private PlayerGravity Gravity;
-    private GameObject CameraRig;
+    private PlayerTeleport Teleport = null!;
+    private PlayerGravity Gravity = null!;
+    private GameObject CameraRig = null!;
 
-    private readonly List<(Camera, LayerMask)> cameraLayers = new();
+    //private readonly List<(Camera, LayerMask)> cameraLayers = new();
 
     private Vector3 playerStartPosition;
     private Quaternion playerStartRotation;
+
+    private Color originalBackgroundColor;
+    private CameraClearFlags originalClearFlags;
+    private int originalCullingMask;
 
     private void Start()
     {
@@ -30,44 +32,56 @@ public class TeleportPlayerToCamera : MonoBehaviour
     {
         // get the currently selected camera
         Camera? selectedCamera = GetComponent<MerdCameraController>().SelectedCamera;
+
         if (selectedCamera == null)
         {
             return;
         }
 
+        Camera? playerCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();//CameraRig.GetComponentInChildren<Camera>();
+
         // save player position for return trip
         playerStartPosition = PlayerController.transform.position;
         playerStartRotation = PlayerController.transform.rotation;
 
+        originalBackgroundColor = playerCam.backgroundColor;
+        originalClearFlags = playerCam.clearFlags;
+        originalCullingMask = playerCam.cullingMask;
+
+
         // teleport player to the camera's fish cage
         Teleport.TeleportPlayerToTransform(selectedCamera.transform.parent.transform);
-        Gravity.GravityEnabled = false;
         
-        // set up underwater shader
-        Camera[] cameras = CameraRig.GetComponentsInChildren<Camera>();
-        LayerMask postProcessLayer = selectedCamera.GetComponent<PostProcessLayer>().volumeLayer;
-        foreach (var camera in cameras)
-        {
-            var layer = camera.GetComponent<PostProcessLayer>();
-            if (layer == null)
-            {
-                continue;
-            }
-
-            cameraLayers.Add((camera, layer.volumeLayer));
-            layer.volumeLayer = postProcessLayer; // water
-        }
+        CameraRig.GetComponentInChildren<UnderwaterFog>().EnableEffects();
+        playerCam.backgroundColor = new Color(0, 255, 255, 255);
+        playerCam.clearFlags = CameraClearFlags.SolidColor;
+        playerCam.cullingMask = selectedCamera.cullingMask;
+        
+       
+        Gravity.GravityEnabled = false;
     }
 
     // Moves player to original position
     public void TeleportBack()
     {
-        Teleport.TeleportPlayer(playerStartPosition, playerStartRotation);
-        Gravity.GravityEnabled = true;
+        // get the currently selected camera
+        Camera? selectedCamera = GetComponent<MerdCameraController>().SelectedCamera;
 
-        foreach (var (camera, layer) in cameraLayers)
+        if (selectedCamera == null)
         {
-            camera.GetComponent<PostProcessLayer>().volumeLayer = layer;
+            return;
         }
+
+        Camera? playerCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();//CameraRig.GetComponentInChildren<Camera>();
+
+        // teleport player back to original position
+        Teleport.TeleportPlayer(playerStartPosition, playerStartRotation);
+        
+        CameraRig.GetComponentInChildren<UnderwaterFog>().DisableEffects();
+        playerCam.backgroundColor = originalBackgroundColor;
+        playerCam.clearFlags = originalClearFlags;
+        playerCam.cullingMask = originalCullingMask;
+
+        Gravity.GravityEnabled = true;
     }
 }

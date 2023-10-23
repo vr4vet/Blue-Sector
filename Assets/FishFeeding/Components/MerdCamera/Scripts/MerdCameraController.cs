@@ -73,7 +73,7 @@ public sealed class MerdCameraController : MonoBehaviour
             }
 
             selectedCamera = value;
-            MovementTrack = value == null ? null : SelectedFishSystem.transform.Find("CameraTrack");    // movement track is parent
+            MovementTrack = value == null ? null : value.transform.parent.transform.Find("CameraTrack"); // movement track is sibling
 
             if (value != null)
             {
