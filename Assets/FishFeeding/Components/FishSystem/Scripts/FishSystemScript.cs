@@ -250,7 +250,7 @@ public class FishSystemScript : MonoBehaviour
         if (fishKilled < amountOfFish)
         {
             // kill fish one by one
-            gameObject.transform.GetChild(1 + fishKilled).GetComponent<FishScript>().Kill();
+            gameObject.transform.GetChild(2 + fishKilled).GetComponent<FishScript>().Kill();
             fishKilled++;
         }
     }
