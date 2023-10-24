@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FishSystemScript : MonoBehaviour
 {
@@ -163,6 +164,7 @@ public class FishSystemScript : MonoBehaviour
         {
             state = FishState.Hungry;
             fullTicks = 0;
+            FishStateChanged.Invoke(this);
             return;
         }
 
@@ -195,12 +197,14 @@ public class FishSystemScript : MonoBehaviour
             // switch to full state, and reset status
             state = FishState.Full;
             hungerStatus = 0;
+            FishStateChanged.Invoke(this);
             return;
         }
         else if (hungerStatus <= secondsToDying)
         {
             // switch to dying state
             state = FishState.Dying;
+            FishStateChanged.Invoke(this);
             return;
         }
 
@@ -228,6 +232,7 @@ public class FishSystemScript : MonoBehaviour
             CancelInvoke(nameof(KillFish));
             state = FishState.Hungry;
             hungerStatus = -20;     // fish should still be almost starving, requiring high feeding intensity to prevent death
+            FishStateChanged.Invoke(this);
         }
         else
         {
@@ -237,6 +242,7 @@ public class FishSystemScript : MonoBehaviour
             }
         }
     }
+
 
     public int fishKilled = 0;
     void KillFish()
@@ -248,6 +254,12 @@ public class FishSystemScript : MonoBehaviour
             fishKilled++;
         }
     }
+
+    /// <summary>
+    /// Gets an event which is raised when the fish state changed.
+    /// </summary>
+    public UnityEvent<FishSystemScript?> FishStateChanged { get; } = new();
+
 
     /* Gives the wasted food in this second based on the state to the merd and the feeding intensity. */
     void ComputeFoodWaste()
