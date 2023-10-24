@@ -57,8 +57,8 @@ public class ScoreTablet : MonoBehaviour
         scoreCount = new Dictionary<string, float>(){
             {"steerCameraCorrect", 0}, {"steerCameraCount", 0},
             {"adjustFeedingCorrect", 0}, {"adjustFeedingCount", 0},
-            {"didNotCheckMerdCount", 0}, {"checkMerdCount", 0},
-            {"merd1SelectedTime", 0}, {"merd2SelectedTime", 0}, {"merd3SelectedTime", 0}};
+            {"didNotCheckMerdCount", 0}, {"checkMerdCount", 0} };
+            //{"merd1SelectedTime", 0}, {"merd2SelectedTime", 0}, {"merd3SelectedTime", 0}};
 
         foreach (Subtask subTask in fishFeedTask.Subtasks) {
              subTask.SetCompleated(false);
@@ -78,6 +78,49 @@ public class ScoreTablet : MonoBehaviour
 
     public void StopScoring() {
         CancelInvoke("UpdateScore");
+    }
+
+    public void GiveFinalTabletScore() {
+        fishFeedTask.GetSubtask("Steer the camera").Points = 0;
+        fishFeedTask.GetSubtask("Adjust feeding intensity").Points = 0;
+        fishFeedTask.GetSubtask("Switch to another cage").Points = 0;
+        Debug.Log("Steer camera: " + fishFeedTask.GetSubtask("Steer the camera").Points);
+        Debug.Log("Adjust feeding intensity: " + fishFeedTask.GetSubtask("Adjust feeding intensity").Points);
+        Debug.Log("Switch to another cage: " + fishFeedTask.GetSubtask("Switch to another cage").Points);
+        foreach (KeyValuePair<string, float> ele in scoreCount) {
+            Debug.Log(ele.Key + ": " + ele.Value);
+        }
+        float steerCameraScore = 0;
+        if (scoreCount["steerCameraCount"] != 0) {
+            steerCameraScore = (scoreCount["steerCameraCorrect"] / scoreCount["steerCameraCount"]) / 3;
+        }
+        Debug.Log("steerScore: " + steerCameraScore);
+        fishFeedTask.GetSubtask("Steer the camera").AddPoints((int)Math.Round(steerCameraScore * 100));
+
+        float adjustFeedingScore = 0;
+        if (scoreCount["adjustFeedingCount"] != 0) {
+            adjustFeedingScore = (scoreCount["adjustFeedingCorrect"] / scoreCount["adjustFeedingCount"]) / 3;
+        }
+        Debug.Log("adjustFeedingScorew: " + adjustFeedingScore);
+        fishFeedTask.GetSubtask("Adjust feeding intensity").AddPoints((int)Math.Round(adjustFeedingScore * 100));
+
+        float checkMerdScore = 0;
+        if (scoreCount["checkMerdCount"] != 0) {
+            checkMerdScore = ((scoreCount["checkMerdCount"] - scoreCount["didNotCheckMerdCount"]) / scoreCount["checkMerdCount"]) / 3;
+        }
+        Debug.Log("checkMerdScore: " + checkMerdScore);
+        fishFeedTask.GetSubtask("Switch to another cage").AddPoints(33);
+
+        Debug.Log("check" + Math.Round(0f * 100));
+
+        Debug.Log("Steer camera: " + fishFeedTask.GetSubtask("Steer the camera").Points);
+        Debug.Log("Adjust feeding intensity: " + fishFeedTask.GetSubtask("Adjust feeding intensity").Points);
+        Debug.Log("Switch to another cage: " + fishFeedTask.GetSubtask("Switch to another cage").Points);
+
+        foreach (string key in scoreCount.Keys.ToList()) {
+            scoreCount[key] = 0;
+        }
+
     }
 
     private void UpdateScore(FishSystemScript fishSystemScript) {
