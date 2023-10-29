@@ -121,7 +121,7 @@ public class FishSystemScript : MonoBehaviour
 
         for (int i = 0; i < fishKilled; i++)
         {
-            gameObject.transform.GetChild(1 + i).GetComponent<FishScript>().Revive();
+            gameObject.transform.GetChild(2 + i).GetComponent<FishScript>().Revive();
         }
         fishKilled = 0;
     }

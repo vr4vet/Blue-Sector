@@ -31,7 +31,7 @@ public class ModeLoader : MonoBehaviour
 
     private void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         LoadXML();
         StartCoroutine(AssignData());
     }
