@@ -132,6 +132,10 @@ public class ScoreTablet : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Updates the score based on the fish cage's current camera position, feeding intensity and if the cage is checked.
+    /// </summary>
+    /// <param name="fishSystemScript">The fishsystemscript for a fish cage.</param>
     private void UpdateScore(FishSystemScript fishSystemScript) {
         if (IsCameraPositionCorrect(fishSystemScript)) {
             scoreCount["steerCameraCorrect"] += 1;
@@ -148,9 +152,13 @@ public class ScoreTablet : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Checks if the camera is facing outwards of the fish cage and at the outer edge of the cage, or if the camera is at the start 
+    /// position.
+    /// </summary>
     private bool IsCameraPositionCorrect(FishSystemScript fishSystemScript) {
         Camera camera = cameras[fishSystemScript];
-        Vector3 zeroVector = new Vector3(0, 0, 0);
+        Vector3 zeroVector = new Vector3(0, 0, 0); // start position of the cameras
         Vector3 targetDir = zeroVector - camera.transform.localPosition;
         float sqrLen = targetDir.sqrMagnitude;
         //float angle = sqrLen;
@@ -164,6 +172,10 @@ public class ScoreTablet : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Gives the score for feeding intensity based on the status of the cage and the current feeding intensity.
+    /// </summary>
+    /// <returns> 1 point if intensity is correct, 0.5 if it's partially correct and 0 otherwise.</returns>
     private float GiveFeedingIntensityScore(FishSystemScript fishSystemScript) {
         if ((fishSystemScript.state == FishSystemScript.FishState.Full && 
             fishSystemScript.feedingIntensity == FishSystemScript.FeedingIntensity.Low) ||
