@@ -17,9 +17,11 @@ public class ScoreTablet : MonoBehaviour
     private Dictionary<FishSystemScript, FishSystemScript.FeedingIntensity> prevFeedingIntensities = new();
     private Dictionary<FishSystemScript, Camera> cameras = new();
     private FishSystemScript.FeedingIntensity prevFeedingIntensity;
-    private Dictionary<string, float> scoreCount = new();
-    private int totalFoodwaste;
-    private float totalHungryTime;
+    //private Dictionary<string, float> scoreCount = new();
+    private float steerCameraCorrect;
+    private float adjustFeedingCorrect;
+    private float didNotCheckMerdCount;
+    private float totalChecks;
 
 
     // Start is called before the first frame update
@@ -38,8 +40,10 @@ public class ScoreTablet : MonoBehaviour
 
         prevFeedingIntensity = selectedFishSystem.feedingIntensity;
 
-        totalFoodwaste = 0;
-        totalHungryTime = 0;
+        steerCameraCorrect = 0;
+        adjustFeedingCorrect = 0;
+        didNotCheckMerdCount = 0;
+        totalChecks = 0;
 
         foreach (GameObject merd in merds) {
             FishSystemScript fishSystemScript = merd.GetComponent<FishSystemScript>();
@@ -52,8 +56,8 @@ public class ScoreTablet : MonoBehaviour
             Debug.Log(ele.Value);
         }*/
 
-        scoreCount = new Dictionary<string, float>(){
-            {"steerCameraCorrect", 0}, {"adjustFeedingCorrect", 0}, {"didNotCheckMerdCount", 0}, {"totalChecks", 0}};
+        /*scoreCount = new Dictionary<string, float>(){
+            {"steerCameraCorrect", 0}, {"adjustFeedingCorrect", 0}, {"didNotCheckMerdCount", 0}, {"totalChecks", 0}};*/
             //{"merd1SelectedTime", 0}, {"merd2SelectedTime", 0}, {"merd3SelectedTime", 0}};
         
         foreach (Subtask subtask in fishFeedTask.Subtasks) {
@@ -89,19 +93,25 @@ public class ScoreTablet : MonoBehaviour
     }*/
 
     public void GiveFinalTabletScore() {
-        foreach (KeyValuePair<string, float> ele in scoreCount) {
+        /*foreach (KeyValuePair<string, float> ele in scoreCount) {
             Debug.Log(ele.Key + ": " + ele.Value);
-        }
+        }*/
 
         float steerCameraScore = 0;
         float adjustFeedingScore = 0;
         float checkMerdScore = 0;
 
-        if (scoreCount["totalChecks"] != 0) {
+        /*if (scoreCount["totalChecks"] != 0) {
             steerCameraScore = scoreCount["steerCameraCorrect"] / scoreCount["totalChecks"];
             adjustFeedingScore = scoreCount["adjustFeedingCorrect"] / scoreCount["totalChecks"];
             checkMerdScore = (scoreCount["totalChecks"] - scoreCount["didNotCheckMerdCount"]) / scoreCount["totalChecks"];
+        }*/
+        if (totalChecks != 0) {
+            steerCameraScore = steerCameraCorrect / totalChecks;
+            adjustFeedingScore = adjustFeedingCorrect / totalChecks;
+            checkMerdScore = (totalChecks - didNotCheckMerdCount) / totalChecks;
         }
+
         Debug.Log("steerScore: " + steerCameraScore);
         Debug.Log("adjustFeedingScorew: " + adjustFeedingScore);
         Debug.Log("checkMerdScore: " + checkMerdScore);
@@ -122,9 +132,13 @@ public class ScoreTablet : MonoBehaviour
         Debug.Log("Camera adjustment: " + taskHolder.GetSkill("Camera adjustment").GetArchivedPoints());
         Debug.Log("Overview of multiple cages: " + taskHolder.GetSkill("Overview of multiple cages").GetArchivedPoints());
 
-        foreach (string key in scoreCount.Keys.ToList()) {
+        /*foreach (string key in scoreCount.Keys.ToList()) {
             scoreCount[key] = 0;
-        }
+        }*/
+        steerCameraCorrect = 0;
+        adjustFeedingCorrect = 0;
+        didNotCheckMerdCount = 0;
+        totalChecks = 0;
 
         foreach (Subtask subtask in fishFeedTask.Subtasks) {
             subtask.Points = 0;
@@ -138,17 +152,17 @@ public class ScoreTablet : MonoBehaviour
     /// <param name="fishSystemScript">The fishsystemscript for a fish cage.</param>
     private void UpdateScore(FishSystemScript fishSystemScript) {
         if (IsCameraPositionCorrect(fishSystemScript)) {
-            scoreCount["steerCameraCorrect"] += 1;
+            steerCameraCorrect += 1;
         }
 
         float feedingIntensityScore = GiveFeedingIntensityScore(fishSystemScript);
-        scoreCount["adjustFeedingCorrect"] += feedingIntensityScore;
+        adjustFeedingCorrect += feedingIntensityScore;
 
         if (fishSystemScript != selectedFishSystem && feedingIntensityScore == 0) {
-            scoreCount["didNotCheckMerdCount"] += 1;
+            didNotCheckMerdCount += 1;
         }
 
-        scoreCount["totalChecks"] += 1;
+        totalChecks += 1;
 
     }
 
