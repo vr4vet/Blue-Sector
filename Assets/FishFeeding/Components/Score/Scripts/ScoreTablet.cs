@@ -14,9 +14,11 @@ public class ScoreTablet : MonoBehaviour
     private MerdCameraController cameraController;
     //[SerializeField]
     private FishSystemScript selectedFishSystem;
-    private Dictionary<FishSystemScript, FishSystemScript.FeedingIntensity> prevFeedingIntensities = new();
-    private Dictionary<FishSystemScript, Camera> cameras = new();
-    private FishSystemScript.FeedingIntensity prevFeedingIntensity;
+    private List<FishSystemScript> fishSystemScripts = new();
+    //private Dictionary<FishSystemScript, FishSystemScript.FeedingIntensity> prevFeedingIntensities = new();
+    private List<FishSystemScript.FeedingIntensity> prevFeedingIntensities = new();
+    //private Dictionary<FishSystemScript, Camera> cameras = new();
+    private Camera[] cameras;
     //private Dictionary<string, float> scoreCount = new();
     private float steerCameraCorrect;
     private float adjustFeedingCorrect;
@@ -36,30 +38,26 @@ public class ScoreTablet : MonoBehaviour
         cameraController = FindObjectOfType<MerdCameraController>();
         cameraController.SelectedFishSystemChanged.AddListener(FishSystemChanged);
 
-        selectedFishSystem = cameraController.SelectedFishSystem;
-
-        prevFeedingIntensity = selectedFishSystem.feedingIntensity;
+        cameras = cameraController.Cameras;
+        selectedFishSystem = cameras[0].GetComponentInParent<FishSystemScript>();;
 
         steerCameraCorrect = 0;
         adjustFeedingCorrect = 0;
         didNotCheckMerdCount = 0;
         totalChecks = 0;
 
+        for (int i = 0; i < 4; i++) {
+            prevFeedingIntensities.Add(FishSystemScript.FeedingIntensity.Low);
+        }
+
         foreach (GameObject merd in merds) {
             FishSystemScript fishSystemScript = merd.GetComponent<FishSystemScript>();
-            prevFeedingIntensities.Add(fishSystemScript, fishSystemScript.feedingIntensity);
+            //prevFeedingIntensities.Add(fishSystemScript, fishSystemScript.feedingIntensity);
+            fishSystemScripts.Add(fishSystemScript);
+            prevFeedingIntensities[fishSystemScript.merdNr] = fishSystemScript.feedingIntensity;
             fishSystemScript.FishStateChanged.AddListener(UpdateScore);
-            cameras.Add(fishSystemScript, fishSystemScript.GetComponentInChildren<Camera>());
         }
-        /*foreach (KeyValuePair<FishSystemScript, FishSystemScript.FeedingIntensity> ele in prevFeedingIntensities) {
-            Debug.Log(ele.Key);
-            Debug.Log(ele.Value);
-        }*/
 
-        /*scoreCount = new Dictionary<string, float>(){
-            {"steerCameraCorrect", 0}, {"adjustFeedingCorrect", 0}, {"didNotCheckMerdCount", 0}, {"totalChecks", 0}};*/
-            //{"merd1SelectedTime", 0}, {"merd2SelectedTime", 0}, {"merd3SelectedTime", 0}};
-        
         foreach (Subtask subtask in fishFeedTask.Subtasks) {
             subtask.Points = 0;
         }
@@ -78,9 +76,9 @@ public class ScoreTablet : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
+    /*void Update() {
 
-    }
+    }*/
 
     /*public void StartScoring() {
         *//*score = 0;*//*
@@ -93,19 +91,10 @@ public class ScoreTablet : MonoBehaviour
     }*/
 
     public void GiveFinalTabletScore() {
-        /*foreach (KeyValuePair<string, float> ele in scoreCount) {
-            Debug.Log(ele.Key + ": " + ele.Value);
-        }*/
-
         float steerCameraScore = 0;
         float adjustFeedingScore = 0;
         float checkMerdScore = 0;
 
-        /*if (scoreCount["totalChecks"] != 0) {
-            steerCameraScore = scoreCount["steerCameraCorrect"] / scoreCount["totalChecks"];
-            adjustFeedingScore = scoreCount["adjustFeedingCorrect"] / scoreCount["totalChecks"];
-            checkMerdScore = (scoreCount["totalChecks"] - scoreCount["didNotCheckMerdCount"]) / scoreCount["totalChecks"];
-        }*/
         if (totalChecks != 0) {
             steerCameraScore = steerCameraCorrect / totalChecks;
             adjustFeedingScore = adjustFeedingCorrect / totalChecks;
@@ -132,9 +121,6 @@ public class ScoreTablet : MonoBehaviour
         Debug.Log("Camera adjustment: " + taskHolder.GetSkill("Camera adjustment").GetArchivedPoints());
         Debug.Log("Overview of multiple cages: " + taskHolder.GetSkill("Overview of multiple cages").GetArchivedPoints());
 
-        /*foreach (string key in scoreCount.Keys.ToList()) {
-            scoreCount[key] = 0;
-        }*/
         steerCameraCorrect = 0;
         adjustFeedingCorrect = 0;
         didNotCheckMerdCount = 0;
@@ -158,7 +144,7 @@ public class ScoreTablet : MonoBehaviour
         float feedingIntensityScore = GiveFeedingIntensityScore(fishSystemScript);
         adjustFeedingCorrect += feedingIntensityScore;
 
-        if (fishSystemScript != selectedFishSystem && feedingIntensityScore == 0) {
+        if (fishSystemScript != selectedFishSystem ) {
             didNotCheckMerdCount += 1;
         }
 
@@ -171,7 +157,7 @@ public class ScoreTablet : MonoBehaviour
     /// position.
     /// </summary>
     private bool IsCameraPositionCorrect(FishSystemScript fishSystemScript) {
-        Camera camera = cameras[fishSystemScript];
+        Camera camera = cameras[fishSystemScript.merdNr - 1];
         Vector3 zeroVector = new Vector3(0, 0, 0); // start position of the cameras
         Vector3 targetDir = zeroVector - camera.transform.localPosition;
         float sqrLen = targetDir.sqrMagnitude;
@@ -235,14 +221,16 @@ public class ScoreTablet : MonoBehaviour
         if (!game.startGame) {
             return;
         }
-        if (prevFeedingIntensities[selectedFishSystem] != selectedFishSystem.feedingIntensity) {
-            Debug.Log(prevFeedingIntensities[selectedFishSystem]);
-            Debug.Log(selectedFishSystem.feedingIntensity);
+        if (prevFeedingIntensities[selectedFishSystem.merdNr] != selectedFishSystem.feedingIntensity) {
+            Debug.Log("Selected merd: "+ selectedFishSystem.merdNr);
+            Debug.Log("Selected merd feeding intensity: " + selectedFishSystem.feedingIntensity);
+            Debug.Log("Selected merd prev feeding intensity: " + prevFeedingIntensities[selectedFishSystem.merdNr]);
             fishFeedTask.GetSubtask("Adjust feeding intensity").SetCompleated(true);
             Debug.Log("secondsubtask completed");
         }
-        foreach (FishSystemScript fishSystemScript in prevFeedingIntensities.Keys.ToList()) {
-            prevFeedingIntensities[fishSystemScript] = fishSystemScript.feedingIntensity;
+        foreach (FishSystemScript fishSystemScript in fishSystemScripts) {
+            prevFeedingIntensities[fishSystemScript.merdNr] = fishSystemScript.feedingIntensity;
+            Debug.Log("MerdNr: " + fishSystemScript.merdNr + " Actual feeding intensity: " + fishSystemScript.feedingIntensity + " updated prev feeding intensity"+prevFeedingIntensities[fishSystemScript.merdNr]);
         }
     }
 
