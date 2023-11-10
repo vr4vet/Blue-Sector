@@ -39,6 +39,7 @@ public class Game : MonoBehaviour
     private Color32 greenColor = new Color32(1, 159, 28, 255);
 
     public Scoring scoring;
+    public ScoreTablet scoreTablet;
     public List<Tutorial> tutorials;
     public Mode currentMode;
     public Modes modesClass;
@@ -53,6 +54,7 @@ public class Game : MonoBehaviour
         merds = GameObject.FindGameObjectsWithTag("Fish System");
         merdCameraController = MerdCameraHost.GetComponent<MerdCameraController>();
         scoring = FindObjectOfType<Scoring>();
+        scoreTablet = FindObjectOfType<ScoreTablet>();
         endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
         GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
         timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
@@ -136,6 +138,7 @@ public class Game : MonoBehaviour
             FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
             merdScript.SetIdle();
         }
+        scoreTablet.GiveFinalTabletScore();
         endScoreText.text = "YOUR SCORE:\n" + scoring.Score;
     }
 
