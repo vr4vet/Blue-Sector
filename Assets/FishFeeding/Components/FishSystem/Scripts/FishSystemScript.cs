@@ -87,8 +87,6 @@ public class FishSystemScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(gameObject.transform.position.y);
-        //Debug.Log(height);
         if (Input.GetKeyDown(KeyCode.J))
         {
             feedingIntensity = FeedingIntensity.Low;
@@ -109,7 +107,6 @@ public class FishSystemScript : MonoBehaviour
             foodGivenPerSec = foodBase * 5 / 3;
             emission.rateOverTime = 40;
         }
-        //Debug.Log(feedingIntensity);
     }
 
     // functions for setting idle state
@@ -119,6 +116,7 @@ public class FishSystemScript : MonoBehaviour
         if (IsInvoking(nameof(KillFish)))
             CancelInvoke(nameof(KillFish));
         hungerStatus = 0;
+        fullTicks = 0;
 
         for (int i = 0; i < fishKilled; i++)
         {
