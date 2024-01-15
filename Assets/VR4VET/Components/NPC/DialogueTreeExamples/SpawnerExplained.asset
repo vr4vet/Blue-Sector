@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: SpawnerExplained
+  m_EditorClassIdentifier: 
+  sections:
+  - dialogue:
+    - 'Hello, I have been spawned at runtime and I will tell you more about it here. '
+    - I am defined in a Scriptable Object called NPC. There you can decide my name,
+      my appearance, my voice,  what I like to talk about, and more.
+    - 'You can easily turn on and off functionality.
+
+      For example, should the
+      NPC follow the player or not?'
+    - The prefab NPCSpawner has methods for spawning the NPC with basic behavior.
+    - You can add your own script to an unpacked NPCSpawner if you want to specify
+      the NPC behavior more.
+    - That is all I know, but you can look at the Scriptable Objects in NPCExamples
+      and NPCSpawner in the scene to learn more.
+    - 'Walk to the pressure plate in front of the box on the right-hand side to start
+      a task. '
+    endAfterDialogue: 1
+    branchPoint:
+      question: 
+      answers: []
