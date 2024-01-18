@@ -8,7 +8,9 @@ public class FishScript : MonoBehaviour
     private float fullnessDivider;
     private float top;
     private float bottom;
-    private bool dead;
+
+    [SerializeField]
+    private bool dead = false;
     private float verticalLimit = 1.5f; // limits how far up or down the next destination will be
 
     [SerializeField]
@@ -44,7 +46,7 @@ public class FishScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.localPosition, destination) < 0.001f && !dead) // generate new destination when reached
+        if (Vector3.Distance(transform.localPosition, destination) < 0.001f) // generate new destination when reached
         { 
             GenerateDestination();
         }
@@ -52,18 +54,15 @@ public class FishScript : MonoBehaviour
         RotateFish();
     }
 
-    // Draw destination in scene view for debugging purposes
-    private void OnDrawGizmos()
-    {
-        Vector3 systemPos = fishSystemScript.transform.position;
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(new Vector3(systemPos.x + destination.x, systemPos.y + destination.y, systemPos.z + destination.z), 0.05f);
-    }
-
     // rotates fish towards its current destination
     void RotateFish()
     {
-        const float rotationLimit = 0.1f;
+        if (dead)
+        {
+            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0); // rotate fish straight if dead
+            return;
+        }
+        const float rotationLimit = 0.2f;   // prevent fish from tipping too far upwards/downwards
         Vector3 targetDirection = destination - transform.localPosition;
         targetDirection.y = Mathf.Clamp(targetDirection.y, -rotationLimit, rotationLimit);
         if (targetDirection != Vector3.zero)
@@ -79,10 +78,9 @@ public class FishScript : MonoBehaviour
         Vector3 fishPosition = transform.localPosition;
 
         if (dead)
-        { 
+        {
             return; 
         }
-        
         if (state != FishSystemScript.FishState.Idle && !randomFish)
         {
             if (state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying)
@@ -105,7 +103,7 @@ public class FishScript : MonoBehaviour
     // public function allowing fish system to kill starving fish
     public void Kill()
     {
-        destinationY = bottom - 0.5f;   // make fish hit bottom
+        destination = new Vector3(destination.x, bottom + 0.5f, destination.z); // make fish hit bottom
         dead = true;
         fishAnimation.Stop();
     }
@@ -121,4 +119,12 @@ public class FishScript : MonoBehaviour
 
     // public function telling this fish to swim randomly and not get hungry etc. Make the fish stream a bit less monotone.
     public void SetRandomFish() => randomFish = true;
+
+    // Draw destination in scene view for debugging purposes
+    private void OnDrawGizmos()
+    {
+        Vector3 systemPos = fishSystemScript.transform.position;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(new Vector3(systemPos.x + destination.x, systemPos.y + destination.y, systemPos.z + destination.z), 0.05f);
+    }
 }
