@@ -38,7 +38,6 @@ public class FishScript : MonoBehaviour
         top = fishSystemScript.height / 2;  // top of merd/water surface
         bottom = -fishSystemScript.height / 2; // bottom of merd
         fullnessDivider = bottom + ((top - bottom) * fishSystemScript.fullnessDivider); // border between hungry and full fish
-        dead = false;
 
         GenerateDestination(); // initialize a destination before fish start swimming
     }
@@ -113,8 +112,6 @@ public class FishScript : MonoBehaviour
     {
         dead = false;
         fishAnimation.Play();
-        //float posY = Random.Range(bottom + 1, top - 1);
-        //transform.position = new Vector3(transform.position.x, posY, transform.position.z);
     }
 
     // public function telling this fish to swim randomly and not get hungry etc. Make the fish stream a bit less monotone.
