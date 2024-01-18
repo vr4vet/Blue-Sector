@@ -9,9 +9,8 @@ public class FishScript : MonoBehaviour
     private float top;
     private float bottom;
     private bool dead;
+    private float verticalLimit = 1.5f; // limits how far up or down the next destination will be
 
-    [SerializeField]
-    private float verticalLimit = 0.0f;
     [SerializeField]
     private bool randomFish;    // makes fish ignore hunger state, meaning it swims randomly. makes fish stream more dynamic
 
@@ -51,6 +50,14 @@ public class FishScript : MonoBehaviour
         }
         transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination, 1 * Time.deltaTime);
         RotateFish();
+    }
+
+    // Draw destination in scene view for debugging purposes
+    private void OnDrawGizmos()
+    {
+        Vector3 systemPos = fishSystemScript.transform.position;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(new Vector3(systemPos.x + destination.x, systemPos.y + destination.y, systemPos.z + destination.z), 0.05f);
     }
 
     // rotates fish towards its current destination
