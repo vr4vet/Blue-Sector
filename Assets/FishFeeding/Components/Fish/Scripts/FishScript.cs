@@ -58,7 +58,6 @@ public class FishScript : MonoBehaviour
     {
         if (dead)
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0); // rotate fish straight if dead
             return;
         }
         const float rotationLimit = 0.2f;   // prevent fish from tipping too far upwards/downwards
