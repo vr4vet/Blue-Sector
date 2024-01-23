@@ -32,6 +32,7 @@ public class FishSystemScript : MonoBehaviour
 
     // [HideInInspector]
     public FishState state;
+    public FishState previousState;
 
     [HideInInspector]
     public enum FeedingIntensity
@@ -46,8 +47,9 @@ public class FishSystemScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foodBase = amountOfFish * eatingAmount;
-        state = FishState.Idle;     // initiate in Idle state
+        Random.InitState(GetInstanceID()); // initiate random seed to prevent synchronized state change between cages
+        foodBase = amountOfFish * eatingAmount;    
+        ChangeState(FishState.Idle); // initiate in Idle state
         feedingIntensity = FeedingIntensity.Low;     // initiate with medium feeding intensity
         foodGivenPerSec = foodBase; // initiate foodGivenPerSec at medium level when fish is full
 
@@ -112,7 +114,7 @@ public class FishSystemScript : MonoBehaviour
     // functions for setting idle state
     public void SetIdle()
     {
-        state = FishState.Idle;
+        ChangeState(FishState.Idle);
         if (IsInvoking(nameof(KillFish)))
             CancelInvoke(nameof(KillFish));
         hungerStatus = 0;
@@ -160,9 +162,8 @@ public class FishSystemScript : MonoBehaviour
         // switch state to hungry, and reset timer
         if (fullTicks >= timeToHungry)
         {
-            state = FishState.Hungry;
+            ChangeState(FishState.Hungry);
             fullTicks = 0;
-            FishStateChanged.Invoke(this);
             return;
         }
 
@@ -193,16 +194,14 @@ public class FishSystemScript : MonoBehaviour
         if (hungerStatus >= secondsToFull)
         {
             // switch to full state, and reset status
-            state = FishState.Full;
+            ChangeState(FishState.Full);
             hungerStatus = 0;
-            FishStateChanged.Invoke(this);
             return;
         }
         else if (hungerStatus <= secondsToDying)
         {
             // switch to dying state
-            state = FishState.Dying;
-            FishStateChanged.Invoke(this);
+            ChangeState(FishState.Dying);
             return;
         }
 
@@ -223,14 +222,20 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
+    void ChangeState(FishState newState)
+    {
+        previousState = state;
+        state = newState;
+        FishStateChanged.Invoke(this);
+    }
+
     void HandleDying()
     {
         if (feedingIntensity == FeedingIntensity.High)
         {
             CancelInvoke(nameof(KillFish));
-            state = FishState.Hungry;
+            ChangeState(FishState.Hungry);
             hungerStatus = -20;     // fish should still be almost starving, requiring high feeding intensity to prevent death
-            FishStateChanged.Invoke(this);
         }
         else
         {
