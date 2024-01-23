@@ -11,6 +11,7 @@ public class FishScript : MonoBehaviour
 
     [SerializeField]
     private bool dead = false;
+    private bool returnedAfterEating = true;   // used to ensure "even spread" of fish when swimming downwards
     private float verticalLimit = 1.5f; // limits how far up or down the next destination will be
 
     [SerializeField]
@@ -39,14 +40,23 @@ public class FishScript : MonoBehaviour
         bottom = -fishSystemScript.height / 2; // bottom of merd
         fullnessDivider = bottom + ((top - bottom) * fishSystemScript.fullnessDivider); // border between hungry and full fish
 
+        fishSystemScript.FishStateChanged.AddListener(SetReturnedAfterEating);
+
         GenerateDestination(); // initialize a destination before fish start swimming
+    }
+
+    private void SetReturnedAfterEating(FishSystemScript fishSystem)
+    {
+        returnedAfterEating = false;
+        GenerateDestination();
     }
 
     // Update is called once per frame
     void Update()
     {
         if (Vector3.Distance(transform.localPosition, destination) < 0.001f) // generate new destination when reached
-        { 
+        {
+            returnedAfterEating = true;
             GenerateDestination();
         }
         transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination, 1 * Time.deltaTime);
@@ -60,7 +70,7 @@ public class FishScript : MonoBehaviour
         {
             return;
         }
-        const float rotationLimit = 0.2f;   // prevent fish from tipping too far upwards/downwards
+        const float rotationLimit = 0.3f;   // prevent fish from tipping too far upwards/downwards
         Vector3 targetDirection = destination - transform.localPosition;
         targetDirection.y = Mathf.Clamp(targetDirection.y, -rotationLimit, rotationLimit);
         if (targetDirection != Vector3.zero)
@@ -73,12 +83,14 @@ public class FishScript : MonoBehaviour
     private void GenerateDestination()
     {
         FishSystemScript.FishState state = fishSystemScript.state;
+        FishSystemScript.FishState previousState = fishSystemScript.previousState;
         Vector3 fishPosition = transform.localPosition;
 
         if (dead)
         {
             return; 
         }
+
         if (state != FishSystemScript.FishState.Idle && !randomFish)
         {
             if (state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying)
@@ -87,7 +99,11 @@ public class FishScript : MonoBehaviour
             }
             else if (state == FishSystemScript.FishState.Full)
             {
-                destinationY = Mathf.Clamp(Random.Range(fishPosition.y - verticalLimit, fishPosition.y + verticalLimit), bottom, fullnessDivider);
+                if (returnedAfterEating)
+                    destinationY = Mathf.Clamp(Random.Range(fishPosition.y - verticalLimit, fishPosition.y + verticalLimit), bottom, fullnessDivider);
+                else
+                    destinationY = Mathf.Clamp(Random.Range(bottom, fishPosition.y + verticalLimit), bottom, fullnessDivider);
+
             }
         } 
         else
