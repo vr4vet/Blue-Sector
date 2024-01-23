@@ -83,7 +83,6 @@ public class FishScript : MonoBehaviour
     private void GenerateDestination()
     {
         FishSystemScript.FishState state = fishSystemScript.state;
-        FishSystemScript.FishState previousState = fishSystemScript.previousState;
         Vector3 fishPosition = transform.localPosition;
 
         if (dead)
