@@ -28,7 +28,7 @@ public class ScoreTablet : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
-        taskHolder = GetComponent<TaskHolder>();
+        taskHolder = FindObjectOfType<TaskHolder>();
         fishFeedTask = taskHolder.GetTask("Feed the fish");
 
         game = FindObjectOfType<Game>();
