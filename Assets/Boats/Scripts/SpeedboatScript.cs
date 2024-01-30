@@ -13,7 +13,7 @@ public class SpeedboatScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.timeScale == 1.0f) // only move boat if time is in 1x speed, or else the pause causes an offset (floating/sinking boat)
-            transform.position = new Vector3(transform.position.x, transform.position.y + (Mathf.Sin(Time.time) * 0.0005f), transform.position.z);
+        // multiply by Time.timeScale to dip boat with speed proportionally to the current game speed. prevents floating/sinking when opening the pause menu.
+        transform.position = new Vector3(transform.position.x, transform.position.y + (Mathf.Sin(Time.time * Time.timeScale) * 0.0005f), transform.position.z);
     }
 }
