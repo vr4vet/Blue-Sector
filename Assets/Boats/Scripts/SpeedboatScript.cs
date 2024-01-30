@@ -13,8 +13,7 @@ public class SpeedboatScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y + (Mathf.Sin(Time.time) * 0.0005f), transform.position.z);
-        //new Vector3(transform.position.x, advancedOceanScript.GetWaterHeight(transform.position), transform.position.z);
-        //new Vector3(transform.position.x, advancedOceanScript.GetWaterHeight(new Vector3(transform.position.x * 16, transform.position.y, transform.position.z * 16))); 
+        if (Time.timeScale == 1.0f) // only move boat if time is in 1x speed, or else the pause causes an offset (floating/sinking boat)
+            transform.position = new Vector3(transform.position.x, transform.position.y + (Mathf.Sin(Time.time) * 0.0005f), transform.position.z);
     }
 }
