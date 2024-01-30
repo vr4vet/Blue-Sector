@@ -17,8 +17,7 @@ public class LanguageSelectionDropdown : MonoBehaviour
     TMP_Dropdown m_Dropdown;
     AsyncOperationHandle m_InitializeOperation;
 
-    void Start()
-    {
+    void Start() {
         // First we setup the dropdown component.
         m_Dropdown = GetComponent<TMP_Dropdown>();
         m_Dropdown.onValueChanged.AddListener(OnSelectionChanged);
@@ -30,24 +29,20 @@ public class LanguageSelectionDropdown : MonoBehaviour
 
         // SelectedLocaleAsync will ensure that the locales have been initialized and a locale has been selected.
         m_InitializeOperation = LocalizationSettings.SelectedLocaleAsync;
-        if (m_InitializeOperation.IsDone)
-        {
+        if (m_InitializeOperation.IsDone) {
             InitializeCompleted(m_InitializeOperation);
         }
-        else
-        {
+        else {
             m_InitializeOperation.Completed += InitializeCompleted;
         }
     }
 
-    void InitializeCompleted(AsyncOperationHandle obj)
-    {
+    void InitializeCompleted(AsyncOperationHandle obj) {
         // Create an option in the dropdown for each Locale
         var options = new List<string>();
         int selectedOption = 0;
         var locales = LocalizationSettings.AvailableLocales.Locales;
-        for (int i = 0; i < locales.Count; ++i)
-        {
+        for (int i = 0; i < locales.Count; ++i) {
             var locale = locales[i];
             if (LocalizationSettings.SelectedLocale == locale)
                 selectedOption = i;
@@ -57,13 +52,11 @@ public class LanguageSelectionDropdown : MonoBehaviour
         }
 
         // If we have no Locales then something may have gone wrong.
-        if (options.Count == 0)
-        {
+        if (options.Count == 0) {
             options.Add("No Locales Available");
             m_Dropdown.interactable = false;
         }
-        else
-        {
+        else {
             m_Dropdown.interactable = true;
         }
 
@@ -74,8 +67,7 @@ public class LanguageSelectionDropdown : MonoBehaviour
         LocalizationSettings.SelectedLocaleChanged += LocalizationSettings_SelectedLocaleChanged;
     }
 
-    void OnSelectionChanged(int index)
-    {
+    void OnSelectionChanged(int index) {
         // Unsubscribe from SelectedLocaleChanged so we don't get an unnecessary callback from the change we are about to make.
         LocalizationSettings.SelectedLocaleChanged -= LocalizationSettings_SelectedLocaleChanged;
 
@@ -86,11 +78,9 @@ public class LanguageSelectionDropdown : MonoBehaviour
         LocalizationSettings.SelectedLocaleChanged += LocalizationSettings_SelectedLocaleChanged;
     }
 
-    void LocalizationSettings_SelectedLocaleChanged(Locale locale)
-    {
+    void LocalizationSettings_SelectedLocaleChanged(Locale locale) {
         // We need to update the dropdown selection to match.
         var selectedIndex = LocalizationSettings.AvailableLocales.Locales.IndexOf(locale);
         m_Dropdown.SetValueWithoutNotify(selectedIndex);
     }
 }
-

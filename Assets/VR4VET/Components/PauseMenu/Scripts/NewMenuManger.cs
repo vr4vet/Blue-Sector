@@ -94,7 +94,8 @@ public class NewMenuManger : MonoBehaviour
         Time.timeScale = 1;
         RenderSettings.skybox = SkyboxMat;
         _cam.cullingMask = -1; // -1 = "Everything"
-        foreach (var item in allMenus) {
+        foreach (var item in allMenus)
+        {
             item.SetActive(false);
         }
     }

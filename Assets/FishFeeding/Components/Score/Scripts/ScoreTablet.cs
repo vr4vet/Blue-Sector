@@ -202,7 +202,7 @@ public class ScoreTablet : MonoBehaviour
         selectedFishSystem = fishSystemScript;
         Subtask switchSubTask = fishFeedTask.GetSubtask("Switch to another cage");
         switchSubTask.SetCompleated(true);
-        Debug.Log("firstsubtask completed");
+        // Debug.Log("firstsubtask completed");
 
         foreach (Subtask subTask in fishFeedTask.Subtasks) {
             if (subTask != switchSubTask)
@@ -222,11 +222,11 @@ public class ScoreTablet : MonoBehaviour
             return;
         }
         if (prevFeedingIntensities[selectedFishSystem.merdNr] != selectedFishSystem.feedingIntensity) {
-            Debug.Log("Selected merd: "+ selectedFishSystem.merdNr);
+            /*Debug.Log("Selected merd: "+ selectedFishSystem.merdNr);
             Debug.Log("Selected merd feeding intensity: " + selectedFishSystem.feedingIntensity);
-            Debug.Log("Selected merd prev feeding intensity: " + prevFeedingIntensities[selectedFishSystem.merdNr]);
+            Debug.Log("Selected merd prev feeding intensity: " + prevFeedingIntensities[selectedFishSystem.merdNr]);*/
             fishFeedTask.GetSubtask("Adjust feeding intensity").SetCompleated(true);
-            Debug.Log("secondsubtask completed");
+            // Debug.Log("secondsubtask completed");
         }
         foreach (FishSystemScript fishSystemScript in fishSystemScripts) {
             prevFeedingIntensities[fishSystemScript.merdNr] = fishSystemScript.feedingIntensity;
