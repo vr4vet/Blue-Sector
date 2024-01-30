@@ -69,7 +69,7 @@ public class Fish : MonoBehaviour
     void Start()
     {
         //Skamløst kokt fra FishScript.cs:
-        InvokeRepeating(nameof(PeriodicUpdates), 0.0f, 1.0f);
+        InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 3.0f)/*0.0f*/, 1.0f);
         inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
         targetPosition = transform.position;
         originalRotation = transform.rotation;
@@ -85,6 +85,7 @@ public class Fish : MonoBehaviour
         fishbone = boneList[0].transform;
         originalMovementSpeed = movementSpeed;
         originalRotationSpeed = rotationSpeed;
+        findClosestTank();
     }
 
     // Update is called once per frame
@@ -135,7 +136,7 @@ public class Fish : MonoBehaviour
                 animator.enabled = true;
                 //animator.SetTrigger("InWater");
                 //animator.SetBool("Swimming", true);
-                targetPosition = new Vector3(transform.position.x, waterHeight - .7f, transform.position.z);
+                //targetPosition = new Vector3(transform.position.x, waterHeight - .7f, transform.position.z);
                 if(unsediatedLevel < .2f) {
                     transform.position = targetPosition;
                 }
@@ -146,10 +147,12 @@ public class Fish : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.5f * Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 10 * Time.deltaTime);
         }*/
-        if( Vector3.Distance(transform.position, targetPosition) > .1 ) {
+        if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
+
         updateSedation();
     }
 
@@ -169,12 +172,16 @@ public class Fish : MonoBehaviour
     private void findClosestTank() {
         float startdist = Vector3.Distance(startTank.transform.position, transform.position);
         float endDist = Vector3.Distance(endTank.transform.position, transform.position);
+        
         if(startdist < endDist) {
             tank = startTank;
         }
         else {
             tank = endTank;
         }
+
+        waterBodyXLength = tank.GetComponent<BoxCollider>().size.x;
+        waterBodyZLength = tank.GetComponent<BoxCollider>().size.z;
     }
 
     private void updateSedation() {
@@ -216,9 +223,16 @@ public class Fish : MonoBehaviour
         prøv å bruke posisjonen kun til hvor den skal rotere, deretter bare beveg den fremmover. Virker som den blir litt spastic av setMoveTarget i on collision og...
         */
         //Mer Skamløs koking fra FishScript.cs:
-        float randX = Random.Range(waterBodyCenter.x -waterBodyXLength / 2,waterBodyCenter.x + waterBodyXLength / 2);
-        float randZ = Random.Range(waterBodyCenter.z -waterBodyZLength / 2,waterBodyCenter.z + waterBodyZLength / 2);
-        targetPosition = new Vector3(randX, transform.position.y, randZ);
+
+        float XLength = waterBodyXLength - 0.3f;
+        float ZLength = waterBodyZLength - 0.3f;
+        //float XLength = .5f;
+        //float ZLength = .5f;
+        float randX = Random.Range(waterBodyCenter.x - XLength / 2, waterBodyCenter.x + XLength/ 2);
+        float randZ = Random.Range(waterBodyCenter.z - ZLength / 2, waterBodyCenter.z + ZLength / 2);
+        //float randX = Random.Range(waterBodyCenter.x - waterBodyXLength / 2, waterBodyCenter.x + waterBodyXLength / 2);
+        //float randZ = Random.Range(waterBodyCenter.z - waterBodyZLength / 2, waterBodyCenter.z + waterBodyZLength / 2);
+        targetPosition = new Vector3(randX, waterHeight - 0.7f, randZ);
         //Debug.Log("Position: " + targetPosition);
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
     }
@@ -325,4 +339,10 @@ public class Fish : MonoBehaviour
              }
          }
      }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(targetPosition, 0.05f);
+    }
 }
