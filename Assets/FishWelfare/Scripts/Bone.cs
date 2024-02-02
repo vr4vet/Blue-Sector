@@ -37,7 +37,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
             rigidBody.freezeRotation = false;
         }
     }
-
+/*
     public void UpdateWaterBody(float waterheight, Vector3 bodyCenter, float xLength, float zLength, bool isInWater){
         //gameObject.GetComponent<Floating>().waterHeight = waterheight;
         parent.waterBodyCenter = bodyCenter;
@@ -45,7 +45,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         parent.waterBodyZLength = zLength;
         parent.waterHeight = waterheight;
         SetIsInWater(isInWater);
-    }
+    }*/
 
     public void OnPointerClick(PointerEventData eventData) {
         MarkLouse(eventData);
@@ -76,7 +76,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
     }
 
     private void OnCollisionEnter(Collision other) {
-        if(other.transform.root.tag == "Water"){
+        if (other.transform.root.tag == "Water"){
             parent.checkForDamage(true, other.relativeVelocity.magnitude);
             parent.tank = other.transform.root.GetComponent<TankController>();
         }
@@ -85,7 +85,19 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void SetIsInWater(bool isInWater) {
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Water")
+            SetIsInWater(true);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Water")
+            SetIsInWater(false);
+    }
+
+        public void SetIsInWater(bool isInWater) {
         if (isInWater){
             parent.isInWaterCount++;
         } 
