@@ -24,6 +24,8 @@ public class Fish : MonoBehaviour
     public float waterBodyXLength;
     [HideInInspector]
     public float waterBodyZLength;
+    [HideInInspector]
+    public float waterBodyYLength;
     private Quaternion originalRotation;
     [HideInInspector]
     public float waterHeight;
@@ -32,7 +34,8 @@ public class Fish : MonoBehaviour
     public GameObject marker;
     private GameObject pointerFinger;
     private List<GameObject> liceList = new List<GameObject>();
-    private List<GameObject> boneList = new List<GameObject>(); //;)
+    private List<GameObject> boneList = new List<GameObject>();
+    //private GameObject[] boneList;// = new List<GameObject>(); //;)
     InspectionTaskManager inspectionTaskManager;
     public LayerMask layer;
     [HideInInspector]
@@ -75,6 +78,7 @@ public class Fish : MonoBehaviour
         originalRotation = transform.rotation;
         liceList = FindObjectwithTag("Louse");
         boneList = FindObjectwithTag("Bone");
+        //boneList = GameObject.FindGameObjectsWithTag("Bone");//FindObjectwithTag("Bone");
         //Debug.Log("number of bones: " + boneList.Count);
         AudioSource[] sounds = GetComponents<AudioSource>();
         hurtSound = sounds[0];
@@ -91,7 +95,7 @@ public class Fish : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(isGrabbedCount);
+        //Debug.Log(isInWaterCount);
         followchild();
         if(isGrabbedCount > 0) {
             putInWater = false;
@@ -116,13 +120,13 @@ public class Fish : MonoBehaviour
     }
 
     void PeriodicUpdates() {
-        if(isInWaterCount > 0 && isGrabbedCount <= 0){
+        findClosestTank();
+        if (isInWaterCount > 0 && isGrabbedCount <= 0){
             SetMoveTarget();    
         }
         if(isGrabbedCount > 0 && Random.Range(0, 1) < unsediatedLevel && health > 0) {
             health -= 1;
         }
-        findClosestTank();
     }
 
     private void Move() {
@@ -180,8 +184,19 @@ public class Fish : MonoBehaviour
             tank = endTank;
         }
 
-        waterBodyXLength = tank.GetComponent<BoxCollider>().size.x;
-        waterBodyZLength = tank.GetComponent<BoxCollider>().size.z;
+        waterBodyXLength = tank.GetComponent<BoxCollider>().bounds.size.z;//tank.GetComponent<BoxCollider>().size.x;
+        waterBodyZLength = tank.GetComponent<BoxCollider>().bounds.size.x;//tank.GetComponent<BoxCollider>().size.z;
+        waterBodyYLength = tank.GetComponent<BoxCollider>().bounds.size.y;//tank.GetComponent<BoxCollider>().size.y;
+        //Debug.Log("X: " + waterBodyXLength + ", Z: " + waterBodyZLength + ", Y: " + waterBodyYLength);
+        //Debug.Log(tank.GetComponent<BoxCollider>().bounds.size);
+        waterBodyCenter = tank.GetComponent<BoxCollider>().bounds.center;
+/*
+        foreach (GameObject bone in boneList)
+        {
+            bone.GetComponent<Bone>().UpdateWaterBody(waterBodyYLength, waterBodyCenter, waterBodyXLength, waterBodyZLength, isInWaterCount > 0);
+        }*/
+        //new Vector3(tank.GetComponent<BoxCollider>().transform.position.x, tank.GetComponent<BoxCollider>().transform.position.y + waterBodyYLength, tank.GetComponent<BoxCollider>().transform.position.z);//new Vector3(tank.GetComponent<BoxCollider>().center.x, tank.GetComponent<BoxCollider>().center.y + waterBodyYLength, tank.GetComponent<BoxCollider>().center.z);
+
     }
 
     private void updateSedation() {
@@ -224,15 +239,18 @@ public class Fish : MonoBehaviour
         */
         //Mer Skamløs koking fra FishScript.cs:
 
-        float XLength = waterBodyXLength - 0.3f;
-        float ZLength = waterBodyZLength - 0.3f;
+        float XLength = waterBodyXLength - 0.1f;
+        float ZLength = waterBodyZLength - 0.1f;
+        float YLength = waterBodyYLength - 0.2f;
         //float XLength = .5f;
         //float ZLength = .5f;
         float randX = Random.Range(waterBodyCenter.x - XLength / 2, waterBodyCenter.x + XLength/ 2);
         float randZ = Random.Range(waterBodyCenter.z - ZLength / 2, waterBodyCenter.z + ZLength / 2);
+        float randY = Random.Range(waterBodyCenter.y - YLength / 2, waterBodyCenter.y + YLength / 2);
         //float randX = Random.Range(waterBodyCenter.x - waterBodyXLength / 2, waterBodyCenter.x + waterBodyXLength / 2);
         //float randZ = Random.Range(waterBodyCenter.z - waterBodyZLength / 2, waterBodyCenter.z + waterBodyZLength / 2);
-        targetPosition = new Vector3(randX, waterHeight - 0.7f, randZ);
+        //targetPosition = new Vector3(randX, waterBodyCenter.y, randZ);
+        targetPosition = new Vector3(randX, randY, randZ);
         //Debug.Log("Position: " + targetPosition);
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
     }
@@ -344,5 +362,8 @@ public class Fish : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(targetPosition, 0.05f);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(waterBodyCenter, 0.1f);
     }
 }
