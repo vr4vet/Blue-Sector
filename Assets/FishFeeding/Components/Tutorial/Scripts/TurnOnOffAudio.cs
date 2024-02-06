@@ -6,10 +6,11 @@ using UnityEngine.InputSystem.HID;
 public class TurnOnOffAudio : MonoBehaviour
 {
     public bool turnOnAudio;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -26,7 +27,7 @@ public class TurnOnOffAudio : MonoBehaviour
         
     }
 
-    void TurnOffAudio() 
+    public void TurnOffAudio() 
     {
         foreach (var audioSource in GetComponentsInChildren<AudioSource>()) {
             audioSource.Stop();
@@ -38,7 +39,7 @@ public class TurnOnOffAudio : MonoBehaviour
         }
     }
 
-    void TurnOnAudio() 
+    public void TurnOnAudio() 
     {
         foreach (var playAudio in GetComponentsInChildren<PlayAudio>()) {
             playAudio.TurnOnTutorialAudio = true;
