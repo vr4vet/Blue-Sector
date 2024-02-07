@@ -42,7 +42,8 @@ public TutorialEntry tutorialEntry;
     private void OnTriggerExit(Collider other) {
         if(other.tag == "Bone"){
             if (isGoal){
-                if(other.gameObject.GetComponent<Bone>().GetParent().isInWaterCount == 0){
+                //if(other.gameObject.GetComponent<Bone>().GetParent().isInWaterCount == 0){
+                if (!other.gameObject.GetComponent<Bone>().GetParent().IsInWater()){
                     inspectionTaskManager.RegressInspection(other.GetComponentInParent<Fish>());
                 }
             }   

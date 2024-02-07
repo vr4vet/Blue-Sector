@@ -27,7 +27,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         liceList = parent.FindObjectwithTag("Louse");
         layer = parent.layer;
         marker = parent.marker;
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Fish"));
+        //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Fish"));
     }
 
     // Update is called once per frame
@@ -45,7 +45,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
     }
 
     public void MarkLouse(PointerEventData eventData){
-        Debug.Log("Marking Louse");
+        //Debug.Log("Marking Louse");
         lastMarkedLouse = checkForLouse(eventData.pointerCurrentRaycast.worldPosition);
         if(lastMarkedLouse != null){
             parent.markSound.Play(0);
@@ -70,7 +70,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log(other.gameObject.layer);
+        //Debug.Log(other.gameObject.layer);
         if (other.transform.gameObject.tag == "Water")
         {
             Debug.Log("Collided with water");
@@ -85,10 +85,11 @@ public class Bone : MonoBehaviour, IPointerClickHandler
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.layer);
+        //Debug.Log(other.gameObject.layer);
         if (other.tag == "Water")
         {
             Debug.Log("Water entered");
+            Debug.Log(parent.tank.name);
             SetIsInWater(true);
         }
             

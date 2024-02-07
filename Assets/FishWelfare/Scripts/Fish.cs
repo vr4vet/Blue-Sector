@@ -97,21 +97,20 @@ public class Fish : MonoBehaviour
         //Debug.Log(transform.name);
         followchild();
         if (isGrabbedCount > 0 || !IsInWater())
-        {
             Stop();
-        }
-        if (IsInWater() && isGrabbedCount <= 0){
+        if (IsInWater() && isGrabbedCount <= 0)    
             Move();
-        } 
+        
+            
 
         damageInvulnerabilityTimer -= Time.deltaTime;
         if(damageInvulnerabilityTimer <= 0f) {
             damageInvulerability = false;
         }
         checkForOverSedation();
-        if(scoreBoardEntry != null){
+        if(scoreBoardEntry != null)
             scoreBoardEntry.handling.text = health.ToString();
-        }
+        
     }
 
     void PeriodicUpdates() {
@@ -124,16 +123,13 @@ public class Fish : MonoBehaviour
         }
     }
 
-    private void Move() {
+    public void Move() {
         //Debug.Log("Moving");
         if(!kinematicBones) {
             foreach( GameObject bone in boneList) {
                 bone.GetComponent<Rigidbody>().isKinematic = true;
                 kinematicBones = true;
                 animator.enabled = true;
-                if(unsediatedLevel < .2f) {
-                    transform.position = targetPosition;
-                }
             }
         }
 
@@ -157,7 +153,7 @@ public class Fish : MonoBehaviour
         }
     }
 
-    private void findClosestTank() {
+    public void findClosestTank() {
         float startdist = Vector3.Distance(startTank.transform.position, transform.position);
         float endDist = Vector3.Distance(endTank.transform.position, transform.position);
         
@@ -189,7 +185,7 @@ public class Fish : MonoBehaviour
                 unsediatedLevel = 0f;
             }
         }
-        animator.speed = unsediatedLevel;
+        animator.speed = unsediatedLevel >= 0 ? unsediatedLevel : 0;
         movementSpeed = originalMovementSpeed * unsediatedLevel;
         rotationSpeed = (originalRotationSpeed * unsediatedLevel) / 1.5f;
     }
@@ -255,12 +251,17 @@ public class Fish : MonoBehaviour
         return false;
     }
 
-    private void OnCollisionEnter(Collision other) {
+    private void OnCollisionEnter(Collision other)
+    {
+        findClosestTank();
         SetMoveTarget();
-        if(other.collider.isTrigger){
+        Debug.Log(tank.name);
+        if (other.collider.isTrigger)
+        {
             checkForDamage(true, other.relativeVelocity.magnitude);
         }
-        else {
+        else
+        {
             checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
