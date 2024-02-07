@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 public class Bone : MonoBehaviour, IPointerClickHandler
 {
     private Fish parent;
-    private bool isInWater;
+    [HideInInspector]
+    public bool isInWater;
     private bool isGrabbed;
     private Rigidbody rigidBody;
 
@@ -26,6 +27,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         liceList = parent.FindObjectwithTag("Louse");
         layer = parent.layer;
         marker = parent.marker;
+        //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Fish"));
     }
 
     // Update is called once per frame
@@ -38,21 +40,12 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void UpdateWaterBody(float waterheight, Vector3 bodyCenter, float xLength, float zLength, bool isInWater){
-        //gameObject.GetComponent<Floating>().waterHeight = waterheight;
-        parent.waterBodyCenter = bodyCenter;
-        parent.waterBodyXLength = xLength;
-        parent.waterBodyZLength = zLength;
-        parent.waterHeight = waterheight;
-        SetIsInWater(isInWater);
-    }
-
     public void OnPointerClick(PointerEventData eventData) {
         MarkLouse(eventData);
     }
 
     public void MarkLouse(PointerEventData eventData){
-        Debug.Log("Marking Louse");
+        //Debug.Log("Marking Louse");
         lastMarkedLouse = checkForLouse(eventData.pointerCurrentRaycast.worldPosition);
         if(lastMarkedLouse != null){
             parent.markSound.Play(0);
@@ -75,24 +68,48 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         return null;
     }
 
-    private void OnCollisionEnter(Collision other) {
-        if(other.transform.root.tag == "Water"){
+    private void OnCollisionEnter(Collision other)
+    {
+        //Debug.Log(other.gameObject.layer);
+        if (other.transform.gameObject.tag == "Water")
+        {
+            Debug.Log("Collided with water");
             parent.checkForDamage(true, other.relativeVelocity.magnitude);
-            parent.tank = other.transform.root.GetComponent<TankController>();
         }
-        else if(other.transform.root.gameObject.tag != "Bone" && other.transform.root.gameObject.tag != "Fish") {
+        else if (other.transform.gameObject.gameObject.tag != "Bone" && other.transform.gameObject.tag != "Fish")
+        {
+            Debug.Log("Collided with something else");
             parent.checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
 
-    public void SetIsInWater(bool isInWater) {
-        if (isInWater){
-            parent.isInWaterCount++;
-        } 
-        else {
-            parent.isInWaterCount--;
+    private void OnTriggerEnter(Collider other)
+    {
+        //Debug.Log(other.gameObject.layer);
+        if (other.tag == "Water")
+        {
+            Debug.Log("Water entered");
+            Debug.Log(parent.tank.name);
+            SetIsInWater(true);
         }
+            
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Water")
+        {
+            Debug.Log("Water exited");
+            SetIsInWater(false);
+        }
+            
+    }
+
+    public void SetIsInWater(bool isInWater) 
+    {
+        this.isInWater = isInWater;
+    }
+    
 
     public void SetIsGrabbed(bool isGrabbed) {
         if (isGrabbed) parent.isGrabbedCount++;
