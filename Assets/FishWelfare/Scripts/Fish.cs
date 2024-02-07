@@ -24,6 +24,8 @@ public class Fish : MonoBehaviour
     public float waterBodyXLength;
     [HideInInspector]
     public float waterBodyZLength;
+    [HideInInspector]
+    public float waterBodyYLength;
     private Quaternion originalRotation;
     [HideInInspector]
     public float waterHeight;
@@ -32,7 +34,8 @@ public class Fish : MonoBehaviour
     public GameObject marker;
     private GameObject pointerFinger;
     private List<GameObject> liceList = new List<GameObject>();
-    private List<GameObject> boneList = new List<GameObject>(); //;)
+    private List<GameObject> boneList = new List<GameObject>();
+    //private GameObject[] boneList;// = new List<GameObject>(); //;)
     InspectionTaskManager inspectionTaskManager;
     public LayerMask layer;
     [HideInInspector]
@@ -47,6 +50,8 @@ public class Fish : MonoBehaviour
     public AudioSource markSound;
     [HideInInspector]
     public int isInWaterCount = 0;
+    //[HideInInspector]
+    //public bool isInWater = true;
     [HideInInspector]
     public int isGrabbedCount = 0;
     private bool kinematicBones = false;
@@ -68,14 +73,12 @@ public class Fish : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Skamløst kokt fra FishScript.cs:
-        InvokeRepeating(nameof(PeriodicUpdates), 0.0f, 1.0f);
+        InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 3.0f), 1.0f);
         inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
         targetPosition = transform.position;
         originalRotation = transform.rotation;
         liceList = FindObjectwithTag("Louse");
         boneList = FindObjectwithTag("Bone");
-        //Debug.Log("number of bones: " + boneList.Count);
         AudioSource[] sounds = GetComponents<AudioSource>();
         hurtSound = sounds[0];
         markSound = sounds[1];
@@ -85,68 +88,53 @@ public class Fish : MonoBehaviour
         fishbone = boneList[0].transform;
         originalMovementSpeed = movementSpeed;
         originalRotationSpeed = rotationSpeed;
+        findClosestTank();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(isGrabbedCount);
+        //Debug.Log(transform.name);
         followchild();
-        if(isGrabbedCount > 0) {
-            putInWater = false;
-        }
-        if(isInWaterCount > 0 && isGrabbedCount <= 0){
-            putInWater = true;
+        if (isGrabbedCount > 0 || !IsInWater())
+            Stop();
+        if (IsInWater() && isGrabbedCount <= 0)    
             Move();
-        } 
-        else if(isInWaterCount == 0 && !putInWater) {
-            Stop();
-        } else if(isGrabbedCount > 0) {
-            Stop();
-        }
+        
+            
+
         damageInvulnerabilityTimer -= Time.deltaTime;
         if(damageInvulnerabilityTimer <= 0f) {
             damageInvulerability = false;
         }
         checkForOverSedation();
-        if(scoreBoardEntry != null){
+        if(scoreBoardEntry != null)
             scoreBoardEntry.handling.text = health.ToString();
-        }
+        
     }
 
     void PeriodicUpdates() {
-        if(isInWaterCount > 0 && isGrabbedCount <= 0){
+        findClosestTank();
+        if (IsInWater() && isGrabbedCount <= 0){
             SetMoveTarget();    
         }
         if(isGrabbedCount > 0 && Random.Range(0, 1) < unsediatedLevel && health > 0) {
             health -= 1;
         }
-        findClosestTank();
     }
 
-    private void Move() {
+    public void Move() {
         //Debug.Log("Moving");
         if(!kinematicBones) {
             foreach( GameObject bone in boneList) {
                 bone.GetComponent<Rigidbody>().isKinematic = true;
-                //GetComponent<Rigidbody>().isKinematic = true;
-                //bone.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 kinematicBones = true;
                 animator.enabled = true;
-                //animator.SetTrigger("InWater");
-                //animator.SetBool("Swimming", true);
-                targetPosition = new Vector3(transform.position.x, waterHeight - .7f, transform.position.z);
-                if(unsediatedLevel < .2f) {
-                    transform.position = targetPosition;
-                }
             }
         }
-        /*if(transform.position.y != waterHeight - .7f) {
-            targetPosition = new Vector3(transform.position.x, waterHeight - .7f, transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.5f * Time.deltaTime);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 10 * Time.deltaTime);
-        }*/
-        if( Vector3.Distance(transform.position, targetPosition) > .1 ) {
+
+        if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
@@ -158,23 +146,30 @@ public class Fish : MonoBehaviour
         if(kinematicBones) {
             foreach( GameObject bone in boneList) {
                 bone.GetComponent<Rigidbody>().isKinematic = false;
-                //GetComponent<Rigidbody>().isKinematic = false;
+                bone.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 kinematicBones = false;
                 animator.enabled = false;
-                //animator.SetTrigger("NotInWater");
             }
         }
     }
 
-    private void findClosestTank() {
+    public void findClosestTank() {
         float startdist = Vector3.Distance(startTank.transform.position, transform.position);
         float endDist = Vector3.Distance(endTank.transform.position, transform.position);
+        
         if(startdist < endDist) {
             tank = startTank;
         }
         else {
             tank = endTank;
         }
+        GameObject water = tank.transform.Find("Water").gameObject;
+
+        // x and z is swapped for some reason
+        waterBodyXLength = water.GetComponent<BoxCollider>().bounds.size.z;
+        waterBodyZLength = tank.GetComponent<BoxCollider>().bounds.size.x;
+        waterBodyYLength = tank.GetComponent<BoxCollider>().bounds.size.y;
+        waterBodyCenter = tank.GetComponent<BoxCollider>().bounds.center;
     }
 
     private void updateSedation() {
@@ -190,7 +185,7 @@ public class Fish : MonoBehaviour
                 unsediatedLevel = 0f;
             }
         }
-        animator.speed = unsediatedLevel;
+        animator.speed = unsediatedLevel >= 0 ? unsediatedLevel : 0;
         movementSpeed = originalMovementSpeed * unsediatedLevel;
         rotationSpeed = (originalRotationSpeed * unsediatedLevel) / 1.5f;
     }
@@ -212,38 +207,18 @@ public class Fish : MonoBehaviour
     }
 
     public void SetMoveTarget() {
-        /*
-        prøv å bruke posisjonen kun til hvor den skal rotere, deretter bare beveg den fremmover. Virker som den blir litt spastic av setMoveTarget i on collision og...
-        */
-        //Mer Skamløs koking fra FishScript.cs:
-        float randX = Random.Range(waterBodyCenter.x -waterBodyXLength / 2,waterBodyCenter.x + waterBodyXLength / 2);
-        float randZ = Random.Range(waterBodyCenter.z -waterBodyZLength / 2,waterBodyCenter.z + waterBodyZLength / 2);
-        targetPosition = new Vector3(randX, transform.position.y, randZ);
-        //Debug.Log("Position: " + targetPosition);
+
+        float XLength = waterBodyXLength - 0.1f;
+        float ZLength = waterBodyZLength - 0.1f;
+        float YLength = waterBodyYLength - 0.2f;
+
+        float randX = Random.Range(waterBodyCenter.x - XLength / 2, waterBodyCenter.x + XLength/ 2);
+        float randZ = Random.Range(waterBodyCenter.z - ZLength / 2, waterBodyCenter.z + ZLength / 2);
+        float randY = Random.Range(waterBodyCenter.y - YLength / 2, waterBodyCenter.y + YLength / 2);
+
+        targetPosition = new Vector3(randX, randY, randZ);
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
     }
-
-    /*public void OnPointerClick(PointerEventData eventData) {
-        lastMarkedLouse = checkForLouse(eventData.pointerCurrentRaycast.worldPosition);
-        if(lastMarkedLouse != null){
-            GameObject newmarker = Instantiate(marker,lastMarkedLouse.transform.position, new Quaternion(0,0,0,0));
-            newmarker.transform.parent = transform;
-        }
-    }
-
-    public GameObject checkForLouse(Vector3 origin) {
-        if(Physics.SphereCast(origin - (pointerFinger.transform.forward*.5f), 0.02f, pointerFinger.transform.forward, out RaycastHit hitInfo, 10f, layer)) {
-            GameObject hit = hitInfo.collider.gameObject;
-            foreach(GameObject louse in liceList) {
-                if (hit == louse && !louse.GetComponent<Louse>().marked) {
-                    louse.GetComponent<Louse>().marked = true;
-                    markedLice++;
-                    return louse;
-                }
-            }
-        }
-        return null;
-    }*/
 
     public void checkForDamage(bool hittingWater, float velocity) {
         if(!damageInvulerability){
@@ -266,12 +241,27 @@ public class Fish : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other) {
+    public bool IsInWater()
+    {
+        foreach (Bone bone in gameObject.transform.GetComponentsInChildren<Bone>()) 
+        {
+            if (bone.isInWater)
+                return true;
+        }
+        return false;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        findClosestTank();
         SetMoveTarget();
-        if(other.collider.isTrigger){
+        Debug.Log(tank.name);
+        if (other.collider.isTrigger)
+        {
             checkForDamage(true, other.relativeVelocity.magnitude);
         }
-        else {
+        else
+        {
             checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
@@ -325,4 +315,15 @@ public class Fish : MonoBehaviour
              }
          }
      }
+
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(targetPosition, 0.05f);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(waterBodyCenter, 0.1f);
+    }
 }
