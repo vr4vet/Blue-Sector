@@ -241,7 +241,7 @@ public class Fish : MonoBehaviour
                 }
                 hurtSound.Play(0);
             }
-            Debug.Log("Taking Damage");
+            //Debug.Log("Taking Damage");
         }
     }
 
@@ -259,7 +259,7 @@ public class Fish : MonoBehaviour
     {
         findClosestTank();
         SetMoveTarget();
-        Debug.Log(tank.name);
+        //Debug.Log(tank.name);
         if (other.collider.isTrigger)
         {
             checkForDamage(true, other.relativeVelocity.magnitude);

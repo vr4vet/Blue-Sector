@@ -64,13 +64,13 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         Debug.Log(other.gameObject.layer);
         if (other.transform.gameObject.tag == "Water")
         {
-            Debug.Log("Collided with water");
+            //Debug.Log("Collided with water");
             parent.checkForDamage(true, other.relativeVelocity.magnitude);
         }
         else if (other.transform.gameObject.gameObject.tag != "Bone" && other.transform.gameObject.tag != "Fish")
         {
-            Debug.Log("Collided with something else");
-            Debug.Log(other.transform.name);
+            //Debug.Log("Collided with something else");
+            //Debug.Log(other.transform.name);
             parent.checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
@@ -80,11 +80,26 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         Debug.Log(other.gameObject.layer);
         if (other.tag == "Water")
         {
-            Debug.Log("Water entered");
-            Debug.Log(parent.tank.name);
+            //Debug.Log("Water entered");
+            //Debug.Log(parent.tank.name);
+/*            if (((TankController)other.gameObject).isGoal)
+*/
             parent.findClosestTank();
             parent.SetMoveTarget();
             SetIsInWater(true);
+
+            // determine which tutorial entry to progress, and whether to add fish to the score wall
+            if (parent.tank.isGoal)
+            {
+                if (parent.IsInWater())
+                {
+                    parent.tank.inspectionTaskManager.ProgressInspection(parent);
+                    parent.tank.tutorialEntry.SetCompleted();
+                }
+
+            }
+            else if (!parent.tank.isGoal && other.CompareTag("Hand"))
+                parent.tank.tutorialEntry.SetCompleted();
         }
             
     }
@@ -93,8 +108,18 @@ public class Bone : MonoBehaviour, IPointerClickHandler
     {
         if (other.tag == "Water")
         {
-            Debug.Log("Water exited");
+            //Debug.Log("Water exited");
             SetIsInWater(false);
+
+            // remove fish from score wall it just left the "wake-up tank"
+            if (parent.tank.isGoal)
+            {
+                //if(other.gameObject.GetComponent<Bone>().GetParent().isInWaterCount == 0){
+                if (!parent.IsInWater())
+                {
+                    parent.tank.inspectionTaskManager.RegressInspection(parent);
+                }
+            }
         }
             
     }
