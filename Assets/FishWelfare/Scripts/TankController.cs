@@ -18,30 +18,4 @@ public TutorialEntry tutorialEntry;
         collider = GetComponent<BoxCollider>();
         waterSound = GetComponent<AudioSource>();
     }
-
-/*//The two following functions should be refactored and moved into Bone
-    private void OnTriggerEnter(Collider other) 
-    {
-        if(other.tag == "Bone"){
-            //waterSound.Play(0);
-            if(isGoal){
-                Debug.Log("Something bony entered!");
-                inspectionTaskManager.ProgressInspection(other.GetComponentInParent<Fish>());
-                tutorialEntry.SetCompleted();
-            }
-        } else if (other.tag == "Hand" && !isGoal) {
-            tutorialEntry.SetCompleted();
-        }
-    }
-
-    private void OnTriggerExit(Collider other) {
-        if(other.tag == "Bone"){
-            if (isGoal){
-                //if(other.gameObject.GetComponent<Bone>().GetParent().isInWaterCount == 0){
-                if (!other.gameObject.GetComponent<Bone>().GetParent().IsInWater()){
-                    inspectionTaskManager.RegressInspection(other.GetComponentInParent<Fish>());
-                }
-            }   
-        }
-    }*/
 }
