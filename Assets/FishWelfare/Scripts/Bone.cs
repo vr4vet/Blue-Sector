@@ -28,16 +28,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         layer = parent.layer;
         marker = parent.marker;
         //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Fish"));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(isInWater && !isGrabbed){
-            rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        } else {
-            rigidBody.freezeRotation = false;
-        }
+        //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Water"), LayerMask.NameToLayer("Fish"));
     }
 
     public void OnPointerClick(PointerEventData eventData) {
@@ -70,7 +61,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
 
     private void OnCollisionEnter(Collision other)
     {
-        //Debug.Log(other.gameObject.layer);
+        Debug.Log(other.gameObject.layer);
         if (other.transform.gameObject.tag == "Water")
         {
             Debug.Log("Collided with water");
@@ -79,17 +70,20 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         else if (other.transform.gameObject.gameObject.tag != "Bone" && other.transform.gameObject.tag != "Fish")
         {
             Debug.Log("Collided with something else");
+            Debug.Log(other.transform.name);
             parent.checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log(other.gameObject.layer);
+        Debug.Log(other.gameObject.layer);
         if (other.tag == "Water")
         {
             Debug.Log("Water entered");
             Debug.Log(parent.tank.name);
+            parent.findClosestTank();
+            parent.SetMoveTarget();
             SetIsInWater(true);
         }
             
