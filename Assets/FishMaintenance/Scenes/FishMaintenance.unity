@@ -1279,11 +1279,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 937645717}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30cf00b6f93998c4a9136c3213489e1f, type: 3}
+  m_Script: {fileID: 11500000, guid: b91107a829f400e41a561f08c63d566e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   handPosition: {fileID: 1004095878}
   screen: {fileID: 978145761}
+  textMesh: {fileID: 978145763}
 --- !u!1 &978145761
 GameObject:
   m_ObjectHideFlags: 0
@@ -1343,7 +1344,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Add a rope by grabbing the pink template.
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 9ad269c99dcf42b7aedefd83dd5a7b9d, type: 2}
@@ -1581,16 +1582,17 @@ MonoBehaviour:
   OnPlayerTeleported:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 978145763}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: "Legg til det manglende tauet ved \xE5 ta tak i omrisset.
+            Bruk knappen bak pekefingeren."
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!4 &1008028448
@@ -1836,6 +1838,25 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &1165750021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165750014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b90ed01ac5d94e9468b242b4c38496a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HapticsOnValidPickup: 1
+  HapticsOnValidRemotePickup: 1
+  HapticsOnCollision: 0
+  HapticsOnGrab: 0
+  VibrateFrequency: 0.3
+  VibrateAmplitude: 0.1
+  VibrateDuration: 1
 --- !u!4 &1246751277 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2926285011936366103, guid: f624b6386dbc59a4a81b28cd53000825,
