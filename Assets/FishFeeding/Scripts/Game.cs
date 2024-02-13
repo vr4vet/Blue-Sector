@@ -139,7 +139,7 @@ public class Game : MonoBehaviour
             merdScript.SetIdle();
         }
         scoreTablet.GiveFinalTabletScore();
-        endScoreText.text = "YOUR SCORE:\n" + scoring.Score;
+        endScoreText.text = scoring.Score.ToString();
     }
 
     /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */
@@ -148,7 +148,7 @@ public class Game : MonoBehaviour
     {
         if (time != -1)
         {
-            timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
+            timeLeft.text = Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
                 Mathf.FloorToInt(gameTimeLeft % 60).ToString("00");
         }
         else
@@ -157,8 +157,8 @@ public class Game : MonoBehaviour
         }
         if (!hud) return; // Don't show hud if in mode defined as such
 
-        currentScore.text = "Score: " + scoring.Score;
-        foodWasteText.text = "Food wastage: " + scoring.FoodWasted + " / Sec.";
+        currentScore.text = scoring.Score.ToString();
+        foodWasteText.text = scoring.FoodWasted.ToString();
         foodWasteSlider.value = scoring.FoodWastedPercentage;
 
         if (foodWasteSlider.value == 1.0f)
@@ -181,14 +181,14 @@ public class Game : MonoBehaviour
             foodWasteFillImage.enabled = false;
         }
 
-        deadFishText.text = "Dead fish: " + scoring.DeadFish;
+        deadFishText.text = scoring.DeadFish.ToString();
     }
 
     private void UpdateCurrentMerdText()
     {
         if (merdCameraController.SelectedFishSystem != null)
         {
-            currentMerdText.text = "Cage " + merdCameraController.SelectedFishSystem.merdNr;
+            currentMerdText.text = merdCameraController.SelectedFishSystem.merdNr.ToString();
         }
     }
 

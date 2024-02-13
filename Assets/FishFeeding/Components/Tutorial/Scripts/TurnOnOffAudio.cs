@@ -83,4 +83,8 @@ public class TurnOnOffAudio : MonoBehaviour
         // Because closest=point if point is inside
         return closest == point;
     }
+
+    void OnDestroy() {
+        PlayerTeleport.OnAfterTeleport -= UpdateTeleportationPosition;
+    }
 }
