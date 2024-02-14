@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
+//using System.Diagnostics;
 
 public class Fish : MonoBehaviour
 {
@@ -95,13 +96,15 @@ public class Fish : MonoBehaviour
     void Update()
     {
         //Debug.Log(transform.name);
+        //Debug.Log(isGrabbedCount);
         followchild();
         if (isGrabbedCount > 0 || !IsInWater())
             Stop();
-        if (IsInWater() && isGrabbedCount <= 0)    
+        if (IsInWater() && isGrabbedCount <= 0)
             Move();
         
-            
+
+
 
         damageInvulnerabilityTimer -= Time.deltaTime;
         if(damageInvulnerabilityTimer <= 0f) {
@@ -110,7 +113,9 @@ public class Fish : MonoBehaviour
         checkForOverSedation();
         if(scoreBoardEntry != null)
             scoreBoardEntry.handling.text = health.ToString();
+
         
+
     }
 
     void PeriodicUpdates() {
@@ -163,13 +168,12 @@ public class Fish : MonoBehaviour
         else {
             tank = endTank;
         }
-        GameObject water = tank.transform.Find("Water").gameObject;
-
-        // x and z is swapped for some reason
-        waterBodyXLength = water.GetComponent<BoxCollider>().bounds.size.z;
-        waterBodyZLength = tank.GetComponent<BoxCollider>().bounds.size.x;
-        waterBodyYLength = tank.GetComponent<BoxCollider>().bounds.size.y;
-        waterBodyCenter = tank.GetComponent<BoxCollider>().bounds.center;
+        
+        Bounds waterBounds = tank.transform.Find("Water").gameObject.GetComponent<BoxCollider>().bounds;
+        waterBodyXLength = waterBounds.size.x;
+        waterBodyZLength = waterBounds.size.z;
+        waterBodyYLength = waterBounds.size.y;
+        waterBodyCenter = waterBounds.center;
     }
 
     private void updateSedation() {
@@ -255,7 +259,7 @@ public class Fish : MonoBehaviour
     {
         findClosestTank();
         SetMoveTarget();
-        Debug.Log(tank.name);
+        //Debug.Log(tank.name);
         if (other.collider.isTrigger)
         {
             checkForDamage(true, other.relativeVelocity.magnitude);
