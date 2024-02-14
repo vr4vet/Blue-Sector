@@ -27,7 +27,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         liceList = parent.FindObjectwithTag("Louse");
         layer = parent.layer;
         marker = parent.marker;
-        //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Fish"));
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Fish"));
         //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Water"), LayerMask.NameToLayer("Fish"));
     }
 
