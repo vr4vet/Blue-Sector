@@ -15,12 +15,10 @@ public class Game : MonoBehaviour
     public bool startGame = false;
     private GameObject[] merds;
 
-    [SerializeField]
-    private GameObject MerdCameraHost;
+    [SerializeField] private GameObject MerdCameraHost;
     private MerdCameraController merdCameraController;
 
-    [field: SerializeField]
-    private int time = 60;
+    [SerializeField] private int time = 60;
 
     private float gameTimeLeft;
     private TextMeshProUGUI endScoreText;
@@ -30,16 +28,18 @@ public class Game : MonoBehaviour
     private TextMeshProUGUI foodWasteText;
     private TextMeshProUGUI currentMerdText;
 
-    [field: SerializeField]
     private UnityEngine.UI.Slider foodWasteSlider;
     private UnityEngine.UI.Image foodWasteFillImage;
+
+    [SerializeField] private List<TextMeshProUGUI> staticText;
 
     private Color32 redColor = new Color32(202, 18, 7, 242);
     private Color32 yellowColor = new Color32(205, 157, 0, 255);
     private Color32 greenColor = new Color32(1, 159, 28, 255);
 
-    public Scoring scoring;
-    public ScoreTablet scoreTablet;
+
+    [HideInInspector] public Scoring scoring;
+    [HideInInspector] public ScoreTablet scoreTablet;
     public List<Tutorial> tutorials;
     public Mode currentMode;
     public Modes modesClass;
@@ -107,6 +107,10 @@ public class Game : MonoBehaviour
                 image.enabled = hud;
             }
             deadFishText.enabled = hud;
+            foreach (TextMeshProUGUI text in staticText) 
+            {
+                text.enabled = hud;
+            }
 
             startGame = true;
 
