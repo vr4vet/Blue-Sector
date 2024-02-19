@@ -69,8 +69,8 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         }
         else if (!other.transform.gameObject.CompareTag("Bone") && !other.transform.gameObject.CompareTag("Fish"))
         {
-            Debug.Log("Collided with something else");
-            Debug.Log(other.transform.name);
+            //Debug.Log("Collided with something else");
+            //Debug.Log(other.transform.name);
             parent.checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
@@ -100,7 +100,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         else if (!parent.tank.isGoal && other.CompareTag("Hand"))
         {
             parent.tank.tutorialEntry.SetCompleted();
-            Debug.Log("Hi");
+            //Debug.Log("Hi");
         }
 
     }
