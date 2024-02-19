@@ -27,8 +27,8 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         liceList = parent.FindObjectwithTag("Louse");
         layer = parent.layer;
         marker = parent.marker;
+        // Prevent fish from colliding with player to prevent fish from taking damage when teleporting and other issues
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Fish"));
-        //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Water"), LayerMask.NameToLayer("Fish"));
     }
 
     public void OnPointerClick(PointerEventData eventData) {
@@ -61,29 +61,27 @@ public class Bone : MonoBehaviour, IPointerClickHandler
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log(other.gameObject.layer);
-        if (other.transform.gameObject.tag == "Water")
+        //Debug.Log(other.gameObject.layer);
+        if (other.transform.gameObject.CompareTag("Water"))
         {
             //Debug.Log("Collided with water");
             parent.checkForDamage(true, other.relativeVelocity.magnitude);
         }
-        else if (other.transform.gameObject.gameObject.tag != "Bone" && other.transform.gameObject.tag != "Fish")
+        else if (!other.transform.gameObject.CompareTag("Bone") && !other.transform.gameObject.CompareTag("Fish"))
         {
-            //Debug.Log("Collided with something else");
-            //Debug.Log(other.transform.name);
+            Debug.Log("Collided with something else");
+            Debug.Log(other.transform.name);
             parent.checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.layer);
-        if (other.tag == "Water")
+        //Debug.Log(other.gameObject.layer);
+        if (other.CompareTag("Water"))
         {
             //Debug.Log("Water entered");
             //Debug.Log(parent.tank.name);
-/*            if (((TankController)other.gameObject).isGoal)
-*/
             parent.findClosestTank();
             parent.SetMoveTarget();
             SetIsInWater(true);
@@ -98,15 +96,18 @@ public class Bone : MonoBehaviour, IPointerClickHandler
                 }
 
             }
-            else if (!parent.tank.isGoal && other.CompareTag("Hand"))
-                parent.tank.tutorialEntry.SetCompleted();
         }
-            
+        else if (!parent.tank.isGoal && other.CompareTag("Hand"))
+        {
+            parent.tank.tutorialEntry.SetCompleted();
+            Debug.Log("Hi");
+        }
+
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Water")
+        if (other.CompareTag("Water"))
         {
             //Debug.Log("Water exited");
             SetIsInWater(false);
@@ -114,7 +115,6 @@ public class Bone : MonoBehaviour, IPointerClickHandler
             // remove fish from score wall it just left the "wake-up tank"
             if (parent.tank.isGoal)
             {
-                //if(other.gameObject.GetComponent<Bone>().GetParent().isInWaterCount == 0){
                 if (!parent.IsInWater())
                 {
                     parent.tank.inspectionTaskManager.RegressInspection(parent);
