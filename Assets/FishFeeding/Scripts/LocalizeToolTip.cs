@@ -8,24 +8,14 @@ using UnityEngine.UI;
 public class LocalizeToolTip : MonoBehaviour
 {
 
-    //public LocalizedStringTable stringTable;
-    private LocalizedStringTable stringTable = new LocalizedStringTable { TableReference = "TextFishFeeding" };
+    [SerializeField] private LocalizedStringTable stringTable;
     private string translatedString;
     [SerializeField] private string entryKey;
 
-    // Start is called before the first frame update
-    /*void Start()
-    {
-        stringTable.TableChanged += LoadStrings;
-    }*/
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
 
     void OnEnable() {
         stringTable.TableChanged += LoadStrings;
+        UpdateString();
     }
 
     void OnDisable() {
@@ -34,12 +24,11 @@ public class LocalizeToolTip : MonoBehaviour
 
     void LoadStrings(StringTable stringTable) {
         translatedString = stringTable.GetEntry(entryKey).GetLocalizedString();
-        /*Debug.Log("currentlevel:" + translatedCurrentLevel);
-        Debug.Log("basic:" + translatedBasic);*/
-        GetComponent<Text>().text = translatedString;
+        UpdateString();
     }
 
-    /*void OnDestroy() {
-        stringTable.TableChanged -= LoadStrings;
-    }*/
+    private void UpdateString() {
+        GetComponent<TooltipScript>().TextContent = translatedString;
+    }
+
 }
