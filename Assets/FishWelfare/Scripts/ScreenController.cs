@@ -61,7 +61,9 @@ public class ScreenController : MonoBehaviour
                 gillScore = 0;
                 break;
         }
-        int liceScore = (int)Mathf.Clamp(10 - Mathf.Abs(10 - (markedLice/lice)*10), 0.0f, 10f);
+        //int liceScore = (int)Mathf.Clamp(10 - Mathf.Abs(10 - (markedLice/lice)*10), 0.0f, 10f);
+        float fraction = markedLice >= lice ? lice / markedLice : markedLice / lice;
+        int liceScore = (int)((1 - (1 - fraction)) * 10);
         Debug.Log(markedLice / lice);
         Debug.Log("Gill score: " + gillScore + " Lice score: " + liceScore + " handling: " + handling);
         return gillScore + liceScore + handling;
