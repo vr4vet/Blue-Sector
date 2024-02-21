@@ -10,17 +10,17 @@ using System;
 public class AddInstructionsToWatch : MonoBehaviour
 {
     public TextMeshPro textMesh;
-    // [SerializeField] InputActionReference lefthand;
-    // public HandController left;
+    public string text;
 
     public void addInstructions()
     {
+        // Next line uses the update InputSustem of unity. This should be used in the future, but because of time constraints the old version was used
         // OpenXRInput.SendHapticImpulse(lefthand, 1, 1, 1, UnityEngine.InputSystem.XR.XRController.leftHand);
 
         var device = UnityEngine.InputSystem.XR.XRController.leftHand;
         var command = UnityEngine.InputSystem.XR.Haptics.SendHapticImpulseCommand.Create(0, 0.3f, 1);
         device.ExecuteCommand(ref command);
 
-        textMesh.SetText("Legg til det manglende tauet ved å holde hånda der tauet skulle ha vært og trykke på knappen bak pekefingeren din. Du vil kjenne vibrering i hånda når du holder over riktig plass");
+        textMesh.SetText(text);
     }
 }

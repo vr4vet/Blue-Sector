@@ -456,6 +456,8 @@ GameObject:
   - component: {fileID: 251903424}
   - component: {fileID: 251903423}
   - component: {fileID: 251903422}
+  - component: {fileID: 251903426}
+  - component: {fileID: 251903427}
   m_Layer: 0
   m_Name: MissingRope
   m_TagString: Untagged
@@ -649,10 +651,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 48653bbc2b4e74648abc1e3560964e74, type: 2}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 251903426}
+        m_TargetAssemblyTypeName: ChangeDialogOfNPC, Assembly-CSharp
+        m_MethodName: changeDialogue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 251903427}
+        m_TargetAssemblyTypeName: AddInstructionsToWatch, Assembly-CSharp
+        m_MethodName: addInstructions
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -741,6 +755,34 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &251903426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251903420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eac1952425a10be41b21160c799db0a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newNpc: {fileID: 11400000, guid: f0646c78b9c9dae4f9632c7ddc5673da, type: 2}
+  spawner: {fileID: 1697353219}
+--- !u!114 &251903427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251903420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f281c3da8ff269742a7cddcd894217e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 978145763}
+  text: "Du har funnet siste tau, g\xE5 tilbake til b\xE5ten."
 --- !u!1001 &263113379
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3412,6 +3454,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 978145763}
+  text: "Legg til det manglende tauet ved \xE5 holde h\xE5nda der tauet skulle ha
+    v\xE6rt og trykke p\xE5 knappen bak pekefingeren din. Du vil kjenne vibrering
+    i h\xE5nda n\xE5r du holder over riktig plass."
 --- !u!1 &1123730918
 GameObject:
   m_ObjectHideFlags: 0
@@ -5206,6 +5251,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 33
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1697353219 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4376909619194593627, guid: ea7db852323fd6b4986a2685991fe1c5,
+    type: 3}
+  m_PrefabInstance: {fileID: 965499511}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c13da548ef4c44409a8f6719bd0feb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1747710434
 PrefabInstance:
   m_ObjectHideFlags: 0
