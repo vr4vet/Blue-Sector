@@ -52,8 +52,8 @@ public class ConversationController : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {   
-        // if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && !_dialogueBoxController.dialogueIsActive) 
-        // {
+        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && !_dialogueBoxController.dialogueIsActive) 
+        {
             // string json = JsonUtility.ToJson(dialogueTree);
             // Debug.Log(json);
             if (_dialogueTree != null) {
@@ -62,7 +62,7 @@ public class ConversationController : MonoBehaviour
                 Debug.LogError("The dialogueTree of the NPC is null");
             }
         }
-    // }
+    }
 
     /// <summary>
     /// Join the json-version and the dialogueTree-version into one list.
