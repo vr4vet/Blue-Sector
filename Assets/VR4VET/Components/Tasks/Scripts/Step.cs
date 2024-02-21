@@ -11,6 +11,7 @@ namespace Task
     {
         [SerializeField] private string _stepName;
         [SerializeField] [Range(1, 20)] private int _repetionNumber = 1;
+        private int stepNumber;
 
         private bool _compleated = false;
         private int _repetionsCompleated = 0;
@@ -25,6 +26,9 @@ namespace Task
             {
                 _repetionsCompleated++;
             }
+        }
+        public int getStepNumber(){
+            return stepNumber;
         }
 
         public float CompleatedPercent()

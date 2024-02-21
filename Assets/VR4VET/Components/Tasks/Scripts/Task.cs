@@ -1,4 +1,4 @@
-﻿/* Developer: Jorge Garcia
+/* Developer: Jorge Garcia
  * Ask your questions on github: https://github.com/Jorest
  */
 
@@ -85,5 +85,6 @@ namespace Task
 
             return returnSub;
         }
+
     }
 }

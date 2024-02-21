@@ -140,7 +140,7 @@ namespace Tablet
                 button.onClick.AddListener(() => SkillPageLoader(skill));
             }
             // refreshing after adding the new elements for the Page loader to set the pages correctly
-            skillContent.GetComponent<ContentPageChanger>().Refresh();
+            // skillContent.GetComponent<ContentPageChanger>().Refresh();
         }
 
         public void SkillPageLoader(Task.Skill skill)
@@ -210,7 +210,7 @@ namespace Tablet
                 button.onClick.AddListener(() => TaskPageLoader(task));
             }
             // refreshing after adding the new elements for the Page loader to set the pages correctly
-            taskContent.GetComponent<ContentPageChanger>().Refresh();
+            // taskContent.GetComponent<ContentPageChanger>().Refresh();
         }
 
         public void TaskPageLoader(Task.Task task)
@@ -269,6 +269,7 @@ namespace Tablet
             {
                 GameObject.Destroy(child.gameObject);
             }
+            
 
             foreach (Task.Step step in subtask.StepList)
             {
@@ -285,7 +286,7 @@ namespace Tablet
                 TMP_Text reps = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
 
                 caption.text = step.StepName;
-                reps.text = step.RepetionsCompleated + "/" + step.RepetionNumber;
+                reps.text = step.RepetionsCompleated + "";
             }
         }
     }
