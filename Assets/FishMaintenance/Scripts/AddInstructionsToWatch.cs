@@ -23,4 +23,9 @@ public class AddInstructionsToWatch : MonoBehaviour
 
         textMesh.SetText(text);
     }
+
+    public void emptyInstructions()
+    {
+        textMesh.SetText("");
+    }
 }
