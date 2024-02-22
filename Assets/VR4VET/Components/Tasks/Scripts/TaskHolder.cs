@@ -21,6 +21,7 @@ namespace Task
         [SerializeField] public List<Skill> skillList = new List<Skill>();
 
         [SerializeField] public List<Task> taskList = new List<Task>();
+        [SerializeField] public List<Badge> badgeList = new List<Badge>();
 
         //making the task holder a singleton
         private void Awake()
@@ -56,11 +57,11 @@ namespace Task
         {
             Skill returnSkill = null;
 
-            foreach (Skill task in skillList)
+            foreach (Skill skill in skillList)
             {
-                if (task.Name == skillName)
+                if (skill.Name == skillName)
                 {
-                    returnSkill = task;
+                    returnSkill = skill;
                     break;
                 }
             }
@@ -68,7 +69,25 @@ namespace Task
             return returnSkill;
         }
 
+        public Badge GetBadge(string badgeName)
+        {
+            Badge returnBadge = null;
+
+            foreach (Badge badge in badgeList)
+            {
+                if (badge.Name == badgeName)
+                {
+                    returnBadge = badge;
+                    break;
+                }
+            }
+
+            return returnBadge;
+        }
     }
+
+
+
     //this sub-class can be usefull in the future to set targets 
     [System.Serializable]
     public class TaskxTarget

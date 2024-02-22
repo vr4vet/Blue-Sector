@@ -20,40 +20,63 @@ namespace Task
 
         [TextArea(5, 20)]
         [SerializeField] private string _feedback;
+        private List<Badge> _badges = new List<Badge>();
 
-        [Header("Related Subtask")]
-        [SerializeField] private List<Subtask> _subtasks = new List<Subtask>();
+
+
+        // [Header("Related Subtask")]
+        // [SerializeField] private List<Subtask> _subtasks = new List<Subtask>();
 
         //public Dictionary<Subtask, int> _pointsPerSubtask = new Dictionary<Subtask, int>();
 
         public string Name { get => _name; set => _name = value; }
         public string Description { get => _description; set => _description = value; }
-        public List<Subtask> Subtasks { get => _subtasks; set => _subtasks = value; }
+        // public List<Subtask> Subtasks { get => _subtasks; set => _subtasks = value; }
         public int MaxPossiblePoints { get => _maxPoints; set => _maxPoints = value; }
+
         public string Feedback { get => _feedback; set => _feedback = value; }
+        public List<Badge> ConnectedBadges { get => _badges; set => _badges = value; }
+
 
         private void Awake()
         {
-            foreach (Subtask sub in _subtasks)
+
+            // foreach (Subtask sub in _subtasks)
+            // {
+            //     //   _pointsPerSubtask.Add(sub, 0);
+            //     sub.RelatedSkills.Add(this);
+            // }
+        }
+
+        // Should we have Percentage or fraction here? Should set number of badges per skill be preset to 2 or 3?
+        public int GetPercentageCompleted()
+        {
+            int complete = 0;
+            foreach (Badge badge in _badges)
             {
-                //   _pointsPerSubtask.Add(sub, 0);
-                sub.RelatedSkills.Add(this);
+                if (!badge.IsLocked())
+                {
+                    complete += (100 / _badges.Count);
+                }
             }
+            return complete;
+
         }
 
         public int GetArchivedPoints()
         {
             achievedPoints = 0;
-            foreach (Subtask sub in _subtasks)
-            {
-                if (achievedPoints < MaxPossiblePoints)
-                {
-                    achievedPoints += sub.Points;
-                }else
-                {
-                    achievedPoints = MaxPossiblePoints;
-                }
-            }
+            // foreach (Subtask sub in _subtasks)
+            // {
+            //     if (achievedPoints < MaxPossiblePoints)
+            //     {
+            //         achievedPoints += sub.Points;
+            //     }
+            //     else
+            //     {
+            //         achievedPoints = MaxPossiblePoints;
+            //     }
+            // }
             return achievedPoints;
         }
     }

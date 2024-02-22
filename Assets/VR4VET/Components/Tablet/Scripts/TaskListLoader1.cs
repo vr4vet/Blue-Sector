@@ -51,7 +51,7 @@ namespace Tablet
         [SerializeField] private TMP_Text _taskFeedback;
         [SerializeField] private TMP_Text _taskAboutTab;
 
-        [Header("sutask other")]
+        [Header("subtask other")]
         [SerializeField] private TMP_Text _subtaskNameTab;
 
         [SerializeField] private TMP_Text _subtaskAboutTab;
@@ -61,10 +61,10 @@ namespace Tablet
 
         [Header("UI Prefabs")]
         [SerializeField] private GameObject _skillEntryList;
-
         [SerializeField] private GameObject _stepListEntry;
         [SerializeField] private GameObject _subtaskListEntry;
         [SerializeField] private GameObject _taskListEntry;
+        [SerializeField] private GameObject _badgeEntry;
 
         [Header("Aditional Events")]
         [SerializeField] private UnityEvent _skillPageOpen;
@@ -78,10 +78,11 @@ namespace Tablet
         public static TaskListLoader1 Ins;
         private void Awake()
         {
-            if(Ins == null)
+            if (Ins == null)
             {
                 Ins = this;
-            }else
+            }
+            else
             {
                 Destroy(this);
             }
@@ -122,22 +123,22 @@ namespace Tablet
             foreach (Task.Skill skill in _skills)
             {
                 //task for the list
-                GameObject item = Instantiate(_skillEntryList, Vector3.zero, Quaternion.identity);
-                Debug.Log("skill item added, " + item.name + " skill:" + skill.Name);
+                GameObject item = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
+                // Debug.Log("skill item added, " + item.name + " skill:" + skill.Name);
                 item.transform.SetParent(skillContent.transform);
                 item.transform.localPosition = Vector3.zero;
                 item.transform.localScale = Vector3.one;
                 item.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                _skillsClones.Add(item);
+                // _skillsClones.Add(item);
 
-                // we find the button first and then its text component
-                Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
-                TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>(true);
-                buttonText.text = skill.Name;
-                item.GetComponentInChildren<TMP_Text>().text = 
-                    skill.GetArchivedPoints() + "/" + skill.MaxPossiblePoints;
+                // // we find the button first and then its text component
+                // Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
+                // TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>(true);
+                // buttonText.text = skill.Name;
+                // item.GetComponentInChildren<TMP_Text>().text =
+                //     skill.GetArchivedPoints() + "/" + skill.MaxPossiblePoints;
 
-                button.onClick.AddListener(() => SkillPageLoader(skill));
+                // button.onClick.AddListener(() => SkillPageLoader(skill));
             }
             // refreshing after adding the new elements for the Page loader to set the pages correctly
             // skillContent.GetComponent<ContentPageChanger>().Refresh();
@@ -160,24 +161,39 @@ namespace Tablet
             {
                 GameObject.Destroy(child.gameObject);
             }
-            foreach (Task.Subtask sub in skill.Subtasks)
+
+            foreach (Task.Badge badge in skill.ConnectedBadges)
             {
-                //task for the list
-                GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
+                GameObject item = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
                 item.transform.SetParent(_skillSubtaskContent.transform);
                 item.transform.localPosition = Vector3.zero;
                 item.transform.localScale = Vector3.one;
                 item.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-                TMP_Text caption = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
-                // GameObject points = item.transform.Find("PointText").gameObject; points for later
-                caption.text = sub.SubtaskName;
 
-                Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
-                GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
-                if (sub.Compleated()) checkmark.SetActive(true);
-                button.onClick.AddListener(() => SubTaskPageLoader(sub));
+
             }
+
+
+
+            // foreach (Task.Subtask sub in skill.Subtasks)
+            // {
+            //     //task for the list
+            //     GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
+            //     item.transform.SetParent(_skillSubtaskContent.transform);
+            //     item.transform.localPosition = Vector3.zero;
+            //     item.transform.localScale = Vector3.one;
+            //     item.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+            //     TMP_Text caption = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
+            //     // GameObject points = item.transform.Find("PointText").gameObject; points for later
+            //     caption.text = sub.SubtaskName;
+
+            //     Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
+            //     GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
+            //     if (sub.Compleated()) checkmark.SetActive(true);
+            //     button.onClick.AddListener(() => SubTaskPageLoader(sub));
+            // }
             // refreshing after adding the new elements for the Page loader to set the pages correctly
         }
 
@@ -203,8 +219,14 @@ namespace Tablet
                 TMP_Text caption = item.transform.Find("txt_TaskNr").GetComponent<TMP_Text>();
                 caption.text = task.TaskName;
                 Button button = item.transform.Find("btn_Task").GetComponent<Button>();
+                GameObject completedButton = item.transform.Find("btn_TaskComplete").gameObject;
                 GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
-                if (task.Compleated()) checkmark.SetActive(true);
+                if (task.Compleated())
+                {
+                    checkmark.SetActive(true);
+                    completedButton.SetActive(true);
+                    button = item.transform.Find("btn_TaskComplete").GetComponent<Button>();
+                };
 
                 button.onClick.AddListener(() => panelManager.OnClickBackToAboutTask());
                 button.onClick.AddListener(() => TaskPageLoader(task));
@@ -245,8 +267,14 @@ namespace Tablet
                 caption.text = sub.SubtaskName;
 
                 Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
+                GameObject completedButton = item.transform.Find("btn_SubTaskComplete").gameObject;
                 GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
-                if (sub.Compleated()) checkmark.SetActive(true);
+                if (sub.Compleated())
+                {
+                    checkmark.SetActive(true);
+                    completedButton.SetActive(true);
+                    button = item.transform.Find("btn_SubTaskComplete").GetComponent<Button>();
+                };
                 button.onClick.AddListener(() => SubTaskPageLoader(sub));
             }
         }
@@ -269,8 +297,8 @@ namespace Tablet
             {
                 GameObject.Destroy(child.gameObject);
             }
-            
-            int stepNumber=1;
+
+
             foreach (Task.Step step in subtask.StepList)
             {
                 GameObject item = Instantiate(_stepListEntry, Vector3.zero, Quaternion.identity);
@@ -283,11 +311,9 @@ namespace Tablet
                 GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
                 if (step.IsCompeleted()) checkmark.SetActive(true);
 
-                TMP_Text reps = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
-
+                TMP_Text number = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
                 caption.text = step.StepName;
-                reps.text = stepNumber + "";
-                stepNumber++;
+                number.text = step.getStepNumber() + "";
             }
         }
     }
