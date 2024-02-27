@@ -30,7 +30,14 @@ public class FactoryFishSpawner : MonoBehaviour
     [Tooltip("The rate at which the fish will spawn in seconds")]
     private float spawnRate;
 
-    // TODO: private int varationInSpawnrate
+    [SerializeField]
+    [Range(0, 10)]
+    [Tooltip("The maximum spawn delay variation in seconds. 0 means no variation.")]
+    private float varationInSpawnrate;
+
+    [SerializeField]
+    [Tooltip("If toggled, the fish will spawn with the different sizes")]
+    private bool fishSizeVariation;
 
     // Start is called before the first frame update
     void Start()
@@ -46,8 +53,8 @@ public class FactoryFishSpawner : MonoBehaviour
 
     private IEnumerator SpawnFish()
     {
-        // Waits for number of seconds equal to the spawnrate
-        yield return new WaitForSeconds(spawnRate);
+        // Waits for number of seconds equal to the spawnrate + variation
+        yield return new WaitForSeconds(spawnRate + RandomizeSpawnRateVariation());
 
         if (currentAmountOfFish < maxAmountOfFish)
         {
@@ -55,12 +62,33 @@ public class FactoryFishSpawner : MonoBehaviour
             GameObject childGameObject = Instantiate(
                 fishPrefab,
                 transform.position,
-                Quaternion.identity,
+                Random.rotation,
                 transform
             );
             childGameObject.name = "FactoryFish" + gameObject.transform.childCount.ToString();
+
+            if (fishSizeVariation)
+            {
+                float randomSize = RandomizeObjectSize();
+                childGameObject.transform.localScale = new Vector3(
+                    randomSize,
+                    randomSize,
+                    randomSize
+                );
+            }
         }
 
         StartCoroutine(SpawnFish());
+    }
+
+    private float RandomizeObjectSize()
+    {
+        // the size variation of the fish relative to the parent spawner
+        return Random.Range(9, 15);
+    }
+
+    private float RandomizeSpawnRateVariation()
+    {
+        return Random.Range(0.5f, varationInSpawnrate);
     }
 }
