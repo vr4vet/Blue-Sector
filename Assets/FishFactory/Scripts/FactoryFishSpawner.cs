@@ -1,28 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public class FactoryFishSpawner : MonoBehaviour
 {
+    // TODO: Not used at this state, but can be implemented down the line
     [HideInInspector]
     enum FishState
     {
         Alive,
         Stunned,
-        Dead // TODO: Not used at this state, but can be implemented down the line
+        Dead
     }
 
     [SerializeField]
+    [Tooltip("The gameobject prefab to spawn")]
     private GameObject fishPrefab;
 
     [SerializeField]
+    [Tooltip("The maximum amount of fish that can be spawned")]
     private int maxAmountOfFish;
 
+    // Counts the amount of child gameobjects in the spawner
     private int currentAmountOfFish;
 
     [SerializeField]
     [Range(0.1f, 10)]
-    [Tooltip("The rate at which the fish will spawn in seconds")] //FIXME: check if seconds and if range is fine
+    [Tooltip("The rate at which the fish will spawn in seconds")]
     private float spawnRate;
 
     // TODO: private int varationInSpawnrate
@@ -35,12 +40,13 @@ public class FactoryFishSpawner : MonoBehaviour
 
     void Update()
     {
+        // Checks the amount of spawned gameobjects in the simulation
         currentAmountOfFish = gameObject.transform.childCount;
     }
 
     private IEnumerator SpawnFish()
     {
-        // When simulation starts, spawn fish
+        // Waits for number of seconds equal to the spawnrate
         yield return new WaitForSeconds(spawnRate);
 
         if (currentAmountOfFish < maxAmountOfFish)
