@@ -11,6 +11,7 @@ public class FactoryFishSpawner : MonoBehaviour
     {
         Alive,
         Stunned,
+        Bleeding, 
         Dead
     }
 
@@ -21,6 +22,10 @@ public class FactoryFishSpawner : MonoBehaviour
     [SerializeField]
     [Tooltip("The maximum amount of fish that can be spawned")]
     private int maxAmountOfFish;
+
+    [SerializeField]
+    [Tooltip("The chance of a fish being a different state than stunned. Higher number equals lower chance")]
+    private int randomFishStateChance;
 
     // Counts the amount of child gameobjects in the spawner
     private int currentAmountOfFish;
@@ -48,7 +53,7 @@ public class FactoryFishSpawner : MonoBehaviour
     void Update()
     {
         // Checks the amount of spawned gameobjects in the simulation
-        currentAmountOfFish = gameObject.transform.childCount;
+        currentAmountOfFish = transform.childCount;
     }
 
     private IEnumerator SpawnFish()
@@ -65,7 +70,9 @@ public class FactoryFishSpawner : MonoBehaviour
                 Random.rotation,
                 transform
             );
-            childGameObject.name = "FactoryFish" + gameObject.transform.childCount.ToString();
+            childGameObject.name = "FactoryFish" + transform.childCount.ToString();
+
+            SetRandomFishState(childGameObject);
 
             if (fishSizeVariation)
             {
@@ -90,5 +97,45 @@ public class FactoryFishSpawner : MonoBehaviour
     private float RandomizeSpawnRateVariation()
     {
         return Random.Range(0.5f, varationInSpawnrate);
+    }
+
+    // Generates a number from 1 to our set chance, to determine the chance of different states.
+    private void SetRandomFishState(GameObject fish)
+    {
+        int randomValue = Random.Range(1, randomFishStateChance + 1);
+        FishState state;
+
+        if (randomValue == 1)
+        {
+            state = FishState.Dead;
+        }
+        else if (randomValue <= 3)
+        {
+            state = FishState.Alive;
+        }
+        else
+        {
+            state = FishState.Stunned;
+        }
+
+        fish.GetComponent<FactoryFishSpawner>().SetFishState(state);
+    }
+    
+    // Sets the Fish state.
+    private void SetFishState(FishState state)
+    {
+        switch (state)
+        {
+            case FishState.Alive:
+                break;
+            case FishState.Stunned:
+                break;
+            case FishState.Bleeding:
+                break;
+            case FishState.Dead:
+                break;
+            default:
+                break;
+        }
     }
 }
