@@ -20,9 +20,7 @@ namespace Task
 
         [TextArea(5, 20)]
         [SerializeField] private string _feedback;
-        private List<Badge> _badges = new List<Badge>();
-
-
+        [SerializeField] private List<Badge> _badges = new List<Badge>();
 
         // [Header("Related Subtask")]
         // [SerializeField] private List<Subtask> _subtasks = new List<Subtask>();
@@ -41,11 +39,16 @@ namespace Task
         private void Awake()
         {
 
-            // foreach (Subtask sub in _subtasks)
-            // {
-            //     //   _pointsPerSubtask.Add(sub, 0);
-            //     sub.RelatedSkills.Add(this);
-            // }
+            foreach (Badge badge in _badges)
+            {
+                badge.ConnectedSkill = this;
+
+                // foreach (Subtask sub in _subtasks)
+                // {
+                //     //   _pointsPerSubtask.Add(sub, 0);
+                //     sub.RelatedSkills.Add(this);
+                // }
+            }
         }
 
         // Should we have Percentage or fraction here? Should set number of badges per skill be preset to 2 or 3?

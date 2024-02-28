@@ -19,21 +19,18 @@ namespace Task
         [SerializeField] private List<Subtask> _subtasks = new List<Subtask>();
 
 
-        [SerializeField] private Skill _skill;
-        // [SerializeField] public GameObject _icon;
+        private Skill _skill;
+        [SerializeField] private Sprite _icon;
 
 
         public string Name { get => _name; set => _name = value; }
         public Skill ConnectedSkill { get => _skill; set => _skill = value; }
         public string Instruction { get => _instruction; set => _instruction = value; }
         public List<Subtask> SubTasks { get => _subtasks; set => _subtasks = value; }
-        // public GameObject BadgeIcon { get => _icon; set => _icon = value; }
+        public Sprite Icon { get => _icon; set => _icon = value; }
 
-        private void Awake()
-        {
-            _skill.ConnectedBadges.Add(this);
 
-        }
+
 
         // Temporary, need to decide if badges are unlocked when subtasks are completed or steps. Can for example unlock a badge on the completion of steps in different subtasks, such as communication. 
         public bool IsLocked()
@@ -42,12 +39,11 @@ namespace Task
             {
                 if (!subtask.Compleated())
                 {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
-
 
 
     }

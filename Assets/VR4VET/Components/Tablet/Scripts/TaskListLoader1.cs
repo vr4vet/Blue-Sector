@@ -38,6 +38,11 @@ namespace Tablet
         [SerializeField] private GameObject _subtaskContent;
         [SerializeField] private GameObject _skillSubtaskContent;
 
+        [Header("Badge elements")]
+        [SerializeField] private TMP_Text _badgeName;
+        [SerializeField] private TMP_Text _badgeInstructions;
+        [SerializeField] private Image _displayBadge;
+
         [Header("skill other")]
         [SerializeField] private TMP_Text _skillTab;
 
@@ -65,8 +70,9 @@ namespace Tablet
         [SerializeField] private GameObject _subtaskListEntry;
         [SerializeField] private GameObject _taskListEntry;
         [SerializeField] private GameObject _badgeEntry;
+        [SerializeField] private GameObject _skillBadgesList;
 
-        [Header("Aditional Events")]
+        [Header("Additional Events")]
         [SerializeField] private UnityEvent _skillPageOpen;
 
         [SerializeField] private UnityEvent _tasksListOpen;
@@ -122,28 +128,70 @@ namespace Tablet
             //loads each skill on the parent object
             foreach (Task.Skill skill in _skills)
             {
-                //task for the list
-                GameObject item = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
-                // Debug.Log("skill item added, " + item.name + " skill:" + skill.Name);
-                item.transform.SetParent(skillContent.transform);
-                item.transform.localPosition = Vector3.zero;
-                item.transform.localScale = Vector3.one;
-                item.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                // _skillsClones.Add(item);
+                // Initiate a parent for list of badges and skill title
+                GameObject skillBadgesContent = Instantiate(_skillBadgesList, Vector3.zero, Quaternion.identity);
+                // Add the horizontal list to vertical content list
+                skillBadgesContent.transform.SetParent(skillContent.transform);
+                skillBadgesContent.transform.localPosition = Vector3.zero;
+                skillBadgesContent.transform.localScale = Vector3.one;
+                skillBadgesContent.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                // Set title to be name of this skill
+                TMP_Text skillName = skillBadgesContent.transform.Find("Txt_SkillName").GetComponent<TMP_Text>();
+                skillName.text = skill.Name;
 
-                // // we find the button first and then its text component
-                // Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
-                // TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>(true);
-                // buttonText.text = skill.Name;
-                // item.GetComponentInChildren<TMP_Text>().text =
-                //     skill.GetArchivedPoints() + "/" + skill.MaxPossiblePoints;
+                // Find Horizontal list to place badges
+                GameObject BadgesList = skillBadgesContent.transform.Find("List_Badges").gameObject;
 
-                // button.onClick.AddListener(() => SkillPageLoader(skill));
+                //Add connected badges to this horizontal list
+                foreach (Task.Badge badge in skill.ConnectedBadges)
+                {
+                    GameObject badgeItem = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
+
+                    badgeItem.transform.SetParent(BadgesList.transform);
+                    badgeItem.transform.localPosition = Vector3.zero;
+                    badgeItem.transform.localScale = Vector3.one;
+                    badgeItem.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+                    // Set Badge Icon
+                    UnityEngine.UI.Image buttonIcon = badgeItem.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
+                    buttonIcon.sprite = badge.Icon;
+
+                    // Find button
+                    Button button = badgeItem.transform.Find("icon_badge").GetComponent<Button>();
+
+                    // Set icon with shader and padlock if badge is locked
+                    GameObject padlock = badgeItem.transform.Find("badge_locked").gameObject;
+                    padlock.SetActive(badge.IsLocked());
+
+                    // Set a listener for badge button click
+
+                    button.onClick.AddListener(() => BadgeInfoLoader(badge));
+
+                    // Debug.Log("skill item added, " + item.name + " skill:" + skill.Name);
+                    // _skillsClones.Add(item);
+
+                    // // we find the button first and then its text component
+                    // Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
+                    // TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>(true);
+                    // buttonText.text = skill.Name;
+                    // item.GetComponentInChildren<TMP_Text>().text =
+                    //     skill.GetArchivedPoints() + "/" + skill.MaxPossiblePoints;
+
+                    // button.onClick.AddListener(() => SkillPageLoader(skill));
+                }
             }
             // refreshing after adding the new elements for the Page loader to set the pages correctly
             // skillContent.GetComponent<ContentPageChanger>().Refresh();
         }
+        public void BadgeInfoLoader(Task.Badge badge)
+        {
 
+
+
+            _badgeName.text = badge.Name;
+            _badgeInstructions.text = badge.Instruction;
+            _displayBadge.sprite = badge.Icon;
+        }
         public void SkillPageLoader(Task.Skill skill)
         {
             if (_skillPageOpen != null) _skillPageOpen.Invoke();
@@ -161,6 +209,7 @@ namespace Tablet
             {
                 GameObject.Destroy(child.gameObject);
             }
+
 
             foreach (Task.Badge badge in skill.ConnectedBadges)
             {
@@ -297,8 +346,7 @@ namespace Tablet
             {
                 GameObject.Destroy(child.gameObject);
             }
-
-
+            int stepNumber = 1;
             foreach (Task.Step step in subtask.StepList)
             {
                 GameObject item = Instantiate(_stepListEntry, Vector3.zero, Quaternion.identity);
@@ -313,7 +361,8 @@ namespace Tablet
 
                 TMP_Text number = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
                 caption.text = step.StepName;
-                number.text = step.getStepNumber() + "";
+                number.text = stepNumber + "";
+                stepNumber++;
             }
         }
     }

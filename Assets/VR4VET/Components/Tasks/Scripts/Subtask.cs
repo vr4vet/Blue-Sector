@@ -43,6 +43,16 @@ namespace Task
         public List<Skill> RelatedSkills { get => _relatedSkills; set => _relatedSkills = value; }
 
         //it returns the completed status, if the autocomplete box is selected it will return true when all its steps are completed
+
+        // private void SetStepNumbers()
+        // {
+        //     int stepNumber = 1;
+        //     foreach (Step step in StepList)
+        //     {
+        //         step.setStepNumber(stepNumber);
+        //         stepNumber++;
+        //     }
+        // }
         public bool Compleated()
         {
             if (_autocompleate)
@@ -50,7 +60,7 @@ namespace Task
                 _compleated = true;
                 foreach (Step step in StepList)
                 {
-                    if (! step.IsCompeleted())
+                    if (!step.IsCompeleted())
                     {
                         _compleated = false;
                         break;
