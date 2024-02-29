@@ -199,6 +199,9 @@ public class StaticPanelManager : MonoBehaviour
     {
         TXT_Skill_Exp.text = "Dine Ferdigheter";
         SwitchMenuTo(SkillListMenu);
+
+
+
     }
 
     public void OnClickMenuHelp()

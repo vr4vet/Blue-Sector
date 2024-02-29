@@ -125,6 +125,7 @@ namespace Tablet
         }
         public void LoadSkillsPage()
         {
+
             //loads each skill on the parent object
             foreach (Task.Skill skill in _skills)
             {
@@ -214,6 +215,10 @@ namespace Tablet
         {
             if (_skillPageOpen != null) _skillPageOpen.Invoke();
 
+
+
+
+
             // hide the subtask list view
             panelManager.OnClickToAboutSkill();
 
@@ -274,8 +279,11 @@ namespace Tablet
             // will add the task
             foreach (Task.Task task in _tasks)
             {
-                // Remove after testing and uncomment line in end of for loop 
+                // Remove line after testing and uncomment line in end of for loop 
                 TaskPageLoader(task);
+
+
+
                 //task for the list
                 GameObject item = Instantiate(_taskListEntry, Vector3.zero, Quaternion.identity);
                 item.transform.SetParent(taskContent.transform);
