@@ -135,12 +135,18 @@ namespace Tablet
                 skillBadgesContent.transform.localPosition = Vector3.zero;
                 skillBadgesContent.transform.localScale = Vector3.one;
                 skillBadgesContent.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+
                 // Set title to be name of this skill
                 TMP_Text skillName = skillBadgesContent.transform.Find("Txt_SkillName").GetComponent<TMP_Text>();
                 skillName.text = skill.Name;
 
                 // Find Horizontal list to place badges
                 GameObject BadgesList = skillBadgesContent.transform.Find("List_Badges").gameObject;
+
+                // Start display vs badge info display
+                // GameObject badgeDisplay = skillBadgesContent.transform.Find("badge_display").gameObject;
+                // GameObject startDisplay = skillBadgesContent.transform.Find("Txt_start").gameObject;
 
                 //Add connected badges to this horizontal list
                 foreach (Task.Badge badge in skill.ConnectedBadges)
@@ -157,16 +163,23 @@ namespace Tablet
                     buttonIcon.sprite = badge.Icon;
 
                     // Find button
-                    Button button = badgeItem.transform.Find("icon_badge").GetComponent<Button>();
+                    Button button = badgeItem.transform.Find("btn_badge").GetComponent<Button>();
 
                     // Set icon with shader and padlock if badge is locked
-                    GameObject padlock = badgeItem.transform.Find("badge_locked").gameObject;
+                    GameObject padlock = badgeItem.transform.Find("padlock").gameObject;
                     padlock.SetActive(badge.IsLocked());
+
+
 
                     // Set a listener for badge button click
 
                     button.onClick.AddListener(() => BadgeInfoLoader(badge));
 
+                    // if (startDisplay.activeInHierarchy)
+                    // {
+                    //     startDisplay.SetActive(false);
+                    //     badgeDisplay.SetActive(true);
+                    // }
                     // Debug.Log("skill item added, " + item.name + " skill:" + skill.Name);
                     // _skillsClones.Add(item);
 
@@ -185,9 +198,14 @@ namespace Tablet
         }
         public void BadgeInfoLoader(Task.Badge badge)
         {
-
-
-
+            Transform badgeInfo = skillsListPageCanvas.transform.Find("BadgeInfo").transform;
+            GameObject badgeDisplay = badgeInfo.Find("badge_display").gameObject;
+            if (!badgeDisplay.activeInHierarchy)
+            {
+                GameObject startDisplay = badgeInfo.Find("Txt_start").gameObject;
+                startDisplay.SetActive(false);
+                badgeDisplay.SetActive(true);
+            }
             _badgeName.text = badge.Name;
             _badgeInstructions.text = badge.Instruction;
             _displayBadge.sprite = badge.Icon;
