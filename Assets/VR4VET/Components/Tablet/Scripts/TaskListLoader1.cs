@@ -236,9 +236,6 @@ namespace Tablet
                 item.transform.localPosition = Vector3.zero;
                 item.transform.localScale = Vector3.one;
                 item.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-
-
             }
 
 
@@ -272,10 +269,13 @@ namespace Tablet
             Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
             _tasks = th.taskList;
 
+
             //loads each task on the parent object
             // will add the task
             foreach (Task.Task task in _tasks)
             {
+                // Remove after testing and uncomment line in end of for loop 
+                TaskPageLoader(task);
                 //task for the list
                 GameObject item = Instantiate(_taskListEntry, Vector3.zero, Quaternion.identity);
                 item.transform.SetParent(taskContent.transform);
@@ -296,7 +296,8 @@ namespace Tablet
                 };
 
                 button.onClick.AddListener(() => panelManager.OnClickBackToAboutTask());
-                button.onClick.AddListener(() => TaskPageLoader(task));
+                // Commented out for testing to start on Task About page
+                // button.onClick.AddListener(() => TaskPageLoader(task));
             }
             // refreshing after adding the new elements for the Page loader to set the pages correctly
             // taskContent.GetComponent<ContentPageChanger>().Refresh();
@@ -351,7 +352,7 @@ namespace Tablet
             if (_subtaskPageOpen != null) _subtaskPageOpen.Invoke();
 
             //hide previos pagee
-            panelManager.OnClickSkillSubtasks();
+            // panelManager.OnClickSkillSubtasks();
 
             TaskPageCanvas.SetActive(false);
             subtaskPageCanvas.SetActive(true);
@@ -373,12 +374,21 @@ namespace Tablet
                 item.transform.localScale = Vector3.one;
                 item.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
+
+                if (step.IsCompeleted())
+                {
+                    GameObject completedStep = item.transform.Find("Completed").gameObject;
+                    GameObject standardStep = item.transform.Find("Standard").gameObject;
+                    completedStep.SetActive(true);
+                    standardStep.SetActive(false);
+                };
                 TMP_Text caption = item.transform.Find("txt_Desc").GetComponent<TMP_Text>();
-                GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
-                if (step.IsCompeleted()) checkmark.SetActive(true);
+                caption.text = step.StepName;
+
+                TMP_Text reps = item.transform.Find("txt_repetitionNr").GetComponent<TMP_Text>();
+                if (step.RepetionNumber > 1) reps.text = step.RepetionsCompleated + "/" + step.RepetionNumber;
 
                 TMP_Text number = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
-                caption.text = step.StepName;
                 number.text = stepNumber + "";
                 stepNumber++;
             }

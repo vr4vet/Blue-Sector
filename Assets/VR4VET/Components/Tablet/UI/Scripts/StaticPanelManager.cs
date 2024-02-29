@@ -46,7 +46,7 @@ public class StaticPanelManager : MonoBehaviour
     [SerializeReference] TextMeshProUGUI TXT_Subtask_task; //is the current task shown for the current subtask, as shown in the title
 
     [SerializeReference] TextMeshProUGUI TXT_Subtask; //is the current Subtask
-    [SerializeReference] GameObject PANEL_Subtask_Description; 
+    [SerializeReference] GameObject PANEL_Subtask_Description;
     [SerializeReference] GameObject PANEL_Subtask_Steps;
     [SerializeReference] TextMeshProUGUI TXT_Subtask_Exp;
 
@@ -127,38 +127,41 @@ public class StaticPanelManager : MonoBehaviour
         SwitchMenuTo(ScoreListMenu);
     }
 
-    public void ChangeCurrentTask(string b)
-    {
-        TXT_TASK.text = b;
-        TXT_Subtask_task.text = b;
+    // public void ChangeCurrentTask(string b)
+    // {
+    //     TXT_TASK.text = b;
+    //     TXT_Subtask_task.text = b;
 
-    }
-    public void ChangeCurrentSubTask(string b)
-    {
-        TXT_Subtask.text = b;
+    // }
+    // public void ChangeCurrentSubTask(string b)
+    // {
+    //     TXT_Subtask.text = b;
 
-    }
-    public void ChangeCurrentSkill(string b)
-    {
-        TXT_Skill.text = b;
+    // }
+    // public void ChangeCurrentSkill(string b)
+    // {
+    //     TXT_Skill.text = b;
 
-    }
+    // }
 
-    public void ChangeCurrentScore(string b)
-    {
-        TXT_Score.text = b;
+    // public void ChangeCurrentScore(string b)
+    // {
+    //     TXT_Score.text = b;
 
-    }
+    // }
 
     public void SetExperienceName(string b)
     {
-        TXT_Task_Exp.text = "Task - " + b;
-        TXT_TaskAbout_Exp.text = "Task - " + b;
-        TXT_Subtask_Exp.text = "Task - " + b;
-        TXT_Skill_Exp.text = "Skills - " + b;
-        TXT_SkillAbout_Exp.text = "Skills - " + b;
-        TXT_Score_Exp.text = "Score - " + b;
-        TXT_Help_Exp.text = "Help - " + b;
+        // TXT_Task_Exp.text = "Task - " + b;
+        // TXT_TaskAbout_Exp.text = "Task - " + b;
+        // TXT_Subtask_Exp.text = "Task - " + b;
+        // TXT_Skill_Exp.text = "Skills - " + b;
+        // TXT_SkillAbout_Exp.text = "Skills - " + b;
+        // TXT_Score_Exp.text = "Score - " + b;
+        // TXT_Help_Exp.text = "Help - " + b;
+
+
+        TXT_TaskAbout_Exp.text = "Oppgaver - " + b;
     }
 
     void SwitchMenuTo(GameObject b)
@@ -179,7 +182,7 @@ public class StaticPanelManager : MonoBehaviour
         {
             item.SetActive(false);
         }
-        MainMenu.SetActive(true);
+        TaskAboutMenu.SetActive(true);
     }
 
     void Update()
@@ -194,6 +197,7 @@ public class StaticPanelManager : MonoBehaviour
     }
     public void OnClickMenuSkills()
     {
+        TXT_Skill_Exp.text = "Dine Ferdigheter";
         SwitchMenuTo(SkillListMenu);
     }
 
@@ -221,43 +225,43 @@ public class StaticPanelManager : MonoBehaviour
 
 
 
-    #endregion
-    #region TaskAboutMenu
+    // #endregion
+    // #region TaskAboutMenu
 
-    public void OnClickTaskAbout()
-    {
-        PANEL_TASK_ABOUT.SetActive(true);
-        PANEL_TASK_FEEDBACK.SetActive(false);
-        PANEL_TASK_SUBTASKLIST.SetActive(false);
-    }
-    public void OnClickTaskFeedback()
-    {
-        PANEL_TASK_ABOUT.SetActive(false);
-        PANEL_TASK_FEEDBACK.SetActive(true);
-        PANEL_TASK_SUBTASKLIST.SetActive(false);
-    }
-    public void OnClickTaskSubtaskList()
-    {
-        PANEL_TASK_ABOUT.SetActive(false);
-        PANEL_TASK_FEEDBACK.SetActive(false);
-        PANEL_TASK_SUBTASKLIST.SetActive(true);
-    }
-
-
-    public void OnClickTaskLocation()
-    {
-        Debug.Log("Clicked Location button.");
-    }
-    public void OnClickTaskSound()
-    {
-        Debug.Log("Clicked Sound button.");
+    // public void OnClickTaskAbout()
+    // {
+    //     PANEL_TASK_ABOUT.SetActive(true);
+    //     PANEL_TASK_FEEDBACK.SetActive(false);
+    //     PANEL_TASK_SUBTASKLIST.SetActive(false);
+    // }
+    // public void OnClickTaskFeedback()
+    // {
+    //     PANEL_TASK_ABOUT.SetActive(false);
+    //     PANEL_TASK_FEEDBACK.SetActive(true);
+    //     PANEL_TASK_SUBTASKLIST.SetActive(false);
+    // }
+    // public void OnClickTaskSubtaskList()
+    // {
+    //     PANEL_TASK_ABOUT.SetActive(false);
+    //     PANEL_TASK_FEEDBACK.SetActive(false);
+    //     PANEL_TASK_SUBTASKLIST.SetActive(true);
+    // }
 
 
-    }
+    // public void OnClickTaskLocation()
+    // {
+    //     Debug.Log("Clicked Location button.");
+    // }
+    // public void OnClickTaskSound()
+    // {
+    //     Debug.Log("Clicked Sound button.");
 
 
-    #endregion
-    #region SubtaskAboutMenu
+    // }
+
+
+    // #endregion
+    // #region SubtaskAboutMenu
 
 
 
@@ -265,24 +269,24 @@ public class StaticPanelManager : MonoBehaviour
     {
         PANEL_Subtask_Description.SetActive(false);
         PANEL_Subtask_Steps.SetActive(true);
-      
+
     }
 
 
-    //return from viewing steps
-    public void OnClickBackFromSubTaskStepList()
-    {
-        PANEL_Subtask_Description.SetActive(true);
-        PANEL_Subtask_Steps.SetActive(false);
-        
-    }
+    // //return from viewing steps
+    // public void OnClickBackFromSubTaskStepList()
+    // {
+    //     PANEL_Subtask_Description.SetActive(true);
+    //     PANEL_Subtask_Steps.SetActive(false);
 
-    public void OnClickSubTaskFeedBack()
-    {
-        PANEL_Subtask_Description.SetActive(false);
-        PANEL_Subtask_Steps.SetActive(false);
-      
-    }
+    // }
+
+    // public void OnClickSubTaskFeedBack()
+    // {
+    //     PANEL_Subtask_Description.SetActive(false);
+    //     PANEL_Subtask_Steps.SetActive(false);
+
+    // }
 
 
 
@@ -294,30 +298,30 @@ public class StaticPanelManager : MonoBehaviour
     }
 
 
-    #endregion
-    #region SkillAboutMenu
+    // #endregion
+    // #region SkillAboutMenu
 
-    public void OnClickSkillAbout()
-    {
-        PANEL_Skill_ABOUT_SKILL.SetActive(true);
-        PANEL_Skill_FEEDBACK.SetActive(false);
-        PANEL_SKILL_ABOUT_SUBTASKLIST.SetActive(false);
-    }
+    // public void OnClickSkillAbout()
+    // {
+    //     PANEL_Skill_ABOUT_SKILL.SetActive(true);
+    //     PANEL_Skill_FEEDBACK.SetActive(false);
+    //     PANEL_SKILL_ABOUT_SUBTASKLIST.SetActive(false);
+    // }
 
-    public void OnClickSkillFeedback()
-    {
-        PANEL_Skill_ABOUT_SKILL.SetActive(false);
-        PANEL_Skill_FEEDBACK.SetActive(true);
-        PANEL_SKILL_ABOUT_SUBTASKLIST.SetActive(false);
+    // public void OnClickSkillFeedback()
+    // {
+    //     PANEL_Skill_ABOUT_SKILL.SetActive(false);
+    //     PANEL_Skill_FEEDBACK.SetActive(true);
+    //     PANEL_SKILL_ABOUT_SUBTASKLIST.SetActive(false);
 
-    }
+    // }
 
-    public void OnClickSkillSubtasks()
-    {
-        PANEL_Skill_ABOUT_SKILL.SetActive(false);
-        PANEL_Skill_FEEDBACK.SetActive(false);
-        PANEL_SKILL_ABOUT_SUBTASKLIST.SetActive(true);
-    }
+    // public void OnClickSkillSubtasks()
+    // {
+    //     PANEL_Skill_ABOUT_SKILL.SetActive(false);
+    //     PANEL_Skill_FEEDBACK.SetActive(false);
+    //     PANEL_SKILL_ABOUT_SUBTASKLIST.SetActive(true);
+    // }
 
 
 
@@ -354,7 +358,7 @@ public class StaticPanelManager : MonoBehaviour
     public void SelectSubTask(SubTask b)
     {
 
-
+        TXT_Subtask_Exp.text = "Steg - " + b.Name;
         SwitchMenuTo(SubtaskAboutMenu);
     }
 
@@ -363,5 +367,5 @@ public class StaticPanelManager : MonoBehaviour
 
     }
 
-   
+
 }
