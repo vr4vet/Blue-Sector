@@ -27,6 +27,15 @@ public class FactoryFishSpawner : MonoBehaviour
     [Tooltip("The chance of a fish being a different state than stunned. Higher number equals lower chance")]
     private int randomFishStateChance;
 
+    // [SerializeField]
+    // [Tooltip("The chance of a fish being dead. Higher number equals higher chance")]
+    // private int fishDeadChance;
+
+    [SerializeField]
+    [Range(2, 20)]
+    [Tooltip("The chance of a fish not being stunned. Higher number equals lower chance")]
+    private int fishAliveChance;
+
     // Counts the amount of child gameobjects in the spawner
     private int currentAmountOfFish;
 
@@ -109,7 +118,7 @@ public class FactoryFishSpawner : MonoBehaviour
         {
             state = FishState.Dead;
         }
-        else if (randomValue <= 3)
+        else if (randomValue <= fishAliveChance)
         {
             state = FishState.Alive;
         }
