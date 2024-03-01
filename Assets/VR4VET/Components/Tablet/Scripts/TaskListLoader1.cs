@@ -82,7 +82,7 @@ namespace Tablet
         private List<GameObject> _skillsClones = new List<GameObject>();
 
         public static TaskListLoader1 Ins;
-        private void Awake()
+        private void Start()
         {
             if (Ins == null)
             {
@@ -94,7 +94,7 @@ namespace Tablet
             }
 
         }
-        private void Start()
+        private void Awake()
         {
             //setting loading the scriptable objects
             Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];

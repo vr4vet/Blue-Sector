@@ -21,6 +21,7 @@ namespace Task
         [SerializeField] public List<Skill> skillList = new List<Skill>();
 
         [SerializeField] public List<Task> taskList = new List<Task>();
+
         [SerializeField] public List<Badge> badgeList = new List<Badge>();
 
         //making the task holder a singleton
@@ -84,6 +85,7 @@ namespace Task
 
             return returnBadge;
         }
+
     }
 
 

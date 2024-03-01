@@ -59,6 +59,13 @@ namespace Task
             _compleated = value;
         }
 
+        public void Reset()
+        {
+            _compleated = false;
+            _repetionsCompleated = 0;
+
+        }
+
         //overload to compleate reps
         public void SetCompleated(bool value, bool compleateReps)
         {
