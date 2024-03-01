@@ -5,16 +5,7 @@ using UnityEngine;
 
 public class FactoryFishSpawner : MonoBehaviour
 {
-    // TODO: Not used at this state, but can be implemented down the line
-    [HideInInspector]
-    enum FishState
-    {
-        Alive,
-        Stunned,
-        Bleeding, 
-        Dead
-    }
-
+    
     [SerializeField]
     [Tooltip("The gameobject prefab to spawn")]
     private GameObject fishPrefab;
@@ -81,8 +72,13 @@ public class FactoryFishSpawner : MonoBehaviour
             );
             childGameObject.name = "FactoryFish" + transform.childCount.ToString();
 
-            SetRandomFishState(childGameObject);
+            FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
+            if (fishState != null)
+            {
+                fishState.currentState = RandomizeFishState();
+            }
 
+            // this randomized the size of the fish if enabled
             if (fishSizeVariation)
             {
                 float randomSize = RandomizeObjectSize();
@@ -109,42 +105,26 @@ public class FactoryFishSpawner : MonoBehaviour
     }
 
     // Generates a number from 1 to our set chance, to determine the chance of different states.
-    private void SetRandomFishState(GameObject fish)
+    private FactoryFishState.State RandomizeFishState()
     {
         int randomValue = Random.Range(1, randomFishStateChance + 1);
-        FishState state;
+        FactoryFishState.State state;
 
         if (randomValue == 1)
         {
-            state = FishState.Dead;
+            state = FactoryFishState.State.Dead;
         }
-        else if (randomValue <= fishAliveChance)
+        else if (randomValue <= 3)
         {
-            state = FishState.Alive;
+            state = FactoryFishState.State.Alive;
         }
         else
         {
-            state = FishState.Stunned;
+            state = FactoryFishState.State.Stunned;
         }
 
-        fish.GetComponent<FactoryFishSpawner>().SetFishState(state);
+        return state;
     }
     
-    // Sets the Fish state.
-    private void SetFishState(FishState state)
-    {
-        switch (state)
-        {
-            case FishState.Alive:
-                break;
-            case FishState.Stunned:
-                break;
-            case FishState.Bleeding:
-                break;
-            case FishState.Dead:
-                break;
-            default:
-                break;
-        }
-    }
+
 }
