@@ -7,6 +7,7 @@ public class MaintenanceManager : MonoBehaviour
     public static MaintenanceManager Instance;
     [SerializeField] private Task.TaskHolder taskHolder;
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
+    [SerializeField] private AudioClip success;
 
     // Start is called before the first frame update
     private void Awake()
@@ -43,12 +44,31 @@ public class MaintenanceManager : MonoBehaviour
 
     public void CompleteStep(string taskName, string subtaskName, string stepName)
     {
-        Task.Subtask sub = taskHolder.GetTask(taskName).GetSubtask(subtaskName);
+        Task.Task task = taskHolder.GetTask(taskName);
+        Task.Subtask sub = task.GetSubtask(subtaskName);
 
-        Task.Step step = taskHolder.GetTask(taskName).GetSubtask(subtaskName).GetStep(stepName);
+        Task.Step step = sub.GetStep(stepName);
         step.CompleateRep();
         taskListLoader.SubTaskPageLoader(sub);
+        taskListLoader.TaskPageLoader(task);
+        taskListLoader.LoadSkillsPage();
         Debug.Log(step.RepetionNumber.ToString() + " completed: " + step.RepetionsCompleated.ToString());
 
     }
+
+    public void PlaySuccess()
+    {
+        //if the gameobject has audiosource
+        if (TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            audioSource.Stop();
+            audioSource.PlayOneShot(success);
+            return;
+        }
+
+        //otherwise create audiosource
+        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
+        newAudioSource.PlayOneShot(success);
+    }
+
 }

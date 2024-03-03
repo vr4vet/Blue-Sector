@@ -17,6 +17,7 @@ public class RopeStep : MonoBehaviour
     void OnEnable()
     {
         manager.CompleteStep("Vedlikehold", "Runde På Ring", "Reparer tau på merd");
+        manager.PlaySuccess();
     }
 
 

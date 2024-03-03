@@ -12,6 +12,8 @@ public class AddInstructionsToWatch : MonoBehaviour
     public TextMeshPro textMesh;
     public string text;
 
+    [SerializeField] private AudioClip incoming;
+
     public void addInstructions()
     {
         // Next line uses the update InputSustem of unity. This should be used in the future, but because of time constraints the old version was used
@@ -22,10 +24,28 @@ public class AddInstructionsToWatch : MonoBehaviour
         device.ExecuteCommand(ref command);
 
         textMesh.SetText(text);
+
+        PlayAudio();
     }
 
     public void emptyInstructions()
     {
         textMesh.SetText("");
+    }
+
+
+    public void PlayAudio()
+    {
+        //if the gameobject has audiosource
+        if (TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            audioSource.Stop();
+            audioSource.PlayOneShot(incoming);
+            return;
+        }
+
+        //otherwise create audiosource
+        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
+        newAudioSource.PlayOneShot(incoming);
     }
 }

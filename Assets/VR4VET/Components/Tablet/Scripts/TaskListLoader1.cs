@@ -111,7 +111,8 @@ namespace Tablet
         private IEnumerator LoadTabletInfo()
         {
             yield return new WaitForSeconds(2);
-            LoadTaskPage();
+            TaskPageLoader(_tasks[0]);
+            // LoadTaskPage();
             LoadSkillsPage();
         }
 
@@ -316,7 +317,7 @@ namespace Tablet
             //for extra events
             if (_taskPageOpen != null) _taskPageOpen.Invoke();
 
-            panelManager.OnClickBackToAboutTask();
+            // panelManager.OnClickBackToAboutTask();
 
             //hide previos pagee
             _taskNameTab.text = task.TaskName;
