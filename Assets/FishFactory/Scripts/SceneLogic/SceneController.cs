@@ -5,21 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    [SerializeField][Tooltip("The name of the scene to change to")]
+    [SerializeField]
     private string sceneName;
-    
-    [SerializeField][Tooltip("GameObjects that will trigger the scene change. This should be colliders on grabbers from BNG framework")]
+    [SerializeField][Tooltip("GameObjects that will trigger the scene change")]
     private List<Collider> triggers;
 
 
-    private void OnTriggerEnter(Collider collidedObject)
+    private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Something entered me");
         foreach (Collider obj in triggers)
         {
-            if (obj == collidedObject)
+            if (obj == other)
             {
                 SceneManager.LoadScene(sceneName);
             }
         }
+    }
+
+    public void ChangeScene(string scene)
+    {
+        SceneManager.LoadScene(scene);
     }
 }
