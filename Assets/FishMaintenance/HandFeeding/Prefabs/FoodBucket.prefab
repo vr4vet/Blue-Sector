@@ -107,7 +107,7 @@ MonoBehaviour:
   BeingHeld: 0
   GrabButton: 2
   Grabtype: 2
-  GrabPhysics: 3
+  GrabPhysics: 0
   GrabMechanic: 0
   GrabSpeed: 15
   RemoteGrabbable: 0
@@ -119,11 +119,11 @@ MonoBehaviour:
   HideHandGraphics: 0
   ParentToHands: 0
   ParentHandModel: 1
-  SnapHandModel: 0
+  SnapHandModel: 1
   CanBeDropped: 0
-  CanBeSnappedToSnapZone: 0
+  CanBeSnappedToSnapZone: 1
   ForceDisableKinematicOnDrop: 0
-  InstantMovement: 0
+  InstantMovement: 1
   MakeChildCollidersGrabbable: 0
   handPoseType: 1
   SelectedHandPose: {fileID: 0}
@@ -138,15 +138,15 @@ MonoBehaviour:
   SecondHandLookSpeed: 40
   SecondaryGrabbable: {fileID: 0}
   OtherGrabbableMustBeGrabbed: {fileID: 0}
-  CollisionSpring: 0
-  CollisionSlerp: 100
+  CollisionSpring: 3000
+  CollisionSlerp: 500
   CollisionLinearMotionX: 2
   CollisionLinearMotionY: 2
   CollisionLinearMotionZ: 2
   CollisionAngularMotionX: 2
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
-  ApplyCorrectiveForce: 0
+  ApplyCorrectiveForce: 1
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -238,11 +238,11 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &4677422209028557647
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,11 +363,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8960566207253127364}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1735992, y: 0.2546, z: -0.48439986}
+  m_LocalRotation: {x: 0.5, y: -0.5, z: -0.5, w: 0.5}
+  m_LocalPosition: {x: 0.16870125, y: 0.2546, z: -0.48439986}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2427604987386630811}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 180, y: 90, z: 90}

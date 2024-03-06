@@ -5,13 +5,15 @@ using UnityEngine;
 public class FillFood : MonoBehaviour
 {
 
-    public GameObject spawnPellet;
+    [SerializeField] private GameObject spawnPellet;
+    private GameObject foods;
 
 
     // private List<GameObject> food= new List<GameObject>();
     // Start is called before the first frame update
     void Awake()
     {
+        foods = transform.GetChild(0).gameObject;
 
         //   this.food=gameObject.transform.GetChild(0).gameObject;
         // int children = gameObject.transform.childCount;
@@ -20,38 +22,42 @@ public class FillFood : MonoBehaviour
 
     }
 
-    // Update is called once per frame
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        GameObject foods = transform.GetChild(0).gameObject;
-        // for(int i = 0; i < children; ++i){
 
-        if (collision.gameObject.tag == "Bucket")
+        if (other.CompareTag("Bucket"))
         {
             foods.SetActive(true);
         }
-
-        if (collision.gameObject.tag == "Merd")
-        {
-            foods.SetActive(false);
-
-
-            Instantiate(spawnPellet, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
-            spawnPellet.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10f, 0));
-
-
-
-            //  Rigidbody rb = child.GetComponent<Rigidbody>();
-            //   rb.isKinematic = false;
-            // rb.detectCollisions = true;
-            // 
-            // rb.AddForce(throwForce);
-        }
-
-
+        // if (other.CompareTag("Merd") && foods.activeSelf)
+        // {
+        //     foods.SetActive(false);
+        //     ReleasePellets();
+        // }
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Merd") && foods.activeSelf)
+        {
+            foods.SetActive(false);
+            ReleasePellets();
+        }
+    }
+
+    private void ReleasePellets()
+    {
+
+        foreach (Transform child in foods.transform)
+        {
+
+            Rigidbody rb = spawnPellet.GetComponent<Rigidbody>();
+
+            rb.AddForce(new Vector3(5f, 10f, 0));
+            Instantiate(spawnPellet, child.position, child.rotation);
+        }
+    }
     void Update()
     {
 
