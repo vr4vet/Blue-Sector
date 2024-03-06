@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: BleedingStationExplained
+  m_EditorClassIdentifier: 
+  sections:
+  - dialogue:
+    - Hello, and welcome to the Bleeding Station. Your task here is to euthanize
+      fish in a humane way.
+    - This is done by cutting the gills of the fish while the fish is stunned.
+    endAfterDialogue: 0
+    branchPoint:
+      question: Are you ready to learn more?
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 0
+      - answerLabel: No
+        nextElement: 5
+      - answerLabel: Yes
+        nextElement: 1
+  - dialogue:
+    - You will find the knife next to me. Be careful not to cut yourself
+      or others around you.
+    - Be sure to never cut towards you!
+    - When handling the knife, you need to wear steel gloves on your most exposed
+      hand.
+    endAfterDialogue: 0
+    branchPoint:
+      question: Do you understand
+      answers:
+      - answerLabel: Can you repeat that?
+        nextElement: 1
+      - answerLabel: I understand I need to handle the knife with care
+        nextElement: 2
+  - dialogue:
+    - The fish on the conveyor belt is stunned and feel no pain. If a fish shows
+      signs of conciousness, this fish needs to be stunned before it is cut and bled.
+    - Concious fish is recognized by .................
+    - You will find a stunning machine on the belt next to me. Insert the fish into
+      the machine, and the fish will be stunned. After that, the fish is ready to
+      be cut.
+    - Sometimes fish that is not eligble for human consumption can come down the
+      conveyor belt. This unedible fish should be thrown in the tub next to me.
+    endAfterDialogue: 0
+    branchPoint:
+      question: Is that clear?
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 2
+      - answerLabel: Yes! Stun concious fish before cutting them, and throw away
+          bad fish.
+        nextElement: 3
+  - dialogue:
+    - Make sure the cut is only on the gills. It should not go deep into the fish.
+    - You will be graded based on ....
+    - All fish must be cut before it moves to the next station!
+    endAfterDialogue: 0
+    branchPoint:
+      question: Do you understand?
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 3
+      - answerLabel: Yes!
+        nextElement: 4
+  - dialogue:
+    - That is all for now. Good luck!
+    endAfterDialogue: 0
+    branchPoint:
+      question: Do you want to hear everything again?
+      answers:
+      - answerLabel: I want to hear everything again
+        nextElement: 0
+      - answerLabel: I understand
+        nextElement: 5
+  - dialogue:
+    - Good bye!
+    endAfterDialogue: 1
+    branchPoint:
+      question: Good bye!
+      answers:
+      - answerLabel: Bye!
+        nextElement: 0
