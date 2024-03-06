@@ -5,15 +5,7 @@ using UnityEngine;
 
 public class FactoryFishSpawner : MonoBehaviour
 {
-    // TODO: Not used at this state, but can be implemented down the line
-    [HideInInspector]
-    enum FishState
-    {
-        Alive,
-        Stunned,
-        Dead
-    }
-
+    
     [SerializeField]
     [Tooltip("The gameobject prefab to spawn")]
     private GameObject fishPrefab;
@@ -21,6 +13,19 @@ public class FactoryFishSpawner : MonoBehaviour
     [SerializeField]
     [Tooltip("The maximum amount of fish that can be spawned")]
     private int maxAmountOfFish;
+
+    [SerializeField]
+    [Tooltip("The chance of a fish being a different state than stunned. Higher number equals lower chance")]
+    private int randomFishStateChance;
+
+    // [SerializeField]
+    // [Tooltip("The chance of a fish being dead. Higher number equals higher chance")]
+    // private int fishDeadChance;
+
+    [SerializeField]
+    [Range(2, 20)]
+    [Tooltip("The chance of a fish not being stunned. Higher number equals lower chance")]
+    private int fishAliveChance;
 
     // Counts the amount of child gameobjects in the spawner
     private int currentAmountOfFish;
@@ -48,7 +53,7 @@ public class FactoryFishSpawner : MonoBehaviour
     void Update()
     {
         // Checks the amount of spawned gameobjects in the simulation
-        currentAmountOfFish = gameObject.transform.childCount;
+        currentAmountOfFish = transform.childCount;
     }
 
     private IEnumerator SpawnFish()
@@ -65,8 +70,15 @@ public class FactoryFishSpawner : MonoBehaviour
                 Random.rotation,
                 transform
             );
-            childGameObject.name = "FactoryFish" + gameObject.transform.childCount.ToString();
+            childGameObject.name = "FactoryFish" + transform.childCount.ToString();
 
+            FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
+            if (fishState != null)
+            {
+                fishState.currentState = RandomizeFishState();
+            }
+
+            // this randomized the size of the fish if enabled
             if (fishSizeVariation)
             {
                 float randomSize = RandomizeObjectSize();
@@ -91,4 +103,28 @@ public class FactoryFishSpawner : MonoBehaviour
     {
         return Random.Range(0.5f, varationInSpawnrate);
     }
+
+    // Generates a number from 1 to our set chance, to determine the chance of different states.
+    private FactoryFishState.State RandomizeFishState()
+    {
+        int randomValue = Random.Range(1, randomFishStateChance + 1);
+        FactoryFishState.State state;
+
+        if (randomValue == 1)
+        {
+            state = FactoryFishState.State.Dead;
+        }
+        else if (randomValue <= 3)
+        {
+            state = FactoryFishState.State.Alive;
+        }
+        else
+        {
+            state = FactoryFishState.State.Stunned;
+        }
+
+        return state;
+    }
+    
+
 }
