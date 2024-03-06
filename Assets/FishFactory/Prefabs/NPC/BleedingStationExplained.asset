@@ -28,7 +28,7 @@ MonoBehaviour:
       - answerLabel: Yes
         nextElement: 1
   - dialogue:
-    - You will find the bleeding knife next to me. Be careful as not to cut yourself
+    - You will find the knife next to me. Be careful not to cut yourself
       or others around you.
     - Be sure to never cut towards you!
     - When handling the knife, you need to wear steel gloves on your most exposed
@@ -45,18 +45,18 @@ MonoBehaviour:
     - The fish on the conveyor belt is stunned and feel no pain. If a fish shows
       signs of conciousness, this fish needs to be stunned before it is cut and bled.
     - Concious fish is recognized by .................
-    - You will find a stunning machine on the belt next to me. Enter the fish into
+    - You will find a stunning machine on the belt next to me. Insert the fish into
       the machine, and the fish will be stunned. After that, the fish is ready to
       be cut.
     - Sometimes fish that is not eligble for human consumption can come down the
-      conveyor belt. This unedible fish should be throw in the tub next to me.
+      conveyor belt. This unedible fish should be thrown in the tub next to me.
     endAfterDialogue: 0
     branchPoint:
       question: Is that clear?
       answers:
       - answerLabel: Could you repeat that?
         nextElement: 2
-      - answerLabel: Yes! Cut stunned fish, concious alive fish first and throw away
+      - answerLabel: Yes! Stun concious fish before cutting them, and throw away
           bad fish.
         nextElement: 3
   - dialogue:
