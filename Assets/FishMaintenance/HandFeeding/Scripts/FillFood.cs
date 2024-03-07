@@ -6,19 +6,14 @@ public class FillFood : MonoBehaviour
 {
 
     [SerializeField] private GameObject spawnPellet;
+    // [SerializeField] private BNG.Grabber grabber;
     private GameObject foods;
+    private Vector3 velocity;
 
-
-    // private List<GameObject> food= new List<GameObject>();
-    // Start is called before the first frame update
     void Awake()
     {
         foods = transform.GetChild(0).gameObject;
 
-        //   this.food=gameObject.transform.GetChild(0).gameObject;
-        // int children = gameObject.transform.childCount;
-        // for(int i = 0; i < children; ++i){
-        //     food.Add(gameObject.transform.GetChild(i).gameObject);
 
     }
 
@@ -30,17 +25,17 @@ public class FillFood : MonoBehaviour
         {
             foods.SetActive(true);
         }
-        // if (other.CompareTag("Merd") && foods.activeSelf)
-        // {
-        //     foods.SetActive(false);
-        //     ReleasePellets();
-        // }
+
     }
 
     void OnTriggerStay(Collider other)
     {
+
+
         if (other.CompareTag("Merd") && foods.activeSelf)
         {
+            Vector3 shovelVelocity = gameObject.GetComponent<Rigidbody>().velocity;
+            velocity = new Vector3(3f + shovelVelocity.x * Mathf.Pow(10, 7), 4f, 3f + shovelVelocity.z * Mathf.Pow(10, 7));
             foods.SetActive(false);
             ReleasePellets();
         }
@@ -52,10 +47,11 @@ public class FillFood : MonoBehaviour
         foreach (Transform child in foods.transform)
         {
 
-            Rigidbody rb = spawnPellet.GetComponent<Rigidbody>();
+            GameObject newPellet = Instantiate(spawnPellet, child.position, child.rotation);
+            Rigidbody rb = newPellet.GetComponent<Rigidbody>();
+            rb.velocity = gameObject.GetComponent<Rigidbody>().velocity;
+            rb.AddForce(velocity, ForceMode.VelocityChange);
 
-            rb.AddForce(new Vector3(5f, 10f, 0));
-            Instantiate(spawnPellet, child.position, child.rotation);
         }
     }
     void Update()
