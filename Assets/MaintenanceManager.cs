@@ -56,6 +56,15 @@ public class MaintenanceManager : MonoBehaviour
 
     }
 
+    public Task.Step GetStep(string taskName, string subtaskName, string stepName)
+    {
+        Task.Task task = taskHolder.GetTask(taskName);
+        Task.Subtask sub = task.GetSubtask(subtaskName);
+
+        Task.Step step = sub.GetStep(stepName);
+        return step;
+    }
+
     public void PlaySuccess()
     {
         //if the gameobject has audiosource
