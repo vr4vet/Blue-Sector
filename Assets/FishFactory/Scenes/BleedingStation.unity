@@ -678,7 +678,7 @@ PrefabInstance:
     - target: {fileID: 2281686386275440644, guid: fa1492a389a7b4c4082875a471f440a4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2281686386275440644, guid: fa1492a389a7b4c4082875a471f440a4,
         type: 3}
@@ -846,7 +846,7 @@ GameObject:
   - component: {fileID: 145500833}
   - component: {fileID: 145500832}
   - component: {fileID: 145500831}
-  - component: {fileID: 145500830}
+  - component: {fileID: 145500835}
   m_Layer: 0
   m_Name: spawner1
   m_TagString: Untagged
@@ -854,28 +854,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &145500830
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 145500829}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afad8b1729113fa44a1ee7d72683f812, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnables:
-  - obj: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069, type: 3}
-    weight: 1
-    badLuckPrevention: 0
-  rate: 2
-  maxSpawns: 5
-  spawnRange: 3
-  badLuckPreventionWeight: 0
-  spawnImmediatly: 1
-  disableSpawn: 0
 --- !u!65 &145500831
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -954,6 +932,26 @@ Transform:
   m_Father: {fileID: 519310727}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 87.685, z: 0}
+--- !u!114 &145500835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145500829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af1c3bb4359c40b43996b74e7b45a300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishPrefab: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+    type: 3}
+  maxAmountOfFish: 5
+  randomFishStateChance: 14
+  fishAliveChance: 4
+  spawnRate: 3.81
+  varationInSpawnrate: 1.41
+  fishSizeVariation: 1
 --- !u!1001 &166202797
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1392,7 +1390,7 @@ GameObject:
   - component: {fileID: 197634220}
   - component: {fileID: 197634219}
   - component: {fileID: 197634218}
-  - component: {fileID: 197634217}
+  - component: {fileID: 197634222}
   m_Layer: 0
   m_Name: spawner3
   m_TagString: Untagged
@@ -1400,28 +1398,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &197634217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 197634216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afad8b1729113fa44a1ee7d72683f812, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnables:
-  - obj: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069, type: 3}
-    weight: 1
-    badLuckPrevention: 0
-  rate: 2
-  maxSpawns: 5
-  spawnRange: 3
-  badLuckPreventionWeight: 0
-  spawnImmediatly: 1
-  disableSpawn: 0
 --- !u!65 &197634218
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1500,6 +1476,26 @@ Transform:
   m_Father: {fileID: 519310727}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 87.685, z: 0}
+--- !u!114 &197634222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197634216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af1c3bb4359c40b43996b74e7b45a300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishPrefab: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+    type: 3}
+  maxAmountOfFish: 5
+  randomFishStateChance: 14
+  fishAliveChance: 4
+  spawnRate: 3.81
+  varationInSpawnrate: 1.41
+  fishSizeVariation: 1
 --- !u!1001 &203701073
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2022,7 +2018,7 @@ PrefabInstance:
     - target: {fileID: 646092130593344030, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 646092130593344030, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -3880,6 +3876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b595aaaedbe6d4ba5a67d4eae5ffef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nrFishStun: 0
 --- !u!65 &496987032
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6028,6 +6025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b595aaaedbe6d4ba5a67d4eae5ffef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nrFishStun: 0
 --- !u!65 &775862841
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7302,7 +7300,7 @@ GameObject:
   - component: {fileID: 951189551}
   - component: {fileID: 951189550}
   - component: {fileID: 951189549}
-  - component: {fileID: 951189548}
+  - component: {fileID: 951189553}
   m_Layer: 0
   m_Name: spawner2
   m_TagString: Untagged
@@ -7310,28 +7308,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &951189548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 951189547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afad8b1729113fa44a1ee7d72683f812, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnables:
-  - obj: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069, type: 3}
-    weight: 1
-    badLuckPrevention: 0
-  rate: 2
-  maxSpawns: 5
-  spawnRange: 3
-  badLuckPreventionWeight: 0
-  spawnImmediatly: 1
-  disableSpawn: 0
 --- !u!65 &951189549
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7410,6 +7386,26 @@ Transform:
   m_Father: {fileID: 519310727}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 87.685, z: 0}
+--- !u!114 &951189553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951189547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af1c3bb4359c40b43996b74e7b45a300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishPrefab: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+    type: 3}
+  maxAmountOfFish: 5
+  randomFishStateChance: 14
+  fishAliveChance: 4
+  spawnRate: 3.81
+  varationInSpawnrate: 1.41
+  fishSizeVariation: 1
 --- !u!1001 &968775296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8003,8 +7999,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_RootOrder: 10
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: -0.671, z: 0}
 --- !u!1 &1135830659
 GameObject:
