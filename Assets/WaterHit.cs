@@ -5,6 +5,8 @@ using UnityEngine;
 public class WaterHit : MonoBehaviour
 {
     [SerializeField] private GameObject splash;
+    [SerializeField] private AudioClip audio;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +29,7 @@ public class WaterHit : MonoBehaviour
             Instantiate(splash, updatedPos, splash.transform.rotation);
             ParticleSystem particleSystem = splash.GetComponent<ParticleSystem>();
             particleSystem.Play();
+            PlayAudio();
         }
     }
     void OnCollisionEnter(Collision collision)
@@ -37,5 +40,15 @@ public class WaterHit : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    public void PlayAudio()
+    {
+
+
+        //otherwise create audiosource
+        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
+        newAudioSource.volume = 0.3f;
+        newAudioSource.PlayOneShot(audio);
     }
 }

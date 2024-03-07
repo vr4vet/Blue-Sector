@@ -6,6 +6,7 @@ public class FillFood : MonoBehaviour
 {
 
     [SerializeField] private GameObject spawnPellet;
+    [SerializeField] private MaintenanceManager manager;
     // [SerializeField] private BNG.Grabber grabber;
     private GameObject foods;
     private Vector3 velocity;
@@ -53,7 +54,10 @@ public class FillFood : MonoBehaviour
             rb.AddForce(velocity, ForceMode.VelocityChange);
 
         }
+        manager.CompleteStep("Håndforing", "Kast mat til fisken");
     }
+
+
     void Update()
     {
 

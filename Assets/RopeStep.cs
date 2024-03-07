@@ -16,7 +16,7 @@ public class RopeStep : MonoBehaviour
     // Update is called once per frame
     void OnEnable()
     {
-        manager.CompleteStep("Vedlikehold", "Runde På Ring", "Reparer tau på merd");
+        manager.CompleteStep("Runde På Ring", "Reparer tau på merd");
         manager.PlaySuccess();
     }
 
