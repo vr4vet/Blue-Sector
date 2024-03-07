@@ -8,7 +8,7 @@ public class DropItem : MonoBehaviour
     [SerializeField] private string task;
     [SerializeField] private string subTask;
     [SerializeField] private string step;
-    public GameObject handSplint;
+    public GameObject item;
     [SerializeField] private BNG.Grabber grabberRight;
 
     public void OnTriggerExit(Collider player)
@@ -17,7 +17,7 @@ public class DropItem : MonoBehaviour
         {
             return;
         }
-        handSplint.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
-        handSplint.SetActive(false);
+        item.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
+        item.SetActive(false);
     }
 }
