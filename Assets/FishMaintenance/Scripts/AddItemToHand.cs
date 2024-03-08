@@ -10,8 +10,8 @@ public class AddItemToHand : MonoBehaviour
 
     void OnEnable()
     {
-        BNG.Grabbable splintGrabbable = item.GetComponent<BNG.Grabbable>();
+        BNG.Grabbable itemGrabbable = item.GetComponent<BNG.Grabbable>();
         item.SetActive(true);
-        grabberRight.GrabGrabbable(splintGrabbable);
+        grabberRight.GrabGrabbable(itemGrabbable);
     }
 }
