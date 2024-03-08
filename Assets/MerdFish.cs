@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MerdFish : MonoBehaviour
 {
+    private float rotationSpeed = 3f;
+    private float moveSpeed = 1f;
+    private bool reachedPoint;
+    private Vector3 targetPos;
 
     private Vector3 fishPosition;
     private Vector3 direction;
@@ -11,20 +15,16 @@ public class MerdFish : MonoBehaviour
     private float radiusSquared;
     private float top;
     private float bottom;
-    private bool dead;
+    private bool dead = false;
 
-    [SerializeField]
-    private bool randomFish;
-
-    private float swimSpeedVertical;
-    private float swimSpeedHorizontal;
-    private float fullDestY;  // Y-coordinate destination when returning when full
-
+    private float swimSpeedVertical = 1f;
+    private float swimSpeedHorizontal = 1f;
     private Animation fishAnimation;
     private GameObject fishSystem;
     private Vector3 fishSystemPosition;
-    private FishSystemScript fishSystemScript;
+    private MerdFishSystem fishSystemScript;
 
+    public GameObject FishSystem { get => fishSystem; set => fishSystem = value; }
     // Start is called before the first frame update
     void Start()
     {
@@ -35,27 +35,63 @@ public class MerdFish : MonoBehaviour
         // get properties of parent fish cage
         fishSystem = gameObject.transform.parent.gameObject;
         fishSystemPosition = fishSystem.transform.position;
-        fishSystemScript = fishSystem.GetComponent<FishSystemScript>();
+        fishSystemScript = fishSystem.GetComponent<MerdFishSystem>();
         fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
+        fishPosition = transform.position;
+        radiusSquared = fishSystemScript.Radius * fishSystemScript.Radius;
+        top = (fishSystem.transform.position.y + (fishSystemScript.Height / 2));  // top of merd/water surface
+        // targetPos = fishSystemScript.JumpTargetPosition();
+        bottom = (fishSystem.transform.position.y - (fishSystemScript.Height / 2)); // bottom of merd
 
-        radiusSquared = fishSystemScript.radius * fishSystemScript.radius;
-        top = (fishSystem.transform.position.y + (fishSystemScript.height / 2));  // top of merd/water surface
-        bottom = (fishSystem.transform.position.y - (fishSystemScript.height / 2)); // bottom of merd
-
-        swimSpeedVertical = fishSystemScript.swimSpeedVertical;
-        swimSpeedHorizontal = fishSystemScript.swimSpeedHorizontal;
-        fullDestY = top;
-        dead = false;
     }
 
     /*
      * this bool is needed to override fish movement when returning after leaving fish system (fish cage) boundaries, to ensure it does not 
      * move about until it has returned safely
     */
+
     private bool waitingForReturn = false;
+    private bool readytoTurn = false;
     // Update is called once per frame
     void Update()
     {
+
+
+        //     reachedPoint = Vector3.Distance(targetPos, transform.position) == 0;
+        //     Vector3 posOffset = new Vector3(0, 0, 0);
+        //     posOffset = new Vector3(targetPos.x, targetPos.y + 6f, targetPos.z);
+        //     var rotation = Quaternion.LookRotation(posOffset - transform.position);
+        //     transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
+
+
+        //     if (!reachedPoint)
+        //     {
+        //         transform.position = new Vector3(targetPos.x, -targetPos.y + 3f, targetPos.z);
+        //         if (readytoTurn)
+        //         {
+        //             Invoke("FallSpeed", 0.2f);
+        //             targetPos = fishPosition;
+        //             reachedPoint = true;
+        //             readytoTurn = false;
+        //         }
+        //         // if (target)
+        //         // {
+        //         //     float dist = ;
+        //         // }
+
+        //     }
+        //     else
+        //     {
+        //         transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        //         readytoTurn = true;
+        //     }
+        // }
+        // void FallSpeed()
+        // {
+        //     moveSpeed *= 3;
+        // }
+
+
         fishPosition = gameObject.transform.position;
         if (IsColliding(fishPosition))
         {
@@ -79,7 +115,10 @@ public class MerdFish : MonoBehaviour
         }
     }
 
-    // checks if fish is within fish cage boundaries (horisontally)
+
+
+
+    // checks if fish is within fish cage boundaries(horisontally)
     bool IsColliding(Vector3 fishPosition)
     {
         // Get the x,z components of the fish position;
@@ -93,15 +132,7 @@ public class MerdFish : MonoBehaviour
     bool IsAtBottom() => gameObject.transform.position.y <= bottom + 0.5f;
 
     // check if fish has reached its destination when swimming downwards when full
-    bool HasReturnedAfterFull()
-    {
-        if (gameObject.transform.position.y <= fullDestY)
-        {
-            fullDestY = top;
-            return true;
-        }
-        return false;
-    }
+
 
     // rotates fish towards its current destination
     void RotateFish()
@@ -130,10 +161,9 @@ public class MerdFish : MonoBehaviour
         fishPosition = gameObject.transform.position;
         float posY = fishPosition.y;
 
-        FishSystemScript.FishState state = fishSystemScript.state;
 
         // no modifications to movement if returning from outside boundaries or still swimming downwards after eating
-        if (IsColliding(fishPosition) || !HasReturnedAfterFull()) return;
+        if (IsColliding(fishPosition)) return;
         if (dead)
         {
             // dead fish continue to sink until hitting bottom, in the speed of swimSpeedVertical field's value
@@ -142,45 +172,43 @@ public class MerdFish : MonoBehaviour
                 movement = new Vector3(direction.x, -swimSpeedVertical, direction.z);
             }
         }
+
+
+        // move down/up if hitting upper/lower boundaries of fish cage, otherwise pick some random fairly horisontal direction
+        if (IsAtSurface())
+        {
+            direction.y = -swimSpeedVertical;
+        }
+        else if (IsAtBottom())
+        {
+            direction.y = swimSpeedVertical;
+        }
         else
         {
-            // move down/up if hitting upper/lower boundaries of fish cage, otherwise pick some random fairly horisontal direction
-            if (IsAtSurface())
-            {
-                direction.y = -swimSpeedVertical;
-            }
-            else if (IsAtBottom())
-            {
-                direction.y = swimSpeedVertical;
-            }
-            else
-            {
-                direction.y = Random.Range(-0.1f, 0.1f);
-            }
+            direction.y = Random.Range(-0.1f, 0.1f);
+        }
+        if (gameObject.transform.position.y >= 8f)
+        {
+            direction.y = -swimSpeedVertical * 7;
+            direction.x = -direction.x;
+            direction.z = -direction.z;
+        }
 
-
-            if (state != FishSystemScript.FishState.Idle && !randomFish)
-            {
-                if ((state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying))
-                {
-                    direction.y = swimSpeedVertical;
-                }
-                else if (state == FishSystemScript.FishState.Full)
-                {
-                    // pick new vertical destination
-                    fullDestY = Random.Range(bottom);
-                    direction.y = -swimSpeedVertical;
-                }
-            }
-
-            // new random direction horisontally
+        if (gameObject.transform.position.y <= top)
+        {
+            direction.y = swimSpeedVertical;
             direction.x = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
             direction.z = direction.x < 0 ? 1 + direction.x : 1 - direction.x;  //  x + z should be equal to 1 or -1 always, to ensure consistent swimming speed
             direction.z = Random.Range(0.0f, 1.0f) < 0.5 ? direction.z * -1 : direction.z; // randomly make negative to prevent repetitive patterns  
-            RotateFish(); // Rotates the fish in the right direction
-
         }
+
+        // new random direction horisontally
+
+        RotateFish(); // Rotates the fish in the right direction
+
+
     }
+
 
     // public function allowing fish system to kill starving fish
     public void Kill()
@@ -198,6 +226,20 @@ public class MerdFish : MonoBehaviour
         transform.position = new Vector3(transform.position.x, posY, transform.position.z);
     }
 
-    // public function telling this fish to swim randomly and not get hungry etc. Make the fish stream a bit less monotone.
-    public void SetRandomFish() => randomFish = true;
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("water"))
+        {
+            // Instantiate(SplashIn)
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("water"))
+        {
+            // Instantiate(SplashOut)
+        }
+    }
+
 }
