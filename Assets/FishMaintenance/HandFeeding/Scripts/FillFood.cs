@@ -44,15 +44,16 @@ public class FillFood : MonoBehaviour
 
     private void ReleasePellets()
     {
-
+        int spawnNumber = 1;
         foreach (Transform child in foods.transform)
         {
 
             GameObject newPellet = Instantiate(spawnPellet, child.position, child.rotation);
+            newPellet.GetComponent<WaterHit>().SpawnNumber = spawnNumber;
             Rigidbody rb = newPellet.GetComponent<Rigidbody>();
             rb.velocity = gameObject.GetComponent<Rigidbody>().velocity;
             rb.AddForce(velocity, ForceMode.VelocityChange);
-
+            spawnNumber++;
         }
         manager.CompleteStep("Håndforing", "Kast mat til fisken");
     }

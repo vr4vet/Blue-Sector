@@ -6,8 +6,8 @@ public class WaterHit : MonoBehaviour
 {
     [SerializeField] private GameObject splash;
     [SerializeField] private AudioClip audio;
-
-
+    private int _spawnNumber = 0;
+    public int SpawnNumber { get => _spawnNumber; set => _spawnNumber = value; }
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +29,7 @@ public class WaterHit : MonoBehaviour
             Instantiate(splash, updatedPos, splash.transform.rotation);
             ParticleSystem particleSystem = splash.GetComponent<ParticleSystem>();
             particleSystem.Play();
-            PlayAudio();
+            if (SpawnNumber == 1) PlayAudio();
         }
     }
     void OnCollisionEnter(Collision collision)
@@ -43,10 +43,7 @@ public class WaterHit : MonoBehaviour
     }
 
     public void PlayAudio()
-    {
-
-
-        //otherwise create audiosource
+    {   //otherwise create audiosource
         AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
         newAudioSource.volume = 0.3f;
         newAudioSource.PlayOneShot(audio);
