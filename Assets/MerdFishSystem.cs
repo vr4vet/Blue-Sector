@@ -28,6 +28,17 @@ public class MerdFishSystem : MonoBehaviour
         }
     }
 
+    public void SetTargetPos(Vector3 targetPos)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            int childNo = Mathf.RoundToInt(Random.Range(0, amountOfFish - 1));
+            MerdFish merdFish = transform.GetChild(childNo).GetComponent<MerdFish>();
+            merdFish.SetTarget(targetPos);
+
+        }
+    }
+
 
     public Vector3 JumpTargetPosition()
     {

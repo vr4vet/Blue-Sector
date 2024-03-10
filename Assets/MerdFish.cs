@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class MerdFish : MonoBehaviour
 {
-    private float rotationSpeed = 3f;
-    private float moveSpeed = 1f;
-    private bool reachedPoint;
-    private Vector3 targetPos;
 
     private Vector3 fishPosition;
     private Vector3 direction;
@@ -17,17 +13,23 @@ public class MerdFish : MonoBehaviour
     private float bottom;
     private bool dead = false;
 
-    private float swimSpeedVertical = 1f;
+    private float swimSpeedVertical = 0.5f;
     private float swimSpeedHorizontal = 1f;
     private Animation fishAnimation;
     private GameObject fishSystem;
     private Vector3 fishSystemPosition;
     private MerdFishSystem fishSystemScript;
-
+    private bool jumpingFish = false;
     public GameObject FishSystem { get => fishSystem; set => fishSystem = value; }
+    public bool JumpingFish { get => jumpingFish; set => jumpingFish = value; }
     // Start is called before the first frame update
     void Start()
     {
+        // if (Random.Range(-0.3f, 1f) < 0)
+        // {
+        //     jumpingFish = true;
+        //     swimSpeedVertical = 1f;
+        // }
         // unique seed per fish for rng, and invoke PeriodicUpdates() with random offset
         Random.InitState(GetInstanceID());
         InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 5.0f), 3.0f);
@@ -51,7 +53,7 @@ public class MerdFish : MonoBehaviour
     */
 
     private bool waitingForReturn = false;
-    private bool readytoTurn = false;
+
     // Update is called once per frame
     void Update()
     {
@@ -128,7 +130,7 @@ public class MerdFish : MonoBehaviour
     }
 
     // functions for checking if fish is too high or low (outside boundaries)
-    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.5f;
+    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.7f;
     bool IsAtBottom() => gameObject.transform.position.y <= bottom + 0.5f;
 
     // check if fish has reached its destination when swimming downwards when full
@@ -144,12 +146,13 @@ public class MerdFish : MonoBehaviour
         }
 
         // if the upwards/downwards direction is steeper than rotationLimit (fish is angled too vertically), set to limit.
-        const float rotationLimit = 0.2f;
+        const float rotationLimit = 0.5f;
         lookRotation.y = Mathf.Clamp(lookRotation.y, -rotationLimit, rotationLimit);
 
         // perform the actual rotation
         Quaternion target = Quaternion.LookRotation(lookRotation);
-        target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
+        // target = Quaternion.RotateTowards(gameObject.transform.rotation, target, 360);
+        target = Quaternion.Slerp(transform.rotation, target, 360);
         gameObject.transform.rotation = target;
     }
     /*
@@ -158,24 +161,14 @@ public class MerdFish : MonoBehaviour
      */
     void PeriodicUpdates()
     {
-        fishPosition = gameObject.transform.position;
-        float posY = fishPosition.y;
+        transform.position += transform.forward * 3f * Time.deltaTime;
+        fishPosition = transform.position;
 
-
-        // no modifications to movement if returning from outside boundaries or still swimming downwards after eating
-        if (IsColliding(fishPosition)) return;
-        if (dead)
+        if (IsColliding(fishPosition) || (dead && !IsAtBottom()))
         {
-            // dead fish continue to sink until hitting bottom, in the speed of swimSpeedVertical field's value
-            if (!IsAtBottom())
-            {
-                movement = new Vector3(direction.x, -swimSpeedVertical, direction.z);
-            }
+            movement = new Vector3(direction.x, -swimSpeedVertical, direction.z);
         }
-
-
-        // move down/up if hitting upper/lower boundaries of fish cage, otherwise pick some random fairly horisontal direction
-        if (IsAtSurface())
+        else if (IsAtSurface())
         {
             direction.y = -swimSpeedVertical;
         }
@@ -183,32 +176,39 @@ public class MerdFish : MonoBehaviour
         {
             direction.y = swimSpeedVertical;
         }
+
+
+        // else if (fishPosition.y > top && jumpingFish)
+        // {
+        //     direction.y = -2f * swimSpeedVertical;
+        //     direction.x = -direction.x;
+        //     direction.z = -direction.x;
+        // }
+        else if (fishPosition.y <= top)
+        {
+            direction.y = swimSpeedVertical;
+            float horizontalSpeed = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
+            direction.x = horizontalSpeed;
+            direction.z = Mathf.Sign(horizontalSpeed) * (1 - Mathf.Abs(horizontalSpeed));
+            direction.z *= Random.Range(0.0f, 1.0f) < 0.5f ? -1 : 1;
+        }
         else
         {
             direction.y = Random.Range(-0.1f, 0.1f);
         }
-        if (gameObject.transform.position.y >= 8f)
-        {
-            direction.y = -swimSpeedVertical * 7;
-            direction.x = -direction.x;
-            direction.z = -direction.z;
-        }
-
-        if (gameObject.transform.position.y <= top)
-        {
-            direction.y = swimSpeedVertical;
-            direction.x = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
-            direction.z = direction.x < 0 ? 1 + direction.x : 1 - direction.x;  //  x + z should be equal to 1 or -1 always, to ensure consistent swimming speed
-            direction.z = Random.Range(0.0f, 1.0f) < 0.5 ? direction.z * -1 : direction.z; // randomly make negative to prevent repetitive patterns  
-        }
-
-        // new random direction horisontally
-
-        RotateFish(); // Rotates the fish in the right direction
 
 
+        RotateFish();
     }
 
+    public void SetTarget(Vector3 targetPos)
+    {
+        transform.position = targetPos;
+
+        jumpingFish = false;
+
+        RotateFish();
+    }
 
     // public function allowing fish system to kill starving fish
     public void Kill()
@@ -231,7 +231,7 @@ public class MerdFish : MonoBehaviour
     {
         if (other.CompareTag("water"))
         {
-            // Instantiate(SplashIn)
+
         }
     }
     void OnTriggerExit(Collider other)

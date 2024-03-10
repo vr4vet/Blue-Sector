@@ -6,11 +6,13 @@ public class WaterHit : MonoBehaviour
 {
     [SerializeField] private GameObject splash;
     [SerializeField] private AudioClip audio;
+    private MerdFishSystem merdFishSystem;
     private int _spawnNumber = 0;
     public int SpawnNumber { get => _spawnNumber; set => _spawnNumber = value; }
     // Start is called before the first frame update
     void Start()
     {
+        merdFishSystem = FindObjectOfType<MerdFishSystem>();
 
     }
 
@@ -29,7 +31,12 @@ public class WaterHit : MonoBehaviour
             Instantiate(splash, updatedPos, splash.transform.rotation);
             ParticleSystem particleSystem = splash.GetComponent<ParticleSystem>();
             particleSystem.Play();
-            if (SpawnNumber == 1) PlayAudio();
+            if (SpawnNumber == 1)
+            {
+                PlayAudio();
+                Vector3 targetPos = new Vector3(transform.position.x, -1f, transform.position.z);
+                merdFishSystem.SetTargetPos(targetPos);
+            }
         }
     }
     void OnCollisionEnter(Collision collision)
@@ -45,7 +52,7 @@ public class WaterHit : MonoBehaviour
     public void PlayAudio()
     {   //otherwise create audiosource
         AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
-        newAudioSource.volume = 0.3f;
+        newAudioSource.volume = 0.5f;
         newAudioSource.PlayOneShot(audio);
     }
 }
