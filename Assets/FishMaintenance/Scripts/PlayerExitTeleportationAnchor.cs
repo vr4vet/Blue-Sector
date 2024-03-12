@@ -8,13 +8,13 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public GameObject cylinderGlow;
     public GameObject teleportationAnchor;
     [SerializeField] private MaintenanceManager manager;
-    [SerializeField] private string task;
+
     [SerializeField] private string subTask;
     [SerializeField] private string step;
 
     public void OnTriggerExit(Collider player)
     {
-        if (manager.GetStep(task, subTask, step).IsCompeleted())
+        if (manager.GetStep(subTask, step).IsCompeleted())
         {
             teleportationAnchor.SetActive(false);
             return;

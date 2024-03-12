@@ -19,7 +19,7 @@ public class RundeRingStep : MonoBehaviour
             itemGuide.SetActive(false);
             handheldItem.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
             handheldItem.SetActive(false);
-            manager.CompleteStep("Vedlikehold", "Runde På Ring", step);
+            manager.CompleteStep("Runde På Ring", step);
             manager.PlaySuccess();
         }
     }

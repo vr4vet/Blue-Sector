@@ -41,8 +41,6 @@ public class WaterHit : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-
-
         if (collision.gameObject.CompareTag("OceanFloor"))
         {
             Destroy(this.gameObject);

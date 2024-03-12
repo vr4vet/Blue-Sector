@@ -5,19 +5,34 @@ using UnityEngine;
 public class DropItem : MonoBehaviour
 {
     [SerializeField] private MaintenanceManager manager;
-    [SerializeField] private string task;
     [SerializeField] private string subTask;
     [SerializeField] private string step;
-    public GameObject item;
-    [SerializeField] private BNG.Grabber grabberRight;
+    public GameObject itemRight;
+    // [SerializeField] private BNG.Grabber grabberRight;
+    public GameObject itemLeft;
 
-    public void OnTriggerExit(Collider player)
+    // [SerializeField] private BNG.Grabber grabberLeft;
+
+    public void OnTriggerExit(Collider other)
     {
-        if (manager.GetStep(task, subTask, step).IsCompeleted())
+        if (other.CompareTag("Player"))
         {
-            return;
+            if (manager.GetStep(subTask, step).IsCompeleted())
+            {
+                return;
+            }
+            if (itemRight)
+            {
+                itemRight.GetComponent<BNG.Grabbable>().DropItem(true, true);
+                itemRight.SetActive(false);
+            }
+            if (itemLeft)
+            {
+                itemLeft.GetComponent<BNG.Grabbable>().DropItem(true, true);
+                itemLeft.SetActive(false);
+            }
+
+
         }
-        item.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
-        item.SetActive(false);
     }
 }

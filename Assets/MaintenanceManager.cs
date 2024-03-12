@@ -8,6 +8,7 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private Task.TaskHolder taskHolder;
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     [SerializeField] private AudioClip success;
+    private Task.Task task;
 
     // Start is called before the first frame update
     private void Awake()
@@ -24,16 +25,17 @@ public class MaintenanceManager : MonoBehaviour
     }
     void Start()
     {
-        foreach (Task.Task task in taskHolder.taskList)
+        task = taskHolder.GetTask("Vedlikehold");
+
+        // Reset subtsk and step progress on each play
+        foreach (Task.Subtask sub in task.Subtasks)
         {
-            foreach (Task.Subtask sub in task.Subtasks)
+            foreach (Task.Step step in sub.StepList)
             {
-                foreach (Task.Step step in sub.StepList)
-                {
-                    step.Reset();
-                }
+                step.Reset();
             }
         }
+
     }
 
     // Update is called once per frame
@@ -44,9 +46,8 @@ public class MaintenanceManager : MonoBehaviour
 
     public void CompleteStep(string subtaskName, string stepName)
     {
-        Task.Task task = taskHolder.GetTask("Vedlikehold");
-        Task.Subtask sub = task.GetSubtask(subtaskName);
 
+        Task.Subtask sub = task.GetSubtask(subtaskName);
         Task.Step step = sub.GetStep(stepName);
         step.CompleateRep();
         taskListLoader.SubTaskPageLoader(sub);
@@ -56,9 +57,8 @@ public class MaintenanceManager : MonoBehaviour
 
     }
 
-    public Task.Step GetStep(string taskName, string subtaskName, string stepName)
+    public Task.Step GetStep(string subtaskName, string stepName)
     {
-        Task.Task task = taskHolder.GetTask(taskName);
         Task.Subtask sub = task.GetSubtask(subtaskName);
 
         Task.Step step = sub.GetStep(stepName);

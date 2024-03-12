@@ -47,7 +47,6 @@ public class FillFood : MonoBehaviour
         int spawnNumber = 1;
         foreach (Transform child in foods.transform)
         {
-
             GameObject newPellet = Instantiate(spawnPellet, child.position, child.rotation);
             newPellet.GetComponent<WaterHit>().SpawnNumber = spawnNumber;
             Rigidbody rb = newPellet.GetComponent<Rigidbody>();
