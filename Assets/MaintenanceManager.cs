@@ -42,9 +42,9 @@ public class MaintenanceManager : MonoBehaviour
 
     }
 
-    public void CompleteStep(string taskName, string subtaskName, string stepName)
+    public void CompleteStep(string subtaskName, string stepName)
     {
-        Task.Task task = taskHolder.GetTask(taskName);
+        Task.Task task = taskHolder.GetTask("Vedlikehold");
         Task.Subtask sub = task.GetSubtask(subtaskName);
 
         Task.Step step = sub.GetStep(stepName);
@@ -52,7 +52,7 @@ public class MaintenanceManager : MonoBehaviour
         taskListLoader.SubTaskPageLoader(sub);
         taskListLoader.TaskPageLoader(task);
         taskListLoader.LoadSkillsPage();
-        Debug.Log(step.RepetionNumber.ToString() + " completed: " + step.RepetionsCompleated.ToString());
+
 
     }
 
@@ -67,17 +67,22 @@ public class MaintenanceManager : MonoBehaviour
 
     public void PlaySuccess()
     {
+        PlayAudio(success);
+    }
+
+    public void PlayAudio(AudioClip audio)
+    {
         //if the gameobject has audiosource
         if (TryGetComponent<AudioSource>(out AudioSource audioSource))
         {
             audioSource.Stop();
-            audioSource.PlayOneShot(success);
+            audioSource.PlayOneShot(audio);
             return;
         }
 
         //otherwise create audiosource
         AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
-        newAudioSource.PlayOneShot(success);
+        newAudioSource.PlayOneShot(audio);
     }
 
 }
