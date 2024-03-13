@@ -25,7 +25,7 @@ public class RopeStep : MonoBehaviour
         {
             manager.CompleteStep("Runde På Ring", "Reparer tau på merd");
         }
-        manager.PlaySuccess();
+
     }
 }
 

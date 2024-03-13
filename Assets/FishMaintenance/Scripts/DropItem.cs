@@ -11,24 +11,29 @@ public class DropItem : MonoBehaviour
     // [SerializeField] private BNG.Grabber grabberRight;
     public GameObject itemLeft;
 
+
     // [SerializeField] private BNG.Grabber grabberLeft;
 
     public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (manager.GetStep(subTask, step).IsCompeleted())
-            {
-                return;
-            }
+            // if (manager.GetStep(subTask, step).IsCompeleted())
+            // {
+            //     return;
+            // }
             if (itemRight)
             {
-                itemRight.GetComponent<BNG.Grabbable>().DropItem(true, true);
+                BNG.Grabbable grabbable = itemRight.GetComponent<BNG.Grabbable>();
+                BNG.Grabber grabber = grabbable.GetPrimaryGrabber();
+                grabbable.DropItem(grabber, true, true);
                 itemRight.SetActive(false);
             }
             if (itemLeft)
             {
-                itemLeft.GetComponent<BNG.Grabbable>().DropItem(true, true);
+                BNG.Grabbable grabbable = itemLeft.GetComponent<BNG.Grabbable>();
+                BNG.Grabber grabber = grabbable.GetPrimaryGrabber();
+                grabbable.DropItem(grabber, true, true);
                 itemLeft.SetActive(false);
             }
 

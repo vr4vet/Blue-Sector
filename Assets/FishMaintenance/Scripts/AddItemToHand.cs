@@ -5,12 +5,13 @@ using UnityEngine;
 public class AddItemToHand : MonoBehaviour
 {
 
-    [SerializeField] private BNG.Grabber grabber;
+    public BNG.Grabber grabber;
+
 
     void OnEnable()
     {
         BNG.Grabbable itemGrabbable = gameObject.GetComponent<BNG.Grabbable>();
-        gameObject.SetActive(true);
         grabber.GrabGrabbable(itemGrabbable);
     }
+
 }
