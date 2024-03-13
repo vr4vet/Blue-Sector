@@ -57,6 +57,9 @@ public class Stream : MonoBehaviour
         if(hit.collider.transform.parent.gameObject.GetComponent<TankController>() != null){
             target = hit.collider.transform.parent.gameObject.GetComponent<TankController>();
         }
+        else{
+            target = null;
+        }
         Vector3 endPoint = hit.collider ? hit.point : ray.GetPoint(10f);
         return endPoint;
     }
