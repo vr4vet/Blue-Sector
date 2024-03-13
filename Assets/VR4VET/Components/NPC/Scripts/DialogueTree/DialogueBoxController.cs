@@ -38,6 +38,11 @@ public class DialogueBoxController : MonoBehaviour
         ResetBox();
         dialogueIsActive = false;
 
+        // Animation stuff
+        updateAnimator();
+    }
+
+    private void Start() {
         // Assign the event camera
         if (_dialogueCanvas != null)
         {
@@ -64,8 +69,6 @@ public class DialogueBoxController : MonoBehaviour
             Debug.LogError("DialogueCanvas not found or does not have a Canvas component!");
         }
 
-        // Animation stuff
-        updateAnimator();
     }
 
     public void updateAnimator() {
