@@ -16,7 +16,7 @@ public class ConversationController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-
+        _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
         _dialogueBoxController = GetComponentInParent<DialogueBoxController>();
         if (_dialogueBoxController == null) {
             Debug.LogError("The NPC is missing the DialogueBoxCOntroller script");
@@ -45,22 +45,28 @@ public class ConversationController : MonoBehaviour
         this._animator = animator;
     }
 
+    public bool isDialogueActive()
+    {
+        return _dialogueBoxController.dialogueIsActive;
+    }
+
     
     /// <summary>
     /// Start the dialogue when the Player is close enough
     /// </summary>
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
-    {   
+    {
         if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && !_dialogueBoxController.dialogueIsActive) 
         {
             // string json = JsonUtility.ToJson(dialogueTree);
             // Debug.Log(json);
             if (_dialogueTree != null) {
                 _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
-            } else {
-                Debug.LogError("The dialogueTree of the NPC is null");
-            }
+            } 
+            // else {
+            //     Debug.LogError("The dialogueTree of the NPC is null");
+            // }
         }
     }
 
@@ -108,7 +114,10 @@ public class ConversationController : MonoBehaviour
         if (_dialogueTreesSOFormat.Count > 0) {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
-        _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        // updateAnimator();
+        // _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        // updateAnimator();
+        // this.transform.parent.gameObject.GetComponentInChildren<Animator>().SetBool(Animator.StringToHash("hasNewDialogueOptions"), true);
     }
 
     /// <summary>

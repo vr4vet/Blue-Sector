@@ -8,6 +8,7 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private Task.TaskHolder taskHolder;
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     [SerializeField] private AudioClip success;
+    [HideInInspector] public int stepCount;
 
     // Start is called before the first frame update
     private void Awake()
@@ -53,7 +54,10 @@ public class MaintenanceManager : MonoBehaviour
         taskListLoader.TaskPageLoader(task);
         taskListLoader.LoadSkillsPage();
         Debug.Log(step.RepetionNumber.ToString() + " completed: " + step.RepetionsCompleated.ToString());
-
+        if (step.IsCompeleted())
+        {
+            stepCount += 1;
+        }
     }
 
     public Task.Step GetStep(string taskName, string subtaskName, string stepName)

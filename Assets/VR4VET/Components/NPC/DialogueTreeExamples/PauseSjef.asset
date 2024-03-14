@@ -1,0 +1,189 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: PauseSjef
+  m_EditorClassIdentifier: 
+  sections:
+  - dialogue:
+    - "Bra jobba p\xE5 merden, det er p\xE5 tide med en pause."
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Det er viktig \xE5 ta pauser iblant n\xE5r man jobber med krevende
+        oppgaver. "
+      answers:
+      - answerLabel: "Kan du fortelle mer om hvordan sikkerheten ivaretas p\xE5 oppdrettsanlegg?"
+        nextElement: 1
+      - answerLabel: Kult, hvor ofte tar man pauser i dette yrket?
+        nextElement: 2
+  - dialogue:
+    - Korrekt bekledning gir grunnleggende sikkerhet.
+    - "Det er viktig \xE5 ha p\xE5 flytevest n\xE5r man ferdes p\xE5 anlegget. Det
+      er sjelden noen faller i vannet, men det er viktig \xE5 v\xE6re forberedt dersom
+      ulykken skulle skje. Hjelm, st\xF8vler og korrekt ytterbekledning er ogs\xE5
+      viktig. "
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Alle skal ogs\xE5 g\xE5 med radio for \xE5 kunne kommunisere p\xE5
+        tvers av anlegget. "
+      answers:
+      - answerLabel: Hvordan jobber dere sammen?
+        nextElement: 3
+      - answerLabel: "Hvilke oppgaver er vanlige p\xE5 oppdrettsanlegg?"
+        nextElement: 4
+  - dialogue:
+    - "Hvor ofte man tar pauser varierer, men lunsj er en fast pause midt p\xE5 dagen."
+    - 'I pausene kan vi enten snakke om arbeidet eller noe helt annet. '
+    endAfterDialogue: 0
+    branchPoint:
+      question: "P\xE5 dette anlegget ser vi p\xE5 pausene som en viktig ressurs
+        for \xE5 bli kjent, men ogs\xE5 planlegge arbeidet. "
+      answers:
+      - answerLabel: Hvordan jobber dere sammen?
+        nextElement: 3
+      - answerLabel: "Hvilke oppgaver er vanlige p\xE5 oppdrettsanlegg?"
+        nextElement: 4
+  - dialogue:
+    - "Vi arbeider alltid flere sammen for \xE5 kunne hjelpehverandre om noe skulle
+      skje. Det er viktig \xE5 ha god kommunikasjon, og man avklarer hvem som gj\xF8r
+      hva."
+    - "N\xE5r vi skal gj\xF8re krevende oppgaver, har vi alltid et m\xF8te p\xE5
+      forh\xE5nd for \xE5 planlegge hvordan oppgaven skal gjennomf\xF8res."
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Dette er for \xE5 forsikre oss om at vi jobber p\xE5 en trygg m\xE5te. "
+      answers:
+      - answerLabel: "Hvilke oppgaver er vanlige p\xE5 et oppdrettsanlegg?"
+        nextElement: 4
+      - answerLabel: Hvilken utdanning kan man ta?
+        nextElement: 5
+  - dialogue:
+    - "Merdene kontorlleres daglig og vedlikehold gjennomf\xF8res ved behov. Da g\xE5r
+      man minst en runde p\xE5 hver merd og sjekker at alt er i orden. Dette kalles
+      \"runde p\xE5 ring\"."
+    - "Med mange laks i merdene vil noen fisk d\xF8, og disse m\xE5 hentes ut og
+      telles. Dette gj\xF8res ogs\xE5 daglig."
+    - "Blant oppgavene som gj\xF8res ukentlig er lusetelling. Laks kontrolleres for
+      antall lus og samtidig sjekkes det at laksen er frisk. For eksempel vil store
+      mengder lus f\xF8re til at tiltak m\xE5 iverksettes. "
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Dette er blant oppgavene til en r\xF8kter, og det finnes andre roller
+        p\xE5 en slik arbeidsplass som inneb\xE6rer andre arbeidsoppgaver. "
+      answers:
+      - answerLabel: Hvilken utdanning kan man ta?
+        nextElement: 5
+  - dialogue:
+    - "Man kan s\xF8ke seg inn p\xE5 videreg\xE5ende p\xE5 bl\xE5 linje med akvakultur
+      som fagomr\xE5de. Etter to \xE5r p\xE5 videreg\xE5ende f\xE5r man seg l\xE6rlingplass
+      og vil kunne ta fagbrev etter endt l\xE6rlingeperiode. "
+    - "Det er ogs\xE5 andre muligheter enn dette. Man kan f\xE5 jobb som r\xF8kter
+      uten \xE5 ha relevant utdanning. Da vil man f\xE5 oppl\xE6ring p\xE5 arbeidsplassen
+      mens man arbeider. Om man \xF8nsker kan man ta fagbrev etter 5 \xE5r i arbeid. "
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 6
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 7
+      - answerLabel: Vanlige oppgaver
+        nextElement: 9
+      - answerLabel: Nei la oss jobbe videre
+        nextElement: 10
+  - dialogue:
+    - Korrekt bekledning gir grunnleggende sikkerhet.
+    - "Det er viktig \xE5 ha p\xE5 flytevest n\xE5r man ferdes p\xE5 anlegget. Det
+      er sjelden noen faller i vannet, men det er viktig \xE5 v\xE6re forberedt dersom
+      ulykken skulle skje. Hjelm, st\xF8vler og korrekt ytterbekledning er ogs\xE5
+      viktig. "
+    - "Alle skal ogs\xE5 g\xE5 med radio for \xE5 kunne kommunisere p\xE5 tvers av
+      anlegget. "
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 0
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 0
+      - answerLabel: Pausekultur
+        nextElement: 0
+      - answerLabel: Vanlige oppgaver
+        nextElement: 0
+      - answerLabel: Nei la oss jobbe videre
+        nextElement: 0
+  - dialogue:
+    - "Vi arbeider alltid flere sammen for \xE5 kunne hjelpehverandre om noe skulle
+      skje. Det er viktig \xE5 ha god kommunikasjon, og man avklarer hvem som gj\xF8r
+      hva."
+    - "N\xE5r vi skal gj\xF8re krevende oppgaver, har vi alltid et m\xF8te p\xE5
+      forh\xE5nd for \xE5 planlegge hvordan oppgaven skal gjennomf\xF8res."
+    - "Dette er for \xE5 forsikre oss om at vi jobber p\xE5 en trygg m\xE5te. "
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 6
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 7
+      - answerLabel: Vanlige oppgaver
+        nextElement: 9
+      - answerLabel: Nei la oss jobbe videre
+        nextElement: 10
+  - dialogue:
+    - "Hvor ofte man tar pauser varierer, men lunsj er en fast pause midt p\xE5 dagen."
+    - 'I pausene kan vi enten snakke om arbeidet eller noe helt annet. '
+    - "P\xE5 dette anlegget ser vi p\xE5 pausene som en viktig ressurs for \xE5 bli
+      kjent, men ogs\xE5 planlegge arbeidet. "
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 6
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 7
+      - answerLabel: Vanlige oppgaver
+        nextElement: 9
+      - answerLabel: Nei la oss jobbe videre
+        nextElement: 10
+  - dialogue:
+    - "Merdene kontorlleres daglig og vedlikehold gjennomf\xF8res ved behov. Da g\xE5r
+      man minst en runde p\xE5 hver merd og sjekker at alt er i orden. Dette kalles
+      \"runde p\xE5 ring\"."
+    - "Med mange laks i merdene vil noen fisk d\xF8, og disse m\xE5 hentes ut og
+      telles. Dette gj\xF8res ogs\xE5 daglig."
+    - "Blant oppgavene som gj\xF8res ukentlig er lusetelling. Laks kontrolleres for
+      antall lus og samtidig sjekkes det at laksen er frisk. For eksempel vil store
+      mengder lus f\xF8re til at tiltak m\xE5 iverksettes. "
+    - "Dette er blant oppgavene til en r\xF8kter, og det finnes andre roller p\xE5
+      en slik arbeidsplass som inneb\xE6rer andre arbeidsoppgaver. "
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 6
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 7
+      - answerLabel: Vanlige oppgaver
+        nextElement: 9
+      - answerLabel: Nei la oss jobbe videre
+        nextElement: 10
+  - dialogue:
+    - Okei, la oss sette i gang!
+    endAfterDialogue: 1
+    branchPoint:
+      question: 
+      answers: []

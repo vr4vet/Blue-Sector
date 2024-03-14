@@ -85,7 +85,9 @@ public class DialogueBoxController : MonoBehaviour
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
         _animator.SetBool(_hasNewDialogueOptionsHash, false);
-        _animator.SetBool(_isTalkingHash, true);
+        // this.gameObject.GetComponentInChildren<Animator>().SetBool(Animator.StringToHash("hasNewDialogueOptions"), false);
+        // _animator.SetBool(_isTalkingHash, true);
+        GetComponentInChildren<Animator>().SetBool(Animator.StringToHash("isTalking"), true);
         // Dialogue 
         ResetBox();
         _dialogueBox.SetActive(true);
