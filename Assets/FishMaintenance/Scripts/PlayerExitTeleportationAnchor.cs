@@ -6,7 +6,6 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 {
     public GameObject cylinder;
     public GameObject cylinderGlow;
-    public GameObject teleportationAnchor;
     [SerializeField] private MaintenanceManager manager;
     [SerializeField] private AddInstructionsToWatch watch;
 
@@ -24,25 +23,25 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     }
     public void OnTriggerExit(Collider other)
     {
-        // cylinder.SetActive(true);
-        // cylinderGlow.SetActive(true);
         if (other.CompareTag("Player"))
         {
             watch.emptyInstructions();
+
             if (manager.GetStep(subTask, step).IsCompeleted())
             {
-                teleportationAnchor.SetActive(false);
+                gameObject.SetActive(false);
                 return;
             }
+
             cylinder.SetActive(true);
             cylinderGlow.SetActive(true);
-
-
         }
-
 
     }
 
 
-
 }
+
+
+
+
