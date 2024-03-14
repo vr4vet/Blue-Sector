@@ -10,9 +10,12 @@ using System;
 public class AddInstructionsToWatch : MonoBehaviour
 {
     public TextMeshPro textMesh;
-    public string text;
 
     [SerializeField] private AudioClip incoming;
+
+    [Tooltip("Text to display"), TextArea(5, 20)]
+    public string text;
+
 
     public void addInstructions()
     {

@@ -8,6 +8,7 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private Task.TaskHolder taskHolder;
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     [SerializeField] private AudioClip success;
+    private Task.Task task;
     [HideInInspector] public int stepCount;
 
     // Start is called before the first frame update
@@ -25,16 +26,17 @@ public class MaintenanceManager : MonoBehaviour
     }
     void Start()
     {
-        foreach (Task.Task task in taskHolder.taskList)
+        task = taskHolder.GetTask("Vedlikehold");
+
+        // Reset subtsk and step progress on each play
+        foreach (Task.Subtask sub in task.Subtasks)
         {
-            foreach (Task.Subtask sub in task.Subtasks)
+            foreach (Task.Step step in sub.StepList)
             {
-                foreach (Task.Step step in sub.StepList)
-                {
-                    step.Reset();
-                }
+                step.Reset();
             }
         }
+
     }
 
     // Update is called once per frame
@@ -43,26 +45,24 @@ public class MaintenanceManager : MonoBehaviour
 
     }
 
-    public void CompleteStep(string taskName, string subtaskName, string stepName)
+    public void CompleteStep(string subtaskName, string stepName)
     {
-        Task.Task task = taskHolder.GetTask(taskName);
-        Task.Subtask sub = task.GetSubtask(subtaskName);
 
+        Task.Subtask sub = task.GetSubtask(subtaskName);
         Task.Step step = sub.GetStep(stepName);
         step.CompleateRep();
         taskListLoader.SubTaskPageLoader(sub);
         taskListLoader.TaskPageLoader(task);
         taskListLoader.LoadSkillsPage();
-        Debug.Log(step.RepetionNumber.ToString() + " completed: " + step.RepetionsCompleated.ToString());
         if (step.IsCompeleted())
         {
-            stepCount += 1;
+            PlaySuccess();
         }
+
     }
 
-    public Task.Step GetStep(string taskName, string subtaskName, string stepName)
+    public Task.Step GetStep(string subtaskName, string stepName)
     {
-        Task.Task task = taskHolder.GetTask(taskName);
         Task.Subtask sub = task.GetSubtask(subtaskName);
 
         Task.Step step = sub.GetStep(stepName);
@@ -71,17 +71,22 @@ public class MaintenanceManager : MonoBehaviour
 
     public void PlaySuccess()
     {
+        PlayAudio(success);
+    }
+
+    public void PlayAudio(AudioClip audio)
+    {
         //if the gameobject has audiosource
         if (TryGetComponent<AudioSource>(out AudioSource audioSource))
         {
             audioSource.Stop();
-            audioSource.PlayOneShot(success);
+            audioSource.PlayOneShot(audio);
             return;
         }
 
         //otherwise create audiosource
         AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
-        newAudioSource.PlayOneShot(success);
+        newAudioSource.PlayOneShot(audio);
     }
 
 }

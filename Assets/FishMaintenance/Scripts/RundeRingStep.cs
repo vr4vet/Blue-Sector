@@ -9,6 +9,7 @@ public class RundeRingStep : MonoBehaviour
     public GameObject handheldItem;
     [SerializeField] private BNG.Grabber grabberRight;
     [SerializeField] private MaintenanceManager manager;
+    [SerializeField] private PlayerExitTeleportationAnchor teleportationAnchor;
     [SerializeField] private string step;
 
     void OnTriggerEnter(Collider other)
@@ -19,8 +20,7 @@ public class RundeRingStep : MonoBehaviour
             itemGuide.SetActive(false);
             handheldItem.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
             handheldItem.SetActive(false);
-            manager.CompleteStep("Vedlikehold", "Runde På Ring", step);
-            manager.PlaySuccess();
+            manager.CompleteStep("Runde På Ring", step);
         }
     }
 }
