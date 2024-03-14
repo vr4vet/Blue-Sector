@@ -12,6 +12,7 @@ public class DialogueBoxController : MonoBehaviour
     [SerializeField] private GameObject _answerBox;
     [SerializeField] private GameObject _dialogueCanvas;
     [SerializeField] public GameObject TTSSpeaker;
+    [HideInInspector] public MaintenanceManager manager;
 
     [HideInInspector] public static event Action OnDialogueStarted;
     [HideInInspector] public static event Action OnDialogueEnded;
@@ -28,10 +29,10 @@ public class DialogueBoxController : MonoBehaviour
 
     [HideInInspector] public bool dialogueIsActive;
 
-    private void Awake() 
+    private void Awake()
     {
         buttonSpawner = GetComponent<ButtonSpawner>();
-        if (buttonSpawner == null) 
+        if (buttonSpawner == null)
         {
             Debug.LogError("The NPC missing the Button spawner script");
         }
@@ -68,19 +69,21 @@ public class DialogueBoxController : MonoBehaviour
         updateAnimator();
     }
 
-    public void updateAnimator() {
+    public void updateAnimator()
+    {
         //this.animator = animator;
         this._animator = GetComponentInChildren<Animator>();
         _isTalkingHash = Animator.StringToHash("isTalking");
         _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
     }
 
-    public void updateAnimator(Animator animator) {
+    public void updateAnimator(Animator animator)
+    {
         this._animator = animator;
     }
 
 
-    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
+    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name)
     {
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
@@ -99,8 +102,13 @@ public class DialogueBoxController : MonoBehaviour
 
     IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
     {
-        for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
-        {   
+        for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++)
+        {
+            if (dialogueTree.sections[section].dialogue[0] == "Okei, la oss sette i gang!")
+            {
+                manager.CompleteStep("Vedlikehold", "Pause", "Snakk med Marianne");
+                manager.PlaySuccess();
+            }
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
             while (!_skipLineTriggered)
@@ -131,7 +139,7 @@ public class DialogueBoxController : MonoBehaviour
         StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
     }
 
-    void ResetBox() 
+    void ResetBox()
     {
         StopAllCoroutines();
         _dialogueBox.SetActive(false);

@@ -37,6 +37,5 @@ public class BreakTask : MonoBehaviour
                 conversationController.SetDialogueTreeList(dialogueTree);
             }
         }
-
     }
 }
