@@ -5,19 +5,25 @@ using UnityEngine;
 public class HandFeeding : MonoBehaviour
 {
 
+    [SerializeField] private MaintenanceManager manager;
     [SerializeField] private GameObject bucket;
     [SerializeField] private GameObject shovel;
     [SerializeField] private BNG.Grabber grabberLeft;
     [SerializeField] private BNG.Grabber grabberRight;
+    private DropItem dropItem;
+    private Task.Step step;
     // Start is called before the first frame update
     void Start()
     {
-
+        dropItem = gameObject.GetComponent<DropItem>();
+        step = manager.GetStep("Håndforing", "Kast mat til fisken");
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (step.IsCompeleted()) dropItem.DropAll();
 
     }
     void OnEnable()
@@ -28,8 +34,6 @@ public class HandFeeding : MonoBehaviour
         grabberLeft.GrabGrabbable(bucketGrabbable);
         // shovel.SetActive(true);
         grabberRight.GrabGrabbable(shovelGrabbable);
-
-
 
 
     }

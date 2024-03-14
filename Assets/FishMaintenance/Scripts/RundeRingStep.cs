@@ -21,8 +21,6 @@ public class RundeRingStep : MonoBehaviour
             handheldItem.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
             handheldItem.SetActive(false);
             manager.CompleteStep("Runde På Ring", step);
-            teleportationAnchor.SetAnchor();
-
         }
     }
 }

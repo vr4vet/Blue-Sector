@@ -53,7 +53,10 @@ public class MaintenanceManager : MonoBehaviour
         taskListLoader.SubTaskPageLoader(sub);
         taskListLoader.TaskPageLoader(task);
         taskListLoader.LoadSkillsPage();
-
+        if (step.IsCompeleted())
+        {
+            PlaySuccess();
+        }
 
     }
 

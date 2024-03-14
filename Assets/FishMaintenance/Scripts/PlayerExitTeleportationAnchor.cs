@@ -13,22 +13,36 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     [SerializeField] private string subTask;
     [SerializeField] private string step;
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            cylinder.SetActive(false);
+            cylinderGlow.SetActive(false);
+
+        }
+    }
     public void OnTriggerExit(Collider other)
     {
-        if (subTask == "Håndforing") SetAnchor();
+        // cylinder.SetActive(true);
+        // cylinderGlow.SetActive(true);
+        if (other.CompareTag("Player"))
+        {
+            watch.emptyInstructions();
+            if (manager.GetStep(subTask, step).IsCompeleted())
+            {
+                teleportationAnchor.SetActive(false);
+                return;
+            }
+            cylinder.SetActive(true);
+            cylinderGlow.SetActive(true);
+
+
+        }
+
+
     }
 
-    public void SetAnchor()
-    {
-        if (manager.GetStep(subTask, step).IsCompeleted())
-        {
-            teleportationAnchor.SetActive(false);
-            manager.PlaySuccess();
-            watch.emptyInstructions();
-            return;
-        }
-        cylinder.SetActive(true);
-        cylinderGlow.SetActive(true);
-    }
+
 
 }

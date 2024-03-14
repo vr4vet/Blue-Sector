@@ -55,6 +55,8 @@ public class FillFood : MonoBehaviour
             spawnNumber++;
         }
         manager.CompleteStep("Håndforing", "Kast mat til fisken");
+
+
     }
 
 
