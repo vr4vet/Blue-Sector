@@ -57,6 +57,7 @@ public class MaintenanceManager : MonoBehaviour
         if (step.IsCompeleted())
         {
             PlaySuccess();
+            stepCount += 1;
         }
 
     }
