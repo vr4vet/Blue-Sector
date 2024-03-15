@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class Despawner : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider collisionObject)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collisionObject.tag != "Destroyable") { return; }
-        // Gets the parent's parent
-        GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
+        if (other.tag != "Destroyable") { return; }
 
-        SpawnedObject obj = fish.GetComponent<SpawnedObject>();
+        SpawnedObject obj = other.GetComponent<SpawnedObject>();
         if (obj)
         {
             obj.UpdateListeners();
         }
 
-        Destroy(fish.gameObject);
+        Destroy(other.gameObject);
     }
 }
