@@ -79,17 +79,13 @@ public class ConveyorController : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         if (!IsBeltOn)
-        {
             return;
-        }
 
         Rigidbody obj = collision.gameObject.GetComponent<Rigidbody>();
         if (obj)
         {
             if (obj.velocity.magnitude > maxSpeed)
-            {
                 return;
-            }
 
             obj.AddForce(_direction * acceleration, ForceMode.Acceleration);
         }
