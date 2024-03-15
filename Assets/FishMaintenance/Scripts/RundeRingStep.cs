@@ -9,7 +9,6 @@ public class RundeRingStep : MonoBehaviour
     public GameObject handheldItem;
     [SerializeField] private BNG.Grabber grabberRight;
     [SerializeField] private MaintenanceManager manager;
-    [SerializeField] private PlayerExitTeleportationAnchor teleportationAnchor;
     [SerializeField] private string step;
 
     void OnTriggerEnter(Collider other)

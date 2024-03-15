@@ -6,6 +6,7 @@ public class AddItemToHand : MonoBehaviour
 {
 
     public BNG.Grabber grabber;
+    [SerializeField] private GameObject bucket;
 
 
     void OnEnable()

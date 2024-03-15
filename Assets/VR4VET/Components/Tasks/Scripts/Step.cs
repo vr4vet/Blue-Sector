@@ -27,6 +27,11 @@ namespace Task
                 _repetionsCompleated++;
             }
         }
+
+        public int getRepNumber()
+        {
+            return _repetionsCompleated;
+        }
         public int getStepNumber()
         {
             return stepNumber;

@@ -5,6 +5,7 @@ using UnityEngine;
 public class EquipmentGrabStep : MonoBehaviour
 {
     [SerializeField] private MaintenanceManager manager;
+    [SerializeField] private string equipmentName;
 
     [SerializeField] private string step;
 
