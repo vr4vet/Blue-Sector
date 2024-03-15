@@ -12,29 +12,16 @@ public class ConveyorController : MonoBehaviour
         Left,
     }
 
-    // test with serializedfield //FIXME: remove
-    [SerializeField]
-    private GameManager gameManager;
-
     // Editor fields
     [SerializeField]
     private bool isBeltOn = true;
-    public bool IsBeltOn
-    {
-        get { return isBeltOn; }
-    }
-
+    public bool IsBeltOn { get { return isBeltOn; } }
     [SerializeField]
     private float acceleration = 30f;
-
     [SerializeField]
     [Range(0, 50)]
     private float maxSpeed = 1f;
-    public float MaxSpeed
-    {
-        get { return maxSpeed; }
-    }
-
+    public float MaxSpeed { get { return maxSpeed; } }
     [SerializeField]
     [Tooltip("For selecting movement direction. Using the direction of the belt object.")]
     private Direction direction = Direction.Forward;
@@ -44,9 +31,7 @@ public class ConveyorController : MonoBehaviour
 
     void Start()
     {
-        gameManager = GameManager.instance;
-
-        switch (direction) // Transforming enum to vector3
+        switch(direction) // Transforming enum to vector3
         {
             case Direction.Forward:
             {
@@ -71,21 +56,15 @@ public class ConveyorController : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        isBeltOn = gameManager.IsTaskOn;
-    }
-
     private void OnCollisionStay(Collision collision)
     {
-        if (!IsBeltOn)
-            return;
+        if (!IsBeltOn) { return; }
 
         Rigidbody obj = collision.gameObject.GetComponent<Rigidbody>();
         if (obj)
         {
-            if (obj.velocity.magnitude > maxSpeed)
-                return;
+            if (obj.velocity.magnitude > maxSpeed) { return; }
+
 
             obj.AddForce(_direction * acceleration, ForceMode.Acceleration);
         }
