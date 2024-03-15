@@ -7,11 +7,14 @@ using UnityEngine;
 public class DiscardBadFish : MonoBehaviour
 {
     // counter for the number of fish that are stunned
+    [SerializeField]
+    [Range(0, 15)]
+    private int DeleteNewFishTreshold = 5;
     private int nrFishDiscarded = 0;
-
-    private List<GameObject> discardedFish = new List<GameObject>();
-
     public int NrFishDiscarded{ get {return nrFishDiscarded;}}
+    
+    // list of fish that are currently stunned
+    private List<GameObject> discardedFish = new List<GameObject>();
     private void OnTriggerEnter(Collider collisionObject)
     {
         if (collisionObject.tag != "Destroyable") return; 
@@ -22,7 +25,7 @@ public class DiscardBadFish : MonoBehaviour
         if (!discardedFish.Contains(fish.gameObject)) 
         {
             discardedFish.Add(fish.gameObject);
-            if (discardedFish.Count >= 5){
+            if (discardedFish.Count >= DeleteNewFishTreshold){
                 GameObject fishDelete = discardedFish[0];
                 discardedFish.RemoveAt(0);
                 Destroy(fishDelete);
