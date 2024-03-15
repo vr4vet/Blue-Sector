@@ -21,13 +21,8 @@ public class GameManager : MonoBehaviour
     {
         // Sets the instance of the GameManager to this object if it does not already exist
         if (instance == null)
-        {
             instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
+
 
         // Makes the GameManager object persist between scenes
         DontDestroyOnLoad(gameObject);
