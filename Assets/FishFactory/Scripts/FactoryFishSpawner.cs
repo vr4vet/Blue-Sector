@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class FactoryFishSpawner : MonoBehaviour
 {
-    
+    private GameManager gameManager;
+
+    [SerializeField]
+    private bool isSpawnerOn = true;
+
     [SerializeField]
     [Tooltip("The gameobject prefab to spawn")]
     private GameObject fishPrefab;
@@ -15,7 +19,9 @@ public class FactoryFishSpawner : MonoBehaviour
     private int maxAmountOfFish;
 
     [SerializeField]
-    [Tooltip("The chance of a fish being a different state than stunned. Higher number equals lower chance")]
+    [Tooltip(
+        "The chance of a fish being a different state than stunned. Higher number equals lower chance"
+    )]
     private int randomFishStateChance;
 
     // [SerializeField]
@@ -47,11 +53,33 @@ public class FactoryFishSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameManager.instance;
+
         StartCoroutine(SpawnFish());
     }
 
     void Update()
     {
+        // True the first time the task is turned on and the spawner has not yet turned on
+        if (gameManager.IsTaskOn && !isSpawnerOn)
+        {
+            isSpawnerOn = true;
+
+            foreach (Transform child in transform)
+            {
+                Rigidbody rb = child
+                    .transform.GetChild(0)
+                    .transform.GetChild(0)
+                    .GetComponent<Rigidbody>();
+                // move the fish a bit to initialize a collision with the conveyor belt after turning it back on
+                rb.AddForce(transform.up * 50, ForceMode.Acceleration);
+            }
+        }
+        else if (!gameManager.IsTaskOn && isSpawnerOn)
+        {
+            isSpawnerOn = false;
+        }
+
         // Checks the amount of spawned gameobjects in the simulation
         currentAmountOfFish = transform.childCount;
     }
@@ -61,7 +89,7 @@ public class FactoryFishSpawner : MonoBehaviour
         // Waits for number of seconds equal to the spawnrate + variation
         yield return new WaitForSeconds(spawnRate + RandomizeSpawnRateVariation());
 
-        if (currentAmountOfFish < maxAmountOfFish)
+        if (currentAmountOfFish < maxAmountOfFish && isSpawnerOn)
         {
             // spawn object as a child of the spawner object
             GameObject childGameObject = Instantiate(
@@ -125,6 +153,4 @@ public class FactoryFishSpawner : MonoBehaviour
 
         return state;
     }
-    
-
 }
