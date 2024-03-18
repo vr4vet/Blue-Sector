@@ -60,7 +60,8 @@ public class ConversationController : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {
-        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && !_dialogueBoxController.dialogueIsActive)
+        // if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && !_dialogueBoxController.dialogueIsActive)
+        if (other.CompareTag("Player") && !_dialogueBoxController.dialogueIsActive)
         {
             // string json = JsonUtility.ToJson(dialogueTree);
             // Debug.Log(json);

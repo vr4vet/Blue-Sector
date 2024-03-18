@@ -32,6 +32,14 @@ public class BreakTask : MonoBehaviour
             {
                 Debug.LogError("The NPC is missing the conversationController");
             }
+            if (mm.GetStep("Pause", "Snakk med Marianne").IsCompeleted())
+            {
+                conversationController.SetDialogueTreeList(new List<DialogueTree>
+                {
+                    null
+                });
+                return;
+            }
             else
             {
                 conversationController.SetDialogueTreeList(dialogueTree);
