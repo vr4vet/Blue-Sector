@@ -25,7 +25,7 @@ public class BreakTask : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mm.stepCount > 0 && !_npc.GetComponentInChildren<ConversationController>().isDialogueActive())
+        if (mm.stepCount > 3 && !_npc.GetComponentInChildren<ConversationController>().isDialogueActive())
         {
             ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
             if (conversationController == null)

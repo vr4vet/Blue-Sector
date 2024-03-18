@@ -5,7 +5,6 @@ using UnityEngine;
 public class RundeRingStep : MonoBehaviour
 {
     public GameObject fixedItem;
-    public GameObject itemGuide;
     public GameObject handheldItem;
     [SerializeField] private BNG.Grabber grabberRight;
     [SerializeField] private MaintenanceManager manager;

@@ -6,15 +6,18 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 {
     public GameObject cylinder;
     public GameObject cylinderGlow;
-    [SerializeField] private MaintenanceManager manager;
+    [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private string subTask;
     [SerializeField] private string step;
-    [SerializeField] private AddInstructionsToWatch watch;
+    private MaintenanceManager manager;
+    private FeedbackManager feedbackManager;
     private BoxCollider boxCollider;
     private Vector3 originalSize;
 
     void Start()
     {
+        manager = maintenanceManager.GetComponent<MaintenanceManager>();
+        feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         boxCollider = gameObject.GetComponent<BoxCollider>();
         originalSize = boxCollider.size;
 
@@ -31,11 +34,10 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     }
     public void OnTriggerExit(Collider other)
     {
-
         if (other.CompareTag("Player"))
         {
-
-            watch.emptyInstructions();
+            feedbackManager.StopMoreFeedback();
+            feedbackManager.emptyInstructions();
             boxCollider.size = originalSize;
             if (string.IsNullOrEmpty(step))
             {

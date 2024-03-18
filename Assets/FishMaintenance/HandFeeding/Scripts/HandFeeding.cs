@@ -5,14 +5,16 @@ using UnityEngine;
 public class HandFeeding : MonoBehaviour
 {
 
-    [SerializeField] private MaintenanceManager manager;
+    [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private GameObject bucket;
     [SerializeField] private GameObject shovel;
     [SerializeField] private BNG.Grabber grabberLeft;
     [SerializeField] private BNG.Grabber grabberRight;
     private DropItem dropItem;
     private Task.Step step;
-    [SerializeField] private AddInstructionsToWatch watch;
+    private FeedbackManager feedbackManager;
+    private MaintenanceManager manager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,31 +22,30 @@ public class HandFeeding : MonoBehaviour
         step = manager.GetStep("Håndforing", "Kast mat til fisken");
     }
 
-
     // Update is called once per frame
-
     void Update()
     {
         if (step.IsCompeleted()) dropItem.DropAll();
     }
+
     void OnEnable()
     {
+        feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
+        manager = maintenanceManager.GetComponent<MaintenanceManager>();
         if (manager.GetStep("Hent Utstyr", "Hent bøtte og spade").IsCompeleted())
         {
             SetEquipmentActive();
         }
         else
         {
-            watch.text = "HENT BØTTE OG SPADE på båten for å starte denne oppgaven";
-            watch.addInstructions();
+            feedbackManager.equipmentFeedback("Håndforing");
         }
 
     }
 
-    void SetEquipmentActive()
+    public void SetEquipmentActive()
     {
-        watch.text = "Kast mat til fisken 5 ganger. Bruk spaden til å hente mat fra bøtten.";
-        watch.addInstructions();
+        feedbackManager.addFeedback("Håndforing");
         bucket.SetActive(true);
         shovel.SetActive(true);
         BNG.Grabbable bucketGrabbable = bucket.GetComponent<BNG.Grabbable>();

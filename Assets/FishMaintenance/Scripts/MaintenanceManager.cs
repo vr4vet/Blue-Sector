@@ -8,6 +8,8 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private Task.TaskHolder taskHolder;
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     [SerializeField] private AudioClip success;
+    private AddInstructionsToWatch watch;
+    private FeedbackManager feedbackManager;
     private Task.Task task;
     [HideInInspector] public int stepCount;
 
@@ -26,6 +28,8 @@ public class MaintenanceManager : MonoBehaviour
     }
     void Start()
     {
+        feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
+        watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         task = taskHolder.GetTask("Vedlikehold");
 
         // Reset subtsk and step progress on each play
@@ -57,8 +61,12 @@ public class MaintenanceManager : MonoBehaviour
         {
             PlaySuccess();
             stepCount += 1;
+            watch.emptyInstructions();
         }
-
+        if (GetSubtask(subtaskName).Compleated())
+        {
+            feedbackManager.feedbackOnTaskComplete(subtaskName);
+        }
     }
 
     public Task.Subtask GetSubtask(string subtaskName)

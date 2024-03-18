@@ -4,38 +4,31 @@ using UnityEngine;
 
 public class DailyCheckStep : MonoBehaviour
 {
-    [SerializeField] private MaintenanceManager manager;
+    [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private BNG.Grabber grabber;
     [SerializeField] private GameObject grabbableObject;
     [SerializeField] private string equipmentStep;
+    [SerializeField] private string step;
+    private FeedbackManager feedbackManager;
+    private MaintenanceManager manager;
 
-    [SerializeField] private AddInstructionsToWatch watch;
-
-    private string originalText;
-    private Task.Step step;
-
-    void Start()
-    {
-        originalText = watch.text;
-        step = manager.GetStep("Hent Utstyr", equipmentStep);
-    }
     void OnEnable()
     {
-        if (step.IsCompeleted())
+        feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
+        manager = maintenanceManager.GetComponent<MaintenanceManager>();
+        if (manager.GetStep("Hent Utstyr", equipmentStep).IsCompeleted())
         {
             SetEquipmentActive();
         }
         else
         {
-            watch.text = equipmentStep.ToUpper() + " på båten for å starte denne oppgaven";
-            watch.addInstructions();
+            feedbackManager.equipmentFeedback(step);
         }
     }
 
-    void SetEquipmentActive()
+    public void SetEquipmentActive()
     {
-        watch.text = originalText;
-        watch.addInstructions();
+        feedbackManager.addFeedback(step);
         grabbableObject.SetActive(true);
         BNG.Grabbable grabbable = grabbableObject.GetComponent<BNG.Grabbable>();
         grabber.GrabGrabbable(grabbable);
