@@ -16,7 +16,7 @@ public class RundeRingStep : MonoBehaviour
         if (other.gameObject.tag == "rundeRing")
         {
             fixedItem.SetActive(true);
-            itemGuide.SetActive(false);
+            gameObject.SetActive(false);
             handheldItem.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
             handheldItem.SetActive(false);
             manager.CompleteStep("Runde På Ring", step);

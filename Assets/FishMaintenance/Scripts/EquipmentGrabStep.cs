@@ -5,7 +5,6 @@ using UnityEngine;
 public class EquipmentGrabStep : MonoBehaviour
 {
     [SerializeField] private MaintenanceManager manager;
-    [SerializeField] private string equipmentName;
 
     [SerializeField] private string step;
 
@@ -18,13 +17,5 @@ public class EquipmentGrabStep : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-    public void GrabEquipment()
-    {
 
-        // BNG.Grabbable grabbable = gameObject.GetComponent<BNG.Grabbable>();
-        // BNG.Grabber grabber = grabbable.GetPrimaryGrabber();
-        // grabbable.DropItem(grabber, true, true);
-        // gameObject.Set
-
-    }
 }
