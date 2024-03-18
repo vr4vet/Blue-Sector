@@ -35,7 +35,7 @@ public class HandFeeding : MonoBehaviour
         }
         else
         {
-            watch.text = "Hent BØTTE OG SPADE på båten for å starte denne oppgaven";
+            watch.text = "HENT BØTTE OG SPADE på båten for å starte denne oppgaven";
             watch.addInstructions();
         }
 
