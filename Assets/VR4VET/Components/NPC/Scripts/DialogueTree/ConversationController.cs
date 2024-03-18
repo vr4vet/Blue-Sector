@@ -15,16 +15,18 @@ public class ConversationController : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
-
+    {
+        _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
         _dialogueBoxController = GetComponentInParent<DialogueBoxController>();
-        if (_dialogueBoxController == null) {
+        if (_dialogueBoxController == null)
+        {
             Debug.LogError("The NPC is missing the DialogueBoxCOntroller script");
         }
         // Join the json-version and the dialogueTree-version into one list;
         // The dialogueTree-version will be first
         JoinWithScriptableObjectList(_dialogueTreesJSONFormat);
-        if (_dialogueTreesSOFormat.Count > 0) {
+        if (_dialogueTreesSOFormat.Count > 0)
+        {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
         updateAnimator();
@@ -41,26 +43,35 @@ public class ConversationController : MonoBehaviour
         }
     }
 
-    public void updateAnimator(Animator animator) {
+    public void updateAnimator(Animator animator)
+    {
         this._animator = animator;
     }
 
-    
+    public bool isDialogueActive()
+    {
+        return _dialogueBoxController.dialogueIsActive;
+    }
+
+
     /// <summary>
     /// Start the dialogue when the Player is close enough
     /// </summary>
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
-    {   
-        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && !_dialogueBoxController.dialogueIsActive) 
+    {
+        // if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && !_dialogueBoxController.dialogueIsActive)
+        if (other.CompareTag("Player") && !_dialogueBoxController.dialogueIsActive)
         {
             // string json = JsonUtility.ToJson(dialogueTree);
             // Debug.Log(json);
-            if (_dialogueTree != null) {
+            if (_dialogueTree != null)
+            {
                 _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
-            } else {
-                Debug.LogError("The dialogueTree of the NPC is null");
             }
+            // else {
+            //     Debug.LogError("The dialogueTree of the NPC is null");
+            // }
         }
     }
 
@@ -101,14 +112,19 @@ public class ConversationController : MonoBehaviour
     /// The NPC will singal through animation that they have a new dialogue. 
     /// </summary>
     /// <param name="dialogueTrees"></param>
-    public void SetDialogueTreeList(List<DialogueTree> dialogueTrees) {
+    public void SetDialogueTreeList(List<DialogueTree> dialogueTrees)
+    {
         _dialogueBoxController?.ExitConversation();
         this._dialogueTreesSOFormat = dialogueTrees;
         _currentElement = 0;
-        if (_dialogueTreesSOFormat.Count > 0) {
+        if (_dialogueTreesSOFormat.Count > 0)
+        {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
-        _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        // updateAnimator();
+        // _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        // updateAnimator();
+        // this.transform.parent.gameObject.GetComponentInChildren<Animator>().SetBool(Animator.StringToHash("hasNewDialogueOptions"), true);
     }
 
     /// <summary>
@@ -116,7 +132,8 @@ public class ConversationController : MonoBehaviour
     /// The NPC will singal through animation that they have a new dialogue. 
     /// </summary>
     /// <param name="dialogueTree"></param>
-    public void SetDialogueTreeList(DialogueTree dialogueTree) {
+    public void SetDialogueTreeList(DialogueTree dialogueTree)
+    {
         SetDialogueTreeList(new List<DialogueTree>
         {
             dialogueTree
@@ -129,37 +146,44 @@ public class ConversationController : MonoBehaviour
     /// The NPC will singal through animation that they have a new dialogue.
     /// </summary>
     /// <param name="dialogueTree"></param>
-    public void InsertDialogueTreeAndChange(DialogueTree dialogueTree) {
-        if (!_dialogueTreesSOFormat.Contains(dialogueTree)) {
+    public void InsertDialogueTreeAndChange(DialogueTree dialogueTree)
+    {
+        if (!_dialogueTreesSOFormat.Contains(dialogueTree))
+        {
             _dialogueBoxController.ExitConversation();
             _currentElement++;
             _dialogueTreesSOFormat.Insert(_currentElement, dialogueTree);
             this._dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
             _animator.SetBool(_hasNewDialogueOptionsHash, true);
-        } 
+        }
     }
 
-    public void SetDialogueTreeList(List<TextAsset> dialogueTrees) {
+    public void SetDialogueTreeList(List<TextAsset> dialogueTrees)
+    {
         SetDialogueTreeList(ConvertFromJSONListToDialogueTreeList(dialogueTrees));
     }
 
-    public void SetDialogueTreeList(TextAsset dialogueTree) {
+    public void SetDialogueTreeList(TextAsset dialogueTree)
+    {
         SetDialogueTreeList(new List<TextAsset>
         {
             dialogueTree
         });
     }
 
-    public void InsertDialogueTreeAndChange(TextAsset dialogueTree) {
+    public void InsertDialogueTreeAndChange(TextAsset dialogueTree)
+    {
         DialogueTree temp = Instantiate(_toBeOverwrittenByJSON);
         JsonUtility.FromJsonOverwrite(dialogueTree.text, temp);
         InsertDialogueTreeAndChange(temp);
     }
 
-    public void SetDialogueTreeList(DialogueTree[] dialogueTreesSO, TextAsset[] dialogueTreesJSON) {
+    public void SetDialogueTreeList(DialogueTree[] dialogueTreesSO, TextAsset[] dialogueTreesJSON)
+    {
         SetDialogueTreeList(new List<DialogueTree>(dialogueTreesSO));
         JoinWithScriptableObjectList(new List<TextAsset>(dialogueTreesJSON));
-        if (_dialogueTreesSOFormat.Count > 0) {
+        if (_dialogueTreesSOFormat.Count > 0)
+        {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
     }
@@ -168,13 +192,16 @@ public class ConversationController : MonoBehaviour
     /// Go to the next dialogueTree.
     /// The NPC will signal through animation that the dialogue changed. 
     /// </summary>
-    public void NextDialogueTree() {
+    public void NextDialogueTree()
+    {
         _currentElement++;
         if (_currentElement >= _dialogueTreesSOFormat.Count())
         {
             _currentElement--;
             Debug.Log("You have already read the last dialogue tree");
-        } else {
+        }
+        else
+        {
             _dialogueBoxController.ExitConversation();
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
             _animator.SetBool(_hasNewDialogueOptionsHash, true);
@@ -185,13 +212,16 @@ public class ConversationController : MonoBehaviour
     /// Go to the prior dialogueTree.
     /// The NPC will signal through animation that the dialogue changed. 
     /// </summary>
-    public void PreviousDialogueTree() {
+    public void PreviousDialogueTree()
+    {
         _currentElement--;
         if (_currentElement < 0)
         {
-            _currentElement=0;
+            _currentElement = 0;
             Debug.Log("You have already read the first dialogue tree");
-        } else {
+        }
+        else
+        {
             _dialogueBoxController.ExitConversation();
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
             _animator.SetBool(_hasNewDialogueOptionsHash, true);

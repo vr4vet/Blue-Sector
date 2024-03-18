@@ -15,4 +15,5 @@ public class NPC : ScriptableObject
     public DialogueTree[] DialogueTreesSO;
     public TextAsset[] DialogueTreeJSON;
     public RuntimeAnimatorController runtimeAnimatorController; 
+    public MaintenanceManager manager;
 }

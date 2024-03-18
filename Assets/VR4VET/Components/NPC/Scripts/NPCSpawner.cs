@@ -7,29 +7,33 @@ public class NPCSpawner : MonoBehaviour
     [SerializeField] private NPC[] _nPCs;
     [HideInInspector] public List<GameObject> _npcInstances;
     private GameObject spawnedNpc;
+    [SerializeField] private MaintenanceManager manager;
 
-    private void Awake() {
+    private void Awake()
+    {
         foreach (var npcSO in _nPCs)
         {
             _npcInstances.Add(SpawnNPC(npcSO));
         }
     }
 
-    public GameObject SpawnNPC(NPC npcSO) {
+    public GameObject SpawnNPC(NPC npcSO)
+    {
         // Instantiate the NPC prefab at the defined location
         GameObject newNPC = Instantiate(npcSO.NpcPrefab, npcSO.SpawnPosition, Quaternion.identity);
         // Rotate the NPC 
-        newNPC.transform.rotation = Quaternion.Euler(npcSO.SpawnRotation);  
+        newNPC.transform.rotation = Quaternion.Euler(npcSO.SpawnRotation);
         // Attach the Text-To-Speech componenets
         AttachTTSComponents(newNPC);
         // change the apperance, animation avatar and voice from the deafult one, to a specific one
-        SetAppearanceAnimationAndVoice(newNPC, npcSO.CharacterModel, npcSO.CharacterAvatar, npcSO.runtimeAnimatorController , npcSO.VoicePresetId);
+        SetAppearanceAnimationAndVoice(newNPC, npcSO.CharacterModel, npcSO.CharacterAvatar, npcSO.runtimeAnimatorController, npcSO.VoicePresetId);
         // Should the NPC follow after the player or not? (from the start)
         SetFollowingBehavior(newNPC, npcSO.ShouldFollow);
         // Update the name of the NPC
         SetName(newNPC, npcSO.NameOfNPC);
         // set talking topics aka. dialogueTrees
         SetConversation(newNPC, npcSO.DialogueTreesSO, npcSO.DialogueTreeJSON);
+        setManager(newNPC);
         spawnedNpc = newNPC;
         // return the NPC
         return newNPC;
@@ -39,7 +43,7 @@ public class NPCSpawner : MonoBehaviour
     {
         // Load the TTS prefab from the Resources folder
         GameObject ttsPrefab = Resources.Load<GameObject>("TTS");
-        
+
         if (ttsPrefab != null)
         {
             // Instantiate the TTS prefab and parent it under the NPC
@@ -61,7 +65,8 @@ public class NPCSpawner : MonoBehaviour
         }
     }
 
-    public void SetFollowingBehavior(GameObject npc, bool shouldFollow) {
+    public void SetFollowingBehavior(GameObject npc, bool shouldFollow)
+    {
         FollowThePlayerController followThePlayerController = npc.GetComponent<FollowThePlayerController>();
         if (followThePlayerController != null)
         {
@@ -86,28 +91,48 @@ public class NPCSpawner : MonoBehaviour
         }
     }
 
-    public void SetName(GameObject npc, String name) {
+    public void SetName(GameObject npc, String name)
+    {
         DisplayName displayName = npc.GetComponent<DisplayName>();
         if (displayName == null)
         {
             Debug.LogError("The NPC is missing the display name componenent");
-        } else {
+        }
+        else
+        {
             displayName.UpdateDisplayedName(name);
         }
     }
 
-    public void SetConversation(GameObject npc, DialogueTree[] dialogueTreesSO, TextAsset[] dialogueTreesJSON) {
+    public void SetConversation(GameObject npc, DialogueTree[] dialogueTreesSO, TextAsset[] dialogueTreesJSON)
+    {
         ConversationController conversationController = npc.GetComponentInChildren<ConversationController>();
         if (conversationController == null)
         {
             Debug.LogError("The NPC is missing the conversationController");
-        } else {
+        }
+        else
+        {
             conversationController.SetDialogueTreeList(dialogueTreesSO, dialogueTreesJSON);
         }
     }
 
-    public GameObject getNpc()
+    public void setManager(GameObject npc)
     {
-        return spawnedNpc;
+        DialogueBoxController dialogueController = npc.GetComponent<DialogueBoxController>();
+
+        if (manager != null && dialogueController != null)
+        {
+            dialogueController.manager = manager;
+        }
+        else
+        {
+            Debug.LogError("Could not set manager to dialogBoxController.");
+        }
     }
+
+    public GameObject getNpc()
+{
+    return spawnedNpc;
+}
 }

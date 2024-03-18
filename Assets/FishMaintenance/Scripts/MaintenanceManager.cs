@@ -9,7 +9,7 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     [SerializeField] private AudioClip success;
     private Task.Task task;
-    private List<string> equipment = new List<string>();
+    [HideInInspector] public int stepCount;
 
     // Start is called before the first frame update
     private void Awake()
@@ -44,20 +44,6 @@ public class MaintenanceManager : MonoBehaviour
     {
 
     }
-
-    public bool EquipmentAdded(string name)
-    {
-        return equipment.Contains(name);
-    }
-    public void AlterEquipmentList(string name, bool remove)
-    {
-        if (remove && EquipmentAdded(name))
-        {
-            equipment.Remove(name);
-            return;
-        }
-        equipment.Add(name);
-    }
     public void CompleteStep(string subtaskName, string stepName)
     {
 
@@ -70,6 +56,7 @@ public class MaintenanceManager : MonoBehaviour
         if (step.IsCompeleted())
         {
             PlaySuccess();
+            stepCount += 1;
         }
 
     }
