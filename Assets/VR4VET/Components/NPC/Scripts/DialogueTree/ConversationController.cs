@@ -27,6 +27,7 @@ public class ConversationController : MonoBehaviour
         if (_dialogueTreesSOFormat.Count > 0) {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
+        _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
         updateAnimator();
     }
 
@@ -177,6 +178,11 @@ public class ConversationController : MonoBehaviour
         } else {
             _dialogueBoxController.ExitConversation();
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
+            if (_animator == null) 
+            { 
+                GameObject parent = this.transform.parent.gameObject; 
+                _animator = parent.GetComponentInChildren<Animator>(); 
+            }
             _animator.SetBool(_hasNewDialogueOptionsHash, true);
         }
     }
