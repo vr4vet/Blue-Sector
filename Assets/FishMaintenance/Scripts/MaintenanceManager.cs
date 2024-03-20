@@ -56,7 +56,7 @@ public class MaintenanceManager : MonoBehaviour
         taskListLoader.SubTaskPageLoader(sub);
         taskListLoader.TaskPageLoader(task);
 
-        Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
+        // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
         if (step.IsCompeleted())
         {
             PlaySuccess();
@@ -66,7 +66,7 @@ public class MaintenanceManager : MonoBehaviour
         if (sub.Compleated())
         {
             SubtaskChanged.Invoke(sub);
-            SkillCompleted.Invoke(skill);
+            // SkillCompleted.Invoke(skill);
         }
     }
 
