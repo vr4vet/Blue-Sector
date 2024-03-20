@@ -13,45 +13,54 @@ public class FeedbackManager : MonoBehaviour
         manager = this.gameObject.GetComponent<MaintenanceManager>();
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         feedback = new Dictionary<string, List<string>>();
+        manager.SubtaskChanged.AddListener(feedbackOnTaskComplete);
         feedback.Add("Hent Utstyr", new List<string> {
             "Ta med deg utstyr.",
             "Berør utstyret for å ta det med deg.",
-            "Bra jobba! Gå videre til neste sylinder."
+            "Bra jobba! Gå videre til neste sylinder.",
+            "",
+            ""
         });
         feedback.Add("Håndforing", new List<string> {
             "Kast mat til fisken 5 ganger.",
             "Bruk spaden til å hente mat fra bøtten. Kast så maten i merden.",
             "Kjempebra, dette var en utfordrende oppgave!",
-            "Hent BØTTE OG SPADE på båten for å starte denne oppgaven"
+            "Hent BØTTE OG SPADE på båten for å starte denne oppgaven",
+            ""
         });
         feedback.Add("Legg til tau på merd", new List<string> {
             "Legg til tauet over omrisset.",
             "Berør omrisset med tauet du har i venstre hånd.",
             "",
-            "Hent TAU på båten for å starte denne oppgaven"
+            "Hent TAU på båten for å starte denne oppgaven",
+            ""
         });
         feedback.Add("Legg til splinter på kjetting", new List<string> {
             "Legg til splinten i kjettingen.",
             "Berør omrisset med splinten du har i venstre hånd.",
             "",
-            "Hent SPLINT på båten for å starte denne oppgaven"
+            "Hent SPLINT på båten for å starte denne oppgaven",
+            ""
         });
         feedback.Add("Reparer tau på merd", new List<string> {
             "Legg til tauet over det gamle.",
             "Berør det utslitte tauet med tauet du har i venstre hånd.",
             "",
-            "Hent TAU på båten for å starte denne oppgaven"
+            "Hent TAU på båten for å starte denne oppgaven",
+            "Berør det utslitte tauet med tauet du har i venstre hånd. Dette klarer du!"
         });
         feedback.Add("Runde På Ring", new List<string> {
             "",
             "",
             "Bra, nå er merden kontrollert.",
+            "",
             ""
         });
         feedback.Add("Pause", new List<string> {
             "",
             "",
             "Bra jobba!",
+            "",
             ""
         });
     }
@@ -61,6 +70,7 @@ public class FeedbackManager : MonoBehaviour
     {
         if (subtaskName == "Reparer tau på merd" && manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && manager.GetStep("Runde På Ring", "Legg til splinter på kjetting").IsCompeleted())
         {
+            StartCoroutine(emergencyFeedback(subtaskName));
             return;
         }
         watch.addInstructions(feedback[subtaskName][0]);
@@ -92,11 +102,17 @@ public class FeedbackManager : MonoBehaviour
         }
     }
 
-    public void feedbackOnTaskComplete(string subtaskName)
+    IEnumerator emergencyFeedback(string subtaskName)
     {
-        if (manager.stepCount < 6 || subtaskName == "Håndforing")
+        yield return new WaitForSeconds(40f);
+        watch.addInstructions(feedback[subtaskName][4]);
+    }
+
+    public void feedbackOnTaskComplete(Task.Subtask subtask)
+    {
+        if (manager.stepCount < 6 || subtask.SubtaskName == "Håndforing")
         {
-            watch.addInstructions(feedback[subtaskName][2]);
+            watch.addInstructions(feedback[subtask.SubtaskName][2]);
         }
     }
 

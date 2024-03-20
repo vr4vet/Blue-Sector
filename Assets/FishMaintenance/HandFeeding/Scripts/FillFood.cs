@@ -14,8 +14,6 @@ public class FillFood : MonoBehaviour
     void Awake()
     {
         foods = transform.GetChild(0).gameObject;
-
-
     }
 
 

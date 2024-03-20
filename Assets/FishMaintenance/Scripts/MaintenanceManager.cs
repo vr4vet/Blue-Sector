@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 public class MaintenanceManager : MonoBehaviour
 {
     public static MaintenanceManager Instance;
@@ -12,6 +12,8 @@ public class MaintenanceManager : MonoBehaviour
     private FeedbackManager feedbackManager;
     private Task.Task task;
     [HideInInspector] public int stepCount;
+
+    public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
 
     // Start is called before the first frame update
     private void Awake()
@@ -43,11 +45,7 @@ public class MaintenanceManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
     public void CompleteStep(string subtaskName, string stepName)
     {
 
@@ -63,14 +61,15 @@ public class MaintenanceManager : MonoBehaviour
             stepCount += 1;
             feedbackManager.emptyInstructions();
         }
-        if (GetSubtask(subtaskName).Compleated())
+        if (sub.Compleated())
         {
-            feedbackManager.feedbackOnTaskComplete(subtaskName);
+            SubtaskChanged.Invoke(sub);
         }
     }
 
     public Task.Subtask GetSubtask(string subtaskName)
     {
+
         return task.GetSubtask(subtaskName);
     }
 

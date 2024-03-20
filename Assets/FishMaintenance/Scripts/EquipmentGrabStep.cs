@@ -8,6 +8,7 @@ public class EquipmentGrabStep : MonoBehaviour
 
     [SerializeField] private string step;
 
+
     void OnTriggerStay(Collider other)
     {
 
