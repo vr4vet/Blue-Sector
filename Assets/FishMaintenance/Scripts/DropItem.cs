@@ -40,10 +40,12 @@ public class DropItem : MonoBehaviour
         }
         if (itemLeft)
         {
-            BNG.Grabbable grabbable = itemLeft.GetComponent<BNG.Grabbable>();
-            BNG.Grabber grabber = grabbable.GetPrimaryGrabber();
-            grabbable.DropItem(grabber, true, true);
             itemLeft.SetActive(false);
+
+            // BNG.Grabbable grabbable = itemLeft.GetComponent<BNG.Grabbable>();
+            // BNG.Grabber grabber = grabbable.GetPrimaryGrabber();
+            // grabbable.DropItem(grabber, true, true);
+
         }
 
     }

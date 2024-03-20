@@ -51,6 +51,18 @@ namespace Task
             }
         }
 
+        public bool IsCompleted()
+        {
+            foreach (Badge badge in _badges)
+            {
+                if (badge.IsLocked())
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         // Should we have Percentage or fraction here? Should set number of badges per skill be preset to 2 or 3?
         public int GetPercentageCompleted()
         {

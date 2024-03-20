@@ -48,9 +48,9 @@ public class HandFeeding : MonoBehaviour
         feedbackManager.addFeedback("Håndforing");
         bucket.SetActive(true);
         shovel.SetActive(true);
-        BNG.Grabbable bucketGrabbable = bucket.GetComponent<BNG.Grabbable>();
+        // BNG.Grabbable bucketGrabbable = bucket.GetComponent<BNG.Grabbable>();
         BNG.Grabbable shovelGrabbable = shovel.GetComponent<BNG.Grabbable>();
-        grabberLeft.GrabGrabbable(bucketGrabbable);
+        // grabberLeft.GrabGrabbable(bucketGrabbable);
         grabberRight.GrabGrabbable(shovelGrabbable);
     }
 

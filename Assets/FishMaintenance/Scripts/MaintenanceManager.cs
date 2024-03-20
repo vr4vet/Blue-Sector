@@ -14,6 +14,7 @@ public class MaintenanceManager : MonoBehaviour
     [HideInInspector] public int stepCount;
 
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
+    public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
 
     // Start is called before the first frame update
     private void Awake()
@@ -54,7 +55,8 @@ public class MaintenanceManager : MonoBehaviour
         step.CompleateRep();
         taskListLoader.SubTaskPageLoader(sub);
         taskListLoader.TaskPageLoader(task);
-        taskListLoader.LoadSkillsPage();
+
+        Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
         if (step.IsCompeleted())
         {
             PlaySuccess();
@@ -64,8 +66,11 @@ public class MaintenanceManager : MonoBehaviour
         if (sub.Compleated())
         {
             SubtaskChanged.Invoke(sub);
+            SkillCompleted.Invoke(skill);
         }
     }
+
+
 
     public Task.Subtask GetSubtask(string subtaskName)
     {

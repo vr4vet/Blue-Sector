@@ -34,7 +34,8 @@ public class FillFood : MonoBehaviour
         if (other.CompareTag("Merd") && foods.activeSelf)
         {
             Vector3 shovelVelocity = gameObject.GetComponent<Rigidbody>().velocity;
-            velocity = new Vector3(3f + shovelVelocity.x * Mathf.Pow(10, 7), 4f, 3f + shovelVelocity.z * Mathf.Pow(10, 7));
+            Debug.Log("Shovel velocity x: " + shovelVelocity.x + " z: " + shovelVelocity.z + " y: " + shovelVelocity.y);
+            velocity = new Vector3(-3f + shovelVelocity.x * Mathf.Pow(10, 7), 4f, -3f - shovelVelocity.z * Mathf.Pow(10, 7));
             foods.SetActive(false);
             ReleasePellets();
         }
