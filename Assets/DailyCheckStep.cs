@@ -22,6 +22,7 @@ public class DailyCheckStep : MonoBehaviour
         }
         else
         {
+            Debug.Log("setter feedback");
             feedbackManager.equipmentFeedback(step);
         }
     }

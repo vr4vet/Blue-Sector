@@ -29,7 +29,7 @@ public class FeedbackManager : MonoBehaviour
             ""
         });
         feedback.Add("Legg til tau på merd", new List<string> {
-            "Legg til tauet over omrisset.",
+            "Legg til det manglende tauet.",
             "Berør omrisset med tauet du har i venstre hånd.",
             "",
             "Hent TAU på båten for å starte denne oppgaven",
@@ -40,10 +40,10 @@ public class FeedbackManager : MonoBehaviour
             "Berør omrisset med splinten du har i venstre hånd.",
             "",
             "Hent SPLINT på båten for å starte denne oppgaven",
-            ""
+            "Berør omrisset på bakken med splinten du har i venstre hånd. Dette klarer du!"
         });
         feedback.Add("Reparer tau på merd", new List<string> {
-            "Legg til tauet over det gamle.",
+            "Bytt ut det gamle tauet.",
             "Berør det utslitte tauet med tauet du har i venstre hånd.",
             "",
             "Hent TAU på båten for å starte denne oppgaven",
@@ -68,7 +68,7 @@ public class FeedbackManager : MonoBehaviour
 
     public void addFeedback(string subtaskName)
     {
-        if (subtaskName == "Reparer tau på merd" && manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && manager.GetStep("Runde På Ring", "Legg til splinter på kjetting").IsCompeleted())
+        if (subtaskName == "Legg til splinter på kjetting" && manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted())
         {
             StartCoroutine(emergencyFeedback(subtaskName));
             return;
@@ -88,15 +88,15 @@ public class FeedbackManager : MonoBehaviour
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
-        else if (subtaskName == "Legg til tau på merd" && !manager.GetStep("Runde På Ring", subtaskName).IsCompeleted())
+        else if (subtaskName == "Reparer tau på merd" && !manager.GetStep("Runde På Ring", subtaskName).IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
-        else if (subtaskName == "Legg til splinter på kjetting" && !manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted())
+        else if (subtaskName == "Legg til tau på merd" && !manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
-        else if (subtaskName == "Reparer tau på merd" && !manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && !manager.GetStep("Runde På Ring", "Legg til splinter på kjetting").IsCompeleted())
+        else if (subtaskName == "Legg til splinter på kjetting" && !manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted() && !manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
