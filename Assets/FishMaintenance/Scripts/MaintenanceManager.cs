@@ -61,7 +61,7 @@ public class MaintenanceManager : MonoBehaviour
         {
             PlaySuccess();
             stepCount += 1;
-            watch.emptyInstructions();
+            feedbackManager.emptyInstructions();
         }
         if (GetSubtask(subtaskName).Compleated())
         {

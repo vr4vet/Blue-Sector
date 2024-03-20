@@ -21,32 +21,32 @@ public class FeedbackManager : MonoBehaviour
         feedback.Add("Håndforing", new List<string> {
             "Kast mat til fisken 5 ganger.",
             "Bruk spaden til å hente mat fra bøtten. Kast så maten i merden.",
-            "Bra jobba!",
-            "HENT BØTTE OG SPADE på båten for å starte denne oppgaven"
+            "Kjempebra, dette var en utfordrende oppgave!",
+            "Hent BØTTE OG SPADE på båten for å starte denne oppgaven"
         });
         feedback.Add("Legg til tau på merd", new List<string> {
             "Legg til tauet over omrisset.",
             "Berør omrisset med tauet du har i venstre hånd.",
-            "Bra jobba!",
-            "HENT TAU på båten for å starte denne oppgaven"
+            "",
+            "Hent TAU på båten for å starte denne oppgaven"
         });
         feedback.Add("Legg til splinter på kjetting", new List<string> {
             "Legg til splinten i kjettingen.",
             "Berør omrisset med splinten du har i venstre hånd.",
-            "Bra jobba!",
-            "HENT SPLINT på båten for å starte denne oppgaven"
+            "",
+            "Hent SPLINT på båten for å starte denne oppgaven"
         });
         feedback.Add("Reparer tau på merd", new List<string> {
             "Legg til tauet over det gamle.",
             "Berør det utslitte tauet med tauet du har i venstre hånd.",
-            "Bra jobba!",
-            "HENT TAU på båten for å starte denne oppgaven"
+            "",
+            "Hent TAU på båten for å starte denne oppgaven"
         });
         feedback.Add("Runde På Ring", new List<string> {
             "",
             "",
-            "Bra jobba!",
-            "HENT UTSTYR på båten for å starte denne oppgaven"
+            "Bra, nå er merden kontrollert.",
+            ""
         });
         feedback.Add("Pause", new List<string> {
             "",
@@ -59,6 +59,10 @@ public class FeedbackManager : MonoBehaviour
 
     public void addFeedback(string subtaskName)
     {
+        if (subtaskName == "Reparer tau på merd" && manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && manager.GetStep("Runde På Ring", "Legg til splinter på kjetting").IsCompeleted())
+        {
+            return;
+        }
         watch.addInstructions(feedback[subtaskName][0]);
         StartCoroutine(moreFeedback(subtaskName));
     }
@@ -78,11 +82,11 @@ public class FeedbackManager : MonoBehaviour
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
-        else if (subtaskName == "Legg til splinter på kjetting" && !manager.GetStep("Runde På Ring", subtaskName).IsCompeleted())
+        else if (subtaskName == "Legg til splinter på kjetting" && !manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
-        else if (subtaskName == "Reparer tau på merd" && !manager.GetStep("Runde På Ring", subtaskName).IsCompeleted())
+        else if (subtaskName == "Reparer tau på merd" && !manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && !manager.GetStep("Runde På Ring", "Legg til splinter på kjetting").IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
@@ -90,7 +94,10 @@ public class FeedbackManager : MonoBehaviour
 
     public void feedbackOnTaskComplete(string subtaskName)
     {
-        watch.addInstructions(feedback[subtaskName][2]);
+        if (manager.stepCount < 6 || subtaskName == "Håndforing")
+        {
+            watch.addInstructions(feedback[subtaskName][2]);
+        }
     }
 
     public void equipmentFeedback(string subtaskName)
@@ -106,5 +113,6 @@ public class FeedbackManager : MonoBehaviour
     public void emptyInstructions()
     {
         watch.emptyInstructions();
+        StopAllCoroutines();
     }
 }
