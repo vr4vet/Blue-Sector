@@ -14,11 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sections:
   - dialogue:
-    - "Bra jobba p\xE5 merden, det er p\xE5 tide med en pause."
+    - Bra jobba, la oss ta en pause.
+    dialogueAudio:
+    - {fileID: 8300000, guid: 7cb6afa8a9b09884995660aba16a8cab, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "Det er viktig \xE5 ta pauser iblant n\xE5r man jobber med krevende
         oppgaver. "
+      questionAudio: {fileID: 8300000, guid: 5aa8ae0d0e91dcf45afeb6099611287e, type: 3}
       answers:
       - answerLabel: "Kan du fortelle mer om hvordan sikkerheten ivaretas p\xE5 oppdrettsanlegg?"
         nextElement: 1
@@ -30,10 +33,15 @@ MonoBehaviour:
       er sjelden noen faller i vannet, men det er viktig \xE5 v\xE6re forberedt dersom
       ulykken skulle skje."
     - "Hjelm, st\xF8vler og korrekt ytterbekledning er ogs\xE5 viktig. "
+    dialogueAudio:
+    - {fileID: 8300000, guid: 21526623fdcf15944a527dea2acc99f0, type: 3}
+    - {fileID: 8300000, guid: 6f1278a84d422014eb99b31884c0927c, type: 3}
+    - {fileID: 8300000, guid: af8ab2e9b4e5afc45bf76e14a9305ad6, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "Alle skal ogs\xE5 g\xE5 med radio for \xE5 kunne kommunisere p\xE5
         tvers av anlegget. "
+      questionAudio: {fileID: 8300000, guid: 1c74fcd7c67ae9a4080f1dfc328b32c4, type: 3}
       answers:
       - answerLabel: Hvordan jobber dere sammen?
         nextElement: 3
@@ -42,10 +50,14 @@ MonoBehaviour:
   - dialogue:
     - "Hvor ofte man tar pauser varierer, men lunsj er en fast pause midt p\xE5 dagen."
     - 'I pausene kan vi enten snakke om arbeidet eller noe helt annet. '
+    dialogueAudio:
+    - {fileID: 8300000, guid: 1f83093ccb50e8147a7780310fbabf36, type: 3}
+    - {fileID: 8300000, guid: 6994db348c184114e8f7b142d6fd94b5, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "P\xE5 dette anlegget ser vi p\xE5 pausene som en viktig ressurs
         for \xE5 planlegge arbeidet. "
+      questionAudio: {fileID: 8300000, guid: 98f8687fa6e2756469c62c0da07eb70e, type: 3}
       answers:
       - answerLabel: Hvordan jobber dere sammen?
         nextElement: 3
@@ -58,25 +70,35 @@ MonoBehaviour:
       hva."
     - "N\xE5r vi skal gj\xF8re krevende oppgaver, har vi alltid et m\xF8te p\xE5
       forh\xE5nd for \xE5 planlegge hvordan oppgaven skal gjennomf\xF8res."
+    dialogueAudio:
+    - {fileID: 8300000, guid: bb19cb99b49527c44b21a0b5ed9e0c30, type: 3}
+    - {fileID: 8300000, guid: b87f3575fa78f574e98e43e26b7e8336, type: 3}
+    - {fileID: 8300000, guid: 293b14adc7cb7fa46b9efbb4f785b52e, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "Dette er for \xE5 forsikre oss om at vi jobber p\xE5 en trygg m\xE5te. "
+      questionAudio: {fileID: 8300000, guid: 7a6c1ebfd0cd2ca4094ca2e08d150785, type: 3}
       answers:
       - answerLabel: "Hvilke oppgaver er vanlige p\xE5 et oppdrettsanlegg?"
         nextElement: 4
       - answerLabel: Hvilken utdanning kan man ta?
         nextElement: 5
   - dialogue:
-    - "Merdene kontorlleres daglig i \"runde p\xE5 ring\". Da g\xE5r man minst en
-      runde p\xE5 hver merd og sjekker at alt er i orden."
-    - "Med mange laks i merdene vil noen fisk d\xF8, og disse m\xE5 hentes ut og
-      telles."
+    - "Hver merd kontrolleres daglig i \"runde p\xE5 ring\". Da g\xE5r man minst
+      en runde p\xE5 hver merd og sjekker at alt er i orden."
+    - "Mange laks lever i hver merd, og noen av disse vil d\xF8. Disse m\xE5 hentes
+      ut og telles."
     - "Blant oppgavene som gj\xF8res ukentlig er lusetelling. Laks kontrolleres for
       antall lus og samtidig sjekkes det at laksen er frisk."
+    dialogueAudio:
+    - {fileID: 8300000, guid: 3756f4679333bc34e8f08b603c863736, type: 3}
+    - {fileID: 8300000, guid: 3c94a8badc092f943830a134dab476ef, type: 3}
+    - {fileID: 8300000, guid: 70585dcd79d658247912225142c56a8a, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "Dette er blant oppgavene til en r\xF8kter, og det finnes andre roller
         p\xE5 en slik arbeidsplass som inneb\xE6rer andre arbeidsoppgaver. "
+      questionAudio: {fileID: 8300000, guid: 733bafbfdb7d1fb408d8e5c1e892ef69, type: 3}
       answers:
       - answerLabel: Hvilken utdanning kan man ta?
         nextElement: 5
@@ -89,96 +111,108 @@ MonoBehaviour:
       p\xE5 arbeidsplassen mens man arbeider. Om man \xF8nsker kan man ta fagbrev
       etter 5 \xE5r i arbeid. "
     - Snakk gjerne med veilederen din eller sjekk ut utdanning.no for mer informasjon.
+    dialogueAudio:
+    - {fileID: 8300000, guid: 2c3d1d3eb2610ad45a2d2beacc0108a1, type: 3}
+    - {fileID: 8300000, guid: 35ab48070c111e14cb8d63bd0b6a317a, type: 3}
+    - {fileID: 8300000, guid: 2b84eda0cce932d48b6f17e4e111d688, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "Er det noe mer du lurer p\xE5?"
+      questionAudio: {fileID: 8300000, guid: 593d4555b2518914ba0a94ef94354c25, type: 3}
       answers:
       - answerLabel: "Sikkerhet p\xE5 anlegget"
         nextElement: 6
       - answerLabel: Hvordan jobbe sammen
         nextElement: 7
       - answerLabel: Vanlige oppgaver
-        nextElement: 9
+        nextElement: 8
       - answerLabel: Nei la oss jobbe videre
-        nextElement: 10
+        nextElement: 9
   - dialogue:
     - Korrekt bekledning gir grunnleggende sikkerhet.
     - "Det er viktig \xE5 ha p\xE5 flytevest n\xE5r man ferdes p\xE5 anlegget. Det
-      er sjelden noen faller i vannet, men det er viktig \xE5 v\xE6re forberedt."
+      er sjelden noen faller i vannet, men det er viktig \xE5 v\xE6re forberedt dersom
+      ulykken skulle skje."
     - "Hjelm, st\xF8vler og korrekt ytterbekledning er ogs\xE5 viktig. "
     - "Alle skal ogs\xE5 g\xE5 med radio for \xE5 kunne kommunisere p\xE5 tvers av
       anlegget. "
+    dialogueAudio:
+    - {fileID: 8300000, guid: 21526623fdcf15944a527dea2acc99f0, type: 3}
+    - {fileID: 8300000, guid: 6f1278a84d422014eb99b31884c0927c, type: 3}
+    - {fileID: 8300000, guid: af8ab2e9b4e5afc45bf76e14a9305ad6, type: 3}
+    - {fileID: 8300000, guid: 1c74fcd7c67ae9a4080f1dfc328b32c4, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "Er det noe mer du lurer p\xE5?"
+      questionAudio: {fileID: 8300000, guid: 593d4555b2518914ba0a94ef94354c25, type: 3}
       answers:
       - answerLabel: "Sikkerhet p\xE5 anlegget"
         nextElement: 6
       - answerLabel: Hvordan jobbe sammen
         nextElement: 7
       - answerLabel: Vanlige oppgaver
-        nextElement: 9
+        nextElement: 8
       - answerLabel: Nei la oss jobbe videre
-        nextElement: 10
+        nextElement: 9
   - dialogue:
-    - "Vi arbeider alltid flere sammen for \xE5 kunne hjelpehverandre om noe skulle
+    - "Vi arbeider alltid flere sammen for \xE5 kunne hjelpe hverandre om noe skulle
       skje."
     - "Det er viktig \xE5 ha god kommunikasjon, og man avklarer hvem som gj\xF8r
       hva."
     - "N\xE5r vi skal gj\xF8re krevende oppgaver, har vi alltid et m\xF8te p\xE5
       forh\xE5nd for \xE5 planlegge hvordan oppgaven skal gjennomf\xF8res."
     - "Dette er for \xE5 forsikre oss om at vi jobber p\xE5 en trygg m\xE5te. "
+    dialogueAudio:
+    - {fileID: 8300000, guid: bb19cb99b49527c44b21a0b5ed9e0c30, type: 3}
+    - {fileID: 8300000, guid: b87f3575fa78f574e98e43e26b7e8336, type: 3}
+    - {fileID: 8300000, guid: 293b14adc7cb7fa46b9efbb4f785b52e, type: 3}
+    - {fileID: 8300000, guid: 7a6c1ebfd0cd2ca4094ca2e08d150785, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "Er det noe mer du lurer p\xE5?"
+      questionAudio: {fileID: 8300000, guid: 593d4555b2518914ba0a94ef94354c25, type: 3}
       answers:
       - answerLabel: "Sikkerhet p\xE5 anlegget"
         nextElement: 6
       - answerLabel: Hvordan jobbe sammen
         nextElement: 7
       - answerLabel: Vanlige oppgaver
-        nextElement: 9
+        nextElement: 8
       - answerLabel: Nei la oss jobbe videre
-        nextElement: 10
-  - dialogue:
-    - "P\xE5 dette anlegget ser vi p\xE5 pausene som en viktig ressurs for \xE5 bli
-      kjent, men ogs\xE5 planlegge arbeidet. "
-    endAfterDialogue: 0
-    branchPoint:
-      question: "Er det noe mer du lurer p\xE5?"
-      answers:
-      - answerLabel: "Sikkerhet p\xE5 anlegget"
-        nextElement: 6
-      - answerLabel: Hvordan jobbe sammen
-        nextElement: 7
-      - answerLabel: Vanlige oppgaver
         nextElement: 9
-      - answerLabel: Nei la oss jobbe videre
-        nextElement: 10
   - dialogue:
-    - "Merdene kontorlleres daglig i \"runde p\xE5 ring\". Da g\xE5r man minst en
-      runde p\xE5 hver merd og sjekker at alt er i orden."
-    - "Med mange laks i merdene vil noen fisk d\xF8, og disse m\xE5 hentes ut og
-      telles."
+    - "Hver merd kontrolleres daglig i \"runde p\xE5 ring\". Da g\xE5r man minst
+      en runde p\xE5 hver merd og sjekker at alt er i orden."
+    - "Mange laks lever i hver merd, og noen av disse vil d\xF8. Disse m\xE5 hentes
+      ut og telles."
     - "Blant oppgavene som gj\xF8res ukentlig er lusetelling. Laks kontrolleres for
       antall lus og samtidig sjekkes det at laksen er frisk."
     - "Dette er blant oppgavene til en r\xF8kter, og det finnes andre roller p\xE5
       en slik arbeidsplass som inneb\xE6rer andre arbeidsoppgaver. "
+    dialogueAudio:
+    - {fileID: 8300000, guid: 3756f4679333bc34e8f08b603c863736, type: 3}
+    - {fileID: 8300000, guid: 3c94a8badc092f943830a134dab476ef, type: 3}
+    - {fileID: 8300000, guid: 70585dcd79d658247912225142c56a8a, type: 3}
+    - {fileID: 8300000, guid: 733bafbfdb7d1fb408d8e5c1e892ef69, type: 3}
     endAfterDialogue: 0
     branchPoint:
       question: "Er det noe mer du lurer p\xE5?"
+      questionAudio: {fileID: 8300000, guid: 593d4555b2518914ba0a94ef94354c25, type: 3}
       answers:
       - answerLabel: "Sikkerhet p\xE5 anlegget"
         nextElement: 6
       - answerLabel: Hvordan jobbe sammen
         nextElement: 7
       - answerLabel: Vanlige oppgaver
-        nextElement: 9
+        nextElement: 8
       - answerLabel: Nei la oss jobbe videre
-        nextElement: 10
+        nextElement: 9
   - dialogue:
     - Okei, la oss sette i gang!
+    dialogueAudio:
+    - {fileID: 8300000, guid: 1aaea47dbe2984645b40bc6729a7d0fc, type: 3}
     endAfterDialogue: 1
     branchPoint:
       question: 
+      questionAudio: {fileID: 0}
       answers: []

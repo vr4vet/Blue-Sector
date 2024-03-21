@@ -100,6 +100,45 @@ public class DialogueBoxController : MonoBehaviour
 
     }
 
+    // IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
+    // {
+    //     for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++)
+    //     {
+    //         if (dialogueTree.sections[section].dialogue[0] == "Okei, la oss sette i gang!")
+    //         {
+    //             manager.CompleteStep("Pause", "Snakk med Marianne");
+    //             manager.PlaySuccess();
+    //         }
+    //         _dialogueText.text = dialogueTree.sections[section].dialogue[i];
+    //         TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+    //         while (!_skipLineTriggered)
+    //         {
+    //             _skipLineButton.SetActive(true);
+    //             _exitButton.SetActive(true);
+    //             yield return null;
+    //         }
+    //         _skipLineTriggered = false;
+    //         _skipLineButton.SetActive(false);
+    //     }
+    //     if (dialogueTree.sections[section].endAfterDialogue)
+    //     {
+    //         OnDialogueEnded?.Invoke();
+    //         ExitConversation();
+    //         yield break;
+    //     }
+    //     _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
+    //     TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+    //     ShowAnswers(dialogueTree.sections[section].branchPoint);
+    //     while (_answerTriggered == false)
+    //     {
+    //         yield return null;
+    //     }
+    //     _answerTriggered = false;
+    //     _exitButton.SetActive(false);
+    //     _skipLineButton.SetActive(false);
+    //     StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
+    // }
+
     IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
     {
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++)
@@ -110,7 +149,7 @@ public class DialogueBoxController : MonoBehaviour
                 manager.PlaySuccess();
             }
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
-            TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+            PlayAudio(dialogueTree.sections[section].dialogueAudio[i]);
             while (!_skipLineTriggered)
             {
                 _skipLineButton.SetActive(true);
@@ -127,7 +166,7 @@ public class DialogueBoxController : MonoBehaviour
             yield break;
         }
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
-        TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+        PlayAudio(dialogueTree.sections[section].branchPoint.questionAudio);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
         while (_answerTriggered == false)
         {
@@ -137,6 +176,25 @@ public class DialogueBoxController : MonoBehaviour
         _exitButton.SetActive(false);
         _skipLineButton.SetActive(false);
         StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
+    }
+
+    public void PlayAudio(AudioClip audio)
+    {
+        if (audio == null)
+        {
+            return;
+        }
+        //if the gameobject has audiosource
+        if (TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            audioSource.Stop();
+            audioSource.PlayOneShot(audio);
+            return;
+        }
+
+        //otherwise create audiosource
+        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
+        newAudioSource.PlayOneShot(audio);
     }
 
     void ResetBox()
