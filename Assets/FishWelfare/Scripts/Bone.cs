@@ -73,7 +73,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         else if (!other.transform.gameObject.CompareTag("Bone") && !other.transform.gameObject.CompareTag("Fish"))
         {
             //Debug.Log("Collided with something else");
-            //Debug.Log(other.transform.name);
+            //Debug.Log(other.gameObject.name);
             parent.checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }

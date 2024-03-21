@@ -71,9 +71,8 @@ public class Fish : MonoBehaviour
 
     private bool putInWater = true;
 
-    private bool targetReached = false;
-
-    private List<Vector3> positionsLastFrame = new List<Vector3>();
+    private float transitionToAnimationTime;
+    private Vector3 transitionToAnimationPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -101,32 +100,7 @@ public class Fish : MonoBehaviour
     {
         //Debug.Log(transform.name);
         //Debug.Log(isGrabbedCount);
-        //followchild();
-        /*        if (isGrabbedCount > 0 || !IsInWater())
-                    Stop();
-                if (IsInWater() && isGrabbedCount <= 0)
-                    Move();
-
-
-
-
-                damageInvulnerabilityTimer -= Time.deltaTime;
-                if(damageInvulnerabilityTimer <= 0f) {
-                    damageInvulerability = false;
-                }
-                checkForOverSedation();
-                if(scoreBoardEntry != null)
-                    scoreBoardEntry.handling.text = health.ToString();*/
-
-
-
-    }
-
-    private void FixedUpdate()
-    {
-        //Debug.Log(transform.name);
-        //Debug.Log(isGrabbedCount);
-        //followchild();
+        followchild();
         if (isGrabbedCount > 0 || !IsInWater())
             Stop();
         if (IsInWater() && isGrabbedCount <= 0)
@@ -143,6 +117,9 @@ public class Fish : MonoBehaviour
         checkForOverSedation();
         if (scoreBoardEntry != null)
             scoreBoardEntry.handling.text = health.ToString();
+
+
+
     }
 
     void PeriodicUpdates()
@@ -158,81 +135,28 @@ public class Fish : MonoBehaviour
         }
     }
 
-
     public void Move()
     {
         //Debug.Log("Moving");
-        Rigidbody head = boneList[0].GetComponent<Rigidbody>();
-        //head.constraints = RigidbodyConstraints.FreezeRotationY;
-        /*        if (!kinematicBones) {
-                    foreach( GameObject bone in boneList) {
-                        //bone.GetComponent<Rigidbody>().isKinematic = true;
-                        kinematicBones = true;
-                        bone.GetComponent<Rigidbody>().useGravity = false;
-                        bone.GetComponent<Rigidbody>().AddForce(-3 * Vector3.up); // adding artificial gravity
-                        //bone.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY;
-                        //animator.enabled = true;
-                    }
-                }
-        */
-
-        foreach (GameObject bone in boneList)
+        if (!kinematicBones)
         {
-            //bone.GetComponent<Rigidbody>().isKinematic = true;
-            kinematicBones = true;
-            bone.GetComponent<Rigidbody>().useGravity = false;
-
-            if (boneList.IndexOf(bone) > 0)
-                bone.GetComponent<Rigidbody>().AddForce(-0.01f * Vector3.up); // adding artificial gravity
+            foreach (GameObject bone in boneList)
+            {
+                bone.GetComponent<Rigidbody>().isKinematic = true;
+                kinematicBones = true;
+                animator.enabled = true;
+                transitionToAnimationPosition = fishbone.position;
+                transitionToAnimationTime = Time.time;
+            }
         }
 
-        Debug.Log(targetReached);
-        float distanceToTarget = Vector3.Distance(head.position, targetPosition);
-        if (distanceToTarget < 0.1f)
+        if (Time.time - transitionToAnimationTime < 1.0f)
+            animator.rootPosition = transitionToAnimationPosition;
+        else if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
         {
-            targetReached = true;
-            head.constraints = RigidbodyConstraints.FreezeAll;
-        }
-        else if (/*Vector3.Distance(transform.position, targetPosition)*/ distanceToTarget > 0.1f && !targetReached)
-        {
-            //transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-
-            //fishbone.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
-            //fishbone.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            //boneList[0].GetComponent<Rigidbody>().MovePosition(targetPosition * Time.deltaTime * 0.5f);
-
-
-            //boneList[0].GetComponent<Rigidbody>().rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            //boneList[0].GetComponent<Rigidbody>().rotation = lookRotation;
-            //boneList[0].GetComponent<Rigidbody>().velocity = Vector3.forward * 2;
-
-
-            Vector3 direction = (targetPosition - head.position);
-            direction.Normalize();
-            head.MovePosition(head.position + (direction * Time.deltaTime * 2f));
-
-            //fishbone.position = Vector3.MoveTowards(fishbone.position, targetPosition, movementSpeed * Time.deltaTime)
-            Quaternion tempRotation = Quaternion.Slerp(fishbone.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            fishbone.rotation = tempRotation;
-            //head.AddTorque(Vector3.Scale(direction, new Vector3(1, 0, 1)) * 3f);
-
-
-            //var targetDir = sphere.transform.position - transform.position;
-
-            Vector3 forward = transform.forward;
-/*            var localTarget = transform.InverseTransformPoint(targetPosition);
-
-            float angle = Mathf.Atan2(localTarget.x, localTarget.z) * Mathf.Rad2Deg;
-
-            //Vector3 eulerAngleVelocity = new Vector3(0, angle, 0);
-            Vector3 eulerAngleVelocity = new Vector3(angle, 0, 0);
-            Quaternion deltaRotation = Quaternion.Euler(eulerAngleVelocity * Time.deltaTime);
-            head.MoveRotation(head.rotation * deltaRotation);
-            Quaternion stabilizedRotation = head.transform.rotation;
-            stabilizedRotation.eulerAngles = new Vector3(0, stabilizedRotation.y, stabilizedRotation.z);
-            head.rotation = stabilizedRotation;*/
-
+            //Debug.Log("Done transitioning");
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
         updateSedation();
     }
@@ -245,8 +169,6 @@ public class Fish : MonoBehaviour
             foreach (GameObject bone in boneList)
             {
                 bone.GetComponent<Rigidbody>().isKinematic = false;
-                //bone.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                bone.GetComponent<Rigidbody>().useGravity = true;
                 bone.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 kinematicBones = false;
                 animator.enabled = false;
@@ -256,11 +178,8 @@ public class Fish : MonoBehaviour
 
     public void findClosestTank()
     {
-        /*        float startdist = Vector3.Distance(startTank.transform.position, transform.position);
-                float endDist = Vector3.Distance(endTank.transform.position, transform.position);*/
-
-        float startdist = Vector3.Distance(startTank.transform.position, fishbone.position);
-        float endDist = Vector3.Distance(endTank.transform.position, fishbone.position);
+        float startdist = Vector3.Distance(startTank.transform.position, transform.position);
+        float endDist = Vector3.Distance(endTank.transform.position, transform.position);
 
         if (startdist < endDist)
         {
@@ -336,11 +255,6 @@ public class Fish : MonoBehaviour
 
         targetPosition = new Vector3(randX, randY, randZ);
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
-
-        targetReached = false;
-        boneList[0].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
-
     }
 
     public void checkForDamage(bool hittingWater, float velocity)
