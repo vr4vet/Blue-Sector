@@ -47,4 +47,9 @@ public class AddInstructionsToWatch : MonoBehaviour
         AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
         newAudioSource.PlayOneShot(incoming);
     }
+
+    public string getText()
+    {
+        return textMesh.GetComponent<TMP_Text>().text;
+    }
 }

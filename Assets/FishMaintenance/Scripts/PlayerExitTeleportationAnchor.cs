@@ -53,8 +53,11 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            feedbackManager.StopMoreFeedback();
-            feedbackManager.emptyInstructions();
+            if (feedbackManager.getText() != "Bra jobba! Gå videre til neste sylinder.")
+            {
+                feedbackManager.StopMoreFeedback();
+                feedbackManager.emptyInstructions();
+            }
             cylinder.SetActive(true);
             cylinderGlow.SetActive(true);
             boxCollider.size = originalSize;

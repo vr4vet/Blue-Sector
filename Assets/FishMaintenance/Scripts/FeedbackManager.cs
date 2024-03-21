@@ -131,4 +131,9 @@ public class FeedbackManager : MonoBehaviour
         watch.emptyInstructions();
         StopAllCoroutines();
     }
+
+    public string getText()
+    {
+        return watch.getText();
+    }
 }
