@@ -14,11 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sections:
   - dialogue:
-    - 'In this task you are going to feed the fish using the control panel on the
-      table to adjust the camera and the amount of feed given to the fish. '
+    - 'In this task you are going to use the control panel on the table to adjust
+      the camera and the amount of feed given to the fish. '
     - 'There are three fish cages corresponding to the orange buttons on the control
-      panel and you have to keep an eye on all of cages! '
-    - Press the A button on your right controller to start the game. Good luck!
+      panel and you have to keep an eye on all of the cages! '
+    endAfterDialogue: 0
+    branchPoint:
+      question: Are you ready to start?
+      answers:
+      - answerLabel: Yes
+        nextElement: 1
+      - answerLabel: No, please repeat
+        nextElement: 0
+  - dialogue:
+    - Great! Follow the tutorial behind you and press the A button on your right
+      controller to start the game. Good luck!
     endAfterDialogue: 1
     branchPoint:
       question: 

@@ -31,8 +31,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
             return;
         }
 
-        _npc = _npcSpawner._npcInstances[0];
-        Debug.Log(_npc.name);
+        _npc = _npcSpawner._npcInstances[1];
 
         if (NPCToPlayerReferenceManager.Instance == null)
         {
@@ -81,14 +80,10 @@ public class SpecializedNPCBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         if (_animator != null) 
         {
-            Debug.Log("currentPath: " + currentPath);
-            Debug.Log("currentPos: " + currentPosition);
             _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
             Debug.Log(_agent.remainingDistance);
-            Debug.Log("walking" + walking);
             if (walking)
             {
                 if (currentPath == -1) { return; }
@@ -112,8 +107,9 @@ public class SpecializedNPCBehavior : MonoBehaviour
         }
     }
 
-    public void DialogueTransition() 
+    public void DialogueTransition(string name) 
     {
+        if (name != _npc.name) { return; }
         currentPath++;
         if (currentPath >= paths.Count) { return; }
         walking = true;

@@ -27,7 +27,6 @@ public class ConversationController : MonoBehaviour
         if (_dialogueTreesSOFormat.Count > 0) {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
-        _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
         updateAnimator();
     }
 
