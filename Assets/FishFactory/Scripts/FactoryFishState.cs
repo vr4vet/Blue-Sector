@@ -9,10 +9,19 @@ public class FactoryFishState : MonoBehaviour
         Alive,
         Stunned,
         Bleeding,
-        Dead
+        Dead,
+        BadCut
     }
 
     public State currentState;
+
+    public void CutGills()
+    {
+        currentState = State.Bleeding;
+    }
+
+    public void BadCut()
+    {
+        currentState = State.BadCut;
+    }
 }
-
-

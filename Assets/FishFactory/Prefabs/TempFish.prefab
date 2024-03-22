@@ -106,7 +106,7 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 56.6
+    limit: -73.63
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -117,7 +117,7 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 43.8
+    limit: 3
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -750,6 +750,7 @@ GameObject:
   - component: {fileID: 7629873390220260630}
   - component: {fileID: 4409538153559368249}
   - component: {fileID: 1631902393193195089}
+  - component: {fileID: 8558291684313983748}
   m_Layer: 0
   m_Name: Bone.002
   m_TagString: Bone
@@ -1056,6 +1057,19 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &8558291684313983748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3789406318523307031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d263eb4712b2824db63728839c2e321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishState: {fileID: 4708518783950727776}
 --- !u!1 &5904361523580772602
 GameObject:
   m_ObjectHideFlags: 0
@@ -1071,6 +1085,7 @@ GameObject:
   - component: {fileID: 2803777293659360099}
   - component: {fileID: 5165582754977071724}
   - component: {fileID: 7693275070032131098}
+  - component: {fileID: 693576795148650945}
   m_Layer: 0
   m_Name: Bone.001
   m_TagString: Bone
@@ -1377,6 +1392,19 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &693576795148650945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5904361523580772602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d263eb4712b2824db63728839c2e321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishState: {fileID: 4708518783950727776}
 --- !u!1 &6761250684236006651
 GameObject:
   m_ObjectHideFlags: 0
@@ -1481,6 +1509,7 @@ GameObject:
   - component: {fileID: 5025953016431772062}
   - component: {fileID: 1675763267509417975}
   - component: {fileID: 1450930353565629075}
+  - component: {fileID: 7189870065385868617}
   m_Layer: 0
   m_Name: GillLeft
   m_TagString: Untagged
@@ -1495,9 +1524,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6990528845072737502}
-  m_LocalRotation: {x: -0.35695282, y: -0.6103971, z: -0.35695308, w: 0.610397}
-  m_LocalPosition: {x: -0.0015670047, y: 0.0034310047, z: -0.0008600005}
-  m_LocalScale: {x: 0.0050000004, y: 0.00020000002, z: 0.005000002}
+  m_LocalRotation: {x: -0.35695282, y: -0.6103972, z: -0.35695308, w: 0.610397}
+  m_LocalPosition: {x: -0.0015670062, y: 0.0034310082, z: -0.0008600007}
+  m_LocalScale: {x: 0.0049999994, y: 0.00020000004, z: 0.0050000027}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8912660782349489306}
@@ -1518,7 +1547,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6990528845072737502}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1531,7 +1560,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 05cd1700f942c804e9fa9c9ebb3b5b30, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1567,6 +1596,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.00000005960468, y: 0, z: -0.000000089407024}
+--- !u!114 &7189870065385868617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990528845072737502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721d196e533c8b04dabea81e3dd9bd46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8344248835457177312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1579,6 +1620,7 @@ GameObject:
   - component: {fileID: 2185598480939993153}
   - component: {fileID: 7397609930443720410}
   - component: {fileID: 2566232244686987091}
+  - component: {fileID: 3493797855565589226}
   m_Layer: 0
   m_Name: GillRight
   m_TagString: Untagged
@@ -1593,9 +1635,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8344248835457177312}
-  m_LocalRotation: {x: -0.40738425, y: 0.5779605, z: -0.40738407, w: -0.5779603}
-  m_LocalPosition: {x: 0.0011800021, y: 0.0038500053, z: -0.0007399991}
-  m_LocalScale: {x: 0.004999998, y: 0.00019999997, z: 0.005}
+  m_LocalRotation: {x: -0.40738413, y: 0.57796055, z: -0.407384, w: -0.57796025}
+  m_LocalPosition: {x: 0.0011800029, y: 0.0038500086, z: -0.0007399991}
+  m_LocalScale: {x: 0.0049999976, y: 0.00019999997, z: 0.005000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8912660782349489306}
@@ -1616,7 +1658,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8344248835457177312}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1665,6 +1707,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.00000005960468, y: 0, z: -0.000000089407024}
+--- !u!114 &3493797855565589226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8344248835457177312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721d196e533c8b04dabea81e3dd9bd46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8949009753926357334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1782,6 +1836,7 @@ GameObject:
   - component: {fileID: 1108904297938659368}
   - component: {fileID: 6969006045870410308}
   - component: {fileID: 3926386766273583588}
+  - component: {fileID: 5115140814727245601}
   m_Layer: 0
   m_Name: Bone.003
   m_TagString: Bone
@@ -2087,3 +2142,16 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &5115140814727245601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9186388590370930684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d263eb4712b2824db63728839c2e321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishState: {fileID: 4708518783950727776}
