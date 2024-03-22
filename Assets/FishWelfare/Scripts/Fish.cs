@@ -71,8 +71,10 @@ public class Fish : MonoBehaviour
 
     private bool putInWater = true;
 
+    // following variables are used to prevent physics from going amok
     private float transitionToAnimationTime;
     private Vector3 transitionToAnimationPosition;
+    private List<Vector3> transitionToAnimationBonesPosition = new List<Vector3> ();
 
     // Start is called before the first frame update
     void Start()
@@ -95,8 +97,8 @@ public class Fish : MonoBehaviour
         findClosestTank();
     }
 
-    // Update is called once per frame
-    void Update()
+    // using LateUpdate instead of Update because corrective maneuvers in Move() need happen after physics is processed
+    void LateUpdate()
     {
         //Debug.Log(transform.name);
         //Debug.Log(isGrabbedCount);
@@ -140,19 +142,32 @@ public class Fish : MonoBehaviour
         //Debug.Log("Moving");
         if (!kinematicBones && transform.position.y <= waterBodyCenter.y)
         {
+            transitionToAnimationTime = Time.time;
             foreach (GameObject bone in boneList)
             {
                 bone.GetComponent<Rigidbody>().isKinematic = true;
                 kinematicBones = true;
                 animator.enabled = true;
+
+                // storing positions to lock fish here
                 transitionToAnimationPosition = fishbone.position;
-                transitionToAnimationTime = Time.time;
+                transitionToAnimationBonesPosition.Add(bone.transform.position);
             }
         }
 
-        if (Time.time - transitionToAnimationTime < 1.0f)
+        float currentTime = Time.time;
+        if (currentTime - transitionToAnimationTime < 0.1f)   // prevent stretching of body
+        {
+            foreach (Vector3 position in transitionToAnimationBonesPosition)
+            {
+                boneList[transitionToAnimationBonesPosition.IndexOf(position)].transform.position = position;
+            }
+        }
+        if (currentTime - transitionToAnimationTime < 1.0f)   // prevent drifting towards previous tank position
+        {
             animator.rootPosition = transitionToAnimationPosition;
-        else if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        }
+        else if (Vector3.Distance(transform.position, targetPosition) > 0.1f)   // move fish as normal
         {
             //Debug.Log("Done transitioning");
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
@@ -173,6 +188,7 @@ public class Fish : MonoBehaviour
                 kinematicBones = false;
                 animator.enabled = false;
             }
+            transitionToAnimationBonesPosition.Clear();
         }
     }
 
