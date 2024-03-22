@@ -138,7 +138,7 @@ public class Fish : MonoBehaviour
     public void Move()
     {
         //Debug.Log("Moving");
-        if (!kinematicBones)
+        if (!kinematicBones && transform.position.y <= waterBodyCenter.y)
         {
             foreach (GameObject bone in boneList)
             {
