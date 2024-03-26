@@ -75,8 +75,10 @@ public class FishScript : MonoBehaviour
         targetDirection.y = Mathf.Clamp(targetDirection.y, -rotationLimit, rotationLimit);
         if (targetDirection != Vector3.zero)
         {
-            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, 15 * Time.deltaTime, 360);
-            transform.rotation = Quaternion.LookRotation(newDirection);
+            // The commented out code makes turning gradual
+/*            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, 15 * Time.deltaTime, 360);
+            transform.rotation = Quaternion.LookRotation(newDirection);*/
+            transform.rotation = Quaternion.LookRotation(targetDirection);
         }
     }
 

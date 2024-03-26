@@ -16,6 +16,9 @@ public class Bone : MonoBehaviour, IPointerClickHandler
     public GameObject marker;
     private List<GameObject> liceList = new List<GameObject>();
     public LayerMask layer;
+    public Vector3 storedPosition;
+    public Quaternion storedRotation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,7 +73,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         else if (!other.transform.gameObject.CompareTag("Bone") && !other.transform.gameObject.CompareTag("Fish"))
         {
             //Debug.Log("Collided with something else");
-            //Debug.Log(other.transform.name);
+            //Debug.Log(other.gameObject.name);
             parent.checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
@@ -82,8 +85,8 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         {
             //Debug.Log("Water entered");
             //Debug.Log(parent.tank.name);
-            parent.findClosestTank();
-            parent.SetMoveTarget();
+            //parent.findClosestTank();
+            //parent.SetMoveTarget();
             SetIsInWater(true);
 
             // determine which tutorial entry to progress, and whether to add fish to the score wall

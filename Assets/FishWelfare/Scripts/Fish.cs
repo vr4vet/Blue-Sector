@@ -71,6 +71,11 @@ public class Fish : MonoBehaviour
 
     private bool putInWater = true;
 
+    // following variables are used to prevent physics from going amok
+    private float transitionToAnimationTime;
+    private Vector3 transitionToAnimationPosition;
+    private List<Vector3> transitionToAnimationBonesPosition = new List<Vector3> ();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -92,8 +97,8 @@ public class Fish : MonoBehaviour
         findClosestTank();
     }
 
-    // Update is called once per frame
-    void Update()
+    // using LateUpdate instead of Update because corrective maneuvers in Move() need happen after physics is processed
+    void LateUpdate()
     {
         //Debug.Log(transform.name);
         //Debug.Log(isGrabbedCount);
@@ -102,73 +107,105 @@ public class Fish : MonoBehaviour
             Stop();
         if (IsInWater() && isGrabbedCount <= 0)
             Move();
-        
+
 
 
 
         damageInvulnerabilityTimer -= Time.deltaTime;
-        if(damageInvulnerabilityTimer <= 0f) {
+        if (damageInvulnerabilityTimer <= 0f)
+        {
             damageInvulerability = false;
         }
         checkForOverSedation();
-        if(scoreBoardEntry != null)
+        if (scoreBoardEntry != null)
             scoreBoardEntry.handling.text = health.ToString();
 
-        
+
 
     }
 
-    void PeriodicUpdates() {
+    void PeriodicUpdates()
+    {
         findClosestTank();
-        if (IsInWater() && isGrabbedCount <= 0){
-            SetMoveTarget();    
+        if (IsInWater() && isGrabbedCount <= 0)
+        {
+            SetMoveTarget();
         }
-        if(isGrabbedCount > 0 && Random.Range(0, 1) < unsediatedLevel && health > 0) {
+        if (isGrabbedCount > 0 && Random.Range(0, 1) < unsediatedLevel && health > 0)
+        {
             health -= 1;
         }
     }
 
-    public void Move() {
+    public void Move()
+    {
         //Debug.Log("Moving");
-        if(!kinematicBones) {
-            foreach( GameObject bone in boneList) {
+        if (!kinematicBones && transform.position.y <= waterBodyCenter.y)
+        {
+            transitionToAnimationTime = Time.time;
+            foreach (GameObject bone in boneList)
+            {
                 bone.GetComponent<Rigidbody>().isKinematic = true;
                 kinematicBones = true;
                 animator.enabled = true;
+
+                // storing positions to lock fish here
+                transitionToAnimationPosition = fishbone.position;
+                transitionToAnimationBonesPosition.Add(bone.transform.position);
             }
         }
 
-        if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        float currentTime = Time.time;
+        if (currentTime - transitionToAnimationTime < 0.1f)   // prevent stretching of body
         {
+            foreach (Vector3 position in transitionToAnimationBonesPosition)
+            {
+                boneList[transitionToAnimationBonesPosition.IndexOf(position)].transform.position = position;
+            }
+        }
+        if (currentTime - transitionToAnimationTime < 1.0f)   // prevent drifting towards previous tank position
+        {
+            animator.rootPosition = transitionToAnimationPosition;
+        }
+        else if (Vector3.Distance(transform.position, targetPosition) > 0.1f)   // move fish as normal
+        {
+            //Debug.Log("Done transitioning");
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
         updateSedation();
     }
 
-    private void Stop() {
+    private void Stop()
+    {
         //Debug.Log("Stopping");
-        if(kinematicBones) {
-            foreach( GameObject bone in boneList) {
+        if (kinematicBones)
+        {
+            foreach (GameObject bone in boneList)
+            {
                 bone.GetComponent<Rigidbody>().isKinematic = false;
                 bone.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 kinematicBones = false;
                 animator.enabled = false;
             }
+            transitionToAnimationBonesPosition.Clear();
         }
     }
 
-    public void findClosestTank() {
+    public void findClosestTank()
+    {
         float startdist = Vector3.Distance(startTank.transform.position, transform.position);
         float endDist = Vector3.Distance(endTank.transform.position, transform.position);
-        
-        if(startdist < endDist) {
+
+        if (startdist < endDist)
+        {
             tank = startTank;
         }
-        else {
+        else
+        {
             tank = endTank;
         }
-        
+
         Bounds waterBounds = tank.transform.Find("Water").gameObject.GetComponent<BoxCollider>().bounds;
         waterBodyXLength = waterBounds.size.x;
         waterBodyZLength = waterBounds.size.z;
@@ -176,16 +213,23 @@ public class Fish : MonoBehaviour
         waterBodyCenter = waterBounds.center;
     }
 
-    private void updateSedation() {
-        if(tank.sedativeConsentration == 0f){
-            if(unsediatedLevel < 1f) {
+    private void updateSedation()
+    {
+        if (tank.sedativeConsentration == 0f)
+        {
+            if (unsediatedLevel < 1f)
+            {
                 unsediatedLevel += Time.deltaTime * 0.01f;
             }
         }
-        else {
-            if(unsediatedLevel > 0f && tank != null){
+        else
+        {
+            if (unsediatedLevel > 0f && tank != null)
+            {
                 unsediatedLevel -= Time.deltaTime * tank.sedativeConsentration;
-            } else if(unsediatedLevel < 0f) {
+            }
+            else if (unsediatedLevel < 0f)
+            {
                 unsediatedLevel = 0f;
             }
         }
@@ -194,29 +238,34 @@ public class Fish : MonoBehaviour
         rotationSpeed = (originalRotationSpeed * unsediatedLevel) / 1.5f;
     }
 
-    private void followchild() {
+    private void followchild()
+    {
         Vector3 originalPosition = fishbone.position;
         transform.position = fishbone.position;
         fishbone.position = originalPosition;
     }
 
-    private void checkForOverSedation() {
-        if(unsediatedLevel < 1f) {
+    private void checkForOverSedation()
+    {
+        if (unsediatedLevel < 1f)
+        {
             sedationTimer -= Time.deltaTime * tank.sedativeConsentration;
         }
-        if(sedationTimer <= 0 && health > 0){
+        if (sedationTimer <= 0 && health > 0)
+        {
             health -= 1;
             sedationTimer = .1f;
         }
     }
 
-    public void SetMoveTarget() {
+    public void SetMoveTarget()
+    {
 
         float XLength = waterBodyXLength - 0.1f;
         float ZLength = waterBodyZLength - 0.1f;
         float YLength = waterBodyYLength - 0.2f;
 
-        float randX = Random.Range(waterBodyCenter.x - XLength / 2, waterBodyCenter.x + XLength/ 2);
+        float randX = Random.Range(waterBodyCenter.x - XLength / 2, waterBodyCenter.x + XLength / 2);
         float randZ = Random.Range(waterBodyCenter.z - ZLength / 2, waterBodyCenter.z + ZLength / 2);
         float randY = Random.Range(waterBodyCenter.y - YLength / 2, waterBodyCenter.y + YLength / 2);
 
@@ -224,19 +273,25 @@ public class Fish : MonoBehaviour
         lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
     }
 
-    public void checkForDamage(bool hittingWater, float velocity) {
-        if(!damageInvulerability){
+    public void checkForDamage(bool hittingWater, float velocity)
+    {
+        if (!damageInvulerability)
+        {
             damageInvulerability = true;
             damageInvulnerabilityTimer = 1f;
-                float damageThreshold = 2f;
-            if (hittingWater) {
+            float damageThreshold = 2f;
+            if (hittingWater)
+            {
                 damageThreshold = 3f;
             }
-            else if(isGrabbedCount > 0){
+            else if (isGrabbedCount > 0)
+            {
                 damageThreshold = 2f;
             }
-            if(velocity > damageThreshold) {
-                if(health > 0) {
+            if (velocity > damageThreshold)
+            {
+                if (health > 0)
+                {
                     health--;
                 }
                 hurtSound.Play(0);
@@ -247,7 +302,7 @@ public class Fish : MonoBehaviour
 
     public bool IsInWater()
     {
-        foreach (Bone bone in gameObject.transform.GetComponentsInChildren<Bone>()) 
+        foreach (Bone bone in gameObject.transform.GetComponentsInChildren<Bone>())
         {
             if (bone.isInWater)
                 return true;
@@ -269,56 +324,65 @@ public class Fish : MonoBehaviour
             checkForDamage(false, other.relativeVelocity.magnitude);
         }
     }
-    public void SetAsSelectedFish() {
-        inspectionTaskManager.SetSelectedFish(this); 
+    public void SetAsSelectedFish()
+    {
+        inspectionTaskManager.SetSelectedFish(this);
     }
 
-    public void SetgillDamageGuessed(int guess) {
+    public void SetgillDamageGuessed(int guess)
+    {
         gillDamageGuessed = guess;
     }
 
-    public int GetGillDamage() {
+    public int GetGillDamage()
+    {
         return gillDamage;
     }
 
-    public int GetGillDamageGuessed() {
+    public int GetGillDamageGuessed()
+    {
         return gillDamageGuessed;
     }
 
-    public int GetId() {
+    public int GetId()
+    {
         return id;
     }
 
-    public int GetMarkedLice() {
+    public int GetMarkedLice()
+    {
         return markedLice;
     }
 
-    public List<GameObject> GetLiceList(){
+    public List<GameObject> GetLiceList()
+    {
         return liceList;
     }
 
     //Couple of util functions for finding children by tag
-    public List<GameObject> FindObjectwithTag(string _tag) {
-         List<GameObject> tempList = new List<GameObject>();
-         Transform parent = transform;
-         GetChildObject(parent, _tag, tempList);
-         return tempList;
+    public List<GameObject> FindObjectwithTag(string _tag)
+    {
+        List<GameObject> tempList = new List<GameObject>();
+        Transform parent = transform;
+        GetChildObject(parent, _tag, tempList);
+        return tempList;
     }
- 
-     public void GetChildObject(Transform parent, string _tag, List<GameObject> list) {
-         for (int i = 0; i < parent.childCount; i++)
-         {
-             Transform child = parent.GetChild(i);
-             if (child.tag == _tag)
-             {
-                 list.Add(child.gameObject);
-             }
-             if (child.childCount > 0)
-             {
-                 GetChildObject(child, _tag, list);
-             }
-         }
-     }
+
+    public void GetChildObject(Transform parent, string _tag, List<GameObject> list)
+    {
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            if (child.tag == _tag)
+            {
+                list.Add(child.gameObject);
+            }
+            if (child.childCount > 0)
+            {
+                GetChildObject(child, _tag, list);
+            }
+        }
+    }
 
 
 
