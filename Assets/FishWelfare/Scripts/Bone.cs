@@ -83,11 +83,11 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         //Debug.Log(other.gameObject.layer);
         if (other.CompareTag("Water"))
         {
-            //Debug.Log("Water entered");
-            //Debug.Log(parent.tank.name);
-            //parent.findClosestTank();
-            //parent.SetMoveTarget();
             SetIsInWater(true);
+
+            // set respawn position to the current tank
+            parent.findClosestTank();
+            parent.GetComponent<Respawner>().SetRespawnPosition(parent.waterBodyCenter);
 
             // determine which tutorial entry to progress, and whether to add fish to the score wall
             if (parent.tank.isGoal)
@@ -99,6 +99,11 @@ public class Bone : MonoBehaviour, IPointerClickHandler
                 }
 
             }
+        }
+        else if (other.CompareTag("Desk"))
+        {
+            // set respawn position to table top
+            parent.GetComponent<Respawner>().SetRespawnPosition(Vector3.Scale(other.bounds.center, new Vector3(1, 1.3f, 1)));
         }
         else if (!parent.tank.isGoal && other.CompareTag("Hand"))
         {

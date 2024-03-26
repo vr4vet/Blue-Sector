@@ -55,7 +55,21 @@ public class Respawner : MonoBehaviour
     {
         transform.position = _respawnPosition;
         transform.rotation = _respawnRotation;
-        gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        if (gameObject.GetComponent<Rigidbody>() != null)
+        {
+            Debug.Log("Oi!");
+            gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+        else
+        {
+            foreach (Rigidbody body in GetComponentsInChildren<Rigidbody>())
+            {
+                Debug.Log("Child rigid happening!");
+                body.velocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+            }
+        }
+
     }
 }
