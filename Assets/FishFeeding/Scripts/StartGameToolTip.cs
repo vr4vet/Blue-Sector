@@ -10,7 +10,7 @@ public class StartGameToolTip : MonoBehaviour
     void Start()
     {
         script = FindObjectOfType<Game>();
-        canvas = GameObject.Find("StartGameToolTip").transform.GetChild(0).gameObject;
+        canvas = transform.GetChild(0).gameObject;
         canvas.GetComponent<Canvas>().enabled = false;
         foreach (var renderer in Controller.GetComponentsInChildren<Renderer>())
         {
@@ -28,7 +28,7 @@ public class StartGameToolTip : MonoBehaviour
             canvasComponent.enabled = visible;
             foreach (var renderer in Controller.GetComponentsInChildren<Renderer>())
             {
-                renderer.enabled = false;
+                renderer.enabled = visible;
             }
         }
     }
