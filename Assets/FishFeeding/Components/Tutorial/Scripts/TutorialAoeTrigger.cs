@@ -24,9 +24,13 @@ public class TutorialAoeTrigger : MonoBehaviour
             OnPlayerEnter.Invoke();
         }
 
-        if (other.CompareTag("Growler") || other.CompareTag("Fish"))
+        if (other.CompareTag("Growler"))    // anesthetic bottle ("growler")
         {
             other.GetComponent<Respawner>().Respawn();
+        }
+        else if (other.CompareTag("Bone"))  // fish
+        {
+            other.GetComponentInParent<Respawner>().Respawn();
         }
     }
 
