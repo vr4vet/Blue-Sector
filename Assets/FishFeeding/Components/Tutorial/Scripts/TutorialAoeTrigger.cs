@@ -23,6 +23,11 @@ public class TutorialAoeTrigger : MonoBehaviour
         {
             OnPlayerEnter.Invoke();
         }
+
+        if (other.CompareTag("Growler") || other.CompareTag("Fish"))
+        {
+            other.GetComponent<Respawner>().Respawn();
+        }
     }
 
     private void OnTriggerExit(Collider other)

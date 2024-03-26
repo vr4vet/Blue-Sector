@@ -2003,6 +2003,29 @@ MonoBehaviour:
           m_WaitForCompletion: 0
           m_LocalVariables: []
         m_PropertyPath: TextContent
+--- !u!1 &689160442 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5739772704919116806, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1789608659}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &689160450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689160442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b21e7122cef438d41a27580bda6b7a73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _killPlane: -3
+  _useSpawnObject: 1
+  _spawnObject: {fileID: 2128905935}
+  _respawnPosition: {x: 0, y: 0, z: 0}
+  _respawnRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &705187130
 GameObject:
   m_ObjectHideFlags: 0
@@ -14902,3 +14925,34 @@ MonoBehaviour:
           m_WaitForCompletion: 0
           m_LocalVariables: []
         m_PropertyPath: m_text
+--- !u!1 &2128905935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2128905936}
+  m_Layer: 0
+  m_Name: GrowlerRespawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2128905936
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128905935}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 35.665, y: 0.9979994, z: -36.669}
+  m_LocalScale: {x: 0.01005, y: 0.010049999, z: 0.010049999}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
