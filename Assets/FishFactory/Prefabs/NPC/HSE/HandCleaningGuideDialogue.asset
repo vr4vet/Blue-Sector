@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: HandCleaningGuideDialogue
+  m_EditorClassIdentifier: 
+  sections:
+  - dialogue:
+    - Hello and welcome! Thank you for wanting to try to experience how it is to
+      work at a fish processing facility!
+    - You are currently in the preparation room. Behind the doors further in, you
+      can find a selection of different tasks found in a fish processing facility.
+    - But before you choose a task you want to experience, you first  need to make
+      sure you follow the health and safety guidelines.
+    - First and foremost, you need to ensure you properly protect your ears and feet.
+      I have prepared some equipment for you here.
+    - Secondly, you need to ensure you have clean hands. You can clean your hands
+      in the specialized cleaning machine here! Just put your hands into the machine
+      and let the machine do the rest! When you're finished, go to my colleague over
+      by the shoe cleaner.
+    endAfterDialogue: 1
+    branchPoint:
+      question: Good luck!
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 0
+      - answerLabel: Thank you! I understand
+        nextElement: 1
