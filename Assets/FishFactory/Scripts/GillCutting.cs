@@ -14,8 +14,6 @@ public class GillCutting : MonoBehaviour
             return;
         }
 
-        Debug.Log("gill with " + collisionObject.name);
-
         fishState.CutGills();
     }
 }
