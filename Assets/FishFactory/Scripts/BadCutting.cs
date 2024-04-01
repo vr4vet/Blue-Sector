@@ -17,6 +17,5 @@ public class BadCutting : MonoBehaviour
         Debug.Log("bad with " + collisionObject.gameObject.name);
 
         fishState.BadCut();
-        GameManager.instance.Score -= 1;
     }
 }

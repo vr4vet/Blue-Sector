@@ -16,10 +16,6 @@ public class GillCutting : MonoBehaviour
 
         Debug.Log("gill with " + collisionObject.name);
 
-        //FIXME: Make this prettier
-        // Get the fish object
-
         fishState.CutGills();
-        GameManager.instance.Score += 1;
     }
 }
