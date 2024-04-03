@@ -17,11 +17,6 @@ public class NPCToPlayerReferenceManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // This keeps the instance alive across different scenes.
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject); // This destroys any duplicate instances that might arise.
         }
         if (PlayerTarget == null)
         {
