@@ -53,8 +53,10 @@ public class HUDMessage : MonoBehaviour
             }
 
 
+
             yield return null; // Wait for the next frame
         }
+        canvasGroup.alpha = 0;
 
 
 

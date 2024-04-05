@@ -146,7 +146,7 @@ public class DialogueBoxController : MonoBehaviour
             if (dialogueTree.sections[section].dialogue[0] == "Okei, la oss sette i gang!")
             {
                 manager.CompleteStep("Pause", "Snakk med Marianne");
-                manager.PlaySuccess();
+                // manager.PlaySuccess();
             }
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             PlayAudio(dialogueTree.sections[section].dialogueAudio[i]);

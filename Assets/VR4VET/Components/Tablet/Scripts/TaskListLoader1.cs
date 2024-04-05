@@ -127,6 +127,13 @@ namespace Tablet
         public void LoadSkillsPage()
         {
 
+            // Reset existing gameobjects in skills page
+            Transform parentTransform = skillContent.transform;
+            for (int i = 0; i < parentTransform.childCount; i++)
+            {
+                Destroy(parentTransform.GetChild(i).gameObject);
+            }
+
             //loads each skill on the parent object
             foreach (Task.Skill skill in _skills)
             {
@@ -280,6 +287,7 @@ namespace Tablet
             // will add the task
             foreach (Task.Task task in _tasks)
             {
+
                 // Remove line after testing and uncomment line in end of for loop 
                 TaskPageLoader(task);
 
@@ -332,6 +340,11 @@ namespace Tablet
 
             foreach (Task.Subtask sub in task.Subtasks)
             {
+
+                if (sub.SubtaskName == "Hent Utstyr")
+                {
+                    continue;
+                }
                 //task for the list
                 GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
                 item.transform.SetParent(TaskSubtaskContent.transform);
@@ -358,6 +371,7 @@ namespace Tablet
 
         public void SubTaskPageLoader(Task.Subtask subtask)
         {
+
             if (_subtaskPageOpen != null) _subtaskPageOpen.Invoke();
 
             //hide previos pagee

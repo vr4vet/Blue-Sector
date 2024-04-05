@@ -8,6 +8,7 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private Task.TaskHolder taskHolder;
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     [SerializeField] private AudioClip success;
+    [SerializeField] private AudioClip equipmentPickup;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
     private Task.Task task;
@@ -65,7 +66,8 @@ public class MaintenanceManager : MonoBehaviour
         // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
         if (step.IsCompeleted())
         {
-            PlaySuccess();
+            if (sub.SubtaskName == "Hent Utstyr") PlayAudio(equipmentPickup);
+            else { PlayAudio(success); }
             stepCount += 1;
             feedbackManager.emptyInstructions();
             StepCompleted.Invoke(step);
@@ -94,10 +96,6 @@ public class MaintenanceManager : MonoBehaviour
         return step;
     }
 
-    public void PlaySuccess()
-    {
-        PlayAudio(success);
-    }
 
     public void PlayAudio(AudioClip audio)
     {

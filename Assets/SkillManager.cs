@@ -11,7 +11,7 @@ public class SkillManager : MonoBehaviour
     private MaintenanceManager manager;
 
     private List<int> completedSteps = new List<int>();
-
+    [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     private int maxSteps;
 
 
@@ -52,9 +52,11 @@ public class SkillManager : MonoBehaviour
         Task.Skill skill = taskHolder.GetSkill(skillName);
         Task.Badge badge = skill.GetBadge(badgeName);
         badge.Unlock();
+        Debug.Log("Badge unlocked: " + badge.Name + "  " + badge.IsLocked());
         // if (!skill.ConnectedBadges.Any(b => b.IsLocked()))
         // {
         manager.SkillCompleted.Invoke(skill);
+        taskListLoader.LoadSkillsPage();
         // }
     }
 
