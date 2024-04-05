@@ -28,49 +28,83 @@ MonoBehaviour:
       - answerLabel: Yes
         nextElement: 1
   - dialogue:
-    - You will find the knife next to me. Be careful not to cut yourself or others
-      around you.
-    - Be sure to never cut towards you!
-    - When handling the knife, you need to wear steel gloves on your most exposed
-      hand.
+    - First, as you are working with live fish you need to have completed a fishwelfare
+      course.
+    endAfterDialogue: 0
+    branchPoint:
+      question: Have you completed this course?
+      answers:
+      - answerLabel: Yes
+        nextElement: 2
+      - answerLabel: No
+        nextElement: 3
+  - dialogue:
+    - 'Great! then you already know that fish should not be alive for more than 15
+      second. '
+    endAfterDialogue: 0
+    branchPoint:
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 4
+  - dialogue:
+    - If you have not completed the fishwelfare course you need to work under supervision
+      for up to a year.
+    - "It is important that the fish is not left alive longer than 15 minutes acording
+      to Tesco\u2019s requrements for fish welfare."
+    endAfterDialogue: 0
+    branchPoint:
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 4
+  - dialogue:
+    - Great! You will find the knife in your right pocket. When the knife is not
+      in use it should be placed back into your pocket.
+    - When handling the knife, you need to wear a steel glove on your most exposed
+      hand and a protective glove on the other.
+    - Remember always cut away from you and never towards anyone else. All the knifes
+      will be collected at the end of the day.
     endAfterDialogue: 0
     branchPoint:
       question: Do you understand
       answers:
       - answerLabel: Can you repeat that?
-        nextElement: 1
+        nextElement: 4
       - answerLabel: I understand I need to handle the knife with care
-        nextElement: 2
+        nextElement: 5
   - dialogue:
     - The fish on the conveyor belt is stunned and feel no pain. If a fish shows
       signs of conciousness, this fish needs to be stunned before it is cut and bled.
-    - Concious fish is recognized by .................
-    - You will find a stunning machine on the belt next to me. Insert the fish into
-      the machine, and the fish will be stunned. After that, the fish is ready to
-      be cut.
+    - You can reognize concious fish by their movement
+    - You will find a stunning machine beside the station where you stand. Insert
+      live fish into the machine, and the fish will be stunned. After that, the fish
+      is ready to be cut.
     - Sometimes fish that is not eligble for human consumption can come down the
-      conveyor belt. This unedible fish should be thrown in the tub next to me.
+      conveyor belt. This unedible fish should be thrown in the tub next to you.
     endAfterDialogue: 0
     branchPoint:
       question: Is that clear?
       answers:
       - answerLabel: Could you repeat that?
-        nextElement: 2
+        nextElement: 5
       - answerLabel: Yes! Stun concious fish before cutting them, and throw away
           bad fish.
-        nextElement: 3
+        nextElement: 6
   - dialogue:
-    - Make sure the cut is only on the gills. It should not go deep into the fish.
-    - You will be graded based on ....
-    - All fish must be cut before it moves to the next station!
+    - Make sure you cut only the gills. The cut should not go to deep into the fish.
+    - You will be graded based on how accurate you cut the fish, along with whether
+      that fish is stunned or alive when you cut it. And remember, dead fish should
+      be discarded!
+    - All fish that are not dead must be cut before it moves to the next station!
     endAfterDialogue: 0
     branchPoint:
       question: Do you understand?
       answers:
       - answerLabel: Could you repeat that?
-        nextElement: 3
+        nextElement: 6
       - answerLabel: Yes!
-        nextElement: 4
+        nextElement: 7
   - dialogue:
     - That is all for now. Good luck!
     endAfterDialogue: 0
@@ -80,7 +114,7 @@ MonoBehaviour:
       - answerLabel: I want to hear everything again
         nextElement: 0
       - answerLabel: I understand
-        nextElement: 5
+        nextElement: 8
   - dialogue:
     - Good bye!
     endAfterDialogue: 1
