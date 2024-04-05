@@ -17,12 +17,23 @@ public class GameManager : MonoBehaviour
         get { return isTaskOn; }
     }
 
+    private int score = 0;
+    public int Score
+    {
+        get { return score; }
+        set { score = value; }
+    }
+
+    void Update()
+    {
+        Debug.Log("score " + score);
+    }
+
     void Awake()
     {
         // Sets the instance of the GameManager to this object if it does not already exist
         if (instance == null)
             instance = this;
-
 
         // Makes the GameManager object persist between scenes
         DontDestroyOnLoad(gameObject);
