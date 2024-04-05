@@ -16,33 +16,30 @@ namespace Task
         [SerializeField] private string _instruction;
 
 
-        [SerializeField] private List<Subtask> _subtasks = new List<Subtask>();
 
 
         private Skill _skill;
         [SerializeField] private Sprite _icon;
 
-
+        private bool locked = true;
         public string Name { get => _name; set => _name = value; }
         public Skill ConnectedSkill { get => _skill; set => _skill = value; }
         public string Instruction { get => _instruction; set => _instruction = value; }
-        public List<Subtask> SubTasks { get => _subtasks; set => _subtasks = value; }
+
         public Sprite Icon { get => _icon; set => _icon = value; }
 
+        public void Lock()
+        {
+            locked = true;
+        }
+        public void Unlock()
+        {
+            locked = false;
 
-
-
-        // Temporary, need to decide if badges are unlocked when subtasks are completed or steps. Can for example unlock a badge on the completion of steps in different subtasks, such as communication. 
+        }
         public bool IsLocked()
         {
-            foreach (Subtask subtask in _subtasks)
-            {
-                if (!subtask.Compleated())
-                {
-                    return true;
-                }
-            }
-            return false;
+            return locked;
         }
 
 

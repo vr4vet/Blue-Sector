@@ -22,8 +22,6 @@ namespace Task
 
         [SerializeField] public List<Task> taskList = new List<Task>();
 
-        [SerializeField] public List<Badge> badgeList = new List<Badge>();
-
         //making the task holder a singleton
         private void Awake()
         {
@@ -35,6 +33,20 @@ namespace Task
             else
             {
                 Destroy(gameObject);
+            }
+        }
+
+        void Start()
+        {
+            foreach (Task task in taskList)
+            {
+                foreach (Subtask subtask in task.Subtasks)
+                {
+                    foreach (Step step in subtask.StepList)
+                    {
+                        step.setStepNumber(subtask.StepList.IndexOf(step) + 1);
+                    }
+                }
             }
         }
 
@@ -70,21 +82,7 @@ namespace Task
             return returnSkill;
         }
 
-        public Badge GetBadge(string badgeName)
-        {
-            Badge returnBadge = null;
 
-            foreach (Badge badge in badgeList)
-            {
-                if (badge.Name == badgeName)
-                {
-                    returnBadge = badge;
-                    break;
-                }
-            }
-
-            return returnBadge;
-        }
 
     }
 

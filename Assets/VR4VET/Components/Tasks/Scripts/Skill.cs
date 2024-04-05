@@ -50,7 +50,6 @@ namespace Task
                 // }
             }
         }
-
         public bool IsCompleted()
         {
             foreach (Badge badge in _badges)
@@ -75,6 +74,31 @@ namespace Task
                 }
             }
             return complete;
+
+        }
+
+        public Badge GetBadge(string badgeName)
+        {
+            Badge returnBadge = null;
+
+            foreach (Badge badge in _badges)
+            {
+                if (badge.Name == badgeName)
+                {
+                    returnBadge = badge;
+                    break;
+                }
+            }
+
+            return returnBadge;
+        }
+
+        public void Reset()
+        {
+            foreach (Badge badge in _badges)
+            {
+                badge.Lock();
+            }
 
         }
 

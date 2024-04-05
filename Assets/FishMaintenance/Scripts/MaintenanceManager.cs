@@ -14,6 +14,8 @@ public class MaintenanceManager : MonoBehaviour
     [HideInInspector] public int stepCount;
 
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
+    public UnityEvent<Task.Step?> StepCompleted { get; } = new();
+
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
 
     // Start is called before the first frame update
@@ -35,13 +37,17 @@ public class MaintenanceManager : MonoBehaviour
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         task = taskHolder.GetTask("Vedlikehold");
 
-        // Reset subtsk and step progress on each play
+        // Reset subtsk and step progress on each play, and skill and badge progress
         foreach (Task.Subtask sub in task.Subtasks)
         {
             foreach (Task.Step step in sub.StepList)
             {
                 step.Reset();
             }
+        }
+        foreach (Task.Skill skill in taskHolder.skillList)
+        {
+            skill.Reset();
         }
 
     }
@@ -62,6 +68,7 @@ public class MaintenanceManager : MonoBehaviour
             PlaySuccess();
             stepCount += 1;
             feedbackManager.emptyInstructions();
+            StepCompleted.Invoke(step);
         }
         if (sub.Compleated())
         {

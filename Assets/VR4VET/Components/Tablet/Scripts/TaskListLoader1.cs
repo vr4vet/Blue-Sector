@@ -374,7 +374,7 @@ namespace Tablet
             {
                 GameObject.Destroy(child.gameObject);
             }
-            int stepNumber = 1;
+            // int stepNumber = 1;
             foreach (Task.Step step in subtask.StepList)
             {
                 GameObject item = Instantiate(_stepListEntry, Vector3.zero, Quaternion.identity);
@@ -398,8 +398,9 @@ namespace Tablet
                 if (step.RepetionNumber > 1) reps.text = step.RepetionsCompleated + "/" + step.RepetionNumber;
 
                 TMP_Text number = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
-                number.text = stepNumber + "";
-                stepNumber++;
+                number.text = step.getStepNumber() + "";
+                // number.text = stepNumber + "";
+                // stepNumber++;
             }
         }
     }

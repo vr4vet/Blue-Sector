@@ -9,9 +9,10 @@ public class HUDMessage : MonoBehaviour
 
 
     [SerializeField] private MaintenanceManager manager;
-    [SerializeField] private TMP_Text skillText;
     [SerializeField] private GameObject badge1;
     [SerializeField] private GameObject badge2;
+    [SerializeField] private TMP_Text skillText;
+
     private float animationDuration = 5f;
     private Task.Skill skill;
     private CanvasGroup canvasGroup;
@@ -30,6 +31,7 @@ public class HUDMessage : MonoBehaviour
         badge2.GetComponent<UnityEngine.UI.Image>().sprite = skill.ConnectedBadges[1].Icon;
         StartCoroutine(FadeAnimation());
     }
+
 
     private System.Collections.IEnumerator FadeAnimation()
     {
