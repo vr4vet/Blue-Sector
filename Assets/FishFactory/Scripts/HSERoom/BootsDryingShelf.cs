@@ -8,14 +8,11 @@ public class BootsDryingShelf : MonoBehaviour
     [SerializeField]
     private float despawnTimer = 3f;
 
+    // Once the boots are cleaned the boots dry off, before the player "puts them on"
     void OnTriggerEnter(Collider collider)
     {
-        if (
-            collider.gameObject.name == "Boots"
-            && collider.gameObject.GetComponent<BootsState>().Boots == BootsState.BootsStatus.Clean
-        )
+        if (collider.gameObject.GetComponent<BootsState>().Boots == BootsState.BootsStatus.Clean)
         {
-            Debug.Log("Player boots dried with " + gameObject.name);
             GameManager.instance.PlaySound("correct");
             StartCoroutine(DryBoots(collider.gameObject));
         }
@@ -24,7 +21,8 @@ public class BootsDryingShelf : MonoBehaviour
     private IEnumerator DryBoots(GameObject boots)
     {
         yield return new WaitForSeconds(despawnTimer);
-        GameManager.instance.PlaySound("taskComplete");
+        GameManager.instance.BootsOn = true;
+        GameManager.instance.PlaySound("correct");
         Destroy(boots);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BootsState : MonoBehaviour
 {
+    [Tooltip("The possible states of the boots.")]
     public enum BootsStatus
     {
         Dirty,
@@ -12,6 +13,7 @@ public class BootsState : MonoBehaviour
         Clean
     }
 
+    [Tooltip("The current state of the boots.")]
     private BootsStatus boots = BootsStatus.Dirty;
     public BootsStatus Boots
     {
@@ -23,6 +25,7 @@ public class BootsState : MonoBehaviour
     [SerializeField]
     private float soakingTime = 3f;
 
+    [Tooltip("The number of scrubs needed to clean the boots.")]
     [SerializeField]
     private int scrubbingLeft = 5;
 
@@ -32,36 +35,37 @@ public class BootsState : MonoBehaviour
     [SerializeField]
     private List<Material> materials = new List<Material>();
 
+    // Called when boots enter water
     public void BootWashing()
     {
-        if (boots == BootsStatus.Clean || boots == BootsStatus.SemiClean)
+        if (boots == BootsStatus.Dirty)
         {
-            return;
+            gameObject.GetComponent<MeshRenderer>().material = materials[1]; // Semi-soaped
+            StartCoroutine(WashBoots());
         }
-        gameObject.GetComponent<MeshRenderer>().material = materials[1];
-        StartCoroutine(WashBoots());
     }
 
+    // The boots need to soak in water before they can be scrubbed
     private IEnumerator WashBoots()
     {
         yield return new WaitForSeconds(soakingTime);
         GameManager.instance.PlaySound("correct");
         boots = BootsStatus.SemiClean;
-        gameObject.GetComponent<MeshRenderer>().material = materials[2];
-        //the boots are now ready to be scrubbed under water
+        gameObject.GetComponent<MeshRenderer>().material = materials[2]; // Soaped
+        // The boots are now ready to be scrubbed under water
     }
 
+    // Called when boots are scrubbed with the scrubber
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "Scrubber" && boots == BootsStatus.SemiClean)
         {
-            Debug.Log("Player scrubbed boots");
             scrubbingLeft--;
             if (scrubbingLeft < 0)
             {
                 boots = BootsStatus.Clean;
                 GameManager.instance.PlaySound("correct");
-                gameObject.GetComponent<MeshRenderer>().material = materials[3];
+                gameObject.GetComponent<MeshRenderer>().material = materials[3]; // Clean
             }
         }
     }

@@ -11,17 +11,10 @@ public class GameManager : MonoBehaviour
     // The main Game Manager is static so that it can be accessed from other scripts
     public static GameManager instance;
 
-    // ---------------- Enumerators ----------------
+    // ---------------- Enumerator ----------------
 
-    public enum PlayerLeftHand
-    {
-        Unsanitized,
-        Sanitized,
-        BlueGlove,
-        SteelGlove,
-    }
-
-    public enum PlayerRightHand
+    [Tooltip("The possible state of the player's hands")]
+    public enum PlayerHandState
     {
         Unsanitized,
         Sanitized,
@@ -58,39 +51,65 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Material steelGlove;
 
+    [Tooltip(
+        "Whether the HSE room has been completed. The player needs to put on ear protection, gloves, and boots."
+    )]
+    [SerializeField]
+    private bool hseRoomCompleted = false;
+    public bool HSERoomCompleted
+    {
+        get { return hseRoomCompleted; }
+        set { hseRoomCompleted = value; }
+    }
+
+    [Tooltip("Whether the player has put on ear protection")]
     private bool earProtectionOn = false;
     public bool EarProtectionOn
     {
         get { return earProtectionOn; }
-        set { earProtectionOn = value; }
+        set
+        {
+            earProtectionOn = value;
+            SetHSECompleted();
+        }
     }
-    private PlayerLeftHand leftHand = PlayerLeftHand.Unsanitized;
-    public PlayerLeftHand LeftHand
+
+    [Tooltip("The player's left hand")]
+    private PlayerHandState leftHand = PlayerHandState.Unsanitized;
+    public PlayerHandState LeftHand
     {
         get { return leftHand; }
         set
         {
             leftHand = value;
             SetPlayerGloves();
+            SetHSECompleted();
         }
     }
 
-    private PlayerRightHand rightHand = PlayerRightHand.Unsanitized;
-    public PlayerRightHand RightHand
+    [Tooltip("The player's right hand")]
+    private PlayerHandState rightHand = PlayerHandState.Unsanitized;
+    public PlayerHandState RightHand
     {
         get { return rightHand; }
         set
         {
             rightHand = value;
             SetPlayerGloves();
+            SetHSECompleted();
         }
     }
 
+    [Tooltip("Whether the player has put on the boots")]
     private bool bootsOn = false;
     public bool BootsOn
     {
         get { return bootsOn; }
-        set { bootsOn = value; }
+        set
+        {
+            bootsOn = value;
+            SetHSECompleted();
+        }
     }
 
     private bool isTaskOn = true;
@@ -108,8 +127,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        //FIXME: Currently the only way to view score, should be removed at a later stage
         Debug.Log("score " + score);
-        Debug.Log("hand" + leftHand + rightHand);
+        Debug.Log(hseRoomCompleted ? "HSE Room Completed" : "HSE Room Incomplete");
     }
 
     void Awake()
@@ -128,21 +148,18 @@ public class GameManager : MonoBehaviour
         {
             case "correct":
                 audioManager.GetComponent<AudioSource>().clip = soundEffects[0];
-                audioManager.GetComponent<AudioSource>().Play();
                 break;
             case "incorrect":
                 audioManager.GetComponent<AudioSource>().clip = soundEffects[1];
-                audioManager.GetComponent<AudioSource>().Play();
                 break;
             case "taskComplete":
                 audioManager.GetComponent<AudioSource>().clip = soundEffects[2];
-                audioManager.GetComponent<AudioSource>().Play();
                 break;
             case "door":
                 audioManager.GetComponent<AudioSource>().clip = soundEffects[3];
-                audioManager.GetComponent<AudioSource>().Play();
                 break;
         }
+        audioManager.GetComponent<AudioSource>().Play();
     }
 
     public void ToggleTaskOn()
@@ -150,22 +167,40 @@ public class GameManager : MonoBehaviour
         isTaskOn = !isTaskOn;
     }
 
+    private void SetHSECompleted()
+    {
+        bool correctGloveCombo =
+            (leftHand == PlayerHandState.SteelGlove && rightHand == PlayerHandState.BlueGlove)
+            || (leftHand == PlayerHandState.BlueGlove && rightHand == PlayerHandState.SteelGlove);
+
+        if (earProtectionOn && correctGloveCombo && bootsOn)
+        {
+            HSERoomCompleted = true;
+            //FIXME: should play task complete sound, but overruled by correct sound
+            PlaySound("taskComplete");
+        }
+        else
+        {
+            HSERoomCompleted = false;
+        }
+    }
+
     private void SetPlayerGloves()
     {
-        if (leftHand == PlayerLeftHand.BlueGlove)
+        if (leftHand == PlayerHandState.BlueGlove)
         {
             leftHandGameObj.GetComponent<Renderer>().material = blueGlove;
         }
-        else if (leftHand == PlayerLeftHand.SteelGlove)
+        else if (leftHand == PlayerHandState.SteelGlove)
         {
             leftHandGameObj.GetComponent<Renderer>().material = steelGlove;
         }
 
-        if (rightHand == PlayerRightHand.BlueGlove)
+        if (rightHand == PlayerHandState.BlueGlove)
         {
             rightHandGameObj.GetComponent<Renderer>().material = blueGlove;
         }
-        else if (rightHand == PlayerRightHand.SteelGlove)
+        else if (rightHand == PlayerHandState.SteelGlove)
         {
             rightHandGameObj.GetComponent<Renderer>().material = steelGlove;
         }
