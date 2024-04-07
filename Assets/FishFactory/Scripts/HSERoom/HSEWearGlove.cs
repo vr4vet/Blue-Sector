@@ -12,27 +12,37 @@ public class HSEWearGlove : MonoBehaviour
         {
             Debug.Log("Player hand trigger with " + gameObject.name);
 
-            if (collider.transform.parent.name == "LeftController")
+            if (
+                collider.transform.parent.name == "LeftController"
+                && (GameManager.instance.RightHand != GameManager.PlayerRightHand.Unsanitized)
+            )
             {
                 if (name == "SteelGlove")
                 {
-                    GameManager.instance.LeftGlove = GameManager.LeftGloveEquipped.Steel;
+                    GameManager.instance.LeftHand = GameManager.PlayerLeftHand.SteelGlove;
                 }
                 else
                 {
-                    GameManager.instance.LeftGlove = GameManager.LeftGloveEquipped.True;
+                    GameManager.instance.LeftHand = GameManager.PlayerLeftHand.BlueGlove;
                 }
+                GameManager.instance.PlaySound("correct");
+            }
+            else if (GameManager.instance.RightHand != GameManager.PlayerRightHand.Unsanitized)
+            {
+                if (name == "SteelGlove")
+                {
+                    GameManager.instance.RightHand = GameManager.PlayerRightHand.SteelGlove;
+                }
+                else
+                {
+                    GameManager.instance.RightHand = GameManager.PlayerRightHand.BlueGlove;
+                }
+
+                GameManager.instance.PlaySound("correct");
             }
             else
             {
-                if (name == "SteelGlove")
-                {
-                    GameManager.instance.RightGlove = GameManager.RightGloveEquipped.Steel;
-                }
-                else
-                {
-                    GameManager.instance.RightGlove = GameManager.RightGloveEquipped.True;
-                }
+                GameManager.instance.PlaySound("incorrect");
             }
         }
     }

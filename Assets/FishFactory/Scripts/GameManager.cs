@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -12,33 +13,50 @@ public class GameManager : MonoBehaviour
 
     // ---------------- Enumerators ----------------
 
-    public enum LeftGloveEquipped
+    public enum PlayerLeftHand
     {
-        False,
-        True,
-        Steel,
+        Unsanitized,
+        Sanitized,
+        BlueGlove,
+        SteelGlove,
     }
 
-    public enum RightGloveEquipped
+    public enum PlayerRightHand
     {
-        False,
-        True,
-        Steel,
+        Unsanitized,
+        Sanitized,
+        BlueGlove,
+        SteelGlove,
     }
 
     // ----------------- Private Variables -----------------
 
     [SerializeField]
-    private GameObject leftHand;
+    private GameObject audioManager;
 
+    [Tooltip(
+        "The sound effects that will be played when the player completes a task. The order should be 'correct', 'wrong', 'taskComplete', 'door', in that order."
+    )]
     [SerializeField]
-    private GameObject rightHand;
+    private AudioClip[] soundEffects;
+
+    [Tooltip(
+        "The game object that contains the material for the left hand. Should be 'fully_gloved' in BNG."
+    )]
+    [SerializeField]
+    private GameObject leftHandGameObj;
+
+    [Tooltip(
+        "The game object that contains the material for the right hand. Should be 'fully_gloved' in BNG."
+    )]
+    [SerializeField]
+    private GameObject rightHandGameObj;
 
     [SerializeField]
     private Material blueGlove;
 
     [SerializeField]
-    private Material steel;
+    private Material steelGlove;
 
     private bool earProtectionOn = false;
     public bool EarProtectionOn
@@ -46,24 +64,24 @@ public class GameManager : MonoBehaviour
         get { return earProtectionOn; }
         set { earProtectionOn = value; }
     }
-    private LeftGloveEquipped leftGlove = LeftGloveEquipped.False;
-    public LeftGloveEquipped LeftGlove
+    private PlayerLeftHand leftHand = PlayerLeftHand.Unsanitized;
+    public PlayerLeftHand LeftHand
     {
-        get { return leftGlove; }
+        get { return leftHand; }
         set
         {
-            leftGlove = value;
+            leftHand = value;
             SetPlayerGloves();
         }
     }
 
-    private RightGloveEquipped rightGlove = RightGloveEquipped.False;
-    public RightGloveEquipped RightGlove
+    private PlayerRightHand rightHand = PlayerRightHand.Unsanitized;
+    public PlayerRightHand RightHand
     {
-        get { return rightGlove; }
+        get { return rightHand; }
         set
         {
-            rightGlove = value;
+            rightHand = value;
             SetPlayerGloves();
         }
     }
@@ -91,7 +109,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         Debug.Log("score " + score);
-        Debug.Log("glove" + leftGlove + rightGlove);
+        Debug.Log("hand" + leftHand + rightHand);
     }
 
     void Awake()
@@ -104,29 +122,52 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void PlaySound(string soundName)
+    {
+        switch (soundName)
+        {
+            case "correct":
+                audioManager.GetComponent<AudioSource>().clip = soundEffects[0];
+                audioManager.GetComponent<AudioSource>().Play();
+                break;
+            case "incorrect":
+                audioManager.GetComponent<AudioSource>().clip = soundEffects[1];
+                audioManager.GetComponent<AudioSource>().Play();
+                break;
+            case "taskComplete":
+                audioManager.GetComponent<AudioSource>().clip = soundEffects[2];
+                audioManager.GetComponent<AudioSource>().Play();
+                break;
+            case "door":
+                audioManager.GetComponent<AudioSource>().clip = soundEffects[3];
+                audioManager.GetComponent<AudioSource>().Play();
+                break;
+        }
+    }
+
     public void ToggleTaskOn()
     {
         isTaskOn = !isTaskOn;
     }
 
-    void SetPlayerGloves()
+    private void SetPlayerGloves()
     {
-        if (leftGlove == LeftGloveEquipped.True)
+        if (leftHand == PlayerLeftHand.BlueGlove)
         {
-            leftHand.GetComponent<Renderer>().material = blueGlove;
+            leftHandGameObj.GetComponent<Renderer>().material = blueGlove;
         }
-        else if (leftGlove == LeftGloveEquipped.Steel)
+        else if (leftHand == PlayerLeftHand.SteelGlove)
         {
-            leftHand.GetComponent<Renderer>().material = steel;
+            leftHandGameObj.GetComponent<Renderer>().material = steelGlove;
         }
 
-        if (rightGlove == RightGloveEquipped.True)
+        if (rightHand == PlayerRightHand.BlueGlove)
         {
-            rightHand.GetComponent<Renderer>().material = blueGlove;
+            rightHandGameObj.GetComponent<Renderer>().material = blueGlove;
         }
-        else if (rightGlove == RightGloveEquipped.Steel)
+        else if (rightHand == PlayerRightHand.SteelGlove)
         {
-            rightHand.GetComponent<Renderer>().material = steel;
+            rightHandGameObj.GetComponent<Renderer>().material = steelGlove;
         }
     }
 }

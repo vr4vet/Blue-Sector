@@ -9,7 +9,7 @@ public class HSEWearable : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             GameManager.instance.EarProtectionOn = true;
-            //TODO: Could add points here
+            GameManager.instance.PlaySound("correct");
             Destroy(gameObject);
         }
     }
