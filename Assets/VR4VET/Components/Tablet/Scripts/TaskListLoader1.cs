@@ -177,6 +177,8 @@ namespace Tablet
                     // Set icon with shader and padlock if badge is locked
                     GameObject padlock = badgeItem.transform.Find("padlock").gameObject;
                     padlock.SetActive(badge.IsLocked());
+                    GameObject completedBackground = badgeItem.transform.Find("CompletedBackground").gameObject;
+                    completedBackground.SetActive(!badge.IsLocked());
 
 
 

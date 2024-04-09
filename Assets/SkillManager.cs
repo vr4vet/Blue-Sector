@@ -86,7 +86,7 @@ public class SkillManager : MonoBehaviour
 
     public void LightningBadge()
     {
-        CompleteBadge("Tilpasningsevne", "Lynet");
+        CompleteBadge("Tilpasningsdyktig", "Lynet");
 
     }
 }

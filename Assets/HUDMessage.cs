@@ -9,8 +9,8 @@ public class HUDMessage : MonoBehaviour
 
 
     [SerializeField] private MaintenanceManager manager;
-    [SerializeField] private GameObject badge1;
-    [SerializeField] private GameObject badge2;
+    [SerializeField] private GameObject badge;
+
     [SerializeField] private TMP_Text skillText;
 
     private float animationDuration = 5f;
@@ -27,8 +27,7 @@ public class HUDMessage : MonoBehaviour
     public void EnableSkillDisplay(Task.Skill skill)
     {
         skillText.text = skill.Name;
-        badge1.GetComponent<UnityEngine.UI.Image>().sprite = skill.ConnectedBadges[0].Icon;
-        badge2.GetComponent<UnityEngine.UI.Image>().sprite = skill.ConnectedBadges[1].Icon;
+        badge.GetComponent<UnityEngine.UI.Image>().sprite = skill.ConnectedBadges[0].Icon;
         StartCoroutine(FadeAnimation());
     }
 
