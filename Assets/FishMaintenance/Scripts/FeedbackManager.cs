@@ -100,6 +100,10 @@ public class FeedbackManager : MonoBehaviour
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
+        if (subtaskName != "Håndforing")
+        {
+            manager.BadgeChanged.Invoke(manager.GetStep("Runde På Ring", subtaskName));
+        }
     }
 
     IEnumerator emergencyFeedback(string subtaskName)

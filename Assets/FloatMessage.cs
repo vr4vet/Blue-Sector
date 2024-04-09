@@ -9,7 +9,7 @@ public class FloatMessage : MonoBehaviour
     private float animationDuration = 4f; // Set the duration in seconds
     private bool isFloating = false; // Track whether the object is currently floating
     private CanvasGroup canvasGroup; // Reference to the CanvasGroup component
-    [SerializeField] private GameObject confettiGroup;
+                                     // [SerializeField] private GameObject confettiGroup;
 
     private void Start()
     {
@@ -22,23 +22,23 @@ public class FloatMessage : MonoBehaviour
 
     public void EnableToast()
     {
-        if (!isFloating) StartConfetti();
+        // if (!isFloating) StartConfetti();
         StartCoroutine(FloatAnimation());
-        isFloating = true;
+        // isFloating = true;
 
 
     }
-    private void StartConfetti()
-    {
+    // private void StartConfetti()
+    // {
 
-        foreach (Transform child in confettiGroup.transform)
-        {
-            child.GetComponent<ParticleSystem>().Play();
+    //     foreach (Transform child in confettiGroup.transform)
+    //     {
+    //         child.GetComponent<ParticleSystem>().Play();
 
-        }
+    //     }
 
 
-    }
+    // }
     private System.Collections.IEnumerator FloatAnimation()
     {
         float startTime = Time.time;

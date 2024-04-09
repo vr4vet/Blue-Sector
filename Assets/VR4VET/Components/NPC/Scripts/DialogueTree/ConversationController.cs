@@ -227,6 +227,10 @@ public class ConversationController : MonoBehaviour
             _animator.SetBool(_hasNewDialogueOptionsHash, true);
         }
     }
+    public int GetActivatedCount()
+    {
+        return _dialogueBoxController.GetActivatedCount();
+    }
 
 
     // Easy way to test the functionality

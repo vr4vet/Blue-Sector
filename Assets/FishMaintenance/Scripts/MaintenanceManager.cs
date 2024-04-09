@@ -15,8 +15,7 @@ public class MaintenanceManager : MonoBehaviour
     [HideInInspector] public int stepCount;
 
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
-    public UnityEvent<Task.Step?> StepCompleted { get; } = new();
-
+    public UnityEvent<Task.Step?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
 
     // Start is called before the first frame update
@@ -66,11 +65,10 @@ public class MaintenanceManager : MonoBehaviour
         // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
         if (step.IsCompeleted())
         {
-            if (sub.SubtaskName == "Hent Utstyr") PlayAudio(equipmentPickup);
-            else { PlayAudio(success); }
+            PlayAudio(success);
             stepCount += 1;
             feedbackManager.emptyInstructions();
-            StepCompleted.Invoke(step);
+            BadgeChanged.Invoke(step);
         }
         if (sub.Compleated())
         {

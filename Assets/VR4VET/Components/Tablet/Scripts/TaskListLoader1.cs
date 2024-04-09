@@ -341,7 +341,7 @@ namespace Tablet
             foreach (Task.Subtask sub in task.Subtasks)
             {
 
-                if (sub.SubtaskName == "Hent Utstyr")
+                if (sub.SubtaskName == "Pause")
                 {
                     continue;
                 }

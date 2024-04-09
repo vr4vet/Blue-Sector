@@ -28,6 +28,8 @@ public class DialogueBoxController : MonoBehaviour
     private ButtonSpawner buttonSpawner;
 
     [HideInInspector] public bool dialogueIsActive;
+    private int _activatedCount = 0;
+
 
     private void Awake()
     {
@@ -95,6 +97,7 @@ public class DialogueBoxController : MonoBehaviour
         ResetBox();
         _dialogueBox.SetActive(true);
         OnDialogueStarted?.Invoke();
+        _activatedCount = 0;
         StartCoroutine(RunDialogue(dialogueTree, startSection));
         _exitButton.SetActive(true);
 
@@ -221,10 +224,17 @@ public class DialogueBoxController : MonoBehaviour
 
     public void AnswerQuestion(int answer)
     {
+
         _answerIndex = answer;
         _answerTriggered = true;
+        _activatedCount++;
         // remove the buttons
         buttonSpawner.removeAllButtons();
+    }
+
+    public int GetActivatedCount()
+    {
+        return _activatedCount;
     }
 
     public void ExitConversation()

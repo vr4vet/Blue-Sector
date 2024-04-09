@@ -34,7 +34,7 @@ public class SkillManager : MonoBehaviour
 
         Task.Subtask subtask = taskHolder.GetTask("Vedlikehold").GetSubtask("Runde På Ring");
         maxSteps = subtask.StepList.Count;
-        manager.StepCompleted.AddListener(UpdateBadges);
+        manager.BadgeChanged.AddListener(UpdateBadges);
 
     }
 
@@ -42,21 +42,29 @@ public class SkillManager : MonoBehaviour
     {
         if (manager.GetSubtask("Runde På Ring").StepList.Contains(step))
         {
-            StepwiseBadge(step.getStepNumber());
+            LightningBadge();
+            if (step.IsCompeleted()) { StepwiseBadge(step.getStepNumber()); }
+        }
+        else if (step.StepName == "Snakk med Marianne" && !step.IsCompeleted())
+        {
+            CuriousBadge();
         }
 
-    }
 
+    }
     private void CompleteBadge(string skillName, string badgeName)
     {
         Task.Skill skill = taskHolder.GetSkill(skillName);
         Task.Badge badge = skill.GetBadge(badgeName);
-        badge.Unlock();
-        Debug.Log("Badge unlocked: " + badge.Name + "  " + badge.IsLocked());
-        // if (!skill.ConnectedBadges.Any(b => b.IsLocked()))
-        // {
-        manager.SkillCompleted.Invoke(skill);
-        taskListLoader.LoadSkillsPage();
+        if (badge.IsLocked())
+        {
+            badge.Unlock();
+            Debug.Log("Badge unlocked: " + badge.Name + "  " + badge.IsLocked());
+            // if (!skill.ConnectedBadges.Any(b => b.IsLocked()))
+            // {
+            manager.SkillCompleted.Invoke(skill);
+            taskListLoader.LoadSkillsPage();
+        }
         // }
     }
 
@@ -71,6 +79,14 @@ public class SkillManager : MonoBehaviour
         }
     }
 
+    public void CuriousBadge()
+    {
+        CompleteBadge("Kommunikasjon", "Nyskjerrigper");
+    }
 
+    public void LightningBadge()
+    {
+        CompleteBadge("Tilpasningsevne", "Lynet");
+
+    }
 }
-
