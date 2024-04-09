@@ -27,7 +27,6 @@ public class SceneController : MonoBehaviour
     public void ChangeScene(string scene)
     {
         // Check if the player has met the requirements to move to the next scene
-        // This can be turned off by setting requirements to false
         if (
             !GameManager.instance.HSERoomCompleted
             && SceneManager.GetActiveScene().name == "HSERoom"

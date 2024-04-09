@@ -160,6 +160,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Connected to the AudioManager object in every scene, to play sound effects
     public void PlaySound(string soundName)
     {
         switch (soundName)
@@ -185,6 +186,7 @@ public class GameManager : MonoBehaviour
         isTaskOn = !isTaskOn;
     }
 
+    // Should only be called when the player has put on ear protection, gloves, and boots
     private void SetHSECompleted()
     {
         bool correctGloveCombo =
@@ -203,6 +205,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Sets the player's gloves to the correct material based on the player's hand state
+    // The player hand state can be manipulated through the EquipGlove script
     private void SetPlayerGloves()
     {
         if (leftHand == PlayerHandState.BlueGlove)
