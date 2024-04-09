@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
-using UnityEngine.UI;
 
 public class LocalizeToolTip : MonoBehaviour
 {
@@ -12,6 +9,20 @@ public class LocalizeToolTip : MonoBehaviour
     [SerializeField] private string entryKeyHeader;
     [SerializeField] private string entryKeyText;
 
+    private void Start()
+    {
+        if (stringTable.IsEmpty) 
+        {
+            Debug.LogError("StringTable is not set");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(entryKeyText))
+        {
+            Debug.LogError("EntryKeyText is not set");
+            return;
+        }
+    }
 
     void OnEnable() {
         stringTable.TableChanged += LoadStrings;
