@@ -41,7 +41,7 @@ public class MerdFish : MonoBehaviour
         fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
         fishPosition = transform.position;
         radiusSquared = fishSystemScript.Radius * fishSystemScript.Radius;
-        top = (fishSystem.transform.position.y + (fishSystemScript.Height / 2));  // top of merd/water surface
+        top = (fishSystem.transform.position.y);  // top of merd/water surface
         // targetPos = fishSystemScript.JumpTargetPosition();
         bottom = (fishSystem.transform.position.y - (fishSystemScript.Height / 2)); // bottom of merd
 
@@ -130,7 +130,7 @@ public class MerdFish : MonoBehaviour
     }
 
     // functions for checking if fish is too high or low (outside boundaries)
-    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.5f;
+    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.2f;
     bool IsAtBottom() => gameObject.transform.position.y <= bottom + 0.5f;
 
     // check if fish has reached its destination when swimming downwards when full
