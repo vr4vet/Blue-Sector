@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [SerializeField]
     [Tooltip("The player's left hand")]
     private PlayerHandState leftHand = PlayerHandState.Unsanitized;
     public PlayerHandState LeftHand
@@ -87,6 +89,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [SerializeField]
     [Tooltip("The player's right hand")]
     private PlayerHandState rightHand = PlayerHandState.Unsanitized;
     public PlayerHandState RightHand
@@ -125,21 +128,36 @@ public class GameManager : MonoBehaviour
         set { score = value; }
     }
 
-    void Update()
-    {
-        //FIXME: Currently the only way to view score, should be removed at a later stage
-        Debug.Log("score " + score);
-        Debug.Log(hseRoomCompleted ? "HSE Room Completed" : "HSE Room Incomplete");
-    }
-
     void Awake()
     {
         // Sets the instance of the GameManager to this object if it does not already exist
         if (instance == null)
             instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
 
         // Makes the GameManager object persist between scenes
         DontDestroyOnLoad(gameObject);
+    }
+
+    void Update()
+    {
+        //FIXME: Currently the only way to view score, should be removed at a later stage
+        Debug.Log("score " + score);
+        Debug.Log(hseRoomCompleted ? "HSE Room Completed" : "HSE Room Incomplete");
+
+        // If the game objects are not set, find them in the current scene
+        //TODO: The objects are not searchable at the at the loading of the scene, so this is a workaround
+        if (leftHandGameObj == null || rightHandGameObj == null || audioManager == null)
+        {
+            audioManager = GameObject.Find("AudioManager");
+            rightHandGameObj = GameObject
+                .Find("Green Gloves Right")
+                .transform.GetChild(0)
+                .gameObject;
+            leftHandGameObj = GameObject.Find("Green Gloves Left").transform.GetChild(0).gameObject;
+            SetPlayerGloves();
+        }
     }
 
     public void PlaySound(string soundName)
