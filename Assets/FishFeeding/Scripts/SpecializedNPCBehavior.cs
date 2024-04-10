@@ -83,7 +83,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
         if (_animator != null) 
         {
             _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
-            Debug.Log(_agent.remainingDistance);
+            //Debug.Log(_agent.remainingDistance);
             if (walking)
             {
                 if (currentPath == -1) { return; }
