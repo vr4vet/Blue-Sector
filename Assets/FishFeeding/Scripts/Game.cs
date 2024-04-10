@@ -95,23 +95,6 @@ public class Game : MonoBehaviour
 
         if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && CanStartGame)
         {
-            // Set mode values
-            time = currentMode.timeLimit;
-            hud = currentMode.hud;
-
-            currentScore.enabled = hud;
-            foodWasteText.enabled = hud;
-            foodWasteSlider.enabled = hud;
-            foreach (var image in foodWasteSlider.GetComponentsInChildren<UnityEngine.UI.Image>())
-            {
-                image.enabled = hud;
-            }
-            deadFishText.enabled = hud;
-            foreach (TextMeshProUGUI text in staticText) 
-            {
-                text.enabled = hud;
-            }
-
             startGame = true;
 
             foreach (GameObject merd in merds)
@@ -199,6 +182,24 @@ public class Game : MonoBehaviour
     private void ModesClass_OnModeChanged(object sender, Mode e)
     {
         currentMode = e;
+
+        // Set mode values
+        time = currentMode.timeLimit;
+        hud = currentMode.hud;
+
+        // Update visibility of HUD based on mode
+        currentScore.enabled = hud;
+        foodWasteText.enabled = hud;
+        foodWasteSlider.enabled = hud;
+        foreach (var image in foodWasteSlider.GetComponentsInChildren<UnityEngine.UI.Image>())
+        {
+            image.enabled = hud;
+        }
+        deadFishText.enabled = hud;
+        foreach (TextMeshProUGUI text in staticText)
+        {
+            text.enabled = hud;
+        }
 
         // Only disable tutorials if defined in mode
         tutorials.ForEach(tutorial =>
