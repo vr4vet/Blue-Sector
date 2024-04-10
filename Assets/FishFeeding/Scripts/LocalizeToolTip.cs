@@ -1,21 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
-using UnityEngine.UI;
 
 public class LocalizeToolTip : MonoBehaviour
 {
 
     [SerializeField] private LocalizedStringTable stringTable;
-    private string translatedString;
-    [SerializeField] private string entryKey;
+    [SerializeField] private string entryKeyHeader;
+    [SerializeField] private string entryKeyText;
 
+    private void Start()
+    {
+        if (stringTable.IsEmpty) 
+        {
+            Debug.LogError("StringTable is not set");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(entryKeyText))
+        {
+            Debug.LogError("EntryKeyText is not set");
+            return;
+        }
+    }
 
     void OnEnable() {
         stringTable.TableChanged += LoadStrings;
-        UpdateString();
     }
 
     void OnDisable() {
@@ -23,12 +33,18 @@ public class LocalizeToolTip : MonoBehaviour
     }
 
     void LoadStrings(StringTable stringTable) {
-        translatedString = stringTable.GetEntry(entryKey).GetLocalizedString();
-        UpdateString();
+        if (!string.IsNullOrEmpty(entryKeyHeader)) {
+            UpdateHeader(stringTable.GetEntry(entryKeyHeader).GetLocalizedString());
+        }
+        UpdateTextContent(stringTable.GetEntry(entryKeyText).GetLocalizedString());
     }
 
-    private void UpdateString() {
+    private void UpdateTextContent(string translatedString) {
         GetComponent<TooltipScript>().TextContent = translatedString;
+    }
+
+    private void UpdateHeader(string translatedString) {
+        GetComponent<TooltipScript>().Header = translatedString;
     }
 
 }
