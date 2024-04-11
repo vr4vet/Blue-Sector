@@ -697,6 +697,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1, type: 3}
+--- !u!135 &63303705 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 3645714274288965361, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
+    type: 3}
+  m_PrefabInstance: {fileID: 865646527}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &81722606
 GameObject:
   m_ObjectHideFlags: 0
@@ -12833,6 +12839,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 5138808387621915663, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1e22de2af8d1ee14f9b7f25a3d5c7169, type: 2}
     - target: {fileID: 5141242278669764301, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: m_Layer
@@ -13948,6 +13959,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6177501444222698452, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6c9b28755696049449f2dbd9ce9b94c6, type: 2}
     - target: {fileID: 6177852333571022188, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: m_Layer
@@ -21870,10 +21886,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1843851143}
     m_Modifications:
+    - target: {fileID: 719392542250545875, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: sceneName
+      value: HSERoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 719392542250545875, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: triggers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1672553281}
+    - target: {fileID: 719392542250545875, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: triggers.Array.data[1]
+      value: 
+      objectReference: {fileID: 63303705}
     - target: {fileID: 3587593575260955342, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_Name
-      value: FactoryDoor (1)
+      value: FactoryDoorHSERoom
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
@@ -21883,17 +21914,17 @@ PrefabInstance:
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.65
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.65
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.65
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
@@ -21903,7 +21934,7 @@ PrefabInstance:
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.887
+      value: -3.483
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
@@ -21950,6 +21981,21 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: sceneName
+      value: HSERoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: triggers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1672553281}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: triggers.Array.data[1]
+      value: 
+      objectReference: {fileID: 63303705}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a238cecad7713264d85f8075e47ace51, type: 3}
 --- !u!4 &1452336635 stripped
@@ -23698,10 +23744,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1843851143}
     m_Modifications:
+    - target: {fileID: 719392542250545875, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: sceneName
+      value: QAStation
+      objectReference: {fileID: 0}
+    - target: {fileID: 719392542250545875, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: triggers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1672553281}
+    - target: {fileID: 719392542250545875, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: triggers.Array.data[1]
+      value: 
+      objectReference: {fileID: 63303705}
     - target: {fileID: 3587593575260955342, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_Name
-      value: FactoryDoor
+      value: FactoryDoorQAStation
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
@@ -23711,17 +23772,17 @@ PrefabInstance:
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.65
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.65
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.65
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
@@ -23731,7 +23792,7 @@ PrefabInstance:
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.039
+      value: -3.51
       objectReference: {fileID: 0}
     - target: {fileID: 4723583979205586769, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
@@ -23778,6 +23839,21 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: sceneName
+      value: QAStation
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: triggers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1672553281}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: triggers.Array.data[1]
+      value: 
+      objectReference: {fileID: 63303705}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a238cecad7713264d85f8075e47ace51, type: 3}
 --- !u!4 &1613921821 stripped
@@ -23926,6 +24002,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7af5a987c1b8a084c8548eed9692d08c, type: 3}
+--- !u!135 &1672553281 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 2594274423201876741, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
+    type: 3}
+  m_PrefabInstance: {fileID: 865646527}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1683228675
 GameObject:
   m_ObjectHideFlags: 0
@@ -27365,7 +27447,7 @@ PrefabInstance:
     - target: {fileID: 8367001512587587516, guid: a83f585208002c6478ebb453d70ac495,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.0673862
+      value: 4.436
       objectReference: {fileID: 0}
     - target: {fileID: 8367001512587587516, guid: a83f585208002c6478ebb453d70ac495,
         type: 3}
