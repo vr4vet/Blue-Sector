@@ -1,3 +1,5 @@
+using BNG;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,6 +18,8 @@ public class SpecializedNPCBehavior : MonoBehaviour
     private int currentPosition;
     private int currentPath;
     private bool walking;
+    private BoxCollider boxCollider;
+    public GrabbableUnityEvents grabbableUnityEvents;
 
 
     // Start is called before the first frame update
@@ -38,6 +42,14 @@ public class SpecializedNPCBehavior : MonoBehaviour
         }
 
         _npc = _npcSpawner._npcInstances[1];
+
+        // Disables capsule collider and adds box collider to NPC
+        GameObject collisionTrigger = _npc.transform.GetChild(0).gameObject;
+        collisionTrigger.GetComponent<CapsuleCollider>().enabled = false;
+        boxCollider = collisionTrigger.AddComponent<BoxCollider>();
+        boxCollider.isTrigger = true;
+        boxCollider.center = new Vector3(-0.85f, 0f, 1.11f);
+        boxCollider.size = new Vector3(2.6f, 2f, 2.3f);
 
         if (NPCToPlayerReferenceManager.Instance == null)
         {
@@ -77,6 +89,9 @@ public class SpecializedNPCBehavior : MonoBehaviour
 
         DialogueBoxController.OnDialogueEnded += DialogueTransition;
 
+        grabbableUnityEvents.onGrab.AddListener(SetFalseNPCTrigger);
+        grabbableUnityEvents.onRelease.AddListener(SetTrueNPCTrigger);
+
         currentPosition = 0;
         currentPath = -1;
 
@@ -104,6 +119,13 @@ public class SpecializedNPCBehavior : MonoBehaviour
                         walking = false;
                         currentPosition = 0;
                         _conversationController.NextDialogueTree();
+
+                        // Adjusts the size of the box collider when the NPC is in the control room
+                        if (currentPath == 0)
+                        {
+                            boxCollider.center = new Vector3(-0.11f, 0f, 1.6f);
+                            boxCollider.size = new Vector3(3.2f, 2f, 3.7f);
+                        }
                     }
                 } 
             }
@@ -119,6 +141,22 @@ public class SpecializedNPCBehavior : MonoBehaviour
         currentPath++;
         if (currentPath >= paths.Count) { return; }
         walking = true;
+    }
+
+    private void SetFalseNPCTrigger(Grabber grabber)
+    {
+        _conversationController.shouldTrigger = false;
+    }
+
+    private void SetTrueNPCTrigger()
+    {
+        StartCoroutine(Timer());
+    }
+
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(1f);
+        _conversationController.shouldTrigger = true;
     }
 
     void OnDestroy()
