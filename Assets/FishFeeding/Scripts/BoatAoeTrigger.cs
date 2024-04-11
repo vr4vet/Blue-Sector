@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(BoxCollider))]
-public class TutorialAoeTrigger : MonoBehaviour
+public class BoatAoeTrigger : MonoBehaviour
 {
     /// <summary>
     /// Gets an event that is fired when the player enters the box collider.
@@ -19,6 +19,15 @@ public class TutorialAoeTrigger : MonoBehaviour
         if (IsPlayer(other))
         {
             OnPlayerEnter.Invoke();
+        }
+
+        if (other.CompareTag("Growler"))    // anesthetic bottle ("growler")
+        {
+            other.GetComponent<Respawner>().Respawn();
+        }
+        else if (other.CompareTag("Bone"))  // fish
+        {
+            other.GetComponentInParent<Respawner>().Respawn();
         }
     }
 

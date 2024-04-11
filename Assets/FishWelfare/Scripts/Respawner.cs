@@ -12,6 +12,8 @@ public class Respawner : MonoBehaviour
     [Header("Respawn properties")]
     [Tooltip("The depth at which a respawn will be triggered")]
     [SerializeField] private float _killPlane;
+    [Tooltip("Set to true if object should respawn at its initial position. Otherwise, set to false")]
+    [SerializeField] private bool _useStartPositionAsSpawnPosition = false;
     [Tooltip("Set to false if setting respawn position in code. Set to true if setting in inspector by placing a gameobject ine the SpawnObject field")]
     [SerializeField] private bool _useSpawnObject = true;
     [Tooltip("The gameobject will respawn at this gameobject's position if Use Spawn Object is set to true (Respawn Position will be set to this value)")]
@@ -78,5 +80,6 @@ public class Respawner : MonoBehaviour
             gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         }
 
+        Debug.Log(gameObject.tag.ToString() + " just respawned");
     }
 }
