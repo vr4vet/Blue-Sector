@@ -84,10 +84,10 @@ public class Fish : MonoBehaviour
         targetPosition = transform.position;
         originalRotation = transform.rotation;
         liceList = FindObjectwithTag("Louse");
-        boneList = FindObjectwithTag("Bone");
+        boneList = FindObjectwithTag("Bone");//FindGameObjectsWithTag("Bone");
         AudioSource[] sounds = GetComponents<AudioSource>();
         hurtSound = sounds[0];
-        markSound = sounds[1];
+        //markSound = sounds[1];
         //The point from which the raycast targeting lice on fishbodie will have its origin. In this case it is RightHandPointer in XR Rig Advanced
         pointerFinger = GameObject.FindGameObjectWithTag("Pointer");
         animator = GetComponent<Animator>();
