@@ -8,6 +8,7 @@ public class HandFeeding : MonoBehaviour
     [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private GameObject bucket;
     [SerializeField] private GameObject shovel;
+    [SerializeField] private GameObject videoObject;
     [SerializeField] private BNG.Grabber grabberLeft;
     [SerializeField] private BNG.Grabber grabberRight;
     private DropItem dropItem;
@@ -48,6 +49,7 @@ public class HandFeeding : MonoBehaviour
         feedbackManager.addFeedback("Håndforing");
         bucket.SetActive(true);
         shovel.SetActive(true);
+        videoObject.SetActive(true);
         // BNG.Grabbable bucketGrabbable = bucket.GetComponent<BNG.Grabbable>();
         BNG.Grabbable shovelGrabbable = shovel.GetComponent<BNG.Grabbable>();
         // grabberLeft.GrabGrabbable(bucketGrabbable);

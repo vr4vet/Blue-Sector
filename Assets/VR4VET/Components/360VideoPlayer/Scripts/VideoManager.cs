@@ -69,6 +69,13 @@ public class VideoManager : MonoBehaviour
         // hide everything in sceene exept potantially the player and teleporting prefab (given not recomended setup)
         VRCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         VRCamera.cullingMask = 1 << LayerMask.NameToLayer("360Video");
+
+
+        while (videoPlayer.isPlaying)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        StopVideo();
     }
 
 

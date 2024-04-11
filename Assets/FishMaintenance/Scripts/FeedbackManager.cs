@@ -22,11 +22,11 @@ public class FeedbackManager : MonoBehaviour
             ""
         });
         feedback.Add("Håndforing", new List<string> {
-            "Kast mat til fisken 5 ganger.",
-            "Bruk spaden til å hente mat fra bøtten. Kast så maten i merden.",
+            "Kast mat til fisken 5 ganger. Se video fra anlegget.",
+            "",
             "Kjempebra, dette var en utfordrende oppgave!",
             "Hent BØTTE OG SPADE på båten for å starte denne oppgaven",
-            ""
+            "Bruk spaden til å hente mat fra bøtten. Kast så maten i merden."
         });
         feedback.Add("Legg til tau på merd", new List<string> {
             "Legg til det manglende tauet.",
@@ -69,12 +69,17 @@ public class FeedbackManager : MonoBehaviour
     public void addFeedback(string subtaskName)
     {
         if (subtaskName == "Legg til splinter på kjetting" && manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted())
+        // if (subtaskName == "Legg til splinter på kjetting" || subtaskName == "Håndforing")
         {
             StartCoroutine(emergencyFeedback(subtaskName));
             return;
         }
         watch.addInstructions(feedback[subtaskName][0]);
         StartCoroutine(moreFeedback(subtaskName));
+        if (subtaskName == "Håndforing")
+        {
+            StartCoroutine(emergencyFeedback(subtaskName));
+        }
     }
 
     IEnumerator moreFeedback(string subtaskName)
@@ -84,10 +89,10 @@ public class FeedbackManager : MonoBehaviour
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
-        else if (subtaskName == "Håndforing" && manager.GetStep(subtaskName, "Kast mat til fisken").getRepNumber() < 2)
-        {
-            watch.addInstructions(feedback[subtaskName][1]);
-        }
+        // else if (subtaskName == "Håndforing" && manager.GetStep(subtaskName, "Kast mat til fisken").getRepNumber() < 2)
+        // {
+        //     watch.addInstructions(feedback[subtaskName][1]);
+        // }
         else if (subtaskName == "Reparer tau på merd" && !manager.GetStep("Runde På Ring", subtaskName).IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
