@@ -26,12 +26,12 @@ public class FishSortingTrigger : MonoBehaviour
             // check if fish has been given correct tier
             if (fish.tag == FishSortingButton.fishSortingButton.currentFishTier.ToString())
             {
-                Debug.Log("Correct");
+                GameManager.instance.PlaySound("correct");
                 score++;
             } 
             else 
             {
-                Debug.Log("Wrong");
+                GameManager.instance.PlaySound("incorrect");
                 score--;
             }
             // swich case to ensure the right trigger opens the right door

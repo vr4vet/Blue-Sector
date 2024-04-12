@@ -52,7 +52,7 @@ public class FactoryFishSpawner : MonoBehaviour
 
     [SerializeField]
     [Tooltip("If toggled, the fish will spawn with the different sizes")]
-    private bool fishTier;
+    private bool toggleFishTier;
 
     // Start is called before the first frame update
     void Start()
@@ -121,7 +121,7 @@ public class FactoryFishSpawner : MonoBehaviour
                 );
             }
 
-            if (fishTier)
+            if (toggleFishTier)
             {
                 int randomValue = Random.Range(1, randomFishStateChance + 1);
                 if (randomValue == 1)
