@@ -679,6 +679,9 @@ namespace BNG
                 // Apply Teleport before offset is applied
                 controller.transform.position = playerDestination;
 
+                // Inform PlayerController of teleport
+                playerController.updateLastTeleportDestination(playerDestination);
+
                 // Apply offset
                 controller.transform.localPosition -= new Vector3(0, yOffset, 0);
 
