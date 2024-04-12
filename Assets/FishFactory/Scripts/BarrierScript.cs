@@ -14,7 +14,6 @@ public class BarrierScript : MonoBehaviour
         toggleBarrier();
     }
 
-    // Update is called once per frame
     public void toggleBarrier()
     {
         if (isActive)
