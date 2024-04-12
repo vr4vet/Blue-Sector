@@ -17,6 +17,8 @@ public class MaintenanceManager : MonoBehaviour
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
     public UnityEvent<Task.Step?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
+    public UnityEvent TaskCompleted { get; } = new();
+
 
     // Start is called before the first frame update
     private void Awake()
@@ -73,7 +75,10 @@ public class MaintenanceManager : MonoBehaviour
         if (sub.Compleated())
         {
             SubtaskChanged.Invoke(sub);
-            // SkillCompleted.Invoke(skill);
+            if(task.Compleated()){
+            TaskCompleted.Invoke();
+            }
+           
         }
     }
 

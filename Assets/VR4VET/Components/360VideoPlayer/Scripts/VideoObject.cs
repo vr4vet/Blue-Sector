@@ -29,7 +29,7 @@ public class VideoObject : MonoBehaviour
     {
         hintText = GetComponentInChildren<TextMesh>();
         videoPlayer = VideoManager.videoManager.videoPlayer;
-        hintText.transform.SetParent(null);
+        // hintText.transform.SetParent(null);
         OriginalRotation = transform.rotation;
         OriginalPosition = transform.position;
         //  XRGI = GetComponent<XRGrabInteractable>();

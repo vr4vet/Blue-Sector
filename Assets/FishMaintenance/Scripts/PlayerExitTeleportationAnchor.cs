@@ -6,6 +6,8 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 {
     public GameObject cylinder;
     public GameObject cylinderGlow;
+    public GameObject equipmentArrow;
+    public GameObject cageArrows;
     [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private string subTask;
     [SerializeField] private string step;
@@ -36,6 +38,14 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         {
             floatingToast.SetActive(true);
             subtaskComplete = true;
+            if (equipmentArrow)
+            {
+                equipmentArrow.SetActive(false);
+            }
+            if (cageArrows)
+            {
+                cageArrows.SetActive(true);
+            }
         };
     }
 
