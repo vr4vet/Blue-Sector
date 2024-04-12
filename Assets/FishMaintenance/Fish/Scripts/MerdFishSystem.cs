@@ -22,7 +22,7 @@ public class MerdFishSystem : MonoBehaviour
 
         for (int i = 0; i < amountOfFish; i++)
         {
-            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y - (height / 2), position.y + (height / 2)), Random.Range(position.z - radius + 3, position.z + radius - 3)), fish.transform.rotation);
+            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), position.y - (height / 2)*2f, Random.Range(position.z - radius + 3, position.z + radius - 3)), fish.transform.rotation);
             newFish.GetComponent<MerdFish>().FishSystem = this.gameObject;
             newFish.transform.parent = gameObject.transform;
         }

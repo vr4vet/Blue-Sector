@@ -105,9 +105,10 @@ public class FeedbackManager : MonoBehaviour
         {
             watch.addInstructions(feedback[subtaskName][1]);
         }
-        if (subtaskName != "Håndforing")
+        if (subtaskName != "Håndforing" && subtaskName != "Hent Utstyr")
         {
-            manager.BadgeChanged.Invoke(manager.GetStep("Runde På Ring", subtaskName));
+            Task.Step badgeStep=manager.GetStep("Runde På Ring", subtaskName);
+            if(badgeStep.IsCompeleted()) manager.BadgeChanged.Invoke(badgeStep);
         }
     }
 

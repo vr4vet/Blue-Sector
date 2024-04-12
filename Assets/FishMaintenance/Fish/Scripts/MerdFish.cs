@@ -130,7 +130,7 @@ public class MerdFish : MonoBehaviour
     }
 
     // functions for checking if fish is too high or low (outside boundaries)
-    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.2f;
+    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.3f;
     bool IsAtBottom() => gameObject.transform.position.y <= bottom + 0.5f;
 
     // check if fish has reached its destination when swimming downwards when full
@@ -168,7 +168,7 @@ public class MerdFish : MonoBehaviour
         {
             movement = new Vector3(direction.x, -swimSpeedVertical, direction.z);
         }
-        else if (IsAtSurface())
+        if (IsAtSurface())
         {
             direction.y = -swimSpeedVertical;
         }
