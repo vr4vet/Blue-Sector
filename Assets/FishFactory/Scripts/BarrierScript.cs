@@ -13,15 +13,12 @@ public class BarrierScript : MonoBehaviour
     {
         if (isActive)
         {
-            // Rotate back to original position at a certain speed
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, 0), speed * Time.deltaTime);
-            isActive = false;
         }
         else
         {
-            // Rotate 45 degrees at a certain speed
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 45, 0), speed * Time.deltaTime);
-            isActive = true;
         }
+        isActive = !isActive;
     }
 }
