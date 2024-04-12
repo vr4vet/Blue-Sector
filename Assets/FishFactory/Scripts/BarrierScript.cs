@@ -6,19 +6,41 @@ public class BarrierScript : MonoBehaviour
 {
      //when active the barrier will block the fish from moving forward and guide it to the correct path
     private bool isActive = false;
-    private float speed = 45f;
+    private float speed = 20f;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        toggleBarrier();
+    }
 
     // Update is called once per frame
     public void toggleBarrier()
     {
         if (isActive)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, 0), speed * Time.deltaTime);
+            StartCoroutine(RotateTo(0, speed));
+            // transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, 0), speed * Time.deltaTime);
         }
         else
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 45, 0), speed * Time.deltaTime);
+            StartCoroutine(RotateTo(45, speed));
+            // transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 45, 0), speed * Time.deltaTime);
         }
         isActive = !isActive;
+    }
+
+    IEnumerator RotateTo(float targetRotation, float speed)
+    {
+        Quaternion from = transform.rotation;
+        Quaternion to = Quaternion.Euler(0, targetRotation, 0);
+        float elapsed = 0.0f;
+
+        while (elapsed < 1.0f)
+        {
+            elapsed += Time.deltaTime * speed;
+            transform.rotation = Quaternion.Slerp(from, to, elapsed);
+            yield return null;
+        }
     }
 }
