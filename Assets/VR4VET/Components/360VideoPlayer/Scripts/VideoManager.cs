@@ -16,6 +16,7 @@ public class VideoManager : MonoBehaviour
     private Camera VRCamera;
 
    [HideInInspector] public VideoPlayer videoPlayer;
+    [SerializeField] private MaintenanceManager mm;
 
 
     /// <summary>
@@ -76,6 +77,7 @@ public class VideoManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         StopVideo();
+        mm.BadgeChanged.Invoke(mm.GetStep("Håndforing", "Kast mat til fisken"));
     }
 
 

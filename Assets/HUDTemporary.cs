@@ -6,6 +6,7 @@ public class HUDTemporary : MonoBehaviour
 {
     [SerializeField] private MaintenanceManager manager;
     [SerializeField] private GameObject confettiGroup;
+    [SerializeField] private AudioClip finished;
     private float animationDuration = 8f;
     private float speed = 3f; // Adjust this to control the float speed
     private float floatStrength = 0.02f; // Adjust this to control the float range
@@ -21,12 +22,18 @@ public class HUDTemporary : MonoBehaviour
 
     public void EnableToast()
     {
+        StartCoroutine(DelayAnimation());
+    }
+
+    private System.Collections.IEnumerator DelayAnimation()
+    {
+        yield return new WaitForSeconds(5f);
+        PlayAudio(finished);
         if (!isFloating) StartConfetti();
         StartCoroutine(FadeAnimation());
         isFloating = true;
-
-
     }
+
     private void StartConfetti()
     {
 confettiGroup.SetActive(true);
@@ -68,6 +75,21 @@ confettiGroup.SetActive(true);
 
 
 
+    }
+
+    public void PlayAudio(AudioClip audio)
+    {
+        //if the gameobject has audiosource
+        if (TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            audioSource.Stop();
+            audioSource.PlayOneShot(audio);
+            return;
+        }
+
+        //otherwise create audiosource
+        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
+        newAudioSource.PlayOneShot(audio);
     }
 
 

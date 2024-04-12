@@ -75,10 +75,11 @@ public class MaintenanceManager : MonoBehaviour
         if (sub.Compleated())
         {
             SubtaskChanged.Invoke(sub);
-            if(task.Compleated()){
-            TaskCompleted.Invoke();
+            if (task.Compleated())
+            {
+                TaskCompleted.Invoke();
             }
-           
+
         }
     }
 

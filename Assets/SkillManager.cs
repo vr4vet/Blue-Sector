@@ -49,6 +49,10 @@ public class SkillManager : MonoBehaviour
         {
             CuriousBadge();
         }
+        else if (step.StepName == "Kast mat til fisken")
+        {
+            VideoBadge();
+        }
 
 
     }
@@ -88,5 +92,9 @@ public class SkillManager : MonoBehaviour
     {
         CompleteBadge("Tilpasningsdyktig", "Lynet");
 
+    }
+    public void VideoBadge()
+    {
+        CompleteBadge("Problemløsning", "Skarpsyn");
     }
 }
