@@ -10,6 +10,8 @@ public class ConveyorController : MonoBehaviour
         Backward,
         Right,
         Left,
+        Up,
+        Down
     }
 
     // test with serializedfield //FIXME: remove
@@ -49,25 +51,35 @@ public class ConveyorController : MonoBehaviour
         switch (direction) // Transforming enum to vector3
         {
             case Direction.Forward:
-            {
-                _direction = gameObject.transform.forward;
-                break;
-            }
+                {
+                    _direction = gameObject.transform.forward;
+                    break;
+                }
             case Direction.Right:
-            {
-                _direction = gameObject.transform.right;
-                break;
-            }
+                {
+                    _direction = gameObject.transform.right;
+                    break;
+                }
             case Direction.Backward:
-            {
-                _direction = -gameObject.transform.forward;
-                break;
-            }
+                {
+                    _direction = -gameObject.transform.forward;
+                    break;
+                }
             case Direction.Left:
-            {
-                _direction = -gameObject.transform.right;
-                break;
-            }
+                {
+                    _direction = -gameObject.transform.right;
+                    break;
+                }
+            case Direction.Up:
+                {
+                    _direction = gameObject.transform.up;
+                    break;
+                }
+            case Direction.Down:
+                {
+                    _direction = -gameObject.transform.up;
+                    break;
+                }
         }
     }
 
