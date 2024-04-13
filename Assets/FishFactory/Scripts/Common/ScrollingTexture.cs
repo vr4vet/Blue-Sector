@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScrollingTexture : MonoBehaviour {
+public class ScrollingTexture : MonoBehaviour
+{
 
     public float scrollSpeed = 0.1F;
     public Renderer rend;
@@ -17,7 +18,7 @@ public class ScrollingTexture : MonoBehaviour {
         if (belt.IsBeltOn)
         {
             float offset = Time.time * scrollSpeed;
-            rend.material.SetTextureOffset("_BaseMap", new Vector2(offset, 0));
+            rend.material.SetTextureOffset("_MainTex", new Vector2(offset, 0));
         }
     }
 }
