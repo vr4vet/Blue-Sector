@@ -5,7 +5,8 @@ using UnityEngine;
 public class ScrollingTexture : MonoBehaviour
 {
 
-    public float scrollSpeed = 0.1F;
+    public float scrollSpeedX = 0.1F;
+    public float scrollSpeedY = 0F;
     public Renderer rend;
     public ConveyorController belt;
     void Start()
@@ -17,8 +18,9 @@ public class ScrollingTexture : MonoBehaviour
         // Rotates the texture, making it seem like the object is moving
         if (belt.IsBeltOn)
         {
-            float offset = Time.time * scrollSpeed;
-            rend.material.SetTextureOffset("_MainTex", new Vector2(offset, 0));
+            float offsetX = Time.time * scrollSpeedX;
+            float offsetY = Time.time * scrollSpeedY;
+            rend.material.SetTextureOffset("_MainTex", new Vector2(offsetX, offsetY));
         }
     }
 }
