@@ -7498,6 +7498,44 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.9968213, z: 1}
   m_Center: {x: 0, y: -0.001588738, z: 0}
+--- !u!23 &838512083 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8066650673604909827, guid: 2071ffc7ec7f14411bdc3080003df18f,
+    type: 3}
+  m_PrefabInstance: {fileID: 838512079}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &838512084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838512081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f47e24a3a139741b9f349556b8d913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollSpeed: 0.08
+  rend: {fileID: 838512083}
+  belt: {fileID: 838512085}
+--- !u!114 &838512085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838512081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 1412606985}
+  isBeltOn: 1
+  acceleration: 30
+  maxSpeed: 0.5
+  direction: 3
 --- !u!1 &859714815
 GameObject:
   m_ObjectHideFlags: 0
@@ -21549,6 +21587,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1409035350}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1412606985 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5175200028539421316, guid: bf00b0ab64967b749a29ac9e127969d7,
+    type: 3}
+  m_PrefabInstance: {fileID: 36728966}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936bbc7d23ee67c4c8469b30b3c11194, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1419134968
 GameObject:
   m_ObjectHideFlags: 0
