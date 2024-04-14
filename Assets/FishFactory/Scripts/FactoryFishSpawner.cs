@@ -50,6 +50,10 @@ public class FactoryFishSpawner : MonoBehaviour
     [Tooltip("If toggled, the fish will spawn with the different sizes")]
     private bool fishSizeVariation;
 
+    [SerializeField]
+    [Tooltip("If toggled, the fish will spawn with the different sizes")]
+    private bool toggleFishTier;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -116,6 +120,23 @@ public class FactoryFishSpawner : MonoBehaviour
                     randomSize
                 );
             }
+
+            if (toggleFishTier)
+            {
+                int randomValue = Random.Range(1, randomFishStateChance + 1);
+                if (randomValue == 1)
+                {
+                    childGameObject.tag = "Tier1";
+                }
+                else if (randomValue <= 3)
+                {
+                    childGameObject.tag = "Tier2";
+                }
+                else
+                {
+                    childGameObject.tag = "Tier3";
+                }
+            }
         }
 
         StartCoroutine(SpawnFish());
@@ -150,7 +171,6 @@ public class FactoryFishSpawner : MonoBehaviour
         {
             state = FactoryFishState.State.Stunned;
         }
-
         return state;
     }
 }
