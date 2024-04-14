@@ -9,18 +9,11 @@ public class SceneController : MonoBehaviour
     [SerializeField]
     private string sceneName;
 
-    [SerializeField]
-    [Tooltip("GameObjects that will trigger the scene change")]
-    private List<Collider> triggers;
-
     private void OnTriggerEnter(Collider collisionObject)
     {
-        foreach (Collider obj in triggers)
+        if (collisionObject.gameObject.name == "Grabber")
         {
-            if (obj == collisionObject)
-            {
-                ChangeScene(sceneName);
-            }
+            ChangeScene(sceneName);
         }
     }
 
