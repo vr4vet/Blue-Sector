@@ -35,7 +35,7 @@ public class WaterHit : MonoBehaviour
             {
                 PlayAudio();
                 Vector3 targetPos = new Vector3(transform.position.x, -1f, transform.position.z);
-                merdFishSystem.SetTargetPos(targetPos);
+                merdFishSystem.GenerateFish(targetPos);
             }
         }
     }

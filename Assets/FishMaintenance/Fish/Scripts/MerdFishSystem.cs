@@ -20,29 +20,19 @@ public class MerdFishSystem : MonoBehaviour
     {
         position = gameObject.transform.position;
 
-        for (int i = 0; i < amountOfFish; i++)
-        {
-            GameObject newFish = Instantiate(fish, new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), position.y - (height / 2)*2f, Random.Range(position.z - radius + 3, position.z + radius - 3)), fish.transform.rotation);
-            newFish.GetComponent<MerdFish>().FishSystem = this.gameObject;
-            newFish.transform.parent = gameObject.transform;
-        }
+
     }
 
-    public void SetTargetPos(Vector3 targetPos)
+    public void GenerateFish(Vector3 targetPos)
     {
         for (int i = 0; i < 3; i++)
         {
-            // Find random fish to move
-            int childNo = Mathf.RoundToInt(Random.Range(0, amountOfFish - 1));
-            MerdFish merdFish = transform.GetChild(childNo).GetComponent<MerdFish>();
-            merdFish.SetTarget(targetPos);
-
+            Vector3 rotationVector = new Vector3(0f, 45f, 0f);
+            GameObject newFish = Instantiate(fish, new Vector3(targetPos.x + Random.Range(-0.5f, 0.5f), targetPos.y, targetPos.z + Random.Range(-0.5f, 0.5f)), Quaternion.Euler(rotationVector));
+            newFish.GetComponent<MerdFish>().FishSystem = this.gameObject;
+            newFish.transform.parent = gameObject.transform;
+            Destroy(newFish, 15f); // fish dies after this many seconds
         }
     }
 
-
-    public Vector3 JumpTargetPosition()
-    {
-        return new Vector3(Random.Range(position.x - radius + 3, position.x + radius - 3), Random.Range(position.y + 1f, 10f), Random.Range(position.z - radius + 3, position.z + radius - 3));
-    }
 }

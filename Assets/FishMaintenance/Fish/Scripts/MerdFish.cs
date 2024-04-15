@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,22 +10,24 @@ public class MerdFish : MonoBehaviour
     private Vector3 direction;
     private Vector3 movement;
     private float radiusSquared;
-    private float top;
-    private float bottom;
+    private float top = 0f;
+    private float bottom = -3f;
     private bool dead = false;
 
-    private float swimSpeedVertical = 0.5f;
-    private float swimSpeedHorizontal = 1f;
+    private float swimSpeedVertical = 1f;
+    private float swimSpeedHorizontal = 0.8f;
     private Animation fishAnimation;
     private GameObject fishSystem;
     private Vector3 fishSystemPosition;
     private MerdFishSystem fishSystemScript;
     private bool jumpingFish = false;
     public GameObject FishSystem { get => fishSystem; set => fishSystem = value; }
-    public bool JumpingFish { get => jumpingFish; set => jumpingFish = value; }
+
     // Start is called before the first frame update
     void Start()
     {
+
+
         // if (Random.Range(-0.3f, 1f) < 0)
         // {
         //     jumpingFish = true;
@@ -32,8 +35,7 @@ public class MerdFish : MonoBehaviour
         // }
         // unique seed per fish for rng, and invoke PeriodicUpdates() with random offset
         Random.InitState(GetInstanceID());
-        InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 5.0f), 3.0f);
-
+        InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 3.0f), 3.0f);
         // get properties of parent fish cage
         fishSystem = gameObject.transform.parent.gameObject;
         fishSystemPosition = fishSystem.transform.position;
@@ -41,9 +43,9 @@ public class MerdFish : MonoBehaviour
         fishAnimation = gameObject.transform.GetChild(0).GetComponent<Animation>();
         fishPosition = transform.position;
         radiusSquared = fishSystemScript.Radius * fishSystemScript.Radius;
-        top = (fishSystem.transform.position.y);  // top of merd/water surface
         // targetPos = fishSystemScript.JumpTargetPosition();
-        bottom = (fishSystem.transform.position.y - (fishSystemScript.Height / 2)); // bottom of merd
+
+
 
     }
 
@@ -52,46 +54,12 @@ public class MerdFish : MonoBehaviour
      * move about until it has returned safely
     */
 
+
     private bool waitingForReturn = false;
 
     // Update is called once per frame
     void Update()
     {
-
-
-        //     reachedPoint = Vector3.Distance(targetPos, transform.position) == 0;
-        //     Vector3 posOffset = new Vector3(0, 0, 0);
-        //     posOffset = new Vector3(targetPos.x, targetPos.y + 6f, targetPos.z);
-        //     var rotation = Quaternion.LookRotation(posOffset - transform.position);
-        //     transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
-
-
-        //     if (!reachedPoint)
-        //     {
-        //         transform.position = new Vector3(targetPos.x, -targetPos.y + 3f, targetPos.z);
-        //         if (readytoTurn)
-        //         {
-        //             Invoke("FallSpeed", 0.2f);
-        //             targetPos = fishPosition;
-        //             reachedPoint = true;
-        //             readytoTurn = false;
-        //         }
-        //         // if (target)
-        //         // {
-        //         //     float dist = ;
-        //         // }
-
-        //     }
-        //     else
-        //     {
-        //         transform.position += transform.forward * moveSpeed * Time.deltaTime;
-        //         readytoTurn = true;
-        //     }
-        // }
-        // void FallSpeed()
-        // {
-        //     moveSpeed *= 3;
-        // }
 
 
         fishPosition = gameObject.transform.position;
@@ -111,7 +79,7 @@ public class MerdFish : MonoBehaviour
         }
 
         // move fish using the current movement vector, both when dead or living, as the fish should sink until hitting the bottom.
-        if (!dead || fishPosition.y > bottom)
+        if (fishPosition.y > bottom)
         {
             transform.position = fishPosition + movement * Time.deltaTime;
         }
@@ -130,7 +98,7 @@ public class MerdFish : MonoBehaviour
     }
 
     // functions for checking if fish is too high or low (outside boundaries)
-    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.3f;
+    bool IsAtSurface() => gameObject.transform.position.y >= top - 0.4f;
     bool IsAtBottom() => gameObject.transform.position.y <= bottom + 0.5f;
 
     // check if fish has reached its destination when swimming downwards when full
@@ -146,7 +114,7 @@ public class MerdFish : MonoBehaviour
         }
 
         // if the upwards/downwards direction is steeper than rotationLimit (fish is angled too vertically), set to limit.
-        const float rotationLimit = 0.3f;
+        const float rotationLimit = 0.5f;
         lookRotation.y = Mathf.Clamp(lookRotation.y, -rotationLimit, rotationLimit);
 
         // perform the actual rotation
@@ -161,85 +129,44 @@ public class MerdFish : MonoBehaviour
      */
     void PeriodicUpdates()
     {
-        transform.position += transform.forward * 3f * Time.deltaTime;
-        fishPosition = transform.position;
+        fishPosition = gameObject.transform.position;
+        float posY = fishPosition.y;
 
-        if (IsColliding(fishPosition) || (dead && !IsAtBottom()))
-        {
-            movement = new Vector3(direction.x, -swimSpeedVertical, direction.z);
-        }
+
+
+        // no modifications to movement if returning from outside boundaries or still swimming downwards after eating
+        if (IsColliding(fishPosition)) return;
+
+
         if (IsAtSurface())
         {
+
             direction.y = -swimSpeedVertical;
         }
         else if (IsAtBottom())
         {
             direction.y = swimSpeedVertical;
-        }
 
-
-        // else if (fishPosition.y > top && jumpingFish)
-        // {
-        //     direction.y = -2f * swimSpeedVertical;
-        //     direction.x = -direction.x;
-        //     direction.z = -direction.x;
-        // }
-        else if (fishPosition.y <= top)
-        {
-            direction.y = swimSpeedVertical;
-            float horizontalSpeed = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
-            direction.x = horizontalSpeed;
-            direction.z = Mathf.Sign(horizontalSpeed) * (1 - Mathf.Abs(horizontalSpeed));
-            direction.z *= Random.Range(0.0f, 1.0f) < 0.5f ? -1 : 1;
         }
         else
         {
-            direction.y = Random.Range(-0.1f, 0.1f);
+            direction.y = Random.Range(-0.1f, 0.2f);
         }
 
 
-        RotateFish();
+
+        // new random direction horisontally
+        direction.x = Random.Range(-swimSpeedHorizontal, swimSpeedHorizontal);
+        direction.z = direction.x < 0 ? 1 + direction.x : 1 - direction.x;  //  x + z should be equal to 1 or -1 always, to ensure consistent swimming speed
+        direction.z = Random.Range(0.0f, 1.0f) < 0.5 ? direction.z * -1 : direction.z; // randomly make negative to prevent repetitive patterns  
+        RotateFish(); // Rotates the fish in the right direction
+
     }
 
-    public void SetTarget(Vector3 targetPos)
-    {
-        transform.position = targetPos;
-
-        jumpingFish = false;
-
-        RotateFish();
-    }
 
     // public function allowing fish system to kill starving fish
-    public void Kill()
-    {
-        dead = true;
-        fishAnimation.Stop();
-    }
-
-    // public function allowing fish system to kill starving fish
-    public void Revive()
-    {
-        dead = false;
-        fishAnimation.Play();
-        float posY = Random.Range(bottom + 1, top - 1);
-        transform.position = new Vector3(transform.position.x, posY, transform.position.z);
-    }
 
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("water"))
-        {
 
-        }
-    }
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("water"))
-        {
-            // Instantiate(SplashOut)
-        }
-    }
 
 }

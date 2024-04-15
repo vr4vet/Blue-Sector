@@ -56,7 +56,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
             cylinder.SetActive(false);
             cylinderGlow.SetActive(false);
-            boxCollider.size = new Vector3(1.55380726f, 2.72183228f, 2.2479949f);
+            boxCollider.size = new Vector3(1f, 3f, 1f);
         }
     }
     public void OnTriggerExit(Collider other)
