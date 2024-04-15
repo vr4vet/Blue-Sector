@@ -45,7 +45,7 @@ public class SkillManager : MonoBehaviour
             LightningBadge();
             if (step.IsCompeleted()) { StepwiseBadge(step.getStepNumber()); }
         }
-        else if (step.StepName == "Snakk med Marianne" && !step.IsCompeleted())
+        else if (step.StepName == "Snakk med Laila" && !step.IsCompeleted())
         {
             CuriousBadge();
         }

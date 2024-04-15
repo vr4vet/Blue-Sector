@@ -109,7 +109,7 @@ public class DialogueBoxController : MonoBehaviour
     //     {
     //         if (dialogueTree.sections[section].dialogue[0] == "Okei, la oss sette i gang!")
     //         {
-    //             manager.CompleteStep("Pause", "Snakk med Marianne");
+    //             manager.CompleteStep("Pause", "Snakk med Laila");
     //             manager.PlaySuccess();
     //         }
     //         _dialogueText.text = dialogueTree.sections[section].dialogue[i];
@@ -148,7 +148,7 @@ public class DialogueBoxController : MonoBehaviour
         {
             if (dialogueTree.sections[section].dialogue[0] == "Okei, la oss sette i gang!")
             {
-                manager.CompleteStep("Pause", "Snakk med Marianne");
+                manager.CompleteStep("Pause", "Snakk med Laila");
                 // manager.PlaySuccess();
             }
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];

@@ -28,7 +28,7 @@ public class BreakTask : MonoBehaviour
     void Update()
     {
         ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
-        Task.Step breakStep = mm.GetStep("Pause", "Snakk med Marianne");
+        Task.Step breakStep = mm.GetStep("Pause", "Snakk med Laila");
         if (mm.stepCount > 3 && !conversationController.isDialogueActive())
         {
 

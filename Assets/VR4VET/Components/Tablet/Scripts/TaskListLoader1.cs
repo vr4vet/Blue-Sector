@@ -343,10 +343,10 @@ namespace Tablet
             foreach (Task.Subtask sub in task.Subtasks)
             {
 
-                if (sub.SubtaskName == "Pause")
-                {
-                    continue;
-                }
+                // if (sub.SubtaskName == "Pause")
+                // {
+                //     continue;
+                // }
                 //task for the list
                 GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
                 item.transform.SetParent(TaskSubtaskContent.transform);

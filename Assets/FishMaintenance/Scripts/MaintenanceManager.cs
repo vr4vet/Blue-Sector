@@ -9,6 +9,7 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     [SerializeField] private AudioClip success;
     [SerializeField] private AudioClip equipmentPickup;
+    private bool twentySeconds = false;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
     private Task.Task task;
@@ -33,6 +34,12 @@ public class MaintenanceManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void lynetEnabled(bool passed)
+    {
+        twentySeconds = passed;
+    }
+
     void Start()
     {
         feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
@@ -70,7 +77,11 @@ public class MaintenanceManager : MonoBehaviour
             PlayAudio(success);
             stepCount += 1;
             feedbackManager.emptyInstructions();
-            BadgeChanged.Invoke(step);
+            if (subtaskName == "Runde På Ring" && twentySeconds)
+            {
+                Task.Step badgeStep = GetStep("Runde På Ring", stepName);
+                BadgeChanged.Invoke(badgeStep);
+            }
         }
         if (sub.Compleated())
         {
