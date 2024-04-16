@@ -63,7 +63,7 @@ MonoBehaviour:
       in use it should be placed back into your pocket.
     - When handling the knife, you need to wear a steel glove on your most exposed
       hand and a protective glove on the other.
-    - Remember always cut away from you and never towards anyone else. All the knifes
+    - Remember always cut away from you and never towards anyone else. All the knives
       will be collected at the end of the day.
     endAfterDialogue: 0
     branchPoint:
@@ -76,10 +76,10 @@ MonoBehaviour:
   - dialogue:
     - The fish on the conveyor belt is stunned and feel no pain. If a fish shows
       signs of conciousness, this fish needs to be stunned before it is cut and bled.
-    - You can reognize concious fish by their movement
+    - You can recognize concious fish by their movement
     - You will find a stunning machine beside the station where you stand. Insert
-      live fish into the machine, and the fish will be stunned. After that, the fish
-      is ready to be cut.
+      live fish into the machine with their head first, and the fish will be stunned.
+      After that, the fish is ready to be cut.
     - Sometimes fish that is not eligble for human consumption can come down the
       conveyor belt. This unedible fish should be thrown in the tub next to you.
     endAfterDialogue: 0
@@ -94,9 +94,9 @@ MonoBehaviour:
   - dialogue:
     - Make sure you cut only the gills. The cut should not go to deep into the fish.
     - You will be graded based on how accurate you cut the fish, along with whether
-      that fish is stunned or alive when you cut it. And remember, dead fish should
+      that fish is stunned or alive when you cut it. And remember, bad fish should
       be discarded!
-    - All fish that are not dead must be cut before it moves to the next station!
+    - All fish must be cut before it moves to the next station!
     endAfterDialogue: 0
     branchPoint:
       question: Do you understand?
@@ -113,10 +113,11 @@ MonoBehaviour:
       answers:
       - answerLabel: I want to hear everything again
         nextElement: 0
-      - answerLabel: I understand
+      - answerLabel: I got it!
         nextElement: 8
   - dialogue:
-    - Good bye!
+    - Alright! I'll be right here if you have any more questions. I wish you good
+      luck! Good bye!
     endAfterDialogue: 1
     branchPoint:
       question: Good bye!
