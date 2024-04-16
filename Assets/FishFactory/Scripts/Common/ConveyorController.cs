@@ -6,10 +6,12 @@ public class ConveyorController : MonoBehaviour
 {
     private enum Direction
     {
-        Forward,
-        Backward,
-        Right,
-        Left,
+        Forward_BlueI,
+        Backward_BlueD,
+        Right_RedI,
+        Left_RedD,
+        Up_GreenI,
+        Down_GreenD
     }
 
     // test with serializedfield //FIXME: remove
@@ -37,7 +39,7 @@ public class ConveyorController : MonoBehaviour
 
     [SerializeField]
     [Tooltip("For selecting movement direction. Using the direction of the belt object.")]
-    private Direction direction = Direction.Forward;
+    private Direction direction = Direction.Forward_BlueI;
 
     // Private variables
     private Vector3 _direction;
@@ -48,26 +50,36 @@ public class ConveyorController : MonoBehaviour
 
         switch (direction) // Transforming enum to vector3
         {
-            case Direction.Forward:
-            {
-                _direction = gameObject.transform.forward;
-                break;
-            }
-            case Direction.Right:
-            {
-                _direction = gameObject.transform.right;
-                break;
-            }
-            case Direction.Backward:
-            {
-                _direction = -gameObject.transform.forward;
-                break;
-            }
-            case Direction.Left:
-            {
-                _direction = -gameObject.transform.right;
-                break;
-            }
+            case Direction.Forward_BlueI:
+                {
+                    _direction = gameObject.transform.forward;
+                    break;
+                }
+            case Direction.Right_RedI:
+                {
+                    _direction = gameObject.transform.right;
+                    break;
+                }
+            case Direction.Backward_BlueD:
+                {
+                    _direction = -gameObject.transform.forward;
+                    break;
+                }
+            case Direction.Left_RedD:
+                {
+                    _direction = -gameObject.transform.right;
+                    break;
+                }
+            case Direction.Up_GreenI:
+                {
+                    _direction = gameObject.transform.up;
+                    break;
+                }
+            case Direction.Down_GreenD:
+                {
+                    _direction = -gameObject.transform.up;
+                    break;
+                }
         }
     }
 
