@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -115,10 +116,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    [Tooltip("Whether the task is currently active. Task is off when entering a new location.")]
     private bool isTaskOn = true;
     public bool IsTaskOn
     {
         get { return isTaskOn; }
+        set { isTaskOn = value; } //TODO: Remove?
     }
 
     private int score = 0;
@@ -138,13 +142,14 @@ public class GameManager : MonoBehaviour
 
         // Makes the GameManager object persist between scenes
         DontDestroyOnLoad(gameObject);
+
+        IsTaskOn = false;
     }
 
     void Update()
     {
         //FIXME: Currently the only way to view score, should be removed at a later stage
         Debug.Log("score " + score);
-        Debug.Log(hseRoomCompleted ? "HSE Room Completed" : "HSE Room Incomplete");
 
         // If the game objects are not set, find them in the current scene
         //TODO: The objects are not searchable at the at the loading of the scene, so this is a workaround

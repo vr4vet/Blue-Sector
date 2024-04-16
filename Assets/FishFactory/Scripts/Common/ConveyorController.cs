@@ -14,10 +14,6 @@ public class ConveyorController : MonoBehaviour
         Down_GreenD
     }
 
-    // test with serializedfield //FIXME: remove
-    [SerializeField]
-    private GameManager gameManager;
-
     // Editor fields
     [SerializeField]
     private bool isBeltOn = true;
@@ -46,46 +42,44 @@ public class ConveyorController : MonoBehaviour
 
     void Start()
     {
-        gameManager = GameManager.instance;
-
         switch (direction) // Transforming enum to vector3
         {
             case Direction.Forward_BlueI:
-                {
-                    _direction = gameObject.transform.forward;
-                    break;
-                }
+            {
+                _direction = gameObject.transform.forward;
+                break;
+            }
             case Direction.Right_RedI:
-                {
-                    _direction = gameObject.transform.right;
-                    break;
-                }
+            {
+                _direction = gameObject.transform.right;
+                break;
+            }
             case Direction.Backward_BlueD:
-                {
-                    _direction = -gameObject.transform.forward;
-                    break;
-                }
+            {
+                _direction = -gameObject.transform.forward;
+                break;
+            }
             case Direction.Left_RedD:
-                {
-                    _direction = -gameObject.transform.right;
-                    break;
-                }
+            {
+                _direction = -gameObject.transform.right;
+                break;
+            }
             case Direction.Up_GreenI:
-                {
-                    _direction = gameObject.transform.up;
-                    break;
-                }
+            {
+                _direction = gameObject.transform.up;
+                break;
+            }
             case Direction.Down_GreenD:
-                {
-                    _direction = -gameObject.transform.up;
-                    break;
-                }
+            {
+                _direction = -gameObject.transform.up;
+                break;
+            }
         }
     }
 
     void Update()
     {
-        isBeltOn = gameManager.IsTaskOn;
+        isBeltOn = GameManager.instance.IsTaskOn;
     }
 
     private void OnCollisionStay(Collision collision)

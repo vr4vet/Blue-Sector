@@ -15,7 +15,7 @@ public class FactoryFishSpawner : MonoBehaviour
     private GameObject fishPrefab;
 
     [SerializeField]
-    [Tooltip("The maximum amount of fish that can be spawned")]
+    [Tooltip("The maximum amount of fish that can be spawned by this spawner")]
     private int maxAmountOfFish;
 
     [SerializeField]
@@ -86,6 +86,7 @@ public class FactoryFishSpawner : MonoBehaviour
 
         // Checks the amount of spawned gameobjects in the simulation
         currentAmountOfFish = transform.childCount;
+        Debug.Log(gameObject.name + " Amount of fish: " + currentAmountOfFish);
     }
 
     private IEnumerator SpawnFish()

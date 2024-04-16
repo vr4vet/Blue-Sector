@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1512,7 +1512,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -1627,7 +1626,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -2079,7 +2077,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145500829}
   m_LocalRotation: {x: -0, y: 0.69268066, z: -0, w: 0.72124445}
-  m_LocalPosition: {x: 0.3524, y: 0.0332, z: 0.3531}
+  m_LocalPosition: {x: 0.3524, y: 0.137, z: 0.3531}
   m_LocalScale: {x: 0.012848493, y: 0.02951312, z: 0.027036075}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2101,11 +2099,11 @@ MonoBehaviour:
   isSpawnerOn: 1
   fishPrefab: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
     type: 3}
-  maxAmountOfFish: 5
+  maxAmountOfFish: 7
   randomFishStateChance: 14
   fishAliveChance: 4
-  spawnRate: 3.81
-  varationInSpawnrate: 1.41
+  spawnRate: 8
+  varationInSpawnrate: 2
   fishSizeVariation: 1
   toggleFishTier: 0
 --- !u!1001 &150855736
@@ -2761,7 +2759,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 197634216}
   m_LocalRotation: {x: -0, y: 0.69268066, z: -0, w: 0.72124445}
-  m_LocalPosition: {x: -0.2572, y: 0.1948, z: 0.3007}
+  m_LocalPosition: {x: -0.2572, y: 0.2179, z: 0.3007}
   m_LocalScale: {x: 0.012848493, y: 0.02951312, z: 0.027036075}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2786,8 +2784,8 @@ MonoBehaviour:
   maxAmountOfFish: 5
   randomFishStateChance: 14
   fishAliveChance: 4
-  spawnRate: 3.81
-  varationInSpawnrate: 1.41
+  spawnRate: 8
+  varationInSpawnrate: 2
   fishSizeVariation: 1
   toggleFishTier: 0
 --- !u!1001 &200893554
@@ -3858,7 +3856,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1412606985}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -6646,7 +6644,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -6731,7 +6728,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -22032,7 +22028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -22543,7 +22538,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 951189547}
   m_LocalRotation: {x: -0, y: 0.69268066, z: -0, w: 0.72124445}
-  m_LocalPosition: {x: -0.043, y: 0.162, z: 0.285}
+  m_LocalPosition: {x: -0.043, y: 0.2274, z: 0.285}
   m_LocalScale: {x: 0.012848493, y: 0.02951312, z: 0.027036075}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -22568,8 +22563,8 @@ MonoBehaviour:
   maxAmountOfFish: 5
   randomFishStateChance: 14
   fishAliveChance: 4
-  spawnRate: 3.81
-  varationInSpawnrate: 1.41
+  spawnRate: 8
+  varationInSpawnrate: 2
   fishSizeVariation: 1
   toggleFishTier: 0
 --- !u!1001 &951503706
@@ -22790,7 +22785,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -22970,12 +22964,12 @@ PrefabInstance:
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.73
+      value: -0.686
       objectReference: {fileID: 0}
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
@@ -22985,7 +22979,7 @@ PrefabInstance:
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.109
+      value: 4.049
       objectReference: {fileID: 0}
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
@@ -23447,7 +23441,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -23865,7 +23858,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -24264,8 +24256,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 4.2338943}
+  m_Center: {x: 5.971048e-10, y: 0, z: 1.616942}
 --- !u!23 &1116407024
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -24324,8 +24316,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1116407021}
   m_LocalRotation: {x: -0, y: -0.005859316, z: -0, w: 0.99998283}
-  m_LocalPosition: {x: -4.4956, y: -0.1924, z: -5.645}
-  m_LocalScale: {x: 1.1738644, y: 1.1585302, z: 0.14427}
+  m_LocalPosition: {x: -4.4428, y: -0.2194, z: -5.6478}
+  m_LocalScale: {x: 0.5907655, y: 0.7246449, z: 0.1375126}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1386195888}
@@ -24368,7 +24360,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -24595,12 +24586,14 @@ VideoPlayer:
   m_DataSource: 0
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
   m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 1
@@ -25307,7 +25300,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -26342,7 +26334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -26459,7 +26450,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1412606985}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -27089,7 +27080,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -28147,7 +28137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -29130,7 +29119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -30392,7 +30380,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -31274,7 +31261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -31770,7 +31756,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -31823,7 +31808,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -31975,7 +31959,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -32488,7 +32471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -34899,7 +34881,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -35001,7 +34982,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -35579,7 +35559,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -36552,12 +36531,12 @@ PrefabInstance:
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.3610474
+      value: 0.404
       objectReference: {fileID: 0}
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
@@ -36567,7 +36546,7 @@ PrefabInstance:
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.9788256
+      value: 1.908
       objectReference: {fileID: 0}
     - target: {fileID: 2696021482383685469, guid: f8e1a3a34b8e4b0479e5cdf1b0310bf1,
         type: 3}
@@ -36897,7 +36876,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 20
   maxSpeed: 0.5
@@ -37642,7 +37620,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3
@@ -37889,7 +37866,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32358fca128a10444aa60462a95ccf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1412606985}
   isBeltOn: 1
   acceleration: 30
   maxSpeed: 0.3

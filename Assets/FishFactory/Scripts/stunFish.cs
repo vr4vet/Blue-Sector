@@ -27,5 +27,9 @@ public class stunFish : MonoBehaviour
             GameManager.instance.PlaySound("correct");
             nrFishStun++;
         }
+        else
+        {
+            GameManager.instance.PlaySound("incorrect");
+        }
     }
 }
