@@ -70,15 +70,13 @@ public class Game : MonoBehaviour
 
         tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<Tutorial>().ToList());
         modesClass.OnModeChanged += ModesClass_OnModeChanged;
+        modesClass.OnFinishedLoading += InitializeMode;
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
      * game hasn't started, start the game and the coroutine Timer and start scoring. */
-
     private void Update()
     {
-        modesList = modesClass.modesList; // reassign
-        currentMode = modesClass.mode;
         UpdateCurrentMerdText();
 
         if (startGame) // only check for pre game things if not started
@@ -110,7 +108,6 @@ public class Game : MonoBehaviour
     }
 
     /* Starts a timer and gives the score after a certain amount of time. */
-
     private IEnumerator Timer()
     {
         if (time == -1) yield return null; // return if game mode has endless time limit
@@ -130,7 +127,6 @@ public class Game : MonoBehaviour
     }
 
     /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */
-
     public void UpdateScreenStats()
     {
         if (time != -1)
@@ -179,15 +175,9 @@ public class Game : MonoBehaviour
         }
     }
 
-    private void ModesClass_OnModeChanged(object sender, Mode e)
+    // Update visibility of HUD based on mode
+    private void UpdateHUDModeVisibility()
     {
-        currentMode = e;
-
-        // Set mode values
-        time = currentMode.timeLimit;
-        hud = currentMode.hud;
-
-        // Update visibility of HUD based on mode
         currentScore.enabled = hud;
         foodWasteText.enabled = hud;
         foodWasteSlider.enabled = hud;
@@ -200,6 +190,29 @@ public class Game : MonoBehaviour
         {
             text.enabled = hud;
         }
+    }
+
+    private void InitializeMode(object sender, Mode e)
+    {
+        modesList = modesClass.modesList; 
+        currentMode = e;
+
+        // Set mode values
+        time = currentMode.timeLimit;
+        hud = currentMode.hud;
+
+        UpdateHUDModeVisibility();
+    }
+
+    private void ModesClass_OnModeChanged(object sender, Mode e)
+    {
+        currentMode = e;
+
+        // Set mode values
+        time = currentMode.timeLimit;
+        hud = currentMode.hud;
+
+        UpdateHUDModeVisibility();
 
         // Only disable tutorials if defined in mode
         tutorials.ForEach(tutorial =>
