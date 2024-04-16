@@ -8,7 +8,9 @@ using UnityEngine;
 
 public class FishSortingTrigger : MonoBehaviour
 {
-    public int score;
+    // variables to allow for tracking of performance
+    private int correctSortedFish;
+    private int incorrectSortedFish;
 
     private void OnTriggerEnter(Collider collisionObject)
     {    
@@ -27,12 +29,12 @@ public class FishSortingTrigger : MonoBehaviour
             if (fish.tag == FishSortingButton.fishSortingButton.currentFishTier.ToString())
             {
                 GameManager.instance.PlaySound("correct");
-                score++;
+                correctSortedFish++;
             } 
             else 
             {
                 GameManager.instance.PlaySound("incorrect");
-                score--;
+                incorrectSortedFish--;
             }
             // swich case to ensure the right trigger opens the right door
             string triggerTag = gameObject.name;

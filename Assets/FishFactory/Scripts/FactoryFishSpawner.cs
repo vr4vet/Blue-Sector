@@ -121,6 +121,7 @@ public class FactoryFishSpawner : MonoBehaviour
                 );
             }
 
+            // this randomize the tag of the fish to either tier 1, 2 or 3, and is used when sorting fish in QA
             if (toggleFishTier)
             {
                 int randomValue = Random.Range(1, randomFishStateChance + 1);
