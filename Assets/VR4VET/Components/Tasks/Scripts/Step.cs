@@ -1,4 +1,4 @@
-﻿/* Developer: Jorge Garcia
+/* Developer: Jorge Garcia
  * Ask your questions on github: https://github.com/Jorest
  */
 
@@ -15,6 +15,8 @@ namespace Task
 
         private bool _compleated = false;
         private int _repetionsCompleated = 0;
+        private Subtask _parentSubtask;
+        public Subtask ParentSubtask { get => _parentSubtask; set => _parentSubtask = value; }
 
         public int RepetionNumber { get => _repetionNumber; set => _repetionNumber = value; }
         public int RepetionsCompleated { get => _repetionsCompleated; set => _repetionsCompleated = value; }
@@ -28,10 +30,8 @@ namespace Task
             }
         }
 
-        public int getRepNumber()
-        {
-            return _repetionsCompleated;
-        }
+
+
         public int getStepNumber()
         {
             return stepNumber;

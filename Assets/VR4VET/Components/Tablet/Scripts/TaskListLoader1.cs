@@ -19,6 +19,7 @@ namespace Tablet
 
         private StaticPanelManager panelManager;
 
+
         //main pages
 
         [Header("Main Page Canvas")]
@@ -27,7 +28,6 @@ namespace Tablet
         public GameObject subtaskPageCanvas;
         public GameObject TaskPageCanvas;
         public GameObject skillsListPageCanvas;
-        public GameObject skillPageCanvas;
 
         //parents objects to load the buttons in
         [Header("Content Spaces")]
@@ -38,17 +38,6 @@ namespace Tablet
         [SerializeField] private GameObject _subtaskContent;
         [SerializeField] private GameObject _skillSubtaskContent;
 
-        [Header("Badge elements")]
-        [SerializeField] private TMP_Text _badgeName;
-        [SerializeField] private TMP_Text _badgeInstructions;
-        [SerializeField] private Image _displayBadge;
-
-        [Header("skill other")]
-        [SerializeField] private TMP_Text _skillTab;
-
-        [SerializeField] private TMP_Text _skillFeedback;
-        [SerializeField] private TMP_Text _skillabout;
-        [SerializeField] private TMP_Text _skillPoints;
 
         [Header("task other")]
         [SerializeField] private TMP_Text _taskNameTab;
@@ -103,27 +92,21 @@ namespace Tablet
 
             panelManager = this.gameObject.GetComponent<StaticPanelManager>();
             //load info in the tablet
-            StartCoroutine(LoadTabletInfo());
+
             panelManager.SetExperienceName(Exp_Name);
+            th.CurrentSubtask.AddListener(HandleCurrentSubtask);
         }
 
-        //since task and skill won't change in the experience we can load them from the beginning
-        private IEnumerator LoadTabletInfo()
+        private void HandleCurrentSubtask(Task.Subtask subtask)
         {
-            yield return new WaitForSeconds(2);
-            TaskPageLoader(_tasks[0]);
-            // LoadTaskPage();
-            LoadSkillsPage();
-        }
-
-        public void UpdateSkillPoints()
-        {
-            for (int i = 0; i < _skills.Count; i++)
+            //if the subtask is not null, load the subtask page
+            if (subtask != null)
             {
-                _skillsClones[i].GetComponentInChildren<TMP_Text>().text =
-                  _skills[i].GetArchivedPoints() + "/" + _skills[i].MaxPossiblePoints;
+                SubTaskPageLoader(subtask);
             }
         }
+
+
         public void LoadSkillsPage()
         {
 
@@ -149,132 +132,72 @@ namespace Tablet
                 // Set title to be name of this skill
                 TMP_Text skillName = skillBadgesContent.transform.Find("Txt_SkillName").GetComponent<TMP_Text>();
                 skillName.text = skill.Name;
-
-                // Find Horizontal list to place badges
-                GameObject BadgesList = skillBadgesContent.transform.Find("List_Badges").gameObject;
-
-                // Start display vs badge info display
-                // GameObject badgeDisplay = skillBadgesContent.transform.Find("badge_display").gameObject;
-                // GameObject startDisplay = skillBadgesContent.transform.Find("Txt_start").gameObject;
-
-                //Add connected badges to this horizontal list
-                foreach (Task.Badge badge in skill.ConnectedBadges)
-                {
-                    GameObject badgeItem = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
-
-                    badgeItem.transform.SetParent(BadgesList.transform);
-                    badgeItem.transform.localPosition = Vector3.zero;
-                    badgeItem.transform.localScale = Vector3.one;
-                    badgeItem.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-                    // Set Badge Icon
-                    UnityEngine.UI.Image buttonIcon = badgeItem.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
-                    buttonIcon.sprite = badge.Icon;
-
-                    // Find button
-                    Button button = badgeItem.transform.Find("btn_badge").GetComponent<Button>();
-
-                    // Set icon with shader and padlock if badge is locked
-                    GameObject padlock = badgeItem.transform.Find("padlock").gameObject;
-                    padlock.SetActive(badge.IsLocked());
-                    GameObject completedBackground = badgeItem.transform.Find("CompletedBackground").gameObject;
-                    completedBackground.SetActive(!badge.IsLocked());
+                GameObject badgeItem = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
 
 
+                // Set Badge Icon and text
 
-                    // Set a listener for badge button click
+                UnityEngine.UI.Image buttonIcon = badgeItem.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
+                buttonIcon.sprite = skill.Icon;
 
-                    button.onClick.AddListener(() => BadgeInfoLoader(badge));
+                TMP_Text unlockInstructions = skillBadgesContent.transform.Find("Txt_BadgeInfo").GetComponent<TMP_Text>();
+                unlockInstructions.text = skill.Instructions;
+                // Set icon with shader and padlock if badge is locked
+                GameObject padlock = badgeItem.transform.Find("padlock").gameObject;
+                padlock.SetActive(skill.IsLocked());
 
-                    // if (startDisplay.activeInHierarchy)
-                    // {
-                    //     startDisplay.SetActive(false);
-                    //     badgeDisplay.SetActive(true);
-                    // }
-                    // Debug.Log("skill item added, " + item.name + " skill:" + skill.Name);
-                    // _skillsClones.Add(item);
-
-                    // // we find the button first and then its text component
-                    // Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
-                    // TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>(true);
-                    // buttonText.text = skill.Name;
-                    // item.GetComponentInChildren<TMP_Text>().text =
-                    //     skill.GetArchivedPoints() + "/" + skill.MaxPossiblePoints;
-
-                    // button.onClick.AddListener(() => SkillPageLoader(skill));
-                }
             }
-            // refreshing after adding the new elements for the Page loader to set the pages correctly
-            // skillContent.GetComponent<ContentPageChanger>().Refresh();
         }
-        public void BadgeInfoLoader(Task.Badge badge)
-        {
-            Transform badgeInfo = skillsListPageCanvas.transform.Find("BadgeInfo").transform;
-            GameObject badgeDisplay = badgeInfo.Find("badge_display").gameObject;
-            if (!badgeDisplay.activeInHierarchy)
-            {
-                GameObject startDisplay = badgeInfo.Find("Txt_start").gameObject;
-                startDisplay.SetActive(false);
-                badgeDisplay.SetActive(true);
-            }
-            _badgeName.text = badge.Name;
-            _badgeInstructions.text = badge.Instruction;
-            _displayBadge.sprite = badge.Icon;
-        }
-        public void SkillPageLoader(Task.Skill skill)
-        {
-            if (_skillPageOpen != null) _skillPageOpen.Invoke();
+        // refreshing after adding the new elements for the Page loader to set the pages correctly
+        // skillContent.GetComponent<ContentPageChanger>().Refresh();
+        // public void SkillPageLoader(Task.Skill skill)
+        // {
+        //     if (_skillPageOpen != null) _skillPageOpen.Invoke();
 
 
 
+        //     _skillabout.text = skill.Description;
+
+        //     _skillName.text = skill.Name;
+
+        //     //cleaning list before loading the new subtasks
+        //     foreach (Transform child in _skillSubtaskContent.transform)
+        //     {
+        //         GameObject.Destroy(child.gameObject);
+        //     }
 
 
-            // hide the subtask list view
-            panelManager.OnClickToAboutSkill();
-
-            _skillTab.text = skill.Name;
-            _skillabout.text = skill.Description;
-            _skillFeedback.text = skill.Feedback;
-            _skillPoints.text = skill.GetArchivedPoints() + "/" + skill.MaxPossiblePoints;
-
-            //cleaning list before loading the new subtasks
-            foreach (Transform child in _skillSubtaskContent.transform)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-
-
-            foreach (Task.Badge badge in skill.ConnectedBadges)
-            {
-                GameObject item = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
-                item.transform.SetParent(_skillSubtaskContent.transform);
-                item.transform.localPosition = Vector3.zero;
-                item.transform.localScale = Vector3.one;
-                item.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            }
+        //     foreach (Task.Badge badge in skill.ConnectedBadges)
+        //     {
+        //         GameObject item = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
+        //         item.transform.SetParent(_skillSubtaskContent.transform);
+        //         item.transform.localPosition = Vector3.zero;
+        //         item.transform.localScale = Vector3.one;
+        //         item.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        //     }
 
 
 
-            // foreach (Task.Subtask sub in skill.Subtasks)
-            // {
-            //     //task for the list
-            //     GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
-            //     item.transform.SetParent(_skillSubtaskContent.transform);
-            //     item.transform.localPosition = Vector3.zero;
-            //     item.transform.localScale = Vector3.one;
-            //     item.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        //     // foreach (Task.Subtask sub in skill.Subtasks)
+        //     // {
+        //     //     //task for the list
+        //     //     GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
+        //     //     item.transform.SetParent(_skillSubtaskContent.transform);
+        //     //     item.transform.localPosition = Vector3.zero;
+        //     //     item.transform.localScale = Vector3.one;
+        //     //     item.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-            //     TMP_Text caption = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
-            //     // GameObject points = item.transform.Find("PointText").gameObject; points for later
-            //     caption.text = sub.SubtaskName;
+        //     //     TMP_Text caption = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
+        //     //     // GameObject points = item.transform.Find("PointText").gameObject; points for later
+        //     //     caption.text = sub.SubtaskName;
 
-            //     Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
-            //     GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
-            //     if (sub.Compleated()) checkmark.SetActive(true);
-            //     button.onClick.AddListener(() => SubTaskPageLoader(sub));
-            // }
-            // refreshing after adding the new elements for the Page loader to set the pages correctly
-        }
+        //     //     Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
+        //     //     GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
+        //     //     if (sub.Compleated()) checkmark.SetActive(true);
+        //     //     button.onClick.AddListener(() => SubTaskPageLoader(sub));
+        //     // }
+        //     // refreshing after adding the new elements for the Page loader to set the pages correctly
+        // }
 
         //gets called on Start since the list of task is always the same
         public void LoadTaskPage()
@@ -328,11 +251,6 @@ namespace Tablet
             if (_taskPageOpen != null) _taskPageOpen.Invoke();
 
             // panelManager.OnClickBackToAboutTask();
-
-            //hide previos pagee
-            _taskNameTab.text = task.TaskName;
-            _taskAboutTab.text = task.Description;
-            _taskFeedback.text = task.Feedback;
 
             //cleaning list before loading the new subtasks
             foreach (Transform child in TaskSubtaskContent.transform)
@@ -402,10 +320,9 @@ namespace Tablet
 
                 if (step.IsCompeleted())
                 {
-                    GameObject completedStep = item.transform.Find("Completed").gameObject;
-                    GameObject standardStep = item.transform.Find("Standard").gameObject;
-                    completedStep.SetActive(true);
-                    standardStep.SetActive(false);
+
+                    GameObject checkCircle = item.transform.Find("Checkcircle").gameObject;
+                    checkCircle.SetActive(true);
                 };
                 TMP_Text caption = item.transform.Find("txt_Desc").GetComponent<TMP_Text>();
                 caption.text = step.StepName;
@@ -418,6 +335,7 @@ namespace Tablet
                 // number.text = stepNumber + "";
                 // stepNumber++;
             }
+
         }
     }
 }

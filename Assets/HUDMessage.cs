@@ -27,7 +27,7 @@ public class HUDMessage : MonoBehaviour
     public void EnableSkillDisplay(Task.Skill skill)
     {
         skillText.text = skill.Name;
-        badge.GetComponent<UnityEngine.UI.Image>().sprite = skill.ConnectedBadges[0].Icon;
+        badge.GetComponent<UnityEngine.UI.Image>().sprite = skill.Icon;
         StartCoroutine(FadeAnimation());
     }
 
