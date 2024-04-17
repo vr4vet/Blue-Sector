@@ -109,16 +109,17 @@ namespace Tablet
 
         public void LoadSkillsPage()
         {
-
+            if (_skillPageOpen != null) _skillPageOpen.Invoke();
             // Reset existing gameobjects in skills page
-            Transform parentTransform = skillContent.transform;
-            for (int i = 0; i < parentTransform.childCount; i++)
-            {
-                Destroy(parentTransform.GetChild(i).gameObject);
-            }
+            // Transform parentTransform = skillContent.transform;
+            // for (int i = 0; i < parentTransform.childCount; i++)
+            // {
+            //     Destroy(parentTransform.GetChild(i).gameObject);
+            // }
 
             //loads each skill on the parent object
-            foreach (Task.Skill skill in _skills)
+            Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
+            foreach (Task.Skill skill in th.skillList)
             {
                 // Initiate a parent for list of badges and skill title
                 GameObject skillBadgesContent = Instantiate(_skillBadgesList, Vector3.zero, Quaternion.identity);
@@ -145,7 +146,6 @@ namespace Tablet
                 // Set icon with shader and padlock if badge is locked
                 GameObject padlock = badgeItem.transform.Find("padlock").gameObject;
                 padlock.SetActive(skill.IsLocked());
-
             }
         }
         // refreshing after adding the new elements for the Page loader to set the pages correctly

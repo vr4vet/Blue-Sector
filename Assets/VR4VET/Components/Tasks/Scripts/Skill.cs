@@ -22,7 +22,7 @@ namespace Task
 
         [SerializeField] private string _instructions;
 
-        [SerializeField] private Sprite _icon;
+        [SerializeField] private Sprite _icon = null;
 
         public string Name { get => _name; set => _name = value; }
         public string Description { get => _description; set => _description = value; }
@@ -30,11 +30,6 @@ namespace Task
         public Sprite Icon { get => _icon; set => _icon = value; }
         public string Instructions { get => _instructions; set => _instructions = value; }
         private bool locked = true;
-
-
-        private void Awake()
-        {
-        }
         public void Lock()
         {
             locked = true;

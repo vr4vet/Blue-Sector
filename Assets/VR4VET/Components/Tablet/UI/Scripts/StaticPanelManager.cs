@@ -22,8 +22,7 @@ public class StaticPanelManager : MonoBehaviour
     [SerializeReference] GameObject TaskAboutMenu;
     [SerializeReference] GameObject SubtaskAboutMenu;
     [SerializeReference] GameObject SkillListMenu;
-    [Header("Manager reference")]
-    [SerializeField] private MaintenanceManager manager;
+
     private List<GameObject> allMenus = new();
 
 
