@@ -526,7 +526,6 @@ GameObject:
   - component: {fileID: 353550537}
   - component: {fileID: 738087202}
   - component: {fileID: 305421419}
-  - component: {fileID: 752814164}
   - component: {fileID: 752814165}
   - component: {fileID: 1119661658}
   m_Layer: 13
@@ -594,7 +593,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: -0.00052836083, z: -2.3106406e-10}
+  m_ConnectedAnchor: {x: 0, y: -0.00052836083, z: 6.3544475e-11}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -678,25 +677,6 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &752814164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 273438476667798305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &752814165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,9 +692,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -724,10 +704,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 752814164}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -763,10 +743,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 752814164}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -930,7 +910,6 @@ GameObject:
   - component: {fileID: 293650893}
   - component: {fileID: 108685240}
   - component: {fileID: 117183120}
-  - component: {fileID: 1171745047}
   m_Layer: 13
   m_Name: Back_5
   m_TagString: Bone
@@ -1095,9 +1074,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1107,10 +1086,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1171745047}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1146,10 +1125,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1171745047}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1299,25 +1278,6 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
---- !u!114 &1171745047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1777015713573393535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2168024215688232703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1424,7 +1384,6 @@ GameObject:
   - component: {fileID: 871384329}
   - component: {fileID: 744659601}
   - component: {fileID: 18663942}
-  - component: {fileID: 744659602}
   - component: {fileID: 744659603}
   m_Layer: 13
   m_Name: Back_1
@@ -1491,7 +1450,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: -0.000528338, z: -1.5450496e-10}
+  m_ConnectedAnchor: {x: 0, y: -0.000528338, z: 1.438093e-10}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -1644,25 +1603,6 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
---- !u!114 &744659602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2322968982182209632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &744659603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1678,9 +1618,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1690,10 +1630,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 744659602}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1729,10 +1669,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 744659602}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1950,7 +1890,6 @@ GameObject:
   - component: {fileID: 1585522387}
   - component: {fileID: 640878721}
   - component: {fileID: 1043450805}
-  - component: {fileID: 1043450806}
   - component: {fileID: 2001593012}
   - component: {fileID: 2001593013}
   m_Layer: 13
@@ -2018,7 +1957,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: -0.0006060891, z: -0.000012996581}
+  m_ConnectedAnchor: {x: 0, y: -0.00060608913, z: -0.000012995686}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -2102,25 +2041,6 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &1043450806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4648646452388991490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &2001593012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2136,9 +2056,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2148,10 +2068,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1043450806}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2187,10 +2107,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1043450806}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2353,7 +2273,6 @@ GameObject:
   - component: {fileID: 5996645361607201535}
   - component: {fileID: 5996645361607201538}
   - component: {fileID: 5996645361607201537}
-  - component: {fileID: 5996645361607201539}
   - component: {fileID: 5996645361607201540}
   m_Layer: 13
   m_Name: Back_2
@@ -2573,25 +2492,6 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
---- !u!114 &5996645361607201539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6048210018162169073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &5996645361607201540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2607,9 +2507,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2619,10 +2519,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5996645361607201539}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2658,10 +2558,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5996645361607201539}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2848,7 +2748,6 @@ GameObject:
   - component: {fileID: 1355815931}
   - component: {fileID: 1355815932}
   - component: {fileID: 1355815933}
-  - component: {fileID: 1355815934}
   - component: {fileID: 1355815935}
   m_Layer: 13
   m_Name: Tail_end
@@ -2913,7 +2812,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 35.3, y: 0.7832265, z: -38.16086}
+  m_ConnectedAnchor: {x: 0, y: 0.0007796842, z: -6.606571e-11}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -3066,25 +2965,6 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
---- !u!114 &1355815934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6748978213728608801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1355815935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3100,9 +2980,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3112,10 +2992,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1355815934}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3151,10 +3031,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1355815934}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3247,10 +3127,8 @@ GameObject:
   - component: {fileID: 919132148199949407}
   - component: {fileID: 919132148199949409}
   - component: {fileID: 919132148199949408}
-  - component: {fileID: 919132148199949410}
-  - component: {fileID: 919132148199949411}
   m_Layer: 6
-  m_Name: salmon_rigged
+  m_Name: salmon_rigged_generic
   m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3408,64 +3286,6 @@ MonoBehaviour:
   - m_Rig: {fileID: 1875088814}
     m_Active: 1
   m_Effectors: []
---- !u!114 &919132148199949410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6915616972181788328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b21e7122cef438d41a27580bda6b7a73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _killPlane: -3
-  _useStartPositionAsSpawnPosition: 0
-  _useSpawnObject: 0
-  _spawnObject: {fileID: 0}
-  _respawnPosition: {x: 0, y: 0, z: 0}
-  _respawnRotation: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &919132148199949411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6915616972181788328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbe2c11f5634e8a439efc8d2bafd966d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gillDamage: 4
-  gillDamageGuessed: 0
-  id: 1
-  waterBodyCenter: {x: 0, y: 0, z: 0}
-  movementSpeed: 0.4
-  rotationSpeed: 4
-  waterBodyXLength: 0
-  waterBodyZLength: 0
-  waterBodyYLength: 0
-  waterHeight: 0
-  uIPointer: {fileID: 0}
-  marker: {fileID: 1292059130267375972, guid: 9d1b7e8dcdb946641a2e272bc4150830, type: 3}
-  layer:
-    serializedVersion: 2
-    m_Bits: 64
-  lastMarkedLouse: {fileID: 0}
-  markedLice: 0
-  numberOfLice: 4
-  health: 10
-  markSound: {fileID: 0}
-  isInWaterCount: 0
-  isGrabbedCount: 0
-  scoreBoardEntry: {fileID: 0}
-  unsediatedLevel: 1
-  tank: {fileID: 0}
-  startTank: {fileID: 0}
-  endTank: {fileID: 0}
-  sedationTimer: 3
 --- !u!1 &7132867527503714408
 GameObject:
   m_ObjectHideFlags: 0
@@ -3478,7 +3298,6 @@ GameObject:
   - component: {fileID: 2090124854}
   - component: {fileID: 478708732}
   - component: {fileID: 1253310517}
-  - component: {fileID: 1253310518}
   - component: {fileID: 1253310519}
   - component: {fileID: 1253310520}
   m_Layer: 13
@@ -3630,25 +3449,6 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &1253310518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7132867527503714408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1253310519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3664,9 +3464,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3676,10 +3476,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1253310518}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3715,10 +3515,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1253310518}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3881,7 +3681,6 @@ GameObject:
   - component: {fileID: 783987575}
   - component: {fileID: 1705924678}
   - component: {fileID: 569489947}
-  - component: {fileID: 1705924679}
   - component: {fileID: 1705924680}
   m_Layer: 13
   m_Name: Back_3
@@ -4101,25 +3900,6 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
---- !u!114 &1705924679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7531260673488108337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1705924680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4135,9 +3915,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4147,10 +3927,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1705924679}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4186,10 +3966,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1705924679}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4283,7 +4063,6 @@ GameObject:
   - component: {fileID: 5382743}
   - component: {fileID: 682472282}
   - component: {fileID: 415868202}
-  - component: {fileID: 682472283}
   - component: {fileID: 682472284}
   m_Layer: 13
   m_Name: Tail
@@ -4350,7 +4129,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: -0.0007797034, z: 2.3224855e-10}
+  m_ConnectedAnchor: {x: 0, y: -0.0007797034, z: -5.878975e-11}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -4503,25 +4282,6 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
---- !u!114 &682472283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7852440317991942239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ad2b8d0a6838b49b8441bfeeed7d07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInWater: 0
-  marker: {fileID: 0}
-  layer:
-    serializedVersion: 2
-    m_Bits: 0
-  storedPosition: {x: 0, y: 0, z: 0}
-  storedRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &682472284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4537,9 +4297,9 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 919132148199949411}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Fish, Assembly-CSharp
-        m_MethodName: SetAsSelectedFish
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4549,10 +4309,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 682472283}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4588,10 +4348,10 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 682472283}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: SetIsGrabbed
-        m_Mode: 6
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

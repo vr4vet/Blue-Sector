@@ -159,7 +159,7 @@ public class Fish : MonoBehaviour
         }
 
         float currentTime = Time.time;
-        if (currentTime - transitionToAnimationTime < 0.2f)   // prevent stretching of body
+        if (currentTime - transitionToAnimationTime < 0.25f)   // prevent stretching of body
         {
             //Debug.Log("Fish bones are locked in place!");
             foreach (Vector3 position in transitionToAnimationBonesPosition)
