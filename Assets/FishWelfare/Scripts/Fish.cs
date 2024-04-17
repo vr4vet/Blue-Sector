@@ -156,7 +156,7 @@ public class Fish : MonoBehaviour
         }
 
         float currentTime = Time.time;
-        if (currentTime - transitionToAnimationTime < 0.1f)   // prevent stretching of body
+        if (currentTime - transitionToAnimationTime < 0.4f)   // prevent stretching of body
         {
             foreach (Vector3 position in transitionToAnimationBonesPosition)
             {
@@ -172,6 +172,7 @@ public class Fish : MonoBehaviour
             //Debug.Log("Done transitioning");
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            Debug.Log(fishbone.gameObject.name);
         }
         updateSedation();
     }
