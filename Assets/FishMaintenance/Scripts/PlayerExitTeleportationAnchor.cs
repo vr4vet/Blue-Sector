@@ -12,6 +12,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     [SerializeField] private string subTask;
     [SerializeField] private string step;
     [SerializeField] private GameObject floatingToast;
+    [SerializeField] private GameObject anchorArrow;
     private MaintenanceManager manager;
     private FeedbackManager feedbackManager;
 
@@ -56,6 +57,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
             cylinder.SetActive(false);
             cylinderGlow.SetActive(false);
+            anchorArrow.SetActive(false);
             boxCollider.size = new Vector3(1f, 3f, 1f);
         }
     }
@@ -70,6 +72,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             }
             cylinder.SetActive(true);
             cylinderGlow.SetActive(true);
+            anchorArrow.SetActive(true);
             boxCollider.size = originalSize;
             try
             {
