@@ -20,7 +20,7 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private bool _answerTriggered;
     [HideInInspector] private int _answerIndex;
     [SerializeField] private GameObject _skipLineButton;
-    [SerializeField] private GameObject _exitButton;
+    // [SerializeField] private GameObject _exitButton;
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
@@ -99,7 +99,7 @@ public class DialogueBoxController : MonoBehaviour
         OnDialogueStarted?.Invoke();
         _activatedCount = 0;
         StartCoroutine(RunDialogue(dialogueTree, startSection));
-        _exitButton.SetActive(true);
+        // _exitButton.SetActive(true);
 
     }
 
@@ -156,7 +156,7 @@ public class DialogueBoxController : MonoBehaviour
             while (!_skipLineTriggered)
             {
                 _skipLineButton.SetActive(true);
-                _exitButton.SetActive(true);
+                // _exitButton.SetActive(true);
                 yield return null;
             }
             _skipLineTriggered = false;
@@ -176,7 +176,7 @@ public class DialogueBoxController : MonoBehaviour
             yield return null;
         }
         _answerTriggered = false;
-        _exitButton.SetActive(false);
+        // _exitButton.SetActive(false);
         _skipLineButton.SetActive(false);
         StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
     }
@@ -208,7 +208,7 @@ public class DialogueBoxController : MonoBehaviour
         _skipLineTriggered = false;
         _answerTriggered = false;
         _skipLineButton.SetActive(false);
-        _exitButton.SetActive(false);
+        // _exitButton.SetActive(false);
     }
 
     void ShowAnswers(BranchPoint branchPoint)
