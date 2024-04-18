@@ -9,6 +9,9 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     [SerializeField] private AudioClip success;
     [SerializeField] private AudioClip equipmentPickup;
+    [SerializeField] private GameObject[] arrows;
+    [SerializeField] private GameObject toBoatArrow;
+    [SerializeField] private GameObject[] firstArrows;
     private bool twentySeconds = false;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
@@ -90,7 +93,23 @@ public class MaintenanceManager : MonoBehaviour
             {
                 TaskCompleted.Invoke();
             }
+            if ((subtaskName == "Runde På Ring" && GetSubtask("Håndforing").Compleated()) || (subtaskName == "Håndforing" && GetSubtask("Runde På Ring").Compleated()))
+            {
+                NavigateToBoat();
+            }
+        }
+    }
 
+    public void NavigateToBoat()
+    {
+        toBoatArrow.SetActive(true);
+        foreach (GameObject arrow in firstArrows)
+        {
+            arrow.SetActive(false);
+        }
+        foreach (GameObject arrow in arrows)
+        {
+            arrow.transform.Rotate(0.0f, 180.0f, 0.0f, Space.World);
         }
     }
 
