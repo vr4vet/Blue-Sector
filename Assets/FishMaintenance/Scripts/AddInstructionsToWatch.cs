@@ -18,13 +18,22 @@ public class AddInstructionsToWatch : MonoBehaviour
     // OpenXRInput.SendHapticImpulse(lefthand, 1, 1, 1, UnityEngine.InputSystem.XR.XRController.leftHand);
     public void addInstructions(string text)
     {
-        var device = UnityEngine.InputSystem.XR.XRController.leftHand;
-        var command = UnityEngine.InputSystem.XR.Haptics.SendHapticImpulseCommand.Create(0, 0.3f, 1);
-        device.ExecuteCommand(ref command);
+        StartCoroutine(sendHaptics());
 
         textMesh.SetText(text);
 
         PlayAudio();
+    }
+
+    IEnumerator sendHaptics()
+    {
+        var device = UnityEngine.InputSystem.XR.XRController.leftHand;
+        var command = UnityEngine.InputSystem.XR.Haptics.SendHapticImpulseCommand.Create(0, 1f, 0.7f);
+        device.ExecuteCommand(ref command);
+        yield return new WaitForSeconds(0.8f);
+        device.ExecuteCommand(ref command);
+        yield return new WaitForSeconds(0.8f);
+        device.ExecuteCommand(ref command);
     }
 
     public void emptyInstructions()
