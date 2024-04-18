@@ -212,6 +212,9 @@ public class GameManager : MonoBehaviour
         audioManager.GetComponent<AudioSource>().Play();
     }
 
+    /// <summary>
+    /// Toggles the task on and off
+    /// </summary>
     public void ToggleTaskOn()
     {
         isTaskOn = !isTaskOn;
@@ -219,7 +222,9 @@ public class GameManager : MonoBehaviour
 
     // ----------------- Private Functions -----------------
 
-    // Should only be called when the player has put on ear protection, gloves, and boots
+    /// <summary>
+    /// Sets the HSE room as completed when the player has put on ear protection, gloves, and boots
+    /// </summary>
     private void SetHSECompleted()
     {
         bool correctGloveCombo =
@@ -238,8 +243,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Sets the player's gloves to the correct material based on the player's hand state
-    // The player hand state can be manipulated through the EquipGlove script
+    /// <summary>
+    /// Sets the player's gloves to the correct material based on the player's hand state
+    /// </summary>
     private void SetPlayerGloves()
     {
         if (leftHand == PlayerHandState.BlueGlove)
