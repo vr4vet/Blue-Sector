@@ -31,7 +31,8 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         layer = parent.layer;
         marker = parent.marker;
         // Prevent fish from colliding with player to prevent fish from taking damage when teleporting and other issues
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Fish"));
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Bone"));
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Bone"), LayerMask.NameToLayer("Bone"));
     }
 
     public void OnPointerClick(PointerEventData eventData) {

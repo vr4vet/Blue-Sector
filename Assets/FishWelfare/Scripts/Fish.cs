@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
+using UnityEngine.UIElements;
 //using System.Diagnostics;
 
 public class Fish : MonoBehaviour
@@ -75,6 +76,7 @@ public class Fish : MonoBehaviour
     private float transitionToAnimationTime;
     private Vector3 transitionToAnimationPosition;
     private List<Vector3> transitionToAnimationBonesPosition = new List<Vector3> ();
+    private List<Quaternion> transitionToAnimationBonesRotation = new List<Quaternion>();
 
     // Start is called before the first frame update
     void Start()
@@ -84,10 +86,10 @@ public class Fish : MonoBehaviour
         targetPosition = transform.position;
         originalRotation = transform.rotation;
         liceList = FindObjectwithTag("Louse");
-        boneList = FindObjectwithTag("Bone");
+        boneList = FindObjectwithTag("Bone");//FindGameObjectsWithTag("Bone");
         AudioSource[] sounds = GetComponents<AudioSource>();
         hurtSound = sounds[0];
-        markSound = sounds[1];
+        //markSound = sounds[1];
         //The point from which the raycast targeting lice on fishbodie will have its origin. In this case it is RightHandPointer in XR Rig Advanced
         pointerFinger = GameObject.FindGameObjectWithTag("Pointer");
         animator = GetComponent<Animator>();
@@ -151,16 +153,22 @@ public class Fish : MonoBehaviour
 
                 // storing positions to lock fish here
                 transitionToAnimationPosition = fishbone.position;
-                transitionToAnimationBonesPosition.Add(bone.transform.position);
+                transitionToAnimationBonesPosition.Add(bone.transform.localPosition);
+                transitionToAnimationBonesRotation.Add(bone.transform.localRotation);
             }
         }
 
         float currentTime = Time.time;
-        if (currentTime - transitionToAnimationTime < 0.1f)   // prevent stretching of body
+        if (currentTime - transitionToAnimationTime < 0.25f)   // prevent stretching of body
         {
+            //Debug.Log("Fish bones are locked in place!");
             foreach (Vector3 position in transitionToAnimationBonesPosition)
             {
-                boneList[transitionToAnimationBonesPosition.IndexOf(position)].transform.position = position;
+                boneList[transitionToAnimationBonesPosition.IndexOf(position)].transform.localPosition = position;
+            }
+            foreach (Quaternion rotation in transitionToAnimationBonesRotation)
+            {
+                boneList[transitionToAnimationBonesRotation.IndexOf(rotation)].transform.localRotation = rotation;
             }
         }
         if (currentTime - transitionToAnimationTime < 1.0f)   // prevent drifting towards previous tank position
@@ -189,6 +197,7 @@ public class Fish : MonoBehaviour
                 animator.enabled = false;
             }
             transitionToAnimationBonesPosition.Clear();
+            transitionToAnimationBonesRotation.Clear();
         }
     }
 

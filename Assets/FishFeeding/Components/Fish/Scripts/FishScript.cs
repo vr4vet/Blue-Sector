@@ -136,8 +136,12 @@ public class FishScript : MonoBehaviour
     // Draw destination in scene view for debugging purposes
     private void OnDrawGizmos()
     {
-        Vector3 systemPos = fishSystemScript.transform.position;
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(new Vector3(systemPos.x + destination.x, systemPos.y + destination.y, systemPos.z + destination.z), 0.05f);
+        if (fishSystemScript != null)
+        {
+            Vector3 systemPos = fishSystemScript.transform.position;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(new Vector3(systemPos.x + destination.x, systemPos.y + destination.y, systemPos.z + destination.z), 0.05f);
+        }
+
     }
 }
