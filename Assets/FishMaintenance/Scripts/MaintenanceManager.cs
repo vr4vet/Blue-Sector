@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Linq;
 public class MaintenanceManager : MonoBehaviour
 {
     public static MaintenanceManager Instance;
@@ -18,9 +19,6 @@ public class MaintenanceManager : MonoBehaviour
     private FeedbackManager feedbackManager;
     private Task.Task task;
     [HideInInspector] public int stepCount;
-    private Task.Subtask _activeSubtask;
-
-
     public UnityEvent<Task.Step?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
@@ -48,6 +46,7 @@ public class MaintenanceManager : MonoBehaviour
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         task = taskHolder.GetTask("Vedlikehold");
         UpdateCurrentSubtask(GetSubtask("Hent Utstyr"));
+
         // Reset subtsk and step progress on each play, and skill and badge progress
         foreach (Task.Subtask sub in task.Subtasks)
         {
@@ -66,8 +65,6 @@ public class MaintenanceManager : MonoBehaviour
     {
         twentySeconds = passed;
     }
-
-
     public void CompleteStep(string subtaskName, string stepName)
     {
 
@@ -96,10 +93,18 @@ public class MaintenanceManager : MonoBehaviour
             {
                 TaskCompleted.Invoke();
             }
+
+            int elementIndex = task.Subtasks.FindIndex(sub => sub.SubtaskName == subtaskName);
+            // if (elementIndex < task.Subtasks.Count - 1)
+            // {
+            //     UpdateCurrentSubtask(task.Subtasks.ElementAt(elementIndex + 1));
+            // }
+
             if ((subtaskName == "Runde På Ring" && GetSubtask("Håndforing").Compleated()) || (subtaskName == "Håndforing" && GetSubtask("Runde På Ring").Compleated()))
             {
                 NavigateToBoat();
             }
+
         }
     }
 

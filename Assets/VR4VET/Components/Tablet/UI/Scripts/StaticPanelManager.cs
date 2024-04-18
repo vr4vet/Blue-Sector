@@ -22,6 +22,7 @@ public class StaticPanelManager : MonoBehaviour
     [SerializeReference] GameObject TaskAboutMenu;
     [SerializeReference] GameObject SubtaskAboutMenu;
     [SerializeReference] GameObject SkillListMenu;
+    [SerializeReference] GameObject NotificationAlertMenu;
 
     private List<GameObject> allMenus = new();
 
@@ -91,7 +92,7 @@ public class StaticPanelManager : MonoBehaviour
 
     void Start()
     {
-        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu });
+        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu, NotificationAlertMenu });
 
         foreach (var item in allMenus)
         {
@@ -138,7 +139,10 @@ public class StaticPanelManager : MonoBehaviour
 
 
 
-
+    public void OnWatchAlert()
+    {
+        SwitchMenuTo(NotificationAlertMenu);
+    }
 
 
 

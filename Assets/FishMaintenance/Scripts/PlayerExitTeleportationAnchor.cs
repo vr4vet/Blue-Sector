@@ -10,6 +10,8 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public GameObject cageArrows;
     public GameObject videoObject;
     [SerializeField] private GameObject maintenanceManager;
+    [SerializeField] private Task.TaskHolder taskHolder;
+
     [SerializeField] private string subTask;
     [SerializeField] private string step;
     [SerializeField] private GameObject floatingToast;
@@ -30,8 +32,34 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         boxCollider = gameObject.GetComponent<BoxCollider>();
         originalSize = boxCollider.size;
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
+        taskHolder.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
         // activeSubtask = manager.GetSubtask(subTask);
 
+    }
+
+    void CurrentSubtaskUpdate(Task.Subtask currentSub)
+    {
+
+        if (currentSub.SubtaskName == subTask)
+        {
+
+            if (subTask == "Hent Utstyr")
+            {
+                equipmentArrow.SetActive(true);
+
+            }
+            else if (manager.GetSubtask(subTask).GetCompletedSteps() == (manager.GetStep(subTask, step).getStepNumber() - 1)) ;
+            {
+                anchorArrow.SetActive(true);
+            }
+
+
+
+        }
+        else
+        {
+            anchorArrow.SetActive(false);
+        }
     }
 
     void OnSubtaskCompleted(Task.Subtask subtask)
