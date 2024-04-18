@@ -32,10 +32,11 @@ namespace Task
         private List<Skill> _relatedSkills = new List<Skill>();
         private int _points = 0;
         private bool _compleated = false;
+        private Task _parentTask;
 
         //for navigation system
         private Transform _taskPosition;
-
+        public Task ParentTask { get => _parentTask; set => _parentTask = value; }
         public string Description { get => _description; set => _description = value; }
         public List<Step> StepList { get => _stepList; set => _stepList = value; }
         public string SubtaskName { get => _subtaskName; set => _subtaskName = value; }
@@ -53,6 +54,14 @@ namespace Task
         //         stepNumber++;
         //     }
         // }
+
+        private void Awake()
+        {
+            foreach (Step step in StepList)
+            {
+                step.ParentSubtask = this;
+            }
+        }
         public bool Compleated()
         {
             if (_autocompleate)
@@ -88,7 +97,7 @@ namespace Task
         public void AddPoints(int value)
         {
             _points += value;
-            Tablet.TaskListLoader1.Ins.UpdateSkillPoints();
+            // Tablet.TaskListLoader1.Ins.UpdateSkillPoints();
         }
 
         public Step GetStep(string stepname)

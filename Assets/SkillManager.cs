@@ -56,20 +56,16 @@ public class SkillManager : MonoBehaviour
 
 
     }
-    private void CompleteBadge(string skillName, string badgeName)
+    private void CompleteBadge(string skillName)
     {
         Task.Skill skill = taskHolder.GetSkill(skillName);
-        Task.Badge badge = skill.GetBadge(badgeName);
-        if (badge.IsLocked())
+        if (skill.IsLocked())
         {
-            badge.Unlock();
-            Debug.Log("Badge unlocked: " + badge.Name + "  " + badge.IsLocked());
-            // if (!skill.ConnectedBadges.Any(b => b.IsLocked()))
-            // {
+            skill.Unlock();
             manager.SkillCompleted.Invoke(skill);
             taskListLoader.LoadSkillsPage();
         }
-        // }
+
     }
 
     public void StepwiseBadge(int stepNumber)
@@ -78,23 +74,23 @@ public class SkillManager : MonoBehaviour
         if (completedSteps.Count == maxSteps)
         {
             bool isIncremental = completedSteps.Zip(completedSteps.Skip(1), (current, next) => current + 1 == next).All(x => x);
-            if (isIncremental)
-                CompleteBadge("Problemløsning", "Stegmester");
+            // if (isIncremental)
+            //  CompleteBadge("Strukturert");  // Må finne nytt navn på denne
         }
     }
 
     public void CuriousBadge()
     {
-        CompleteBadge("Kommunikasjon", "Nyskjerrigper");
+        CompleteBadge("Kommunikasjon");
     }
 
     public void LightningBadge()
     {
-        CompleteBadge("Tilpasningsdyktig", "Lynet");
+        CompleteBadge("Tilpasningsdyktig");
 
     }
     public void VideoBadge()
     {
-        CompleteBadge("Problemløsning", "Skarpsyn");
+        CompleteBadge("Problemløsning");
     }
 }

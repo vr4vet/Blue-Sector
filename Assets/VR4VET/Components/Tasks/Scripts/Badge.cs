@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Task
 {
-    [CreateAssetMenu(fileName = "New Badge", menuName = "Tasks/Badge")]
+
     public class Badge : ScriptableObject
     {
 

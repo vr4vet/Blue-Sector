@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 namespace Task
 {
 
@@ -15,6 +15,7 @@ namespace Task
     public class TaskHolder : MonoBehaviour
     {
         public static TaskHolder Instance;
+        public UnityEvent<Subtask?> CurrentSubtask { get; } = new();
         private List<TaskxTarget> _taskAndTargerts = new List<TaskxTarget>();
 
         [Header("Profession Tasks")]

@@ -17,10 +17,12 @@ public class MaintenanceManager : MonoBehaviour
     private FeedbackManager feedbackManager;
     private Task.Task task;
     [HideInInspector] public int stepCount;
+    private Task.Subtask _activeSubtask;
 
-    public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
+
     public UnityEvent<Task.Step?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
+    public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
     public UnityEvent TaskCompleted { get; } = new();
 
 
@@ -38,17 +40,13 @@ public class MaintenanceManager : MonoBehaviour
         }
     }
 
-    public void lynetEnabled(bool passed)
-    {
-        twentySeconds = passed;
-    }
 
     void Start()
     {
         feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         task = taskHolder.GetTask("Vedlikehold");
-
+        UpdateCurrentSubtask(GetSubtask("Hent Utstyr"));
         // Reset subtsk and step progress on each play, and skill and badge progress
         foreach (Task.Subtask sub in task.Subtasks)
         {
@@ -59,9 +57,13 @@ public class MaintenanceManager : MonoBehaviour
         }
         foreach (Task.Skill skill in taskHolder.skillList)
         {
-            skill.Reset();
+            skill.Lock();
         }
 
+    }
+    public void lynetEnabled(bool passed)
+    {
+        twentySeconds = passed;
     }
 
 
@@ -113,7 +115,10 @@ public class MaintenanceManager : MonoBehaviour
         }
     }
 
-
+    public void UpdateCurrentSubtask(Task.Subtask subtask)
+    {
+        taskHolder.CurrentSubtask.Invoke(subtask);
+    }
 
     public Task.Subtask GetSubtask(string subtaskName)
     {
