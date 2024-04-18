@@ -12,6 +12,7 @@ public class MaintenanceManager : MonoBehaviour
     [SerializeField] private GameObject[] arrows;
     [SerializeField] private GameObject toBoatArrow;
     [SerializeField] private GameObject[] firstArrows;
+    [SerializeField] private GameObject pauseAnchor;
     private bool twentySeconds = false;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
@@ -113,6 +114,7 @@ public class MaintenanceManager : MonoBehaviour
         {
             arrow.transform.Rotate(0.0f, 180.0f, 0.0f, Space.World);
         }
+        pauseAnchor.SetActive(true);
     }
 
     public void UpdateCurrentSubtask(Task.Subtask subtask)
