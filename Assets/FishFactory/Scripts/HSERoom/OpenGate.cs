@@ -1,15 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OpenGate : MonoBehaviour
 {
-    // Update is called once per frame
+    // ------------- Private Variables -------------
+
+    private Transform doorRight;
+
+    private Transform doorLeft;
+
+    private const float rightDoorStopPoint = -1f;
+
+    private const float leftDoorStopPoint = 1.45f;
+
+    // ------------- Unity Functions -------------
+
+    void Start()
+    {
+        doorRight = transform.Find("DoorRight");
+        doorLeft = transform.Find("DoorLeft");
+    }
+
     void FixedUpdate()
     {
         if (
-            GameManager.instance.RightHand != GameManager.PlayerHandState.Unsanitized
-            && GameManager.instance.LeftHand != GameManager.PlayerHandState.Unsanitized
+            GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized
+            && GameManager.Instance.LeftHand != GameManager.PlayerHandState.Unsanitized
         )
         {
             MoveRightGate();
@@ -17,23 +32,25 @@ public class OpenGate : MonoBehaviour
         }
     }
 
+    // ------------- Private Functions -------------
+
+    /// <summary>
+    /// Move the right gate to the right. The gate stays open in case the player wants to return to the previous room
+    /// </summary>
     private void MoveRightGate()
     {
-        // get child of this gameobject based on name
-        Transform doorRight = transform.Find("DoorRight");
-
         // slowly move the gameobject to the right. Stop on z = 1
-        if (doorRight.transform.localPosition.z > -1f)
+        if (doorRight.localPosition.z > rightDoorStopPoint)
             doorRight.localPosition += new Vector3(0, 0, -0.01f);
     }
 
+    /// <summary>
+    /// Move the left gate to the left. The gate stays open in case the player wants to return to the previous room
+    /// </summary>
     private void MoveLeftGate()
     {
-        // get child of this gameobject based on name
-        Transform doorLeft = transform.Find("DoorLeft");
-
         // slowly move the gameobject to the left. Stop on z = 1.45
-        if (doorLeft.localPosition.z < 1.45)
+        if (doorLeft.localPosition.z < leftDoorStopPoint)
             doorLeft.localPosition += new Vector3(0, 0, 0.01f);
     }
 }

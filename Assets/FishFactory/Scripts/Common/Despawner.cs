@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Despawner : MonoBehaviour
 {
+    /// <summary>
+    /// Destroy the fish object when it collides with the despawner
+    /// </summary>
+    /// <param name="collider">The head bone collider of the fish object</param>
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.tag != "Destroyable")
@@ -11,6 +13,7 @@ public class Despawner : MonoBehaviour
             return;
         }
 
-        Destroy(collider.transform.parent.transform.parent.gameObject); // Destroy the main fish object
+        // Destroy the main fish object
+        Destroy(collider.transform.parent.transform.parent.gameObject);
     }
 }

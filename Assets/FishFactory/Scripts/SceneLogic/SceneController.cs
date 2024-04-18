@@ -1,14 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using BNG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    [Header("Scene Controller")]
+    [Tooltip("The name of the scene to change to")]
     [SerializeField]
     private string sceneName;
 
+    /// <summary>
+    /// When the player collides with the scene controller, change the scene
+    /// </summary>
+    /// <param name="collisionObject">The player collider</param>
     private void OnTriggerEnter(Collider collisionObject)
     {
         if (collisionObject.gameObject.name == "Grabber")
@@ -17,17 +21,22 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Change the scene. If the player is currently in the HSE room the requirements has to be fulfilled first.
+    /// </summary>
+    /// <param name="scene">The name of the scene to change to</param>
     public void ChangeScene(string scene)
     {
-        // Check if the player has met the requirements to move to the next scene
         if (
-            !GameManager.instance.HSERoomCompleted
+            !GameManager.Instance.HSERoomCompleted
             && SceneManager.GetActiveScene().name == "HSERoom"
         )
         {
-            GameManager.instance.PlaySound("incorrect");
+            GameManager.Instance.PlaySound("incorrect");
             return;
         }
+
+        GameManager.Instance.PlaySound("door");
         SceneManager.LoadScene(scene);
     }
 }
