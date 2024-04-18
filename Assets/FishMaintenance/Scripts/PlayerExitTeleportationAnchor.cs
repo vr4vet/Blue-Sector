@@ -53,6 +53,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        manager.UpdateCurrentSubtask(manager.GetSubtask(subTask));
         if (other.CompareTag("Player"))
         {
 
