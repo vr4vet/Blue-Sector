@@ -18,8 +18,6 @@ namespace Tablet
         private List<Task.Skill> _skills = new List<Task.Skill>();
 
         private StaticPanelManager panelManager;
-
-
         //main pages
 
         [Header("Main Page Canvas")]
@@ -43,27 +41,24 @@ namespace Tablet
         [SerializeField] private TMP_Text _taskNameTab;
 
         [SerializeField] private TMP_Text _taskFeedback;
-        [SerializeField] private TMP_Text _taskAboutTab;
+
 
         [Header("subtask other")]
         [SerializeField] private TMP_Text _subtaskNameTab;
 
-        [SerializeField] private TMP_Text _subtaskAboutTab;
+
 
         [Header("Experience Name")]
         [SerializeField] private string Exp_Name;
 
         [Header("UI Prefabs")]
-        [SerializeField] private GameObject _skillEntryList;
         [SerializeField] private GameObject _stepListEntry;
         [SerializeField] private GameObject _subtaskListEntry;
         [SerializeField] private GameObject _taskListEntry;
-        [SerializeField] private GameObject _badgeEntry;
         [SerializeField] private GameObject _skillBadgesList;
 
         [Header("Additional Events")]
         [SerializeField] private UnityEvent _skillPageOpen;
-
         [SerializeField] private UnityEvent _tasksListOpen;
         [SerializeField] private UnityEvent _taskPageOpen;
         [SerializeField] private UnityEvent _subtaskPageOpen;
@@ -90,13 +85,17 @@ namespace Tablet
             _tasks = th.taskList;
             _skills = th.skillList;
 
-            panelManager = this.gameObject.GetComponent<StaticPanelManager>();
-            //load info in the tablet
-
-            panelManager.SetExperienceName(Exp_Name);
+            StartCoroutine(LoadTabletInfo());
             th.CurrentSubtask.AddListener(HandleCurrentSubtask);
         }
 
+        //since task and skill won't change in the experience we can load them from the beginning
+        private IEnumerator LoadTabletInfo()
+        {
+            yield return new WaitForSeconds(2);
+            // TaskPageLoader(_tasks[0]);
+            LoadSkillsPage();
+        }
         private void HandleCurrentSubtask(Task.Subtask subtask)
         {
             //if the subtask is not null, load the subtask page
@@ -116,7 +115,7 @@ namespace Tablet
             // {
             //     Destroy(parentTransform.GetChild(i).gameObject);
             // }
-
+            Debug.Log("Loading Skills Page");
             //loads each skill on the parent object
             Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
             foreach (Task.Skill skill in th.skillList)
@@ -133,19 +132,21 @@ namespace Tablet
                 // Set title to be name of this skill
                 TMP_Text skillName = skillBadgesContent.transform.Find("Txt_SkillName").GetComponent<TMP_Text>();
                 skillName.text = skill.Name;
-                GameObject badgeItem = Instantiate(_badgeEntry, Vector3.zero, Quaternion.identity);
 
+                // Set instructions for unlocking this skill
+                TMP_Text unlockInstructions = skillBadgesContent.transform.Find("Txt_BadgeInfo").GetComponent<TMP_Text>();
+                unlockInstructions.text = skill.Instructions;
 
-                // Set Badge Icon and text
-
+                // Find Badge Image and replace with the Icon for this skill
+                GameObject badgeItem = skillBadgesContent.transform.Find("BadgeItem").gameObject;
                 UnityEngine.UI.Image buttonIcon = badgeItem.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
                 buttonIcon.sprite = skill.Icon;
 
-                TMP_Text unlockInstructions = skillBadgesContent.transform.Find("Txt_BadgeInfo").GetComponent<TMP_Text>();
-                unlockInstructions.text = skill.Instructions;
-                // Set icon with shader and padlock if badge is locked
+                // Set icon with shader and padlock if badge is locked, if unlocked set green badge active
                 GameObject padlock = badgeItem.transform.Find("padlock").gameObject;
+                GameObject completedBackground = badgeItem.transform.Find("CompletedBackground").gameObject;
                 padlock.SetActive(skill.IsLocked());
+                completedBackground.SetActive(!skill.IsLocked());
             }
         }
         // refreshing after adding the new elements for the Page loader to set the pages correctly
@@ -301,7 +302,7 @@ namespace Tablet
             subtaskPageCanvas.SetActive(true);
 
             _subtaskNameTab.GetComponent<TMP_Text>().text = subtask.SubtaskName;
-            _subtaskAboutTab.GetComponent<TMP_Text>().text = subtask.Description;
+
 
             //cleaning list before loading the new subtasks
             foreach (Transform child in _subtaskContent.transform)
