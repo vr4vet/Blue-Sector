@@ -12,6 +12,7 @@ public class ConversationController : MonoBehaviour
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
     [HideInInspector] private DialogueBoxController _dialogueBoxController;
+    public bool shouldTrigger;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class ConversationController : MonoBehaviour
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
         updateAnimator();
+        shouldTrigger = true;
     }
 
     public void updateAnimator()
@@ -52,7 +54,7 @@ public class ConversationController : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {   
-        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && !_dialogueBoxController.dialogueIsActive) 
+        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && shouldTrigger && !_dialogueBoxController.dialogueIsActive) 
         {
             // string json = JsonUtility.ToJson(dialogueTree);
             // Debug.Log(json);

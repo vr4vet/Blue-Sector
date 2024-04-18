@@ -14,20 +14,23 @@ public class Modes : MonoBehaviour
     [HideInInspector]
     public event EventHandler<Mode> OnModeChanged;
 
+    [HideInInspector]
+    public event EventHandler<Mode> OnFinishedLoading;
+
     private ModeLoader modeLoader;
     private int modeIndex;
 
     private void Start()
     {
         modeLoader = FindObjectOfType<ModeLoader>();
+        modeLoader.OnFinishedLoading += InitializeMode;
     }
 
-    private void Update()
+    private void InitializeMode(object sender, List<Mode> e)
     {
-        if (!modeLoader.finishedLoading) return;
-        /* || modesList == null || modesList.Count() > 0*/
-        modesList = modeLoader.modesList;
+        modesList = e;
         mode = modesList[modeIndex];
+        OnFinishedLoading?.Invoke(this, mode);
     }
 
     public void ChangeTo(int i)
