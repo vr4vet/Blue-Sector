@@ -80,6 +80,15 @@ public class VideoObject : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.gameObject.tag == "Shovel")
+        {
+            PlayVideo();
+            VideoIsPlayedOnce = true;
+        }
+    }
+
 
     /// <summary>
     /// Stop the video and make the object start rotating

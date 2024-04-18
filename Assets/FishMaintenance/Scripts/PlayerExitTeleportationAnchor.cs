@@ -8,6 +8,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public GameObject cylinderGlow;
     public GameObject equipmentArrow;
     public GameObject cageArrows;
+    public GameObject videoObject;
     [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private string subTask;
     [SerializeField] private string step;
@@ -73,6 +74,10 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             cylinder.SetActive(true);
             cylinderGlow.SetActive(true);
             anchorArrow.SetActive(true);
+            if (videoObject)
+            {
+                videoObject.SetActive(false);
+            }
             boxCollider.size = originalSize;
             try
             {

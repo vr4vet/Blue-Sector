@@ -11,7 +11,6 @@ public class DropItem : MonoBehaviour
     public GameObject itemRight;
     // [SerializeField] private BNG.Grabber grabberRight;
     public GameObject itemLeft;
-    public GameObject videoObject;
 
 
     // [SerializeField] private BNG.Grabber grabberLeft;
@@ -47,10 +46,6 @@ public class DropItem : MonoBehaviour
             // BNG.Grabber grabber = grabbable.GetPrimaryGrabber();
             // grabbable.DropItem(grabber, true, true);
 
-        }
-        if (videoObject)
-        {
-            videoObject.SetActive(false);
         }
     }
 }
