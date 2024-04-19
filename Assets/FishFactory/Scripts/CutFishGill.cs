@@ -6,6 +6,9 @@ public class CutFishGill : MonoBehaviour
     [SerializeField]
     private FactoryFishState fishState;
 
+    [SerializeField]
+    private KnifeState knifeState;
+
     /// <summary>
     /// When the knife collides with the fish gill, cut the gill
     /// </summary>
@@ -18,5 +21,12 @@ public class CutFishGill : MonoBehaviour
         }
 
         fishState.CutFishGills();
+        knifeState.DecrementDurabilityCount();
+    }
+
+    void Start()
+    {
+        GameObject knife = GameObject.Find("FishKnife");
+        knifeState = knife.GetComponent<KnifeState>();
     }
 }
