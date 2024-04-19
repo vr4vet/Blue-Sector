@@ -7,6 +7,7 @@ public class EquipmentGrabStep : MonoBehaviour
     [SerializeField] private MaintenanceManager manager;
 
     [SerializeField] private string step;
+    [SerializeField] private GameObject guidingHand;
 
 
     void OnTriggerStay(Collider other)
@@ -16,6 +17,7 @@ public class EquipmentGrabStep : MonoBehaviour
         {
             manager.CompleteStep("Hent Utstyr", step);
             gameObject.SetActive(false);
+            guidingHand.SetActive(false);
         }
     }
 

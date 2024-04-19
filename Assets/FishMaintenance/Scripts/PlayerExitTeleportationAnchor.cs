@@ -9,6 +9,9 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public GameObject equipmentArrow;
     public GameObject cageArrows;
     public GameObject videoObject;
+    public GameObject GuidingHandSplint;
+    public GameObject GuidingHandRope;
+    public GameObject GuidingHandBucket;
     [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private string subTask;
     [SerializeField] private string step;
@@ -78,6 +81,18 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             if (videoObject)
             {
                 videoObject.SetActive(false);
+            }
+            if (GuidingHandSplint)
+            {
+                GuidingHandSplint.SetActive(false);
+            }
+            if (GuidingHandRope)
+            {
+                GuidingHandRope.SetActive(false);
+            }
+            if (GuidingHandBucket)
+            {
+                GuidingHandBucket.SetActive(false);
             }
             boxCollider.size = originalSize;
             try
