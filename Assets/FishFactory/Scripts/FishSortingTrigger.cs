@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class FishSortingTrigger : MonoBehaviour
 {
-    // The score of the player based on sorting the fish
-    public int score;
+    // Variables to allow for tracking of performance
+    private int correctSortedFish;
+    private int incorrectSortedFish;
 
     /// <summary>
     /// When the fish enters the trigger, check if the fish has been sorted and if it has the correct tier
@@ -29,12 +30,12 @@ public class FishSortingTrigger : MonoBehaviour
             if (fish.tag == FishSortingButton.fishSortingButton.currentFishTier.ToString())
             {
                 GameManager.Instance.PlaySound("correct");
-                score++;
+                correctSortedFish++;
             }
             else
             {
                 GameManager.Instance.PlaySound("incorrect");
-                score--;
+                incorrectSortedFish--;
             }
             // swich case to ensure the right trigger opens the right door
             string triggerTag = gameObject.name;

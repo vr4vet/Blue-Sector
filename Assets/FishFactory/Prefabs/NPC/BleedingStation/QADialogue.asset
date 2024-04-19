@@ -19,8 +19,14 @@ MonoBehaviour:
     - The fish on the conveyour belt next to me, comes from a cooling tank where
       the fish bleeds out. Please step on the platform next to me, to use the sorting
       machine.
-    - To correctly sort fish, put the fish in the booth of the sorting machine and
-      press the correct button to decide if the fish is of superior or lower quality.
+    - You use the three buttons on the panel to sort the fish. The closest button
+      is for the highest quality fish, called superior. The middle button is for
+      lower quality fish that does not meet the requirements to be superior. Finally
+      the third button, the button farthest from you is for the lowest quality fish.
+    - You do not need to push a button for each fish you sort. The button that was
+      last pressed is the tier the fish will be sorted into. If you find a fish that
+      is not the same tier as the fish you last sorted then you need to press the
+      corresponding button to change the tier to the correct one.
     endAfterDialogue: 0
     branchPoint:
       question: Are you ready to move on?
@@ -53,16 +59,14 @@ MonoBehaviour:
       question: 
       answers:
       - answerLabel: Could you repeat that?
+        nextElement: 2
+      - answerLabel: Thanks
         nextElement: 0
-      - answerLabel: Yes
-        nextElement: 1
   - dialogue:
-    - Goodbye!
+    - Ok, Good luck
     endAfterDialogue: 1
     branchPoint:
-      question: Are you ready to move on?
+      question: 
       answers:
-      - answerLabel: Could you repeat that?
+      - answerLabel: Thanks
         nextElement: 0
-      - answerLabel: Yes
-        nextElement: 1
