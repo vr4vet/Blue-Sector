@@ -41,7 +41,7 @@ public class DiscardFishTests
     }
 
     /// <summary>
-    /// Tests to ensure that the DiscardBadFish script correctly discards fish objects when they collide with the discard box.
+    /// Tests to ensure that the DiscardBadFish script does not count non-fish objects towards the discarded fish count.
     /// </summary>
     [UnityTest]
     public IEnumerator DoesNotDiscardNonFishObjects()
@@ -62,7 +62,7 @@ public class DiscardFishTests
     }
 
     /// <summary>
-    /// Tests to ensure that the DiscardBadFish script correctly discards fish objects when they collide with the discard box.
+    /// Tests to ensure that the DiscardBadFish script does not discard a fish object that has already been discarded.
     /// </summary>
     [UnityTest]
     public IEnumerator DoesNotDiscardAgain()
