@@ -1,39 +1,40 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using BNG;
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class FishSortingTrigger : MonoBehaviour
 {
-    // variables to allow for tracking of performance
+    // Variables to allow for tracking of performance
     private int correctSortedFish;
     private int incorrectSortedFish;
 
+    /// <summary>
+    /// When the fish enters the trigger, check if the fish has been sorted and if it has the correct tier
+    /// </summary>
+    /// <param name="collisionObject">The fish collider</param>
     private void OnTriggerEnter(Collider collisionObject)
-    {    
-        // get parent of parent of bone
+    {
+        // The main fish object
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
-        // check if fish has already been sorted
-        if (FishSortingButton.fishSortingButton.sortedFish.Contains(fish.gameObject)) return;
 
-        // get the tag of the trigger and open the corresponding door to let the fish fall onto the belt
-        if (collisionObject.CompareTag("Destroyable")) 
+        // Check if fish has already been sorted
+        if (FishSortingButton.fishSortingButton.sortedFish.Contains(fish.gameObject))
+            return;
+
+        // Get the tag of the trigger and open the corresponding door to let the fish fall onto the belt
+        if (collisionObject.CompareTag("Destroyable"))
         {
             // add fish to list of sorted fish
             FishSortingButton.fishSortingButton.sortedFish.Add(fish.gameObject);
-            
+
             // check if fish has been given correct tier
             if (fish.tag == FishSortingButton.fishSortingButton.currentFishTier.ToString())
             {
-                GameManager.instance.PlaySound("correct");
+                GameManager.Instance.PlaySound("correct");
                 correctSortedFish++;
-            } 
-            else 
+            }
+            else
             {
-                GameManager.instance.PlaySound("incorrect");
+                GameManager.Instance.PlaySound("incorrect");
                 incorrectSortedFish--;
             }
             // swich case to ensure the right trigger opens the right door
@@ -67,16 +68,22 @@ public class FishSortingTrigger : MonoBehaviour
             }
         }
     }
-    
-    // get the game object with doorName, open the door and start coroutine to close the door
+
+    /// <summary>
+    /// Open the door with the given name and close it after a delay
+    /// </summary>
+    /// <param name="doorName">The name of the door to open</param>
     private void OpenDoor(string doorName)
     {
         GameObject door = GameObject.Find(doorName);
         door.transform.Translate(Vector3.back * 0.17f);
         StartCoroutine(CloseDoorAfterDelay(door));
-
     }
 
+    /// <summary>
+    /// Close the door after a delay
+    /// </summary>
+    /// <param name="door">The door to close</param>
     private IEnumerator CloseDoorAfterDelay(GameObject door)
     {
         // Keep the door open for 2 seconds

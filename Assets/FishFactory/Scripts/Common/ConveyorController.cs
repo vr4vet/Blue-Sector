@@ -1,22 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ConveyorController : MonoBehaviour
 {
+    // The colors used by the Unity Editor to indicate movement axis. D and I refers to whether it is an increase or decrease in value along the given axis.
     private enum Direction
     {
-        Forward,
-        Backward,
-        Right,
-        Left,
+        Forward_BlueI,
+        Backward_BlueD,
+        Right_RedI,
+        Left_RedD,
+        Up_GreenI,
+        Down_GreenD
     }
 
-    // test with serializedfield //FIXME: remove
-    [SerializeField]
-    private GameManager gameManager;
+    // ----------------- Editor Variables -----------------
 
-    // Editor fields
     [SerializeField]
     private bool isBeltOn = true;
     public bool IsBeltOn
@@ -36,36 +34,49 @@ public class ConveyorController : MonoBehaviour
     }
 
     [SerializeField]
-    [Tooltip("For selecting movement direction. Using the direction of the belt object.")]
-    private Direction direction = Direction.Forward;
+    [Tooltip(
+        "For selecting movement direction. Using the direction of the belt object. The colors used by the Unity Editor to indicate movement axis. D and I refers to whether it is an increase or decrease in value along the given axis."
+    )]
+    private Direction direction = Direction.Forward_BlueI;
 
-    // Private variables
+    // ----------------- Private Variables -----------------
+
     private Vector3 _direction;
+
+    // ----------------- Unity Functions -----------------
 
     void Start()
     {
-        gameManager = GameManager.instance;
-
         switch (direction) // Transforming enum to vector3
         {
-            case Direction.Forward:
+            case Direction.Forward_BlueI:
             {
                 _direction = gameObject.transform.forward;
                 break;
             }
-            case Direction.Right:
+            case Direction.Right_RedI:
             {
                 _direction = gameObject.transform.right;
                 break;
             }
-            case Direction.Backward:
+            case Direction.Backward_BlueD:
             {
                 _direction = -gameObject.transform.forward;
                 break;
             }
-            case Direction.Left:
+            case Direction.Left_RedD:
             {
                 _direction = -gameObject.transform.right;
+                break;
+            }
+            case Direction.Up_GreenI:
+            {
+                _direction = gameObject.transform.up;
+                break;
+            }
+            case Direction.Down_GreenD:
+            {
+                _direction = -gameObject.transform.up;
                 break;
             }
         }
@@ -73,9 +84,15 @@ public class ConveyorController : MonoBehaviour
 
     void Update()
     {
-        isBeltOn = gameManager.IsTaskOn;
+        isBeltOn = GameManager.Instance.IsTaskOn;
     }
 
+    // ----------------- Private Functions -----------------
+
+    /// <summary>
+    /// Method <c>OnCollisionStay</c> applies force to objects that are on the conveyor belt.
+    /// </summary>
+    /// <param name="collision"> The collision object that is on the conveyor belt. </param>
     private void OnCollisionStay(Collision collision)
     {
         if (!IsBeltOn)
@@ -89,13 +106,5 @@ public class ConveyorController : MonoBehaviour
 
             obj.AddForce(_direction * acceleration, ForceMode.Acceleration);
         }
-    }
-
-    /// <summary>
-    /// Method <c>ToggleBelt</c> toggles belt on and off.
-    /// </summary>
-    public void ToggleBelt()
-    {
-        isBeltOn = !isBeltOn;
     }
 }

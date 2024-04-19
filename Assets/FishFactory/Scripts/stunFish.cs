@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class stunFish : MonoBehaviour
+public class StunFish : MonoBehaviour
 {
     // counter for the number of fish that are stunned
     public int nrFishStun = 0;
@@ -13,19 +11,23 @@ public class stunFish : MonoBehaviour
         {
             return;
         }
-        // get the parent's parent
+        // Get the main fish object
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
 
-        // get fish state and check if fish is alive, if fish is alive it's state is set to stunned
+        // Get fish state and check if fish is alive, if fish is alive it's state is set to stunned
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
         if (fishState.currentState == FactoryFishState.State.Alive)
         {
-            // commented out as animation is not working correctly and the component has been disabled
+            // FIXME: commented out as animation is not working correctly and the component has been disabled
             // fish.GetComponent<Animator>().enabled = false;
 
             fishState.currentState = FactoryFishState.State.Stunned;
-            GameManager.instance.PlaySound("correct");
+            GameManager.Instance.PlaySound("correct");
             nrFishStun++;
+        }
+        else
+        {
+            GameManager.Instance.PlaySound("incorrect");
         }
     }
 }

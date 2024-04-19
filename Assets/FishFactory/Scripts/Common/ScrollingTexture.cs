@@ -1,23 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ScrollingTexture : MonoBehaviour {
+public class ScrollingTexture : MonoBehaviour
+{
+    // ----------------- Editor Variables -----------------
 
-    public float scrollSpeed = 0.1F;
-    public Renderer rend;
-    public ConveyorController belt;
+    [SerializeField]
+    private float scrollSpeedX = 0.1F;
+
+    [SerializeField]
+    private float scrollSpeedY = 0F;
+
+    [SerializeField]
+    private Renderer rend;
+
+    [SerializeField]
+    private ConveyorController belt;
+
+    // ----------------- Unity Functions -----------------
+
     void Start()
     {
         rend = GetComponent<Renderer>();
     }
+
     void FixedUpdate()
     {
         // Rotates the texture, making it seem like the object is moving
         if (belt.IsBeltOn)
         {
-            float offset = Time.time * scrollSpeed;
-            rend.material.SetTextureOffset("_BaseMap", new Vector2(offset, 0));
+            float offsetX = Time.time * scrollSpeedX;
+            float offsetY = Time.time * scrollSpeedY;
+            rend.material.SetTextureOffset("_MainTex", new Vector2(offsetX, offsetY));
         }
     }
 }

@@ -1,11 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipGlove : MonoBehaviour
 {
     // Player should be able to change the glove they are wearing on either hand
     // The player needs to wear a steel glove and a blue glove on either hand to progress to the factory
+
+    /// <summary>
+    /// When the player collides with the glove, equip it
+    /// </summary>
+    /// <param name="collider">The player hand collider</param>
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.name == "Grabber")
@@ -17,20 +20,20 @@ public class EquipGlove : MonoBehaviour
 
             if (
                 collider.transform.parent.name == "LeftController"
-                && GameManager.instance.RightHand != GameManager.PlayerHandState.Unsanitized
+                && GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized
             )
             {
-                GameManager.instance.LeftHand = gloveType;
-                GameManager.instance.PlaySound("correct");
+                GameManager.Instance.LeftHand = gloveType;
+                GameManager.Instance.PlaySound("correct");
             }
-            else if (GameManager.instance.RightHand != GameManager.PlayerHandState.Unsanitized)
+            else if (GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized)
             {
-                GameManager.instance.RightHand = gloveType;
-                GameManager.instance.PlaySound("correct");
+                GameManager.Instance.RightHand = gloveType;
+                GameManager.Instance.PlaySound("correct");
             }
             else
             {
-                GameManager.instance.PlaySound("incorrect");
+                GameManager.Instance.PlaySound("incorrect");
             }
         }
     }

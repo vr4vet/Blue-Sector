@@ -1,27 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SanitizeHands : MonoBehaviour
 {
     // Player can put one or both hands into the sanitizer to clean their hands
+
+    /// <summary>
+    /// When the player hand collides with the sanitizer, change the hand state to sanitized. The player can put one or both hands into the sanitizer to clean their hands. Both hands must be sanitized before the player can put on gloves.
+    /// </summary>
+    /// <param name="collider">The player hand collider</param>
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.name == "Grabber")
         {
-            // Player should not be able to put on gloves without sanitizing hands first
             if (
                 collider.transform.parent.name == "LeftController"
-                && GameManager.instance.LeftHand == GameManager.PlayerHandState.Unsanitized
+                && GameManager.Instance.LeftHand == GameManager.PlayerHandState.Unsanitized
             )
             {
-                GameManager.instance.LeftHand = GameManager.PlayerHandState.Sanitized;
-                GameManager.instance.PlaySound("correct");
+                GameManager.Instance.LeftHand = GameManager.PlayerHandState.Sanitized;
+                GameManager.Instance.PlaySound("correct");
             }
-            else if (GameManager.instance.RightHand == GameManager.PlayerHandState.Unsanitized)
+            else if (GameManager.Instance.RightHand == GameManager.PlayerHandState.Unsanitized)
             {
-                GameManager.instance.RightHand = GameManager.PlayerHandState.Sanitized;
-                GameManager.instance.PlaySound("correct");
+                GameManager.Instance.RightHand = GameManager.PlayerHandState.Sanitized;
+                GameManager.Instance.PlaySound("correct");
             }
         }
     }
