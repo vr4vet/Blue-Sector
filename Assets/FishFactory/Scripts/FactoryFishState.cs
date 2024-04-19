@@ -9,7 +9,10 @@ public class FactoryFishState : MonoBehaviour
         Stunned,
         Bleeding,
         BadQuality,
-        BadCut
+        BadCut,
+        GuttingSuccess,
+        GuttingIncomplete,
+        GuttingFailure,
     }
 
     // The current public state of the fish.
