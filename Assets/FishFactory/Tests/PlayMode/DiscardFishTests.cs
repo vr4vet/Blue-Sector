@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.SceneManagement;
 
 public class DiscardFishTests
 {
     private GameObject discardBox;
     private GameObject fish;
     private DiscardBadFish discardScript;
+    private const string TestSceneName = "DiscardFishTestScene";
 
     [SetUp]
     public void SetUp()
     {
+        // create a new test scene
+        SceneManager.CreateScene(TestSceneName);
+
         // Load and instantiate the prefabs
         var discardBoxPrefab = Resources.Load<GameObject>("Prefabs/FishDiscardBox");
         var fishPrefab = Resources.Load<GameObject>("Prefabs/TempFish");
@@ -77,5 +82,13 @@ public class DiscardFishTests
             discardScript.NrFishDiscarded,
             "The fish should not be discarded again after it has been discarded once"
         );
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        Object.Destroy(fish);
+        Object.Destroy(discardBox);
+        SceneManager.UnloadSceneAsync(TestSceneName);
     }
 }
