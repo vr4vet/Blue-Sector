@@ -18,6 +18,11 @@ namespace Tablet
         private List<Task.Skill> _skills = new List<Task.Skill>();
 
         private StaticPanelManager panelManager;
+
+        [SerializeField] private GameObject maintenanceManager;
+
+        private MaintenanceManager manager => maintenanceManager.GetComponent<MaintenanceManager>();
+        private AddInstructionsToWatch watch => maintenanceManager.GetComponent<AddInstructionsToWatch>();
         //main pages
 
         [Header("Main Page Canvas")]
@@ -82,11 +87,11 @@ namespace Tablet
         {
             //setting loading the scriptable objects
             Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
+            panelManager = gameObject.GetComponent<StaticPanelManager>();
             _tasks = th.taskList;
             _skills = th.skillList;
-
             StartCoroutine(LoadTabletInfo());
-            th.CurrentSubtask.AddListener(HandleCurrentSubtask);
+            manager.CurrentSubtask.AddListener(HandleCurrentSubtask);
         }
 
         //since task and skill won't change in the experience we can load them from the beginning
@@ -106,6 +111,7 @@ namespace Tablet
         }
 
 
+
         public void LoadSkillsPage()
         {
             if (_skillPageOpen != null) _skillPageOpen.Invoke();
@@ -115,7 +121,6 @@ namespace Tablet
             // {
             //     Destroy(parentTransform.GetChild(i).gameObject);
             // }
-            Debug.Log("Loading Skills Page");
             //loads each skill on the parent object
             Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
             foreach (Task.Skill skill in th.skillList)

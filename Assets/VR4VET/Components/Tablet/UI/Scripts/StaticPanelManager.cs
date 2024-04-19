@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using System.Collections;
+
 
 public class StaticPanelManager : MonoBehaviour
 {
@@ -23,8 +26,11 @@ public class StaticPanelManager : MonoBehaviour
     [SerializeReference] GameObject SubtaskAboutMenu;
     [SerializeReference] GameObject SkillListMenu;
     [SerializeReference] GameObject NotificationAlertMenu;
-
+    [SerializeReference] private GameObject maintenanceManager;
+    private AddInstructionsToWatch watch => maintenanceManager.GetComponent<AddInstructionsToWatch>();
     private List<GameObject> allMenus = new();
+
+    private bool activeAlert = false;
 
 
 
@@ -42,7 +48,9 @@ public class StaticPanelManager : MonoBehaviour
         {
             _instance = this;
         }
+
     }
+
 
     #endregion
 
@@ -50,6 +58,19 @@ public class StaticPanelManager : MonoBehaviour
 
     #region Navigation Methods
 
+
+    void Start()
+    {
+        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu, NotificationAlertMenu });
+
+        foreach (var item in allMenus)
+        {
+            item.SetActive(false);
+        }
+        SelectSubtask();
+
+        watch.IncomingMessage.AddListener(SetAlertMenu);
+    }
 
     public void OnClickBackToTasks()
     {
@@ -90,18 +111,6 @@ public class StaticPanelManager : MonoBehaviour
         b.SetActive(true);
     }
 
-    void Start()
-    {
-        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu, NotificationAlertMenu });
-
-        foreach (var item in allMenus)
-        {
-            item.SetActive(false);
-        }
-        SelectSubtask();
-
-
-    }
 
     void Update()
     {
@@ -123,6 +132,19 @@ public class StaticPanelManager : MonoBehaviour
     }
 
 
+    public void SetAlertMenu()
+    {
+
+        NotificationAlertMenu.SetActive(activeAlert);
+        activeAlert = !activeAlert;
+    }
+
+
+
+
+
+
+
 
 
     public void OnClickTask()
@@ -138,11 +160,6 @@ public class StaticPanelManager : MonoBehaviour
 
 
 
-
-    public void OnWatchAlert()
-    {
-        SwitchMenuTo(NotificationAlertMenu);
-    }
 
 
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerExitTeleportationAnchor : MonoBehaviour
 {
@@ -10,20 +11,18 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public GameObject cageArrows;
     public GameObject videoObject;
     [SerializeField] private GameObject maintenanceManager;
-    [SerializeField] private Task.TaskHolder taskHolder;
-
     [SerializeField] private string subTask;
     [SerializeField] private string step;
-    [SerializeField] private GameObject floatingToast;
     [SerializeField] private GameObject anchorArrow;
     private MaintenanceManager manager;
     private FeedbackManager feedbackManager;
 
-
+    private bool activeArrow = false;
     private BoxCollider boxCollider;
     private Vector3 originalSize;
 
     private bool subtaskComplete = false;
+
 
     void Start()
     {
@@ -32,41 +31,39 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         boxCollider = gameObject.GetComponent<BoxCollider>();
         originalSize = boxCollider.size;
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
-        taskHolder.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
+        if (subTask != "Hent Utstyr") manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
         // activeSubtask = manager.GetSubtask(subTask);
 
     }
 
     void CurrentSubtaskUpdate(Task.Subtask currentSub)
     {
-
         if (currentSub.SubtaskName == subTask)
         {
 
-            if (subTask == "Hent Utstyr")
+            if ((currentSub.GetCompletedSteps() + 1) == (currentSub.GetStep(step).getStepNumber()))
             {
-                equipmentArrow.SetActive(true);
+                activeArrow = true;
+
 
             }
-            else if (manager.GetSubtask(subTask).GetCompletedSteps() == (manager.GetStep(subTask, step).getStepNumber() - 1)) ;
+            else
             {
-                anchorArrow.SetActive(true);
+                activeArrow = false;
             }
-
-
 
         }
         else
         {
-            anchorArrow.SetActive(false);
+            activeArrow = false;
         }
+        anchorArrow.SetActive(activeArrow);
     }
 
-    void OnSubtaskCompleted(Task.Subtask subtask)
+    public void OnSubtaskCompleted(Task.Subtask subtask)
     {
         if (subtask.SubtaskName == subTask)
         {
-            floatingToast.SetActive(true);
             subtaskComplete = true;
             if (equipmentArrow)
             {
@@ -81,7 +78,11 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        manager.UpdateCurrentSubtask(manager.GetSubtask(subTask));
+        //if (currentSubtask && currentSubtask.SubtaskName != subTask)
+        // {
+        //    manager.UpdateCurrentSubtask(manager.GetSubtask(subTask));
+        // }
+
         if (other.CompareTag("Player"))
         {
 
@@ -102,7 +103,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             }
             cylinder.SetActive(true);
             cylinderGlow.SetActive(true);
-            anchorArrow.SetActive(true);
+            anchorArrow.SetActive(activeArrow);
             if (videoObject)
             {
                 videoObject.SetActive(false);

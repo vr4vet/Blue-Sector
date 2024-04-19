@@ -23,6 +23,7 @@ public class MaintenanceManager : MonoBehaviour
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
     public UnityEvent TaskCompleted { get; } = new();
+    public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
 
 
     // Start is called before the first frame update
@@ -85,6 +86,8 @@ public class MaintenanceManager : MonoBehaviour
                 Task.Step badgeStep = GetStep("Runde På Ring", stepName);
                 BadgeChanged.Invoke(badgeStep);
             }
+            UpdateCurrentSubtask(sub);
+
         }
         if (sub.Compleated())
         {
@@ -95,10 +98,10 @@ public class MaintenanceManager : MonoBehaviour
             }
 
             int elementIndex = task.Subtasks.FindIndex(sub => sub.SubtaskName == subtaskName);
-            // if (elementIndex < task.Subtasks.Count - 1)
-            // {
-            //     UpdateCurrentSubtask(task.Subtasks.ElementAt(elementIndex + 1));
-            // }
+            if (elementIndex < task.Subtasks.Count - 1)
+            {
+                UpdateCurrentSubtask(task.Subtasks.ElementAt(elementIndex + 1));
+            }
 
             if ((subtaskName == "Runde På Ring" && GetSubtask("Håndforing").Compleated()) || (subtaskName == "Håndforing" && GetSubtask("Runde På Ring").Compleated()))
             {
@@ -124,7 +127,7 @@ public class MaintenanceManager : MonoBehaviour
 
     public void UpdateCurrentSubtask(Task.Subtask subtask)
     {
-        taskHolder.CurrentSubtask.Invoke(subtask);
+        CurrentSubtask.Invoke(subtask);
     }
 
     public Task.Subtask GetSubtask(string subtaskName)

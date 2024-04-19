@@ -6,11 +6,13 @@ using UnityEngine.InputSystem;
 using TMPro;
 using BNG;
 using System;
-
+using UnityEngine.Events;
 public class AddInstructionsToWatch : MonoBehaviour
 {
     public TextMeshPro textMesh;
     [SerializeField] private AudioClip incoming;
+
+    public UnityEvent IncomingMessage = new UnityEvent();
 
 
     // emptyInstructions();
@@ -18,11 +20,15 @@ public class AddInstructionsToWatch : MonoBehaviour
     // OpenXRInput.SendHapticImpulse(lefthand, 1, 1, 1, UnityEngine.InputSystem.XR.XRController.leftHand);
     public void addInstructions(string text)
     {
+
         StartCoroutine(sendHaptics());
 
-        textMesh.SetText(text);
+        StartCoroutine(sendAlertMenu());
 
+
+        textMesh.SetText(text);
         PlayAudio();
+
     }
 
     IEnumerator sendHaptics()
@@ -35,7 +41,13 @@ public class AddInstructionsToWatch : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         device.ExecuteCommand(ref command);
     }
+    IEnumerator sendAlertMenu()
+    {
+        IncomingMessage.Invoke();
 
+        yield return new WaitForSeconds(0.3f);
+        IncomingMessage.Invoke();
+    }
     public void emptyInstructions()
     {
         textMesh.SetText("");
@@ -44,6 +56,7 @@ public class AddInstructionsToWatch : MonoBehaviour
 
     public void PlayAudio()
     {
+
         //if the gameobject has audiosource
         if (TryGetComponent<AudioSource>(out AudioSource audioSource))
         {
@@ -55,6 +68,7 @@ public class AddInstructionsToWatch : MonoBehaviour
         //otherwise create audiosource
         AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
         newAudioSource.PlayOneShot(incoming);
+
     }
 
     public string getText()
