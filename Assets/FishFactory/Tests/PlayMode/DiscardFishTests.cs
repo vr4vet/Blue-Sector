@@ -4,9 +4,8 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-
 public class DiscardFishTests
-{  
+{
     private GameObject discardBox;
     private GameObject fish;
     private DiscardBadFish discardScript;
@@ -24,22 +23,26 @@ public class DiscardFishTests
         discardScript = discardBox.GetComponentInChildren<DiscardBadFish>();
     }
 
-/// <summary>
-/// Tests to ensure that the DiscardBadFish script correctly discards fish objects when they collide with the discard box.
-/// </summary>
+    /// <summary>
+    /// Tests to ensure that the DiscardBadFish script correctly discards fish objects when they collide with the discard box.
+    /// </summary>
     [UnityTest]
     public IEnumerator DiscardFish()
-    {   
+    {
         fish.transform.position = discardBox.transform.position + Vector3.up; // set the fish position to be on top of the discard box
-        
+
         yield return new WaitForSeconds(1);
 
-        Assert.AreEqual(1, discardScript.NrFishDiscarded, "The fish should be discarded and the counter should be increased");
+        Assert.AreEqual(
+            1,
+            discardScript.NrFishDiscarded,
+            "The fish should be discarded and the counter should be increased"
+        );
     }
 
-/// <summary>
-/// Tests to ensure that the DiscardBadFish script correctly discards fish objects when they collide with the discard box.
-/// </summary>
+    /// <summary>
+    /// Tests to ensure that the DiscardBadFish script correctly discards fish objects when they collide with the discard box.
+    /// </summary>
     [UnityTest]
     public IEnumerator DoesNotDiscardNonFishObjects()
     {
@@ -51,20 +54,28 @@ public class DiscardFishTests
 
         yield return new WaitForSeconds(1); // wait for 3 seconds temporarily to let the the coolision happen
 
-        Assert.AreEqual(0, discardScript.NrFishDiscarded, "The non-fish object should not count towards discarded fish");
-    }    
+        Assert.AreEqual(
+            0,
+            discardScript.NrFishDiscarded,
+            "The non-fish object should not count towards discarded fish"
+        );
+    }
 
-/// <summary>
-/// Tests to ensure that the DiscardBadFish script correctly discards fish objects when they collide with the discard box.
-/// </summary>
+    /// <summary>
+    /// Tests to ensure that the DiscardBadFish script correctly discards fish objects when they collide with the discard box.
+    /// </summary>
     [UnityTest]
-    public IEnumerator DoesNotDiscardAgain ()
+    public IEnumerator DoesNotDiscardAgain()
     {
         fish.transform.position = discardBox.transform.position + Vector3.up; // Set the fish position to be on top of the discard box
         yield return new WaitForSeconds(1); // Wait for the collision and potential destruction to be processed
         fish.transform.position = discardBox.transform.position + Vector3.up; // Set the fish position to be on top of the discard box
         yield return new WaitForSeconds(1); // Wait for the collision and potential destruction to be processed
 
-        Assert.AreEqual(1, discardScript.NrFishDiscarded, "The fish should not be discarded again after it has been discarded once");
+        Assert.AreEqual(
+            1,
+            discardScript.NrFishDiscarded,
+            "The fish should not be discarded again after it has been discarded once"
+        );
     }
 }
