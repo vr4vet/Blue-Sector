@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class KnifeState : MonoBehaviour
 {
+    // Reference to the regular knife GameObject
     [SerializeField]
-    private GameObject regularKnife; // Reference to the regular knife GameObject
+    [Tooltip("Place the component matching the regular fish knife blade")]
+    private GameObject regularKnife;
 
+    // Reference to the chipped knife GameObject
     [SerializeField]
-    private GameObject chippedKnife; // Reference to the chipped knife GameObject
+    [Tooltip("Place the component matching the chipped fish knife blade")]
+    private GameObject chippedKnife;
 
     [SerializeField]
     [Tooltip("Enable random count to chip knife instead of a set count")]
@@ -23,8 +27,8 @@ public class KnifeState : MonoBehaviour
         if (isChippingRandom)
         {
             durabilityCount = RandomizeDurability();
-            UpdateKnifeVisibility();
         }
+        UpdateKnifeVisibility();
     }
 
     private int RandomizeDurability()

@@ -9,6 +9,12 @@ public class CutFishBody : MonoBehaviour
     [SerializeField]
     private KnifeState knifeState;
 
+    void Start()
+    {
+        GameObject knife = GameObject.Find("FishKnife");
+        knifeState = knife.GetComponent<KnifeState>();
+    }
+
     /// <summary>
     /// When the knife collides with the fish body, the player makes a wrong cut
     /// </summary>
@@ -22,11 +28,5 @@ public class CutFishBody : MonoBehaviour
 
         fishState.CutFishBody();
         knifeState.DecrementDurabilityCount();
-    }
-
-    void Start()
-    {
-        GameObject knife = GameObject.Find("FishKnife");
-        knifeState = knife.GetComponent<KnifeState>();
     }
 }
