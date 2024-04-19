@@ -32,6 +32,10 @@ public class CutFishGill : MonoBehaviour
             // Update the task step
             UpdateTaskStep();
         }
+        else
+        {
+            return;
+        }
     }
     
     /// <summary>
