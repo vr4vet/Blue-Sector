@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ConveyorController : MonoBehaviour
 {
+    // The colors used by the Unity Editor to indicate movement axis. D and I refers to whether it is an increase or decrease in value along the given axis.
     private enum Direction
     {
         Forward_BlueI,
@@ -14,7 +13,8 @@ public class ConveyorController : MonoBehaviour
         Down_GreenD
     }
 
-    // Editor fields
+    // ----------------- Editor Variables -----------------
+
     [SerializeField]
     private bool isBeltOn = true;
     public bool IsBeltOn
@@ -34,11 +34,16 @@ public class ConveyorController : MonoBehaviour
     }
 
     [SerializeField]
-    [Tooltip("For selecting movement direction. Using the direction of the belt object.")]
+    [Tooltip(
+        "For selecting movement direction. Using the direction of the belt object. The colors used by the Unity Editor to indicate movement axis. D and I refers to whether it is an increase or decrease in value along the given axis."
+    )]
     private Direction direction = Direction.Forward_BlueI;
 
-    // Private variables
+    // ----------------- Private Variables -----------------
+
     private Vector3 _direction;
+
+    // ----------------- Unity Functions -----------------
 
     void Start()
     {
@@ -79,9 +84,15 @@ public class ConveyorController : MonoBehaviour
 
     void Update()
     {
-        isBeltOn = GameManager.instance.IsTaskOn;
+        isBeltOn = GameManager.Instance.IsTaskOn;
     }
 
+    // ----------------- Private Functions -----------------
+
+    /// <summary>
+    /// Method <c>OnCollisionStay</c> applies force to objects that are on the conveyor belt.
+    /// </summary>
+    /// <param name="collision"> The collision object that is on the conveyor belt. </param>
     private void OnCollisionStay(Collision collision)
     {
         if (!IsBeltOn)
@@ -95,13 +106,5 @@ public class ConveyorController : MonoBehaviour
 
             obj.AddForce(_direction * acceleration, ForceMode.Acceleration);
         }
-    }
-
-    /// <summary>
-    /// Method <c>ToggleBelt</c> toggles belt on and off.
-    /// </summary>
-    public void ToggleBelt()
-    {
-        isBeltOn = !isBeltOn;
     }
 }

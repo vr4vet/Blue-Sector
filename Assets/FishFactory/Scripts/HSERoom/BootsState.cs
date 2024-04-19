@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BootsState : MonoBehaviour
 {
+    // ----------------- Public Variables -----------------
+
     [Tooltip("The possible states of the boots.")]
     public enum BootsStatus
     {
@@ -21,6 +22,8 @@ public class BootsState : MonoBehaviour
         set { boots = value; }
     }
 
+    // ----------------- Editor Variables -----------------
+
     [Tooltip("The time it takes for the boots to soak in water, before they can be scrubbed.")]
     [SerializeField]
     private float soakingTime = 3f;
@@ -35,7 +38,30 @@ public class BootsState : MonoBehaviour
     [SerializeField]
     private List<Material> materials = new List<Material>();
 
-    // Called when boots enter water
+    // ----------------- Functions -----------------
+
+    /// <summary>
+    /// Check if the boots are scrubbed with the scrubber. Only checks for "collisions" with the scrubber object.
+    /// </summary>
+    /// <param name="collision">The scrubber object</param>
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "Scrubber" && boots == BootsStatus.SemiClean)
+        {
+            // Could add sound effect here
+            scrubbingLeft--;
+            if (scrubbingLeft < 0)
+            {
+                boots = BootsStatus.Clean;
+                GameManager.Instance.PlaySound("correct");
+                gameObject.GetComponent<MeshRenderer>().material = materials[3]; // Clean
+            }
+        }
+    }
+
+    /// <summary>
+    /// Soak the boots in water to prepare them for scrubbing
+    /// </summary>
     public void BootWashing()
     {
         if (boots == BootsStatus.Dirty)
@@ -45,28 +71,16 @@ public class BootsState : MonoBehaviour
         }
     }
 
-    // The boots need to soak in water before they can be scrubbed
+    /// <summary>
+    /// Coroutine to soak the boots in water before they can be scrubbed
+    /// </summary>
+    /// <returns>Wait for the boots to soak</returns>
     private IEnumerator WashBoots()
     {
         yield return new WaitForSeconds(soakingTime);
-        GameManager.instance.PlaySound("correct");
+        GameManager.Instance.PlaySound("correct");
         boots = BootsStatus.SemiClean;
         gameObject.GetComponent<MeshRenderer>().material = materials[2]; // Soaped
         // The boots are now ready to be scrubbed under water
-    }
-
-    // Called when boots are scrubbed with the scrubber
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Scrubber" && boots == BootsStatus.SemiClean)
-        {
-            scrubbingLeft--;
-            if (scrubbingLeft < 0)
-            {
-                boots = BootsStatus.Clean;
-                GameManager.instance.PlaySound("correct");
-                gameObject.GetComponent<MeshRenderer>().material = materials[3]; // Clean
-            }
-        }
     }
 }

@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class WashBoots : MonoBehaviour
 {
+    /// <summary>
+    /// When the player collides with the boots, wash them
+    /// </summary>
+    /// <param name="collider">The player boots collider</param>
     void OnTriggerEnter(Collider collider)
     {
         if (collider.name == "Boots")

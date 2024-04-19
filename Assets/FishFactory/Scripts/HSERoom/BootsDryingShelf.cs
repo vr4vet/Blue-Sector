@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BootsDryingShelf : MonoBehaviour
@@ -8,21 +7,28 @@ public class BootsDryingShelf : MonoBehaviour
     [SerializeField]
     private float despawnTimer = 3f;
 
-    // Once the boots are cleaned the boots dry off, before the player "puts them on"
+    /// <summary>
+    /// If the boots are clean, dry them off, before the player "puts them on"
+    /// </summary>
+    /// <param name="collider">The collider of the boots</param>
     void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.GetComponent<BootsState>().Boots == BootsState.BootsStatus.Clean)
         {
-            GameManager.instance.PlaySound("correct");
+            GameManager.Instance.PlaySound("correct");
             StartCoroutine(DryBoots(collider.gameObject));
         }
     }
 
+    /// <summary>
+    /// Coroutine to change boot status to dry and despawn them
+    /// </summary>
+    /// <param name="boots">The boots to dry</param>
     private IEnumerator DryBoots(GameObject boots)
     {
         yield return new WaitForSeconds(despawnTimer);
-        GameManager.instance.BootsOn = true;
-        GameManager.instance.PlaySound("correct");
+        GameManager.Instance.BootsOn = true;
+        GameManager.Instance.PlaySound("correct");
         Destroy(boots);
     }
 }
