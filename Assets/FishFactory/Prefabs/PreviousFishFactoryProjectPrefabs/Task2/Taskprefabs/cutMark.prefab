@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3580311380588111960}
   - component: {fileID: 432356209290455037}
   - component: {fileID: 2442357168534573879}
-  - component: {fileID: 7666798293545550757}
   m_Layer: 0
   m_Name: newcutmark
   m_TagString: Untagged
@@ -29,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0.002, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7498536744610108182}
   m_RootOrder: 0
@@ -52,6 +52,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -82,19 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7666798293545550757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4243519599197188834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51ff7acf70a21354b972985e58a57645, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  relativematerial: {fileID: 2100000, guid: 6064ccdcdd97eea449294bcd5d3b03e5, type: 2}
 --- !u!1 &8196644232525647315
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,6 +109,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3580311380588111960}
   m_Father: {fileID: 0}
