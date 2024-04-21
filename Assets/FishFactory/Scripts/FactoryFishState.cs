@@ -9,7 +9,10 @@ public class FactoryFishState : MonoBehaviour
         Stunned,
         Bleeding,
         BadQuality,
-        BadCut
+        BadCut,
+        GuttingSuccess,
+        GuttingIncomplete,
+        GuttingFailure,
     }
 
     // The current public state of the fish.
@@ -35,9 +38,10 @@ public class FactoryFishState : MonoBehaviour
 
             case State.BadCut:
                 currentState = State.Bleeding;
-                // The player can cut the gills of a fish that has already been cut incorrectly
+                // The player can cut the gills of a fish that has already been cut incorrectly, fixing the mistake.
                 GameManager.Instance.PlaySound("correct");
                 break;
+
             case State.Bleeding:
                 // The player should not be able to cut the gills of a fish that is already bleeding
                 break;
@@ -56,15 +60,10 @@ public class FactoryFishState : MonoBehaviour
     {
         // To make the cutting process more forgiving, we will not penalize the player for a bad cut if the fish is already cut correctly
         // The player will only be penalized for a bad cut if the fish is alive or has not been cut yet
-        if (
-            currentState == State.Bleeding
-            || currentState == State.BadQuality
-            || currentState == State.BadCut
-        )
+        if (currentState == State.Alive || currentState == State.Stunned)
         {
-            return;
+            currentState = State.BadCut;
+            GameManager.Instance.PlaySound("incorrect");
         }
-        currentState = State.BadCut;
-        GameManager.Instance.PlaySound("incorrect");
     }
 }
