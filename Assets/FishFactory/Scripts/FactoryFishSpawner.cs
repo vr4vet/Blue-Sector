@@ -10,7 +10,7 @@ public class FactoryFishSpawner : MonoBehaviour
     private bool isSpawnerOn = true;
 
     [SerializeField]
-    [Tooltip("The gameobject prefab to spawn")]
+    [Tooltip("The gameobject prefab to spawn. This prefab will be used as the tier 1 fish if fish tiers are enabeled")]
     private GameObject fishPrefab;
 
     [SerializeField]
@@ -50,6 +50,14 @@ public class FactoryFishSpawner : MonoBehaviour
     private bool toggleFishTier;
 
     [SerializeField]
+    [Tooltip("The gameobject prefab to spawn if fish is tier 2")]
+    private GameObject fishPrefabTier2;
+
+    [SerializeField]
+    [Tooltip("The gameobject prefab to spawn if fish is tier 3")]
+    private GameObject fishPrefabTier3;
+
+    [SerializeField]
     [Range(0, 100)]
     [Tooltip("The percentage of fish that should be Tier 1. Higher number equals higher chance.")]
     private int tier1Percentage = 25;
@@ -60,6 +68,21 @@ public class FactoryFishSpawner : MonoBehaviour
         "The percentage of fish that should be Tier 2. Higher number equals higher chance. The remaining percentage will be Tier 3."
     )]
     private int tier2Percentage = 50;
+
+    [Header("Fish Gutting Settings")]
+    [SerializeField]
+    [Tooltip("If toggled, the fish will be assigned a state defining if it has been successfully gutted or not")]
+    private bool toggleFishGuttingChance;
+
+    [SerializeField]
+    [Range(0, 100)]
+    [Tooltip("The percentage of fish that should be successfully gutted")]
+    private int successfullGuttingChance = 65;
+
+    [SerializeField]
+    [Range(0, 100)]
+    [Tooltip("The percentage of fish that are not completely gutted")]
+    private int incompleteGuttingChance = 25;
 
     // ------------------ Private Variables ------------------
 
@@ -128,14 +151,39 @@ public class FactoryFishSpawner : MonoBehaviour
 
         if (currentAmountOfFish < maxAmountOfFish && isSpawnerOn)
         {
+            GameObject spawnedFishPrefab = fishPrefab;
+            string fishTag = "fish";
+
+            // Randomizes the quality of the fish if enabled. The fish will be tagged with the tier it belongs to.
+            if (toggleFishTier)
+            {
+                int randomValue = Random.Range(1, 101);
+                if (randomValue <= tier1Percentage)
+                {
+                    fishTag = "Tier1";
+                    spawnedFishPrefab = fishPrefab;
+                }
+                else if (randomValue <= tier1Percentage + tier2Percentage)
+                {
+                    fishTag = "Tier2";
+                    spawnedFishPrefab = fishPrefabTier2;
+                }
+                else
+                {
+                    fishTag = "Tier3";
+                    spawnedFishPrefab = fishPrefabTier3;
+                }
+            }
+
             // Spawn object as a child of the spawner object, and as such limit the amount of spawned objects to increase performance.
             GameObject childGameObject = Instantiate(
-                fishPrefab,
+                spawnedFishPrefab,
                 transform.position,
                 Random.rotation,
                 transform
             );
             childGameObject.name = "FactoryFish" + transform.childCount.ToString();
+            childGameObject.tag = fishTag;
 
             // Randomizes the state of the fish
             FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
@@ -153,24 +201,6 @@ public class FactoryFishSpawner : MonoBehaviour
                     randomSize,
                     randomSize
                 );
-            }
-
-            // Randomizes the quality of the fish if enabled. The fish will be tagged with the tier it belongs to.
-            if (toggleFishTier)
-            {
-                int randomValue = Random.Range(1, 101);
-                if (randomValue <= tier1Percentage)
-                {
-                    childGameObject.tag = "Tier1";
-                }
-                else if (randomValue <= tier1Percentage + tier2Percentage)
-                {
-                    childGameObject.tag = "Tier2";
-                }
-                else
-                {
-                    childGameObject.tag = "Tier3";
-                }
             }
         }
 
@@ -207,6 +237,23 @@ public class FactoryFishSpawner : MonoBehaviour
         int randomValue = Random.Range(1, 101);
 
         FactoryFishState.State state;
+
+        if (toggleFishGuttingChance)
+        {
+            if (randomValue <= successfullGuttingChance)
+            {
+                state = FactoryFishState.State.GuttingSuccess;
+            }
+            else if (randomValue <= successfullGuttingChance + incompleteGuttingChance)
+            {
+                state = FactoryFishState.State.GuttingIncomplete;
+            }
+            else
+            {
+                state = FactoryFishState.State.GuttingFailure;  
+            }
+            return state;
+        }
 
         if (randomValue <= aliveFishPercent)
         {
