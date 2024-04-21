@@ -7,15 +7,21 @@ public class GutFish : MonoBehaviour
     [SerializeField]
     private Light gutLight;
 
+    [SerializeField]
+    private Texture guttedFish;
+
     void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.tag == "Destroyable")
         {
             // TODO: Change texture to gutted fish
-            // collider.gameObject.GetComponent<Renderer>().material.mainTexture =
-            //     Resources.Load<Texture>("GuttedFish");
+            collider
+                .transform.parent.transform.parent.transform.Find("Stereo textured mesh")
+                .GetComponent<Renderer>()
+                .material.mainTexture = guttedFish;
             // Play sound
-            GameManager.Instance.PlaySound("door");
+            GetComponent<AudioSource>()
+                .Play();
 
             // Turn on light
             gutLight.enabled = true;
