@@ -44,6 +44,10 @@ public class FactoryFishSpawner : MonoBehaviour
     )]
     private int badFishPercent = 10;
 
+    [SerializeField]
+    [Tooltip("The gameobject prefab to spawn if fish is bad or dead and should be thrown away")]
+    private GameObject badfishPrefab;
+
     [Header("Fish Tier Settings")]
     [SerializeField]
     [Tooltip("If toggled, the fish will spawn in different tiers")]
@@ -175,6 +179,13 @@ public class FactoryFishSpawner : MonoBehaviour
                 }
             }
 
+            // Get a random state and sets prefab to badfishPrefab if the state is BadQuality
+            FactoryFishState.State randomizedFishState = RandomizeFishState();
+            if (randomizedFishState == FactoryFishState.State.BadQuality) 
+            {
+                spawnedFishPrefab = badfishPrefab;
+            }
+
             // Spawn object as a child of the spawner object, and as such limit the amount of spawned objects to increase performance.
             GameObject childGameObject = Instantiate(
                 spawnedFishPrefab,
@@ -183,14 +194,24 @@ public class FactoryFishSpawner : MonoBehaviour
                 transform
             );
             childGameObject.name = "FactoryFish" + transform.childCount.ToString();
-            childGameObject.tag = fishTag;
+            
+            if (toggleFishTier)
+            {
+                childGameObject.tag = fishTag;
+            }
 
-            // Randomizes the state of the fish
+            // Set the state of the fish to the randomizedFishState
             FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
             if (fishState != null)
             {
-                fishState.currentState = RandomizeFishState();
+                fishState.currentState = randomizedFishState;
             }
+
+            // Enable animator if fish is alive (disabled as fish animations are not functional)
+            /* if(randomizedFishState == FactoryFishState.State.Alive)
+            {
+                childGameObject.GetComponent<Animator>().enabled = true;
+            } */
 
             // Randomizes the size of the fish if enabled
             if (fishSizeVariation)
