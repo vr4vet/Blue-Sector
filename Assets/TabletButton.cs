@@ -14,18 +14,10 @@ public class TabletButton : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-
-        Debug.Log("triggerEntered");
-        if (other.CompareTag("Hand"))
+        if (other.CompareTag("Finger"))
         {
             button.onClick.Invoke();
         }
-    }
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("collisionEntered");
-        Debug.Log(collision.collider.tag);
-        button.onClick.Invoke();
     }
 
 }

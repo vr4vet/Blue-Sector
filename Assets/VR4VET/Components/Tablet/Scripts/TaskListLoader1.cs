@@ -61,6 +61,8 @@ namespace Tablet
         [SerializeField] private GameObject _subtaskListEntry;
         [SerializeField] private GameObject _taskListEntry;
         [SerializeField] private GameObject _skillBadgesList;
+        [SerializeField] private GameObject _horizontalSkill;
+        [SerializeField] private GameObject _simpleSkill;
 
         [Header("Additional Events")]
         [SerializeField] private UnityEvent _skillPageOpen;
@@ -111,6 +113,38 @@ namespace Tablet
         }
 
 
+        public void LoadSkillBadge(Task.Skill skill, GameObject parent)
+        {
+            // Initiate a parent for list of badges and skill title
+            GameObject skillBadgesContent = Instantiate(_simpleSkill, Vector3.zero, Quaternion.identity);
+            // Add the horizontal list to vertical content list
+            skillBadgesContent.transform.SetParent(parent.transform);
+            skillBadgesContent.transform.localPosition = Vector3.zero;
+            skillBadgesContent.transform.localScale = Vector3.one;
+            skillBadgesContent.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+
+            // Set title to be name of this skill
+            TMP_Text skillName = skillBadgesContent.transform.Find("Txt_SkillName").GetComponent<TMP_Text>();
+            skillName.text = skill.Name;
+
+            // // Set instructions for unlocking this skill
+            // TMP_Text unlockInstructions = skillBadgesContent.transform.Find("Txt_BadgeInfo").GetComponent<TMP_Text>();
+            // unlockInstructions.text = skill.Instructions;
+
+            // Find Badge Image and replace with the Icon for this skill
+            GameObject badgeItem = skillBadgesContent.transform.Find("BadgeItem").gameObject;
+            UnityEngine.UI.Image buttonIcon = badgeItem.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
+            buttonIcon.sprite = skill.Icon;
+
+            // Set icon with shader and padlock if badge is locked, if unlocked set green badge active
+            GameObject padlock = badgeItem.transform.Find("padlock").gameObject;
+            GameObject completedBackground = badgeItem.transform.Find("CompletedBackground").gameObject;
+            padlock.SetActive(skill.IsLocked());
+            completedBackground.SetActive(!skill.IsLocked());
+
+        }
+
 
         public void LoadSkillsPage()
         {
@@ -123,35 +157,26 @@ namespace Tablet
             // }
             //loads each skill on the parent object
             Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
-            foreach (Task.Skill skill in th.skillList)
+
+            GameObject horizontalSkill = Instantiate(_horizontalSkill, Vector3.zero, Quaternion.identity);
+
+
+            for (int i = 0; i < th.skillList.Count; i++)
             {
-                // Initiate a parent for list of badges and skill title
-                GameObject skillBadgesContent = Instantiate(_skillBadgesList, Vector3.zero, Quaternion.identity);
-                // Add the horizontal list to vertical content list
-                skillBadgesContent.transform.SetParent(skillContent.transform);
-                skillBadgesContent.transform.localPosition = Vector3.zero;
-                skillBadgesContent.transform.localScale = Vector3.one;
-                skillBadgesContent.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                if (i % 2 == 0 && i != 0)
+                {
+                    horizontalSkill = Instantiate(_horizontalSkill, Vector3.zero, Quaternion.identity);
+                }
+
+                horizontalSkill.transform.SetParent(skillContent.transform);
+                horizontalSkill.transform.localPosition = Vector3.zero;
+                horizontalSkill.transform.localScale = Vector3.one;
+                horizontalSkill.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                LoadSkillBadge(th.skillList[i], horizontalSkill);
 
 
-                // Set title to be name of this skill
-                TMP_Text skillName = skillBadgesContent.transform.Find("Txt_SkillName").GetComponent<TMP_Text>();
-                skillName.text = skill.Name;
 
-                // Set instructions for unlocking this skill
-                TMP_Text unlockInstructions = skillBadgesContent.transform.Find("Txt_BadgeInfo").GetComponent<TMP_Text>();
-                unlockInstructions.text = skill.Instructions;
 
-                // Find Badge Image and replace with the Icon for this skill
-                GameObject badgeItem = skillBadgesContent.transform.Find("BadgeItem").gameObject;
-                UnityEngine.UI.Image buttonIcon = badgeItem.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
-                buttonIcon.sprite = skill.Icon;
-
-                // Set icon with shader and padlock if badge is locked, if unlocked set green badge active
-                GameObject padlock = badgeItem.transform.Find("padlock").gameObject;
-                GameObject completedBackground = badgeItem.transform.Find("CompletedBackground").gameObject;
-                padlock.SetActive(skill.IsLocked());
-                completedBackground.SetActive(!skill.IsLocked());
             }
         }
         // refreshing after adding the new elements for the Page loader to set the pages correctly
