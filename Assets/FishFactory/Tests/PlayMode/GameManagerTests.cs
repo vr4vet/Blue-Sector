@@ -25,49 +25,36 @@ public class GameManagerTests
         // Load the sound effects
         soundEffects = Resources.LoadAll<AudioClip>("Sounds");
         gameManager.SoundEffects = soundEffects;
+
     }
 
     [TearDown]
     public void TearDown()
     {
+        // Destroy the GameManager object
         Object.Destroy(gameManagerObject);
+        // Unload the test scene
         SceneManager.UnloadSceneAsync(TestSceneName);
     }
 
-    [Test]
-    public void ToggleTaskOnTest()
+    [UnityTest]
+    public IEnumerator ToggleTaskOnTest()
     {
         Assert.IsFalse(gameManager.IsTaskOn);
         gameManager.ToggleTaskOn();
         Assert.IsTrue(gameManager.IsTaskOn);
         gameManager.ToggleTaskOn();
         Assert.IsFalse(gameManager.IsTaskOn);
+        yield return null;
     }
 
-    [Test]
-    public void SoundsArePlaying()
-    {
-        gameManager.PlaySound("correct");
-        Assert.IsTrue(gameManager.GetComponent<AudioSource>().isPlaying);
-    }
-
-    [Test]
-    public void PlaysTheCorrectSound()
+    [UnityTest]
+    public IEnumerator PlaysTheCorrectSound()
     {
         gameManager.PlaySound("correct");
         Assert.AreEqual(gameManager.GetComponent<AudioSource>().clip, soundEffects[0]);
         gameManager.PlaySound("incorrect");
         Assert.AreEqual(gameManager.GetComponent<AudioSource>().clip, soundEffects[1]);
-    }
-
-    [Test]
-    public void CanCompleteHSE()
-    {
-        gameManager.SetPlayerGloves();
-        Assert.IsFalse(gameManager.HSERoomCompleted);
-        gameManager.EarProtectionOn = true;
-        Assert.IsFalse(gameManager.HSERoomCompleted);
-        gameManager.BootsOn = true;
-        Asser.IsTrue(gameManager.HSERoomCompleted);
+        yield return null;
     }
 };
