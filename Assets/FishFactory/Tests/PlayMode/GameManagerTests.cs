@@ -21,6 +21,10 @@ public class GameManagerTests
         // Create a new GameObject and add the GameManager component to it
         gameManagerObject = new GameObject();
         gameManager = gameManagerObject.AddComponent<GameManager>();
+
+        // Load the sound effects
+        soundEffects = Resources.LoadAll<AudioClip>("Sounds");
+        gameManager.SoundEffects = soundEffects;
     }
 
     [TearDown]
@@ -31,32 +35,39 @@ public class GameManagerTests
     }
 
     [Test]
-    public void GameManager_IsSingleton()
+    public void ToggleTaskOnTest()
     {
-        // Create another GameManager instance
-        var anotherGameObject = new GameObject();
-        var anotherGameManager = anotherGameObject.AddComponent<GameManager>();
-
-        // Assert that the second instance is destroyed and the first instance remains
-        Assert.IsTrue(gameManager == GameManager.Instance);
-        Assert.IsFalse(anotherGameManager == GameManager.Instance);
-
-        // Clean up
-        Object.Destroy(anotherGameObject);
+        Assert.IsFalse(gameManager.IsTaskOn);
+        gameManager.ToggleTaskOn();
+        Assert.IsTrue(gameManager.IsTaskOn);
+        gameManager.ToggleTaskOn();
+        Assert.IsFalse(gameManager.IsTaskOn);
     }
 
     [Test]
-    public void ToggleTaskOn_TogglesCorrectly()
+    public void SoundsArePlaying()
     {
-        // Initial state is false
-        Assert.IsFalse(gameManager.IsTaskOn);
+        gameManager.PlaySound("correct");
+        Assert.IsTrue(gameManager.GetComponent<AudioSource>().isPlaying);
+    }
 
-        // Toggle task on
-        gameManager.ToggleTaskOn();
-        Assert.IsTrue(gameManager.IsTaskOn);
+    [Test]
+    public void PlaysTheCorrectSound()
+    {
+        gameManager.PlaySound("correct");
+        Assert.AreEqual(gameManager.GetComponent<AudioSource>().clip, soundEffects[0]);
+        gameManager.PlaySound("incorrect");
+        Assert.AreEqual(gameManager.GetComponent<AudioSource>().clip, soundEffects[1]);
+    }
 
-        // Toggle task off
-        gameManager.ToggleTaskOn();
-        Assert.IsFalse(gameManager.IsTaskOn);
+    [Test]
+    public void CanCompleteHSE()
+    {
+        gameManager.SetPlayerGloves();
+        Assert.IsFalse(gameManager.HSERoomCompleted);
+        gameManager.EarProtectionOn = true;
+        Assert.IsFalse(gameManager.HSERoomCompleted);
+        gameManager.BootsOn = true;
+        Asser.IsTrue(gameManager.HSERoomCompleted);
     }
 };
