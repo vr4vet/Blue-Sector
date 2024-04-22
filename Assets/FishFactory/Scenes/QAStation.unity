@@ -4682,14 +4682,16 @@ MonoBehaviour:
   fishSizeVariation: 1
   aliveFishPercent: 10
   badFishPercent: 10
+  badfishPrefab: {fileID: 2435888089390791047, guid: ab861210663e17e498d5f5cbc166c025,
+    type: 3}
   toggleFishTier: 0
   fishPrefabTier2: {fileID: 0}
   fishPrefabTier3: {fileID: 0}
   tier1Percentage: 25
   tier2Percentage: 50
-  toggleFishGuttingChance: 0
-  successfullGuttingChance: 80
-  incompleteGuttingChance: 80
+  toggleFishGuttingChance: 1
+  successfullGuttingChance: 0
+  incompleteGuttingChance: 100
 --- !u!65 &415939426
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7809,7 +7811,7 @@ GameObject:
   - component: {fileID: 598380307}
   - component: {fileID: 598380306}
   m_Layer: 0
-  m_Name: Wall1 (1)
+  m_Name: Roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8400,6 +8402,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall2
       objectReference: {fileID: 0}
+    - target: {fileID: 5564782313871557706, guid: 25e6a7ec6a0b3594da2640c242dc83b3,
+        type: 3}
+      propertyPath: guttedFish
+      value: 
+      objectReference: {fileID: 2100000, guid: 4ea695ae2f48bc04595839cd2e9d161d, type: 2}
     - target: {fileID: 5564782313871557707, guid: 25e6a7ec6a0b3594da2640c242dc83b3,
         type: 3}
       propertyPath: m_RootOrder

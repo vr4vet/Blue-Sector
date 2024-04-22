@@ -8,7 +8,7 @@ public class GutFish : MonoBehaviour
     private Light gutLight;
 
     [SerializeField]
-    private Texture guttedFish;
+    private Material guttedFish;
 
     void OnTriggerEnter(Collider collider)
     {
@@ -18,7 +18,7 @@ public class GutFish : MonoBehaviour
             collider
                 .transform.parent.transform.parent.transform.Find("Stereo textured mesh")
                 .GetComponent<Renderer>()
-                .material.mainTexture = guttedFish;
+                .material = guttedFish;
             // Play sound
             GetComponent<AudioSource>()
                 .Play();
