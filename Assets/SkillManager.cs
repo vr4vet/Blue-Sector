@@ -14,6 +14,8 @@ public class SkillManager : MonoBehaviour
     [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
     private int maxSteps;
 
+    private Task.Task task => taskHolder.GetTask("Vedlikehold");
+
 
     private void Awake()
     {
@@ -31,8 +33,7 @@ public class SkillManager : MonoBehaviour
     void Start()
     {
         manager = this.gameObject.GetComponent<MaintenanceManager>();
-
-        Task.Subtask subtask = taskHolder.GetTask("Vedlikehold").GetSubtask("Runde På Ring");
+        Task.Subtask subtask = task.GetSubtask("Runde På Ring");
         maxSteps = subtask.StepList.Count;
         manager.BadgeChanged.AddListener(UpdateBadges);
 
@@ -40,7 +41,7 @@ public class SkillManager : MonoBehaviour
 
     public void UpdateBadges(Task.Step step)
     {
-        if (manager.GetSubtask("Runde På Ring").StepList.Contains(step))
+        if (step.ParentSubtask.SubtaskName == "Runde På Ring" && !step.IsCompeleted())
         {
             LightningBadge();
             if (step.IsCompeleted()) { StepwiseBadge(step.getStepNumber()); }
@@ -53,7 +54,6 @@ public class SkillManager : MonoBehaviour
         {
             VideoBadge();
         }
-
 
     }
     private void CompleteBadge(string skillName)

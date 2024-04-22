@@ -5,43 +5,37 @@ using UnityEngine.Events;
 
 public class PlayerExitTeleportationAnchor : MonoBehaviour
 {
-    public GameObject cylinder;
-    public GameObject cylinderGlow;
     public GameObject equipmentArrow;
     public GameObject cageArrows;
     public GameObject videoObject;
     [SerializeField] private GameObject maintenanceManager;
-    [SerializeField] private string subTask;
-    [SerializeField] private string step;
+
     [SerializeField] private GameObject anchorArrow;
     private MaintenanceManager manager;
     private FeedbackManager feedbackManager;
-
     private bool activeArrow = false;
-    private BoxCollider boxCollider;
-    private Vector3 originalSize;
-
-    private bool subtaskComplete = false;
+    public Task.Subtask subtask;
+    [SerializeField] private string stepName;
+    private Task.Step step;
 
 
     void Start()
     {
+        step = subtask.GetStep(stepName);
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
-        boxCollider = gameObject.GetComponent<BoxCollider>();
-        originalSize = boxCollider.size;
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
-        if (subTask != "Hent Utstyr") manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
+        if (subtask.SubtaskName != "Hent Utstyr") manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
         // activeSubtask = manager.GetSubtask(subTask);
 
     }
 
     void CurrentSubtaskUpdate(Task.Subtask currentSub)
     {
-        if (currentSub.SubtaskName == subTask)
+        if (currentSub == subtask)
         {
 
-            if ((currentSub.GetCompletedSteps() + 1) == (currentSub.GetStep(step).getStepNumber()))
+            if ((subtask.GetCompletedSteps() + 1) == (step.getStepNumber()))
             {
                 activeArrow = true;
 
@@ -60,11 +54,11 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         anchorArrow.SetActive(activeArrow);
     }
 
-    public void OnSubtaskCompleted(Task.Subtask subtask)
+    public void OnSubtaskCompleted(Task.Subtask completedSubtask)
     {
-        if (subtask.SubtaskName == subTask)
+        if (completedSubtask == subtask)
         {
-            subtaskComplete = true;
+
             if (equipmentArrow)
             {
                 equipmentArrow.SetActive(false);
@@ -86,10 +80,8 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         if (other.CompareTag("Player"))
         {
 
-            cylinder.SetActive(false);
-            cylinderGlow.SetActive(false);
             anchorArrow.SetActive(false);
-            boxCollider.size = new Vector3(1f, 3f, 1f);
+
         }
     }
     public void OnTriggerExit(Collider other)
@@ -101,31 +93,25 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
                 feedbackManager.StopMoreFeedback();
                 feedbackManager.emptyInstructions();
             }
-            cylinder.SetActive(true);
-            cylinderGlow.SetActive(true);
+
             anchorArrow.SetActive(activeArrow);
             if (videoObject)
             {
                 videoObject.SetActive(false);
             }
-            boxCollider.size = originalSize;
-            try
-            {
-                if (subtaskComplete)
-                {
-                    gameObject.SetActive(false);
-                    return;
-                }
-                else if (manager.GetStep(subTask, step).IsCompeleted())
-                {
-                    gameObject.SetActive(false);
-                    return;
-                }
-            }
-            catch
-            {
 
+
+            if (subtask.Compleated())
+            {
+                gameObject.SetActive(false);
+                return;
             }
+            else if (step.IsCompeleted() && subtask.SubtaskName != "Hent Utstyr")
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
 
         }
 

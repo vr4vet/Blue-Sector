@@ -52,7 +52,7 @@ public class FillFood : MonoBehaviour
             rb.AddForce(velocity, ForceMode.VelocityChange);
             spawnNumber++;
         }
-        manager.CompleteStep("Håndforing", "Kast mat til fisken");
+        manager.CompleteStep(manager.GetStep("Håndforing", "Kast mat til fisken"));
 
 
     }

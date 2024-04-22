@@ -14,6 +14,7 @@ namespace Task
         private int stepNumber;
 
         private bool _compleated = false;
+        private bool _currentStep = false;
         private int _repetionsCompleated = 0;
         private Subtask _parentSubtask;
         public Subtask ParentSubtask { get => _parentSubtask; set => _parentSubtask = value; }
@@ -21,6 +22,9 @@ namespace Task
         public int RepetionNumber { get => _repetionNumber; set => _repetionNumber = value; }
         public int RepetionsCompleated { get => _repetionsCompleated; set => _repetionsCompleated = value; }
         public string StepName { get => _stepName; set => _stepName = value; }
+
+        public bool CurrentStep { get => _currentStep; set => _currentStep = value; }
+
 
         public void CompleateRep()
         {

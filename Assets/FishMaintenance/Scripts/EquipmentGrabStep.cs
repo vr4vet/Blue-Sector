@@ -14,7 +14,8 @@ public class EquipmentGrabStep : MonoBehaviour
 
         if (other.CompareTag("Hand"))
         {
-            manager.CompleteStep("Hent Utstyr", step);
+            Task.Step completedStep = manager.GetStep("Hent Utstyr", step);
+            manager.CompleteStep(completedStep);
             gameObject.SetActive(false);
         }
     }

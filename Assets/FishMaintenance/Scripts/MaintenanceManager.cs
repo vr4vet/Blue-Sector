@@ -17,15 +17,16 @@ public class MaintenanceManager : MonoBehaviour
     private bool twentySeconds = false;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
-    private Task.Task task;
+    private Task.Task task => taskHolder.GetTask("Vedlikehold");
     [HideInInspector] public int stepCount;
+
+    public Task.Task MaintenanceTask { get => task; }
+
     public UnityEvent<Task.Step?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
     public UnityEvent TaskCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
-
-
     // Start is called before the first frame update
     private void Awake()
     {
@@ -45,8 +46,7 @@ public class MaintenanceManager : MonoBehaviour
     {
         feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
-        task = taskHolder.GetTask("Vedlikehold");
-        UpdateCurrentSubtask(GetSubtask("Hent Utstyr"));
+        UpdateCurrentSubtask(task.GetSubtask("Hent Utstyr"));
 
         // Reset subtsk and step progress on each play, and skill and badge progress
         foreach (Task.Subtask sub in task.Subtasks)
@@ -66,11 +66,10 @@ public class MaintenanceManager : MonoBehaviour
     {
         twentySeconds = passed;
     }
-    public void CompleteStep(string subtaskName, string stepName)
+    public void CompleteStep(Task.Step step)
     {
 
-        Task.Subtask sub = task.GetSubtask(subtaskName);
-        Task.Step step = sub.GetStep(stepName);
+        Task.Subtask sub = step.ParentSubtask;
         step.CompleateRep();
         taskListLoader.SubTaskPageLoader(sub);
         taskListLoader.TaskPageLoader(task);
@@ -81,29 +80,38 @@ public class MaintenanceManager : MonoBehaviour
             PlayAudio(success);
             stepCount += 1;
             feedbackManager.emptyInstructions();
-            if (subtaskName == "Runde På Ring" && twentySeconds)
+            if (sub.SubtaskName == "Runde På Ring" && twentySeconds)
             {
-                Task.Step badgeStep = GetStep("Runde På Ring", stepName);
-                BadgeChanged.Invoke(badgeStep);
+                BadgeChanged.Invoke(step);
             }
-            UpdateCurrentSubtask(sub);
+            SubtaskChanged.Invoke(sub);
+            if (sub.StepList.Count < sub.GetCompletedSteps())
+            {
+                Task.Step nextStep = sub.StepList.Find(element => (!element.IsCompeleted()));
+                nextStep.CurrentStep = true;
+                step.CurrentStep = false;
+                UpdateCurrentSubtask(sub);
+
+            }
+
 
         }
         if (sub.Compleated())
         {
+            string subtaskName = sub.SubtaskName;
             SubtaskChanged.Invoke(sub);
             if (task.Compleated())
             {
                 TaskCompleted.Invoke();
             }
 
-            int elementIndex = task.Subtasks.FindIndex(sub => sub.SubtaskName == subtaskName);
+            int elementIndex = task.Subtasks.FindIndex(elem => elem.SubtaskName == subtaskName);
             if (elementIndex < task.Subtasks.Count - 1)
             {
                 UpdateCurrentSubtask(task.Subtasks.ElementAt(elementIndex + 1));
             }
 
-            if ((subtaskName == "Runde På Ring" && GetSubtask("Håndforing").Compleated()) || (subtaskName == "Håndforing" && GetSubtask("Runde På Ring").Compleated()))
+            if ((subtaskName == "Runde På Ring" && task.GetSubtask("Håndforing").Compleated()) || (subtaskName == "Håndforing" && task.GetSubtask("Runde På Ring").Compleated()))
             {
                 NavigateToBoat();
             }
@@ -130,11 +138,6 @@ public class MaintenanceManager : MonoBehaviour
         CurrentSubtask.Invoke(subtask);
     }
 
-    public Task.Subtask GetSubtask(string subtaskName)
-    {
-
-        return task.GetSubtask(subtaskName);
-    }
 
     public Task.Step GetStep(string subtaskName, string stepName)
     {
@@ -144,6 +147,7 @@ public class MaintenanceManager : MonoBehaviour
         Task.Step step = sub.GetStep(stepName);
         return step;
     }
+
 
 
     public void PlayAudio(AudioClip audio)
