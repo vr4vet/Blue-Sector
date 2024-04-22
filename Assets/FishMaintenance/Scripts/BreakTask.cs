@@ -16,8 +16,6 @@ public class BreakTask : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Task.Step breakStep = mm.GetStep("Pause", "Snakk med Laila");
-
         _npcSpawner = GetComponent<NPCSpawner>();
         if (_npcSpawner == null)
         {
@@ -32,6 +30,7 @@ public class BreakTask : MonoBehaviour
     void Update()
     {
         Task.Task task = mm.MaintenanceTask;
+        Task.Step breakStep = mm.GetStep("Pause", "Snakk med Laila");
         ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
         if (task.GetSubtask("Håndforing").Compleated() && task.GetSubtask("Runde På Ring").Compleated() && !conversationController.isDialogueActive())
         {

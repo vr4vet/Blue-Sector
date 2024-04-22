@@ -54,6 +54,7 @@ public class MaintenanceManager : MonoBehaviour
             foreach (Task.Step step in sub.StepList)
             {
                 step.Reset();
+                step.CurrentStep = false;
             }
         }
         foreach (Task.Skill skill in taskHolder.skillList)
@@ -84,10 +85,10 @@ public class MaintenanceManager : MonoBehaviour
             {
                 BadgeChanged.Invoke(step);
             }
-            SubtaskChanged.Invoke(sub);
-            if (sub.StepList.Count < sub.GetCompletedSteps())
+
+            Task.Step nextStep = sub.StepList.FirstOrDefault(element => (!element.IsCompeleted()));
+            if (nextStep != null)
             {
-                Task.Step nextStep = sub.StepList.Find(element => (!element.IsCompeleted()));
                 nextStep.CurrentStep = true;
                 step.CurrentStep = false;
                 UpdateCurrentSubtask(sub);
@@ -105,11 +106,17 @@ public class MaintenanceManager : MonoBehaviour
                 TaskCompleted.Invoke();
             }
 
-            int elementIndex = task.Subtasks.FindIndex(elem => elem.SubtaskName == subtaskName);
-            if (elementIndex < task.Subtasks.Count - 1)
+
+            Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
+
+            if (nextSubtask != null)
             {
-                UpdateCurrentSubtask(task.Subtasks.ElementAt(elementIndex + 1));
+                Task.Step nextStep = nextSubtask.StepList.FirstOrDefault(element => (!element.IsCompeleted()));
+                step.CurrentStep = false;
+                nextStep.CurrentStep = true;
+                UpdateCurrentSubtask(nextSubtask);
             }
+
 
             if ((subtaskName == "Runde På Ring" && task.GetSubtask("Håndforing").Compleated()) || (subtaskName == "Håndforing" && task.GetSubtask("Runde På Ring").Compleated()))
             {

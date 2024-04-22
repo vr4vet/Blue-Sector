@@ -17,7 +17,8 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public Task.Subtask subtask;
     [SerializeField] private string stepName;
     private Task.Step step;
-
+    private Task.Subtask currentSubtask;
+    private bool playerInside = false;
 
     void Start()
     {
@@ -25,27 +26,21 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
-        if (subtask.SubtaskName != "Hent Utstyr") manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
-        // activeSubtask = manager.GetSubtask(subTask);
+        if (subtask.SubtaskName != "Hent Utstyr")
+        {
+            step = subtask.GetStep(stepName);
+            manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
+            // activeSubtask = manager.GetSubtask(subTask);
 
+        }
     }
-
-    void CurrentSubtaskUpdate(Task.Subtask currentSub)
+    public void CurrentSubtaskUpdate(Task.Subtask currentSub)
     {
-        if (currentSub == subtask)
+        currentSubtask = currentSub;
+        if (step.CurrentStep)
         {
 
-            if ((subtask.GetCompletedSteps() + 1) == (step.getStepNumber()))
-            {
-                activeArrow = true;
-
-
-            }
-            else
-            {
-                activeArrow = false;
-            }
-
+            activeArrow = true;
         }
         else
         {
@@ -58,7 +53,6 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     {
         if (completedSubtask == subtask)
         {
-
             if (equipmentArrow)
             {
                 equipmentArrow.SetActive(false);
@@ -79,15 +73,19 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-
+            playerInside = true;
             anchorArrow.SetActive(false);
-
+            if (currentSubtask != subtask)
+            {
+                manager.UpdateCurrentSubtask(subtask);
+            }
         }
     }
     public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            playerInside = false;
             if (feedbackManager.getText() != "Bra jobba! Gå videre til neste sylinder.")
             {
                 feedbackManager.StopMoreFeedback();
@@ -106,7 +104,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
                 gameObject.SetActive(false);
                 return;
             }
-            else if (step.IsCompeleted() && subtask.SubtaskName != "Hent Utstyr")
+            else if (subtask.SubtaskName != "Hent Utstyr" && step.IsCompeleted())
             {
                 gameObject.SetActive(false);
                 return;

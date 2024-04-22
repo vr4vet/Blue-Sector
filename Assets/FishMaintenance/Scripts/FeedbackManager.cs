@@ -124,7 +124,7 @@ public class FeedbackManager : MonoBehaviour
 
     public void feedbackOnTaskComplete(Task.Subtask subtask)
     {
-        if (manager.stepCount < 6 || subtask.SubtaskName == "Håndforing")
+        if (subtask.SubtaskName == "Hent Utstyr" || subtask.SubtaskName == "Håndforing")
         {
             watch.addInstructions(feedback[subtask.SubtaskName][2]);
         }
