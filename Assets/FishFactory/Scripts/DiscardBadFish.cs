@@ -12,7 +12,11 @@ public class DiscardBadFish : MonoBehaviour
     public int DestroyFishTreshold{ get {return destroyFishTreshold;}}
     private int nrFishDiscarded = 0;
     public int NrFishDiscarded{ get {return nrFishDiscarded;}}
-    
+    private int incorrectlyDiscardedFish = 0;
+    public int IncorrectlyDiscardedFish{ get {return incorrectlyDiscardedFish;}}
+    private int correctlyDiscardedFish = 0;
+    public int CorrectlyDiscardedFish{ get {return correctlyDiscardedFish;}}
+
     // list of fish that are currently stunned
     private List<GameObject> discardedFish = new List<GameObject>();
     private void OnTriggerEnter(Collider collisionObject)
@@ -25,7 +29,22 @@ public class DiscardBadFish : MonoBehaviour
         if (!discardedFish.Contains(fish.gameObject)) 
         {
             discardedFish.Add(fish.gameObject);
-            if (discardedFish.Count >= destroyFishTreshold){
+
+            // Check if the fish should have been discarded or not, and give the user feedback
+            if (fishState.currentState == FactoryFishState.State.BadQuality)
+            {
+                GameManager.Instance.PlaySound("correct");
+                correctlyDiscardedFish++;
+            }
+            else
+            {
+                GameManager.Instance.PlaySound("incorrect");
+                incorrectlyDiscardedFish--;
+            }
+
+            // Delete fish if number of fish in bin is larger than destroyFishTreshold
+            if (discardedFish.Count >= destroyFishTreshold)
+            {
                 GameObject fishDelete = discardedFish[0];
                 discardedFish.RemoveAt(0);
                 Destroy(fishDelete);
