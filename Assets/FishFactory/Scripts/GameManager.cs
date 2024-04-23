@@ -43,6 +43,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [Tooltip("The AudioManager object in the scene that will play sound effects.")]
     private GameObject audioManager;
+    public  GameObject AudioManager
+    {
+        set { audioManager = value; }
+    }   
 
     [SerializeField]
     [Tooltip(
@@ -51,8 +55,8 @@ public class GameManager : MonoBehaviour
     private AudioClip[] soundEffects;
     public  AudioClip[] SoundEffects
     {
-        get { return soundEffects; }
         set { soundEffects = value; }
+        get { return soundEffects; }
     }   
      
     [SerializeField]

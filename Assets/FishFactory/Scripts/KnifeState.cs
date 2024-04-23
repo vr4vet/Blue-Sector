@@ -8,11 +8,22 @@ public class KnifeState : MonoBehaviour
     [SerializeField]
     [Tooltip("Place the component matching the regular fish knife blade")]
     private GameObject regularKnife;
+    public GameObject RegularKnife
+    {
+        set { regularKnife = value; }
+    }
 
     // Reference to the chipped knife GameObject
     [SerializeField]
     [Tooltip("Place the component matching the chipped fish knife blade")]
     private GameObject chippedKnife;
+    public GameObject ChippedKnife
+    {
+        set { chippedKnife = value; }
+    }
+
+        // Public properties or methods to set the fields
+
 
     [SerializeField]
     [Tooltip("Enable random count to chip knife instead of a set count")]

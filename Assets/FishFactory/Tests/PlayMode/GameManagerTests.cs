@@ -9,32 +9,36 @@ public class GameManagerTests
 {
     private GameManager gameManager;
     private GameObject gameManagerObject;
-    private AudioClip[] soundEffects;
+    private GameObject audioManager;
     private const string TestSceneName = "GameManagerTestScene";
 
     [SetUp]
     public void SetUp()
     {
-        // create scene for testing
-        SceneManager.CreateScene(TestSceneName);
-
         // Create a new GameObject and add the GameManager component to it
         gameManagerObject = new GameObject();
         gameManager = gameManagerObject.AddComponent<GameManager>();
 
         // Load the sound effects
-        soundEffects = Resources.LoadAll<AudioClip>("Sounds");
-        gameManager.SoundEffects = soundEffects;
+        var audioManagerPrefab = Resources.Load<GameObject>("Prefabs/AudioManager");
+        audioManager = Object.Instantiate(audioManagerPrefab);
+        gameManager.SoundEffects = Resources.LoadAll<AudioClip>("Sounds");
+        gameManager.AudioManager = audioManager;
 
+        //create an audio listener
+        var listener = new GameObject("AudioListener");
+        listener.AddComponent<AudioListener>();
+
+        //configure hand objects
+        gameManager.LeftHandGameObj = new GameObject();
+        gameManager.RightHandGameObj = new GameObject();
     }
 
     [TearDown]
     public void TearDown()
     {
-        // Destroy the GameManager object
         Object.Destroy(gameManagerObject);
-        // Unload the test scene
-        SceneManager.UnloadSceneAsync(TestSceneName);
+        Object.Destroy(gameManager);
     }
 
     [UnityTest]
@@ -49,12 +53,15 @@ public class GameManagerTests
     }
 
     [UnityTest]
-    public IEnumerator PlaysTheCorrectSound()
+    public IEnumerator PlaySoundTest()
     {
         gameManager.PlaySound("correct");
-        Assert.AreEqual(gameManager.GetComponent<AudioSource>().clip, soundEffects[0]);
+        yield return new WaitForSeconds(1);
+        Debug.Log(audioManager.GetComponent<AudioSource>().clip);
+        Debug.Log(gameManager.SoundEffects[0]);
+        Assert.AreEqual(audioManager.GetComponent<AudioSource>().clip, gameManager.SoundEffects[0]);
         gameManager.PlaySound("incorrect");
-        Assert.AreEqual(gameManager.GetComponent<AudioSource>().clip, soundEffects[1]);
-        yield return null;
+        yield return new WaitForSeconds(1);
+        Assert.AreEqual(audioManager.GetComponent<AudioSource>().clip, gameManager.SoundEffects[1]);
     }
 };
