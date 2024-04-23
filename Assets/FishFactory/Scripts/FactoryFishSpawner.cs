@@ -10,7 +10,9 @@ public class FactoryFishSpawner : MonoBehaviour
     private bool isSpawnerOn = true;
 
     [SerializeField]
-    [Tooltip("The gameobject prefab to spawn. This prefab will be used as the tier 1 fish if fish tiers are enabeled")]
+    [Tooltip(
+        "The gameobject prefab to spawn. This prefab will be used as the tier 1 fish if fish tiers are enabeled"
+    )]
     private GameObject fishPrefab;
 
     [SerializeField]
@@ -75,7 +77,9 @@ public class FactoryFishSpawner : MonoBehaviour
 
     [Header("Fish Gutting Settings")]
     [SerializeField]
-    [Tooltip("If toggled, the fish will be assigned a state defining if it has been successfully gutted or not")]
+    [Tooltip(
+        "If toggled, the fish will be assigned a state defining if it has been successfully gutted or not"
+    )]
     private bool toggleFishGuttingChance;
 
     [SerializeField]
@@ -181,7 +185,7 @@ public class FactoryFishSpawner : MonoBehaviour
 
             // Get a random state and sets prefab to badfishPrefab if the state is BadQuality
             FactoryFishState.State randomizedFishState = RandomizeFishState();
-            if (randomizedFishState == FactoryFishState.State.BadQuality) 
+            if (randomizedFishState == FactoryFishState.State.BadQuality)
             {
                 spawnedFishPrefab = badfishPrefab;
             }
@@ -194,7 +198,7 @@ public class FactoryFishSpawner : MonoBehaviour
                 transform
             );
             childGameObject.name = "FactoryFish" + transform.childCount.ToString();
-            
+
             if (toggleFishTier)
             {
                 childGameObject.tag = fishTag;
@@ -236,7 +240,7 @@ public class FactoryFishSpawner : MonoBehaviour
     private float RandomizeObjectSize()
     {
         // the size variation of the fish relative to the parent spawner
-        return Random.Range(9, 15);
+        return Random.Range(0.7f, 1.2f);
     }
 
     /// <summary>
@@ -271,7 +275,7 @@ public class FactoryFishSpawner : MonoBehaviour
             }
             else
             {
-                state = FactoryFishState.State.GuttingFailure;  
+                state = FactoryFishState.State.GuttingFailure;
             }
             return state;
         }

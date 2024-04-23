@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5922821090411740520}
   - component: {fileID: 5922821090411740524}
+  - component: {fileID: 3290794811654590911}
+  - component: {fileID: 2183471210345806713}
   m_Layer: 0
   m_Name: FactoryFishSpawner
   m_TagString: Untagged
@@ -44,11 +46,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af1c3bb4359c40b43996b74e7b45a300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishPrefab: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+  isSpawnerOn: 1
+  fishPrefab: {fileID: 6915616972181788328, guid: 8d1d0501811a13b4398c341f3109c677,
     type: 3}
   maxAmountOfFish: 10
-  randomFishStateChance: 0
-  fishAliveChance: 3
-  spawnRate: 1
-  varationInSpawnrate: 0
-  fishSizeVariation: 0
+  spawnRate: 8
+  varationInSpawnrate: 4
+  fishSizeVariation: 1
+  aliveFishPercent: 10
+  badFishPercent: 10
+  badfishPrefab: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+    type: 3}
+  toggleFishTier: 0
+  fishPrefabTier2: {fileID: 0}
+  fishPrefabTier3: {fileID: 0}
+  tier1Percentage: 25
+  tier2Percentage: 50
+  toggleFishGuttingChance: 0
+  successfullGuttingChance: 65
+  incompleteGuttingChance: 25
+--- !u!33 &3290794811654590911
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5922821090411740525}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &2183471210345806713
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5922821090411740525}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
