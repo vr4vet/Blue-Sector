@@ -24,11 +24,13 @@ namespace Task
 
         [SerializeField] private Sprite _icon = null;
 
+        [SerializeField] private Subtask _connectedSubtask;
         public string Name { get => _name; set => _name = value; }
         public string Description { get => _description; set => _description = value; }
 
         public Sprite Icon { get => _icon; set => _icon = value; }
         public string Instructions { get => _instructions; set => _instructions = value; }
+        public Subtask ConnectedSubtask { get => _connectedSubtask; set => _connectedSubtask = value; }
         private bool locked = true;
         public void Lock()
         {

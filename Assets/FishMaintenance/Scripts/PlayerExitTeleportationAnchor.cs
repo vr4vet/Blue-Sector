@@ -119,7 +119,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
                 gameObject.SetActive(false);
                 return;
             }
-            else if (subtask.SubtaskName != "Hent Utstyr" && step.IsCompeleted())
+            else if (subtask.SubtaskName == "Runde På Ring" && step.IsCompeleted())
             {
                 gameObject.SetActive(false);
                 return;

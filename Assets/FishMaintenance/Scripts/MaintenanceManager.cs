@@ -22,7 +22,7 @@ public class MaintenanceManager : MonoBehaviour
 
     public Task.Task MaintenanceTask { get => task; }
 
-    public UnityEvent<Task.Step?> BadgeChanged { get; } = new();
+    public UnityEvent<Task.Skill?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
     public UnityEvent TaskCompleted { get; } = new();
@@ -63,7 +63,7 @@ public class MaintenanceManager : MonoBehaviour
         }
 
     }
-    public void lynetEnabled(bool passed)
+    public void effectiveBadgeEnabled(bool passed)
     {
         twentySeconds = passed;
     }
@@ -83,8 +83,10 @@ public class MaintenanceManager : MonoBehaviour
             feedbackManager.emptyInstructions();
             if (sub.SubtaskName == "Runde På Ring" && twentySeconds)
             {
-                BadgeChanged.Invoke(step);
+                Task.Skill skill = taskHolder.GetSkill("Effektiv");
+                BadgeChanged.Invoke(skill);
             }
+
 
             Task.Step nextStep = sub.StepList.FirstOrDefault(element => (!element.IsCompeleted()));
             if (nextStep != null)
@@ -105,7 +107,11 @@ public class MaintenanceManager : MonoBehaviour
             {
                 TaskCompleted.Invoke();
             }
-
+            if (sub.SubtaskName == "Runde På Ring")
+            {
+                Task.Skill skill = taskHolder.GetSkill("Problemløser");
+                BadgeChanged.Invoke(skill);
+            }
 
             Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
 

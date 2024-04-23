@@ -8,6 +8,8 @@ public class BreakTask : MonoBehaviour
     [HideInInspector] private GameObject _npc;
     [SerializeField] private MaintenanceManager mm;
     [SerializeField] private DialogueTree dialogueTree;
+
+    [SerializeField] private Task.Skill skillBadge;
     private int _activatedCount = 0;
     private Task.Step breakStep;
 
@@ -54,7 +56,7 @@ public class BreakTask : MonoBehaviour
         }
         if (_activatedCount == 3)
         {
-            mm.BadgeChanged.Invoke(breakStep);
+            mm.BadgeChanged.Invoke(skillBadge);
         }
         else
         {

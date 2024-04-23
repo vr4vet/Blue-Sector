@@ -36,10 +36,10 @@ public class HUDTemporary : MonoBehaviour
 
     private void StartConfetti()
     {
-confettiGroup.SetActive(true);
+        confettiGroup.SetActive(true);
         foreach (Transform child in confettiGroup.transform)
         {
-            
+
             child.GetComponent<ParticleSystem>().Play();
 
         }

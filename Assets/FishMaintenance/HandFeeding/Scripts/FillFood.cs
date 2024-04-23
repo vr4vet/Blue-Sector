@@ -7,6 +7,7 @@ public class FillFood : MonoBehaviour
 
     [SerializeField] private GameObject spawnPellet;
     [SerializeField] private MaintenanceManager manager;
+    [SerializeField] private Task.Subtask subtask;
     // [SerializeField] private BNG.Grabber grabber;
     private GameObject foods;
     private Vector3 velocity;
@@ -52,7 +53,8 @@ public class FillFood : MonoBehaviour
             rb.AddForce(velocity, ForceMode.VelocityChange);
             spawnNumber++;
         }
-        manager.CompleteStep(manager.GetStep("Håndforing", "Kast mat til fisken"));
+        Task.Step step = subtask.GetStep("Kast mat til fisken");
+        manager.CompleteStep(step);
 
 
     }
