@@ -15,8 +15,65 @@ public class FactoryFishState : MonoBehaviour
         GuttingFailure,
     }
 
+    [SerializeField]
+    Material bleedingFish;
+
+    [SerializeField]
+    Material aliveFish;
+
+    [SerializeField]
+    Material badFish;
+
+    [SerializeField]
+    Material stunnedFish;
+
+    void Start() { }
+
     // The current public state of the fish.
     public State currentState;
+
+    void Update()
+    {
+        Renderer fishRenderer = gameObject.transform.GetChild(1).GetComponent<Renderer>();
+
+        GetComponent<Renderer>();
+
+        Material[] fishMaterials = fishRenderer.materials;
+        switch (currentState)
+        {
+            case State.Alive:
+                // Set first material to bleeding fish
+                fishMaterials[0] = aliveFish;
+                // Set the updated materials
+                fishRenderer.materials = fishMaterials;
+                break;
+
+            case State.Stunned:
+                // Set first material to stunned fish
+                fishMaterials[0] = stunnedFish;
+                // Set the updated materials
+                fishRenderer.materials = fishMaterials;
+                break;
+
+            case State.BadCut:
+                // Set first material to badly cut fish
+                break;
+
+            case State.Bleeding:
+                // Set first material to bleeding fish
+                fishMaterials[0] = bleedingFish;
+                // Set the updated materials
+                fishRenderer.materials = fishMaterials;
+                break;
+
+            case State.BadQuality:
+                // Set first material to bad fish
+                fishMaterials[0] = badFish;
+                // Set the updated materials
+                fishRenderer.materials = fishMaterials;
+                break;
+        }
+    }
 
     /// <summary>
     /// When the player cuts the gills of the fish.
