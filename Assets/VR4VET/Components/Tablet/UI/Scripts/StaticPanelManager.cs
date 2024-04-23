@@ -134,14 +134,26 @@ public class StaticPanelManager : MonoBehaviour
 
     public void SetAlertMenu()
     {
-        StopAllCoroutines();
-        NotificationAlertMenu.SetActive(true);
-        StartCoroutine(sendAlertMenu());
+        if (gameObject.activeInHierarchy)
+        {
+            StopAllCoroutines();
+            NotificationAlertMenu.SetActive(true);
+            StartCoroutine(sendAlertMenu());
+        }
+        else
+        {
+            NotificationAlertMenu.SetActive(false);
+        }
     }
 
     IEnumerator sendAlertMenu()
     {
         yield return new WaitForSeconds(3f);
+        NotificationAlertMenu.SetActive(false);
+    }
+
+    void OnDisable()
+    {
         NotificationAlertMenu.SetActive(false);
     }
 
