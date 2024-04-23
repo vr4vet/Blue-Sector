@@ -9,34 +9,20 @@ public class DiscardFishTests
 {
     private GameObject discardBox;
     private GameObject fish;
-    private GameObject knife;
     private DiscardBadFish discardScript;
     private const string TestSceneName = "DiscardFishTestScene";
 
     [SetUp]
     public void SetUp()
     {
+        // create a new test scene
+        SceneManager.CreateScene(TestSceneName);
+
         // Load and instantiate the prefabs
         var discardBoxPrefab = Resources.Load<GameObject>("Prefabs/FishDiscardBox");
-        var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/TempFish");
+        var fishPrefab = Resources.Load<GameObject>("Prefabs/TempFish");
         fish = Object.Instantiate(fishPrefab);
         discardBox = Object.Instantiate(discardBoxPrefab);
-
-        // Load, instantiate and setup the knife prefab
-        var knife = Resources.Load<GameObject>("Prefabs/Knife/FishKnife");
-        knife = Object.Instantiate(knife);
-        var knifeState = knife.GetComponent<KnifeState>();
-        if (knifeState == null)
-        {
-            Debug.LogError("KnifeState component not found on the knife prefab.");
-            return;
-        }
-        //configure the knife state script
-        var bladePrefab = Resources.Load<GameObject>("Prefabs/Knife/FishKnifeBlade");
-        GameObject regularKnife = Object.Instantiate(bladePrefab);
-        knifeState.RegularKnife = regularKnife;
-        knifeState.ChippedKnife = regularKnife;
-
 
         // get the DiscardBadFish script
         discardScript = discardBox.GetComponentInChildren<DiscardBadFish>();
@@ -103,5 +89,6 @@ public class DiscardFishTests
     {
         Object.Destroy(fish);
         Object.Destroy(discardBox);
+        SceneManager.UnloadSceneAsync(TestSceneName);
     }
 }
