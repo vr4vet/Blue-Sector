@@ -35,7 +35,7 @@ public class SkillManager : MonoBehaviour
         manager = this.gameObject.GetComponent<MaintenanceManager>();
         Task.Subtask subtask = task.GetSubtask("Runde På Ring");
         maxSteps = subtask.StepList.Count;
-        manager.BadgeChanged.AddListener(UpdateBadges);
+        // manager.BadgeChanged.AddListener(UpdateBadges);
 
     }
 
@@ -58,13 +58,13 @@ public class SkillManager : MonoBehaviour
     }
     private void CompleteBadge(string skillName)
     {
-        Task.Skill skill = taskHolder.GetSkill(skillName);
-        if (skill.IsLocked())
-        {
-            skill.Unlock();
-            manager.SkillCompleted.Invoke(skill);
-            taskListLoader.LoadSkillsPage();
-        }
+        // Task.Skill skill = taskHolder.GetSkill(skillName);
+        // if (skill.IsLocked())
+        // {
+        //     skill.Unlock();
+        //     manager.SkillCompleted.Invoke(skill);
+        //     taskListLoader.LoadSkillsPage();
+        // }
 
     }
 
