@@ -7,7 +7,7 @@ public class MaintenanceManager : MonoBehaviour
 {
     public static MaintenanceManager Instance;
     [SerializeField] private Task.TaskHolder taskHolder;
-    [SerializeField] private Tablet.TaskListLoader1 taskListLoader;
+    [SerializeField] private GameObject tablet;
     [SerializeField] private AudioClip success;
     [SerializeField] private AudioClip equipmentPickup;
     [SerializeField] private GameObject[] arrows;
@@ -18,11 +18,14 @@ public class MaintenanceManager : MonoBehaviour
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
     private Task.Task task => taskHolder.GetTask("Vedlikehold");
+
+    private Tablet.TaskListLoader1 taskListLoader => tablet.GetComponent<Tablet.TaskListLoader1>();
+    private StaticPanelManager staticPanelManager => tablet.GetComponent<StaticPanelManager>();
     [HideInInspector] public int stepCount;
 
     public Task.Task MaintenanceTask { get => task; }
 
-    public UnityEvent<Task.Step?> BadgeChanged { get; } = new();
+    public UnityEvent<Task.Skill?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
     public UnityEvent TaskCompleted { get; } = new();
@@ -63,7 +66,7 @@ public class MaintenanceManager : MonoBehaviour
         }
 
     }
-    public void lynetEnabled(bool passed)
+    public void effectiveBadgeEnabled(bool passed)
     {
         twentySeconds = passed;
     }
@@ -78,13 +81,16 @@ public class MaintenanceManager : MonoBehaviour
         // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
         if (step.IsCompeleted())
         {
+
             PlayAudio(success);
             stepCount += 1;
             feedbackManager.emptyInstructions();
             if (sub.SubtaskName == "Runde På Ring" && twentySeconds)
             {
-                BadgeChanged.Invoke(step);
+                Task.Skill skill = taskHolder.GetSkill("Effektiv");
+                BadgeChanged.Invoke(skill);
             }
+
 
             Task.Step nextStep = sub.StepList.FirstOrDefault(element => (!element.IsCompeleted()));
             if (nextStep != null)
@@ -105,7 +111,11 @@ public class MaintenanceManager : MonoBehaviour
             {
                 TaskCompleted.Invoke();
             }
-
+            if (sub.SubtaskName == "Runde På Ring")
+            {
+                Task.Skill skill = taskHolder.GetSkill("Problemløser");
+                BadgeChanged.Invoke(skill);
+            }
 
             Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
 
@@ -143,6 +153,7 @@ public class MaintenanceManager : MonoBehaviour
     public void UpdateCurrentSubtask(Task.Subtask subtask)
     {
         CurrentSubtask.Invoke(subtask);
+        staticPanelManager.SelectSubtask();
     }
 
 

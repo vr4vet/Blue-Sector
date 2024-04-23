@@ -75,7 +75,7 @@ public class FeedbackManager : MonoBehaviour
             return;
         }
         watch.addInstructions(feedback[subtaskName][0]);
-        manager.lynetEnabled(true);
+        manager.effectiveBadgeEnabled(true);
         StartCoroutine(moreFeedback(subtaskName));
         if (subtaskName == "Håndforing")
         {
@@ -97,17 +97,17 @@ public class FeedbackManager : MonoBehaviour
         else if (subtaskName == "Reparer tau på merd" && !manager.GetStep("Runde På Ring", subtaskName).IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
-            manager.lynetEnabled(false);
+            manager.effectiveBadgeEnabled(false);
         }
         else if (subtaskName == "Legg til tau på merd" && !manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
-            manager.lynetEnabled(false);
+            manager.effectiveBadgeEnabled(false);
         }
         else if (subtaskName == "Legg til splinter på kjetting" && !manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted() && !manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
-            manager.lynetEnabled(false);
+            manager.effectiveBadgeEnabled(false);
         }
         // if (subtaskName != "Håndforing" && subtaskName != "Hent Utstyr")
         // {

@@ -37,19 +37,6 @@ namespace Task
             }
         }
 
-        void Start()
-        {
-            foreach (Task task in taskList)
-            {
-                foreach (Subtask subtask in task.Subtasks)
-                {
-                    foreach (Step step in subtask.StepList)
-                    {
-                        step.setStepNumber(subtask.StepList.IndexOf(step) + 1);
-                    }
-                }
-            }
-        }
 
         public Task GetTask(string taskName)
         {

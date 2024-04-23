@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TeleportHighlight : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class TeleportHighlight : MonoBehaviour
     [SerializeField] private Material hitGlow;
     [SerializeField] private Material hitCylinder;
     [SerializeField] private BNG.PlayerTeleport playerTeleport;
-
+    [SerializeField] private Transform destination;
 
     private Renderer glowRenderer;
     private Renderer cylinderRenderer;
@@ -19,7 +20,8 @@ public class TeleportHighlight : MonoBehaviour
     private Material originalCylinder;
     private BoxCollider boxCollider;
     private Vector3 originalSize;
-
+    private bool teleportedInside = false;
+    public UnityEvent PlayerTeleported;
     private void Start()
     {
         glowRenderer = cylinderGlow.GetComponent<Renderer>();
@@ -47,25 +49,27 @@ public class TeleportHighlight : MonoBehaviour
         }
     }
 
-
     public void PlayerInside()
     {
-        //if (currentSubtask && currentSubtask.SubtaskName != subTask)
-        // {
-        //    manager.UpdateCurrentSubtask(manager.GetSubtask(subTask));
-        // }
+        teleportedInside = true;
+    }
 
-        cylinder.SetActive(false);
-        cylinderGlow.SetActive(false);
 
-        boxCollider.size = new Vector3(1f, 3f, 1f);
-        // else
-        // {
-        //     cylinder.SetActive(true);
-        //     cylinderGlow.SetActive(true);
+    public void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            cylinder.SetActive(false);
+            cylinderGlow.SetActive(false);
+            if (!teleportedInside)
+            {
+                playerTeleport.TeleportPlayer(destination.position, destination.rotation);
+                PlayerTeleported.Invoke();
+                teleportedInside = true;
 
-        //     boxCollider.size = originalSize;
-        // }
+            }
+
+        }
     }
 
     public void OnTriggerExit(Collider other)
@@ -74,7 +78,8 @@ public class TeleportHighlight : MonoBehaviour
         {
             cylinder.SetActive(true);
             cylinderGlow.SetActive(true);
-            boxCollider.size = originalSize;
+            teleportedInside = false;
+            // boxCollider.size = originalSize;
         }
     }
 

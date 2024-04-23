@@ -60,6 +60,8 @@ namespace Task
             foreach (Step step in StepList)
             {
                 step.ParentSubtask = this;
+                step.setStepNumber(StepList.IndexOf(step) + 1);
+
             }
         }
         public bool Compleated()

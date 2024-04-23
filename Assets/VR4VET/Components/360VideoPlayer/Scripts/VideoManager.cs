@@ -11,11 +11,12 @@ public class VideoManager : MonoBehaviour
 {
     public static VideoManager videoManager;
     [SerializeField] private SkyboxHolder SkyboxHolder;
+    [SerializeField] private Task.Skill observantBadge;
 
     private LayerMask oldCulingMask;
     private Camera VRCamera;
 
-   [HideInInspector] public VideoPlayer videoPlayer;
+    [HideInInspector] public VideoPlayer videoPlayer;
     [SerializeField] private MaintenanceManager mm;
 
 
@@ -42,7 +43,7 @@ public class VideoManager : MonoBehaviour
     /// </summary>
     /// <param name="clip"></param>
     public void ShowVideo(VideoClip clip)
-	{
+    {
         //change the video clip
         videoPlayer.clip = clip;
 
@@ -52,7 +53,7 @@ public class VideoManager : MonoBehaviour
         StartCoroutine(applyVideo());
 
     }
-    
+
     /// <summary>
     /// This method will wait untill the video clip is fully changed then apply it to the skybox
     /// </summary>
@@ -77,7 +78,9 @@ public class VideoManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         StopVideo();
-        mm.BadgeChanged.Invoke(mm.GetStep("Håndforing", "Kast mat til fisken"));
+        mm.BadgeChanged.Invoke(observantBadge);
+        Task.Step videoStep = mm.GetStep("Håndforing", "Se 360 Video");
+        mm.CompleteStep(videoStep);
     }
 
 
