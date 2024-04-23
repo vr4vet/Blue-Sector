@@ -9,7 +9,7 @@ public class AddGuidingHands : MonoBehaviour
     [SerializeField] private GameObject guidingHandRope;
     [SerializeField] private GameObject guidingHandBucket;
 
-    void OnEnable()
+    public void intoAnchor()
     {
         if (!mm.GetStep("Hent Utstyr", "Hent splinter").IsCompeleted())
         {

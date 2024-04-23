@@ -134,6 +134,7 @@ public class StaticPanelManager : MonoBehaviour
 
     public void SetAlertMenu()
     {
+        StopAllCoroutines();
         NotificationAlertMenu.SetActive(true);
         StartCoroutine(sendAlertMenu());
     }
