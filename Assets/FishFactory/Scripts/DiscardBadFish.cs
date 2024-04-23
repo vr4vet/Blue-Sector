@@ -9,29 +9,46 @@ public class DiscardBadFish : MonoBehaviour
     [SerializeField]
     [Range(0, 15)]
     private int destroyFishTreshold = 5;
-    public int DestroyFishTreshold{ get {return destroyFishTreshold;}}
+    public int DestroyFishTreshold
+    {
+        get { return destroyFishTreshold; }
+    }
     private int nrFishDiscarded = 0;
-    public int NrFishDiscarded{ get {return nrFishDiscarded;}}
+    public int NrFishDiscarded
+    {
+        get { return nrFishDiscarded; }
+    }
     private int incorrectlyDiscardedFish = 0;
-    public int IncorrectlyDiscardedFish{ get {return incorrectlyDiscardedFish;}}
+    public int IncorrectlyDiscardedFish
+    {
+        get { return incorrectlyDiscardedFish; }
+    }
     private int correctlyDiscardedFish = 0;
-    public int CorrectlyDiscardedFish{ get {return correctlyDiscardedFish;}}
+    public int CorrectlyDiscardedFish
+    {
+        get { return correctlyDiscardedFish; }
+    }
 
     // list of fish that are currently stunned
     private List<GameObject> discardedFish = new List<GameObject>();
+
     private void OnTriggerEnter(Collider collisionObject)
     {
-        if (collisionObject.tag != "Destroyable") return; 
+        if (collisionObject.tag != "Destroyable")
+            return;
         // get the parent's parent
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
         // get fish state and check if fish is dead, if fish is dead it's deleted
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-        if (!discardedFish.Contains(fish.gameObject)) 
+        if (!discardedFish.Contains(fish.gameObject))
         {
             discardedFish.Add(fish.gameObject);
 
             // Check if the fish should have been discarded or not, and give the user feedback
-            if (fishState.currentState == FactoryFishState.State.BadQuality)
+            if (
+                fishState.currentState == FactoryFishState.State.BadQuality
+                || fishState.currentState == FactoryFishState.State.GuttingFailure
+            )
             {
                 GameManager.Instance.PlaySound("correct");
                 correctlyDiscardedFish++;
