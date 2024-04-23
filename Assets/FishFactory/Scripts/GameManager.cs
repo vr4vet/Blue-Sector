@@ -43,24 +43,44 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [Tooltip("The AudioManager object in the scene that will play sound effects.")]
     private GameObject audioManager;
+    public  GameObject AudioManager
+    {
+        set { audioManager = value; }
+        get { return audioManager; }
+    }   
 
     [SerializeField]
     [Tooltip(
         "The sound effects that will be played when the player completes a task. The order should be 'correct', 'wrong', 'taskComplete', 'door', in that order."
     )]
     private AudioClip[] soundEffects;
-
+    public  AudioClip[] SoundEffects
+    {
+        set { soundEffects = value; }
+        get { return soundEffects; }
+    }   
+     
     [SerializeField]
     [Tooltip(
         "The game object that contains the material for the left hand. Should be 'fully_gloved' in BNG."
     )]
     private GameObject leftHandGameObj;
+    public GameObject LeftHandGameObj
+    {
+        get { return leftHandGameObj; }
+        set { leftHandGameObj = value; }
+    }
 
     [SerializeField]
     [Tooltip(
         "The game object that contains the material for the right hand. Should be 'fully_gloved' in BNG."
     )]
     private GameObject rightHandGameObj;
+    public GameObject RightHandGameObj
+    {
+        get { return rightHandGameObj; }
+        set { rightHandGameObj = value; }
+    }
 
     [SerializeField]
     private Material blueGlove;
