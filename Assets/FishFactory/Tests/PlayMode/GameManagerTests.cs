@@ -53,10 +53,9 @@ public class GameManagerTests
     public IEnumerator PlaySoundTest()
     {
         gameManager.PlaySound("correct");
-        yield return new WaitForSeconds(1);
         Assert.AreEqual(gameManager.AudioManager.GetComponent<AudioSource>().clip, gameManager.SoundEffects[0]);
         gameManager.PlaySound("incorrect");
-        yield return new WaitForSeconds(1);
         Assert.AreEqual(gameManager.AudioManager.GetComponent<AudioSource>().clip, gameManager.SoundEffects[1]);
+        yield return null;
     }
 };
