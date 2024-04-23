@@ -19,11 +19,11 @@ public class RopeStep : MonoBehaviour
     {
         if (missing)
         {
-            manager.CompleteStep("Runde På Ring", "Legg til tau på merd");
+            manager.CompleteStep(manager.GetStep("Runde På Ring", "Legg til tau på merd"));
         }
         else
         {
-            manager.CompleteStep("Runde På Ring", "Reparer tau på merd");
+            manager.CompleteStep(manager.GetStep("Runde På Ring", "Reparer tau på merd"));
         }
 
     }

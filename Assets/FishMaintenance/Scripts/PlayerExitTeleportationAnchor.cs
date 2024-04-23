@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerExitTeleportationAnchor : MonoBehaviour
 {
-    public GameObject cylinder;
-    public GameObject cylinderGlow;
     public GameObject equipmentArrow;
     public GameObject cageArrows;
     public GameObject videoObject;
@@ -13,36 +12,50 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public GameObject GuidingHandRope;
     public GameObject GuidingHandBucket;
     [SerializeField] private GameObject maintenanceManager;
-    [SerializeField] private string subTask;
-    [SerializeField] private string step;
-    [SerializeField] private GameObject floatingToast;
+
     [SerializeField] private GameObject anchorArrow;
     private MaintenanceManager manager;
     private FeedbackManager feedbackManager;
-
-
-    private BoxCollider boxCollider;
-    private Vector3 originalSize;
-
-    private bool subtaskComplete = false;
+    private bool activeArrow = false;
+    public Task.Subtask subtask;
+    [SerializeField] private string stepName;
+    private Task.Step step;
+    private Task.Subtask currentSubtask;
+    private bool playerInside = false;
 
     void Start()
     {
+        step = subtask.GetStep(stepName);
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
-        boxCollider = gameObject.GetComponent<BoxCollider>();
-        originalSize = boxCollider.size;
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
-        // activeSubtask = manager.GetSubtask(subTask);
+        if (subtask.SubtaskName != "Hent Utstyr")
+        {
+            step = subtask.GetStep(stepName);
+            manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
+            // activeSubtask = manager.GetSubtask(subTask);
 
+        }
+    }
+    public void CurrentSubtaskUpdate(Task.Subtask currentSub)
+    {
+        currentSubtask = currentSub;
+        if (step.CurrentStep)
+        {
+
+            activeArrow = true;
+        }
+        else
+        {
+            activeArrow = false;
+        }
+        anchorArrow.SetActive(activeArrow);
     }
 
-    void OnSubtaskCompleted(Task.Subtask subtask)
+    public void OnSubtaskCompleted(Task.Subtask completedSubtask)
     {
-        if (subtask.SubtaskName == subTask)
+        if (completedSubtask == subtask)
         {
-            floatingToast.SetActive(true);
-            subtaskComplete = true;
             if (equipmentArrow)
             {
                 equipmentArrow.SetActive(false);
@@ -56,28 +69,33 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        manager.UpdateCurrentSubtask(manager.GetSubtask(subTask));
+        //if (currentSubtask && currentSubtask.SubtaskName != subTask)
+        // {
+        //    manager.UpdateCurrentSubtask(manager.GetSubtask(subTask));
+        // }
+
         if (other.CompareTag("Player"))
         {
-
-            cylinder.SetActive(false);
-            cylinderGlow.SetActive(false);
+            playerInside = true;
             anchorArrow.SetActive(false);
-            boxCollider.size = new Vector3(1f, 3f, 1f);
+            if (currentSubtask != subtask)
+            {
+                manager.UpdateCurrentSubtask(subtask);
+            }
         }
     }
     public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            playerInside = false;
             if (feedbackManager.getText() != "Bra jobba! Gå videre til neste sylinder.")
             {
                 feedbackManager.StopMoreFeedback();
                 feedbackManager.emptyInstructions();
             }
-            cylinder.SetActive(true);
-            cylinderGlow.SetActive(true);
-            anchorArrow.SetActive(true);
+
+            anchorArrow.SetActive(activeArrow);
             if (videoObject)
             {
                 videoObject.SetActive(false);
@@ -94,24 +112,19 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             {
                 GuidingHandBucket.SetActive(false);
             }
-            boxCollider.size = originalSize;
-            try
-            {
-                if (subtaskComplete)
-                {
-                    gameObject.SetActive(false);
-                    return;
-                }
-                else if (manager.GetStep(subTask, step).IsCompeleted())
-                {
-                    gameObject.SetActive(false);
-                    return;
-                }
-            }
-            catch
-            {
 
+
+            if (subtask.Compleated())
+            {
+                gameObject.SetActive(false);
+                return;
             }
+            else if (subtask.SubtaskName != "Hent Utstyr" && step.IsCompeleted())
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
 
         }
 

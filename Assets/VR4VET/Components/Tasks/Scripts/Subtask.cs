@@ -113,6 +113,20 @@ namespace Task
             return returnStep;
         }
 
+        public int GetCompletedSteps()
+        {
+            int counter = 0;
+            foreach (Step step in StepList)
+            {
+                if (step.IsCompeleted())
+                {
+                    counter++;
+                }
+            }
+            return counter;
+
+        }
+
         public void RandomizeReps()
         {
             if (_repetitionMin != _repetitionMax)
@@ -121,5 +135,6 @@ namespace Task
             }
             else _repetitions = _repetitionMax;
         }
+
     }
 }

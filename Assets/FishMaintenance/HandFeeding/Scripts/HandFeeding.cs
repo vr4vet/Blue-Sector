@@ -12,6 +12,7 @@ public class HandFeeding : MonoBehaviour
     [SerializeField] private BNG.Grabber grabberLeft;
     [SerializeField] private BNG.Grabber grabberRight;
     private DropItem dropItem;
+    public Task.Subtask subtask;
     private Task.Step step;
     private FeedbackManager feedbackManager;
     private MaintenanceManager manager;
@@ -19,8 +20,9 @@ public class HandFeeding : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         dropItem = gameObject.GetComponent<DropItem>();
-        step = manager.GetStep("Håndforing", "Kast mat til fisken");
+        step = subtask.GetStep("Kast mat til fisken");
     }
 
     // Update is called once per frame
@@ -31,8 +33,9 @@ public class HandFeeding : MonoBehaviour
 
     void OnEnable()
     {
-        feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
+        feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
+
         if (manager.GetStep("Hent Utstyr", "Hent bøtte og spade").IsCompeleted())
         {
             SetEquipmentActive();

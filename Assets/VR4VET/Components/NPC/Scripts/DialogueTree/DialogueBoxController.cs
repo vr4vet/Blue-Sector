@@ -148,7 +148,7 @@ public class DialogueBoxController : MonoBehaviour
         {
             if (dialogueTree.sections[section].dialogue[0] == "Takk for praten!")
             {
-                manager.CompleteStep("Pause", "Snakk med Laila");
+                manager.CompleteStep(manager.GetStep("Pause", "Snakk med Laila"));
                 // manager.PlaySuccess();
             }
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];

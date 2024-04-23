@@ -9,6 +9,8 @@ public class BreakTask : MonoBehaviour
     [SerializeField] private MaintenanceManager mm;
     [SerializeField] private DialogueTree dialogueTree;
     private int _activatedCount = 0;
+    private Task.Step breakStep;
+
 
 
     // Start is called before the first frame update
@@ -27,9 +29,10 @@ public class BreakTask : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
+        Task.Task task = mm.MaintenanceTask;
         Task.Step breakStep = mm.GetStep("Pause", "Snakk med Laila");
-        if (mm.GetSubtask("Håndforing").Compleated() && mm.GetSubtask("Runde På Ring").Compleated() && !conversationController.isDialogueActive())
+        ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
+        if (task.GetSubtask("Håndforing").Compleated() && task.GetSubtask("Runde På Ring").Compleated() && !conversationController.isDialogueActive())
         {
 
             if (conversationController == null)

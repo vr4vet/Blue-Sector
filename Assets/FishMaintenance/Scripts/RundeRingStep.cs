@@ -18,7 +18,8 @@ public class RundeRingStep : MonoBehaviour
             gameObject.SetActive(false);
             handheldItem.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
             handheldItem.SetActive(false);
-            manager.CompleteStep("Runde På Ring", step);
+            Task.Step completedStep = manager.GetStep("Runde På Ring", step);
+            manager.CompleteStep(completedStep);
         }
     }
 }
