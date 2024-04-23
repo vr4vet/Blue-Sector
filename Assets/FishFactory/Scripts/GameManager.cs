@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     public  GameObject AudioManager
     {
         set { audioManager = value; }
+        get { return audioManager; }
     }   
 
     [SerializeField]
