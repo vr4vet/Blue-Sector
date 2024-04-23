@@ -23,7 +23,7 @@ public class AddInstructionsToWatch : MonoBehaviour
 
         StartCoroutine(sendHaptics());
 
-        // StartCoroutine(sendAlertMenu());
+        IncomingMessage.Invoke();
 
 
         textMesh.SetText(text);
@@ -41,13 +41,7 @@ public class AddInstructionsToWatch : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         device.ExecuteCommand(ref command);
     }
-    IEnumerator sendAlertMenu()
-    {
-        IncomingMessage.Invoke();
 
-        yield return new WaitForSeconds(0.01f);
-        IncomingMessage.Invoke();
-    }
     public void emptyInstructions()
     {
         textMesh.SetText("");
