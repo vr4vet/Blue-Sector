@@ -17,7 +17,7 @@ public class FeedbackManager : MonoBehaviour
         feedback.Add("Hent Utstyr", new List<string> {
             "Ta med deg utstyr.",
             "Berør utstyret for å ta det med deg.",
-            "Bra jobba! Gå videre til neste sylinder.",
+            "Bra jobba! Følg pilene rundt merden.",
             "",
             ""
         });

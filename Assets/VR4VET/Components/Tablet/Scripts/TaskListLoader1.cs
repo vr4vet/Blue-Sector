@@ -94,6 +94,7 @@ namespace Tablet
             _skills = th.skillList;
             StartCoroutine(LoadTabletInfo());
             manager.CurrentSubtask.AddListener(HandleCurrentSubtask);
+
         }
 
         //since task and skill won't change in the experience we can load them from the beginning

@@ -35,7 +35,7 @@ public class FloatArrow : MonoBehaviour
     {
         if (other.CompareTag("Player") && entered)
         {
-            Debug.Log("Player exited");
+
             currentY = distantY;
             this.transform.position = new Vector3(transform.position.x, currentY, transform.position.z);
             entered = false;

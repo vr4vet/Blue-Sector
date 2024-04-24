@@ -29,6 +29,12 @@ public class HandFeeding : MonoBehaviour
     void Update()
     {
         if (step.IsCompeleted()) dropItem.DropAll();
+        if (subtask.Compleated())
+        {
+            bucket.SetActive(false);
+            videoObject.SetActive(false);
+        }
+
     }
 
     void OnEnable()

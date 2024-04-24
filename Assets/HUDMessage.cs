@@ -14,7 +14,7 @@ public class HUDMessage : MonoBehaviour
     [SerializeField] private GameObject confettiGroup;
     [SerializeField] private AudioClip soundEffect;
     private CanvasGroup canvasGroup;
-    private bool isFloating = false;
+
 
     void Start()
     {
@@ -26,9 +26,9 @@ public class HUDMessage : MonoBehaviour
     public void EnableTaskDisplay()
     {
         SkillUnlocked.SetActive(false);
-        TaskCompleted.SetActive(true);
+        canvasGroup.alpha = 0;
         StartCoroutine(DelayAnimation());
-        if (!isFloating) StartConfetti();
+
 
     }
 
@@ -36,21 +36,12 @@ public class HUDMessage : MonoBehaviour
     private System.Collections.IEnumerator DelayAnimation()
     {
         yield return new WaitForSeconds(5f);
+        TaskCompleted.SetActive(true);
         PlayAudio(soundEffect);
         StartCoroutine(FadeAnimation(7f, 3.5f));
-        isFloating = true;
+
     }
 
-    private void StartConfetti()
-    {
-        confettiGroup.SetActive(true);
-        foreach (Transform child in confettiGroup.transform)
-        {
-
-            child.GetComponent<ParticleSystem>().Play();
-
-        }
-    }
 
     public void EnableSkillDisplay(Task.Skill skill)
     {

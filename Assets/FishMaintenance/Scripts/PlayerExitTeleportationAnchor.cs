@@ -23,12 +23,14 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     private Task.Subtask currentSubtask;
     private bool playerInside = false;
 
+
     void Start()
     {
         step = subtask.GetStep(stepName);
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
+        currentSubtask = manager.MaintenanceTask.GetSubtask("Hent Utstyr");
         if (subtask.SubtaskName != "Hent Utstyr")
         {
             step = subtask.GetStep(stepName);
@@ -40,7 +42,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public void CurrentSubtaskUpdate(Task.Subtask currentSub)
     {
         currentSubtask = currentSub;
-        if (step.CurrentStep)
+        if (step.CurrentStep && !playerInside)
         {
 
             activeArrow = true;
@@ -78,18 +80,22 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         {
             playerInside = true;
             anchorArrow.SetActive(false);
-            if (currentSubtask != subtask)
+            if ((currentSubtask != subtask) && (currentSubtask.SubtaskName != "Hent Utstyr"))
+
             {
                 manager.UpdateCurrentSubtask(subtask);
             }
         }
+
     }
+
+
     public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             playerInside = false;
-            if (feedbackManager.getText() != "Bra jobba! Gå videre til neste sylinder.")
+            if (feedbackManager.getText() != "Bra jobba! Følg pilene rundt merden.")
             {
                 feedbackManager.StopMoreFeedback();
                 feedbackManager.emptyInstructions();
@@ -112,8 +118,6 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             {
                 GuidingHandBucket.SetActive(false);
             }
-
-
             if (subtask.Compleated())
             {
                 gameObject.SetActive(false);
@@ -126,12 +130,13 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             }
 
 
+
+
+
+
         }
 
-
     }
-
-
 }
 
 
