@@ -59,8 +59,8 @@ public class TeleportHighlight : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            cylinder.SetActive(false);
-            cylinderGlow.SetActive(false);
+            // cylinder.SetActive(false);
+            // cylinderGlow.SetActive(false);
             if (!teleportedInside)
             {
                 playerTeleport.TeleportPlayer(destination.position, destination.rotation);
@@ -76,8 +76,8 @@ public class TeleportHighlight : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            cylinder.SetActive(true);
-            cylinderGlow.SetActive(true);
+            // cylinder.SetActive(true);
+            // cylinderGlow.SetActive(true);
             teleportedInside = false;
             // boxCollider.size = originalSize;
         }

@@ -28,6 +28,7 @@ public class HUDMessage : MonoBehaviour
         SkillUnlocked.SetActive(false);
         TaskCompleted.SetActive(true);
         StartCoroutine(DelayAnimation());
+        if (!isFloating) StartConfetti();
 
     }
 
@@ -36,8 +37,7 @@ public class HUDMessage : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         PlayAudio(soundEffect);
-        StartCoroutine(FadeAnimation(7f, 4f));
-        if (!isFloating) StartConfetti();
+        StartCoroutine(FadeAnimation(7f, 3.5f));
         isFloating = true;
     }
 
@@ -60,7 +60,7 @@ public class HUDMessage : MonoBehaviour
         GameObject badge = SkillUnlocked.transform.Find("badgeDisplay").gameObject;
         UnityEngine.UI.Image badgeIcon = badge.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
         badgeIcon.sprite = skill.Icon;
-        StartCoroutine(FadeAnimation(5f, 3.5f));
+        StartCoroutine(FadeAnimation(5.5f, 3.5f));
 
     }
 
