@@ -4,11 +4,10 @@ using UnityEngine;
 using BNG;
 using UnityEngine.XR.Management;
 
-public class EmulatorOffsetEnabler : MonoBehaviour
+public class EmulatorStairOffset : MonoBehaviour
 {
     private bool _hmdExists;
     [SerializeField] private Transform Player;
-    private PlayerTeleport _teleportScript;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,11 +27,10 @@ public class EmulatorOffsetEnabler : MonoBehaviour
         // Get the PlayerController
         Player = Player.Find("PlayerController");
 
-        _teleportScript = GetComponent<PlayerTeleport>();
         _hmdExists = XRGeneralSettings.Instance.Manager.activeLoader != null;
         if(!_hmdExists)
         {
-            _teleportScript.TeleportYOffset = Player.GetComponent<BNGPlayerController>().ElevateCameraHeight;
+            transform.Translate(0f, Player.GetComponent<BNGPlayerController>().ElevateCameraHeight+1f,0f);
         }
     }
 }
