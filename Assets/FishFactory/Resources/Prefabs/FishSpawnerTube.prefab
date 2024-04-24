@@ -806,7 +806,7 @@ Transform:
   m_Children:
   - {fileID: 3650426372351742080}
   - {fileID: 6447468049062219316}
-  - {fileID: 2500192146831186850}
+  - {fileID: 1258164394957727222}
   - {fileID: 2097846317004137394}
   - {fileID: 193872164436458681}
   - {fileID: 5699039728695569353}
@@ -1048,133 +1048,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!1 &5509354087871105975
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2500192146831186850}
-  - component: {fileID: 3155560728286396926}
-  - component: {fileID: 5012619146599047317}
-  - component: {fileID: 3927940316940635959}
-  - component: {fileID: 8956598537416962814}
-  m_Layer: 0
-  m_Name: spawner3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2500192146831186850
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5509354087871105975}
-  m_LocalRotation: {x: -0, y: 0.72124445, z: -0, w: -0.69268066}
-  m_LocalPosition: {x: 1.65, y: 0.387, z: 0.035}
-  m_LocalScale: {x: 0.024139998, y: 0.08457, z: 0.09981}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 189194619709676801}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 87.685, z: 0}
---- !u!33 &3155560728286396926
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5509354087871105975}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5012619146599047317
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5509354087871105975}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3927940316940635959
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5509354087871105975}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8956598537416962814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5509354087871105975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af1c3bb4359c40b43996b74e7b45a300, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isSpawnerOn: 1
-  fishPrefab: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
-    type: 3}
-  maxAmountOfFish: 5
-  spawnRate: 3.81
-  varationInSpawnrate: 1.41
-  fishSizeVariation: 1
-  aliveFishPercent: 10
-  badFishPercent: 10
-  toggleFishTier: 0
-  fishPrefabTier2: {fileID: 0}
-  fishPrefabTier3: {fileID: 0}
-  tier1Percentage: 25
-  tier2Percentage: 50
-  toggleFishGuttingChance: 0
-  successfullGuttingChance: 65
-  incompleteGuttingChance: 25
 --- !u!1 &6731327396932794322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1486,3 +1359,126 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1001 &4848111527100749982
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 189194619709676801}
+    m_Modifications:
+    - target: {fileID: 2183471210345806713, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.387
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: fishPrefab
+      value: 
+      objectReference: {fileID: 6915616972181788328, guid: a57c9041a788d7847af4289138a56bfd,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: toggleFishTier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: fishPrefabTier2
+      value: 
+      objectReference: {fileID: 6915616972181788328, guid: 8d1d0501811a13b4398c341f3109c677,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: fishPrefabTier3
+      value: 
+      objectReference: {fileID: 6915616972181788328, guid: babf94ae5f471ac499e90d2c4fe0fdda,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: toggleFishGuttingChance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740525, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: m_Name
+      value: FactoryFishSpawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 29a63aece631c1f4ba043e8b4cc96678, type: 3}
+--- !u!4 &1258164394957727222 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
+    type: 3}
+  m_PrefabInstance: {fileID: 4848111527100749982}
+  m_PrefabAsset: {fileID: 0}

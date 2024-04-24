@@ -13,18 +13,21 @@ public class GutFish : MonoBehaviour
     [SerializeField]
     private Material badFish;
 
+    void Awake()
+    {
+        guttedFish = Resources.Load<Material>("Materials/Fish/salmonGutted");
+        badFish = Resources.Load<Material>("Materials/Fish/salmonWronglyGutted");
+    }
+
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag == "Destroyable")
+        // Get the main fish object
+        GameObject fish = collider.transform.parent.gameObject.transform.parent.gameObject;
+        Debug.Log(fish.tag);
+        Debug.Log(fish.name);
+        if (fish.tag == "Fish")
         {
-            Renderer fishRenderer = collider
-                .transform.parent.transform.parent.transform.Find("Stereo textured mesh")
-                .GetComponent<Renderer>();
-
-            Material[] fishMaterials = fishRenderer.materials;
-
-            // Get the main fish object
-            GameObject fish = collider.transform.parent.gameObject.transform.parent.gameObject;
+            Renderer fishMaterial = fish.transform.GetChild(0).GetComponent<Renderer>();
 
             // Get fish state and check if fish is alive, if fish is alive it's state is set to stunned
             FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
@@ -32,9 +35,7 @@ public class GutFish : MonoBehaviour
             if (fishState.currentState == FactoryFishState.State.GuttingSuccess)
             {
                 // Set first material to gutted fish
-                fishMaterials[0] = guttedFish;
-                // Set the updated materials
-                fishRenderer.materials = fishMaterials;
+                fishMaterial.material = guttedFish;
                 GetComponent<AudioSource>().Play();
             }
             else if (fishState.currentState == FactoryFishState.State.GuttingIncomplete)
@@ -43,12 +44,8 @@ public class GutFish : MonoBehaviour
             }
             else
             {
-                // Set first material to gutted fish
-                fishMaterials[0] = guttedFish;
-                // Set second material to badfish
-                fishMaterials[1] = badFish;
-                // Set the updated materials
-                fishRenderer.materials = fishMaterials;
+                // Set material to gutted fish
+                fishMaterial.material = badFish;
                 GetComponent<AudioSource>().Play();
             }
 
@@ -59,7 +56,10 @@ public class GutFish : MonoBehaviour
 
     void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.tag == "Destroyable")
+        // Get the main fish object
+        GameObject fish = collider.transform.parent.gameObject.transform.parent.gameObject;
+
+        if (fish.tag == "Fish")
         {
             // Turn off light
             gutLight.enabled = false;

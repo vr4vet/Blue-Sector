@@ -140,7 +140,7 @@ public class FactoryFishSpawner : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            Rigidbody rb = child.GetChild(0).GetChild(0).GetComponent<Rigidbody>();
+            Rigidbody rb = child.GetChild(2).GetChild(0).GetComponent<Rigidbody>();
 
             // Move the fish a bit to initialize a collision with the conveyor belt after turning it back on
             //FIXME: This is a solution to get the fish moving while dealing with the current iteration of the conveyor prefab. Should be replaced at a later stage
