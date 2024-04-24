@@ -19,8 +19,7 @@ public class MaintenanceManager : MonoBehaviour
     private FeedbackManager feedbackManager;
     private Task.Task task => taskHolder.GetTask("Vedlikehold");
 
-    private Tablet.TaskListLoader1 taskListLoader => tablet.GetComponent<Tablet.TaskListLoader1>();
-    private StaticPanelManager staticPanelManager => tablet.GetComponent<StaticPanelManager>();
+
     [HideInInspector] public int stepCount;
 
     public Task.Task MaintenanceTask { get => task; }
@@ -28,7 +27,7 @@ public class MaintenanceManager : MonoBehaviour
     public UnityEvent<Task.Skill?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
-    public UnityEvent TaskCompleted { get; } = new();
+    public UnityEvent<Task.Task> TaskCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
     // Start is called before the first frame update
     private void Awake()
@@ -75,12 +74,12 @@ public class MaintenanceManager : MonoBehaviour
 
         Task.Subtask sub = step.ParentSubtask;
         step.CompleateRep();
-        taskListLoader.SubTaskPageLoader(sub);
-        taskListLoader.TaskPageLoader(task);
-
+        UpdateCurrentSubtask(sub);
         // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
         if (step.IsCompeleted())
         {
+
+            SubtaskChanged.Invoke(sub);
 
             PlayAudio(success);
             stepCount += 1;
@@ -109,7 +108,7 @@ public class MaintenanceManager : MonoBehaviour
             SubtaskChanged.Invoke(sub);
             if (task.Compleated())
             {
-                TaskCompleted.Invoke();
+                TaskCompleted.Invoke(task);
             }
             if (sub.SubtaskName == "Runde På Ring")
             {
@@ -153,7 +152,7 @@ public class MaintenanceManager : MonoBehaviour
     public void UpdateCurrentSubtask(Task.Subtask subtask)
     {
         CurrentSubtask.Invoke(subtask);
-        staticPanelManager.SelectSubtask();
+
     }
 
 

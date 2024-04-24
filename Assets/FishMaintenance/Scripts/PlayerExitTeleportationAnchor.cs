@@ -7,7 +7,6 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 {
     public GameObject equipmentArrow;
     public GameObject cageArrows;
-    public GameObject videoObject;
     public GameObject GuidingHandSplint;
     public GameObject GuidingHandRope;
     public GameObject GuidingHandBucket;
@@ -54,9 +53,9 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         anchorArrow.SetActive(activeArrow);
     }
 
-    public void OnSubtaskCompleted(Task.Subtask completedSubtask)
+    public void OnSubtaskCompleted(Task.Subtask incomingSubtask)
     {
-        if (completedSubtask == subtask)
+        if ((incomingSubtask == subtask) && incomingSubtask.Compleated())
         {
             if (equipmentArrow)
             {
@@ -81,7 +80,10 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             playerInside = true;
             anchorArrow.SetActive(false);
             if ((currentSubtask != subtask) && (currentSubtask.SubtaskName != "Hent Utstyr"))
-
+            {
+                manager.UpdateCurrentSubtask(subtask);
+            }
+            else if (subtask.SubtaskName == "Hent Utstyr")
             {
                 manager.UpdateCurrentSubtask(subtask);
             }
@@ -102,10 +104,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             }
 
             anchorArrow.SetActive(activeArrow);
-            if (videoObject)
-            {
-                videoObject.SetActive(false);
-            }
+
             if (GuidingHandSplint)
             {
                 GuidingHandSplint.SetActive(false);

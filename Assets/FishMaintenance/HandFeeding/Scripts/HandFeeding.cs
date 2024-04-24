@@ -53,6 +53,15 @@ public class HandFeeding : MonoBehaviour
 
     }
 
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            bucket.SetActive(false);
+            videoObject.SetActive(false);
+        }
+    }
+
     public void SetEquipmentActive()
     {
         feedbackManager.addFeedback("Håndforing");

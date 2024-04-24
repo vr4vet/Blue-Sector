@@ -28,6 +28,8 @@ public class StaticPanelManager : MonoBehaviour
     [SerializeReference] GameObject NotificationAlertMenu;
     [SerializeReference] private GameObject maintenanceManager;
     private AddInstructionsToWatch watch => maintenanceManager.GetComponent<AddInstructionsToWatch>();
+    private MaintenanceManager manager => maintenanceManager.GetComponent<MaintenanceManager>();
+
     private List<GameObject> allMenus = new();
 
     private bool activeAlert = false;
@@ -61,7 +63,7 @@ public class StaticPanelManager : MonoBehaviour
 
     void Start()
     {
-        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu, NotificationAlertMenu });
+        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu });
 
         foreach (var item in allMenus)
         {
@@ -70,6 +72,21 @@ public class StaticPanelManager : MonoBehaviour
         SelectSubtask();
 
         watch.IncomingMessage.AddListener(SetAlertMenu);
+        manager.CurrentSubtask.AddListener(OnCurrentSubtaskChanged);
+        manager.SkillCompleted.AddListener(OnSkillCompleted);
+
+    }
+
+    private void OnCurrentSubtaskChanged(Task.Subtask subtask)
+    {
+        SwitchMenuTo(SubtaskAboutMenu);
+
+
+    }
+
+    private void OnSkillCompleted(Task.Skill skill)
+    {
+        SwitchMenuTo(SkillListMenu);
     }
 
     public void OnClickBackToTasks()
@@ -171,10 +188,6 @@ public class StaticPanelManager : MonoBehaviour
         SwitchMenuTo(TaskAboutMenu);
 
     }
-
-
-
-
 
 
 

@@ -23,13 +23,15 @@ public class HUDMessage : MonoBehaviour
         manager.TaskCompleted.AddListener(EnableTaskDisplay);
     }
 
-    public void EnableTaskDisplay()
+    public void EnableTaskDisplay(Task.Task task)
     {
-        SkillUnlocked.SetActive(false);
-        canvasGroup.alpha = 0;
-        StartCoroutine(DelayAnimation());
+        if (task != null)
+        {
+            SkillUnlocked.SetActive(false);
+            canvasGroup.alpha = 0;
+            StartCoroutine(DelayAnimation());
 
-
+        }
     }
 
 
@@ -37,6 +39,7 @@ public class HUDMessage : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         TaskCompleted.SetActive(true);
+        canvasGroup.alpha = 0;
         PlayAudio(soundEffect);
         StartCoroutine(FadeAnimation(7f, 3.5f));
 
@@ -45,14 +48,17 @@ public class HUDMessage : MonoBehaviour
 
     public void EnableSkillDisplay(Task.Skill skill)
     {
+        if (skill != null)
+        {
 
-        TMP_Text skillText = SkillUnlocked.transform.Find("txt_SkillName").GetComponent<TMP_Text>();
-        skillText.text = skill.Name;
-        GameObject badge = SkillUnlocked.transform.Find("badgeDisplay").gameObject;
-        UnityEngine.UI.Image badgeIcon = badge.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
-        badgeIcon.sprite = skill.Icon;
-        StartCoroutine(FadeAnimation(5.5f, 3.5f));
+            TMP_Text skillText = SkillUnlocked.transform.Find("txt_SkillName").GetComponent<TMP_Text>();
+            skillText.text = skill.Name;
+            GameObject badge = SkillUnlocked.transform.Find("badgeDisplay").gameObject;
+            UnityEngine.UI.Image badgeIcon = badge.transform.Find("icon_badge").GetComponent<UnityEngine.UI.Image>();
+            badgeIcon.sprite = skill.Icon;
+            StartCoroutine(FadeAnimation(5.5f, 3.5f));
 
+        }
     }
 
 

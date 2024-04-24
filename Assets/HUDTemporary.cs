@@ -20,7 +20,7 @@ public class HUDTemporary : MonoBehaviour
         manager.TaskCompleted.AddListener(EnableToast);
     }
 
-    public void EnableToast()
+    public void EnableToast(Task.Task task)
     {
         StartCoroutine(DelayAnimation());
     }
