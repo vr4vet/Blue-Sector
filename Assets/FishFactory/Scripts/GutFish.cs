@@ -23,8 +23,7 @@ public class GutFish : MonoBehaviour
     {
         // Get the main fish object
         GameObject fish = collider.transform.parent.gameObject.transform.parent.gameObject;
-        Debug.Log(fish.tag);
-        Debug.Log(fish.name);
+
         if (fish.tag == "Fish")
         {
             Renderer fishMaterial = fish.transform.GetChild(0).GetComponent<Renderer>();
@@ -32,13 +31,13 @@ public class GutFish : MonoBehaviour
             // Get fish state and check if fish is alive, if fish is alive it's state is set to stunned
             FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
 
-            if (fishState.currentState == FactoryFishState.State.GuttingSuccess)
+            if (fishState.CurrentState == FactoryFishState.State.GuttingSuccess)
             {
                 // Set first material to gutted fish
                 fishMaterial.material = guttedFish;
                 GetComponent<AudioSource>().Play();
             }
-            else if (fishState.currentState == FactoryFishState.State.GuttingIncomplete)
+            else if (fishState.CurrentState == FactoryFishState.State.GuttingIncomplete)
             {
                 //TODO: play different sound
             }

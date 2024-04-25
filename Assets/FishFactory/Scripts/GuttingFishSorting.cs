@@ -5,7 +5,9 @@ using UnityEngine;
 public class GuttingFishSorting : MonoBehaviour
 {
     [SerializeField]
-    [Tooltip("If toggled, the trigger will give correct if fish has state GuttingSuccess. If not it will give correct for GuttingIncomplete state")]
+    [Tooltip(
+        "If toggled, the trigger will give correct if fish has state GuttingSuccess. If not it will give correct for GuttingIncomplete state"
+    )]
     private bool successfullGuttingCheck;
 
     // ------------------ Private Variables ------------------
@@ -29,7 +31,7 @@ public class GuttingFishSorting : MonoBehaviour
 
         if (successfullGuttingCheck)
         {
-            if (fishState.currentState == FactoryFishState.State.GuttingSuccess)
+            if (fishState.CurrentState == FactoryFishState.State.GuttingSuccess)
             {
                 GameManager.Instance.PlaySound("correct");
                 successfullySortedFish++;
@@ -38,7 +40,7 @@ public class GuttingFishSorting : MonoBehaviour
         }
         else
         {
-            if (fishState.currentState == FactoryFishState.State.GuttingIncomplete)
+            if (fishState.CurrentState == FactoryFishState.State.GuttingIncomplete)
             {
                 GameManager.Instance.PlaySound("correct");
                 successfullySortedFish++;

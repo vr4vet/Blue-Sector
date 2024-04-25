@@ -46,8 +46,8 @@ public class DiscardBadFish : MonoBehaviour
 
             // Check if the fish should have been discarded or not, and give the user feedback
             if (
-                fishState.currentState == FactoryFishState.State.BadQuality
-                || fishState.currentState == FactoryFishState.State.GuttingFailure
+                fishState.CurrentState == FactoryFishState.State.BadQuality
+                || fishState.CurrentState == FactoryFishState.State.GuttingFailure
             )
             {
                 GameManager.Instance.PlaySound("correct");

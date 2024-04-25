@@ -208,7 +208,7 @@ public class FactoryFishSpawner : MonoBehaviour
             FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
             if (fishState != null)
             {
-                fishState.currentState = randomizedFishState;
+                fishState.CurrentState = randomizedFishState;
             }
 
             // Enable animator if fish is alive (disabled as fish animations are not functional)

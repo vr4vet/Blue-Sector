@@ -1,7 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 public class FactoryFishState : MonoBehaviour
 {
+    // ------------ Public Variables ------------
+
     // The possible states of the fish.
     public enum State
     {
@@ -15,16 +18,31 @@ public class FactoryFishState : MonoBehaviour
         GuttingFailure,
     }
 
+    // The current public state of the fish.
+    public State CurrentState;
+
+    // ------------ Editor Variables ------------
+
     [SerializeField]
-    Material bleedingFish;
+    private Material bleedingFish;
+
+    // ------------ Unity Functions ------------
 
     void Awake()
     {
         bleedingFish = Resources.Load<Material>("Materials/Fish/salmonBleeding");
     }
 
-    // The current public state of the fish.
-    public State currentState;
+    void Start()
+    {
+        // If the fish is alive, it should start moving
+        if (CurrentState == State.Alive)
+        {
+            StartCoroutine(AliveFish());
+        }
+    }
+
+    // ------------ Public Functions ------------
 
     /// <summary>
     /// When the player cuts the gills of the fish.
@@ -33,22 +51,22 @@ public class FactoryFishState : MonoBehaviour
     {
         Renderer fishMaterial = gameObject.transform.GetChild(0).GetComponent<Renderer>();
 
-        switch (currentState)
+        switch (CurrentState)
         {
             case State.Alive:
-                currentState = State.Bleeding;
+                CurrentState = State.Bleeding;
                 // The player should not cut the gills of a fish that is alive
                 GameManager.Instance.PlaySound("incorrect");
                 break;
 
             case State.Stunned:
-                currentState = State.Bleeding;
+                CurrentState = State.Bleeding;
                 fishMaterial.material = bleedingFish;
                 GameManager.Instance.PlaySound("correct");
                 break;
 
             case State.BadCut:
-                currentState = State.Bleeding;
+                CurrentState = State.Bleeding;
                 fishMaterial.material = bleedingFish;
                 // The player can cut the gills of a fish that has already been cut incorrectly, fixing the mistake.
                 GameManager.Instance.PlaySound("correct");
@@ -72,10 +90,65 @@ public class FactoryFishState : MonoBehaviour
     {
         // To make the cutting process more forgiving, we will not penalize the player for a bad cut if the fish is already cut correctly
         // The player will only be penalized for a bad cut if the fish is alive or has not been cut yet
-        if (currentState == State.Alive || currentState == State.Stunned)
+        if (CurrentState == State.Alive || CurrentState == State.Stunned)
         {
-            currentState = State.BadCut;
+            CurrentState = State.BadCut;
             GameManager.Instance.PlaySound("incorrect");
         }
+    }
+
+    // ------------ Private Functions ------------
+
+    /// <summary>
+    /// Coroutine that makes the fish move while alive.
+    /// </summary>
+    /// <returns> The fish will move in a random direction </returns>
+    private IEnumerator AliveFish()
+    {
+        // Every time the fish "gathers strength" it will shake 4 times
+        for (int i = 0; i < 4; i++)
+        {
+            // Each repetition will have a random delay between 0.5 and 1 seconds
+            yield return new WaitForSeconds(Random.Range(0.5f, 1f));
+
+            // The fish head and body (back_3) rigidbodies
+            Rigidbody head = transform.GetChild(2).transform.GetChild(0).GetComponent<Rigidbody>();
+            Rigidbody body = transform
+                .GetChild(2)
+                .transform.GetChild(0)
+                .transform.GetChild(0)
+                .transform.GetChild(0)
+                .transform.GetChild(0)
+                .transform.GetChild(0)
+                .GetComponent<Rigidbody>();
+
+            // Makes the fish head move upwards
+            head.AddForce(transform.up * 500, ForceMode.Acceleration);
+
+            // Makes the fish shake in a random direction
+            head.AddTorque(
+                new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 500,
+                ForceMode.Acceleration
+            );
+            // Makes the fish middle body move upwards
+            body.AddForce(transform.up * 500, ForceMode.Acceleration);
+            // Makes the fish shake in a random direction
+            body.AddTorque(
+                new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 500,
+                ForceMode.Acceleration
+            );
+            // Makes sure the fish ends up in a random upwards motion
+            head.AddForce(transform.up * 100, ForceMode.Acceleration);
+
+            // If the fish is no longer alive, stop the coroutine
+            if (CurrentState != State.Alive)
+            {
+                yield break;
+            }
+        }
+
+        // Wait for 2-8 seconds before repeating
+        yield return new WaitForSeconds(Random.Range(2, 8));
+        StartCoroutine(AliveFish());
     }
 }
