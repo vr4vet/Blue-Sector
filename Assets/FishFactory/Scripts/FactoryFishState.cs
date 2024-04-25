@@ -18,68 +18,21 @@ public class FactoryFishState : MonoBehaviour
     [SerializeField]
     Material bleedingFish;
 
-    [SerializeField]
-    Material aliveFish;
-
-    [SerializeField]
-    Material badFish;
-
-    [SerializeField]
-    Material stunnedFish;
-
-    void Start() { }
+    void Awake()
+    {
+        bleedingFish = Resources.Load<Material>("Materials/Fish/salmonBleeding");
+    }
 
     // The current public state of the fish.
     public State currentState;
-
-    void Update()
-    {
-        Renderer fishRenderer = gameObject.transform.GetChild(1).GetComponent<Renderer>();
-
-        GetComponent<Renderer>();
-
-        Material[] fishMaterials = fishRenderer.materials;
-        switch (currentState)
-        {
-            case State.Alive:
-                // Set first material to bleeding fish
-                fishMaterials[0] = aliveFish;
-                // Set the updated materials
-                fishRenderer.materials = fishMaterials;
-                break;
-
-            case State.Stunned:
-                // Set first material to stunned fish
-                fishMaterials[0] = stunnedFish;
-                // Set the updated materials
-                fishRenderer.materials = fishMaterials;
-                break;
-
-            case State.BadCut:
-                // Set first material to badly cut fish
-                break;
-
-            case State.Bleeding:
-                // Set first material to bleeding fish
-                fishMaterials[0] = bleedingFish;
-                // Set the updated materials
-                fishRenderer.materials = fishMaterials;
-                break;
-
-            case State.BadQuality:
-                // Set first material to bad fish
-                fishMaterials[0] = badFish;
-                // Set the updated materials
-                fishRenderer.materials = fishMaterials;
-                break;
-        }
-    }
 
     /// <summary>
     /// When the player cuts the gills of the fish.
     /// </summary>
     public void CutFishGills()
     {
+        Renderer fishMaterial = gameObject.transform.GetChild(0).GetComponent<Renderer>();
+
         switch (currentState)
         {
             case State.Alive:
@@ -90,11 +43,13 @@ public class FactoryFishState : MonoBehaviour
 
             case State.Stunned:
                 currentState = State.Bleeding;
+                fishMaterial.material = bleedingFish;
                 GameManager.Instance.PlaySound("correct");
                 break;
 
             case State.BadCut:
                 currentState = State.Bleeding;
+                fishMaterial.material = bleedingFish;
                 // The player can cut the gills of a fish that has already been cut incorrectly, fixing the mistake.
                 GameManager.Instance.PlaySound("correct");
                 break;
