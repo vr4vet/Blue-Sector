@@ -28,6 +28,8 @@ public class StunFish : MonoBehaviour
         else
         {
             GameManager.Instance.PlaySound("incorrect");
+            AudioSource audio = GetComponent<AudioSource>();
+            audio.Play();
         }
     }
 }

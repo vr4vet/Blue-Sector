@@ -860,7 +860,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
@@ -1025,11 +1025,11 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: 0
+    limit: -27.241055
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 0
+    limit: 49.294655
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -1040,7 +1040,7 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0.001
   m_AngularZLimit:
-    limit: 6.2730126
+    limit: 6
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -1257,7 +1257,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
@@ -1710,7 +1710,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
@@ -1935,7 +1935,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3814371106168548784}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2384,7 +2384,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
@@ -2631,7 +2631,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
@@ -3037,11 +3037,11 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -4.3237276
+    limit: -2.1736686
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 9.488106
+    limit: 11.527109
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -3119,7 +3119,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
@@ -3350,7 +3350,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7704949703424369091}
   - {fileID: 8608444743723334032}
@@ -3372,11 +3372,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052af0f5f24acc945a2fe57249a37398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentState: 0
   bleedingFish: {fileID: 0}
-  aliveFish: {fileID: 0}
-  badFish: {fileID: 0}
-  stunnedFish: {fileID: 0}
-  currentState: 1
 --- !u!82 &919132148199949407
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3483,7 +3480,7 @@ Animator:
   m_GameObject: {fileID: 6915616972181788328}
   m_Enabled: 0
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 942ecd44aab846d41be2c7d0ba6f68bd, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4d593675458de3644b199a847861bf43, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 2
   m_ApplyRootMotion: 0
@@ -3623,11 +3620,11 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: 0
+    limit: -41.709484
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 0
+    limit: 54.938164
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -3638,7 +3635,7 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0.001
   m_AngularZLimit:
-    limit: 5.898264
+    limit: 6.772684
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -3855,7 +3852,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
@@ -4102,7 +4099,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
@@ -4417,11 +4414,11 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: 0
+    limit: 2.6073694
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 0
+    limit: 15.12537
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
@@ -4432,7 +4429,7 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0.001
   m_AngularZLimit:
-    limit: 6.009987
+    limit: 12.414778
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -4499,7 +4496,7 @@ MonoBehaviour:
   GrabPhysics: 0
   GrabMechanic: 1
   GrabSpeed: 15
-  RemoteGrabbable: 0
+  RemoteGrabbable: 1
   RemoteGrabMechanic: 0
   RemoteGrabDistance: 2
   ThrowForceMultiplier: 2
