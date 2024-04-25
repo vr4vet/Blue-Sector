@@ -76,7 +76,6 @@ public class FishSortingTrigger : MonoBehaviour
     private void OpenDoor(string doorName)
     {
         GameObject door = GameObject.Find(doorName);
-        door.transform.Translate(Vector3.back * 0.17f);
         StartCoroutine(CloseDoorAfterDelay(door));
     }
 
@@ -86,6 +85,10 @@ public class FishSortingTrigger : MonoBehaviour
     /// <param name="door">The door to close</param>
     private IEnumerator CloseDoorAfterDelay(GameObject door)
     {
+        // Delay opening the door 1 second
+        yield return new WaitForSeconds(1);
+        // Move the door up
+        door.transform.Translate(Vector3.back * 0.17f);
         // Keep the door open for 2 seconds
         yield return new WaitForSeconds(2);
         // Move the door down
