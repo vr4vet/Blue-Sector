@@ -14,7 +14,7 @@ public class TabletButton : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Hand"))
+        if (other.CompareTag("Finger"))
         {
             button.onClick.Invoke();
         }

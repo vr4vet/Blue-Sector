@@ -30,12 +30,12 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
         currentSubtask = manager.MaintenanceTask.GetSubtask("Hent Utstyr");
+
         if (subtask.SubtaskName != "Hent Utstyr")
         {
             step = subtask.GetStep(stepName);
             manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
             // activeSubtask = manager.GetSubtask(subTask);
-
         }
     }
     public void CurrentSubtaskUpdate(Task.Subtask currentSub)
@@ -75,11 +75,12 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         //    manager.UpdateCurrentSubtask(manager.GetSubtask(subTask));
         // }
 
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Hand"))
         {
+
             playerInside = true;
             anchorArrow.SetActive(false);
-            if ((currentSubtask != subtask) && (currentSubtask.SubtaskName != "Hent Utstyr"))
+            if (currentSubtask != subtask)
             {
                 manager.UpdateCurrentSubtask(subtask);
             }
@@ -96,6 +97,8 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+
+
             playerInside = false;
             if (feedbackManager.getText() != "Bra jobba! Følg pilene rundt merden.")
             {

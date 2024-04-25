@@ -17,9 +17,13 @@ public class HandFeeding : MonoBehaviour
     private FeedbackManager feedbackManager;
     private MaintenanceManager manager;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
+
+
 
         dropItem = gameObject.GetComponent<DropItem>();
         step = subtask.GetStep("Kast mat til fisken");
@@ -45,6 +49,7 @@ public class HandFeeding : MonoBehaviour
         if (manager.GetStep("Hent Utstyr", "Hent bøtte og spade").IsCompeleted())
         {
             SetEquipmentActive();
+
         }
         else
         {
@@ -57,6 +62,7 @@ public class HandFeeding : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+
             bucket.SetActive(false);
             videoObject.SetActive(false);
         }

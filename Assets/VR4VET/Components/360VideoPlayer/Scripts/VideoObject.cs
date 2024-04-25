@@ -137,6 +137,7 @@ public class VideoObject : MonoBehaviour
             }
 
         VideoManager.videoManager.ShowVideo(videoClip);
+        gameObject.SetActive(false);
 
         //scale
         // transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
