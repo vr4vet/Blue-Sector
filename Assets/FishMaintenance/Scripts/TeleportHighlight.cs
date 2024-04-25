@@ -57,7 +57,7 @@ public class TeleportHighlight : MonoBehaviour
 
     public void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Hand"))
         {
             // cylinder.SetActive(false);
             // cylinderGlow.SetActive(false);
