@@ -16,16 +16,9 @@ MonoBehaviour:
   - dialogue:
     - Hello, and welcome to the gutting station. Your task here is to correctly sort
       incomplete or badly gutted fish.
-    - The box next to me contains the gutting machine. It is highly automatic, but
-      sometimes the gutting of the fish is not up to our standards, and require manual
-      gutting.
-    - When you see a fish that has not been properly gutted, push the button and
-      send it to on the other conveyor belt be manually gutted. Properly gutted fish
-      should be kept on the conveyor belt they are orignally.
-    - Should you encounter any fish which has been badly gutted, you should be discarded
-      and thrown into the box next to you. Make sure to flip the fish and check both
-      sides for damages.
-    - When you are ready, start by pressing the blue button next to the gutting machine.
+    - The box next to me contains the gutting machine. It is completely automatic,
+      but sometimes the gutting of the fish is not up to our standards, and require
+      manual gutting.
     endAfterDialogue: 0
     branchPoint:
       question: Do you understand?
@@ -35,12 +28,23 @@ MonoBehaviour:
       - answerLabel: Yes
         nextElement: 1
   - dialogue:
-    - That is all for now. Good luck!
-    endAfterDialogue: 1
+    - 'When you see a fish that has not been properly gutted, push the green button
+      and send it to on the other conveyor belt be manually gutted. Properly gutted
+      fish should be kept on the conveyor belt they are on orignally.
+
+'
+    - 'Should you encounter any fish which has been damaged, you should discard them
+      in the box next to you. Make sure to flip the fish and check both sides for
+      damages.
+
+'
+    - When you are ready, start by pressing the red button next to the gutting machine
+      and step up onto the platform next to the green button.
+    endAfterDialogue: 0
     branchPoint:
-      question: 
+      question: Good luck!
       answers:
-      - answerLabel: Could you repeat that?
-        nextElement: 2
-      - answerLabel: Thanks
+      - answerLabel: Could you repeat that last part?
+        nextElement: 1
+      - answerLabel: Could you repeat everything?
         nextElement: 0
