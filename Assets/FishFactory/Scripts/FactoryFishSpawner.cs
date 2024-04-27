@@ -56,14 +56,6 @@ public class FactoryFishSpawner : MonoBehaviour
     private bool toggleFishTier;
 
     [SerializeField]
-    [Tooltip("The gameobject prefab to spawn if fish is tier 2")]
-    private GameObject fishPrefabTier2;
-
-    [SerializeField]
-    [Tooltip("The gameobject prefab to spawn if fish is tier 3")]
-    private GameObject fishPrefabTier3;
-
-    [SerializeField]
     [Range(0, 100)]
     [Tooltip("The percentage of fish that should be Tier 1. Higher number equals higher chance.")]
     private int tier1Percentage = 25;
