@@ -56,14 +56,6 @@ public class FactoryFishSpawner : MonoBehaviour
     private bool toggleFishTier;
 
     [SerializeField]
-    [Tooltip("The gameobject prefab to spawn if fish is tier 2")]
-    private GameObject fishPrefabTier2;
-
-    [SerializeField]
-    [Tooltip("The gameobject prefab to spawn if fish is tier 3")]
-    private GameObject fishPrefabTier3;
-
-    [SerializeField]
     [Range(0, 100)]
     [Tooltip("The percentage of fish that should be Tier 1. Higher number equals higher chance.")]
     private int tier1Percentage = 25;
@@ -97,7 +89,16 @@ public class FactoryFishSpawner : MonoBehaviour
     // Counts the amount of child gameobjects in the spawner
     private int currentAmountOfFish;
 
+    private Material tier2;
+    private Material tier3;
+
     // ------------------ Unity Functions ------------------
+
+    void Awake()
+    {
+        tier2 = Resources.Load<Material>("Materials/Fish/salmonTier2");
+        tier3 = Resources.Load<Material>("Materials/Fish/salmonTier3");
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -162,28 +163,8 @@ public class FactoryFishSpawner : MonoBehaviour
             GameObject spawnedFishPrefab = fishPrefab;
             string fishTag = "fish";
 
-            // Randomizes the quality of the fish if enabled. The fish will be tagged with the tier it belongs to.
-            if (toggleFishTier)
-            {
-                int randomValue = Random.Range(1, 101);
-                if (randomValue <= tier1Percentage)
-                {
-                    fishTag = "Tier1";
-                    spawnedFishPrefab = fishPrefab;
-                }
-                else if (randomValue <= tier1Percentage + tier2Percentage)
-                {
-                    fishTag = "Tier2";
-                    spawnedFishPrefab = fishPrefabTier2;
-                }
-                else
-                {
-                    fishTag = "Tier3";
-                    spawnedFishPrefab = fishPrefabTier3;
-                }
-            }
-
             // Get a random state and sets prefab to badfishPrefab if the state is BadQuality
+
             FactoryFishState.State randomizedFishState = RandomizeFishState();
             if (randomizedFishState == FactoryFishState.State.BadQuality)
             {
@@ -198,10 +179,27 @@ public class FactoryFishSpawner : MonoBehaviour
                 transform
             );
             childGameObject.name = "FactoryFish" + transform.childCount.ToString();
+            Renderer fishMaterial = childGameObject.transform.GetChild(0).GetComponent<Renderer>();
+
 
             if (toggleFishTier)
             {
-                childGameObject.tag = fishTag;
+                int randomValue = Random.Range(1, 101);
+
+                if (randomValue <= tier1Percentage)
+                {
+                    randomizedFishState = FactoryFishState.State.Tier1; 
+                }
+                else if (randomValue <= tier1Percentage + tier2Percentage)
+                {
+                    randomizedFishState = FactoryFishState.State.Tier2;
+                    fishMaterial.material = tier2;
+                }
+                else
+                {
+                    randomizedFishState = FactoryFishState.State.Tier3;
+                    fishMaterial.material = tier3;
+                }
             }
 
             // Set the state of the fish to the randomizedFishState
@@ -210,12 +208,6 @@ public class FactoryFishSpawner : MonoBehaviour
             {
                 fishState.CurrentState = randomizedFishState;
             }
-
-            // Enable animator if fish is alive (disabled as fish animations are not functional)
-            /* if(randomizedFishState == FactoryFishState.State.Alive)
-            {
-                childGameObject.GetComponent<Animator>().enabled = true;
-            } */
 
             // Randomizes the size of the fish if enabled
             if (fishSizeVariation)

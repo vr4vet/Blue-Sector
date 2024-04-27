@@ -24,6 +24,10 @@ public class GutFish : MonoBehaviour
         // Get the main fish object
         GameObject fish = collider.transform.parent.gameObject.transform.parent.gameObject;
 
+        if (fish.tag != "Fish"){
+            return;
+        }
+        
         if (fish.tag == "Fish")
         {
             Renderer fishMaterial = fish.transform.GetChild(0).GetComponent<Renderer>();

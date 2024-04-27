@@ -16,6 +16,9 @@ public class FactoryFishState : MonoBehaviour
         GuttingSuccess,
         GuttingIncomplete,
         GuttingFailure,
+        Tier1,
+        Tier2,
+        Tier3,
     }
 
     // The current public state of the fish.

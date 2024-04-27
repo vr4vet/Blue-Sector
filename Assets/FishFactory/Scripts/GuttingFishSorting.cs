@@ -20,12 +20,13 @@ public class GuttingFishSorting : MonoBehaviour
 
     private void OnTriggerEnter(Collider collisionObject)
     {
-        if (collisionObject.tag != "Destroyable")
-        {
-            return;
-        }
+
         // Get the main fish object
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
+        if (fish.tag != "Fish"){
+            return;
+        }
+        
         // Get fish state and check if fish is alive, if fish is alive it's state is set to stunned
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
 
