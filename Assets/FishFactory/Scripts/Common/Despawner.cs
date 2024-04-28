@@ -8,12 +8,13 @@ public class Despawner : MonoBehaviour
     /// <param name="collider">The head bone collider of the fish object</param>
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.tag != "Destroyable")
+        GameObject colliderObject = collider.transform.parent.transform.parent.gameObject;
+        if (colliderObject.tag != "Fish")
         {
             return;
         }
 
         // Destroy the main fish object
-        Destroy(collider.transform.parent.transform.parent.gameObject);
+        Destroy(colliderObject);
     }
 }

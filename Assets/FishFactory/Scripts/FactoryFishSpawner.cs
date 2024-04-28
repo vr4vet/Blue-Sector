@@ -10,7 +10,9 @@ public class FactoryFishSpawner : MonoBehaviour
     private bool isSpawnerOn = true;
 
     [SerializeField]
-    [Tooltip("The gameobject prefab to spawn")]
+    [Tooltip(
+        "The gameobject prefab to spawn. This prefab will be used as the tier 1 fish if fish tiers are enabeled"
+    )]
     private GameObject fishPrefab;
 
     [SerializeField]
@@ -44,6 +46,10 @@ public class FactoryFishSpawner : MonoBehaviour
     )]
     private int badFishPercent = 10;
 
+    [SerializeField]
+    [Tooltip("The gameobject prefab to spawn if fish is bad or dead and should be thrown away")]
+    private GameObject badfishPrefab;
+
     [Header("Fish Tier Settings")]
     [SerializeField]
     [Tooltip("If toggled, the fish will spawn in different tiers")]
@@ -61,12 +67,38 @@ public class FactoryFishSpawner : MonoBehaviour
     )]
     private int tier2Percentage = 50;
 
+    [Header("Fish Gutting Settings")]
+    [SerializeField]
+    [Tooltip(
+        "If toggled, the fish will be assigned a state defining if it has been successfully gutted or not"
+    )]
+    private bool toggleFishGuttingChance;
+
+    [SerializeField]
+    [Range(0, 100)]
+    [Tooltip("The percentage of fish that should be successfully gutted")]
+    private int successfullGuttingChance = 65;
+
+    [SerializeField]
+    [Range(0, 100)]
+    [Tooltip("The percentage of fish that are not completely gutted")]
+    private int incompleteGuttingChance = 25;
+
     // ------------------ Private Variables ------------------
 
     // Counts the amount of child gameobjects in the spawner
     private int currentAmountOfFish;
 
+    private Material tier2;
+    private Material tier3;
+
     // ------------------ Unity Functions ------------------
+
+    void Awake()
+    {
+        tier2 = Resources.Load<Material>("Materials/Fish/salmonTier2");
+        tier3 = Resources.Load<Material>("Materials/Fish/salmonTier3");
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -109,7 +141,7 @@ public class FactoryFishSpawner : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            Rigidbody rb = child.GetChild(0).GetChild(0).GetComponent<Rigidbody>();
+            Rigidbody rb = child.GetChild(2).GetChild(0).GetComponent<Rigidbody>();
 
             // Move the fish a bit to initialize a collision with the conveyor belt after turning it back on
             //FIXME: This is a solution to get the fish moving while dealing with the current iteration of the conveyor prefab. Should be replaced at a later stage
@@ -128,20 +160,53 @@ public class FactoryFishSpawner : MonoBehaviour
 
         if (currentAmountOfFish < maxAmountOfFish && isSpawnerOn)
         {
+            GameObject spawnedFishPrefab = fishPrefab;
+            string fishTag = "fish";
+
+            // Get a random state and sets prefab to badfishPrefab if the state is BadQuality
+
+            FactoryFishState.State randomizedFishState = RandomizeFishState();
+            if (randomizedFishState == FactoryFishState.State.BadQuality)
+            {
+                spawnedFishPrefab = badfishPrefab;
+            }
+
             // Spawn object as a child of the spawner object, and as such limit the amount of spawned objects to increase performance.
             GameObject childGameObject = Instantiate(
-                fishPrefab,
+                spawnedFishPrefab,
                 transform.position,
                 Random.rotation,
                 transform
             );
             childGameObject.name = "FactoryFish" + transform.childCount.ToString();
+            Renderer fishMaterial = childGameObject.transform.GetChild(0).GetComponent<Renderer>();
 
-            // Randomizes the state of the fish
+
+            if (toggleFishTier)
+            {
+                int randomValue = Random.Range(1, 101);
+
+                if (randomValue <= tier1Percentage)
+                {
+                    randomizedFishState = FactoryFishState.State.Tier1; 
+                }
+                else if (randomValue <= tier1Percentage + tier2Percentage)
+                {
+                    randomizedFishState = FactoryFishState.State.Tier2;
+                    fishMaterial.material = tier2;
+                }
+                else
+                {
+                    randomizedFishState = FactoryFishState.State.Tier3;
+                    fishMaterial.material = tier3;
+                }
+            }
+
+            // Set the state of the fish to the randomizedFishState
             FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
             if (fishState != null)
             {
-                fishState.currentState = RandomizeFishState();
+                fishState.CurrentState = randomizedFishState;
             }
 
             // Randomizes the size of the fish if enabled
@@ -153,24 +218,6 @@ public class FactoryFishSpawner : MonoBehaviour
                     randomSize,
                     randomSize
                 );
-            }
-
-            // Randomizes the quality of the fish if enabled. The fish will be tagged with the tier it belongs to.
-            if (toggleFishTier)
-            {
-                int randomValue = Random.Range(1, 101);
-                if (randomValue <= tier1Percentage)
-                {
-                    childGameObject.tag = "Tier1";
-                }
-                else if (randomValue <= tier1Percentage + tier2Percentage)
-                {
-                    childGameObject.tag = "Tier2";
-                }
-                else
-                {
-                    childGameObject.tag = "Tier3";
-                }
             }
         }
 
@@ -185,7 +232,7 @@ public class FactoryFishSpawner : MonoBehaviour
     private float RandomizeObjectSize()
     {
         // the size variation of the fish relative to the parent spawner
-        return Random.Range(9, 15);
+        return Random.Range(0.7f, 1.2f);
     }
 
     /// <summary>
@@ -207,6 +254,23 @@ public class FactoryFishSpawner : MonoBehaviour
         int randomValue = Random.Range(1, 101);
 
         FactoryFishState.State state;
+
+        if (toggleFishGuttingChance)
+        {
+            if (randomValue <= successfullGuttingChance)
+            {
+                state = FactoryFishState.State.GuttingSuccess;
+            }
+            else if (randomValue <= successfullGuttingChance + incompleteGuttingChance)
+            {
+                state = FactoryFishState.State.GuttingIncomplete;
+            }
+            else
+            {
+                state = FactoryFishState.State.GuttingFailure;
+            }
+            return state;
+        }
 
         if (randomValue <= aliveFishPercent)
         {
