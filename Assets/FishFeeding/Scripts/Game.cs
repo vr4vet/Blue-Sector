@@ -15,12 +15,10 @@ public class Game : MonoBehaviour
     public bool startGame = false;
     private GameObject[] merds;
 
-    [SerializeField]
-    private GameObject MerdCameraHost;
+    [SerializeField] private GameObject MerdCameraHost;
     private MerdCameraController merdCameraController;
 
-    [field: SerializeField]
-    private int time = 60;
+    [SerializeField] private int time = 60;
 
     private float gameTimeLeft;
     private TextMeshProUGUI endScoreText;
@@ -30,15 +28,18 @@ public class Game : MonoBehaviour
     private TextMeshProUGUI foodWasteText;
     private TextMeshProUGUI currentMerdText;
 
-    [field: SerializeField]
     private UnityEngine.UI.Slider foodWasteSlider;
     private UnityEngine.UI.Image foodWasteFillImage;
+
+    [SerializeField] private List<TextMeshProUGUI> staticText;
 
     private Color32 redColor = new Color32(202, 18, 7, 242);
     private Color32 yellowColor = new Color32(205, 157, 0, 255);
     private Color32 greenColor = new Color32(1, 159, 28, 255);
 
-    public Scoring scoring;
+
+    [HideInInspector] public Scoring scoring;
+    [HideInInspector] public ScoreTablet scoreTablet;
     public List<Tutorial> tutorials;
     public Mode currentMode;
     public Modes modesClass;
@@ -53,6 +54,7 @@ public class Game : MonoBehaviour
         merds = GameObject.FindGameObjectsWithTag("Fish System");
         merdCameraController = MerdCameraHost.GetComponent<MerdCameraController>();
         scoring = FindObjectOfType<Scoring>();
+        scoreTablet = FindObjectOfType<ScoreTablet>();
         endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
         GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
         timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
@@ -68,15 +70,13 @@ public class Game : MonoBehaviour
 
         tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<Tutorial>().ToList());
         modesClass.OnModeChanged += ModesClass_OnModeChanged;
+        modesClass.OnFinishedLoading += InitializeMode;
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
      * game hasn't started, start the game and the coroutine Timer and start scoring. */
-
     private void Update()
     {
-        modesList = modesClass.modesList; // reassign
-        currentMode = modesClass.mode;
         UpdateCurrentMerdText();
 
         if (startGame) // only check for pre game things if not started
@@ -93,19 +93,6 @@ public class Game : MonoBehaviour
 
         if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && CanStartGame)
         {
-            // Set mode values
-            time = currentMode.timeLimit;
-            hud = currentMode.hud;
-
-            currentScore.enabled = hud;
-            foodWasteText.enabled = hud;
-            foodWasteSlider.enabled = hud;
-            foreach (var image in foodWasteSlider.GetComponentsInChildren<UnityEngine.UI.Image>())
-            {
-                image.enabled = hud;
-            }
-            deadFishText.enabled = hud;
-
             startGame = true;
 
             foreach (GameObject merd in merds)
@@ -121,7 +108,6 @@ public class Game : MonoBehaviour
     }
 
     /* Starts a timer and gives the score after a certain amount of time. */
-
     private IEnumerator Timer()
     {
         if (time == -1) yield return null; // return if game mode has endless time limit
@@ -136,16 +122,16 @@ public class Game : MonoBehaviour
             FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
             merdScript.SetIdle();
         }
-        endScoreText.text = "YOUR SCORE:\n" + scoring.Score;
+        scoreTablet.GiveFinalTabletScore();
+        endScoreText.text = scoring.Score.ToString();
     }
 
     /* Updates the timer, score, food waste and the amount of dead fish on the merd screen. */
-
     public void UpdateScreenStats()
     {
         if (time != -1)
         {
-            timeLeft.text = "Time left: " + Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
+            timeLeft.text = Mathf.FloorToInt(gameTimeLeft / 60) + ":" +
                 Mathf.FloorToInt(gameTimeLeft % 60).ToString("00");
         }
         else
@@ -154,8 +140,8 @@ public class Game : MonoBehaviour
         }
         if (!hud) return; // Don't show hud if in mode defined as such
 
-        currentScore.text = "Score: " + scoring.Score;
-        foodWasteText.text = "Food wastage: " + scoring.FoodWasted + " / Sec.";
+        currentScore.text = scoring.Score.ToString();
+        foodWasteText.text = scoring.FoodWasted.ToString();
         foodWasteSlider.value = scoring.FoodWastedPercentage;
 
         if (foodWasteSlider.value == 1.0f)
@@ -178,20 +164,55 @@ public class Game : MonoBehaviour
             foodWasteFillImage.enabled = false;
         }
 
-        deadFishText.text = "Dead fish: " + scoring.DeadFish;
+        deadFishText.text = scoring.DeadFish.ToString();
     }
 
     private void UpdateCurrentMerdText()
     {
         if (merdCameraController.SelectedFishSystem != null)
         {
-            currentMerdText.text = "Cage " + merdCameraController.SelectedFishSystem.merdNr;
+            currentMerdText.text = merdCameraController.SelectedFishSystem.merdNr.ToString();
         }
+    }
+
+    // Update visibility of HUD based on mode
+    private void UpdateHUDModeVisibility()
+    {
+        currentScore.enabled = hud;
+        foodWasteText.enabled = hud;
+        foodWasteSlider.enabled = hud;
+        foreach (var image in foodWasteSlider.GetComponentsInChildren<UnityEngine.UI.Image>())
+        {
+            image.enabled = hud;
+        }
+        deadFishText.enabled = hud;
+        foreach (TextMeshProUGUI text in staticText)
+        {
+            text.enabled = hud;
+        }
+    }
+
+    private void InitializeMode(object sender, Mode e)
+    {
+        modesList = modesClass.modesList; 
+        currentMode = e;
+
+        // Set mode values
+        time = currentMode.timeLimit;
+        hud = currentMode.hud;
+
+        UpdateHUDModeVisibility();
     }
 
     private void ModesClass_OnModeChanged(object sender, Mode e)
     {
         currentMode = e;
+
+        // Set mode values
+        time = currentMode.timeLimit;
+        hud = currentMode.hud;
+
+        UpdateHUDModeVisibility();
 
         // Only disable tutorials if defined in mode
         tutorials.ForEach(tutorial =>

@@ -23,6 +23,9 @@ public class ModeLoader : MonoBehaviour
     [HideInInspector]
     public bool finishedLoading = false;
 
+    [HideInInspector]
+    public event EventHandler<List<Mode>> OnFinishedLoading;
+
     private int timeLimit;
     private float failureThreshold, modifier;
     private bool isUnlocked, hud;
@@ -31,7 +34,7 @@ public class ModeLoader : MonoBehaviour
 
     private void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         LoadXML();
         StartCoroutine(AssignData());
     }
@@ -59,6 +62,7 @@ public class ModeLoader : MonoBehaviour
         }
 
         finishedLoading = true;
+        OnFinishedLoading?.Invoke(this, modesList);
     }
 }
 

@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FishSystemScript : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class FishSystemScript : MonoBehaviour
 
     // [HideInInspector]
     public FishState state;
+    public FishState previousState;
 
     [HideInInspector]
     public enum FeedingIntensity
@@ -45,9 +47,10 @@ public class FishSystemScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foodBase = amountOfFish * eatingAmount;
-        state = FishState.Idle;     // initiate in Idle state
-        feedingIntensity = FeedingIntensity.Medium;     // initiate with medium feeding intensity
+        Random.InitState(GetInstanceID()); // initiate random seed to prevent synchronized state change between cages
+        foodBase = amountOfFish * eatingAmount;    
+        ChangeState(FishState.Idle); // initiate in Idle state
+        feedingIntensity = FeedingIntensity.Low;     // initiate with medium feeding intensity
         foodGivenPerSec = foodBase; // initiate foodGivenPerSec at medium level when fish is full
 
         // get position for spawning fish within fish system boundaries
@@ -86,8 +89,6 @@ public class FishSystemScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(gameObject.transform.position.y);
-        //Debug.Log(height);
         if (Input.GetKeyDown(KeyCode.J))
         {
             feedingIntensity = FeedingIntensity.Low;
@@ -108,20 +109,20 @@ public class FishSystemScript : MonoBehaviour
             foodGivenPerSec = foodBase * 5 / 3;
             emission.rateOverTime = 40;
         }
-        //Debug.Log(feedingIntensity);
     }
 
     // functions for setting idle state
     public void SetIdle()
     {
-        state = FishState.Idle;
+        ChangeState(FishState.Idle);
         if (IsInvoking(nameof(KillFish)))
             CancelInvoke(nameof(KillFish));
         hungerStatus = 0;
+        fullTicks = 0;
 
         for (int i = 0; i < fishKilled; i++)
         {
-            gameObject.transform.GetChild(1 + i).GetComponent<FishScript>().Revive();
+            gameObject.transform.GetChild(2 + i).GetComponent<FishScript>().Revive();
         }
         fishKilled = 0;
     }
@@ -161,7 +162,7 @@ public class FishSystemScript : MonoBehaviour
         // switch state to hungry, and reset timer
         if (fullTicks >= timeToHungry)
         {
-            state = FishState.Hungry;
+            ChangeState(FishState.Hungry);
             fullTicks = 0;
             return;
         }
@@ -193,14 +194,14 @@ public class FishSystemScript : MonoBehaviour
         if (hungerStatus >= secondsToFull)
         {
             // switch to full state, and reset status
-            state = FishState.Full;
+            ChangeState(FishState.Full);
             hungerStatus = 0;
             return;
         }
         else if (hungerStatus <= secondsToDying)
         {
             // switch to dying state
-            state = FishState.Dying;
+            ChangeState(FishState.Dying);
             return;
         }
 
@@ -221,12 +222,19 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
+    void ChangeState(FishState newState)
+    {
+        previousState = state;
+        state = newState;
+        FishStateChanged.Invoke(this);
+    }
+
     void HandleDying()
     {
         if (feedingIntensity == FeedingIntensity.High)
         {
             CancelInvoke(nameof(KillFish));
-            state = FishState.Hungry;
+            ChangeState(FishState.Hungry);
             hungerStatus = -20;     // fish should still be almost starving, requiring high feeding intensity to prevent death
         }
         else
@@ -238,16 +246,23 @@ public class FishSystemScript : MonoBehaviour
         }
     }
 
+
     public int fishKilled = 0;
     void KillFish()
     {
         if (fishKilled < amountOfFish)
         {
             // kill fish one by one
-            gameObject.transform.GetChild(1 + fishKilled).GetComponent<FishScript>().Kill();
+            gameObject.transform.GetChild(2 + fishKilled).GetComponent<FishScript>().Kill();
             fishKilled++;
         }
     }
+
+    /// <summary>
+    /// Gets an event which is raised when the fish state changed.
+    /// </summary>
+    public UnityEvent<FishSystemScript?> FishStateChanged { get; } = new();
+
 
     /* Gives the wasted food in this second based on the state to the merd and the feeding intensity. */
     void ComputeFoodWaste()
