@@ -32,6 +32,8 @@ public class BootsState : MonoBehaviour
     [SerializeField]
     private int scrubbingLeft = 5;
 
+    private float scrubbingDuration = 0f;
+
     [Tooltip(
         "The materials that will be used to change the boots' appearance. Should be 'dirty', 'soaped', 'semisoaped', 'clean', in that order."
     )]
@@ -44,6 +46,7 @@ public class BootsState : MonoBehaviour
     /// Check if the boots are scrubbed with the scrubber. Only checks for "collisions" with the scrubber object.
     /// </summary>
     /// <param name="collision">The scrubber object</param>
+    /*
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "Scrubber" && boots == BootsStatus.SemiClean)
@@ -51,6 +54,28 @@ public class BootsState : MonoBehaviour
             // Could add sound effect here
             scrubbingLeft--;
             if (scrubbingLeft < 0)
+            {
+                boots = BootsStatus.Clean;
+                GameManager.Instance.PlaySound("correct");
+                gameObject.GetComponent<MeshRenderer>().material = materials[3]; // Clean
+            }
+        }
+    }
+    */
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.name == "Scrubber" && boots == BootsStatus.SemiClean)
+        {
+            scrubbingDuration += Time.deltaTime; // Track scrubbing duration
+            // Calculate scrubbing progress based on time
+            int scrubbingProgress = Mathf.FloorToInt(
+                scrubbingDuration / soakingTime * scrubbingLeft
+            );
+            // Reduce scrubbing left based on time
+            scrubbingLeft = Mathf.Max(0, scrubbingLeft - scrubbingProgress);
+
+            if (scrubbingLeft <= 0)
             {
                 boots = BootsStatus.Clean;
                 GameManager.Instance.PlaySound("correct");
