@@ -26,10 +26,8 @@ public class StaticPanelManager : MonoBehaviour
     [SerializeReference] GameObject SubtaskAboutMenu;
     [SerializeReference] GameObject SkillListMenu;
     [SerializeReference] GameObject NotificationAlertMenu;
-    [SerializeReference] private GameObject maintenanceManager;
-    private AddInstructionsToWatch watch => maintenanceManager.GetComponent<AddInstructionsToWatch>();
-    private MaintenanceManager manager => maintenanceManager.GetComponent<MaintenanceManager>();
-
+    private AddInstructionsToWatch watch;
+    private MaintenanceManager manager;
     private List<GameObject> allMenus = new();
 
     private bool activeAlert = false;
@@ -70,7 +68,8 @@ public class StaticPanelManager : MonoBehaviour
             item.SetActive(false);
         }
         SelectSubtask();
-
+        manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
+        watch = GameObject.FindObjectsOfType<AddInstructionsToWatch>()[0];
         watch.IncomingMessage.AddListener(SetAlertMenu);
         manager.CurrentSubtask.AddListener(OnCurrentSubtaskChanged);
         manager.SkillCompleted.AddListener(OnSkillCompleted);

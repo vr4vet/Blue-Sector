@@ -18,11 +18,8 @@ namespace Tablet
         private List<Task.Skill> _skills = new List<Task.Skill>();
 
         private StaticPanelManager panelManager;
-
-        [SerializeField] private GameObject maintenanceManager;
-
-        private MaintenanceManager manager => maintenanceManager.GetComponent<MaintenanceManager>();
-        private AddInstructionsToWatch watch => maintenanceManager.GetComponent<AddInstructionsToWatch>();
+        private MaintenanceManager manager;
+        private AddInstructionsToWatch watch;
         //main pages
 
         [Header("Main Page Canvas")]
@@ -73,7 +70,7 @@ namespace Tablet
         private List<GameObject> _skillsClones = new List<GameObject>();
 
         public static TaskListLoader1 Ins;
-        private void Start()
+        private void Awake()
         {
             if (Ins == null)
             {
@@ -85,10 +82,12 @@ namespace Tablet
             }
 
         }
-        private void Awake()
+        private void Start()
         {
             //setting loading the scriptable objects
             Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
+            manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
+            watch = GameObject.FindObjectsOfType<AddInstructionsToWatch>()[0];
             panelManager = gameObject.GetComponent<StaticPanelManager>();
             _tasks = th.taskList;
             _skills = th.skillList;

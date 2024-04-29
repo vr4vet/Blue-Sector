@@ -7,17 +7,19 @@ public class HUDMessage : MonoBehaviour
 {
     // Start is called before the first frame update
 
-
-    [SerializeField] private MaintenanceManager manager;
     [SerializeField] private GameObject SkillUnlocked;
     [SerializeField] private GameObject TaskCompleted;
     [SerializeField] private GameObject confettiGroup;
     [SerializeField] private AudioClip soundEffect;
     private CanvasGroup canvasGroup;
 
+    private MaintenanceManager manager;
+
+
 
     void Start()
     {
+        manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
         manager.SkillCompleted.AddListener(EnableSkillDisplay);
         manager.TaskCompleted.AddListener(EnableTaskDisplay);
