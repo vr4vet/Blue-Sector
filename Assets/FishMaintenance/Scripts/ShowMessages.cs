@@ -11,11 +11,11 @@ public class ShowMessages : MonoBehaviour
 
     void Update()
     {
-        if (textMesh.text.Length < 3)
-        {
-            screen.SetActive(false);
-            return;
-        }
+        //     if (textMesh.text.Length < 3)
+        //     {
+        //         screen.SetActive(false);
+        //         return;
+        //     }
         Quaternion localRotation = handPosition.localRotation;
         float pitchAngleX = localRotation.eulerAngles.x;
         // float pitchAngleY = Quaternion.Euler(localRotation.eulerAngles).y;

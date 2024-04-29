@@ -21,13 +21,13 @@ public class AddInstructionsToWatch : MonoBehaviour
     public void addInstructions(string text)
     {
 
-        StartCoroutine(sendHaptics());
+        // StartCoroutine(sendHaptics());
 
-        IncomingMessage.Invoke();
+        // IncomingMessage.Invoke();
 
 
-        textMesh.SetText(text);
-        PlayAudio();
+        // textMesh.SetText(text);
+        // PlayAudio();
 
     }
 
@@ -44,7 +44,7 @@ public class AddInstructionsToWatch : MonoBehaviour
 
     public void emptyInstructions()
     {
-        textMesh.SetText("");
+        // textMesh.SetText("");
     }
 
 
@@ -67,6 +67,7 @@ public class AddInstructionsToWatch : MonoBehaviour
 
     public string getText()
     {
-        return textMesh.GetComponent<TMP_Text>().text;
+        // return textMesh.GetComponent<TMP_Text>().text;
+        return "";
     }
 }
