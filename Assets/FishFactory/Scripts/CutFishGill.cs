@@ -29,7 +29,7 @@ public class CutFishGill : MonoBehaviour
 
     private void UpdateTaskStep()
     {
-        // Access the TaskHolder component from the DataHolder object
+        // Access the TaskHolder component from the TaskHolder object
         TaskHolder taskHolder = TaskHolder.GetComponent<TaskHolder>();
 
         // Access the specific step associated with cutting fish gills
