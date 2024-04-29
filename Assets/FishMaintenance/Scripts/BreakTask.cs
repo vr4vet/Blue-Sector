@@ -10,6 +10,8 @@ public class BreakTask : MonoBehaviour
     [SerializeField] private DialogueTree dialogueTree;
 
     [SerializeField] private Task.Skill skillBadge;
+    [SerializeField] private GameObject deadfishTask;
+    [SerializeField] private GameObject breakAnchor;
     private int _activatedCount = 0;
     private Task.Step breakStep;
 
@@ -43,6 +45,8 @@ public class BreakTask : MonoBehaviour
             }
             if (breakStep.IsCompeleted())
             {
+                deadfishTask.SetActive(true);
+                breakAnchor.SetActive(false);
                 conversationController.SetDialogueTreeList(new List<DialogueTree>
                 {
                     null

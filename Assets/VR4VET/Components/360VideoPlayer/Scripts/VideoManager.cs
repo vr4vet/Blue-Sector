@@ -79,8 +79,8 @@ public class VideoManager : MonoBehaviour
         }
         StopVideo();
         mm.BadgeChanged.Invoke(observantBadge);
-        Task.Step videoStep = mm.GetStep("Håndforing", "Se 360 Video");
-        mm.CompleteStep(videoStep);
+        // Task.Step videoStep = mm.GetStep("Håndforing", "Se 360 Video");
+        // mm.CompleteStep(videoStep);
 
     }
 

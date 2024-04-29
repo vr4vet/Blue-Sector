@@ -63,11 +63,22 @@ public class FeedbackManager : MonoBehaviour
             "",
             ""
         });
+        feedback.Add("Dødfisk håndtering", new List<string> {
+            "",
+            "",
+            "",
+            "",
+            ""
+        });
     }
 
 
     public void addFeedback(string subtaskName)
     {
+        if (subtaskName == "Dødfisk håndtering")
+        {
+            return;
+        }
         if (subtaskName == "Legg til splinter på kjetting" && manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted())
         // if (subtaskName == "Legg til splinter på kjetting" || subtaskName == "Håndforing")
         {

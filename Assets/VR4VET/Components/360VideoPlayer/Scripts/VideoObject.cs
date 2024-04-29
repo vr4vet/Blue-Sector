@@ -11,6 +11,9 @@ using BNG;
 public class VideoObject : MonoBehaviour
 {
     public VideoClip videoClip;
+    public Task.Subtask subtask;
+    public MaintenanceManager mm;
+    public DeadfishDialog deadfishDialog;
 
     private VideoPlayer videoPlayer;
     private int rotataionSpeed = 50;
@@ -138,6 +141,16 @@ public class VideoObject : MonoBehaviour
 
         VideoManager.videoManager.ShowVideo(videoClip);
         gameObject.SetActive(false);
+        Task.Step videoStep = subtask.GetStep("Se Video");
+        mm.CompleteStep(subtask.GetStep("Se Video"));
+
+        if (subtask.SubtaskName == "Dødfisk håndtering")
+        {
+            if (deadfishDialog)
+            {
+                deadfishDialog.UpdateDialog(videoStep.RepetionNumber);
+            }
+        }
 
         //scale
         // transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);

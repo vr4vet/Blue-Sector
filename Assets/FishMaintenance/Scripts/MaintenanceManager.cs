@@ -101,6 +101,7 @@ public class MaintenanceManager : MonoBehaviour
 
 
         }
+        Debug.Log(sub);
         if (sub.Compleated())
         {
             string subtaskName = sub.SubtaskName;
