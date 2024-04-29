@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Task;
 public class CutFishGill : MonoBehaviour
 {
     [Tooltip("The fish state script attached to the main fish object")]
@@ -7,13 +7,7 @@ public class CutFishGill : MonoBehaviour
     private FactoryFishState fishState;
 
     [SerializeField]
-    private KnifeState knifeState;
-
-    void Start()
-    {
-        GameObject knife = GameObject.Find("FishKnife");
-        knifeState = knife.GetComponent<KnifeState>();
-    }
+    private GameObject TaskHolder; // Reference to the TaskHolder GameObject
 
     /// <summary>
     /// When the knife collides with the fish gill, cut the gill
@@ -21,12 +15,27 @@ public class CutFishGill : MonoBehaviour
     /// <param name="collider"> The knife collider </param>
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.tag != "Knife")
+        if (!collider.CompareTag("Knife"))
         {
             return;
         }
 
+        // Cut the fish gills
         fishState.CutFishGills();
-        knifeState.DecrementDurabilityCount();
+
+        // Update the task step
+        UpdateTaskStep();
+    }
+
+    private void UpdateTaskStep()
+    {
+        // Access the TaskHolder component from the DataHolder object
+        TaskHolder taskHolder = TaskHolder.GetComponent<TaskHolder>();
+
+        // Access the specific step associated with cutting fish gills
+        Step step = taskHolder.GetTask("Euthanize fish").GetSubtask("Bleed fish").GetStep("Cut fish gills");
+
+        // Complete a repetition of the step
+        step.CompleateRep();
     }
 }

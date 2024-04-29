@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1911,9 +1911,13 @@ MonoBehaviour:
   fishSizeVariation: 1
   aliveFishPercent: 10
   badFishPercent: 10
+  badfishPrefab: {fileID: 0}
   toggleFishTier: 0
   tier1Percentage: 25
   tier2Percentage: 50
+  toggleFishGuttingChance: 0
+  successfullGuttingChance: 65
+  incompleteGuttingChance: 25
 --- !u!1001 &150855736
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2595,9 +2599,13 @@ MonoBehaviour:
   fishSizeVariation: 1
   aliveFishPercent: 10
   badFishPercent: 10
+  badfishPrefab: {fileID: 0}
   toggleFishTier: 0
   tier1Percentage: 25
   tier2Percentage: 50
+  toggleFishGuttingChance: 0
+  successfullGuttingChance: 65
+  incompleteGuttingChance: 25
 --- !u!1001 &200893554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9638,7 +9646,7 @@ PrefabInstance:
         type: 3}
       propertyPath: StartingItem
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2088809661}
     - target: {fileID: 4129876796731260970, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: m_Layer
@@ -13393,6 +13401,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7438470712292323659, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
+        type: 3}
+      propertyPath: CanDropItem
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7451172402920254788, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
@@ -22458,9 +22471,13 @@ MonoBehaviour:
   fishSizeVariation: 1
   aliveFishPercent: 10
   badFishPercent: 10
+  badfishPrefab: {fileID: 0}
   toggleFishTier: 0
   tier1Percentage: 25
   tier2Percentage: 50
+  toggleFishGuttingChance: 0
+  successfullGuttingChance: 65
+  incompleteGuttingChance: 25
 --- !u!1001 &951503706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23339,6 +23356,12 @@ MonoBehaviour:
   acceleration: 20
   maxSpeed: 0.5
   direction: 5
+--- !u!135 &1031055212 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 4584439615517983557, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
+    type: 3}
+  m_PrefabInstance: {fileID: 405925177}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1035816517
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26799,12 +26822,12 @@ PrefabInstance:
         type: 3}
       propertyPath: PlayerTarget
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 405925178}
     - target: {fileID: 4330640650074883634, guid: 5d9cb0bf37420f547a3d16e4ec82094a,
         type: 3}
       propertyPath: PlayerCollider
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1031055212}
     - target: {fileID: 4330640650074883635, guid: 5d9cb0bf37420f547a3d16e4ec82094a,
         type: 3}
       propertyPath: m_RootOrder
@@ -36108,6 +36131,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a83f585208002c6478ebb453d70ac495, type: 3}
+--- !u!114 &2088809661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6256070976084120318, guid: a83f585208002c6478ebb453d70ac495,
+    type: 3}
+  m_PrefabInstance: {fileID: 2088809660}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cdea428d48e2bb488d33d5f75c39bb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2088953114
 GameObject:
   m_ObjectHideFlags: 0
