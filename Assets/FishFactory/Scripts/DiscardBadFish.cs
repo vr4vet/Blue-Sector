@@ -34,10 +34,14 @@ public class DiscardBadFish : MonoBehaviour
 
     private void OnTriggerEnter(Collider collisionObject)
     {
-        if (collisionObject.tag != "Fish")
-            return;
+    
         // get the parent's parent
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
+
+        if (fish.tag != "Fish"){
+            return;
+        }
+
         // get fish state and check if fish is dead, if fish is dead it's deleted
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
         if (!discardedFish.Contains(fish.gameObject))
