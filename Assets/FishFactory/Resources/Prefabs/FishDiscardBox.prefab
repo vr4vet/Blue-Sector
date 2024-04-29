@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6caf58380129cfc4ab4bef0cb2c32085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeleteNewFishTreshold: 3
+  destroyFishTreshold: 5
 --- !u!1 &662017725943925863
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 172303580937983709}
   - component: {fileID: 3876471888391248248}
   - component: {fileID: 1310276930289397170}
-  - component: {fileID: 3876471888391248251}
+  - component: {fileID: 6916215017557643559}
   m_Layer: 0
   m_Name: FishDiscardBox
   m_TagString: Untagged
@@ -138,8 +138,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 662017725943925863}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.5, y: 0, z: -10.984}
-  m_LocalScale: {x: 45, y: 45, z: 45}
+  m_LocalPosition: {x: -1.5, y: 0.009, z: -11.055}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 427450867588862523}
@@ -196,7 +196,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3876471888391248251
+--- !u!64 &6916215017557643559
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
