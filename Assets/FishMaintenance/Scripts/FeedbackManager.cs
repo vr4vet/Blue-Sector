@@ -64,7 +64,7 @@ public class FeedbackManager : MonoBehaviour
             ""
         });
         feedback.Add("Dødfisk håndtering", new List<string> {
-            "",
+            "Skyv dødfisken i karet med høtten i høyre hånd.",
             "",
             "",
             "",
