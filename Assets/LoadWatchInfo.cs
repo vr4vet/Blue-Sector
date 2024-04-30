@@ -84,7 +84,6 @@ public class LoadWatchInfo : MonoBehaviour
         SkillEntry.transform.localScale = Vector3.one;
         SkillEntry.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-
         // Set title to be name of this skill
         TMP_Text skillName = SkillEntry.transform.Find("SkillName").GetComponent<TMP_Text>();
         skillName.text = skill.Name;

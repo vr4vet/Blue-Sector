@@ -11,6 +11,7 @@ public class TeleportHighlight : MonoBehaviour
     [SerializeField] private Material hitCylinder;
     [SerializeField] private BNG.PlayerTeleport playerTeleport;
     [SerializeField] private Transform destination;
+    [SerializeField] private bool teleportOnHand = true;
 
     private Renderer glowRenderer;
     private Renderer cylinderRenderer;
@@ -57,7 +58,7 @@ public class TeleportHighlight : MonoBehaviour
 
     public void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Hand"))
+        if (other.CompareTag("Player") || (teleportOnHand && other.CompareTag("Hand")))
         {
             // cylinder.SetActive(false);
             // cylinderGlow.SetActive(false);
