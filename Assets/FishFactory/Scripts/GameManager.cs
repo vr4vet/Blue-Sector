@@ -136,6 +136,15 @@ public class GameManager : MonoBehaviour
         set { isTaskOn = value; }
     }
 
+    [SerializeField]
+    [Tooltip("Whether the secondary task is currently active. Is false when entering a new location.")]
+    private bool isSecondaryTaskOn = false;
+    public bool IsSecondaryTaskOn
+    {
+        get { return isSecondaryTaskOn; }
+        set { isSecondaryTaskOn = value; }
+    }
+
     private int score = 0;
     public int Score
     {
@@ -238,6 +247,10 @@ public class GameManager : MonoBehaviour
     public void ToggleTaskOn()
     {
         isTaskOn = !isTaskOn;
+    }
+    public void ToggleSecondaryTaskOn()
+    {
+        isSecondaryTaskOn = !isSecondaryTaskOn;
     }
 
     // ----------------- Private Functions -----------------

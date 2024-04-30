@@ -14,6 +14,12 @@ public class ConveyorController : MonoBehaviour
     }
 
     // ----------------- Editor Variables -----------------
+    [SerializeField]
+    private bool useSecondaryTask;
+    public bool UseSecondaryTask
+    {
+        get { return useSecondaryTask; }
+    }
 
     [SerializeField]
     private bool isBeltOn = true;
@@ -84,6 +90,11 @@ public class ConveyorController : MonoBehaviour
 
     void Update()
     {
+        if (useSecondaryTask)
+        {
+            isBeltOn = GameManager.Instance.IsSecondaryTaskOn;
+            return;
+        }
         isBeltOn = GameManager.Instance.IsTaskOn;
     }
 
