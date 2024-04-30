@@ -19,8 +19,11 @@ public class LoadWatchInfo : MonoBehaviour
     [SerializeField] private GameObject subtaskContent;
     [SerializeField] private TMP_Text subtaskTitle;
 
+
+
     [Header("StatusBar Elements")]
     [SerializeField] private GameObject StatusBar;
+    [SerializeField] private TMP_Text ProgressText;
     [SerializeField] private TMP_Text StatusText;
 
     [Header("Skill Elements")]
@@ -30,6 +33,7 @@ public class LoadWatchInfo : MonoBehaviour
     [Header("Prefab Entries")]
     [SerializeField] private GameObject StepItem;
     [SerializeField] private GameObject SkillItem;
+    private Vector2 originalTransform;
 
 
     private float progress = 0;
@@ -55,8 +59,8 @@ public class LoadWatchInfo : MonoBehaviour
         taskHolder = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
         manager.CurrentSubtask.AddListener(HandleCurrentSubtask);
 
-        // manager.SkillCompleted.AddListener(HandleSkillUnlocked);
-
+        manager.SkillCompleted.AddListener(HandleSkillUnlocked);
+        originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
 
     }
 
@@ -89,43 +93,26 @@ public class LoadWatchInfo : MonoBehaviour
 
 
 
-    // public void LoadSkills()
-    // {
-    //     foreach (Transform child in skillContent.transform)
-    //     {
-    //         GameObject.Destroy(child.gameObject);
-    //     }
 
-
-
-    //     foreach (Task.Skill skill in taskHolder.skillList)
-    //     {
-
-
-
-    //         GameObject SkillEntry = Instantiate(SkillItem, Vector3.zero, Quaternion.identity);
-
-    //         SkillEntry.transform.SetParent(skillContent.transform);
-    //         SkillEntry.transform.localPosition = Vector3.zero;
-    //         SkillEntry.transform.localScale = Vector3.one;
-    //         SkillEntry.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-
-    //         // Set title to be name of this skill
-    //         TMP_Text skillName = skillBadgesContent.transform.Find("Txt_SkillName").GetComponent<TMP_Text>();
-    //         skillName.text = skill.Name;
-
-    //     }
-    // }
 
     public void UpdateProgressBar(Task.Task task)
     {
 
 
         RectTransform barTransform = StatusBar.GetComponent<RectTransform>();
-        float taskProgress = task.GetProgress() / barTransform.sizeDelta.x;
-        barTransform.sizeDelta = new Vector2(taskProgress, barTransform.sizeDelta.y);
-        StatusText.text = taskProgress + "/" + task.Subtasks.Count;
+        float taskProgress = task.GetProgress() / task.Subtasks.Count * originalTransform.x;
+        barTransform.sizeDelta = new Vector2(taskProgress, originalTransform.y);
+
+        // Det bør flyttes et annet sted hvis det skal brukes
+        ProgressText.text = Mathf.Round(task.GetProgress()) + "/" + task.Subtasks.Count;
+        string userStatus = "Lærling";
+        if (task.GetProgress() == task.Subtasks.Count)
+            userStatus = "Sjef";
+        else if (task.GetProgress() > Mathf.Round(task.Subtasks.Count / 2))
+            userStatus = "Månedens Ansatt";
+        else if (task.GetProgress() > Mathf.Round(task.Subtasks.Count / 3))
+            userStatus = "Fagarbeider";
+        StatusText.text = userStatus;
 
     }
     public void LoadSubtasks(Task.Subtask subtask)
