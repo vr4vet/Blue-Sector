@@ -14,6 +14,7 @@ public class VideoObject : MonoBehaviour
     public Task.Subtask subtask;
     public MaintenanceManager mm;
     public DeadfishDialog deadfishDialog;
+    public GameObject deadfishAnchor;
 
     private VideoPlayer videoPlayer;
     private int rotataionSpeed = 50;
@@ -141,15 +142,15 @@ public class VideoObject : MonoBehaviour
 
         VideoManager.videoManager.ShowVideo(videoClip);
         gameObject.SetActive(false);
-        Task.Step videoStep = subtask.GetStep("Se Video");
         mm.CompleteStep(subtask.GetStep("Se Video"));
 
-        if (subtask.SubtaskName == "Dødfisk håndtering")
+        if (deadfishDialog)
         {
-            if (deadfishDialog)
-            {
-                deadfishDialog.UpdateDialog(videoStep.RepetionNumber);
-            }
+            deadfishDialog.UpdateDialog();
+        }
+        if(deadfishAnchor)
+        {
+            deadfishAnchor.SetActive(true);
         }
 
         //scale

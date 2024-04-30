@@ -53,6 +53,14 @@ public class ConversationController : MonoBehaviour
         return _dialogueBoxController.dialogueIsActive;
     }
 
+    public void startDialog()
+    {
+        if (_dialogueTree != null)
+        {
+            _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
+        }
+    }
+
 
     /// <summary>
     /// Start the dialogue when the Player is close enough

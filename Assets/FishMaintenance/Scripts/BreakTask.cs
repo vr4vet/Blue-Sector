@@ -51,6 +51,7 @@ public class BreakTask : MonoBehaviour
                 {
                     null
                 });
+                this.enabled = false;
                 return;
             }
             else
