@@ -16,19 +16,19 @@ MonoBehaviour:
   - dialogue:
     - Hello, and welcome to the gutting station. Your task here is to correctly sort
       incomplete or badly gutted fish.
-    - The box next to me contains the gutting machine. It is completely automatic,
-      but sometimes the gutting of the fish is not up to our standards, and require
-      manual gutting.
+    - The box next to me contains the gutting machine. It is completely automatic
+      and you will see flashes of light when the fish are gutted. But sometimes the
+      gutting of the fish is not up to our standards, and require manual gutting.
     endAfterDialogue: 0
     branchPoint:
       question: Do you understand?
       answers:
       - answerLabel: Could you repeat that?
         nextElement: 0
-      - answerLabel: Yes
+      - answerLabel: Yes, the gutting machine does not always do a complete job
         nextElement: 1
   - dialogue:
-    - 'When you see a fish that has not been properly gutted, push the green button
+    - 'When you see a fish that has not been properly gutted, push the lever forward
       and send it to on the other conveyor belt be manually gutted. Properly gutted
       fish should be kept on the conveyor belt they are on orignally.
 
@@ -39,7 +39,8 @@ MonoBehaviour:
 
 '
     - When you are ready, start by pressing the red button next to the gutting machine
-      and step up onto the platform next to the green button.
+      and step up onto the platform next to the lever. Remember, lever forward for
+      fish that needs manual gutting and lever backward for properly gutted fish.
     endAfterDialogue: 0
     branchPoint:
       question: Good luck!

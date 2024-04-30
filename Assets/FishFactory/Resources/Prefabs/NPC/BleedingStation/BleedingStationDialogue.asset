@@ -50,7 +50,7 @@ MonoBehaviour:
   - dialogue:
     - If you have not completed the fishwelfare course you need to work under supervision
       for up to a year.
-    - "It is important that the fish is not left alive longer than 15 minutes acording
+    - "It is important that the fish is not left alive longer than 15 seconds acording
       to Tesco\u2019s requrements for fish welfare."
     endAfterDialogue: 0
     branchPoint:
@@ -59,10 +59,8 @@ MonoBehaviour:
       - answerLabel: Yes
         nextElement: 4
   - dialogue:
-    - Great! You will find the knife in your right pocket. When the knife is not
-      in use it should be placed back into your pocket.
-    - When handling the knife, you need to wear a steel glove on your most exposed
-      hand and a protective glove on the other.
+    - You will find the knife in your right pocket. When the knife is not in use
+      it should be placed back into your pocket.
     - Remember always cut away from you and never towards anyone else. All the knives
       will be collected at the end of the day.
     endAfterDialogue: 0
@@ -96,31 +94,12 @@ MonoBehaviour:
     - You will be graded based on how accurate you cut the fish, along with whether
       that fish is stunned or alive when you cut it. And remember, bad fish should
       be discarded!
-    - All fish must be cut before it moves to the next station!
+    - 'All fish must be cut before it moves to the next station! '
     endAfterDialogue: 0
     branchPoint:
-      question: Do you understand?
+      question: Have you understood everything?
       answers:
-      - answerLabel: Could you repeat that?
+      - answerLabel: Could you repeat that last part?
         nextElement: 6
-      - answerLabel: Yes!
-        nextElement: 7
-  - dialogue:
-    - That is all for now. Good luck!
-    endAfterDialogue: 0
-    branchPoint:
-      question: Do you want to hear everything again?
-      answers:
-      - answerLabel: I want to hear everything again
-        nextElement: 0
-      - answerLabel: I got it!
-        nextElement: 8
-  - dialogue:
-    - Alright! I'll be right here if you have any more questions. I wish you good
-      luck! Good bye!
-    endAfterDialogue: 1
-    branchPoint:
-      question: Good bye!
-      answers:
-      - answerLabel: Bye!
-        nextElement: 0
+      - answerLabel: Could you re-explain the tasks again
+        nextElement: 4
