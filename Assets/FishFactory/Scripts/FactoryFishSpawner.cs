@@ -84,6 +84,15 @@ public class FactoryFishSpawner : MonoBehaviour
     [Tooltip("The percentage of fish that are not completely gutted")]
     private int incompleteGuttingChance = 25;
 
+    [Header("Use secondary task")]
+    [SerializeField]
+    [Tooltip("If true, the spawner will be turned on and off by the secondary task")]
+    private bool useSecondaryTask;
+    private bool UseSecondaryTask
+    {
+        get { return useSecondaryTask; }
+    }
+
     // ------------------ Private Variables ------------------
 
     // Counts the amount of child gameobjects in the spawner
@@ -121,12 +130,19 @@ public class FactoryFishSpawner : MonoBehaviour
     /// </summary>
     private void UpdateSpawnerState()
     {
-        bool isTaskOn = GameManager.Instance.IsTaskOn;
+        bool taskState;
+        
+        if (useSecondaryTask)
+        {
+            taskState = GameManager.Instance.IsSecondaryTaskOn;
+        } else {
+            taskState = GameManager.Instance.IsTaskOn; 
+        }
 
         // XOR operator: If isTaskOn and isSpawnerOff are not the same, update the spawner state
-        if (isTaskOn ^ isSpawnerOn)
+        if (taskState ^ isSpawnerOn)
         {
-            isSpawnerOn = isTaskOn;
+            isSpawnerOn = taskState;
             if (isSpawnerOn)
             {
                 InitializeConveyorMovement();
