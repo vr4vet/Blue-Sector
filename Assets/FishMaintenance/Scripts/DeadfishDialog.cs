@@ -39,12 +39,15 @@ public class DeadfishDialog : MonoBehaviour
             }
             else
             {
-                videoObject.SetActive(true);
-                conversationController.SetDialogueTreeList(new List<DialogueTree>
+                if (!conversationController.isDialogueActive())
                 {
-                    null
-                });
-                this.enabled = false;
+                    videoObject.SetActive(true);
+                    conversationController.SetDialogueTreeList(new List<DialogueTree>
+                    {
+                        null
+                    });
+                    this.enabled = false;
+                }
             }
         }
     }

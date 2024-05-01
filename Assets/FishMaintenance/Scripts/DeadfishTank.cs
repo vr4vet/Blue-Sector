@@ -7,6 +7,8 @@ public class DeadfishTank : MonoBehaviour
     [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private GameObject hoett;
     [SerializeField] private GameObject fish;
+    [SerializeField] private GameObject openDoor;
+    [SerializeField] private GameObject closedDoor;
     [SerializeField] private GameObject water;
     [SerializeField] private BNG.Grabber grabberRight;
     [SerializeField] private Task.Subtask subtask;
@@ -36,6 +38,8 @@ public class DeadfishTank : MonoBehaviour
         hoett.SetActive(true);
         fish.SetActive(true);
         water.SetActive(true);
+        openDoor.SetActive(true);
+        closedDoor.SetActive(false);
         BNG.Grabbable hoettGrabbable = hoett.GetComponent<BNG.Grabbable>();
         grabberRight.GrabGrabbable(hoettGrabbable);
     }

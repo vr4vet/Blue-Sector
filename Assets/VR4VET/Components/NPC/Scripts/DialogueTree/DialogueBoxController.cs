@@ -152,7 +152,7 @@ public class DialogueBoxController : MonoBehaviour
             }
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             PlayAudio(dialogueTree.sections[section].dialogueAudio[i]);
-            if (dialogueTree.sections[section].dialogue[i] == "Se video av laks som hentes ut.")
+            if (dialogueTree.sections[section].dialogue[i] == "Start oppgaven ved å se video av laks som telles.")
             {
                 manager.CompleteStep(manager.GetStep("Dødfisk håndtering", "Få info fra Laila"));
             }

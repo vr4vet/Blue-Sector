@@ -6,6 +6,7 @@ public class DeadfishCollide : MonoBehaviour
 {
     [SerializeField] private MaintenanceManager mm;
     [SerializeField] private Task.Subtask subtask;
+    [SerializeField] private AudioClip splash;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +25,24 @@ public class DeadfishCollide : MonoBehaviour
         {
             mm.CompleteStep(subtask.GetStep("Skyv dødfisken i karet"));
             other.GetComponent<Outline>().enabled = false;
+            PlayAudio();
         }
+    }
+
+    public void PlayAudio()
+    {
+
+        //if the gameobject has audiosource
+        if (TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            audioSource.Stop();
+            audioSource.PlayOneShot(splash);
+            return;
+        }
+
+        //otherwise create audiosource
+        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
+        newAudioSource.PlayOneShot(splash);
+
     }
 }
