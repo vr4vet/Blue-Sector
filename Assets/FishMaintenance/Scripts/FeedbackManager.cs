@@ -77,6 +77,7 @@ public class FeedbackManager : MonoBehaviour
     {
         if (subtaskName == "Dødfisk håndtering")
         {
+            watch.addInstructions(feedback[subtaskName][0]);
             return;
         }
         if (subtaskName == "Legg til splinter på kjetting" && manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted() && manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted())

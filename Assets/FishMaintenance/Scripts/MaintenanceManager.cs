@@ -18,6 +18,7 @@ public class MaintenanceManager : MonoBehaviour
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
     private Task.Task task => taskHolder.GetTask("Vedlikehold");
+    private int teleportationAnchorCount;
 
 
     [HideInInspector] public int stepCount;
@@ -181,6 +182,16 @@ public class MaintenanceManager : MonoBehaviour
         //otherwise create audiosource
         AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
         newAudioSource.PlayOneShot(audio);
+    }
+
+    public void incrementTeleportationAnchorCount()
+    {
+        teleportationAnchorCount += 1;
+    }
+
+    public int getTeleportationAnchorCount()
+    {
+        return teleportationAnchorCount;
     }
 
 }

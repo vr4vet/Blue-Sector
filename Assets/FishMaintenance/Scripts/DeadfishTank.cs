@@ -7,13 +7,13 @@ public class DeadfishTank : MonoBehaviour
     [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private GameObject hoett;
     [SerializeField] private GameObject fish;
+    [SerializeField] private GameObject[] additionalFish;
     [SerializeField] private GameObject openDoor;
     [SerializeField] private GameObject closedDoor;
     [SerializeField] private GameObject water;
     [SerializeField] private BNG.Grabber grabberRight;
     [SerializeField] private Task.Subtask subtask;
     private DropItem dropItem;
-    private Task.Step step;
     private FeedbackManager feedbackManager;
     private MaintenanceManager manager;
 
@@ -34,7 +34,6 @@ public class DeadfishTank : MonoBehaviour
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
 
-        feedbackManager.addFeedback(subtask.SubtaskName);
         hoett.SetActive(true);
         fish.SetActive(true);
         water.SetActive(true);
@@ -42,5 +41,18 @@ public class DeadfishTank : MonoBehaviour
         closedDoor.SetActive(false);
         BNG.Grabbable hoettGrabbable = hoett.GetComponent<BNG.Grabbable>();
         grabberRight.GrabGrabbable(hoettGrabbable);
+
+        if (manager.getTeleportationAnchorCount() > 10)
+        {
+            feedbackManager.addFeedback("Dødfisk håndtering");
+        }
+        else
+        {
+            foreach (GameObject deadfish in additionalFish)
+            {
+                deadfish.SetActive(true);
+                subtask.GetStep("Skyv dødfisken i karet").RepetionNumber = 4;
+            }
+        }
     }
 }
