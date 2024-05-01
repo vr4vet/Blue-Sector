@@ -149,10 +149,13 @@ public class DialogueBoxController : MonoBehaviour
             if (dialogueTree.sections[section].dialogue[0] == "Takk for praten! La oss ta håndtere dødfisken.")
             {
                 manager.CompleteStep(manager.GetStep("Pause", "Snakk med Laila"));
-                // manager.PlaySuccess();
             }
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             PlayAudio(dialogueTree.sections[section].dialogueAudio[i]);
+            if (dialogueTree.sections[section].dialogue[i] == "Se video av laks som hentes ut.")
+            {
+                manager.CompleteStep(manager.GetStep("Dødfisk håndtering", "Få info fra Laila"));
+            }
             while (!_skipLineTriggered)
             {
                 _skipLineButton.SetActive(true);

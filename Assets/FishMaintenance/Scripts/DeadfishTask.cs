@@ -6,7 +6,6 @@ public class DeadfishTask : MonoBehaviour
 {
     [SerializeField] private GameObject[] deadfishEquipment;
     [SerializeField] private GameObject foldedLoader;
-    [SerializeField] private GameObject secondVideo;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +19,6 @@ public class DeadfishTask : MonoBehaviour
             equipment.SetActive(true);
         }
         foldedLoader.SetActive(false);
-        secondVideo.SetActive(true);
     }
 
     // Update is called once per frame
