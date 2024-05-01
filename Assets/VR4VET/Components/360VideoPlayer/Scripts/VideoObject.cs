@@ -13,7 +13,7 @@ public class VideoObject : MonoBehaviour
     public VideoClip videoClip;
     public Task.Subtask subtask;
     public MaintenanceManager mm;
-    public DeadfishDialog deadfishDialog;
+    public bool deadfishSetupVideo;
     public GameObject deadfishAnchor;
 
     private VideoPlayer videoPlayer;
@@ -140,14 +140,10 @@ public class VideoObject : MonoBehaviour
                 headset.hintText.gameObject.SetActive(false);
             }
 
-        VideoManager.videoManager.ShowVideo(videoClip);
+        VideoManager.videoManager.ShowVideo(videoClip, deadfishSetupVideo);
         gameObject.SetActive(false);
         mm.CompleteStep(subtask.GetStep("Se Video"));
 
-        if (deadfishDialog)
-        {
-            deadfishDialog.UpdateDialog();
-        }
         if(deadfishAnchor)
         {
             deadfishAnchor.SetActive(true);
