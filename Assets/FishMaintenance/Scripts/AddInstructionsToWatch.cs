@@ -68,5 +68,6 @@ public class AddInstructionsToWatch : MonoBehaviour
     public string getText()
     {
         return textMesh.GetComponent<TMP_Text>().text;
+
     }
 }

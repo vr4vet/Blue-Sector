@@ -62,7 +62,18 @@ namespace Task
             }
             return _compleated;
         }
-
+        public float GetProgress()
+        {
+            float progress = 0;
+            foreach (Subtask sub in _subtasks)
+            {
+                if (sub.Compleated())
+                {
+                    progress += 1;
+                }
+            }
+            return progress;
+        }
         public bool CheckSubtaksCompleated()
         {
             bool val = true;

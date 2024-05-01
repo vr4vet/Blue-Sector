@@ -13,6 +13,8 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     [SerializeField] private GameObject maintenanceManager;
 
     [SerializeField] private GameObject anchorArrow;
+
+    [SerializeField] private GameObject cylinder;
     private MaintenanceManager manager;
     private FeedbackManager feedbackManager;
     private bool activeArrow = false;
@@ -51,6 +53,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             activeArrow = false;
         }
         anchorArrow.SetActive(activeArrow);
+        cylinder.SetActive(activeArrow);
     }
 
     public void OnSubtaskCompleted(Task.Subtask incomingSubtask)
@@ -75,7 +78,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         //    manager.UpdateCurrentSubtask(manager.GetSubtask(subTask));
         // }
 
-        if (other.CompareTag("Player") || other.CompareTag("Hand"))
+        if (other.CompareTag("Player"))
         {
 
             playerInside = true;
@@ -107,6 +110,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             }
 
             anchorArrow.SetActive(activeArrow);
+            cylinder.SetActive(activeArrow);
 
             if (GuidingHandSplint)
             {
