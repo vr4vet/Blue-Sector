@@ -24,7 +24,6 @@ public class FishForce : MonoBehaviour
         {
             // gameObject.transform.position = new Vector3(-0.5608958f,1.0359474f,-2.769325f);
             fishSpawner.RespawnDeadfish();
-            Debug.Log("Respawned");
             Destroy(gameObject);
         }
     }

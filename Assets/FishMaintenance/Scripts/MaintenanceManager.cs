@@ -7,7 +7,6 @@ public class MaintenanceManager : MonoBehaviour
 {
     public static MaintenanceManager Instance;
     [SerializeField] private Task.TaskHolder taskHolder;
-    [SerializeField] private GameObject tablet;
     [SerializeField] private AudioClip success;
     [SerializeField] private AudioClip equipmentPickup;
     [SerializeField] private GameObject[] arrows;
@@ -33,6 +32,7 @@ public class MaintenanceManager : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+       
         if (Instance == null)
         {
             Instance = this;

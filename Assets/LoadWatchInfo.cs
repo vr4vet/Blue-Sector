@@ -62,6 +62,8 @@ public class LoadWatchInfo : MonoBehaviour
         manager.SkillCompleted.AddListener(HandleSkillUnlocked);
         originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
 
+        // For å fikse bug, bør endres i Maintenancemanager for å oppdatere på start.
+        HandleCurrentSubtask(manager.MaintenanceTask.GetSubtask("Hent Utstyr"));
     }
 
     private void HandleCurrentSubtask(Task.Subtask subtask)
