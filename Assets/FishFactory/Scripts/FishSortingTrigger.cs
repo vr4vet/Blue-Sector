@@ -93,10 +93,10 @@ public class FishSortingTrigger : MonoBehaviour
         // Delay opening the door 1 second
         yield return new WaitForSeconds(1);
         // Move the door up
-        door.transform.Translate(Vector3.back * 0.17f);
+        door.transform.Translate(Vector3.back * 0.177f);
         // Keep the door open for 2 seconds
         yield return new WaitForSeconds(2);
         // Move the door down
-        door.transform.Translate(Vector3.forward * 0.17f);
+        door.transform.Translate(Vector3.forward * 0.177f);
     }
 }
