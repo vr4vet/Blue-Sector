@@ -17,11 +17,10 @@ public class FillFood : MonoBehaviour
         foods = transform.GetChild(0).gameObject;
     }
 
-
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision collision)
     {
 
-        if (other.CompareTag("Bucket"))
+        if (collision.gameObject.CompareTag("Bucket"))
         {
             foods.SetActive(true);
         }

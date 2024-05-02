@@ -51,13 +51,14 @@ public class MaintenanceManager : MonoBehaviour
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         UpdateCurrentSubtask(task.GetSubtask("Hent Utstyr"));
 
-        // Reset subtsk and step progress on each play, and skill and badge progress
+        // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Subtask sub in task.Subtasks)
         {
             foreach (Task.Step step in sub.StepList)
             {
                 step.Reset();
                 step.CurrentStep = false;
+                if(step.StepName == "Skyv dødfisken i karet") step.setStepNumber(1);
             }
         }
         foreach (Task.Skill skill in taskHolder.skillList)
@@ -103,7 +104,7 @@ public class MaintenanceManager : MonoBehaviour
 
 
         }
-        Debug.Log(sub);
+      
         if (sub.Compleated())
         {
             string subtaskName = sub.SubtaskName;
