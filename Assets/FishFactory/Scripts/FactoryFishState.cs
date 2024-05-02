@@ -116,8 +116,11 @@ public class FactoryFishState : MonoBehaviour
 
             // The fish head and body (back_3) rigidbodies
             Rigidbody head = transform.GetChild(2).transform.GetChild(0).GetComponent<Rigidbody>();
-            Rigidbody body = transform
+            Rigidbody tail = transform
                 .GetChild(2)
+                .transform.GetChild(0)
+                .transform.GetChild(0)
+                .transform.GetChild(0)
                 .transform.GetChild(0)
                 .transform.GetChild(0)
                 .transform.GetChild(0)
@@ -126,22 +129,10 @@ public class FactoryFishState : MonoBehaviour
                 .GetComponent<Rigidbody>();
 
             // Makes the fish head move upwards
-            head.AddForce(transform.up * 500, ForceMode.Acceleration);
+            head.AddForce(transform.up * 900, ForceMode.Force);
 
-            // Makes the fish shake in a random direction
-            head.AddTorque(
-                new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 500,
-                ForceMode.Acceleration
-            );
-            // Makes the fish middle body move upwards
-            body.AddForce(transform.up * 500, ForceMode.Acceleration);
-            // Makes the fish shake in a random direction
-            body.AddTorque(
-                new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 500,
-                ForceMode.Acceleration
-            );
-            // Makes sure the fish ends up in a random upwards motion
-            head.AddForce(transform.up * 100, ForceMode.Acceleration);
+            // Makes the fish tail move upwards
+            tail.AddForce(transform.up * 500, ForceMode.Force);
 
             // If the fish is no longer alive, stop the coroutine
             if (CurrentState != State.Alive)
@@ -151,7 +142,7 @@ public class FactoryFishState : MonoBehaviour
         }
 
         // Wait for 2-8 seconds before repeating
-        yield return new WaitForSeconds(Random.Range(2, 8));
+        yield return new WaitForSeconds(Random.Range(1, 3));
         StartCoroutine(AliveFish());
     }
 }
