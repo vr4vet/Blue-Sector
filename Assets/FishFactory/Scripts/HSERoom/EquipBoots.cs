@@ -3,7 +3,7 @@ using UnityEngine;
 public class EquipBoots : MonoBehaviour
 {
     /// <summary>
-    /// When the player's feet collide with the boots, equip them
+    /// When the player's feet or body-collider of choice collide with the boots, equip them
     /// </summary>
     /// <param name="collision">The player's feet collider</param>
     private void OnCollisionEnter(Collision collision)

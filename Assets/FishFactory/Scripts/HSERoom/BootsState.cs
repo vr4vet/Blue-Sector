@@ -28,7 +28,7 @@ public class BootsState : MonoBehaviour
     [SerializeField]
     private float soakingTime = 3f;
 
-    [Tooltip("The number of scrubs needed to clean the boots.")]
+    [Tooltip("An estimate of scrubbingtime needed to clean the boots.")]
     [SerializeField]
     private int scrubbingLeft = 5;
 
@@ -44,35 +44,19 @@ public class BootsState : MonoBehaviour
 
     /// <summary>
     /// Check if the boots are scrubbed with the scrubber. Only checks for "collisions" with the scrubber object.
+    /// Uses deltatime to manage the time it takes to scrub and clean the boots.
     /// </summary>
     /// <param name="collision">The scrubber object</param>
-    /*
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Scrubber" && boots == BootsStatus.SemiClean)
-        {
-            // Could add sound effect here
-            scrubbingLeft--;
-            if (scrubbingLeft < 0)
-            {
-                boots = BootsStatus.Clean;
-                GameManager.Instance.PlaySound("correct");
-                gameObject.GetComponent<MeshRenderer>().material = materials[3]; // Clean
-            }
-        }
-    }
-    */
-
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.name == "Scrubber" && boots == BootsStatus.SemiClean)
         {
-            scrubbingDuration += Time.deltaTime; // Track scrubbing duration
+            // Track scrubbing duration
+            scrubbingDuration += Time.deltaTime;
             // Calculate scrubbing progress based on time
             int scrubbingProgress = Mathf.FloorToInt(
                 scrubbingDuration / soakingTime * scrubbingLeft
             );
-            // Reduce scrubbing left based on time
             scrubbingLeft = Mathf.Max(0, scrubbingLeft - scrubbingProgress);
 
             if (scrubbingLeft <= 0)
@@ -91,7 +75,8 @@ public class BootsState : MonoBehaviour
     {
         if (boots == BootsStatus.Dirty)
         {
-            gameObject.GetComponent<MeshRenderer>().material = materials[1]; // Semi-soaped
+            // Semi-soaped
+            gameObject.GetComponent<MeshRenderer>().material = materials[1];
             StartCoroutine(WashBoots());
         }
     }
@@ -105,7 +90,8 @@ public class BootsState : MonoBehaviour
         yield return new WaitForSeconds(soakingTime);
         GameManager.Instance.PlaySound("correct");
         boots = BootsStatus.SemiClean;
-        gameObject.GetComponent<MeshRenderer>().material = materials[2]; // Soaped
+        // Soaped
+        gameObject.GetComponent<MeshRenderer>().material = materials[2];
         // The boots are now ready to be scrubbed under water
     }
 }
