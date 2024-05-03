@@ -129,10 +129,10 @@ public class FactoryFishState : MonoBehaviour
                 .GetComponent<Rigidbody>();
 
             // Makes the fish head move upwards
-            head.AddForce(transform.up * 900, ForceMode.Force);
+            head.AddForce(Vector3.up * 800, ForceMode.Force);
 
             // Makes the fish tail move upwards
-            tail.AddForce(transform.up * 500, ForceMode.Force);
+            tail.AddForce(Vector3.up * 500, ForceMode.Force);
 
             // If the fish is no longer alive, stop the coroutine
             if (CurrentState != State.Alive)
