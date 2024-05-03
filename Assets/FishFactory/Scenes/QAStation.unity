@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8809,6 +8809,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0.861
       objectReference: {fileID: 0}
+    - target: {fileID: 4888947218316621596, guid: 7edd6b98812c8f346b37899b25c4f843,
+        type: 3}
+      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1669525620}
+    - target: {fileID: 4888947218316621596, guid: 7edd6b98812c8f346b37899b25c4f843,
+        type: 3}
+      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleTaskOn
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888947218316621596, guid: 7edd6b98812c8f346b37899b25c4f843,
+        type: 3}
+      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: StopConveyorButton, Scripts
+      objectReference: {fileID: 0}
     - target: {fileID: 5854930259821463844, guid: 7edd6b98812c8f346b37899b25c4f843,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -11147,12 +11162,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29a63aece631c1f4ba043e8b4cc96678, type: 3}
---- !u!1 &601328016 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5922821090411740525, guid: 29a63aece631c1f4ba043e8b4cc96678,
-    type: 3}
-  m_PrefabInstance: {fileID: 601328015}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &601328020 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5922821090411740520, guid: 29a63aece631c1f4ba043e8b4cc96678,
@@ -24129,7 +24138,7 @@ PrefabInstance:
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
@@ -24139,7 +24148,7 @@ PrefabInstance:
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
@@ -24150,7 +24159,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 601328016}
+      objectReference: {fileID: 1515611311}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -24169,7 +24178,7 @@ PrefabInstance:
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: ToggleSecondaryTaskOn
       objectReference: {fileID: 0}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
@@ -24179,7 +24188,7 @@ PrefabInstance:
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: StopConveyorButton, Scripts
       objectReference: {fileID: 0}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
@@ -24268,6 +24277,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 5e0690fb5121d784f8b1e8e65b42c1f9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d81e12ec6db043045add9d1b413cd126, type: 3}
+--- !u!114 &1515611311 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6232392830285893699, guid: d81e12ec6db043045add9d1b413cd126,
+    type: 3}
+  m_PrefabInstance: {fileID: 1515611310}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd63a5b92ab7834b90d2cc9432fc018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1527340212
 GameObject:
   m_ObjectHideFlags: 0
@@ -26312,7 +26333,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1150831978}
+      objectReference: {fileID: 1669525620}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -26321,7 +26342,7 @@ PrefabInstance:
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Scripts
+      value: StopConveyorButton, Scripts
       objectReference: {fileID: 0}
     - target: {fileID: 2669687470600740102, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
@@ -26406,17 +26427,17 @@ PrefabInstance:
     - target: {fileID: 9065547995743422266, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.059
+      value: 0.006
       objectReference: {fileID: 0}
     - target: {fileID: 9065547995743422266, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.013
+      value: 1.038
       objectReference: {fileID: 0}
     - target: {fileID: 9065547995743422266, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.752
+      value: -0.7294
       objectReference: {fileID: 0}
     - target: {fileID: 9065547995743422266, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
@@ -26445,6 +26466,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d81e12ec6db043045add9d1b413cd126, type: 3}
+--- !u!114 &1669525620 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6232392830285893699, guid: d81e12ec6db043045add9d1b413cd126,
+    type: 3}
+  m_PrefabInstance: {fileID: 1669525619}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd63a5b92ab7834b90d2cc9432fc018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1679542306
 GameObject:
   m_ObjectHideFlags: 0
