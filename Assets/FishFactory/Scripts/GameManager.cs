@@ -251,13 +251,16 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Toggles the task on and off
+    /// Toggles the main task on and off
     /// </summary>
     public void ToggleTaskOn()
     {
         isTaskOn = !isTaskOn;
     }
 
+    /// <summary>
+    /// Toggles the secondary task on and off
+    /// </summary>
     public void ToggleSecondaryTaskOn()
     {
         isSecondaryTaskOn = !isSecondaryTaskOn;
