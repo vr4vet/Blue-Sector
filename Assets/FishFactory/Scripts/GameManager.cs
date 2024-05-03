@@ -43,23 +43,23 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [Tooltip("The AudioManager object in the scene that will play sound effects.")]
     private GameObject audioManager;
-    public  GameObject AudioManager
+    public GameObject AudioManager
     {
         set { audioManager = value; }
         get { return audioManager; }
-    }   
+    }
 
     [SerializeField]
     [Tooltip(
         "The sound effects that will be played when the player completes a task. The order should be 'correct', 'wrong', 'taskComplete', 'door', in that order."
     )]
     private AudioClip[] soundEffects;
-    public  AudioClip[] SoundEffects
+    public AudioClip[] SoundEffects
     {
         set { soundEffects = value; }
         get { return soundEffects; }
-    }   
-     
+    }
+
     [SerializeField]
     [Tooltip(
         "The game object that contains the material for the left hand. Should be 'fully_gloved' in BNG."
@@ -137,7 +137,9 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField]
-    [Tooltip("Whether the secondary task is currently active. Is false when entering a new location.")]
+    [Tooltip(
+        "Whether the secondary task is currently active. Is false when entering a new location."
+    )]
     private bool isSecondaryTaskOn = false;
     public bool IsSecondaryTaskOn
     {
@@ -145,14 +147,14 @@ public class GameManager : MonoBehaviour
         set { isSecondaryTaskOn = value; }
     }
 
+    // ------------- Public Variables -------------
+
     private int score = 0;
     public int Score
     {
         get { return score; }
         set { score = value; }
     }
-
-    // ------------- Public Variables -------------
 
     // Whether the player has put on the boots
     private bool bootsOn = false;
@@ -176,6 +178,13 @@ public class GameManager : MonoBehaviour
             earProtectionOn = value;
             SetHSECompleted();
         }
+    }
+
+    private Vector3 newPlayerPosition;
+    public Vector3 NewPlayerPosition
+    {
+        get { return newPlayerPosition; }
+        set { newPlayerPosition = value; }
     }
 
     // ----------------- Unity Functions -----------------
@@ -248,6 +257,7 @@ public class GameManager : MonoBehaviour
     {
         isTaskOn = !isTaskOn;
     }
+
     public void ToggleSecondaryTaskOn()
     {
         isSecondaryTaskOn = !isSecondaryTaskOn;
