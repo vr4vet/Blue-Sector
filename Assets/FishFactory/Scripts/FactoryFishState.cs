@@ -114,7 +114,7 @@ public class FactoryFishState : MonoBehaviour
             // Each repetition will have a random delay between 0.5 and 1 seconds
             yield return new WaitForSeconds(Random.Range(0.5f, 1f));
 
-            // The fish head and body (back_3) rigidbodies
+            // The fish head and tail rigidbodies
             Rigidbody head = transform.GetChild(2).transform.GetChild(0).GetComponent<Rigidbody>();
             Rigidbody tail = transform
                 .GetChild(2)
