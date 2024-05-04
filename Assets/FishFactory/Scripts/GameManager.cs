@@ -180,11 +180,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private Vector3 newPlayerPosition;
-    public Vector3 NewPlayerPosition
+    // The player's position in the next scene
+    private Vector3 nextScenePlayerPosition;
+    public Vector3 NextScenePlayerPosition
     {
-        get { return newPlayerPosition; }
-        set { newPlayerPosition = value; }
+        get { return nextScenePlayerPosition; }
+        set { nextScenePlayerPosition = value; }
+    }
+
+    // Euler angles for the player's rotation in the next scene
+    private Vector3 nextScenePlayerRotation;
+    public Vector3 NextScenePlayerRotation
+    {
+        get { return nextScenePlayerRotation; }
+        set { nextScenePlayerRotation = value; }
     }
 
     // ----------------- Unity Functions -----------------
