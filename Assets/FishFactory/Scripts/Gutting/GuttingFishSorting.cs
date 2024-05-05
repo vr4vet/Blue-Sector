@@ -12,9 +12,9 @@ public class GuttingFishSorting : MonoBehaviour
 
     // ------------------ Unity Functions ------------------
 
-    //<summary>
-    //When the fish collides with the fish sorting trigger, check if the fish is in the correct state.
-    //</summary>
+    /// <summary>
+    /// When the fish collides with the fish sorting trigger, check if the fish is in the correct state.
+    /// </summary>
     private void OnTriggerEnter(Collider collisionObject)
     {
 
@@ -38,10 +38,10 @@ public class GuttingFishSorting : MonoBehaviour
 
     // ---------------- Private Functions ------------------
 
-    //<summary>
-    //Check if the state of the fish is the same as the success condition.
-    //Play a sound based on the result.
-    //</summary>
+    /// <summary>
+    /// Check if the state of the fish is the same as the success condition.
+    /// Play a sound based on the result.
+    /// </summary>
    private void checkFishState(FactoryFishState.State successCondition, GameObject fish)
    {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
