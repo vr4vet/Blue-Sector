@@ -32,7 +32,7 @@ public class FishSortingTrigger : MonoBehaviour
         FishSortingButton.fishSortingButton.sortedFish.Add(fish.gameObject);
     
         // check if fish has been given correct tier
-        if (fishState == FishSortingButton.fishSortingButton.currentFishTier.ToString())
+        if (fishState == FishSortingButton.fishSortingButton.CurrentTier.ToString())
         {
             GameManager.Instance.PlaySound("correct");
             correctSortedFish++;

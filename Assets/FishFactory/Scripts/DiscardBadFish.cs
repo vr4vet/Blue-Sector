@@ -58,6 +58,9 @@ public class DiscardBadFish : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destroy the oldest fish in the bin
+    /// </summary>
     private void DestroyOldestFish()
     {
         GameObject fishDelete = _discardedFish[0];
