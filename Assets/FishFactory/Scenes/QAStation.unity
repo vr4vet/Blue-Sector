@@ -2430,80 +2430,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 142156153}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &149382712
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5175200028539421316, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: isSecondaryTaskOn
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.9315615
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.20414591
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -12.020488
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5175200028539421319, guid: bf00b0ab64967b749a29ac9e127969d7,
-        type: 3}
-      propertyPath: m_Name
-      value: GameManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bf00b0ab64967b749a29ac9e127969d7, type: 3}
 --- !u!1 &151271308
 GameObject:
   m_ObjectHideFlags: 0
@@ -3027,7 +2953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307855cbfcdad7c429887c5cbd4f198c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  successfullGuttingCheck: 0
+  _successOnGuttingSuccess: 1
 --- !u!65 &165989173
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3232,8 +3158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2981b2092389a224a8c3c8e26230332c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentFishTier: 0
-  sortedFish: []
+  _colorPanel: {fileID: 0}
 --- !u!4 &187513297
 Transform:
   m_ObjectHideFlags: 0
@@ -8246,14 +8171,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
         type: 3}
+      propertyPath: _spawnRate
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
       propertyPath: fishPrefab
       value: 
       objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
         type: 3}
     - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
         type: 3}
+      propertyPath: _badfishPrefab
+      value: 
+      objectReference: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+        type: 3}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _toggleFishTier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
       propertyPath: maxAmountOfFish
       value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _maxAmountOfFish
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _salmonFishPrefab
+      value: 
+      objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
+        type: 3}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _fishSizeVariation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _varationInSpawnrate
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2097846317004137394, guid: 0520bc6499befc448814690dd287e41f,
         type: 3}
@@ -8789,191 +8751,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 550111409}
     m_Modifications:
-    - target: {fileID: 507606632438807598, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.11393328
-      objectReference: {fileID: 0}
-    - target: {fileID: 507606632438807598, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.861
-      objectReference: {fileID: 0}
-    - target: {fileID: 2733391653538251164, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.11393328
-      objectReference: {fileID: 0}
-    - target: {fileID: 2733391653538251164, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.861
-      objectReference: {fileID: 0}
-    - target: {fileID: 4888947218316621596, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1669525620}
-    - target: {fileID: 4888947218316621596, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ToggleTaskOn
-      objectReference: {fileID: 0}
-    - target: {fileID: 4888947218316621596, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: StopConveyorButton, Scripts
-      objectReference: {fileID: 0}
-    - target: {fileID: 5854930259821463844, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.11393328
-      objectReference: {fileID: 0}
-    - target: {fileID: 5854930259821463844, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.861
-      objectReference: {fileID: 0}
-    - target: {fileID: 6653571837478779986, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: Trigger6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6653571837478779986, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 8406428818111934311, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: Trigger7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8406428818111934311, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 8453914923889509592, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: Trigger8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8453914923889509592, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951062246665, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: SlidingDoor8
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951062246665, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951070605430, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951070605430, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951070605430, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951160586338, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951160586338, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951160586338, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951332235745, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951332235745, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951332235745, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951698412410, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 92fa9b266651a9446a1c04a82ee636e2, type: 2}
-    - target: {fileID: 9003131951698412415, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951698412415, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951698412415, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951711785856, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.11393328
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951711785856, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.861
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951711785857, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: Trigger5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951711785857, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
     - target: {fileID: 9003131951912090173, guid: 7edd6b98812c8f346b37899b25c4f843,
         type: 3}
       propertyPath: m_RootOrder
@@ -9033,61 +8810,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: QAMachine (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952008665110, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.74947727
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952008665110, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.9645
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952087965467, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: SlidingDoor5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952087965467, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952657215323, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: SlidingDoor6
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952657215323, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952762877834, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: SlidingDoor7
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952762877834, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952811628935, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131952811628935, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952811628935, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7edd6b98812c8f346b37899b25c4f843, type: 3}
@@ -11158,7 +10880,7 @@ PrefabInstance:
     - target: {fileID: 5922821090411740525, guid: 29a63aece631c1f4ba043e8b4cc96678,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29a63aece631c1f4ba043e8b4cc96678, type: 3}
@@ -14538,6 +14260,85 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 863929927}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &867897393
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5175200028539421316, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: _isTaskOn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421316, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: _audioManager
+      value: 
+      objectReference: {fileID: 916313352}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.9315615
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.20414591
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -12.020488
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421317, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5175200028539421319, guid: bf00b0ab64967b749a29ac9e127969d7,
+        type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf00b0ab64967b749a29ac9e127969d7, type: 3}
 --- !u!1 &877948076
 GameObject:
   m_ObjectHideFlags: 0
@@ -15117,6 +14918,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aabd3c08d3b33f54dafb54f8da691fd9, type: 3}
+--- !u!1 &916313352 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5582427761267303759, guid: aabd3c08d3b33f54dafb54f8da691fd9,
+    type: 3}
+  m_PrefabInstance: {fileID: 916313351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &935601283 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9188763572013030162, guid: b167a7d9d4a50474487d44a68b8401c5,
@@ -15771,7 +15578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307855cbfcdad7c429887c5cbd4f198c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  successfullGuttingCheck: 1
+  _successOnGuttingSuccess: 1
 --- !u!65 &1002498027
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15843,8 +15650,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1002498025}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.7065449, y: -0.572012, z: 1.6721716}
-  m_LocalScale: {x: 0.42280623, y: 0.3089879, z: 0.682285}
+  m_LocalPosition: {x: -0.7065449, y: -0.308, z: 2.1154}
+  m_LocalScale: {x: 1.309367, y: 0.3089879, z: 0.682285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1636245708}
@@ -18344,18 +18151,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1139670897}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1150831978 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5175200028539421316, guid: bf00b0ab64967b749a29ac9e127969d7,
-    type: 3}
-  m_PrefabInstance: {fileID: 149382712}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 936bbc7d23ee67c4c8469b30b3c11194, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1156307813
 GameObject:
   m_ObjectHideFlags: 0
@@ -22333,7 +22128,7 @@ PrefabInstance:
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
       propertyPath: InitialXRotation
-      value: -30
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2109111115295015112, guid: a2419f9845db03f479057114b6bbbe86,
         type: 3}
@@ -24169,7 +23964,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1150831978}
+      objectReference: {fileID: 0}
     - target: {fileID: 2306869186023900423, guid: d81e12ec6db043045add9d1b413cd126,
         type: 3}
       propertyPath: onButtonUp.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -25917,7 +25712,7 @@ PrefabInstance:
     - target: {fileID: 7028846462367453590, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7028846462367453590, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
@@ -33693,14 +33488,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
         type: 3}
+      propertyPath: _spawnRate
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
       propertyPath: fishPrefab
       value: 
       objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
         type: 3}
     - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
         type: 3}
+      propertyPath: _badfishPrefab
+      value: 
+      objectReference: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+        type: 3}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _toggleFishTier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
       propertyPath: maxAmountOfFish
       value: 107
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _maxAmountOfFish
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _salmonFishPrefab
+      value: 
+      objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
+        type: 3}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _fishSizeVariation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1258164394957727218, guid: 0520bc6499befc448814690dd287e41f,
+        type: 3}
+      propertyPath: _varationInSpawnrate
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1258164394957727222, guid: 0520bc6499befc448814690dd287e41f,
         type: 3}
@@ -36847,217 +36679,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 550111409}
     m_Modifications:
-    - target: {fileID: 2167894999672304930, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2167894999672304934, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3758609390497518466, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4888947218316621596, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 11500000, guid: 936bbc7d23ee67c4c8469b30b3c11194,
-        type: 3}
-    - target: {fileID: 4888947218316621596, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6653571837478779986, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: Trigger2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6653571837478779986, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 8406428818111934311, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: Trigger3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8406428818111934311, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 8453914923889509592, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: Trigger4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8453914923889509592, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951062246665, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: SlidingDoor4
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951062246665, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951070605430, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951070605430, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951070605430, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951160586338, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951160586338, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951160586338, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951332235745, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951332235745, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951332235745, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951470774435, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.31737873
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951470774435, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.4826
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215890, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951546215892, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951698412410, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 92fa9b266651a9446a1c04a82ee636e2, type: 2}
-    - target: {fileID: 9003131951698412415, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131951698412415, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951698412415, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951711785857, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: Trigger1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951711785857, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
     - target: {fileID: 9003131951912090173, guid: 7edd6b98812c8f346b37899b25c4f843,
         type: 3}
       propertyPath: m_RootOrder
@@ -37117,96 +36738,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: QAMachine
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951914921858, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.4110206
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131951914921858, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.5291
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952008665110, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.75118035
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952008665110, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.9636
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952087965467, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: SlidingDoor1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952087965467, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952087965467, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952249104159, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.33901763
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952249104159, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.4936
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952249104159, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.72982
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952657215323, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: SlidingDoor2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952657215323, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952762877834, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_Name
-      value: SlidingDoor3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952762877834, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952811628935, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 187513296}
-    - target: {fileID: 9003131952811628935, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952811628935, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: setTier2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9003131952811628935, guid: 7edd6b98812c8f346b37899b25c4f843,
-        type: 3}
-      propertyPath: onButtonDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FishSortingButton, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7edd6b98812c8f346b37899b25c4f843, type: 3}
