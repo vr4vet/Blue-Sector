@@ -27,13 +27,13 @@ public class FactoryFishState : MonoBehaviour
     // ------------ Editor Variables ------------
 
     [SerializeField]
-    private Material bleedingFish;
+    private Material _bleedingFish;
 
     // ------------ Unity Functions ------------
 
     void Awake()
     {
-        bleedingFish = Resources.Load<Material>("Materials/Fish/salmonBleeding");
+        _bleedingFish = Resources.Load<Material>("Materials/Fish/salmonBleeding");
     }
 
     void Start()
@@ -64,13 +64,13 @@ public class FactoryFishState : MonoBehaviour
 
             case State.Stunned:
                 CurrentState = State.Bleeding;
-                fishMaterial.material = bleedingFish;
+                fishMaterial.material = _bleedingFish;
                 GameManager.Instance.PlaySound("correct");
                 break;
 
             case State.BadCut:
                 CurrentState = State.Bleeding;
-                fishMaterial.material = bleedingFish;
+                fishMaterial.material = _bleedingFish;
                 // The player can cut the gills of a fish that has already been cut incorrectly, fixing the mistake.
                 GameManager.Instance.PlaySound("correct");
                 break;

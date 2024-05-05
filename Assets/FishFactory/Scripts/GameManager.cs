@@ -214,9 +214,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        //FIXME: Currently the only way to view score, should be removed at a later stage
-        Debug.Log("score " + score);
-
         // If the game objects are not set, find them in the current scene
         //TODO: The objects are not searchable at the at the loading of the scene, so this is a workaround
         // This is a limitation of the current implementation of the game, and should be fixed at a later stage
