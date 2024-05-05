@@ -12,7 +12,6 @@ public class FishSortingButton : MonoBehaviour
     private GameObject _colorPanel;
 
     // ------------------ Public Variables ------------------
-
     public enum FishTier
     {
         Tier1,
@@ -22,9 +21,13 @@ public class FishSortingButton : MonoBehaviour
     
     public static FishSortingButton fishSortingButton;
 
-    public List<GameObject> sortedFish = new List<GameObject>();
-
     // ------------------ Private Variables ------------------
+
+    private List<GameObject> _sortedFish = new List<GameObject>();
+    public List<GameObject> SortedFish
+    {
+        get { return _sortedFish; }
+    }
 
     private FishTier _currentTier;
     public FishTier CurrentTier
@@ -81,6 +84,5 @@ public class FishSortingButton : MonoBehaviour
                 break;
         }
         _colorPanel.GetComponent<Renderer>().material = material;
-        Debug.Log("Tier set to " + _currentTier);
     }
 }

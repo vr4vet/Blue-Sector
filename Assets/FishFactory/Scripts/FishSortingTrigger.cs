@@ -20,7 +20,7 @@ public class FishSortingTrigger : MonoBehaviour
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
 
         // Check if fish has already been sorted
-        if (FishSortingButton.fishSortingButton.sortedFish.Contains(fish.gameObject))
+        if (FishSortingButton.fishSortingButton.SortedFish.Contains(fish.gameObject))
         {
             return;
         }
@@ -29,7 +29,7 @@ public class FishSortingTrigger : MonoBehaviour
         string fishState = fish.GetComponent<FactoryFishState>().CurrentState.ToString();
 
         // add fish to list of sorted fish
-        FishSortingButton.fishSortingButton.sortedFish.Add(fish.gameObject);
+        FishSortingButton.fishSortingButton.SortedFish.Add(fish.gameObject);
     
         // check if fish has been given correct tier
         if (fishState == FishSortingButton.fishSortingButton.CurrentTier.ToString())
