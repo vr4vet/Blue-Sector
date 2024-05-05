@@ -61,53 +61,53 @@ public class SceneController : MonoBehaviour
         // get scene name and destination scene
         string targetSpawnLocation = SceneManager.GetActiveScene().name + "To" + scene;
 
-        switch (targetSpawnLocation)
-        {
-            case "HSERoomToBleedingStation":
-                GameManager.Instance.NewPlayerPosition = new Vector3(
-                    4.88999987f,
-                    1.06599998f,
-                    12.4700003f
-                );
-                break;
-            case "HSERoomToQAStation":
-                GameManager.Instance.NewPlayerPosition = new Vector3(
-                    -10.191f,
-                    1.06599998f,
-                    -10.0489998f
-                );
-                break;
-            case "BleedingStationToHSERoom":
-                GameManager.Instance.NewPlayerPosition = new Vector3(
-                    0.829999983f,
-                    1.00600004f,
-                    -5.25f
-                );
-                break;
-            case "BleedingStationToQAStation":
-                GameManager.Instance.NewPlayerPosition = new Vector3(
-                    -8.76399994f,
-                    1.06599998f,
-                    -20.8099995f
-                );
-                break;
-            case "QAStationToHSERoom":
-                GameManager.Instance.NewPlayerPosition = new Vector3(
-                    -4.0079999f,
-                    1.06599998f,
-                    -3.95799994f
-                );
-                break;
-            case "QAStationToBleedingStation":
-                GameManager.Instance.NewPlayerPosition = new Vector3(
-                    -13.7299995f,
-                    1.06599998f,
-                    12.8199997f
-                );
-                break;
-        }
+        // switch (targetSpawnLocation)
+        // {
+        //     case "HSERoomToBleedingStation":
+        //         GameManager.Instance.NewPlayerPosition = new Vector3(
+        //             4.88999987f,
+        //             1.06599998f,
+        //             12.4700003f
+        //         );
+        //         break;
+        //     case "HSERoomToQAStation":
+        //         GameManager.Instance.NewPlayerPosition = new Vector3(
+        //             -10.191f,
+        //             1.06599998f,
+        //             -10.0489998f
+        //         );
+        //         break;
+        //     case "BleedingStationToHSERoom":
+        //         GameManager.Instance.NewPlayerPosition = new Vector3(
+        //             0.829999983f,
+        //             1.00600004f,
+        //             -5.25f
+        //         );
+        //         break;
+        //     case "BleedingStationToQAStation":
+        //         GameManager.Instance.NewPlayerPosition = new Vector3(
+        //             -8.76399994f,
+        //             1.06599998f,
+        //             -20.8099995f
+        //         );
+        //         break;
+        //     case "QAStationToHSERoom":
+        //         GameManager.Instance.NewPlayerPosition = new Vector3(
+        //             -4.0079999f,
+        //             1.06599998f,
+        //             -3.95799994f
+        //         );
+        //         break;
+        //     case "QAStationToBleedingStation":
+        //         GameManager.Instance.NewPlayerPosition = new Vector3(
+        //             -13.7299995f,
+        //             1.06599998f,
+        //             12.8199997f
+        //         );
+        //         break;
+        // }
 
-        Debug.Log(GameManager.Instance.NewPlayerPosition);
+        // Debug.Log(GameManager.Instance.NewPlayerPosition);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         // Debug.Log(SceneManager.sceneLoaded.GetInvocationList());

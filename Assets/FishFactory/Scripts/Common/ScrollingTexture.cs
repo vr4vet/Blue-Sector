@@ -26,7 +26,7 @@ public class ScrollingTexture : MonoBehaviour
     void FixedUpdate()
     {
         // Rotates the texture, making it seem like the object is moving
-        if (belt.IsActive)
+        if (belt.IsBeltOn)
         {
             float offsetX = Time.time * scrollSpeedX;
             float offsetY = Time.time * scrollSpeedY;
