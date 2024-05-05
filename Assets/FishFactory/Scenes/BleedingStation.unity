@@ -39,7 +39,6 @@ RenderSettings:
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1964,9 +1963,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &131140772
 GameObject:
   m_ObjectHideFlags: 0
@@ -2080,7 +2079,7 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
+  maxSpeed: 1
   direction: 0
 --- !u!1001 &131443028
 PrefabInstance:
@@ -7580,7 +7579,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
         type: 3}
+      propertyPath: _spawnRate
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
       propertyPath: fishPrefab
+      value: 
+      objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _badfishPrefab
+      value: 
+      objectReference: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _maxAmountOfFish
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _salmonFishPrefab
       value: 
       objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
         type: 3}
@@ -7588,6 +7609,16 @@ PrefabInstance:
         type: 3}
       propertyPath: fishSizeVariation
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _fishSizeVariation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _varationInSpawnrate
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5922821090411740525, guid: 29a63aece631c1f4ba043e8b4cc96678,
         type: 3}
@@ -9242,8 +9273,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 4
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &484316593
 GameObject:
   m_ObjectHideFlags: 0
@@ -9421,8 +9452,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 2
+  maxSpeed: 1
+  direction: 0
 --- !u!65 &491759808
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16902,7 +16933,7 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
+  maxSpeed: 1
   direction: 0
 --- !u!1 &905236143
 GameObject:
@@ -18441,8 +18472,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 5
+  maxSpeed: 1
+  direction: 0
 --- !u!65 &967625009
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19763,9 +19794,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 5
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &1029810785
 GameObject:
   m_ObjectHideFlags: 0
@@ -20121,7 +20152,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
         type: 3}
+      propertyPath: _spawnRate
+      value: 6.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
       propertyPath: fishPrefab
+      value: 
+      objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _badfishPrefab
+      value: 
+      objectReference: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _maxAmountOfFish
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _salmonFishPrefab
       value: 
       objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
         type: 3}
@@ -20129,6 +20182,16 @@ PrefabInstance:
         type: 3}
       propertyPath: fishSizeVariation
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _fishSizeVariation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _varationInSpawnrate
+      value: 3.57
       objectReference: {fileID: 0}
     - target: {fileID: 5922821090411740525, guid: 29a63aece631c1f4ba043e8b4cc96678,
         type: 3}
@@ -20927,8 +20990,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 5
+  maxSpeed: 1
+  direction: 0
 --- !u!114 &1096880083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21594,9 +21657,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1001 &1128870700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23370,9 +23433,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1001 &1223276945
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25516,9 +25579,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 2
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1001 &1346698474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26768,8 +26831,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 5
+  maxSpeed: 1
+  direction: 1
 --- !u!114 &1401330951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28229,9 +28292,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1001 &1473950029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29894,9 +29957,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &1568238615
 GameObject:
   m_ObjectHideFlags: 0
@@ -32201,7 +32264,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
         type: 3}
+      propertyPath: _spawnRate
+      value: 7.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
       propertyPath: fishPrefab
+      value: 
+      objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _badfishPrefab
+      value: 
+      objectReference: {fileID: 2435888089390791047, guid: 876825a9ca87ae343a886434bb014069,
+        type: 3}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _maxAmountOfFish
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _salmonFishPrefab
       value: 
       objectReference: {fileID: 6915616972181788328, guid: 858716d7651b2cb4eb65485d029dee67,
         type: 3}
@@ -32209,6 +32294,16 @@ PrefabInstance:
         type: 3}
       propertyPath: fishSizeVariation
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _fishSizeVariation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5922821090411740524, guid: 29a63aece631c1f4ba043e8b4cc96678,
+        type: 3}
+      propertyPath: _varationInSpawnrate
+      value: 6.21
       objectReference: {fileID: 0}
     - target: {fileID: 5922821090411740525, guid: 29a63aece631c1f4ba043e8b4cc96678,
         type: 3}
@@ -32269,9 +32364,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!4 &1658525092 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 405158047733232540, guid: cfeb1a1b35c01f843862f6a712829d70,
@@ -33836,8 +33931,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 4
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &1736700129
 GameObject:
   m_ObjectHideFlags: 0
@@ -34433,9 +34528,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &1752158445
 GameObject:
   m_ObjectHideFlags: 0
@@ -34487,8 +34582,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 5
+  maxSpeed: 1
+  direction: 0
 --- !u!114 &1752158448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34638,9 +34733,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 2
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1001 &1757018594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35256,9 +35351,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 5
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &1789265459
 GameObject:
   m_ObjectHideFlags: 0
@@ -38433,9 +38528,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1001 &1978541050
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38629,9 +38724,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 4
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &2000516544
 GameObject:
   m_ObjectHideFlags: 0
@@ -39613,9 +39708,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 3
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!1 &2050527014
 GameObject:
   m_ObjectHideFlags: 0
@@ -41325,9 +41420,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSecondaryTask: 0
   isBeltOn: 1
-  acceleration: 20
-  maxSpeed: 0.5
-  direction: 4
+  acceleration: 30
+  maxSpeed: 1
+  direction: 0
 --- !u!4 &2137984241 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2817507724800957127, guid: 94cd43d357faa4065a013fcc39f489fd,
@@ -42136,8 +42231,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 3
+  maxSpeed: 1
+  direction: 0
 --- !u!1001 &3211200653424460169
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42418,8 +42513,8 @@ MonoBehaviour:
   useSecondaryTask: 0
   isBeltOn: 1
   acceleration: 30
-  maxSpeed: 0.3
-  direction: 4
+  maxSpeed: 1
+  direction: 3
 --- !u!114 &6802391081277559207
 MonoBehaviour:
   m_ObjectHideFlags: 0
