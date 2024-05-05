@@ -4,11 +4,10 @@ public class CutFish : MonoBehaviour
 {
     [Tooltip("The fish state script attached to the main fish object")]
     [SerializeField]
-    private FactoryFishState _fishState;
+    protected FactoryFishState _fishState;
 
     [Tooltip("The knife script attached to the knife object")]
-    [SerializeField]
-    private KnifeState _knifeState;
+    protected KnifeState _knifeState;
 
     void Start()
     {
@@ -16,21 +15,7 @@ public class CutFish : MonoBehaviour
         _knifeState = knife.GetComponent<KnifeState>();
     }
 
-    private void OnTriggerEnter(Collider collider)
-    {
-        cutEvent(collider.tag, true);
-    }
-
-    /// <summary>
-    /// When the knife collides with the fish body, the player makes a wrong cut
-    /// </summary>
-    /// <param name="collision"> The knife object </param>
-    private void OnCollisionEnter(Collision collisionObject)
-    {
-        cutEvent(collisionObject.collider.tag, false);
-    }
-
-    private void cutEvent(string tag, bool isGills)
+    protected void cutEvent(string tag, bool isGills = false)
     {
         if (tag != "Knife")
             return;
