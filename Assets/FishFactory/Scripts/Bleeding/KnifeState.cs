@@ -7,21 +7,23 @@ public class KnifeState : MonoBehaviour
     // ---------------- Editor Variables ----------------
 
     // Reference to the regular knife GameObject
-    [SerializeField]
+    [Header("Knife Object settings")]
     [Tooltip("The gameobject matching the regular fish knife blade")]
+    [SerializeField]
     private GameObject _regularKnife;
 
     // Reference to the chipped knife GameObject
-    [SerializeField]
     [Tooltip("The gameobject matching the chipped fish knife blade")]
+    [SerializeField]
     private GameObject _chippedKnife;
 
-    [SerializeField]
+    [Header("Knife Durability Settings")]
     [Tooltip("Enable random count to chip knife instead of a set count")]
+    [SerializeField]
     private bool _isChippingRandom;
 
-    [SerializeField]
     [Tooltip("Number of cuts before a knife gets chipped")]
+    [SerializeField]
     private int _durabilityCount = 5;
 
     // ---------------- Unity Functions ----------------
