@@ -9,84 +9,84 @@ public class FactoryFishSpawner : MonoBehaviour
     [SerializeField]
     private bool _isSpawnerOn = true;
 
-    [SerializeField]
     [Tooltip(
         "The gameobject prefab to spawn. This prefab will be used as the tier 1 fish if fish tiers are enabeled"
     )]
+    [SerializeField]
     private GameObject _salmonFishPrefab;
 
-    [SerializeField]
     [Tooltip("The maximum amount of fish that can be spawned by this spawner")]
+    [SerializeField]
     private int _maxAmountOfFish;
 
+    [Tooltip("The rate at which the fish will spawn in seconds")]
     [SerializeField]
     [Range(0.1f, 10)]
-    [Tooltip("The rate at which the fish will spawn in seconds")]
     private float _spawnRate;
 
+    [Tooltip("The maximum spawn delay variation in seconds. 0 means no variation.")]
     [SerializeField]
     [Range(0, 10)]
-    [Tooltip("The maximum spawn delay variation in seconds. 0 means no variation.")]
     private float _varationInSpawnrate;
 
     [Header("Fish Variation Settings")]
-    [SerializeField]
     [Tooltip("If toggled, the fish will spawn in different sizes")]
+    [SerializeField]
     private bool _fishSizeVariation;
 
+    [Tooltip("The percentage of fish that should be alive. Higher number equals higher chance.")]
     [SerializeField]
     [Range(0, 100)]
-    [Tooltip("The percentage of fish that should be alive. Higher number equals higher chance.")]
     private int _aliveFishPercent = 10;
 
-    [SerializeField]
-    [Range(0, 100)]
     [Tooltip(
         "The percentage of fish that should be bad quality. Higher number equals higher chance. The remaining percentage will be stunned."
     )]
+    [SerializeField]
+    [Range(0, 100)]
     private int _badFishPercent = 10;
 
-    [SerializeField]
     [Tooltip("The gameobject prefab to spawn if fish is bad or dead and should be thrown away")]
+    [SerializeField]
     private GameObject _badfishPrefab;
 
+    [Tooltip("If toggled, the fish will spawn in different tiers")]
     [Header("Fish Tier Settings")]
     [SerializeField]
-    [Tooltip("If toggled, the fish will spawn in different tiers")]
     private bool _toggleFishTier;
 
+    [Tooltip("The percentage of fish that should be Tier 1. Higher number equals higher chance.")]
     [SerializeField]
     [Range(0, 100)]
-    [Tooltip("The percentage of fish that should be Tier 1. Higher number equals higher chance.")]
     private int _tier1Percentage = 25;
 
-    [SerializeField]
-    [Range(0, 100)]
     [Tooltip(
         "The percentage of fish that should be Tier 2. Higher number equals higher chance. The remaining percentage will be Tier 3."
     )]
+    [SerializeField]
+    [Range(0, 100)]
     private int _tier2Percentage = 50;
 
-    [Header("Fish Gutting Settings")]
-    [SerializeField]
     [Tooltip(
         "If toggled, the fish will be assigned a state defining if it has been successfully gutted or not"
     )]
+    [Header("Fish Gutting Settings")]
+    [SerializeField]
     private bool _toggleFishGuttingChance;
 
+    [Tooltip("The percentage of fish that should be successfully gutted")]
     [SerializeField]
     [Range(0, 100)]
-    [Tooltip("The percentage of fish that should be successfully gutted")]
     private int _successfullGuttingChance = 65;
 
-    [SerializeField]
-    [Range(0, 100)]
     [Tooltip("The percentage of fish that are not completely gutted")]
+    [Range(0, 100)]
+    [SerializeField]
     private int _incompleteGuttingChance = 25;
 
     [Header("Use secondary task")]
-    [SerializeField]
     [Tooltip("If true, the spawner will be turned on and off by the secondary task")]
+    [SerializeField]
     private bool _useSecondaryTask;
 
     // ------------------ Private Variables ------------------
@@ -105,7 +105,6 @@ public class FactoryFishSpawner : MonoBehaviour
         _tier3 = Resources.Load<Material>("Materials/Fish/salmonTier3");
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(SpawnFish());
@@ -126,18 +125,10 @@ public class FactoryFishSpawner : MonoBehaviour
     /// </summary>
     private void UpdateSpawnerState()
     {
-        bool taskState;
+        // The task state uses the secondary task if the useSecondaryTask is true
+        bool taskState = _useSecondaryTask ? GameManager.Instance.IsSecondaryTaskOn : GameManager.Instance.IsTaskOn;
 
-        if (_useSecondaryTask)
-        {
-            taskState = GameManager.Instance.IsSecondaryTaskOn;
-        }
-        else
-        {
-            taskState = GameManager.Instance.IsTaskOn;
-        }
-
-        // XOR operator: If isTaskOn and isSpawnerOff are not the same, update the spawner state
+        //If isTaskOn and isSpawnerOff are not the same, while not equal, update the spawner state.
         if (taskState ^ _isSpawnerOn)
         {
             _isSpawnerOn = taskState;
@@ -149,16 +140,16 @@ public class FactoryFishSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Initializes fish conveyor movement by adding a force to the fish
+    /// Initializes fish conveyor movement by adding a force to the fish.
+    /// This function should be moved to a script directly related to a conveyor belt in the future, 
+    /// however this is not compatible with conveyour prefabs provided to the team (per May 2024).
     /// </summary>
     private void InitializeConveyorMovement()
     {
+        // Move the fish a bit to initialize a collision with the conveyor belt after turning it back on
         foreach (Transform child in transform)
         {
             Rigidbody rb = child.GetChild(2).GetChild(0).GetComponent<Rigidbody>();
-
-            // Move the fish a bit to initialize a collision with the conveyor belt after turning it back on
-            //FIXME: This is a solution to get the fish moving while dealing with the current iteration of the conveyor prefab. Should be replaced at a later stage
             rb.AddForce(transform.up * 50, ForceMode.Acceleration);
         }
     }
