@@ -42,7 +42,7 @@ public class SceneController : MonoBehaviour
             return;
         }
 
-        // Set the target location (door) the player should be placed by after the scene change
+        // Set the target location (exit door) the player should be placed by after the scene change
         SetPlayerTargetLocation(scene);
 
         // Adds a delegate to trigger when the scene is loaded
@@ -61,7 +61,6 @@ public class SceneController : MonoBehaviour
     {
         // Get scene name and destination scene in the format "CurrentSceneNameToDestinationScene"
         string targetSpawnLocation = SceneManager.GetActiveScene().name + "To" + scene;
-
         switch (targetSpawnLocation)
         {
             case "HSERoomToBleedingStation":

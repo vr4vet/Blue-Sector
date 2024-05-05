@@ -14,6 +14,8 @@ public class BootsState : MonoBehaviour
         Clean
     }
 
+    // ----------------- Editor Variables -----------------
+
     [Tooltip("The current state of the boots.")]
     private BootsStatus boots = BootsStatus.Dirty;
     public BootsStatus Boots
@@ -21,8 +23,6 @@ public class BootsState : MonoBehaviour
         get { return boots; }
         set { boots = value; }
     }
-
-    // ----------------- Editor Variables -----------------
 
     [Tooltip("The time it takes for the boots to soak in water, before they can be scrubbed.")]
     [SerializeField]
@@ -32,13 +32,15 @@ public class BootsState : MonoBehaviour
     [SerializeField]
     private int scrubbingLeft = 5;
 
-    private float scrubbingDuration = 0f;
-
     [Tooltip(
         "The materials that will be used to change the boots' appearance. Should be 'dirty', 'soaped', 'semisoaped', 'clean', in that order."
     )]
     [SerializeField]
     private List<Material> materials = new List<Material>();
+
+    // ----------------- Private Variables -----------------
+
+    private float scrubbingDuration = 0f;
 
     // ----------------- Functions -----------------
 
