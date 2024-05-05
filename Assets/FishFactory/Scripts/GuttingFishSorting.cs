@@ -17,6 +17,7 @@ public class GuttingFishSorting : MonoBehaviour
 
         // Get the main fish object
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
+        
         if (fish.tag != "Fish"){
             return;
         }
