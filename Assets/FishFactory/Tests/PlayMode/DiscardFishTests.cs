@@ -20,7 +20,7 @@ public class DiscardFishTests
 
         // Load and instantiate the prefabs
         var discardBoxPrefab = Resources.Load<GameObject>("Prefabs/FishDiscardBox");
-        var fishPrefab = Resources.Load<GameObject>("Prefabs/TempFish");
+        var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactoryBadFish");
         fish = Object.Instantiate(fishPrefab);
         discardBox = Object.Instantiate(discardBoxPrefab);
 

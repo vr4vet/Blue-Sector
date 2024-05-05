@@ -11,9 +11,20 @@ public class CutFishBody : MonoBehaviour
 
     void Start()
     {
-        GameObject knife = GameObject.Find("FishKnife");
-        knifeState = knife.GetComponent<KnifeState>();
+        // Check if the knife GameObject was found
+        if (knifeState != null)
+        {
+            // Get the KnifeState component if the knife GameObject was found
+            knifeState = GetComponent<KnifeState>();
+        }
+        else
+        {
+            // Log a warning if the knife GameObject was not found
+            Debug.LogWarning("Knife GameObject not found in the scene.");
+        }
     }
+
+
 
     /// <summary>
     /// When the knife collides with the fish body, the player makes a wrong cut
