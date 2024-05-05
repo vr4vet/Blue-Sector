@@ -23,7 +23,7 @@ public class GutFish : MonoBehaviour
         _incorrectlyGuttedFish = Resources.Load<Material>("Materials/Fish/salmonWronglyGutted");
     }
 
-    void OnTriggerEnter(Collider collider)
+   private void OnTriggerEnter(Collider collider)
     {
         GameObject fish = collider.transform.parent.gameObject.transform.parent.gameObject;
         if (fish.tag != "Fish")
@@ -41,7 +41,7 @@ public class GutFish : MonoBehaviour
     /// If the fish is gutted correctly, apply the gutted fish material.
     /// If the fish is gutted incorrectly, apply the bad fish material.
     /// </summary>
-    void handleGutting(GameObject fish, Renderer fishMaterial) {
+    private void handleGutting(GameObject fish, Renderer fishMaterial) {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
         fishMaterial.material = fishState.CurrentState == FactoryFishState.State.GuttingSuccess ? _correctlyGuttedFish : _incorrectlyGuttedFish;;
         GetComponent<AudioSource>().Play();
@@ -50,7 +50,7 @@ public class GutFish : MonoBehaviour
     /// <summary>
     /// When the fish leaves the trigger, turn off the gut light
     /// </summary>
-    void OnTriggerExit(Collider collider)
+    private void OnTriggerExit(Collider collider)
     {
         GameObject fish = collider.transform.parent.gameObject.transform.parent.gameObject;
 
