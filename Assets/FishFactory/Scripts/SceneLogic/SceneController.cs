@@ -139,6 +139,9 @@ public class SceneController : MonoBehaviour
         GameManager.Instance.NextScenePlayerPosition = new Vector3(0, 0, 0);
         GameManager.Instance.NextScenePlayerRotation = new Vector3(0, 0, 0);
 
+        GameManager.Instance.IsTaskOn = false;
+        GameManager.Instance.IsSecondaryTaskOn = false;
+
         // Remove the delegate to prevent memory leaks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
