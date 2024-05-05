@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class BarrierFishHandling : MonoBehaviour
 {
-    // You can adjust this value to get the desired sliding effect
-    [SerializeField] float slideForce = 10f; 
+    [Tooltip("The force applied to the collsion object when it hits the barrier")]
+    [SerializeField] 
+    private float _slideForce = 10f; 
 
     void OnCollisionEnter(Collision collision)
     {
-        Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
+        Rigidbody rigidbody = collision.gameObject.GetComponent<Rigidbody>();
 
-        if (rb != null)
+        if (rigidbody != null)
         {
             Vector3 direction = collision.contacts[0].point - transform.position;
             direction = -direction.normalized;
-
-            rb.AddForce(direction * slideForce, ForceMode.Impulse);
+            rigidbody.AddForce(direction * _slideForce, ForceMode.Impulse);
         }
     }
 }

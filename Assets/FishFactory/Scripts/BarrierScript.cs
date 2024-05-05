@@ -3,79 +3,64 @@ using UnityEngine;
 
 public class BarrierScript : MonoBehaviour
 {
-    // -------- Editor Variables --------
 
-    [Tooltip("The angle the barrier will rotate to")]
+    [Tooltip("The angle the barrier will rotate to, measured by degrees")]
     [SerializeField]
-    private float targetRotation = 30f;
+    private float _rotationTarget = 30f;
 
     [Tooltip("The speed at which the barrier will rotate")]
     [SerializeField]
-    private float speed = 3f;
+    private float _rotationSpeed = 3f;
 
-    // -------- Private Variables --------
+    [Tooltip("The lower rotation of the barrier")]
+    private Quaternion _lowerRotation;
 
-    private Quaternion down;
+    [Tooltip("The upper rotation of the barrier")]
+    private Quaternion _upperRotation;
 
-    private Quaternion up;
-
-    //when active the barrier will block the fish from moving forward and guide it to the side conveyor path
-    private bool isActive = false;
-
-    // -------- Unity Functions --------
+    [Tooltip("When active the barrier will block the fish from moving forward and guide it to the side conveyor path")] 
+    private bool _isActive = false;
 
     void Start()
     {
-        //Calculate the lower rotation based on current local rotation
-        down = transform.localRotation;
-
-        //Calculate the upper rotation based on local rotation
-        up = Quaternion.Euler(
+        //Calculate the lower rotation values based on current local rotation
+        _lowerRotation = transform.localRotation;
+        _upperRotation = Quaternion.Euler(
             transform.localEulerAngles.x,
-            transform.localEulerAngles.y + targetRotation,
+            transform.localEulerAngles.y + _rotationTarget,
             transform.localEulerAngles.z
         );
     }
 
-    // -------- Public Functions --------
-
     /// <summary>
-    /// Toggles the barrier between the up and down positions
+    /// Toggles the barrier between the up and _lowerRotation positions
     /// </summary>
     public void toggleBarrier()
     {
-        StartCoroutine(Rotate(speed));
+        StartCoroutine(Rotate());
     }
 
     /// <summary>
     /// Returns the current state of the barrier
     /// </summary>
-    /// <param name="speed"> The speed at which the barrier will rotate </param>
     /// <returns> IEnumerator </returns>
-    IEnumerator Rotate(float speed)
+    IEnumerator Rotate()
     {
         float elapsed = 0.0f;
-
-        // Opens or closes the barrier based on the current state
-        if (isActive)
+        
+        while (elapsed < 1.0f)
         {
-            while (elapsed < 1.0f)
+            elapsed += Time.deltaTime * _rotationSpeed;
+            if (_isActive)
             {
-                elapsed += Time.deltaTime * speed;
-                transform.localRotation = Quaternion.Slerp(down, up, elapsed);
-                isActive = false;
-                yield return null;
-            }
-        }
-        else
-        {
-            while (elapsed < 1.0f)
+                transform.localRotation = Quaternion.Slerp(_lowerRotation, _upperRotation, elapsed);
+            } 
+            else
             {
-                elapsed += Time.deltaTime * speed;
-                transform.localRotation = Quaternion.Slerp(up, down, elapsed);
-                isActive = true;
-                yield return null;
+                transform.localRotation = Quaternion.Slerp(_upperRotation, _lowerRotation, elapsed);
             }
+            yield return null;
         }
+        _isActive = !_isActive;
     }
 }
