@@ -127,12 +127,14 @@ public class FactoryFishSpawner : MonoBehaviour
     private void UpdateSpawnerState()
     {
         bool taskState;
-        
+
         if (_useSecondaryTask)
         {
             taskState = GameManager.Instance.IsSecondaryTaskOn;
-        } else {
-            taskState = GameManager.Instance.IsTaskOn; 
+        }
+        else
+        {
+            taskState = GameManager.Instance.IsTaskOn;
         }
 
         // XOR operator: If isTaskOn and isSpawnerOff are not the same, update the spawner state
@@ -193,13 +195,6 @@ public class FactoryFishSpawner : MonoBehaviour
             childGameObject.name = "FactoryFish" + transform.childCount.ToString();
             Renderer fishMaterial = childGameObject.transform.GetChild(0).GetComponent<Renderer>();
 
-            // Set the state of the fish to the randomizedFishState
-            FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
-            if (fishState != null)
-            {
-                fishState.CurrentState = randomizedFishState;
-            }
-
             // Randomizes the tier of the fish if enabled
             if (_toggleFishTier)
             {
@@ -207,7 +202,7 @@ public class FactoryFishSpawner : MonoBehaviour
 
                 if (randomValue <= _tier1Percentage)
                 {
-                    randomizedFishState = FactoryFishState.State.Tier1; 
+                    randomizedFishState = FactoryFishState.State.Tier1;
                 }
                 else if (randomValue <= _tier1Percentage + _tier2Percentage)
                 {
@@ -219,6 +214,13 @@ public class FactoryFishSpawner : MonoBehaviour
                     randomizedFishState = FactoryFishState.State.Tier3;
                     fishMaterial.material = _tier3;
                 }
+            }
+
+            // Set the state of the fish to the randomizedFishState
+            FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
+            if (fishState != null)
+            {
+                fishState.CurrentState = randomizedFishState;
             }
 
             // Randomizes the size of the fish if enabled
