@@ -8,13 +8,7 @@ public class GuttingFishSorting : MonoBehaviour
     [Tooltip(
         "If toggled, the trigger will give correct if fish has state GuttingSuccess. If not it will give correct for GuttingIncomplete state"
     )]
-    private bool successfullGuttingCheck;
-
-    // ------------------ Private Variables ------------------
-
-    // Counts the amount correctly and incorrectly sorted fish
-    private int successfullySortedFish;
-    private int incorrectlySortedFish;
+    private bool _successOnGuttingSuccess = true;
 
     // ------------------ Unity Functions ------------------
 
@@ -27,28 +21,25 @@ public class GuttingFishSorting : MonoBehaviour
             return;
         }
         
-        // Get fish state and check if fish is alive, if fish is alive it's state is set to stunned
-        FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-
-        if (successfullGuttingCheck)
+        if (_successOnGuttingSuccess)
         {
-            if (fishState.CurrentState == FactoryFishState.State.GuttingSuccess)
-            {
-                GameManager.Instance.PlaySound("correct");
-                successfullySortedFish++;
-                return;
-            }
+            checkFishState(FactoryFishState.State.GuttingSuccess, fish);
         }
         else
         {
-            if (fishState.CurrentState == FactoryFishState.State.GuttingIncomplete)
-            {
-                GameManager.Instance.PlaySound("correct");
-                successfullySortedFish++;
-                return;
-            }
+            checkFishState(FactoryFishState.State.GuttingIncomplete, fish);
         }
-        GameManager.Instance.PlaySound("incorrect");
-        incorrectlySortedFish++;
-    }
+
+   }
+
+   private void checkFishState(FactoryFishState.State successCondition, GameObject fish)
+   {
+        FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
+        if (fishState.CurrentState == successCondition)
+        {
+            GameManager.Instance.PlaySound("correct");  
+        } else {
+            GameManager.Instance.PlaySound("incorrect");
+        }
+   }
 }
