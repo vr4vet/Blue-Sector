@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GutFish : MonoBehaviour
 {
+    // ---------------- Editor Variables ----------------
+
     [Tooltip("The light that turns on when the fish is gutted")]
     [SerializeField]
     private Light _gutLight;
@@ -17,13 +19,21 @@ public class GutFish : MonoBehaviour
     [SerializeField]
     private Material _incorrectlyGuttedFish;
 
+    // ---------------- Unity Functions ----------------
+
     void Awake()
     {
         _correctlyGuttedFish = Resources.Load<Material>("Materials/Fish/salmonGutted");
         _incorrectlyGuttedFish = Resources.Load<Material>("Materials/Fish/salmonWronglyGutted");
     }
 
-   private void OnTriggerEnter(Collider collider)
+    // ---------------- Private Functions ----------------
+
+    /// <summary>
+    /// When the fish enters the trigger, gut the fish.
+    /// </summary>
+    /// <param name="collider">The head bone collider of the fish object</param>
+    private void OnTriggerEnter(Collider collider)
     {
         GameObject fish = collider.transform.parent.gameObject.transform.parent.gameObject;
         if (fish.tag != "Fish")
@@ -41,9 +51,14 @@ public class GutFish : MonoBehaviour
     /// If the fish is gutted correctly, apply the gutted fish material.
     /// If the fish is gutted incorrectly, apply the bad fish material.
     /// </summary>
-    private void handleGutting(GameObject fish, Renderer fishMaterial) {
+    private void handleGutting(GameObject fish, Renderer fishMaterial)
+    {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-        fishMaterial.material = fishState.CurrentState == FactoryFishState.State.GuttingSuccess ? _correctlyGuttedFish : _incorrectlyGuttedFish;;
+        fishMaterial.material =
+            fishState.CurrentState == FactoryFishState.State.GuttingSuccess
+                ? _correctlyGuttedFish
+                : _incorrectlyGuttedFish;
+        ;
         GetComponent<AudioSource>().Play();
     }
 
