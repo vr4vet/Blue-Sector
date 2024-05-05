@@ -14,7 +14,7 @@ public class FishSortingTrigger : MonoBehaviour
         {
             return;
         }
-        
+
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
         List<GameObject> sortedFish = FishSortingButton.fishSortingButton.SortedFish;
 
@@ -36,7 +36,7 @@ public class FishSortingTrigger : MonoBehaviour
 
         OpenDoor(gameObject.name[gameObject.name.Length - 1]);
     }
-    
+
     /// <summary>
     /// Open the door with the given name and close it after a delay
     /// </summary>

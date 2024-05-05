@@ -25,26 +25,28 @@ public class DiscardBadFish : MonoBehaviour
     {
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
 
-        if (fish.tag != "Fish"){
+        if (fish.tag != "Fish")
+        {
             return;
         }
 
         if (!_discardedFish.Contains(fish.gameObject))
         {
             _discardedFish.Add(fish.gameObject);
-            HandleAudioFeedback( fish.GetComponent<FactoryFishState>());
+            HandleAudioFeedback(fish.GetComponent<FactoryFishState>());
             if (_discardedFish.Count >= _destroyFishTreshold)
             {
                 DestroyOldestFish();
             }
-       }
+        }
     }
 
     /// <summary>
     /// Play audio feedback based on the fish state, and if the fish was correctly discarded
     /// </summary>
     /// <param name="fishState"> The fish state script attached to the fish object </param>
-    private void HandleAudioFeedback(FactoryFishState fishState){
+    private void HandleAudioFeedback(FactoryFishState fishState)
+    {
         if (
             fishState.CurrentState == FactoryFishState.State.BadQuality
             || fishState.CurrentState == FactoryFishState.State.GuttingFailure

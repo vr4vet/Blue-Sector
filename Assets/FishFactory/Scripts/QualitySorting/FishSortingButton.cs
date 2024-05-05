@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FishSortingButton : MonoBehaviour
 {
-
     // ------------------ Editor Variables ------------------
 
     [Tooltip("The color panel that changes color based on the tier of the fish")]
@@ -15,10 +14,10 @@ public class FishSortingButton : MonoBehaviour
     public enum FishTier
     {
         Tier1,
-        Tier2, 
+        Tier2,
         Tier3
     }
-    
+
     public static FishSortingButton fishSortingButton;
 
     // ------------------ Private Variables ------------------
@@ -56,7 +55,7 @@ public class FishSortingButton : MonoBehaviour
     }
 
     // ------------------ Public Functions ------------------
-    
+
 
     /// <summary>
     ///  Sorts the fish based on the tier

@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class BarrierScript : MonoBehaviour
 {
-
     [Tooltip("The angle the barrier will rotate to, measured by degrees")]
     [SerializeField]
     private float _rotationTarget = 30f;
@@ -18,7 +17,9 @@ public class BarrierScript : MonoBehaviour
     [Tooltip("The upper rotation of the barrier")]
     private Quaternion _upperRotation;
 
-    [Tooltip("When active the barrier will block the fish from moving forward and guide it to the side conveyor path")] 
+    [Tooltip(
+        "When active the barrier will block the fish from moving forward and guide it to the side conveyor path"
+    )]
     private bool _isActive = false;
 
     void Start()
@@ -47,14 +48,14 @@ public class BarrierScript : MonoBehaviour
     IEnumerator Rotate()
     {
         float elapsed = 0.0f;
-        
+
         while (elapsed < 1.0f)
         {
             elapsed += Time.deltaTime * _rotationSpeed;
             if (_isActive)
             {
                 transform.localRotation = Quaternion.Slerp(_lowerRotation, _upperRotation, elapsed);
-            } 
+            }
             else
             {
                 transform.localRotation = Quaternion.Slerp(_upperRotation, _lowerRotation, elapsed);

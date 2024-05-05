@@ -11,4 +11,3 @@ public class CutFishBody : CutFish
         cutEvent(collisionObject.collider.tag);
     }
 }
-

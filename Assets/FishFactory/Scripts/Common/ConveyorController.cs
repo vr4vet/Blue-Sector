@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class ConveyorController : MonoBehaviour
-{    
+{
     /// <summary>
     /// Enum <c>Direction</c> is used to select the movement direction of the conveyor belt.
     /// The colors used by the Unity Editor to indicate movement axis.
@@ -32,7 +32,7 @@ public class ConveyorController : MonoBehaviour
     private bool _isActive = true;
     public bool IsActive
     {
-        get { return _isActive;}
+        get { return _isActive; }
     }
 
     [Header("Speed Settings")]
@@ -100,7 +100,9 @@ public class ConveyorController : MonoBehaviour
 
     void Update()
     {
-        _isActive = UseSecondaryTask ? GameManager.Instance.IsSecondaryTaskOn : GameManager.Instance.IsTaskOn;
+        _isActive = UseSecondaryTask
+            ? GameManager.Instance.IsSecondaryTaskOn
+            : GameManager.Instance.IsTaskOn;
     }
 
     // ----------------- Private Functions -----------------

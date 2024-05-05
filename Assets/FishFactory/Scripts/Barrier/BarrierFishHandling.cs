@@ -5,8 +5,8 @@ using UnityEngine;
 public class BarrierFishHandling : MonoBehaviour
 {
     [Tooltip("The force applied to the collsion object when it hits the barrier")]
-    [SerializeField] 
-    private float _slideForce = 10f; 
+    [SerializeField]
+    private float _slideForce = 10f;
 
     void OnCollisionEnter(Collision collision)
     {

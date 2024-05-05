@@ -126,7 +126,9 @@ public class FactoryFishSpawner : MonoBehaviour
     private void UpdateSpawnerState()
     {
         // The task state uses the secondary task if the useSecondaryTask is true
-        bool taskState = _useSecondaryTask ? GameManager.Instance.IsSecondaryTaskOn : GameManager.Instance.IsTaskOn;
+        bool taskState = _useSecondaryTask
+            ? GameManager.Instance.IsSecondaryTaskOn
+            : GameManager.Instance.IsTaskOn;
 
         //If isTaskOn and isSpawnerOff are not the same, while not equal, update the spawner state.
         if (taskState ^ _isSpawnerOn)
@@ -141,7 +143,7 @@ public class FactoryFishSpawner : MonoBehaviour
 
     /// <summary>
     /// Initializes fish conveyor movement by adding a force to the fish.
-    /// This function should be moved to a script directly related to a conveyor belt in the future, 
+    /// This function should be moved to a script directly related to a conveyor belt in the future,
     /// however this is not compatible with conveyour prefabs provided to the team (per May 2024).
     /// </summary>
     private void InitializeConveyorMovement()

@@ -17,14 +17,14 @@ public class GuttingFishSorting : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter(Collider collisionObject)
     {
-
         // Get the main fish object
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
-        
-        if (fish.tag != "Fish"){
+
+        if (fish.tag != "Fish")
+        {
             return;
         }
-        
+
         if (_successOnGuttingSuccess)
         {
             checkFishState(FactoryFishState.State.GuttingSuccess, fish);
@@ -33,8 +33,7 @@ public class GuttingFishSorting : MonoBehaviour
         {
             checkFishState(FactoryFishState.State.GuttingIncomplete, fish);
         }
-
-   }
+    }
 
     // ---------------- Private Functions ------------------
 
@@ -42,14 +41,16 @@ public class GuttingFishSorting : MonoBehaviour
     /// Check if the state of the fish is the same as the success condition.
     /// Play a sound based on the result.
     /// </summary>
-   private void checkFishState(FactoryFishState.State successCondition, GameObject fish)
-   {
+    private void checkFishState(FactoryFishState.State successCondition, GameObject fish)
+    {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
         if (fishState.CurrentState == successCondition)
         {
-            GameManager.Instance.PlaySound("correct");  
-        } else {
+            GameManager.Instance.PlaySound("correct");
+        }
+        else
+        {
             GameManager.Instance.PlaySound("incorrect");
         }
-   }
+    }
 }

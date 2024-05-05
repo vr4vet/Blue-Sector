@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
         if (_leftHandGameObj == null || _rightHandGameObj == null || _audioManager == null)
         {
             _audioManager = GameObject.Find("AudioManager");
-            _rightHandGameObj = GameObject  
+            _rightHandGameObj = GameObject
                 .Find("Green Gloves Right")
                 .transform.GetChild(0)
                 .gameObject;
