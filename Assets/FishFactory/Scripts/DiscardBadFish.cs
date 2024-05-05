@@ -5,72 +5,63 @@ using UnityEngine;
 
 public class DiscardBadFish : MonoBehaviour
 {
-    // counter for the number of fish that are stunned
+    [Tooltip("The number of fish that need to be in the bin before they are destroyed")]
     [SerializeField]
     [Range(0, 15)]
-    private int destroyFishTreshold = 5;
+    private int _destroyFishTreshold = 5;
     public int DestroyFishTreshold
     {
-        get { return destroyFishTreshold; }
-    }
-    private int nrFishDiscarded = 0;
-    public int NrFishDiscarded
-    {
-        get { return nrFishDiscarded; }
-    }
-    private int incorrectlyDiscardedFish = 0;
-    public int IncorrectlyDiscardedFish
-    {
-        get { return incorrectlyDiscardedFish; }
-    }
-    private int correctlyDiscardedFish = 0;
-    public int CorrectlyDiscardedFish
-    {
-        get { return correctlyDiscardedFish; }
+        get { return _destroyFishTreshold; }
     }
 
-    // list of fish that are currently stunned
-    private List<GameObject> discardedFish = new List<GameObject>();
+    [Tooltip("List of fish that are in the bin")]
+    private List<GameObject> _discardedFish = new List<GameObject>();
+    public int DiscardedFishCount
+    {
+        get { return _discardedFish.Count; }
+    }
 
     private void OnTriggerEnter(Collider collisionObject)
     {
-    
-        // get the parent's parent
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
 
         if (fish.tag != "Fish"){
             return;
         }
 
-        // get fish state and check if fish is dead, if fish is dead it's deleted
-        FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-        if (!discardedFish.Contains(fish.gameObject))
+        if (!_discardedFish.Contains(fish.gameObject))
         {
-            discardedFish.Add(fish.gameObject);
+            _discardedFish.Add(fish.gameObject);
+            HandleAudioFeedback( fish.GetComponent<FactoryFishState>());
+            if (_discardedFish.Count >= _destroyFishTreshold)
+            {
+                DestroyOldestFish();
+            }
+       }
+    }
 
-            // Check if the fish should have been discarded or not, and give the user feedback
-            if (
-                fishState.CurrentState == FactoryFishState.State.BadQuality
-                || fishState.CurrentState == FactoryFishState.State.GuttingFailure
-            )
-            {
-                GameManager.Instance.PlaySound("correct");
-                correctlyDiscardedFish++;
-            }
-            else
-            {
-                GameManager.Instance.PlaySound("incorrect");
-                incorrectlyDiscardedFish--;
-            }
-
-            // Delete fish if number of fish in bin is larger than destroyFishTreshold
-            if (discardedFish.Count >= destroyFishTreshold)
-            {
-                GameObject fishDelete = discardedFish[0];
-                discardedFish.RemoveAt(0);
-                Destroy(fishDelete);
-            }
-            nrFishDiscarded++;
+    /// <summary>
+    /// Play audio feedback based on the fish state, and if the fish was correctly discarded
+    /// </summary>
+    /// <param name="fishState"> The fish state script attached to the fish object </param>
+    private void HandleAudioFeedback(FactoryFishState fishState){
+        if (
+            fishState.CurrentState == FactoryFishState.State.BadQuality
+            || fishState.CurrentState == FactoryFishState.State.GuttingFailure
+        )
+        {
+            GameManager.Instance.PlaySound("correct");
         }
+        else
+        {
+            GameManager.Instance.PlaySound("incorrect");
+        }
+    }
+
+    private void DestroyOldestFish()
+    {
+        GameObject fishDelete = _discardedFish[0];
+        _discardedFish.RemoveAt(0);
+        Destroy(fishDelete);
     }
 }

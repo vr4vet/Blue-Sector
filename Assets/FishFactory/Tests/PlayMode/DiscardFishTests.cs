@@ -40,7 +40,7 @@ public class DiscardFishTests
 
         Assert.AreEqual(
             1,
-            discardScript.NrFishDiscarded,
+            discardScript.DiscardedFishCount,
             "The fish should be discarded and the counter should be increased"
         );
     }
@@ -61,7 +61,7 @@ public class DiscardFishTests
 
         Assert.AreEqual(
             0,
-            discardScript.NrFishDiscarded,
+            discardScript.DiscardedFishCount,
             "The non-fish object should not count towards discarded fish"
         );
     }
@@ -79,7 +79,7 @@ public class DiscardFishTests
 
         Assert.AreEqual(
             1,
-            discardScript.NrFishDiscarded,
+            discardScript.DiscardedFishCount,
             "The fish should not be discarded again after it has been discarded once"
         );
     }
