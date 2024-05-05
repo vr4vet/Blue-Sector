@@ -4,55 +4,63 @@ using UnityEngine;
 
 public class KnifeState : MonoBehaviour
 {
+    // ---------------- Editor Variables ----------------
+
     // Reference to the regular knife GameObject
     [SerializeField]
-    [Tooltip("Place the component matching the regular fish knife blade")]
-    private GameObject regularKnife;
+    [Tooltip("The gameobject matching the regular fish knife blade")]
+    private GameObject _regularKnife;
 
     // Reference to the chipped knife GameObject
     [SerializeField]
-    [Tooltip("Place the component matching the chipped fish knife blade")]
-    private GameObject chippedKnife;
+    [Tooltip("The gameobject matching the chipped fish knife blade")]
+    private GameObject _chippedKnife;
 
     [SerializeField]
     [Tooltip("Enable random count to chip knife instead of a set count")]
-    private bool isChippingRandom;
+    private bool _isChippingRandom;
 
     [SerializeField]
     [Tooltip("Number of cuts before a knife gets chipped")]
-    private int durabilityCount = 5;
+    private int _durabilityCount = 5;
+
+    // ---------------- Unity Functions ----------------
 
     void Start()
     {
-        if (isChippingRandom)
+        if (_isChippingRandom)
         {
-            durabilityCount = RandomizeDurability();
+            _durabilityCount = RandomizeDurability();
         }
         UpdateKnifeVisibility();
     }
 
-    private int RandomizeDurability()
-    {
-        // range for the amounts cuts to chip the knife
-        return Random.Range(6, 15);
-    }
+    // ---------------- Public Functions ----------------
 
     // Method to decrement durabilityCount
     public void DecrementDurabilityCount()
     {
-        if (durabilityCount > 0)
+        if (_durabilityCount > 0)
         {
-            durabilityCount--;
+            _durabilityCount--;
         }
-        if (durabilityCount == 0)
+        if (_durabilityCount == 0)
         {
             UpdateKnifeVisibility();
         }
     }
 
+    // ---------------- Private Functions ----------------
+
+    private int RandomizeDurability()
+    {
+        // Range for the amount of cuts to chip the knife
+        return Random.Range(6, 15);
+    }
+
     private void UpdateKnifeVisibility()
     {
-        regularKnife.SetActive(durabilityCount > 0);
-        chippedKnife.SetActive(durabilityCount == 0);
+        _regularKnife.SetActive(_durabilityCount > 0);
+        _chippedKnife.SetActive(_durabilityCount == 0);
     }
 }
