@@ -41,7 +41,7 @@ public class FishSortingTrigger : MonoBehaviour
     /// Open the door with the given name and close it after a delay
     /// </summary>
     /// <param name="doorName">The door number</param>
-    private void OpenDoor(string doorName)
+    private void OpenDoor(char doorName)
     {
         GameObject door = GameObject.Find("SlidingDoor" + doorName);
         StartCoroutine(CloseDoorAfterDelay(door));
