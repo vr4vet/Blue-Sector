@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class ConveyorController : MonoBehaviour
 {
-    // The colors used by the Unity Editor to indicate movement axis. D and I refers to whether it is an increase or decrease in value along the given axis.
-    private enum Direction
+    /// <summary>
+    /// Enum <c>Direction</c> is used to select the movement direction of the conveyor belt.
+    /// The colors used by the Unity Editor to indicate movement axis.
+    /// D and I refers to whether it is an increase or decrease in value along the given axis.
+    /// </summary>
+    private enum DirectionState
     {
         Forward_BlueI,
         Backward_BlueD,
@@ -14,75 +18,81 @@ public class ConveyorController : MonoBehaviour
     }
 
     // ----------------- Editor Variables -----------------
+    [Header("Conveyor Belt Settings")]
+    [Tooltip("Links the conveyor to the secondary task if true")]
     [SerializeField]
-    private bool useSecondaryTask;
+    private bool _useSecondaryTask;
     public bool UseSecondaryTask
     {
-        get { return useSecondaryTask; }
+        get { return _useSecondaryTask; }
     }
 
+    [Tooltip("Toggle the conveyor belt on or off.")]
     [SerializeField]
-    private bool isBeltOn = true;
-    public bool IsBeltOn
+    private bool _isActive = true;
+    public bool IsActive
     {
-        get { return isBeltOn; }
+        get { return _isActive; }
     }
 
+    [Header("Speed Settings")]
+    [Tooltip("The acceleration of the object on the conveyor belt.")]
     [SerializeField]
-    private float acceleration = 30f;
+    private float _acceleration = 30f;
 
+    [Tooltip("The maximum speed the object can reach on the conveyor belt.")]
     [SerializeField]
     [Range(0, 50)]
-    private float maxSpeed = 1f;
-    public float MaxSpeed
+    private float _speed = 1f;
+    public float Speed
     {
-        get { return maxSpeed; }
+        get { return _speed; }
     }
 
     [SerializeField]
     [Tooltip(
         "For selecting movement direction. Using the direction of the belt object. The colors used by the Unity Editor to indicate movement axis. D and I refers to whether it is an increase or decrease in value along the given axis."
     )]
-    private Direction direction = Direction.Forward_BlueI;
+    private DirectionState _direction = DirectionState.Forward_BlueI;
 
     // ----------------- Private Variables -----------------
 
-    private Vector3 _direction;
+    private Vector3 _directionVector;
 
     // ----------------- Unity Functions -----------------
 
     void Start()
     {
-        switch (direction) // Transforming enum to vector3
+        switch (_direction) // Transforming enum to vector3
         {
-            case Direction.Forward_BlueI:
+            case DirectionState.Forward_BlueI:
             {
-                _direction = gameObject.transform.forward;
+                _directionVector = gameObject.transform.forward;
                 break;
             }
-            case Direction.Right_RedI:
+            case DirectionState.Right_RedI:
             {
-                _direction = gameObject.transform.right;
+                _directionVector = gameObject.transform.right;
                 break;
             }
-            case Direction.Backward_BlueD:
+            case DirectionState.Backward_BlueD:
             {
-                _direction = -gameObject.transform.forward;
+                _directionVector = -gameObject.transform.forward;
                 break;
             }
-            case Direction.Left_RedD:
+            case DirectionState.Left_RedD:
             {
-                _direction = -gameObject.transform.right;
+                _directionVector = -gameObject.transform.right;
                 break;
             }
-            case Direction.Up_GreenI:
+            case DirectionState.Up_GreenI:
             {
-                _direction = gameObject.transform.up;
+                _directionVector = gameObject.transform.up;
                 break;
             }
-            case Direction.Down_GreenD:
+            case DirectionState.Down_GreenD:
             {
-                _direction = -gameObject.transform.up;
+                _directionVector = -gameObject.transform.up;
                 break;
             }
         }
@@ -90,12 +100,9 @@ public class ConveyorController : MonoBehaviour
 
     void Update()
     {
-        if (useSecondaryTask)
-        {
-            isBeltOn = GameManager.Instance.IsSecondaryTaskOn;
-            return;
-        }
-        isBeltOn = GameManager.Instance.IsTaskOn;
+        _isActive = UseSecondaryTask
+            ? GameManager.Instance.IsSecondaryTaskOn
+            : GameManager.Instance.IsTaskOn;
     }
 
     // ----------------- Private Functions -----------------
@@ -106,16 +113,16 @@ public class ConveyorController : MonoBehaviour
     /// <param name="collision"> The collision object that is on the conveyor belt. </param>
     private void OnCollisionStay(Collision collision)
     {
-        if (!IsBeltOn)
+        if (!_isActive)
             return;
 
         Rigidbody obj = collision.gameObject.GetComponent<Rigidbody>();
         if (obj)
         {
-            if (obj.velocity.magnitude > maxSpeed)
+            if (obj.velocity.magnitude > _speed)
                 return;
 
-            obj.AddForce(_direction * acceleration, ForceMode.Acceleration);
+            obj.AddForce(_directionVector * _acceleration, ForceMode.Acceleration);
         }
     }
 }

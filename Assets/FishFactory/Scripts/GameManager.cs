@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
         - Setting the player's gloves based on the player's hand state
         - Setting the HSE room as completed when the player has put on ear protection, gloves, and boots
         - Toggling the room tasks to on and off
-        - Keeping track of the player's score
 
     */
 
@@ -40,74 +39,76 @@ public class GameManager : MonoBehaviour
 
     // ----------------- Editor Variables -----------------
 
+    [Header("Sound Settings")]
     [SerializeField]
     [Tooltip("The AudioManager object in the scene that will play sound effects.")]
-    private GameObject audioManager;
+    private GameObject _audioManager;
     public GameObject AudioManager
     {
-        set { audioManager = value; }
-        get { return audioManager; }
+        set { _audioManager = value; }
+        get { return _audioManager; }
     }
 
     [SerializeField]
     [Tooltip(
         "The sound effects that will be played when the player completes a task. The order should be 'correct', 'wrong', 'taskComplete', 'door', in that order."
     )]
-    private AudioClip[] soundEffects;
+    private AudioClip[] _soundEffects;
     public AudioClip[] SoundEffects
     {
-        set { soundEffects = value; }
-        get { return soundEffects; }
+        set { _soundEffects = value; }
+        get { return _soundEffects; }
     }
 
+    [Header("Glove Settings")]
     [SerializeField]
     [Tooltip(
         "The game object that contains the material for the left hand. Should be 'fully_gloved' in BNG."
     )]
-    private GameObject leftHandGameObj;
+    private GameObject _leftHandGameObj;
     public GameObject LeftHandGameObj
     {
-        get { return leftHandGameObj; }
-        set { leftHandGameObj = value; }
+        get { return _leftHandGameObj; }
+        set { _leftHandGameObj = value; }
     }
 
     [SerializeField]
     [Tooltip(
         "The game object that contains the material for the right hand. Should be 'fully_gloved' in BNG."
     )]
-    private GameObject rightHandGameObj;
+    private GameObject _rightHandGameObj;
     public GameObject RightHandGameObj
     {
-        get { return rightHandGameObj; }
-        set { rightHandGameObj = value; }
+        get { return _rightHandGameObj; }
+        set { _rightHandGameObj = value; }
     }
 
     [SerializeField]
-    private Material blueGlove;
+    private Material _blueGlove;
 
     [SerializeField]
-    private Material steelGlove;
+    private Material _steelGlove;
 
     [SerializeField]
     [Tooltip(
         "Whether the HSE room has been completed. The player needs to put on ear protection, gloves, and boots."
     )]
-    private bool hseRoomCompleted = false;
+    private bool _hseRoomCompleted = false;
     public bool HSERoomCompleted
     {
-        get { return hseRoomCompleted; }
-        set { hseRoomCompleted = value; }
+        get { return _hseRoomCompleted; }
+        set { _hseRoomCompleted = value; }
     }
 
     [SerializeField]
     [Tooltip("The player's left hand")]
-    private PlayerHandState leftHand = PlayerHandState.Unsanitized;
+    private PlayerHandState _leftHand = PlayerHandState.Unsanitized;
     public PlayerHandState LeftHand
     {
-        get { return leftHand; }
+        get { return _leftHand; }
         set
         {
-            leftHand = value;
+            _leftHand = value;
             SetPlayerGloves();
             SetHSECompleted();
         }
@@ -115,76 +116,79 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [Tooltip("The player's right hand")]
-    private PlayerHandState rightHand = PlayerHandState.Unsanitized;
+    private PlayerHandState _rightHand = PlayerHandState.Unsanitized;
     public PlayerHandState RightHand
     {
-        get { return rightHand; }
+        get { return _rightHand; }
         set
         {
-            rightHand = value;
+            _rightHand = value;
             SetPlayerGloves();
             SetHSECompleted();
         }
     }
 
+    [Header("Task Settings")]
     [SerializeField]
     [Tooltip("Whether the task is currently active. Task is off when entering a new location.")]
-    private bool isTaskOn = true;
+    private bool _isTaskOn = true;
     public bool IsTaskOn
     {
-        get { return isTaskOn; }
-        set { isTaskOn = value; }
+        get { return _isTaskOn; }
+        set { _isTaskOn = value; }
     }
 
     [SerializeField]
     [Tooltip(
         "Whether the secondary task is currently active. Is false when entering a new location."
     )]
-    private bool isSecondaryTaskOn = false;
+    private bool _isSecondaryTaskOn = false;
     public bool IsSecondaryTaskOn
     {
-        get { return isSecondaryTaskOn; }
-        set { isSecondaryTaskOn = value; }
+        get { return _isSecondaryTaskOn; }
+        set { _isSecondaryTaskOn = value; }
     }
 
     // ------------- Public Variables -------------
 
-    private int score = 0;
-    public int Score
-    {
-        get { return score; }
-        set { score = value; }
-    }
-
     // Whether the player has put on the boots
-    private bool bootsOn = false;
+    private bool _bootsOn = false;
     public bool BootsOn
     {
-        get { return bootsOn; }
+        get { return _bootsOn; }
         set
         {
-            bootsOn = value;
+            _bootsOn = value;
             SetHSECompleted();
         }
     }
 
     // Whether the player has put on ear protection
-    private bool earProtectionOn = false;
+    private bool _earProtectionOn = false;
     public bool EarProtectionOn
     {
-        get { return earProtectionOn; }
+        get { return _earProtectionOn; }
         set
         {
-            earProtectionOn = value;
+            _earProtectionOn = value;
             SetHSECompleted();
         }
     }
 
-    private Vector3 newPlayerPosition;
-    public Vector3 NewPlayerPosition
+    // The player's position in the next scene
+    private Vector3 nextScenePlayerPosition;
+    public Vector3 NextScenePlayerPosition
     {
-        get { return newPlayerPosition; }
-        set { newPlayerPosition = value; }
+        get { return nextScenePlayerPosition; }
+        set { nextScenePlayerPosition = value; }
+    }
+
+    // Euler angles for the player's rotation in the next scene
+    private Vector3 nextScenePlayerRotation;
+    public Vector3 NextScenePlayerRotation
+    {
+        get { return nextScenePlayerRotation; }
+        set { nextScenePlayerRotation = value; }
     }
 
     // ----------------- Unity Functions -----------------
@@ -205,49 +209,49 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        //FIXME: Currently the only way to view score, should be removed at a later stage
-        Debug.Log("score " + score);
-
         // If the game objects are not set, find them in the current scene
         //TODO: The objects are not searchable at the at the loading of the scene, so this is a workaround
         // This is a limitation of the current implementation of the game, and should be fixed at a later stage
-        if (leftHandGameObj == null || rightHandGameObj == null || audioManager == null)
+        if (_leftHandGameObj == null || _rightHandGameObj == null || _audioManager == null)
         {
-            audioManager = GameObject.Find("AudioManager");
-            rightHandGameObj = GameObject
+            _audioManager = GameObject.Find("AudioManager");
+            _rightHandGameObj = GameObject
                 .Find("Green Gloves Right")
                 .transform.GetChild(0)
                 .gameObject;
-            leftHandGameObj = GameObject.Find("Green Gloves Left").transform.GetChild(0).gameObject;
+            _leftHandGameObj = GameObject
+                .Find("Green Gloves Left")
+                .transform.GetChild(0)
+                .gameObject;
             SetPlayerGloves();
         }
     }
 
     // ----------------- Public Functions -----------------
 
-    // Connected to the AudioManager object in every scene. to play sound effects
     /// <summary>
-    /// Plays a sound effect based on the sound name
+    /// Plays a sound effect based on the sound name. Connected to the AudioManager object in every scene.
     /// </summary>
     /// <param name="soundName">The name of the sound effect to be played. Either "correct", "incorrect", "taskComplete", or "door"</param>
     public void PlaySound(string soundName)
     {
+        AudioSource audioSource = _audioManager.GetComponent<AudioSource>();
         switch (soundName)
         {
             case "correct":
-                audioManager.GetComponent<AudioSource>().clip = soundEffects[0];
+                audioSource.clip = _soundEffects[0];
                 break;
             case "incorrect":
-                audioManager.GetComponent<AudioSource>().clip = soundEffects[1];
+                audioSource.clip = _soundEffects[1];
                 break;
             case "taskComplete":
-                audioManager.GetComponent<AudioSource>().clip = soundEffects[2];
+                audioSource.clip = _soundEffects[2];
                 break;
             case "door":
-                audioManager.GetComponent<AudioSource>().clip = soundEffects[3];
+                audioSource.clip = _soundEffects[3];
                 break;
         }
-        audioManager.GetComponent<AudioSource>().Play();
+        audioSource.Play();
     }
 
     /// <summary>
@@ -255,7 +259,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ToggleTaskOn()
     {
-        isTaskOn = !isTaskOn;
+        _isTaskOn = !_isTaskOn;
     }
 
     /// <summary>
@@ -263,7 +267,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ToggleSecondaryTaskOn()
     {
-        isSecondaryTaskOn = !isSecondaryTaskOn;
+        _isSecondaryTaskOn = !_isSecondaryTaskOn;
     }
 
     // ----------------- Private Functions -----------------
@@ -274,18 +278,13 @@ public class GameManager : MonoBehaviour
     private void SetHSECompleted()
     {
         bool correctGloveCombo =
-            (leftHand == PlayerHandState.SteelGlove && rightHand == PlayerHandState.BlueGlove)
-            || (leftHand == PlayerHandState.BlueGlove && rightHand == PlayerHandState.SteelGlove);
+            (_leftHand == PlayerHandState.SteelGlove && _rightHand == PlayerHandState.BlueGlove)
+            || (_leftHand == PlayerHandState.BlueGlove && _rightHand == PlayerHandState.SteelGlove);
 
-        if (earProtectionOn && correctGloveCombo && bootsOn)
+        HSERoomCompleted = _earProtectionOn && correctGloveCombo && _bootsOn ? true : false;
+        if (HSERoomCompleted)
         {
-            HSERoomCompleted = true;
-            //FIXME: should play task complete sound, but overruled by correct sound
             PlaySound("taskComplete");
-        }
-        else
-        {
-            HSERoomCompleted = false;
         }
     }
 
@@ -294,22 +293,22 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void SetPlayerGloves()
     {
-        if (leftHand == PlayerHandState.BlueGlove)
+        if (_leftHand == PlayerHandState.BlueGlove)
         {
-            leftHandGameObj.GetComponent<Renderer>().material = blueGlove;
+            _leftHandGameObj.GetComponent<Renderer>().material = _blueGlove;
         }
-        else if (leftHand == PlayerHandState.SteelGlove)
+        else if (_leftHand == PlayerHandState.SteelGlove)
         {
-            leftHandGameObj.GetComponent<Renderer>().material = steelGlove;
+            _leftHandGameObj.GetComponent<Renderer>().material = _steelGlove;
         }
 
-        if (rightHand == PlayerHandState.BlueGlove)
+        if (_rightHand == PlayerHandState.BlueGlove)
         {
-            rightHandGameObj.GetComponent<Renderer>().material = blueGlove;
+            _rightHandGameObj.GetComponent<Renderer>().material = _blueGlove;
         }
-        else if (rightHand == PlayerHandState.SteelGlove)
+        else if (_rightHand == PlayerHandState.SteelGlove)
         {
-            rightHandGameObj.GetComponent<Renderer>().material = steelGlove;
+            _rightHandGameObj.GetComponent<Renderer>().material = _steelGlove;
         }
     }
 }

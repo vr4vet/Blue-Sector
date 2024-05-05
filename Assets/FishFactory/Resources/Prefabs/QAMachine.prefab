@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 5379451775855626626}
   - component: {fileID: 5527679929659840393}
   m_Layer: 0
-  m_Name: ColorBox
+  m_Name: ColorPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -839,7 +839,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleTaskOn
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1010,7 +1010,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1045,6 +1045,51 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3731512036903710019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2745873756994919007}
+  - component: {fileID: 5750700183536520292}
+  m_Layer: 0
+  m_Name: TierManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2745873756994919007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3731512036903710019}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.71675056, y: 0.42911813, z: -0.65773344}
+  m_LocalScale: {x: 0.86956525, y: 0.86956525, z: 0.86956525}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9003131951912090173}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5750700183536520292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3731512036903710019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2981b2092389a224a8c3c8e26230332c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorPanel: {fileID: 1784781916420380915}
 --- !u!1 &3758609390497518466
 GameObject:
   m_ObjectHideFlags: 0
@@ -1410,7 +1455,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1907,7 +1952,7 @@ GameObject:
   - component: {fileID: 5986880040153409650}
   - component: {fileID: 3622897123007080517}
   m_Layer: 0
-  m_Name: trigger (1)
+  m_Name: trigger2
   m_TagString: Trigger1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2065,7 +2110,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2162,7 +2207,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2555,7 +2600,7 @@ GameObject:
   - component: {fileID: 7127381131516707533}
   - component: {fileID: 7465754541926802503}
   m_Layer: 0
-  m_Name: trigger (2)
+  m_Name: trigger3
   m_TagString: Trigger1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2665,7 +2710,7 @@ GameObject:
   - component: {fileID: 3358954060495414336}
   - component: {fileID: 6332864155437842286}
   m_Layer: 0
-  m_Name: trigger (3)
+  m_Name: trigger4
   m_TagString: Trigger1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2995,7 +3040,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3264,7 +3309,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3361,7 +3406,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3745,7 +3790,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4069,7 +4114,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4166,7 +4211,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4264,7 +4309,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4409,7 +4454,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1c55511bb8c75c94d8dbe9f5112d2495, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4490,7 +4535,7 @@ GameObject:
   - component: {fileID: 9003131951062246678}
   - component: {fileID: 9003131951062246679}
   m_Layer: 0
-  m_Name: Cube (10)
+  m_Name: SlidingDoor4
   m_TagString: SlidingDoor1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4539,7 +4584,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4758,14 +4803,14 @@ MonoBehaviour:
   onButtonDown:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleTaskOn
-        m_Mode: 1
+      - m_Target: {fileID: 5750700183536520292}
+        m_TargetAssemblyTypeName: FishSortingButton, Scripts
+        m_MethodName: SetTier
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5150,14 +5195,14 @@ MonoBehaviour:
   onButtonDown:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleTaskOn
-        m_Mode: 1
+      - m_Target: {fileID: 5750700183536520292}
+        m_TargetAssemblyTypeName: FishSortingButton, Scripts
+        m_MethodName: SetTier
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5323,7 +5368,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5468,7 +5513,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5565,7 +5610,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1c55511bb8c75c94d8dbe9f5112d2495, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5662,7 +5707,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5978,14 +6023,14 @@ MonoBehaviour:
   onButtonDown:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleTaskOn
-        m_Mode: 1
+      - m_Target: {fileID: 5750700183536520292}
+        m_TargetAssemblyTypeName: FishSortingButton, Scripts
+        m_MethodName: SetTier
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -6151,7 +6196,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6309,9 +6354,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9003131951470774436}
-  m_LocalRotation: {x: -0, y: -0, z: 0.060485482, w: 0.9981691}
-  m_LocalPosition: {x: 1.4753594, y: 0.73006636, z: 0.70139015}
-  m_LocalScale: {x: 0.30301574, y: 0.036030296, z: 0.08940419}
+  m_LocalRotation: {x: -0, y: -0, z: 0.060485475, w: 0.9981691}
+  m_LocalPosition: {x: 1.4753599, y: 0.73006654, z: 0.70139027}
+  m_LocalScale: {x: 0.30301577, y: 0.0360303, z: 0.08940419}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9003131952134419968}
@@ -6345,7 +6390,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6571,7 +6616,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6730,8 +6775,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9003131951538601921}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.59199995, y: 0.33569995, z: -0.055360377}
-  m_LocalScale: {x: 0.052585997, y: 0.6541995, z: 1.5956119}
+  m_LocalPosition: {x: 0.592, y: 0.3357, z: -0.05536}
+  m_LocalScale: {x: 0.052586004, y: 0.6541995, z: 1.595612}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9003131952134419968}
@@ -6765,7 +6810,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6984,14 +7029,14 @@ MonoBehaviour:
   onButtonDown:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleTaskOn
-        m_Mode: 1
+      - m_Target: {fileID: 5750700183536520292}
+        m_TargetAssemblyTypeName: FishSortingButton, Scripts
+        m_MethodName: SetTier
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -7604,14 +7649,14 @@ MonoBehaviour:
   onButtonDown:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleTaskOn
-        m_Mode: 1
+      - m_Target: {fileID: 5750700183536520292}
+        m_TargetAssemblyTypeName: FishSortingButton, Scripts
+        m_MethodName: SetTier
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -7729,7 +7774,7 @@ GameObject:
   - component: {fileID: 9003131951711785870}
   - component: {fileID: 9003131951711785871}
   m_Layer: 0
-  m_Name: trigger
+  m_Name: trigger1
   m_TagString: Trigger1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7920,7 +7965,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1c55511bb8c75c94d8dbe9f5112d2495, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8556,6 +8601,7 @@ Transform:
   - {fileID: 7030916457799365443}
   - {fileID: 931783947085896769}
   - {fileID: 7490396313003679679}
+  - {fileID: 2745873756994919007}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8585,9 +8631,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9003131951914921859}
-  m_LocalRotation: {x: -0, y: -0, z: 0.060485482, w: 0.9981691}
-  m_LocalPosition: {x: 1.5242, y: 0.73600787, z: 0.21949933}
-  m_LocalScale: {x: 0.40118474, y: 0.036030296, z: 0.87365663}
+  m_LocalRotation: {x: -0, y: -0, z: 0.060485475, w: 0.9981691}
+  m_LocalPosition: {x: 1.5242, y: 0.73600805, z: 0.21949959}
+  m_LocalScale: {x: 0.40118477, y: 0.0360303, z: 0.8736567}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9003131952134419968}
@@ -8621,7 +8667,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8815,7 +8861,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1c55511bb8c75c94d8dbe9f5112d2495, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8912,7 +8958,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9282,7 +9328,7 @@ GameObject:
   - component: {fileID: 9003131952087965464}
   - component: {fileID: 9003131952087965465}
   m_Layer: 0
-  m_Name: Cube (13)
+  m_Name: SlidingDoor1
   m_TagString: SlidingDoor1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9331,7 +9377,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9905,7 +9951,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9966,9 +10012,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9003131952249104144}
-  m_LocalRotation: {x: -0, y: -0, z: 0.060485482, w: 0.9981691}
-  m_LocalPosition: {x: 1.4755584, y: 0.73009056, z: -0.2897702}
-  m_LocalScale: {x: 0.303252, y: 0.036030296, z: 0.14441404}
+  m_LocalRotation: {x: -0, y: -0, z: 0.060485475, w: 0.9981691}
+  m_LocalPosition: {x: 1.4755583, y: 0.73009074, z: -0.28977}
+  m_LocalScale: {x: 0.30325204, y: 0.0360303, z: 0.14441404}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9003131952134419968}
@@ -10002,7 +10048,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10484,7 +10530,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10678,7 +10724,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10872,7 +10918,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11066,7 +11112,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11163,7 +11209,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11292,7 +11338,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11340,7 +11386,7 @@ GameObject:
   - component: {fileID: 9003131952657215320}
   - component: {fileID: 9003131952657215321}
   m_Layer: 0
-  m_Name: Cube (12)
+  m_Name: SlidingDoor2
   m_TagString: SlidingDoor1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11389,7 +11435,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11486,7 +11532,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11681,7 +11727,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11893,7 +11939,7 @@ GameObject:
   - component: {fileID: 9003131952762877847}
   - component: {fileID: 9003131952762877832}
   m_Layer: 0
-  m_Name: Cube (11)
+  m_Name: SlidingDoor3
   m_TagString: SlidingDoor1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11942,7 +11988,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12423,7 +12469,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12675,14 +12721,14 @@ MonoBehaviour:
   onButtonDown:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleTaskOn
-        m_Mode: 1
+      - m_Target: {fileID: 5750700183536520292}
+        m_TargetAssemblyTypeName: FishSortingButton, Scripts
+        m_MethodName: SetTier
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -12993,7 +13039,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13090,7 +13136,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e66dad23915e7f4db46264337fcb246, type: 2}
+  - {fileID: 2100000, guid: c2d2bc95c1033ff4d93e2af1fb5e9111, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

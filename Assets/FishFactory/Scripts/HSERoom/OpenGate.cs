@@ -14,7 +14,7 @@ public class OpenGate : MonoBehaviour
 
     // ------------- Unity Functions -------------
 
-    void Start()
+    void Awake()
     {
         doorRight = transform.Find("DoorRight");
         doorLeft = transform.Find("DoorLeft");

@@ -29,12 +29,37 @@ public class SceneController : MonoBehaviour
     /// Change the scene. If the player is currently in the HSE room the requirements has to be fulfilled first.
     /// </summary>
     /// <param name="scene">The name of the scene to change to</param>
-    public void ChangeScene(string scene)
+    private void ChangeScene(string scene)
+    {
+        // Check if the player is in the HSE room and if the requirements are fulfilled. Player should only be able to progress after the HSE room is completed.
+        if (
+            !GameManager.Instance.HSERoomCompleted
+            && SceneManager.GetActiveScene().name == "HSERoom"
+        )
+        {
+            GameManager.Instance.PlaySound("incorrect");
+            return;
+        }
+
+        // Set the target location (door) the player should be placed by after the scene change
+        SetPlayerTargetLocation(scene);
+
+        // Adds a delegate to trigger when the scene is loaded
+        // The delegate will move the player to the correct location
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        GameManager.Instance.PlaySound("door");
+        SceneManager.LoadScene(scene);
+    }
+
+    /// <summary>
+    /// Set the target location the player should be placed by after the scene change
+    /// </summary>
+    /// <param name="scene">The name of the scene to change to</param>
+    private void SetPlayerTargetLocation(string scene)
     {
         // get scene name and destination scene
         string targetSpawnLocation = SceneManager.GetActiveScene().name + "To" + scene;
-
-        Debug.Log(targetSpawnLocation + "spawnlocation");
 
         switch (targetSpawnLocation)
         {
@@ -103,8 +128,14 @@ public class SceneController : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         GameObject player = GameObject.Find("XR Rig Advanced VR4VET");
-        player.transform.position = GameManager.Instance.NewPlayerPosition;
-        GameManager.Instance.NewPlayerPosition = new Vector3(0, 0, 0);
+        player.transform.position = GameManager.Instance.NextScenePlayerPosition;
+        player.transform.eulerAngles = GameManager.Instance.NextScenePlayerRotation;
+
+        // Reset the new player position
+        GameManager.Instance.NextScenePlayerPosition = new Vector3(0, 0, 0);
+        GameManager.Instance.NextScenePlayerRotation = new Vector3(0, 0, 0);
+
+        // Remove the delegate to prevent memory leaks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
