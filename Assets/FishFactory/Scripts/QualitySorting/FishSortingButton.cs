@@ -42,7 +42,11 @@ public class FishSortingButton : MonoBehaviour
 
     void Awake()
     {
-        fishSortingButton = this;
+        if (fishSortingButton == null)
+        {
+            fishSortingButton = this;
+        }
+
         // Load materials
         _tier1Texture = Resources.Load<Material>("Materials/QAPanel/Tier1");
         _tier2Texture = Resources.Load<Material>("Materials/QAPanel/Tier2");
@@ -66,14 +70,17 @@ public class FishSortingButton : MonoBehaviour
             case 1:
                 _currentTier = FishTier.Tier1;
                 material = _tier1Texture;
+                Debug.Log(_currentTier);
                 break;
             case 2:
                 _currentTier = FishTier.Tier2;
                 material = _tier2Texture;
+                Debug.Log(_currentTier);
                 break;
             case 3:
                 _currentTier = FishTier.Tier3;
                 material = _tier3Texture;
+                Debug.Log(_currentTier);
                 break;
             default:
                 Debug.LogError("Invalid tier number");
