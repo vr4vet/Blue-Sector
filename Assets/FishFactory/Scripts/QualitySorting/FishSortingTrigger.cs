@@ -10,6 +10,9 @@ public class FishSortingTrigger : MonoBehaviour
     [SerializeField]
     private GameObject _door;
 
+    [Tooltip("The QA machine tier manager")]
+    [SerializeField]
+    private FishSortingButton _tierManager;
 
     /// <summary>
     /// When the fish enters the trigger, check if the fish has been sorted and if it has the correct tier
@@ -23,7 +26,7 @@ public class FishSortingTrigger : MonoBehaviour
         }
 
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
-        List<GameObject> sortedFish = FishSortingButton.fishSortingButton.SortedFish;
+        List<GameObject> sortedFish = _tierManager.SortedFish;
 
         if (sortedFish.Contains(fish.gameObject))
         {
@@ -32,7 +35,7 @@ public class FishSortingTrigger : MonoBehaviour
         sortedFish.Add(fish.gameObject);
 
         string fishState = fish.GetComponent<FactoryFishState>().CurrentState.ToString();
-        if (fishState == FishSortingButton.fishSortingButton.CurrentTier.ToString())
+        if (fishState == _tierManager.CurrentTier.ToString())
         {
             GameManager.Instance.PlaySound("correct");
         }
