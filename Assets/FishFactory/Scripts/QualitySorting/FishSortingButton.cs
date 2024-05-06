@@ -42,16 +42,13 @@ public class FishSortingButton : MonoBehaviour
 
     void Awake()
     {
+        fishSortingButton = this;
         // Load materials
         _tier1Texture = Resources.Load<Material>("Materials/QAPanel/Tier1");
         _tier2Texture = Resources.Load<Material>("Materials/QAPanel/Tier2");
         _tier3Texture = Resources.Load<Material>("Materials/QAPanel/Tier3");
 
-        // Sets the instance of the FishSortingButton to this object if it does not already exist
-        if (fishSortingButton == null)
-        {
-            fishSortingButton = this;
-        }
+        Debug.Log("awake");
     }
 
     // ------------------ Public Functions ------------------
