@@ -41,7 +41,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Sound Settings")]
     [SerializeField]
-    [Tooltip("The AudioManager object in the scene that will play sound effects.")]
+    [Tooltip(
+        "The AudioManager object in the scene that will play sound effects. This object is found automatically in the scene."
+    )]
     private GameObject _audioManager;
     public GameObject AudioManager
     {
@@ -51,7 +53,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [Tooltip(
-        "The sound effects that will be played when the player completes a task. The order should be 'correct', 'wrong', 'taskComplete', 'door', in that order."
+        "The sound effects that will be played when the player completes a task. The order should be 'correct', 'wrong', 'taskComplete', 'door', 'metal', in that order."
     )]
     private AudioClip[] _soundEffects;
     public AudioClip[] SoundEffects
@@ -60,10 +62,10 @@ public class GameManager : MonoBehaviour
         get { return _soundEffects; }
     }
 
-    [Header("Glove Settings")]
+    [Header("Debug Glove Settings")]
     [SerializeField]
     [Tooltip(
-        "The game object that contains the material for the left hand. Should be 'fully_gloved' in BNG."
+        "The game object that contains the material for the left hand. Should be 'fully_gloved' in BNG. This object is found automatically in the scene."
     )]
     private GameObject _leftHandGameObj;
     public GameObject LeftHandGameObj
@@ -74,7 +76,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [Tooltip(
-        "The game object that contains the material for the right hand. Should be 'fully_gloved' in BNG."
+        "The game object that contains the material for the right hand. Should be 'fully_gloved' in BNG. This object is found automatically in the scene."
     )]
     private GameObject _rightHandGameObj;
     public GameObject RightHandGameObj
@@ -83,9 +85,15 @@ public class GameManager : MonoBehaviour
         set { _rightHandGameObj = value; }
     }
 
+    [Tooltip(
+        "The material for the blue glove. This material is found in the Resources folder and should be loaded automatically."
+    )]
     [SerializeField]
     private Material _blueGlove;
 
+    [Tooltip(
+        "The material for the steel glove. This material is found in the Resources folder and should be loaded automatically."
+    )]
     [SerializeField]
     private Material _steelGlove;
 
@@ -204,6 +212,9 @@ public class GameManager : MonoBehaviour
         // Makes the GameManager object persist between scenes
         DontDestroyOnLoad(gameObject);
 
+        _blueGlove = Resources.Load<Material>("Materials/BlueGlove");
+        _steelGlove = Resources.Load<Material>("Materials/SteelGlove");
+
         IsTaskOn = false;
     }
 
@@ -232,7 +243,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Plays a sound effect based on the sound name. Connected to the AudioManager object in every scene.
     /// </summary>
-    /// <param name="soundName">The name of the sound effect to be played. Either "correct", "incorrect", "taskComplete", or "door"</param>
+    /// <param name="soundName">The name of the sound effect to be played. Either "correct", "incorrect", "taskComplete", "door", or "metal"</param>
     public void PlaySound(string soundName)
     {
         AudioSource audioSource = _audioManager.GetComponent<AudioSource>();
