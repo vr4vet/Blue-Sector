@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class FishSortingTrigger : MonoBehaviour
 {
+    // ------------------ Editor Variables ------------------
+
+    [Tooltip("Door to open")]
+    [SerializeField]
+    private GameObject _door;
+
+
     /// <summary>
     /// When the fish enters the trigger, check if the fish has been sorted and if it has the correct tier
     /// </summary>
@@ -34,17 +41,7 @@ public class FishSortingTrigger : MonoBehaviour
             GameManager.Instance.PlaySound("incorrect");
         }
 
-        OpenDoor(gameObject.name[gameObject.name.Length - 1]);
-    }
-
-    /// <summary>
-    /// Open the door with the given name and close it after a delay
-    /// </summary>
-    /// <param name="doorName">The door number</param>
-    private void OpenDoor(char doorName)
-    {
-        GameObject door = GameObject.Find("SlidingDoor" + doorName);
-        StartCoroutine(CloseDoorAfterDelay(door));
+        StartCoroutine(CloseDoorAfterDelay(_door));
     }
 
     /// <summary>
