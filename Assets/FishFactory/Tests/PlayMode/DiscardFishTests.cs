@@ -36,7 +36,7 @@ public class DiscardFishTests
     {
         fish.transform.position = discardBox.transform.position + Vector3.up; // set the fish position to be on top of the discard box
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
 
         Assert.AreEqual(
             1,
@@ -73,9 +73,9 @@ public class DiscardFishTests
     public IEnumerator DoesNotDiscardAgain()
     {
         fish.transform.position = discardBox.transform.position + Vector3.up; // Set the fish position to be on top of the discard box
-        yield return new WaitForSeconds(3); // Wait for the collision and potential destruction to be processed
+        yield return new WaitForSeconds(1); // Wait for the collision and potential destruction to be processed
         fish.transform.position = discardBox.transform.position + Vector3.up; // Set the fish position to be on top of the discard box
-        yield return new WaitForSeconds(3); // Wait for the collision and potential destruction to be processed
+        yield return new WaitForSeconds(1); // Wait for the collision and potential destruction to be processed
 
         Assert.AreEqual(
             1,
