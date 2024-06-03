@@ -8,7 +8,7 @@ public class GuttingFishSorting : MonoBehaviour
     [Tooltip(
         "If toggled, the trigger will give correct if fish has state GuttingSuccess. If not it will give correct for GuttingIncomplete state"
     )]
-    private bool _successOnGuttingSuccess = true;
+    public FactoryFishState.State _successOnGuttingSuccess;
 
     // ------------------ Unity Functions ------------------
 
@@ -25,13 +25,13 @@ public class GuttingFishSorting : MonoBehaviour
             return;
         }
 
-        if (_successOnGuttingSuccess)
+        if (checkFishState(FactoryFishState.State.GuttingSuccess, fish))
         {
-            checkFishState(FactoryFishState.State.GuttingSuccess, fish);
+            GameManager.Instance.PlaySound("correct");
         }
         else
         {
-            checkFishState(FactoryFishState.State.GuttingIncomplete, fish);
+            GameManager.Instance.PlaySound("incorrect");
         }
     }
 
@@ -41,16 +41,16 @@ public class GuttingFishSorting : MonoBehaviour
     /// Check if the state of the fish is the same as the success condition.
     /// Play a sound based on the result.
     /// </summary>
-    private void checkFishState(FactoryFishState.State successCondition, GameObject fish)
+    public bool checkFishState(FactoryFishState.State successCondition, GameObject fish)
     {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
         if (fishState.CurrentState == successCondition)
         {
-            GameManager.Instance.PlaySound("correct");
+        return true;
         }
         else
         {
-            GameManager.Instance.PlaySound("incorrect");
+        return false;
         }
     }
 }
