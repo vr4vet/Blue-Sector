@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -21,7 +22,7 @@ public class GuttingFishSortingTest
 
        // Load and instantiate the prefabs
        var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactorySalmon");
-       Fish = Object.Instantiate(fishPrefab);
+       Fish = UnityEngine.Object.Instantiate(fishPrefab);
        Fish.transform.position = new Vector3(10, 10, 10);
        Sorter = GameObject.CreatePrimitive(PrimitiveType.Cube);
        Sorter.transform.position = new Vector3(0, 0, 0);
@@ -30,25 +31,42 @@ public class GuttingFishSortingTest
        SortingScript = Sorter.AddComponent<GuttingFishSorting>();
         
     }
+    [UnityTest]
+    public IEnumerator DoesNotSortAgain()
+    {
+        Fish.transform.position = Sorter.transform.position + Vector3.up; // Set the fish position to be on top of the discard box
+        yield return new WaitForSeconds(1); // Wait for the collision and potential destruction to be processed
+        Fish.transform.position = Sorter.transform.position + Vector3.up; // Set the fish position to be on top of the discard box
+        yield return new WaitForSeconds(1); // Wait for the collision and potential destruction to be processed
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
+        Assert.AreEqual(
+            1,
+            SortingScript.SortedFishCount,
+            "The fish should not be discarded again after it has been discarded once"
+        );
+    }
+    
     [UnityTest]
     public IEnumerator SortGuttingSuccess()
     {
-        Fish.GetComponent<FactoryFishState>().CurrentState = FactoryFishState.State.GuttingSuccess;
-        SortingScript._successOnGuttingSuccess = FactoryFishState.State.GuttingSuccess;
-       Assert.AreEqual(
-        true,
-        SortingScript.checkFishState(FactoryFishState.State.GuttingSuccess, Fish)
-       );
-
+        int SuccessFullSorts = 0;
+        foreach (FactoryFishState.State state in Enum.GetValues(typeof(FactoryFishState.State)))
+        {
+            Fish.GetComponent<FactoryFishState>().CurrentState = state;
+            SortingScript._successOnGuttingSuccess = FactoryFishState.State.GuttingSuccess;
+            if (SortingScript.checkFishState(FactoryFishState.State.GuttingSuccess, Fish))
+                SuccessFullSorts++;
+        }
+        Assert.AreEqual(
+            1,
+            SuccessFullSorts
+        );
         yield return null;
     }
     public void OneTimeTearDown()
     {
-        Object.Destroy(Fish);
-        Object.Destroy(Sorter);
+        UnityEngine.Object.Destroy(Fish);
+        UnityEngine.Object.Destroy(Sorter);
         SceneManager.UnloadSceneAsync(TestSceneName);
     }
 }
