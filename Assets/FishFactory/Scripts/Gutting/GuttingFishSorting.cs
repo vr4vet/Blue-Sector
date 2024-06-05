@@ -5,11 +5,12 @@ using UnityEngine;
 public class GuttingFishSorting : MonoBehaviour
 {
     [SerializeField]
-    [Tooltip(
-        "If toggled, the trigger will give correct if fish has state GuttingSuccess. If not it will give correct for GuttingIncomplete state"
-    )]
-    private bool _successOnGuttingSuccess = true;
-
+    public FactoryFishState.State _successOnGuttingSuccess;
+    private List<int> _sortedFish = new List<int>();
+    public int SortedFishCount
+    { 
+        get { return _sortedFish.Count;}
+    }
     // ------------------ Unity Functions ------------------
 
     /// <summary>
@@ -25,15 +26,26 @@ public class GuttingFishSorting : MonoBehaviour
             return;
         }
 
-        if (_successOnGuttingSuccess)
+        if (!_sortedFish.Contains(fish.gameObject.GetInstanceID()))
         {
-            checkFishState(FactoryFishState.State.GuttingSuccess, fish);
+            _sortedFish.Add(fish.gameObject.GetInstanceID());
+        }
+        if (GameManager.Instance != null)
+            HandleAudioFeedback(fish.GetComponent<FactoryFishState>());
+    }
+
+     private void HandleAudioFeedback(FactoryFishState fishState)
+    {
+        if (checkFishState(fishState.gameObject))
+        {
+            GameManager.Instance.PlaySound("correct");
         }
         else
         {
-            checkFishState(FactoryFishState.State.GuttingIncomplete, fish);
+            GameManager.Instance.PlaySound("incorrect");
         }
     }
+
 
     // ---------------- Private Functions ------------------
 
@@ -41,16 +53,16 @@ public class GuttingFishSorting : MonoBehaviour
     /// Check if the state of the fish is the same as the success condition.
     /// Play a sound based on the result.
     /// </summary>
-    private void checkFishState(FactoryFishState.State successCondition, GameObject fish)
+    public bool checkFishState(GameObject fish)
     {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-        if (fishState.CurrentState == successCondition)
+        if (fishState.CurrentState == _successOnGuttingSuccess)
         {
-            GameManager.Instance.PlaySound("correct");
+        return true;
         }
         else
         {
-            GameManager.Instance.PlaySound("incorrect");
+        return false;
         }
     }
 }

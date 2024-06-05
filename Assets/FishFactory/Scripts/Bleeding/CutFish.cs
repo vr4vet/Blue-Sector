@@ -12,7 +12,8 @@ public class CutFish : MonoBehaviour
     void Start()
     {
         GameObject knife = GameObject.Find("FishKnife");
-        _knifeState = knife.GetComponent<KnifeState>();
+        if (knife)
+            _knifeState = knife.GetComponent<KnifeState>();
     }
 
     protected void cutEvent(string tag, bool isGills = false)
