@@ -49,20 +49,18 @@ public class GuttingFishSortingTest
     [UnityTest]
     public IEnumerator SortGuttingSuccess()
     {
-        int SuccessFullSorts = 0;
         foreach (FactoryFishState.State state in Enum.GetValues(typeof(FactoryFishState.State)))
         {
             Fish.GetComponent<FactoryFishState>().CurrentState = state;
             SortingScript._successOnGuttingSuccess = FactoryFishState.State.GuttingSuccess;
-            if (SortingScript.checkFishState(FactoryFishState.State.GuttingSuccess, Fish))
-                SuccessFullSorts++;
+            if (Fish.GetComponent<FactoryFishState>().CurrentState == FactoryFishState.State.GuttingSuccess)
+                Assert.AreEqual(true, SortingScript.checkFishState(Fish));
+            else
+                Assert.AreEqual(false, SortingScript.checkFishState(Fish));
         }
-        Assert.AreEqual(
-            1,
-            SuccessFullSorts
-        );
         yield return null;
     }
+    [OneTimeTearDown]
     public void OneTimeTearDown()
     {
         UnityEngine.Object.Destroy(Fish);
