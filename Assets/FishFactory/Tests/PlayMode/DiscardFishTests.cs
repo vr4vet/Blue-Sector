@@ -17,11 +17,11 @@ public class DiscardFishTests
     {
         // create a new test scene
         SceneManager.CreateScene(TestSceneName);
-
         // Load and instantiate the prefabs
         var discardBoxPrefab = Resources.Load<GameObject>("Prefabs/FishDiscardBox");
-        var fishPrefab = Resources.Load<GameObject>("Prefabs/TempFish");
+        var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactoryBadFish");
         fish = Object.Instantiate(fishPrefab);
+        fish.GetComponent<FactoryFishState>().CurrentState = FactoryFishState.State.BadQuality;
         discardBox = Object.Instantiate(discardBoxPrefab);
 
         // get the DiscardBadFish script

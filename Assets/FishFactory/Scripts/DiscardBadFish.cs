@@ -33,7 +33,9 @@ public class DiscardBadFish : MonoBehaviour
         if (!_discardedFish.Contains(fish.gameObject))
         {
             _discardedFish.Add(fish.gameObject);
-            HandleAudioFeedback(fish.GetComponent<FactoryFishState>());
+            // for testing purposes where there is no GameManager Instance
+            if (GameManager.Instance != null)
+                HandleAudioFeedback(fish.GetComponent<FactoryFishState>());
             if (_discardedFish.Count >= _destroyFishTreshold)
             {
                 DestroyOldestFish();
