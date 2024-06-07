@@ -3,7 +3,6 @@
  * Ask your questions on github: https://github.com/Jorest
  */
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -259,10 +258,9 @@ namespace Tablet
 
         public void TaskPageLoader(Task.Task task)
         {
-            Debug.Log("Task page loading");
             currentTask = task;
             //for extra events
-            if (_taskPageOpen != null) _taskPageOpen.Invoke(); 
+            if (_taskPageOpen != null) _taskPageOpen.Invoke();
 
             panelManager.OnClickBackToAboutTask();
 
@@ -271,28 +269,13 @@ namespace Tablet
             _taskAboutTab.text = task.Description;
             _taskFeedback.text = task.Feedback;
 
-            // Start a coroutine to wait for the child GameObjects to be destroyed
-            StartCoroutine(WaitForChildrenDestroyed(task));
-        }
-
-        IEnumerator WaitForChildrenDestroyed(Task.Task task)
-        {
             //cleaning list before loading the new subtasks
-            foreach(Transform child in TaskSubtaskContent.transform) {
-                Destroy(child.gameObject);
-            }
-
-            // Wait until there are no more child GameObjects
-            while (TaskSubtaskContent.transform.childCount > 0)
+            foreach (Transform child in TaskSubtaskContent.transform)
             {
-                yield return null; // Wait for the next frame
+                GameObject.Destroy(child.gameObject);
             }
-
             if (task.Subtasks != null)
             {
-                // Create a list to store gameobjects from the subtasks list items
-                List<GameObject> childObjects = new List<GameObject>();
-
                 foreach (Task.Subtask sub in task.Subtasks)
                 {
                     //task for the list
@@ -310,14 +293,9 @@ namespace Tablet
                     GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
                     if (sub.Compleated()) checkmark.SetActive(true);
                     button.onClick.AddListener(() => SubTaskPageLoader(sub));
-                    childObjects.Add(item);
                 }
             }
-
-            // Load the new subtask list
-            TaskSubtaskContent.GetComponent<ContentPageChanger>().Refresh();
         }
-
 
         public void SubTaskPageLoader(Task.Subtask subtask)
         {
@@ -333,24 +311,11 @@ namespace Tablet
             _subtaskNameTab.GetComponent<TMP_Text>().text = subtask.SubtaskName;
             _subtaskAboutTab.GetComponent<TMP_Text>().text = subtask.Description;
 
-            // Start a coroutine to wait for the child GameObjects to be destroyed
-            StartCoroutine(WaitForChildrenDestroyedSubtask(subtask));
-        }
-
-        IEnumerator WaitForChildrenDestroyedSubtask(Task.Subtask subtask)
-        {
             //cleaning list before loading the new subtasks
             foreach (Transform child in _subtaskContent.transform)
             {
-                Destroy(child.gameObject);
+                GameObject.Destroy(child.gameObject);
             }
-
-            // Wait until there are no more child GameObjects
-            while (_subtaskContent.transform.childCount > 0)
-            {
-                yield return null; // Wait for the next frame
-            }
-
             if (subtask.StepList != null)
             {
                 foreach (Task.Step step in subtask.StepList)
@@ -360,83 +325,82 @@ namespace Tablet
                     item.transform.localPosition = Vector3.zero;
                     item.transform.localScale = Vector3.one;
                     item.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                    item.GetComponent<StepUI>().associatedSubTask = subtask;
 
                     TMP_Text caption = item.transform.Find("txt_Desc").GetComponent<TMP_Text>();
                     GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
                     if (step.IsCompeleted()) checkmark.SetActive(true);
 
                     TMP_Text reps = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
-                    caption.text = step.StepName;
 
-                    if (step.Timer >= 0) {
-                       reps.text = step.Counter.ToString(@"mm\:ss");
-                    } else if (step.Timer < 0){
-                        reps.text = step.RepetionsCompleated + "/" + step.RepetionNumber;
-                    }
+                    caption.text = step.StepName;
+                    reps.text = step.RepetionsCompleated + "/" + step.RepetionNumber;
                 }
             }
-
-            // Load the new subtask list
-            _subtaskContent.GetComponent<ContentPageChanger>().Refresh();
         }
 
         public void updateCheckMarks()
         {
-            UpdateTaskPage();
             if (currentTask == null)
             {
                 return;
             }
+            UpdateTaskPage();
             //cleaning list before loading the new subtasks
             foreach (Transform child in TaskSubtaskContent.transform)
             {
                 GameObject.Destroy(child.gameObject);
             }
+            if (currentTask.Subtasks != null)
+            {
+                foreach (Task.Subtask sub in currentTask.Subtasks)
+                {
+                    //task for the list
+                    GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
+                    item.transform.SetParent(TaskSubtaskContent.transform);
+                    item.transform.localPosition = Vector3.zero;
+                    item.transform.localScale = Vector3.one;
+                    item.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-            // Start a coroutine to wait for the child GameObjects to be destroyed
-            StartCoroutine(WaitForChildrenDestroyed(currentTask));
+                    TMP_Text caption = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
+                    // GameObject points = item.transform.Find("PointText").gameObject; points for later
+                    caption.text = sub.SubtaskName;
 
+                    Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
+                    GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
+                    if (sub.Compleated()) checkmark.SetActive(true);
+                    button.onClick.AddListener(() => SubTaskPageLoader(sub));
+                }
+            }
+
+            //cleaning list before loading the new subtasks
+            foreach (Transform child in _subtaskContent.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
             if (currentSubtask == null)
             {
                 return;
             }
+            if (currentSubtask.StepList != null)
+            {
+                foreach (Task.Step step in currentSubtask.StepList)
+                {
+                    GameObject item = Instantiate(_stepListEntry, Vector3.zero, Quaternion.identity);
+                    item.transform.SetParent(_subtaskContent.transform);
+                    item.transform.localPosition = Vector3.zero;
+                    item.transform.localScale = Vector3.one;
+                    item.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-            // Start a coroutine to wait for the child GameObjects to be destroyed
-            StartCoroutine(WaitForChildrenDestroyedSubtask(currentSubtask));
-        }
-            // Coroutine that handles counting and formatting timer string
-        private IEnumerator _startTimer (int Timer, Task.Step step) {
-            while (true){
-                if (Timer > 0){
-                    for (int i = Timer; i >= 0 && step.IsCompeleted() == false; i--){
-                        TimeSpan RemainingTime = new TimeSpan(0, 0, i);
-                        step.Counter = RemainingTime;
-                        Debug.Log(RemainingTime);
-                        yield return new WaitForSeconds(1f);
-                    }
-                        if (step.IsCompeleted()){
-                            yield break;
-                        }
-                }else if(Timer == 0) {
-                    TimeSpan timer = step.Counter;
-                    while(Timer != null && step.IsCompeleted() == false){
-                        timer += new TimeSpan(0, 0, 1);
-                        step.Counter = timer;
-                        yield return new WaitForSeconds(1f);
-                        Debug.Log(timer);
-                    }
-                    if (step.IsCompeleted()) {
-                    yield break;
-                    }
-                    yield return new WaitForSeconds(1f);
+                    TMP_Text caption = item.transform.Find("txt_Desc").GetComponent<TMP_Text>();
+                    GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
+                    if (step.IsCompeleted()) checkmark.SetActive(true);
+
+                    TMP_Text reps = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
+
+                    caption.text = step.StepName;
+                    reps.text = step.RepetionsCompleated + "/" + step.RepetionNumber;
                 }
             }
-        }
-        // public method to start coroutine because scriptable objects cannot start coroutines on their own
-        public void startTimer(int Timer, Task.Step step) {
-            Debug.Log("Start counting");
-            StartCoroutine(_startTimer(Timer, step));
         }
     }
 }
