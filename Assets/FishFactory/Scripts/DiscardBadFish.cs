@@ -23,6 +23,8 @@ public class DiscardBadFish : MonoBehaviour
 
     private void OnTriggerEnter(Collider collisionObject)
     {
+        if (collisionObject.transform.parent == null || collisionObject.transform.parent.parent == null)
+            return;
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
 
         if (fish.tag != "Fish")

@@ -4,6 +4,9 @@ public class StunFish : MonoBehaviour
 {
     private void OnTriggerEnter(Collider collisionObject)
     {
+        if (collisionObject.transform.parent == null || collisionObject.transform.parent.parent == null)
+            return;
+
         // Get the main fish object
         GameObject fish = collisionObject.transform.parent.gameObject.transform.parent.gameObject;
 
