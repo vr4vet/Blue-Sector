@@ -42,7 +42,8 @@ public class DialogueBoxController : MonoBehaviour
         updateAnimator();
     }
 
-    private void Start() {
+    private void Start()
+    {
         // Assign the event camera
         if (_dialogueCanvas != null)
         {

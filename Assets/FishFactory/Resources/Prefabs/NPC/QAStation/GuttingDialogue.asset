@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: GuttingDialogue
+  m_EditorClassIdentifier: 
+  sections:
+  - dialogue:
+    - Hello, and welcome to the gutting station. Your task here is to correctly sort
+      incomplete or badly gutted fish.
+    - The box next to me contains the gutting machine. It is completely automatic
+      and you will see flashes of light when the fish are gutted. But sometimes the
+      gutting of the fish is not up to our standards, and require manual gutting.
+    endAfterDialogue: 0
+    branchPoint:
+      question: Do you understand?
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 0
+      - answerLabel: Yes, the gutting machine does not always do a complete job
+        nextElement: 1
+  - dialogue:
+    - 'When you see a fish that has not been properly gutted, push the lever forward
+      and send it to on the other conveyor belt be manually gutted. Properly gutted
+      fish should be kept on the conveyor belt they are on orignally.
+
+'
+    - 'Should you encounter any fish which has been damaged, you should discard them
+      in the box next to you. Make sure to flip the fish and check both sides for
+      damages.
+
+'
+    - When you are ready, start by pressing the red button next to the gutting machine
+      and step up onto the platform next to the lever. Remember, lever forward for
+      fish that needs manual gutting and lever backward for properly gutted fish.
+    endAfterDialogue: 0
+    branchPoint:
+      question: Good luck!
+      answers:
+      - answerLabel: Could you repeat that last part?
+        nextElement: 1
+      - answerLabel: Could you repeat everything?
+        nextElement: 0
