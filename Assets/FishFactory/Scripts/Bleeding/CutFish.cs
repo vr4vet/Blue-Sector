@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CutFish : MonoBehaviour
@@ -15,7 +16,7 @@ public class CutFish : MonoBehaviour
         if (knife)
             _knifeState = knife.GetComponent<KnifeState>();
     }
-
+    
     protected void cutEvent(string tag, bool isGills = false)
     {
         if (tag != "Knife")
@@ -28,6 +29,11 @@ public class CutFish : MonoBehaviour
         {
             _fishState.CutFishBody();
         }
-        _knifeState.DecrementDurabilityCount();
+        
+        bool state = _knifeState.DecrementDurabilityCount();
+        if (state)
+        {
+            _fishState.PlaceMetalInFish();
+        }
     }
 }

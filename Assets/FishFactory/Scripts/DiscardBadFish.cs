@@ -54,6 +54,7 @@ public class DiscardBadFish : MonoBehaviour
         if (
             fishState.CurrentState == FactoryFishState.State.BadQuality
             || fishState.CurrentState == FactoryFishState.State.GuttingFailure
+            || fishState.CurrentState == FactoryFishState.State.ContainsMetal
         )
         {
             GameManager.Instance.PlaySound("correct");

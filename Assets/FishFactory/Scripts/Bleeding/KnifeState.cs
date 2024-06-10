@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Codice.Client.Common;
 using UnityEngine;
 
 public class KnifeState : MonoBehaviour
@@ -40,7 +41,7 @@ public class KnifeState : MonoBehaviour
     // ---------------- Public Functions ----------------
 
     // Method to decrement durabilityCount
-    public void DecrementDurabilityCount()
+    public bool DecrementDurabilityCount()
     {
         if (_durabilityCount > 0)
         {
@@ -48,8 +49,11 @@ public class KnifeState : MonoBehaviour
         }
         if (_durabilityCount == 0)
         {
+            _durabilityCount--;
             UpdateKnifeVisibility();
+            return true;
         }
+        return false;
     }
 
     // ---------------- Private Functions ----------------
