@@ -28,16 +28,22 @@ public class DialogueBoxController : MonoBehaviour
 
     [HideInInspector] public bool dialogueIsActive;
 
-    private void Awake() 
+    private void Awake()
     {
         buttonSpawner = GetComponent<ButtonSpawner>();
-        if (buttonSpawner == null) 
+        if (buttonSpawner == null)
         {
             Debug.LogError("The NPC missing the Button spawner script");
         }
         ResetBox();
         dialogueIsActive = false;
 
+        // Animation stuff
+        updateAnimator();
+    }
+
+    private void Start()
+    {
         // Assign the event camera
         if (_dialogueCanvas != null)
         {
@@ -64,8 +70,6 @@ public class DialogueBoxController : MonoBehaviour
             Debug.LogError("DialogueCanvas not found or does not have a Canvas component!");
         }
 
-        // Animation stuff
-        updateAnimator();
     }
 
     public void updateAnimator() {
