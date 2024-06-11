@@ -49,8 +49,8 @@ public class KnifeState : MonoBehaviour
         }
         if (_durabilityCount == 0)
         {
-            _durabilityCount--;
             UpdateKnifeVisibility();
+            _durabilityCount--;
             return true;
         }
         return false;
