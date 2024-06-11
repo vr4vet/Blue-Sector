@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CutFish : MonoBehaviour
@@ -10,11 +11,13 @@ public class CutFish : MonoBehaviour
     [Tooltip("The knife script attached to the knife object")]
     protected KnifeState _knifeState;
 
+    public GameObject[] knife;
+
     void Start()
     {
-        GameObject knife = GameObject.Find("FishKnife");
-        if (knife)
-            _knifeState = knife.GetComponent<KnifeState>();
+        knife = GameObject.FindGameObjectsWithTag("Knife");
+        if (knife.Length >=1 && knife[^1])
+            _knifeState = knife[^1].GetComponent<KnifeState>();
     }
     
     protected void cutEvent(string tag, bool isGills = false)
@@ -31,9 +34,11 @@ public class CutFish : MonoBehaviour
         }
         
         bool state = _knifeState.DecrementDurabilityCount();
+        Debug.Log(state);
         if (state)
         {
             _fishState.PlaceMetalInFish();
+            Debug.Log("metallll");
         }
     }
 }
