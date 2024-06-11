@@ -6,6 +6,7 @@ public class NPCSpawner : MonoBehaviour
 {
     [SerializeField] private NPC[] _nPCs;
     [HideInInspector] public List<GameObject> _npcInstances;
+    private GameObject spawnedNpc;
 
     private void Awake() {
         foreach (var npcSO in _nPCs)
@@ -29,6 +30,7 @@ public class NPCSpawner : MonoBehaviour
         SetName(newNPC, npcSO.NameOfNPC);
         // set talking topics aka. dialogueTrees
         SetConversation(newNPC, npcSO.DialogueTreesSO, npcSO.DialogueTreeJSON);
+        spawnedNpc = newNPC;
         // return the NPC
         return newNPC;
     }
@@ -102,5 +104,10 @@ public class NPCSpawner : MonoBehaviour
         } else {
             conversationController.SetDialogueTreeList(dialogueTreesSO, dialogueTreesJSON);
         }
+    }
+
+    public GameObject getNpc()
+    {
+        return spawnedNpc;
     }
 }
