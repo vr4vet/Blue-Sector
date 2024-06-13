@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class DiscardKnife : MonoBehaviour
 {
+    [Tooltip(
+        "The knife prefab that should spawn"
+    )]
+    [SerializeField]
+    private GameObject _newKnifePrefab;
+
     protected KnifeState _knifeState;
 
     private void OnTriggerEnter(Collider collisionObject)
@@ -20,6 +26,12 @@ public class DiscardKnife : MonoBehaviour
         {
             HandleAudioFeedback(Knife.GetComponent<KnifeState>());
             Destroy(Knife);
+            if (Knife.name == "BackupFishKnife")
+            {
+                Vector3 pos = new Vector3(4.56f,0.962f,-9.352f);
+                GameObject newKnife = Instantiate(_newKnifePrefab, pos, Quaternion.identity);
+                newKnife.name = "BackupFishKnife";
+            }
         }
     }
 
