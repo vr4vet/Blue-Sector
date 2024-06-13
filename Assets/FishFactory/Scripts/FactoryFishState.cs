@@ -13,6 +13,7 @@ public class FactoryFishState : MonoBehaviour
         Bleeding,
         BadQuality,
         BadCut,
+        ContainsMetal,
         GuttingSuccess,
         GuttingIncomplete,
         GuttingFailure,
@@ -29,11 +30,16 @@ public class FactoryFishState : MonoBehaviour
     [SerializeField]
     private Material _bleedingFish;
 
+    // ------------------ Private Variables ------------------
+
+    private Material metalMat;
+
     // ------------ Unity Functions ------------
 
     void Awake()
     {
         _bleedingFish = Resources.Load<Material>("Materials/Fish/salmonBleeding");
+        metalMat = Resources.Load<Material>("Materials/Old project material/Conveyor/Metal");
     }
 
     void Start()
@@ -98,6 +104,20 @@ public class FactoryFishState : MonoBehaviour
             CurrentState = State.BadCut;
             GameManager.Instance.PlaySound("incorrect");
         }
+    }
+
+    /// <summary>
+    /// When the knife is chipped for the first time add metal to fish and update state.
+    /// </summary>
+    public void PlaceMetalInFish()
+    {
+        CurrentState = State.ContainsMetal;
+        GameObject neck = transform.GetChild(2).transform.GetChild(0).transform.GetChild(0).gameObject;
+        GameObject Metal = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Metal.transform.localScale = new Vector3(0.02f,0.025f,0.003f);
+        Metal.GetComponent<Renderer>().material = metalMat;
+        Metal.transform.SetParent(neck.transform);
+        Metal.transform.position = neck.transform.position + new Vector3(-0.007f,0.04f,0f);
     }
 
     // ------------ Private Functions ------------

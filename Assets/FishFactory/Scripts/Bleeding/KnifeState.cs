@@ -24,7 +24,7 @@ public class KnifeState : MonoBehaviour
 
     [Tooltip("Number of cuts before a knife gets chipped")]
     [SerializeField]
-    private int _durabilityCount = 5;
+    public int _durabilityCount = 5;
 
     // ---------------- Unity Functions ----------------
 
@@ -40,7 +40,7 @@ public class KnifeState : MonoBehaviour
     // ---------------- Public Functions ----------------
 
     // Method to decrement durabilityCount
-    public void DecrementDurabilityCount()
+    public bool DecrementDurabilityCount()
     {
         if (_durabilityCount > 0)
         {
@@ -49,7 +49,10 @@ public class KnifeState : MonoBehaviour
         if (_durabilityCount == 0)
         {
             UpdateKnifeVisibility();
+            _durabilityCount--;
+            return true;
         }
+        return false;
     }
 
     // ---------------- Private Functions ----------------
@@ -63,6 +66,6 @@ public class KnifeState : MonoBehaviour
     private void UpdateKnifeVisibility()
     {
         _regularKnife.SetActive(_durabilityCount > 0);
-        _chippedKnife.SetActive(_durabilityCount == 0);
+        _chippedKnife.SetActive(_durabilityCount <= 0);
     }
 }
