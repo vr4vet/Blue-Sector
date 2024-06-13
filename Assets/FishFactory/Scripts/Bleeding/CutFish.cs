@@ -9,13 +9,15 @@ public class CutFish : MonoBehaviour
     [Tooltip("The knife script attached to the knife object")]
     protected KnifeState _knifeState;
 
+    public GameObject[] knife;
+
     void Start()
     {
-        GameObject knife = GameObject.Find("FishKnife");
-        if (knife)
-            _knifeState = knife.GetComponent<KnifeState>();
+        knife = GameObject.FindGameObjectsWithTag("Knife");
+        if (knife.Length >=1 && knife[0])
+            _knifeState = knife[0].GetComponent<KnifeState>();
     }
-
+    
     protected void cutEvent(string tag, bool isGills = false)
     {
         if (tag != "Knife")
@@ -28,6 +30,11 @@ public class CutFish : MonoBehaviour
         {
             _fishState.CutFishBody();
         }
-        _knifeState.DecrementDurabilityCount();
+        
+        bool state = _knifeState.DecrementDurabilityCount();
+        if (state)
+        {
+            _fishState.PlaceMetalInFish();
+        }
     }
 }
