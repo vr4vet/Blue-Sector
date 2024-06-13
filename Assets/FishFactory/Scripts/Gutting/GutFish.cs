@@ -55,7 +55,7 @@ public class GutFish : MonoBehaviour
     {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
         fishMaterial.material =
-            fishState.CurrentState == FactoryFishState.State.GuttingSuccess
+            fishState.guttingState == FactoryFishState.GuttingState.GuttingSuccess
                 ? _correctlyGuttedFish
                 : _incorrectlyGuttedFish;
         ;

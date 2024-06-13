@@ -5,7 +5,7 @@ using UnityEngine;
 public class GuttingFishSorting : MonoBehaviour
 {
     [SerializeField]
-    public FactoryFishState.State _successOnGuttingSuccess;
+    public FactoryFishState.GuttingState _successOnGuttingSuccess;
     private List<int> _sortedFish = new List<int>();
     public int SortedFishCount
     { 
@@ -56,7 +56,7 @@ public class GuttingFishSorting : MonoBehaviour
     public bool checkFishState(GameObject fish)
     {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-        if (fishState.CurrentState == _successOnGuttingSuccess)
+        if (fishState.guttingState == _successOnGuttingSuccess)
         {
         return true;
         }
