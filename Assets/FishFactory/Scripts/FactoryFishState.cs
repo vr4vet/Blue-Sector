@@ -5,23 +5,6 @@ public class FactoryFishState : MonoBehaviour
 {
     // ------------ Public Variables ------------
 
-    // The possible states of the fish.
-    /* public enum State
-    {
-        Alive,
-        Stunned,
-        Bleeding,
-        BadQuality,
-        BadCut,
-        ContainsMetal,
-        GuttingSuccess,
-        GuttingIncomplete,
-        GuttingFailure,
-        Tier1,
-        Tier2,
-        Tier3,
-    } */
-
     public enum Tier
     {
         Tier1,
@@ -37,14 +20,12 @@ public class FactoryFishState : MonoBehaviour
         GuttingFailure,
     }
 
+    // The current public states of the fish.
     public Tier fishTier;
     public GuttingState guttingState;
     public bool ContainsMetal = false;
     public bool Stunned;
     public bool correctlyBled;
-
-    // The current public state of the fish.
-    //public State CurrentState;
 
     // ------------ Editor Variables ------------
 
@@ -81,41 +62,6 @@ public class FactoryFishState : MonoBehaviour
     /// <summary>
     /// When the player cuts the gills of the fish.
     /// </summary>
-    /* public void CutFishGills()
-    {
-        Renderer fishMaterial = gameObject.transform.GetChild(0).GetComponent<Renderer>();
-
-        switch (CurrentState)
-        {
-            case State.Alive:
-                CurrentState = State.Bleeding;
-                // The player should not cut the gills of a fish that is alive
-                GameManager.Instance.PlaySound("incorrect");
-                break;
-
-            case State.Stunned:
-                CurrentState = State.Bleeding;
-                fishMaterial.material = _bleedingFish;
-                GameManager.Instance.PlaySound("correct");
-                break;
-
-            case State.BadCut:
-                CurrentState = State.Bleeding;
-                fishMaterial.material = _bleedingFish;
-                // The player can cut the gills of a fish that has already been cut incorrectly, fixing the mistake.
-                GameManager.Instance.PlaySound("correct");
-                break;
-
-            case State.Bleeding:
-                // The player should not be able to cut the gills of a fish that is already bleeding
-                break;
-
-            case State.BadQuality:
-                // The player should not cut the gills of a fish that is bad
-                GameManager.Instance.PlaySound("incorrect");
-                break;
-        }
-    } */
     public void CutFishGills()
     {
         Renderer fishMaterial = gameObject.transform.GetChild(0).GetComponent<Renderer>();
@@ -144,21 +90,11 @@ public class FactoryFishState : MonoBehaviour
     /// <summary>
     /// When the player cuts the body of the fish.
     /// </summary>
-    /* public void CutFishBody()
-    {
-        // To make the cutting process more forgiving, we will not penalize the player for a bad cut if the fish is already cut correctly
-        // The player will only be penalized for a bad cut if the fish is alive or has not been cut yet
-        if (CurrentState == State.Alive || CurrentState == State.Stunned)
-        {
-            CurrentState = State.BadCut;
-            GameManager.Instance.PlaySound("incorrect");
-        }
-    } */
     public void CutFishBody()
     {
         // To make the cutting process more forgiving, we will not penalize the player for a bad cut if the fish is already cut correctly
         // The player will only be penalized for a bad cut if the fish is alive or has not been cut yet
-        if ((Stunned || !Stunned) && !correctlyBled)
+        if (!correctlyBled)
         {
             correctlyBled = false;
             GameManager.Instance.PlaySound("incorrect");

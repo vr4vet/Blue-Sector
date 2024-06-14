@@ -180,8 +180,6 @@ public class FactoryFishSpawner : MonoBehaviour
         {
             // The prefab to modify and spawn in the spawner
             fishPrefab = _salmonFishPrefab;
-            string fishTag = "fish";
-
             int randomValue = Random.Range(1, 101);
 
             // Get a random state and sets prefab to badfishPrefab if the state is BadQuality
@@ -205,7 +203,7 @@ public class FactoryFishSpawner : MonoBehaviour
             childGameObject.name = "FactoryFish" + transform.childCount.ToString();
             Renderer fishMaterial = childGameObject.transform.GetChild(0).GetComponent<Renderer>();
             
-            // Set the state of the fish to the randomizedFishState
+            // Set the states of the fish to the randomized states
             FactoryFishState fishState = childGameObject.GetComponent<FactoryFishState>();
             if (fishState != null)
             {
