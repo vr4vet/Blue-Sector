@@ -19,9 +19,9 @@ public class StunFish : MonoBehaviour
 
         // Get fish state and check if fish is alive, if alive the fish state is set to stunned
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-        if (fishState.CurrentState == FactoryFishState.State.Alive)
+        if (fishState.Stunned == false)
         {
-            fishState.CurrentState = FactoryFishState.State.Stunned;
+            fishState.Stunned = true;
             GameManager.Instance.PlaySound("correct");
         }
         else

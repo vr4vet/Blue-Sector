@@ -21,7 +21,7 @@ public class DiscardFishTests
         var discardBoxPrefab = Resources.Load<GameObject>("Prefabs/FishDiscardBox");
         var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactoryBadFish");
         fish = Object.Instantiate(fishPrefab);
-        fish.GetComponent<FactoryFishState>().CurrentState = FactoryFishState.State.BadQuality;
+        fish.GetComponent<FactoryFishState>().fishTier = FactoryFishState.Tier.BadQuality;
         discardBox = Object.Instantiate(discardBoxPrefab);
 
         // get the DiscardBadFish script

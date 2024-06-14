@@ -5,25 +5,27 @@ public class FactoryFishState : MonoBehaviour
 {
     // ------------ Public Variables ------------
 
-    // The possible states of the fish.
-    public enum State
+    public enum Tier
     {
-        Alive,
-        Stunned,
-        Bleeding,
-        BadQuality,
-        BadCut,
-        ContainsMetal,
-        GuttingSuccess,
-        GuttingIncomplete,
-        GuttingFailure,
         Tier1,
         Tier2,
         Tier3,
+        BadQuality
     }
 
-    // The current public state of the fish.
-    public State CurrentState;
+    public enum GuttingState
+    {
+        GuttingSuccess,
+        GuttingIncomplete,
+        GuttingFailure,
+    }
+
+    // The current public states of the fish.
+    public Tier fishTier;
+    public GuttingState guttingState;
+    public bool ContainsMetal = false;
+    public bool Stunned;
+    public bool correctlyBled;
 
     // ------------ Editor Variables ------------
 
@@ -44,8 +46,12 @@ public class FactoryFishState : MonoBehaviour
 
     void Start()
     {
+        if (fishTier == Tier.BadQuality)
+        {
+            Stunned = true;
+        }
         // If the fish is alive, it should start moving
-        if (CurrentState == State.Alive)
+        if (Stunned == false)
         {
             StartCoroutine(AliveFish());
         }
@@ -59,36 +65,25 @@ public class FactoryFishState : MonoBehaviour
     public void CutFishGills()
     {
         Renderer fishMaterial = gameObject.transform.GetChild(0).GetComponent<Renderer>();
-
-        switch (CurrentState)
+        
+        if (fishTier == Tier.BadQuality)
         {
-            case State.Alive:
-                CurrentState = State.Bleeding;
-                // The player should not cut the gills of a fish that is alive
-                GameManager.Instance.PlaySound("incorrect");
-                break;
-
-            case State.Stunned:
-                CurrentState = State.Bleeding;
-                fishMaterial.material = _bleedingFish;
-                GameManager.Instance.PlaySound("correct");
-                break;
-
-            case State.BadCut:
-                CurrentState = State.Bleeding;
-                fishMaterial.material = _bleedingFish;
-                // The player can cut the gills of a fish that has already been cut incorrectly, fixing the mistake.
-                GameManager.Instance.PlaySound("correct");
-                break;
-
-            case State.Bleeding:
-                // The player should not be able to cut the gills of a fish that is already bleeding
-                break;
-
-            case State.BadQuality:
-                // The player should not cut the gills of a fish that is bad
-                GameManager.Instance.PlaySound("incorrect");
-                break;
+            GameManager.Instance.PlaySound("incorrect");
+            return;
+        }
+        if (!Stunned && !correctlyBled)
+        {
+            correctlyBled = true;
+            fishMaterial.material = _bleedingFish;
+            GameManager.Instance.PlaySound("incorrect");
+            return;
+        }
+        if (Stunned && !correctlyBled)
+        {
+            correctlyBled = true;
+            fishMaterial.material = _bleedingFish;
+            GameManager.Instance.PlaySound("correct");
+            return;
         }
     }
 
@@ -99,9 +94,9 @@ public class FactoryFishState : MonoBehaviour
     {
         // To make the cutting process more forgiving, we will not penalize the player for a bad cut if the fish is already cut correctly
         // The player will only be penalized for a bad cut if the fish is alive or has not been cut yet
-        if (CurrentState == State.Alive || CurrentState == State.Stunned)
+        if (!correctlyBled)
         {
-            CurrentState = State.BadCut;
+            correctlyBled = false;
             GameManager.Instance.PlaySound("incorrect");
         }
     }
@@ -111,7 +106,7 @@ public class FactoryFishState : MonoBehaviour
     /// </summary>
     public void PlaceMetalInFish()
     {
-        CurrentState = State.ContainsMetal;
+        ContainsMetal = true;
         GameObject neck = transform.GetChild(2).transform.GetChild(0).transform.GetChild(0).gameObject;
         GameObject Metal = GameObject.CreatePrimitive(PrimitiveType.Cube);
         Metal.transform.localScale = new Vector3(0.02f,0.025f,0.003f);
@@ -136,17 +131,7 @@ public class FactoryFishState : MonoBehaviour
 
             // The fish head and tail rigidbodies
             Rigidbody head = transform.GetChild(2).transform.GetChild(0).GetComponent<Rigidbody>();
-            Rigidbody tail = transform
-                .GetChild(2)
-                .transform.GetChild(0)
-                .transform.GetChild(0)
-                .transform.GetChild(0)
-                .transform.GetChild(0)
-                .transform.GetChild(0)
-                .transform.GetChild(0)
-                .transform.GetChild(0)
-                .transform.GetChild(0)
-                .GetComponent<Rigidbody>();
+            Rigidbody tail = transform.Find("Salmon_Armature/Head/Neck/Back_1/Back_2/Back_3/Back_4/Back_5/Tail/Tail_end").GetComponent<Rigidbody>();
 
             // Makes the fish head move upwards
             head.AddForce(Vector3.up * 800, ForceMode.Force);
@@ -155,7 +140,7 @@ public class FactoryFishState : MonoBehaviour
             tail.AddForce(Vector3.up * 500, ForceMode.Force);
 
             // If the fish is no longer alive, stop the coroutine
-            if (CurrentState != State.Alive)
+            if (Stunned == true)
             {
                 yield break;
             }
