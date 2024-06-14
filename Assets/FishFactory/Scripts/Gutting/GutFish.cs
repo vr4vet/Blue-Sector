@@ -54,11 +54,15 @@ public class GutFish : MonoBehaviour
     private void handleGutting(GameObject fish, Renderer fishMaterial)
     {
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-        fishMaterial.material =
-            fishState.guttingState == FactoryFishState.GuttingState.GuttingSuccess
-                ? _correctlyGuttedFish
-                : _incorrectlyGuttedFish;
-        ;
+        switch (fishState.guttingState)
+        {
+            case FactoryFishState.GuttingState.GuttingSuccess:
+                fishMaterial.material = _correctlyGuttedFish;
+                break;
+            case FactoryFishState.GuttingState.GuttingFailure:
+                fishMaterial.material = _incorrectlyGuttedFish;
+                break;
+        }
         GetComponent<AudioSource>().Play();
     }
 

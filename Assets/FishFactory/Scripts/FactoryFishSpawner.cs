@@ -34,6 +34,10 @@ public class FactoryFishSpawner : MonoBehaviour
     [SerializeField]
     private bool _fishSizeVariation;
 
+    [Tooltip("If toggled, some fish wil be alive")]
+    [SerializeField]
+    private bool _canBeAlive;
+
     [Tooltip("The percentage of fish that should be alive. Higher number equals higher chance.")]
     [SerializeField]
     [Range(0, 100)]
@@ -191,7 +195,14 @@ public class FactoryFishSpawner : MonoBehaviour
             {
                 randomizedTier = RandomizeFishTier(randomValue);
             }
-            randomizedStunnChance = RandomizeAliveFishState(randomValue);
+            if (_canBeAlive)
+            {
+                randomizedStunnChance = RandomizeAliveFishState(randomValue);     
+            }
+            else
+            {
+                randomizedStunnChance = true;
+            }
 
             // Spawn object as a child of the spawner object, and as such limit the amount of spawned objects to increase performance.
             GameObject childGameObject = Instantiate(
