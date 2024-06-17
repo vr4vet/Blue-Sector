@@ -16,12 +16,17 @@ public class DespawnerTest
     private GameObject Despawner;
     private Despawner DespawnerScript;
     private GameManager gameManager;
+    private GameObject listener;
+    private GameObject leftHand;
+    private GameObject rightHand;
+    private GameObject audioManager;
 
     [SetUp]
     public void SetUp()
     {
        // create a new test scene
        SceneManager.CreateScene(TestSceneName);
+       SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
 
        // Load and instantiate the prefabs
        var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactorySalmon");
@@ -47,15 +52,17 @@ public class DespawnerTest
         gameManager = gameManagerObject.AddComponent<GameManager>();
         // Load the sound effects
         var audioManagerPrefab = Resources.Load<GameObject>("Prefabs/AudioManager");
-        var audioManager = UnityEngine.Object.Instantiate(audioManagerPrefab);
+        audioManager = UnityEngine.Object.Instantiate(audioManagerPrefab);
         gameManager.SoundEffects = Resources.LoadAll<AudioClip>("Sounds");
         gameManager.AudioManager = audioManager;
         //create an audio listener
-        var listener = new GameObject("AudioListener");
+        listener = new GameObject("AudioListener");
         listener.AddComponent<AudioListener>();
         //configure hand objects
-        gameManager.LeftHandGameObj = new GameObject();
-        gameManager.RightHandGameObj = new GameObject();
+        leftHand = new GameObject("Green Gloves Right");
+        rightHand = new GameObject("Green Gloves Left");
+        gameManager.LeftHandGameObj = leftHand;
+        gameManager.RightHandGameObj = rightHand;
     }
 
     /// <summary>
@@ -117,6 +124,11 @@ public class DespawnerTest
         UnityEngine.Object.Destroy(FishWithMetal);
         UnityEngine.Object.Destroy(Knife);
         UnityEngine.Object.Destroy(Despawner);
+        UnityEngine.Object.Destroy(gameManager);
+        UnityEngine.Object.Destroy(audioManager);
+        UnityEngine.Object.Destroy(listener);
+        UnityEngine.Object.Destroy(leftHand);
+        UnityEngine.Object.Destroy(rightHand);
         SceneManager.UnloadSceneAsync(TestSceneName);
     }
 }

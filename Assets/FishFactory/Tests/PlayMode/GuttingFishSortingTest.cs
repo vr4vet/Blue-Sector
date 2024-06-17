@@ -17,8 +17,9 @@ public class GuttingFishSortingTest
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-       // create a new test scene
-       SceneManager.CreateScene(TestSceneName);
+        // Create a new test scene
+        SceneManager.CreateScene(TestSceneName);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
 
        // Load and instantiate the prefabs
        var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactorySalmon");

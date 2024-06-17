@@ -8,11 +8,18 @@ using UnityEngine.SceneManagement;
 public class GameManagerTests
 {
     private GameManager gameManager;
+    private GameObject listener;
+    private GameObject leftHand;
+    private GameObject rightHand;
     private const string TestSceneName = "GameManagerTestScene";
 
-    [SetUp]
+    [OneTimeSetUp]
     public void SetUp()
     {
+        // Create a new test scene
+        SceneManager.CreateScene(TestSceneName);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
+
         // Create a new GameObject and add the GameManager component to it
         var gameManagerObject = new GameObject();
         gameManager = gameManagerObject.AddComponent<GameManager>();
@@ -24,18 +31,25 @@ public class GameManagerTests
         gameManager.AudioManager = audioManager;
 
         //create an audio listener
-        var listener = new GameObject("AudioListener");
+        listener = new GameObject("AudioListener");
         listener.AddComponent<AudioListener>();
 
         //configure hand objects
-        gameManager.LeftHandGameObj = new GameObject();
-        gameManager.RightHandGameObj = new GameObject();
+        leftHand = new GameObject("Green Gloves Right");
+        rightHand = new GameObject("Green Gloves Left");
+        gameManager.LeftHandGameObj = leftHand;
+        gameManager.RightHandGameObj = rightHand;
     }
 
-    [TearDown]
+    [OneTimeTearDown]
     public void TearDown()
     {
         Object.Destroy(gameManager);
+        Object.Destroy(listener);
+        Object.Destroy(leftHand);
+        Object.Destroy(rightHand);
+        SceneManager.UnloadSceneAsync(TestSceneName);
+        
     }
 
     [UnityTest]
