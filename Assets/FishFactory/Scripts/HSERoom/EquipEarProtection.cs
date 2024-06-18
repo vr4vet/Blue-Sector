@@ -10,8 +10,14 @@ public class EquipEarProtection : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            GameManager.Instance.EarProtectionOn = true;
-            GameManager.Instance.PlaySound("correct");
+            if (!GameManager.Instance) {
+                // for testing purposes where there is no GameManager Instance
+                return;
+            } else {
+                GameManager.Instance.EarProtectionOn = true;
+                GameManager.Instance.PlaySound("correct");
+            }
+            
             Destroy(gameObject);
         }
     }

@@ -64,7 +64,12 @@ public class BootsState : MonoBehaviour
             if (scrubbingLeft <= 0)
             {
                 boots = BootsStatus.Clean;
-                GameManager.Instance.PlaySound("correct");
+                if (!GameManager.Instance) {
+                    // for testing purposes where there is no GameManager Instance
+                return;
+                } else {
+                    GameManager.Instance.PlaySound("correct");
+                }
                 gameObject.GetComponent<MeshRenderer>().material = materials[3]; // Clean
             }
         }
@@ -90,7 +95,10 @@ public class BootsState : MonoBehaviour
     private IEnumerator WashBoots()
     {
         yield return new WaitForSeconds(soakingTime);
-        GameManager.Instance.PlaySound("correct");
+        // for testing purposes where there is no GameManager Instance
+        if (GameManager.Instance) {
+            GameManager.Instance.PlaySound("correct");
+        }
         boots = BootsStatus.SemiClean;
         // Soaped
         gameObject.GetComponent<MeshRenderer>().material = materials[2];

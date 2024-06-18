@@ -51,17 +51,22 @@ public class DiscardBadFish : MonoBehaviour
     /// <param name="fishState"> The fish state script attached to the fish object </param>
     private void HandleAudioFeedback(FactoryFishState fishState)
     {
-        if (
-            fishState.fishTier == FactoryFishState.Tier.BadQuality
-            || fishState.guttingState == FactoryFishState.GuttingState.GuttingFailure
-            || fishState.ContainsMetal == true
-        )
-        {
-            GameManager.Instance.PlaySound("correct");
-        }
-        else
-        {
-            GameManager.Instance.PlaySound("incorrect");
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        } else {
+            if (
+                fishState.fishTier == FactoryFishState.Tier.BadQuality
+                || fishState.guttingState == FactoryFishState.GuttingState.GuttingFailure
+                || fishState.ContainsMetal == true
+            )
+            {
+                GameManager.Instance.PlaySound("correct");
+            }
+            else
+            {
+                GameManager.Instance.PlaySound("incorrect");
+            }
         }
     }
 

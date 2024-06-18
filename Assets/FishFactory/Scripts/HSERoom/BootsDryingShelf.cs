@@ -19,7 +19,12 @@ public class BootsDryingShelf : MonoBehaviour
     {
         if (collider.gameObject.GetComponent<BootsState>().Boots == BootsState.BootsStatus.Clean)
         {
-            GameManager.Instance.PlaySound("correct");
+            if (!GameManager.Instance) {
+                // for testing purposes where there is no GameManager Instance
+                return;
+            } else {
+                GameManager.Instance.PlaySound("correct");
+            }
             StartCoroutine(DryBoots(collider.gameObject));
         }
     }
@@ -31,8 +36,12 @@ public class BootsDryingShelf : MonoBehaviour
     private IEnumerator DryBoots(GameObject boots)
     {
         yield return new WaitForSeconds(despawnTimer);
-        GameManager.Instance.BootsOn = true;
-        GameManager.Instance.PlaySound("correct");
-        Destroy(boots);
+        
+        // for testing purposes where there is no GameManager Instance
+        if (GameManager.Instance) {
+                GameManager.Instance.BootsOn = true;
+                GameManager.Instance.PlaySound("correct");
+                Destroy(boots);
+            }
     }
 }

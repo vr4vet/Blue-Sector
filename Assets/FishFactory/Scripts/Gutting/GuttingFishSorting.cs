@@ -30,19 +30,29 @@ public class GuttingFishSorting : MonoBehaviour
         {
             _sortedFish.Add(fish.gameObject.GetInstanceID());
         }
-        if (GameManager.Instance != null)
+        if (GameManager.Instance != null) {
             HandleAudioFeedback(fish.GetComponent<FactoryFishState>());
+        } else {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        }
+            
     }
 
      private void HandleAudioFeedback(FactoryFishState fishState)
     {
-        if (checkFishState(fishState.gameObject))
-        {
-            GameManager.Instance.PlaySound("correct");
-        }
-        else
-        {
-            GameManager.Instance.PlaySound("incorrect");
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        } else {
+            if (checkFishState(fishState.gameObject))
+            {
+                GameManager.Instance.PlaySound("correct");
+            }
+            else
+            {
+                GameManager.Instance.PlaySound("incorrect");
+            }
         }
     }
 

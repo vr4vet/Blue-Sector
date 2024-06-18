@@ -93,12 +93,18 @@ public class ConveyorController : MonoBehaviour
 
     void Update()
     {
-        if (useSecondaryTask)
-        {
-            isBeltOn = GameManager.Instance.IsSecondaryTaskOn;
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
             return;
+        } else {
+            if (useSecondaryTask)
+            {
+                isBeltOn = GameManager.Instance.IsSecondaryTaskOn;
+                return;
+            }
+            isBeltOn = GameManager.Instance.IsTaskOn;
         }
-        isBeltOn = GameManager.Instance.IsTaskOn;
+        
     }
 
     // ----------------- Private Functions -----------------

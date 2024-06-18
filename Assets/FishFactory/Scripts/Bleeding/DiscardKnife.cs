@@ -29,13 +29,18 @@ public class DiscardKnife : MonoBehaviour
     /// <param name="fishState"> The fish state script attached to the fish object </param>
     private void HandleAudioFeedback(KnifeState knifeState)
     {
-        if (knifeState._durabilityCount <= 0)
-        {
-            GameManager.Instance.PlaySound("correct");
-        }
-        else 
-        {
-            GameManager.Instance.PlaySound("incorrect");
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        } else {
+            if (knifeState._durabilityCount <= 0)
+            {
+                GameManager.Instance.PlaySound("correct");
+            }
+            else 
+            {
+                GameManager.Instance.PlaySound("incorrect");
+            }
         }
     }
 }

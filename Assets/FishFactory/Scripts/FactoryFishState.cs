@@ -65,25 +65,29 @@ public class FactoryFishState : MonoBehaviour
     public void CutFishGills()
     {
         Renderer fishMaterial = gameObject.transform.GetChild(0).GetComponent<Renderer>();
-        
-        if (fishTier == Tier.BadQuality)
-        {
-            GameManager.Instance.PlaySound("incorrect");
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
             return;
-        }
-        if (!Stunned && !correctlyBled)
-        {
-            correctlyBled = true;
-            fishMaterial.material = _bleedingFish;
-            GameManager.Instance.PlaySound("incorrect");
-            return;
-        }
-        if (Stunned && !correctlyBled)
-        {
-            correctlyBled = true;
-            fishMaterial.material = _bleedingFish;
-            GameManager.Instance.PlaySound("correct");
-            return;
+        } else {
+            if (fishTier == Tier.BadQuality)
+            {
+                GameManager.Instance.PlaySound("incorrect");
+                return;
+            }
+            if (!Stunned && !correctlyBled)
+            {
+                correctlyBled = true;
+                fishMaterial.material = _bleedingFish;
+                GameManager.Instance.PlaySound("incorrect");
+                return;
+            }
+            if (Stunned && !correctlyBled)
+            {
+                correctlyBled = true;
+                fishMaterial.material = _bleedingFish;
+                GameManager.Instance.PlaySound("correct");
+                return;
+            }
         }
     }
 
@@ -97,7 +101,12 @@ public class FactoryFishState : MonoBehaviour
         if (!correctlyBled)
         {
             correctlyBled = false;
-            GameManager.Instance.PlaySound("incorrect");
+            if (!GameManager.Instance) {
+                // for testing purposes where there is no GameManager Instance
+                return;
+            } else {
+                GameManager.Instance.PlaySound("incorrect");
+            }
         }
     }
 

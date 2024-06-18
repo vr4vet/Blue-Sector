@@ -13,27 +13,32 @@ public class EquipGlove : MonoBehaviour
     {
         if (collider.gameObject.name == "Grabber")
         {
-            GameManager.PlayerHandState gloveType =
-                name == "SteelGlove"
-                    ? GameManager.PlayerHandState.SteelGlove
-                    : GameManager.PlayerHandState.BlueGlove;
+            if (!GameManager.Instance) {
+                // for testing purposes where there is no GameManager Instance
+                return;
+            } else {
+                GameManager.PlayerHandState gloveType =
+                    name == "SteelGlove"
+                        ? GameManager.PlayerHandState.SteelGlove
+                        : GameManager.PlayerHandState.BlueGlove;
 
-            if (
-                collider.transform.parent.name == "LeftController"
-                && GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized
-            )
-            {
-                GameManager.Instance.LeftHand = gloveType;
-                GameManager.Instance.PlaySound("correct");
-            }
-            else if (GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized)
-            {
-                GameManager.Instance.RightHand = gloveType;
-                GameManager.Instance.PlaySound("correct");
-            }
-            else
-            {
-                GameManager.Instance.PlaySound("incorrect");
+                if (
+                    collider.transform.parent.name == "LeftController"
+                    && GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized
+                )
+                {
+                    GameManager.Instance.LeftHand = gloveType;
+                    GameManager.Instance.PlaySound("correct");
+                }
+                else if (GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized)
+                {
+                    GameManager.Instance.RightHand = gloveType;
+                    GameManager.Instance.PlaySound("correct");
+                }
+                else
+                {
+                    GameManager.Instance.PlaySound("incorrect");
+                }
             }
         }
     }

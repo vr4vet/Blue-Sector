@@ -18,15 +18,22 @@ public class StunFish : MonoBehaviour
         GetComponent<AudioSource>().Play();
 
         // Get fish state and check if fish is alive, if alive the fish state is set to stunned
-        FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
-        if (fishState.Stunned == false)
-        {
-            fishState.Stunned = true;
-            GameManager.Instance.PlaySound("correct");
+        FactoryFishState fishState = fish.GetComponent<FactoryFishState>()
+        ;
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        } else {       
+            if (fishState.Stunned == false)
+            {
+                fishState.Stunned = true;
+                GameManager.Instance.PlaySound("correct");
+            }
+            else
+            {
+                GameManager.Instance.PlaySound("incorrect");
+            }
         }
-        else
-        {
-            GameManager.Instance.PlaySound("incorrect");
-        }
+        
     }
 }

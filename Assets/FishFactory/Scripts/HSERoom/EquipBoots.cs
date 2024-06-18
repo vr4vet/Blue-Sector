@@ -13,8 +13,14 @@ public class EquipBoots : MonoBehaviour
             && gameObject.GetComponent<BootsState>().Boots == BootsState.BootsStatus.Clean
         )
         {
-            GameManager.Instance.BootsOn = true;
-            GameManager.Instance.PlaySound("correct");
+            if (!GameManager.Instance) {
+                // for testing purposes where there is no GameManager Instance
+                return;
+            } else {
+                GameManager.Instance.BootsOn = true;
+                GameManager.Instance.PlaySound("correct");
+            }
+            
             Destroy(gameObject);
         }
     }

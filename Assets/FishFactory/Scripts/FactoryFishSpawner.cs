@@ -140,18 +140,23 @@ public class FactoryFishSpawner : MonoBehaviour
     /// </summary>
     private void UpdateSpawnerState()
     {
-        // The task state uses the secondary task if the useSecondaryTask is true
-        bool taskState = _useSecondaryTask
-            ? GameManager.Instance.IsSecondaryTaskOn
-            : GameManager.Instance.IsTaskOn;
-
-        //If isTaskOn and isSpawnerOff are not the same, while not equal, update the spawner state.
-        if (taskState ^ _isSpawnerOn)
-        {
-            _isSpawnerOn = taskState;
-            if (_isSpawnerOn)
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        } else {
+            // The task state uses the secondary task if the useSecondaryTask is true
+            bool taskState = _useSecondaryTask
+                ? GameManager.Instance.IsSecondaryTaskOn
+                : GameManager.Instance.IsTaskOn;
+        
+            //If isTaskOn and isSpawnerOff are not the same, while not equal, update the spawner state.
+            if (taskState ^ _isSpawnerOn)
             {
-                InitializeConveyorMovement();
+                _isSpawnerOn = taskState;
+                if (_isSpawnerOn)
+                {
+                    InitializeConveyorMovement();
+                }
             }
         }
     }

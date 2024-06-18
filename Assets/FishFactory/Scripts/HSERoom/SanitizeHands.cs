@@ -12,18 +12,23 @@ public class SanitizeHands : MonoBehaviour
     {
         if (collider.gameObject.name == "Grabber")
         {
-            if (
-                collider.transform.parent.name == "LeftController"
-                && GameManager.Instance.LeftHand == GameManager.PlayerHandState.Unsanitized
-            )
-            {
-                GameManager.Instance.LeftHand = GameManager.PlayerHandState.Sanitized;
-                GameManager.Instance.PlaySound("correct");
-            }
-            else if (GameManager.Instance.RightHand == GameManager.PlayerHandState.Unsanitized)
-            {
-                GameManager.Instance.RightHand = GameManager.PlayerHandState.Sanitized;
-                GameManager.Instance.PlaySound("correct");
+            if (!GameManager.Instance) {
+                // for testing purposes where there is no GameManager Instance
+                return;
+            } else {
+                if (
+                    collider.transform.parent.name == "LeftController"
+                    && GameManager.Instance.LeftHand == GameManager.PlayerHandState.Unsanitized
+                )
+                {
+                    GameManager.Instance.LeftHand = GameManager.PlayerHandState.Sanitized;
+                    GameManager.Instance.PlaySound("correct");
+                }
+                else if (GameManager.Instance.RightHand == GameManager.PlayerHandState.Unsanitized)
+                {
+                    GameManager.Instance.RightHand = GameManager.PlayerHandState.Sanitized;
+                    GameManager.Instance.PlaySound("correct");
+                }
             }
         }
     }

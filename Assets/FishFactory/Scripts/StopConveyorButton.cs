@@ -9,7 +9,12 @@ public class StopConveyorButton : MonoBehaviour
     /// </summary>
     public void ToggleTaskOn()
     {
-        GameManager.Instance.ToggleTaskOn();
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        } else {
+            GameManager.Instance.ToggleTaskOn();
+        }
     }
 
     /// <summary>
@@ -17,6 +22,11 @@ public class StopConveyorButton : MonoBehaviour
     /// </summary>
     public void ToggleSecondaryTaskOn()
     {
-        GameManager.Instance.ToggleSecondaryTaskOn();
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        } else {             
+            GameManager.Instance.ToggleSecondaryTaskOn();
+        }
     }
 }

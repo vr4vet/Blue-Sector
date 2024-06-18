@@ -29,7 +29,12 @@ public class Despawner : MonoBehaviour
         FactoryFishState fishState = colliderObject.GetComponent<FactoryFishState>();
         if (fishState.ContainsMetal == true)
         {
-            GameManager.Instance.PlaySound("incorrect");
+            if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+            } else {
+                GameManager.Instance.PlaySound("incorrect");
+            }
         }
 
         // Destroy the main fish object

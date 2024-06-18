@@ -22,13 +22,18 @@ public class OpenGate : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (
-            GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized
-            && GameManager.Instance.LeftHand != GameManager.PlayerHandState.Unsanitized
-        )
-        {
-            MoveRightGate();
-            MoveLeftGate();
+        if (!GameManager.Instance) {
+            // for testing purposes where there is no GameManager Instance
+            return;
+        } else {
+            if (
+                GameManager.Instance.RightHand != GameManager.PlayerHandState.Unsanitized
+                && GameManager.Instance.LeftHand != GameManager.PlayerHandState.Unsanitized
+            )
+            {
+                MoveRightGate();
+                MoveLeftGate();
+            }
         }
     }
 
