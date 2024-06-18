@@ -78,7 +78,7 @@ public class DespawnerTest
     [UnityTest]
     public IEnumerator ASoundIsPlayedWhenFishWithMetalDespawn()
     {
-        FishWithMetal.transform.position = Despawner.transform.position + Vector3.up; // Set the knife position to be on top of the despawner box
+        FishWithMetal.transform.position = Despawner.transform.position + Vector3.up; // Set the fish position to be on top of the despawner box
         yield return new WaitForSeconds(1); // wait for 1 second to let the the coolision happen
         Assert.AreEqual(gameManager.SoundEffects[1], gameManager.AudioManager.GetComponent<AudioSource>().clip);
         
