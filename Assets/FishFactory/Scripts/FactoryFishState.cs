@@ -30,11 +30,11 @@ public class FactoryFishState : MonoBehaviour
     // ------------ Editor Variables ------------
 
     [SerializeField]
-    private Material _bleedingFish;
+    public Material _bleedingFish;
 
     // ------------------ Private Variables ------------------
 
-    private Material metalMat;
+    public Material metalMat;
 
     // ------------ Unity Functions ------------
 
@@ -109,6 +109,7 @@ public class FactoryFishState : MonoBehaviour
         ContainsMetal = true;
         GameObject neck = transform.GetChild(2).transform.GetChild(0).transform.GetChild(0).gameObject;
         GameObject Metal = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Metal.name = "MetalPiece";
         Metal.transform.localScale = new Vector3(0.02f,0.025f,0.003f);
         Metal.GetComponent<Renderer>().material = metalMat;
         Metal.transform.SetParent(neck.transform);
