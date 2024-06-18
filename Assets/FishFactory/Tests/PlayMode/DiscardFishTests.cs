@@ -19,7 +19,7 @@ public class DiscardFishTests
         SceneManager.CreateScene(TestSceneName);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
 
-        // Load and instantiate the prefabs
+        // Load and instantiate the prefabs and create a fish and discard box
         var discardBoxPrefab = Resources.Load<GameObject>("Prefabs/FishDiscardBox");
         var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactoryBadFish");
         fish = Object.Instantiate(fishPrefab);

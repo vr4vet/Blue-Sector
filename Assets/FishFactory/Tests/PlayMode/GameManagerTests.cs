@@ -14,7 +14,7 @@ public class GameManagerTests
     private const string TestSceneName = "GameManagerTestScene";
 
     [OneTimeSetUp]
-    public void SetUp()
+    public void OneTimeSetUp()
     {
         // Create a new test scene
         SceneManager.CreateScene(TestSceneName);
@@ -42,7 +42,7 @@ public class GameManagerTests
     }
 
     [OneTimeTearDown]
-    public void TearDown()
+    public void OneTimeTearDown()
     {
         Object.Destroy(gameManager);
         Object.Destroy(listener);
@@ -52,6 +52,9 @@ public class GameManagerTests
         
     }
 
+    /// <summary>
+    /// Tests to ensure that the toggle of task work.
+    /// </summary>
     [UnityTest]
     public IEnumerator ToggleTaskOnTest()
     {
@@ -63,6 +66,9 @@ public class GameManagerTests
         yield return null;
     }
 
+    /// <summary>
+    /// Tests to ensure that the correct sound is played.
+    /// </summary>
     [UnityTest]
     public IEnumerator PlaySoundTest()
     {

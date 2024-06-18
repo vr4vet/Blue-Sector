@@ -6,12 +6,14 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.SceneManagement;
 using UnityEditorInternal;
+using System.Security.Cryptography.X509Certificates;
+using NUnit.Framework.Constraints;
+using UnityEditor.PackageManager;
 
 public class FishTierSortingTest
 {
     private const string TestSceneName = "FishTierSortingTests";
     private GameObject Tier1Fish;
-    private GameObject Tier1Fish2;
     private GameObject SortingTrigger;
     private GameObject SortingButton;
     private FishSortingTrigger FishSortingTriggerScript;
@@ -30,7 +32,7 @@ public class FishTierSortingTest
        SceneManager.CreateScene(TestSceneName);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
 
-       // Load and instantiate the prefab
+       // Load and instantiate the fish prefab
        var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactorySalmon");
        
        // Create a tier 1 fish
@@ -55,14 +57,17 @@ public class FishTierSortingTest
        // Create a new GameObject and add the GameManager component to it
         var gameManagerObject = new GameObject();
         gameManager = gameManagerObject.AddComponent<GameManager>();
+
         // Load the sound effects
         var audioManagerPrefab = Resources.Load<GameObject>("Prefabs/AudioManager");
         audioManager = UnityEngine.Object.Instantiate(audioManagerPrefab);
         gameManager.SoundEffects = Resources.LoadAll<AudioClip>("Sounds");
         gameManager.AudioManager = audioManager;
+
         //create an audio listener
         listener = new GameObject("AudioListener");
         listener.AddComponent<AudioListener>();
+
         //configure hand objects
         leftHand = new GameObject("Green Gloves Right");
         rightHand = new GameObject("Green Gloves Left");
@@ -70,6 +75,9 @@ public class FishTierSortingTest
         gameManager.RightHandGameObj = rightHand;
     }
 
+    /// <summary>
+    /// Tests to ensure that the button sets the correct tier and the "correct" sound is played when the correct fish is sorted.
+    /// </summary>
     [UnityTest]
     public IEnumerator GiveCorrectOnCorrectTier()
     {
@@ -88,6 +96,9 @@ public class FishTierSortingTest
         Assert.AreEqual(gameManager.SoundEffects[0], gameManager.AudioManager.GetComponent<AudioSource>().clip);
     }
 
+    /// <summary>
+    /// Tests to ensure that the button sets the correct tier and the "incorrect" sound is played when the wrong fish is sorted.
+    /// </summary>
     [UnityTest]
     public IEnumerator GiveIncorrectOnIncorrectTier()
     {
@@ -104,11 +115,38 @@ public class FishTierSortingTest
         Assert.AreEqual(gameManager.SoundEffects[1], gameManager.AudioManager.GetComponent<AudioSource>().clip);
     }
 
+    /// <summary>
+    /// Tests to ensure that the button sets the correct tier and the "incorrect" sound is played when the wrong fish is sorted.
+    /// </summary>
+    [UnityTest]
+    public IEnumerator GiveErrorOnTooHighTier()
+    {
+        var tiers = Enum.GetValues(typeof(FishSortingButton.FishTier));
+        for (int i = 1; i < 5; i++)
+        {
+            if (i == 4)
+            {   
+                LogAssert.ignoreFailingMessages = true;
+                FishSortingButtonScript.SetTier(i);
+                LogAssert.Expect(LogType.Error, "Invalid tier number");
+            }
+            else
+            {
+                FishSortingButtonScript.SetTier(i);
+                Assert.AreEqual(
+                    tiers.GetValue(i-1),
+                    FishSortingButtonScript.CurrentTier,
+                    "The fish tier should be set to " + i
+                );
+            }
+        }
+        yield return new WaitForSeconds(0.1f);
+    }
+
     [TearDown]
     public void TearDown()
     {
         UnityEngine.Object.Destroy(Tier1Fish);
-        UnityEngine.Object.Destroy(Tier1Fish2);
         UnityEngine.Object.Destroy(SortingTrigger);
         UnityEngine.Object.Destroy(SortingButton);
         UnityEngine.Object.Destroy(gameManager);

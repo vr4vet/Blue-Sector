@@ -42,8 +42,14 @@ public class FishSortingTrigger : MonoBehaviour
         {
             GameManager.Instance.PlaySound("incorrect");
         }
-
-        StartCoroutine(CloseDoorAfterDelay(_door));
+        if (_door)
+        {
+            StartCoroutine(CloseDoorAfterDelay(_door));
+        }
+        else
+        {
+            Debug.Log("No door assigned");
+        }
     }
 
     /// <summary>
@@ -52,16 +58,10 @@ public class FishSortingTrigger : MonoBehaviour
     /// <param name="door">The door to close</param>
     private IEnumerator CloseDoorAfterDelay(GameObject door)
     {
-        if (_door)
-        {
+        
             yield return new WaitForSeconds(1);
             door.transform.Translate(Vector3.back * 0.177f);
             yield return new WaitForSeconds(2);
             door.transform.Translate(Vector3.forward * 0.177f);
-        }
-        else
-        {
-            Debug.Log("No door assigned");
-        }
     }
 }
