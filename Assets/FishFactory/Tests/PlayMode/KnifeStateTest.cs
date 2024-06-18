@@ -14,11 +14,13 @@ public class KnifeStateTest
     private FactoryFishState _fishState;
     private GameObject GameManager;
     private GameObject AudioManager;
+    private Scene KnifeStateTestScene;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        SceneManager.CreateScene("KnifeStateTest");
+        KnifeStateTestScene = SceneManager.CreateScene("KnifeStateTestScene");
+        SceneManager.SetActiveScene(KnifeStateTestScene);
         var KnifePrefab = Resources.Load<GameObject>("Prefabs/Knife/FishKnife");
         Knife = Object.Instantiate(KnifePrefab);
         _knifeState = Knife.GetComponent<KnifeState>();
@@ -69,6 +71,8 @@ public class KnifeStateTest
     {
         Object.Destroy(Knife);
         Object.Destroy(Fish);
-        SceneManager.UnloadSceneAsync("KnifeStateTest");
+        Object.Destroy(GameManager);
+        Object.Destroy(AudioManager);
+        SceneManager.UnloadSceneAsync(KnifeStateTestScene);
     }
 }
