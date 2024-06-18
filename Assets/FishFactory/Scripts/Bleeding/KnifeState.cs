@@ -57,7 +57,7 @@ public class KnifeState : MonoBehaviour
 
     // ---------------- Private Functions ----------------
 
-    private int RandomizeDurability()
+    public int RandomizeDurability()
     {
         // Range for the amount of cuts to chip the knife
         return Random.Range(6, 15);
