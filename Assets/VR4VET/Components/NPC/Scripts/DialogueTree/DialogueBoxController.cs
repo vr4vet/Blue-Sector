@@ -20,6 +20,7 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private int _answerIndex;
     [SerializeField] private GameObject _skipLineButton;
     [SerializeField] private GameObject _exitButton;
+    [SerializeField] private GameObject _speakButton; 
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
@@ -27,6 +28,9 @@ public class DialogueBoxController : MonoBehaviour
     private ButtonSpawner buttonSpawner;
 
     [HideInInspector] public bool dialogueIsActive;
+
+    // For testing purposes now
+    private DialogueTree dialogueTreeX;
 
     private void Awake() 
     {
@@ -86,6 +90,7 @@ public class DialogueBoxController : MonoBehaviour
 
     public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
     {
+        dialogueTreeX = dialogueTree;
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
         _animator.SetBool(_hasNewDialogueOptionsHash, false);
@@ -133,7 +138,7 @@ public class DialogueBoxController : MonoBehaviour
         StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
     }
 
-    void ResetBox() 
+    public void ResetBox() 
     {
         StopAllCoroutines();
         _dialogueBox.SetActive(false);
@@ -142,6 +147,7 @@ public class DialogueBoxController : MonoBehaviour
         _answerTriggered = false;
         _skipLineButton.SetActive(false);
         _exitButton.SetActive(false);
+          
     }
 
     void ShowAnswers(BranchPoint branchPoint)
@@ -169,5 +175,27 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
         ResetBox();
+    }
+
+    public void ExitConversationX()
+    {
+        // Version of exitconversation only used by the exit button
+        // Changed "properties" of exitbutton in the NPC prefab to direct to this
+        // Takes the dialogueTree on to the new "talkCanvas"
+        // Makes dialogueTreeX a global var (could not find local solution), bad practice?
+        _animator.SetBool(_isTalkingHash, false);
+        dialogueIsActive = false;
+        ResetBox();
+        startTalkCanvas(dialogueTreeX);
+    }
+
+    public void startTalkCanvas(DialogueTree dialogueTree)
+    {
+        _dialogueBox.SetActive(true);
+        dialogueIsActive = true;
+        _dialogueText.text = null;
+        //RectTransform rt = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
+        //rt.sizeDelta = new Vector2(20,20);
+        buttonSpawner.spawnSpeakButton(dialogueTree);
     }
 }

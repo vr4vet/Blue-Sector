@@ -95,4 +95,18 @@ public class ButtonSpawner : MonoBehaviour
             }
         }
     }
+
+    // Add new "Speak" button to start conversation again
+    public void spawnSpeakButton(DialogueTree dialogueTree) {
+        Vector3 spawnLocation = getSpawnLocation(1, 1);
+        _buttonsSpawned[0] = Instantiate(_buttonPrefab, spawnLocation, Quaternion.identity);
+        GameObject button = _buttonsSpawned[0];
+        button.transform.SetParent(_parentInCanvas.transform, false);
+        RectTransform buttonTransfrom = button.GetComponent<RectTransform>();
+        Vector3 buttonLocation = new Vector3(spawnLocation.x, spawnLocation.y, spawnLocation.z);
+        buttonTransfrom.localPosition = buttonLocation;
+        button.GetComponentInChildren<TextMeshProUGUI>().text = "Speak";
+
+        _buttonsSpawned[0].GetComponent<Button>().onClick.AddListener(() => {_dialogueBoxController.StartDialogue(dialogueTree, 0, "NPC");});
+    }
 }

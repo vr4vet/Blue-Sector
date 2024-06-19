@@ -113,6 +113,7 @@ MonoBehaviour:
   TTSSpeaker: {fileID: 0}
   _skipLineButton: {fileID: 581411041544405079}
   _exitButton: {fileID: 715794130603018707}
+  _speakButton: {fileID: 0}
   dialogueIsActive: 0
 --- !u!114 &5828373786828991796
 MonoBehaviour:
@@ -238,6 +239,7 @@ MonoBehaviour:
   _toBeOverwrittenByJSON: {fileID: 0}
   _dialogueTreesJSONFormat: []
   _dialogueTreesSOFormat: []
+  shouldTrigger: 0
 --- !u!1 &581411041544405079
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,7 +572,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4707600065585342815}
         m_TargetAssemblyTypeName: DialogueBoxController, Assembly-CSharp
-        m_MethodName: ExitConversation
+        m_MethodName: ExitConversationX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
