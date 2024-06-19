@@ -53,6 +53,12 @@ public class NPCSpawner : MonoBehaviour
             if (ttsSpeaker != null && dialogueController != null)
             {
                 dialogueController.TTSSpeaker = ttsSpeaker.gameObject;
+
+                // Set the TTSSpeakerAudio settings to those defined in NPC-scriptable
+                AudioSource speakerAudio = ttsSpeaker.GetComponentInChildren<AudioSource>();
+                
+                speakerAudio.spatialBlend = 1;
+                speakerAudio.minDistance = 5;
             }
         }
         else
