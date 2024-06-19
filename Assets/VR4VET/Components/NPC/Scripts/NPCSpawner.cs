@@ -21,7 +21,7 @@ public class NPCSpawner : MonoBehaviour
         // Rotate the NPC 
         newNPC.transform.rotation = Quaternion.Euler(npcSO.SpawnRotation);  
         // Attach the Text-To-Speech componenets
-        AttachTTSComponents(newNPC);
+        AttachTTSComponents(newNPC, npcSO.SpatialBlend, npcSO.MinDistance);
         // change the apperance, animation avatar and voice from the deafult one, to a specific one
         SetAppearanceAnimationAndVoice(newNPC, npcSO.CharacterModel, npcSO.CharacterAvatar, npcSO.runtimeAnimatorController , npcSO.VoicePresetId);
         // Should the NPC follow after the player or not? (from the start)
@@ -35,7 +35,7 @@ public class NPCSpawner : MonoBehaviour
         return newNPC;
     }
 
-    public void AttachTTSComponents(GameObject npc)
+    public void AttachTTSComponents(GameObject npc, float spatialBlend, float minDistance)
     {
         // Load the TTS prefab from the Resources folder
         GameObject ttsPrefab = Resources.Load<GameObject>("TTS");
@@ -57,8 +57,8 @@ public class NPCSpawner : MonoBehaviour
                 // Set the TTSSpeakerAudio settings to those defined in NPC-scriptable
                 AudioSource speakerAudio = ttsSpeaker.GetComponentInChildren<AudioSource>();
                 
-                speakerAudio.spatialBlend = 1;
-                speakerAudio.minDistance = 5;
+                speakerAudio.spatialBlend = spatialBlend;
+                speakerAudio.minDistance = minDistance;
             }
         }
         else
