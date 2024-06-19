@@ -61,7 +61,9 @@ public class ConversationController : MonoBehaviour
             if (_dialogueTree != null) {
                 _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
             } else {
-                Debug.LogError("The dialogueTree of the NPC is null");
+                // Commented out because not all NPC's should have a dialogue tree, therefor not an "Error"
+
+                //Debug.LogError("The dialogueTree of the NPC is null");
             }
         }
     }
