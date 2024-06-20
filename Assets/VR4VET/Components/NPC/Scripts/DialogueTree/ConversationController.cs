@@ -8,6 +8,7 @@ public class ConversationController : MonoBehaviour
     [SerializeField] private List<TextAsset> _dialogueTreesJSONFormat; // list of JSON, will be added to the list below
     [SerializeField] private List<DialogueTree> _dialogueTreesSOFormat; // lsit of ScriptableObjects, JSON will be turned into SO, and added here. Yhis is the list we work with
     [HideInInspector] private DialogueTree _dialogueTree; // The active dialogue
+    [HideInInspector] private DialogueTree _oldDialogueTree; // The previous dialogue, for checking if we are on same dialogue
     [HideInInspector] private int _currentElement = 0; // The element number of the active dialogue
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
@@ -54,10 +55,12 @@ public class ConversationController : MonoBehaviour
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {   
-        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && shouldTrigger && !_dialogueBoxController.dialogueIsActive) 
+        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && shouldTrigger && !_dialogueBoxController.dialogueIsActive && _oldDialogueTree != _dialogueTree) 
         {
             // string json = JsonUtility.ToJson(dialogueTree);
             // Debug.Log(json);
+            //_dialogueBoxController.startSpeakCanvas(_dialogueTree);
+            _oldDialogueTree = _dialogueTree;
             if (_dialogueTree != null) {
                 _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
             } else {

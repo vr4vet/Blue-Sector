@@ -25,12 +25,12 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
 
-    private ButtonSpawner buttonSpawner;
+    public ButtonSpawner buttonSpawner;
 
     [HideInInspector] public bool dialogueIsActive;
 
     // For testing purposes now
-    private DialogueTree dialogueTreeX;
+    private DialogueTree dialogueTreeRestart;
 
     private void Awake() 
     {
@@ -90,7 +90,6 @@ public class DialogueBoxController : MonoBehaviour
 
     public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
     {
-        dialogueTreeX = dialogueTree;
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
         _animator.SetBool(_hasNewDialogueOptionsHash, false);
@@ -106,6 +105,7 @@ public class DialogueBoxController : MonoBehaviour
 
     IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
     {
+        dialogueTreeRestart = dialogueTree;
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
             // Start talking animation
@@ -186,6 +186,7 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
         ResetBox();
+        startSpeakCanvas(dialogueTreeRestart);
     }
 
     public void ExitConversationX()
@@ -193,17 +194,16 @@ public class DialogueBoxController : MonoBehaviour
         // Version of exitconversation only used by the exit button
         // Changed "properties" of exitbutton in the NPC prefab to direct to this
         // Takes the dialogueTree on to the new "talkCanvas"
-        // Makes dialogueTreeX a global var (could not find local solution), bad practice?
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
         ResetBox();
-        startSpeakCanvas(dialogueTreeX);
+        startSpeakCanvas(dialogueTreeRestart);
     }
 
     public void startSpeakCanvas(DialogueTree dialogueTree)
     {
         _dialogueBox.SetActive(true);
-        dialogueIsActive = true;
+        //dialogueIsActive = true;
         _dialogueText.text = null;
         RectTransform rt = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(50,30);
