@@ -197,16 +197,16 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
         ResetBox();
-        startTalkCanvas(dialogueTreeX);
+        startSpeakCanvas(dialogueTreeX);
     }
 
-    public void startTalkCanvas(DialogueTree dialogueTree)
+    public void startSpeakCanvas(DialogueTree dialogueTree)
     {
         _dialogueBox.SetActive(true);
         dialogueIsActive = true;
         _dialogueText.text = null;
-        //RectTransform rt = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
-        //rt.sizeDelta = new Vector2(20,20);
+        RectTransform rt = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
+        rt.sizeDelta = new Vector2(50,30);
         buttonSpawner.spawnSpeakButton(dialogueTree);
     }
 }
