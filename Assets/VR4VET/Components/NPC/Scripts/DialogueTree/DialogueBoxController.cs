@@ -94,7 +94,7 @@ public class DialogueBoxController : MonoBehaviour
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
         _animator.SetBool(_hasNewDialogueOptionsHash, false);
-        _animator.SetBool(_isTalkingHash, true);
+        //_animator.SetBool(_isTalkingHash, true);
         // Dialogue 
         ResetBox();
         _dialogueBox.SetActive(true);
@@ -108,6 +108,9 @@ public class DialogueBoxController : MonoBehaviour
     {
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
+            // Start talking animation
+            _animator.SetBool(_isTalkingHash, true);
+            StartCoroutine(revertToIdleAnimation());
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
             while (!_skipLineTriggered)
@@ -167,6 +170,14 @@ public class DialogueBoxController : MonoBehaviour
         _answerTriggered = true;
         // remove the buttons
         buttonSpawner.removeAllButtons();
+    }
+
+    // Reverts to idle animation after 10.267 seconds
+    // Time is length of talking animation, should be tweaked to not use value
+    private IEnumerator revertToIdleAnimation() {
+        yield return new WaitForSeconds(10.267f);
+        _animator.SetBool(_isTalkingHash, false);
+
     }
 
     public void ExitConversation()
