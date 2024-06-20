@@ -98,6 +98,7 @@ public class ButtonSpawner : MonoBehaviour
 
     // Add new "Speak" button to start conversation again
     public void spawnSpeakButton(DialogueTree dialogueTree) {
+        removeAllButtons();
         Vector3 spawnLocation = getSpawnLocation(1, 1);
         _buttonsSpawned[0] = Instantiate(_buttonPrefab, spawnLocation, Quaternion.identity);
         GameObject button = _buttonsSpawned[0];

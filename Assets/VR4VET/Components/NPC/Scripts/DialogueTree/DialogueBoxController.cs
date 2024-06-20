@@ -29,8 +29,8 @@ public class DialogueBoxController : MonoBehaviour
 
     [HideInInspector] public bool dialogueIsActive;
 
-    // For testing purposes now
-    private DialogueTree dialogueTreeRestart;
+    // For testing purposes
+    public DialogueTree dialogueTreeRestart;
 
     private void Awake() 
     {
@@ -186,21 +186,10 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
         ResetBox();
-        startSpeakCanvas(dialogueTreeRestart);
+        StartSpeakCanvas(dialogueTreeRestart);
     }
 
-    public void ExitConversationX()
-    {
-        // Version of exitconversation only used by the exit button
-        // Changed "properties" of exitbutton in the NPC prefab to direct to this
-        // Takes the dialogueTree on to the new "talkCanvas"
-        _animator.SetBool(_isTalkingHash, false);
-        dialogueIsActive = false;
-        ResetBox();
-        startSpeakCanvas(dialogueTreeRestart);
-    }
-
-    public void startSpeakCanvas(DialogueTree dialogueTree)
+    public void StartSpeakCanvas(DialogueTree dialogueTree)
     {
         _dialogueBox.SetActive(true);
         //dialogueIsActive = true;

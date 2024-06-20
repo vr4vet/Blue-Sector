@@ -71,6 +71,7 @@ public class ConversationController : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// Join the json-version and the dialogueTree-version into one list.
     /// The dialogueTree-version will be first.
@@ -182,8 +183,11 @@ public class ConversationController : MonoBehaviour
             _currentElement--;
             Debug.Log("You have already read the last dialogue tree");
         } else {
-            _dialogueBoxController.ExitConversation();
+            //_dialogueBoxController.ExitConversation();
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
+            _oldDialogueTree = _dialogueTree;
+            // Change the speak canvas to the new dialogue tree
+            _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
             if (_animator == null) 
             { 
                 GameObject parent = this.transform.parent.gameObject; 
@@ -204,8 +208,11 @@ public class ConversationController : MonoBehaviour
             _currentElement=0;
             Debug.Log("You have already read the first dialogue tree");
         } else {
-            _dialogueBoxController.ExitConversation();
+            //_dialogueBoxController.ExitConversation();
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
+            _oldDialogueTree = _dialogueTree;
+            // Change the speak canvas to the new dialogue tree
+            _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
             _animator.SetBool(_hasNewDialogueOptionsHash, true);
         }
     }

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7850822095440211487}
   - component: {fileID: 1615359058989093574}
   - component: {fileID: 6268987475164533209}
+  - component: {fileID: -4863188786543627984}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -114,7 +115,9 @@ MonoBehaviour:
   _skipLineButton: {fileID: 581411041544405079}
   _exitButton: {fileID: 715794130603018707}
   _speakButton: {fileID: 0}
+  buttonSpawner: {fileID: 0}
   dialogueIsActive: 0
+  dialogueTreeRestart: {fileID: 0}
 --- !u!114 &5828373786828991796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +180,52 @@ MonoBehaviour:
   _voicePresetId: 17
   _runtimeAnimatorController: {fileID: 9100000, guid: acb4b9981fa45ce46adb4867634b31ab,
     type: 2}
+--- !u!114 &-4863188786543627984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142329030213301039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 5676063214657601538
+  references:
+    version: 2
+    RefIds:
+    - rid: 5676063214657601538
+      type: {class: TrackedMonoBehaviourObject, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects,
+        asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 4707600065585342815}
+        m_TrackedProperties:
+          items:
+          - rid: 5676063214657601539
+        m_UpdateType: 0
+        m_Changed:
+          m_PersistentCalls:
+            m_Calls: []
+    - rid: 5676063214657601539
+      type: {class: LocalizedAssetProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties,
+        asm: Unity.Localization}
+      data:
+        m_Localized:
+          rid: 5676063214657601540
+        m_PropertyPath: _speakButton
+    - rid: 5676063214657601540
+      type: {class: LocalizedGameObject, ns: UnityEngine.Localization, asm: Unity.Localization}
+      data:
+        m_TableReference:
+          m_TableCollectionName: 
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
 --- !u!1 &389399547921113031
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,7 +621,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4707600065585342815}
         m_TargetAssemblyTypeName: DialogueBoxController, Assembly-CSharp
-        m_MethodName: ExitConversationX
+        m_MethodName: ExitConversation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
