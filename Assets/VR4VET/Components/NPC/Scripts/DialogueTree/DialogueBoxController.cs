@@ -185,12 +185,12 @@ public class DialogueBoxController : MonoBehaviour
         // stop talk-animation
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
-        ResetBox();
         StartSpeakCanvas(dialogueTreeRestart);
     }
 
     public void StartSpeakCanvas(DialogueTree dialogueTree)
     {
+        ResetBox();
         _dialogueBox.SetActive(true);
         //dialogueIsActive = true;
         _dialogueText.text = null;
