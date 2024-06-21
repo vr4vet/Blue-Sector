@@ -71,6 +71,21 @@ public class ConversationController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Method to trigger dialogue
+    /// Should be connected to event of your choosing
+    /// Only triggers if there is a new dialogue tree
+    /// </summary>
+    void DialogueTrigger() {
+        if (_oldDialogueTree != _dialogueTree) {
+            // Change the old tree to be the current tree, to ensure no repeats
+            _oldDialogueTree = _dialogueTree;
+            if (_dialogueTree != null) {
+                _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
+            }
+        }
+    }
+
 
     /// <summary>
     /// Join the json-version and the dialogueTree-version into one list.
