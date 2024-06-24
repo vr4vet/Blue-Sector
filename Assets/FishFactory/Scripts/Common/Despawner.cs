@@ -27,7 +27,7 @@ public class Despawner : MonoBehaviour
             return;
         }
         FactoryFishState fishState = colliderObject.GetComponent<FactoryFishState>();
-        if (fishState.CurrentState == FactoryFishState.State.ContainsMetal)
+        if (fishState.ContainsMetal == true)
         {
             GameManager.Instance.PlaySound("incorrect");
         }
