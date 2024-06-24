@@ -200,7 +200,7 @@ public class ConversationController : MonoBehaviour
         } else {
             //_dialogueBoxController.ExitConversation();
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
-            _oldDialogueTree = _dialogueTree;
+            //_oldDialogueTree = _dialogueTree;
             // Change the speak canvas to the new dialogue tree
             _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
             if (_animator == null) 
@@ -225,7 +225,7 @@ public class ConversationController : MonoBehaviour
         } else {
             //_dialogueBoxController.ExitConversation();
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
-            _oldDialogueTree = _dialogueTree;
+            //_oldDialogueTree = _dialogueTree;
             // Change the speak canvas to the new dialogue tree
             _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
             _animator.SetBool(_hasNewDialogueOptionsHash, true);
