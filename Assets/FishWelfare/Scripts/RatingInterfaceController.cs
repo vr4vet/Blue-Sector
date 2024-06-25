@@ -37,6 +37,10 @@ public class RatingInterfaceController : MonoBehaviour
         gameObject.SetActive(active);
     }
 
+    public bool GetActive() {
+        return active;
+    }
+
     public void SyncButtons(ButtonController clicked) {
         foreach(ButtonController button in buttons) {
             if(button != clicked) {
