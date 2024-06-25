@@ -49,11 +49,11 @@ public class GuttingFishSortingTest
     [UnityTest]
     public IEnumerator SortGuttingSuccess()
     {
-        foreach (FactoryFishState.State state in Enum.GetValues(typeof(FactoryFishState.State)))
+        foreach (FactoryFishState.GuttingState state in Enum.GetValues(typeof(FactoryFishState.GuttingState)))
         {
-            Fish.GetComponent<FactoryFishState>().CurrentState = state;
-            SortingScript._successOnGuttingSuccess = FactoryFishState.State.GuttingSuccess;
-            if (Fish.GetComponent<FactoryFishState>().CurrentState == FactoryFishState.State.GuttingSuccess)
+            Fish.GetComponent<FactoryFishState>().guttingState = state;
+            SortingScript._successOnGuttingSuccess = FactoryFishState.GuttingState.GuttingSuccess;
+            if (Fish.GetComponent<FactoryFishState>().guttingState == FactoryFishState.GuttingState.GuttingSuccess)
                 Assert.AreEqual(true, SortingScript.checkFishState(Fish));
             else
                 Assert.AreEqual(false, SortingScript.checkFishState(Fish));

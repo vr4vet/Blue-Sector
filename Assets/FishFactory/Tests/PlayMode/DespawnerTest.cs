@@ -30,7 +30,7 @@ public class DespawnerTest
 
        FishWithMetal = UnityEngine.Object.Instantiate(fishPrefab);
        FishWithMetal.transform.position = new Vector3(10, 10, 10);
-       FishWithMetal.GetComponent<FactoryFishState>().CurrentState = FactoryFishState.State.ContainsMetal;
+       FishWithMetal.GetComponent<FactoryFishState>().ContainsMetal = true;
 
        var knifePrefab = Resources.Load<GameObject>("Prefabs/Knife/FishKnife");
        Knife = UnityEngine.Object.Instantiate(knifePrefab);

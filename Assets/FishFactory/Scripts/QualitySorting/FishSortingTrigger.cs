@@ -34,7 +34,7 @@ public class FishSortingTrigger : MonoBehaviour
         }
         sortedFish.Add(fish.gameObject);
 
-        string fishState = fish.GetComponent<FactoryFishState>().CurrentState.ToString();
+        string fishState = fish.GetComponent<FactoryFishState>().guttingState.ToString();
         if (fishState == _tierManager.CurrentTier.ToString())
         {
             GameManager.Instance.PlaySound("correct");
