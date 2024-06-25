@@ -35,7 +35,7 @@ public class InspectionNPCBehavior : MonoBehaviour
 
         _conversationController = _npc.GetComponentInChildren<ConversationController>();
         // ShouldTrigger false makes sure proximity dialogue activation is off
-        //_conversationController.shouldTrigger = false;
+        _conversationController.shouldTrigger = false;
 
         //Change ratingCanvas position to position of dialogue canvas
         ratingCanvas.transform.localPosition = dialogueCanvas.localPosition;

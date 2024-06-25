@@ -53,7 +53,7 @@ public class InspectionTaskManager : MonoBehaviour
     public void SetSelectedFish(Fish fish){
         if(selectedFish != fish) {
             selectedFish = fish;
-            ratingInterfaceController.SyncButtons(null);
+            ratingInterfaceController.SyncButtons(null, fish.GetGillDamageGuessed());
             liceInterfaceController.SetLice(selectedFish.markedLice);
         }
         Debug.Log("Gilldamage: " + selectedFish.GetGillDamage());
@@ -67,7 +67,6 @@ public class InspectionTaskManager : MonoBehaviour
             selectedFish.SetgillDamageGuessed(guess);
         }
         Debug.Log("Guess: " + selectedFish.GetGillDamageGuessed());
-        Debug.Log(" ACTUALDAMAGE: Gilldamage: " + selectedFish.GetGillDamage());
     }
 
     public void SetLiceCount() {
