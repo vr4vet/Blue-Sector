@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class CutFish : MonoBehaviour
@@ -9,13 +10,26 @@ public class CutFish : MonoBehaviour
     [Tooltip("The knife script attached to the knife object")]
     protected KnifeState _knifeState;
 
-    public GameObject[] knife;
+    public GameObject[] knifes;
 
     void Start()
     {
-        knife = GameObject.FindGameObjectsWithTag("Knife");
-        if (knife.Length >=1 && knife[0])
-            _knifeState = knife[0].GetComponent<KnifeState>();
+        //Find all knifes in scene and choose the correct knife state
+        knifes = GameObject.FindGameObjectsWithTag("Knife");
+        if (knifes.Length >=1 && knifes[0])
+        {
+            foreach (GameObject knife in knifes)
+            {
+                if (knife.name == "FishKnife")
+                {
+                    _knifeState = knife.GetComponent<KnifeState>();
+                }
+                else
+                {
+                    _knifeState = knifes[0].GetComponent<KnifeState>();
+                }
+            }
+        }
     }
     
     protected void cutEvent(string tag, bool isGills = false)
