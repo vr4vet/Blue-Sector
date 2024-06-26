@@ -20,13 +20,17 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private int _answerIndex;
     [SerializeField] private GameObject _skipLineButton;
     [SerializeField] private GameObject _exitButton;
+    [SerializeField] private GameObject _speakButton; 
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
 
-    private ButtonSpawner buttonSpawner;
+    public ButtonSpawner buttonSpawner;
 
     [HideInInspector] public bool dialogueIsActive;
+
+    // For testing purposes
+    public DialogueTree dialogueTreeRestart;
 
     private void Awake() 
     {
@@ -89,7 +93,7 @@ public class DialogueBoxController : MonoBehaviour
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
         _animator.SetBool(_hasNewDialogueOptionsHash, false);
-        _animator.SetBool(_isTalkingHash, true);
+        //_animator.SetBool(_isTalkingHash, true);
         // Dialogue 
         ResetBox();
         _dialogueBox.SetActive(true);
@@ -101,8 +105,12 @@ public class DialogueBoxController : MonoBehaviour
 
     IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
     {
+        dialogueTreeRestart = dialogueTree;
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
+            // Start talking animation
+            _animator.SetBool(_isTalkingHash, true);
+            StartCoroutine(revertToIdleAnimation());
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
             while (!_skipLineTriggered)
@@ -133,7 +141,7 @@ public class DialogueBoxController : MonoBehaviour
         StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
     }
 
-    void ResetBox() 
+    public void ResetBox() 
     {
         StopAllCoroutines();
         _dialogueBox.SetActive(false);
@@ -142,6 +150,7 @@ public class DialogueBoxController : MonoBehaviour
         _answerTriggered = false;
         _skipLineButton.SetActive(false);
         _exitButton.SetActive(false);
+          
     }
 
     void ShowAnswers(BranchPoint branchPoint)
@@ -163,11 +172,30 @@ public class DialogueBoxController : MonoBehaviour
         buttonSpawner.removeAllButtons();
     }
 
+    // Reverts to idle animation after 10.267 seconds
+    // Time is length of talking animation, should be tweaked to not use value
+    private IEnumerator revertToIdleAnimation() {
+        yield return new WaitForSeconds(10.267f);
+        _animator.SetBool(_isTalkingHash, false);
+
+    }
+
     public void ExitConversation()
     {
         // stop talk-animation
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
+        StartSpeakCanvas(dialogueTreeRestart);
+    }
+
+    public void StartSpeakCanvas(DialogueTree dialogueTree)
+    {
         ResetBox();
+        _dialogueBox.SetActive(true);
+        //dialogueIsActive = true;
+        _dialogueText.text = null;
+        RectTransform rt = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
+        rt.sizeDelta = new Vector2(50,30);
+        buttonSpawner.spawnSpeakButton(dialogueTree);
     }
 }
