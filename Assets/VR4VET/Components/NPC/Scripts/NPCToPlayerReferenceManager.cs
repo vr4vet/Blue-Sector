@@ -6,13 +6,12 @@ public class NPCToPlayerReferenceManager : MonoBehaviour
 {
     public GameObject PlayerTarget; // something that moves with the player and often represents the players position (e.g. CameraRig)
     public Collider PlayerCollider; // Something actives TriggerOnEnter and other collison stuff (e.g. HolseterRight)
-
     #region Singleton
 
     // Only the singleton can set the refernces
-    public static NPCToPlayerReferenceManager Instance {get; private set;}
+    public static NPCToPlayerReferenceManager Instance { get; private set; }
 
-    void Awake() 
+    void Awake()
     {
         if (Instance == null)
         {
