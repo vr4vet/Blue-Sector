@@ -17,7 +17,9 @@ public class DiscardFishTests
     {
         // create a new test scene
         SceneManager.CreateScene(TestSceneName);
-        // Load and instantiate the prefabs
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
+
+        // Load and instantiate the prefabs and create a fish and discard box
         var discardBoxPrefab = Resources.Load<GameObject>("Prefabs/FishDiscardBox");
         var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactoryBadFish");
         fish = Object.Instantiate(fishPrefab);
@@ -35,7 +37,6 @@ public class DiscardFishTests
     public IEnumerator DiscardFish()
     {
         fish.transform.position = discardBox.transform.position + Vector3.up; // set the fish position to be on top of the discard box
-
         yield return new WaitForSeconds(1);
 
         Assert.AreEqual(

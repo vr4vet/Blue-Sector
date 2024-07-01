@@ -12,7 +12,7 @@ public class FishSortingTrigger : MonoBehaviour
 
     [Tooltip("The QA machine tier manager")]
     [SerializeField]
-    private FishSortingButton _tierManager;
+    public FishSortingButton _tierManager;
 
     /// <summary>
     /// When the fish enters the trigger, check if the fish has been sorted and if it has the correct tier
@@ -20,7 +20,7 @@ public class FishSortingTrigger : MonoBehaviour
     /// <param name="collisionObject">The fish collider</param>
     private void OnTriggerEnter(Collider collisionObject)
     {
-        if (collisionObject.tag != "Bone")
+        if (collisionObject.name != "Head")
         {
             return;
         }
@@ -43,8 +43,14 @@ public class FishSortingTrigger : MonoBehaviour
         {
             GameManager.Instance.PlaySound("incorrect");
         }
-
-        StartCoroutine(CloseDoorAfterDelay(_door));
+        if (_door)
+        {
+            StartCoroutine(CloseDoorAfterDelay(_door));
+        }
+        else
+        {
+            Debug.Log("No door assigned");
+        }
     }
 
     /// <summary>
@@ -53,9 +59,10 @@ public class FishSortingTrigger : MonoBehaviour
     /// <param name="door">The door to close</param>
     private IEnumerator CloseDoorAfterDelay(GameObject door)
     {
-        yield return new WaitForSeconds(1);
-        door.transform.Translate(Vector3.back * 0.177f);
-        yield return new WaitForSeconds(2);
-        door.transform.Translate(Vector3.forward * 0.177f);
+        
+            yield return new WaitForSeconds(1);
+            door.transform.Translate(Vector3.back * 0.177f);
+            yield return new WaitForSeconds(2);
+            door.transform.Translate(Vector3.forward * 0.177f);
     }
 }

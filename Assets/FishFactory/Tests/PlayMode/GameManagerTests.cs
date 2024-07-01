@@ -8,11 +8,18 @@ using UnityEngine.SceneManagement;
 public class GameManagerTests
 {
     private GameManager gameManager;
+    private GameObject listener;
+    private GameObject leftHand;
+    private GameObject rightHand;
     private const string TestSceneName = "GameManagerTestScene";
 
-    [SetUp]
-    public void SetUp()
+    [OneTimeSetUp]
+    public void OneTimeSetUp()
     {
+        // Create a new test scene
+        SceneManager.CreateScene(TestSceneName);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
+
         // Create a new GameObject and add the GameManager component to it
         var gameManagerObject = new GameObject();
         gameManager = gameManagerObject.AddComponent<GameManager>();
@@ -24,20 +31,30 @@ public class GameManagerTests
         gameManager.AudioManager = audioManager;
 
         //create an audio listener
-        var listener = new GameObject("AudioListener");
+        listener = new GameObject("AudioListener");
         listener.AddComponent<AudioListener>();
 
         //configure hand objects
-        gameManager.LeftHandGameObj = new GameObject();
-        gameManager.RightHandGameObj = new GameObject();
+        leftHand = new GameObject("Green Gloves Right");
+        rightHand = new GameObject("Green Gloves Left");
+        gameManager.LeftHandGameObj = leftHand;
+        gameManager.RightHandGameObj = rightHand;
     }
 
-    [TearDown]
-    public void TearDown()
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
     {
         Object.Destroy(gameManager);
+        Object.Destroy(listener);
+        Object.Destroy(leftHand);
+        Object.Destroy(rightHand);
+        SceneManager.UnloadSceneAsync(TestSceneName);
+        
     }
 
+    /// <summary>
+    /// Tests to ensure that the toggle of task work.
+    /// </summary>
     [UnityTest]
     public IEnumerator ToggleTaskOnTest()
     {
@@ -49,6 +66,9 @@ public class GameManagerTests
         yield return null;
     }
 
+    /// <summary>
+    /// Tests to ensure that the correct sound is played.
+    /// </summary>
     [UnityTest]
     public IEnumerator PlaySoundTest()
     {
