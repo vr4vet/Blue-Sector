@@ -33,6 +33,7 @@ public class FishSortingTrigger : MonoBehaviour
             return;
         }
         sortedFish.Add(fish.gameObject);
+
         string fishState = fish.GetComponent<FactoryFishState>().fishTier.ToString();
         if (fishState == _tierManager.CurrentTier.ToString())
         {
