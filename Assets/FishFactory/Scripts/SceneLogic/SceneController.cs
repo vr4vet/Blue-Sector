@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,6 +21,7 @@ public class SceneController : MonoBehaviour
     {
         if (collisionObject.gameObject.name == "Grabber")
         {
+            InventoryManager.Instance.SaveInventory();
             ChangeScene(sceneName);
         }
     }
@@ -140,7 +142,7 @@ public class SceneController : MonoBehaviour
 
         GameManager.Instance.IsTaskOn = false;
         GameManager.Instance.IsSecondaryTaskOn = false;
-
+        
         // Remove the delegate to prevent memory leaks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
