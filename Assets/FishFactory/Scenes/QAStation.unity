@@ -5140,6 +5140,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bringGameObjectFromRightPocket: 1
   _bringGameObjectFromLeftPocket: 1
+  _bringGameObjectFromRightHand: 0
+  _bringGameObjectFromLeftHand: 0
+  heldItem:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1654047329}
+        m_TargetAssemblyTypeName: UnityEngine.Joint, UnityEngine
+        m_MethodName: set_connectedBody
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Rigidbody, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &241378905
 Transform:
   m_ObjectHideFlags: 0
@@ -31895,6 +31912,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f2bcfe3b2900db469a02abdad5e5fc7, type: 3}
+--- !u!153 &1654047329 stripped
+ConfigurableJoint:
+  m_CorrespondingSourceObject: {fileID: 3645714274288965357, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1654047328}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1657979826
 GameObject:
   m_ObjectHideFlags: 0
