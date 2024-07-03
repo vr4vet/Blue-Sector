@@ -2,6 +2,7 @@ using System;
 using Mono.Cecil;
 using NUnit.Framework.Internal;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
@@ -37,14 +38,46 @@ public class InventoryManager : MonoBehaviour
     [SerializeField]
     private bool _bringGameObjectFromLeftHand; 
 
-    // ----------------- Private variables -----------------
+    [Header("Inventory")]
+    [Tooltip("Bring the game object carried in the inventory to the next scene")]
+    [SerializeField]
+    private bool _bringGameObjectFromInventory;
 
+    [Tooltip("Bring the game object carried in the inventory to the next scene")]
+    [SerializeField]
+    private GameObject inventoryObject;
+
+    // ----------------- Editor Fields For Debug -----------------
+
+    [Header("For Debug")]
+    [Header("Pocket objects")]
+    [SerializeField]
     private GameObject rightObject;
+    [SerializeField]
     private GameObject leftObject;
+    [Header("Hand Objects")]
+    [SerializeField]
     private UnityEngine.Object rightHandObject;
+    [SerializeField]
     private UnityEngine.Object leftHandObject;
 
+    [Header("inventory objects")]
+    [SerializeField]
+    private UnityEngine.Object slot1;
+    [SerializeField]
+    private UnityEngine.Object slot2;
+    [SerializeField]
+    private UnityEngine.Object slot3;
+    [SerializeField]
+    private UnityEngine.Object slot4;
+    [SerializeField]
+    private UnityEngine.Object slot5;
+    [SerializeField]
+    private UnityEngine.Object slot6;
+
     public UnityEvent<Rigidbody> heldItem;
+
+    private GameObject[] inventoryObjects;
 
     // ----------------- Unity Functions -----------------
 
@@ -91,6 +124,18 @@ public class InventoryManager : MonoBehaviour
         {
             BringObjectFromLeftPocket();
         }
+        if (rightHandObject)
+        {
+            DontDestroyOnLoad(rightHandObject);
+        }
+        if (leftHandObject)
+        {
+            DontDestroyOnLoad(leftHandObject);
+        }
+        if (_bringGameObjectFromInventory)
+        {
+            BringObjectsFromInventory();
+        }
     }
 
     public void GetRightGrabbable(UnityEngine.Object obj)
@@ -100,8 +145,6 @@ public class InventoryManager : MonoBehaviour
             if (obj.ToString() != "HolsterRight (BNG.Grabbable)")
             {
                 rightHandObject = obj;
-                DontDestroyOnLoad(rightHandObject);
-                Debug.Log(rightHandObject);
             }
         }
     }
@@ -113,9 +156,17 @@ public class InventoryManager : MonoBehaviour
             if (obj.ToString() != "HolsterLeft (BNG.Grabbable)")
             {
                 leftHandObject = obj;
-                DontDestroyOnLoad(leftHandObject);
             }
         }
+    }
+
+    public void discardRightGrabbable()
+    {
+        rightHandObject = null;
+    }
+    public void discardLeftGrabbable()
+    {
+        leftHandObject = null;
     }
 
     // ----------------- Private Functions -----------------
@@ -132,6 +183,15 @@ public class InventoryManager : MonoBehaviour
         leftObject = GameObject.Find("XR Rig Advanced VR4VET/Inventory/HolsterLeft").transform.GetChild(1).gameObject;
         leftObject.transform.parent = null;
         DontDestroyOnLoad(leftObject);
+    }
+
+    private void BringObjectsFromInventory()
+    {
+        for (int i = 1; i < 7; i++)
+        {
+            inventoryObject = inventoryObject.transform.GetChild(i).transform.GetChild(1).gameObject;
+        }
+        Debug.Log(inventoryObject);
     }
 
     /// <summary>
@@ -168,8 +228,8 @@ public class InventoryManager : MonoBehaviour
         if (rightHandObject != null)
         {
             // Find the object
-            string test = rightHandObject.ToString().Replace(" (BNG.Grabbable)", "");
-            GameObject rightHandGameObject = GameObject.Find(test).gameObject;
+            string seachString = rightHandObject.ToString().Replace(" (BNG.Grabbable)", "");
+            GameObject rightHandGameObject = GameObject.Find(seachString).gameObject;
 
             // Create a copy and destroy the old
             GameObject newObject = Instantiate(rightHandGameObject);
@@ -182,6 +242,25 @@ public class InventoryManager : MonoBehaviour
             newObject.transform.SetParent(rightHand.transform);
             newObject.transform.position = rightHand.transform.position;
             newObject.transform.rotation = rightHand.transform.rotation;
+        }
+
+        if (leftHandObject != null)
+        {
+            // Find the object
+            string seachString = leftHandObject.ToString().Replace(" (BNG.Grabbable)", "");
+            GameObject leftHandGameObject = GameObject.Find(seachString).gameObject;
+
+            // Create a copy and destroy the old
+            GameObject newObject = Instantiate(leftHandGameObject);
+            Destroy(leftHandGameObject);
+
+            Rigidbody objectRigidbody = newObject.GetComponent<Rigidbody>();
+            objectRigidbody.isKinematic = true;
+
+            GameObject leftHand = GameObject.Find("LeftController").gameObject;
+            newObject.transform.SetParent(leftHand.transform);
+            newObject.transform.position = leftHand.transform.position;
+            newObject.transform.rotation = leftHand.transform.rotation;
         }
     }
 } 
