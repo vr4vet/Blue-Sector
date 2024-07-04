@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Mono.Cecil;
 using NUnit.Framework.Internal;
 using UnityEngine;
@@ -55,29 +56,17 @@ public class InventoryManager : MonoBehaviour
     private GameObject rightObject;
     [SerializeField]
     private GameObject leftObject;
+
     [Header("Hand Objects")]
     [SerializeField]
     private UnityEngine.Object rightHandObject;
     [SerializeField]
     private UnityEngine.Object leftHandObject;
 
-    [Header("inventory objects")]
-    [SerializeField]
-    private UnityEngine.Object slot1;
-    [SerializeField]
-    private UnityEngine.Object slot2;
-    [SerializeField]
-    private UnityEngine.Object slot3;
-    [SerializeField]
-    private UnityEngine.Object slot4;
-    [SerializeField]
-    private UnityEngine.Object slot5;
-    [SerializeField]
-    private UnityEngine.Object slot6;
+    // ----------------- Private variables -----------------
 
-    public UnityEvent<Rigidbody> heldItem;
+    private List<GameObject> inventoryObjects = new List<GameObject>();
 
-    private GameObject[] inventoryObjects;
 
     // ----------------- Unity Functions -----------------
 
@@ -138,6 +127,9 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Function should be an event on the "on grab event" for the right grabber 
+    /// </summary>
     public void GetRightGrabbable(UnityEngine.Object obj)
     {
         if (_bringGameObjectFromRightHand)
@@ -149,6 +141,9 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Function should be an event on the "on grab event" for the left grabber 
+    /// </summary>
     public void GetLeftGrabbable(UnityEngine.Object obj)
     {
         if (_bringGameObjectFromLeftHand)
@@ -160,10 +155,17 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Function should be an event on the "on release event" for the right grabber 
+    /// </summary>
     public void discardRightGrabbable()
     {
         rightHandObject = null;
     }
+
+    /// <summary>
+    /// Function should be an event on the "on release event" for the left grabber 
+    /// </summary>
     public void discardLeftGrabbable()
     {
         leftHandObject = null;
@@ -189,13 +191,23 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 1; i < 7; i++)
         {
-            inventoryObject = inventoryObject.transform.GetChild(i).transform.GetChild(1).gameObject;
+            try
+            {
+                GameObject objectInInventory = inventoryObject.transform.GetChild(i).transform.GetChild(1).gameObject;
+                inventoryObjects.Add(objectInInventory);
+                objectInInventory.transform.parent = null;
+                DontDestroyOnLoad(objectInInventory);
+
+            }
+            catch (Exception e)
+            {}
         }
-        Debug.Log(inventoryObject);
     }
 
     /// <summary>
     /// Once a new scene has been loaded this function populates the inventory with the saved items
+    /// In order for the inventory manager to work in both fish factory as well as other scenarios it can't make use of the BNG namespace.
+    /// This is the work around for that. 
     /// </summary>
     private void PopulateInventory(Scene scene, LoadSceneMode mode)
     {
@@ -261,6 +273,23 @@ public class InventoryManager : MonoBehaviour
             newObject.transform.SetParent(leftHand.transform);
             newObject.transform.position = leftHand.transform.position;
             newObject.transform.rotation = leftHand.transform.rotation;
+        }
+        if (inventoryObjects.Count > 0)
+        {
+            GameObject inventory = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/PopupInventoryAnchor/PopupInventory").gameObject;
+            for (int i = 1; i < inventoryObjects.Count + 1; i++)
+            {
+                GameObject objectToBePlaced = inventoryObjects[i-1];
+                // Set object to be kinematic to stop it from falling
+                Rigidbody objectRigidbody = objectToBePlaced.GetComponent<Rigidbody>();
+                objectRigidbody.isKinematic = true;
+
+                GameObject correctSlot = inventory.transform.GetChild(i).gameObject;
+                objectToBePlaced.transform.SetParent(correctSlot.transform);
+                objectToBePlaced.transform.position = correctSlot.transform.position;
+                objectToBePlaced.transform.rotation = correctSlot.transform.rotation;
+                objectToBePlaced = null;
+            }
         }
     }
 } 
