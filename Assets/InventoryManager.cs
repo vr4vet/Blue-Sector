@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Mono.Cecil;
-using NUnit.Framework.Internal;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using BNG;
+using Unity.VisualScripting;
+using System.Collections;
 
 
 public class InventoryManager : MonoBehaviour
@@ -53,20 +52,19 @@ public class InventoryManager : MonoBehaviour
     [Header("For Debug")]
     [Header("Pocket objects")]
     [SerializeField]
-    private GameObject rightObject;
+    private Grabbable rightObject;
     [SerializeField]
-    private GameObject leftObject;
+    private Grabbable leftObject;
 
     [Header("Hand Objects")]
     [SerializeField]
-    private UnityEngine.Object rightHandObject;
+    private Grabbable rightHandObject;
     [SerializeField]
-    private UnityEngine.Object leftHandObject;
+    private Grabbable leftHandObject;
 
     // ----------------- Private variables -----------------
 
-    private List<GameObject> inventoryObjects = new List<GameObject>();
-
+    private List<Grabbable> inventoryObjects = new List<Grabbable>();
 
     // ----------------- Unity Functions -----------------
 
@@ -94,14 +92,15 @@ public class InventoryManager : MonoBehaviour
     void OnDisable()
     {
         SceneManager.sceneLoaded -= PopulateInventory;
+
     }
 
     // ----------------- Public Functions -----------------
 
     /// <summary>
     /// This function needs to be called before the ChangeScene() function is called. 
-    /// It is done by calling InventoryManager.Instance.SaveInventory() in the same function that calls the ChangeScene().
-    /// An example of this can be found in the script SceneController.cs in the function OnTriggerEnter().
+    /// It can be done by calling InventoryManager.Instance.SaveInventory() in the same function that calls the ChangeScene().
+    /// A better aproach is to use UnityEvent and add this before the scene change.
     /// </summary>
     public void SaveInventory()
     {
@@ -130,7 +129,7 @@ public class InventoryManager : MonoBehaviour
     /// <summary>
     /// Function should be an event on the "on grab event" for the right grabber 
     /// </summary>
-    public void GetRightGrabbable(UnityEngine.Object obj)
+    public void GetRightGrabbable(Grabbable obj)
     {
         if (_bringGameObjectFromRightHand)
         {
@@ -144,7 +143,7 @@ public class InventoryManager : MonoBehaviour
     /// <summary>
     /// Function should be an event on the "on grab event" for the left grabber 
     /// </summary>
-    public void GetLeftGrabbable(UnityEngine.Object obj)
+    public void GetLeftGrabbable(Grabbable obj)
     {
         if (_bringGameObjectFromLeftHand)
         {
@@ -175,16 +174,18 @@ public class InventoryManager : MonoBehaviour
 
     private void BringObjectFromRightPocket()
     {
-        rightObject = GameObject.Find("XR Rig Advanced VR4VET/Inventory/HolsterRight").transform.GetChild(1).gameObject;
+        SnapZone rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject.GetComponent<SnapZone>();
+        rightObject = rightPocket.HeldItem;
         rightObject.transform.parent = null;
         DontDestroyOnLoad(rightObject);
     }
 
     private void BringObjectFromLeftPocket()
     {
-        leftObject = GameObject.Find("XR Rig Advanced VR4VET/Inventory/HolsterLeft").transform.GetChild(1).gameObject;
+        SnapZone leftPocket = GameObject.Find("Inventory").transform.GetChild(1).gameObject.GetComponent<SnapZone>();
+        leftObject = leftPocket.HeldItem;
         leftObject.transform.parent = null;
-        DontDestroyOnLoad(leftObject);
+        DontDestroyOnLoad(rightObject);
     }
 
     private void BringObjectsFromInventory()
@@ -193,11 +194,10 @@ public class InventoryManager : MonoBehaviour
         {
             try
             {
-                GameObject objectInInventory = inventoryObject.transform.GetChild(i).transform.GetChild(1).gameObject;
+                Grabbable objectInInventory = inventoryObject.transform.GetChild(i).gameObject.GetComponent<SnapZone>().HeldItem;
                 inventoryObjects.Add(objectInInventory);
                 objectInInventory.transform.parent = null;
                 DontDestroyOnLoad(objectInInventory);
-
             }
             catch (Exception e)
             {}
@@ -206,90 +206,99 @@ public class InventoryManager : MonoBehaviour
 
     /// <summary>
     /// Once a new scene has been loaded this function populates the inventory with the saved items
-    /// In order for the inventory manager to work in both fish factory as well as other scenarios it can't make use of the BNG namespace.
-    /// This is the work around for that. 
     /// </summary>
     private void PopulateInventory(Scene scene, LoadSceneMode mode)
     {
         if (rightObject != null)
         {
-            // Set object to be kinematic to stop it from falling
-            Rigidbody rightRigidBody = rightObject.GetComponent<Rigidbody>();
-            rightRigidBody.isKinematic = true;
-
-            GameObject rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject;
-            rightObject.transform.SetParent(rightPocket.transform);
-            rightObject.transform.position = rightPocket.transform.position + new Vector3(0,0.02f,0);
-            rightObject.transform.rotation = rightPocket.transform.rotation;
+            SnapZone rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject.GetComponent<SnapZone>();
+            rightPocket.HeldItem = rightObject;
             rightObject = null;
         }
 
         if (leftObject != null)
         {
-            // Set object to be kinematic to stop it from falling
-            Rigidbody leftRigidBody = leftObject.GetComponent<Rigidbody>();
-            leftRigidBody.isKinematic = true;
-
-            GameObject leftPocket = GameObject.Find("Inventory").transform.GetChild(1).gameObject;
-            leftObject.transform.SetParent(leftPocket.transform);
-            leftObject.transform.position = leftPocket.transform.position + new Vector3(0,0.02f,0);
-            leftObject.transform.rotation = leftPocket.transform.rotation;
+            SnapZone leftPocket = GameObject.Find("Inventory").transform.GetChild(1).gameObject.GetComponent<SnapZone>();
+            leftPocket.HeldItem = leftObject;
             leftObject = null;
         }
         
         if (rightHandObject != null)
         {
-            // Find the object
-            string seachString = rightHandObject.ToString().Replace(" (BNG.Grabbable)", "");
-            GameObject rightHandGameObject = GameObject.Find(seachString).gameObject;
+            Grabber rightHand = GameObject.Find("RightController/Grabber").gameObject.GetComponent<Grabber>();
+            Grabbable newRightObject = Instantiate(rightHandObject);
+            Destroy(rightHandObject.GameObject().gameObject);
 
-            // Create a copy and destroy the old
-            GameObject newObject = Instantiate(rightHandGameObject);
-            Destroy(rightHandGameObject);
+            newRightObject.transform.SetParent(rightHand.transform);
+            newRightObject.GameObject().gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            newRightObject.GameObject().transform.position = rightHand.transform.position;
+            newRightObject.GameObject().transform.rotation = rightHand.transform.rotation;
 
-            Rigidbody objectRigidbody = newObject.GetComponent<Rigidbody>();
-            objectRigidbody.isKinematic = true;
-
-            GameObject rightHand = GameObject.Find("RightController").gameObject;
-            newObject.transform.SetParent(rightHand.transform);
-            newObject.transform.position = rightHand.transform.position;
-            newObject.transform.rotation = rightHand.transform.rotation;
+            rightHand.ForceGrab = true;
+            rightHand.EquipGrabbableOnStart = newRightObject;
+            rightHand.HeldGrabbable = newRightObject;
+            StartCoroutine(CheckForReGrab(rightHand, newRightObject, true));
         }
 
         if (leftHandObject != null)
         {
-            // Find the object
-            string seachString = leftHandObject.ToString().Replace(" (BNG.Grabbable)", "");
-            GameObject leftHandGameObject = GameObject.Find(seachString).gameObject;
+            Grabber leftHand = GameObject.Find("LeftController/Grabber").gameObject.GetComponent<Grabber>();
+            Grabbable newLeftObject = Instantiate(leftHandObject);
+            Destroy(leftHandObject.GameObject().gameObject);
 
-            // Create a copy and destroy the old
-            GameObject newObject = Instantiate(leftHandGameObject);
-            Destroy(leftHandGameObject);
+            newLeftObject.transform.SetParent(leftHand.transform);
+            newLeftObject.GameObject().gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            newLeftObject.GameObject().transform.position = leftHand.transform.position;
+            newLeftObject.GameObject().transform.rotation = leftHand.transform.rotation;
 
-            Rigidbody objectRigidbody = newObject.GetComponent<Rigidbody>();
-            objectRigidbody.isKinematic = true;
-
-            GameObject leftHand = GameObject.Find("LeftController").gameObject;
-            newObject.transform.SetParent(leftHand.transform);
-            newObject.transform.position = leftHand.transform.position;
-            newObject.transform.rotation = leftHand.transform.rotation;
+            leftHand.ForceGrab = true;
+            leftHand.EquipGrabbableOnStart = newLeftObject;
+            leftHand.HeldGrabbable = newLeftObject;
+            StartCoroutine(CheckForReGrab(leftHand, newLeftObject, false));
         }
         if (inventoryObjects.Count > 0)
         {
             GameObject inventory = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/PopupInventoryAnchor/PopupInventory").gameObject;
             for (int i = 1; i < inventoryObjects.Count + 1; i++)
             {
-                GameObject objectToBePlaced = inventoryObjects[i-1];
-                // Set object to be kinematic to stop it from falling
-                Rigidbody objectRigidbody = objectToBePlaced.GetComponent<Rigidbody>();
-                objectRigidbody.isKinematic = true;
+                SnapZone correctSlot = inventory.transform.GetChild(i).gameObject.GetComponent<SnapZone>();
+                correctSlot.HeldItem = inventoryObjects[i-1];
+            }
+            inventoryObjects = null;
+        }
+    }
 
-                GameObject correctSlot = inventory.transform.GetChild(i).gameObject;
-                objectToBePlaced.transform.SetParent(correctSlot.transform);
-                objectToBePlaced.transform.position = correctSlot.transform.position;
-                objectToBePlaced.transform.rotation = correctSlot.transform.rotation;
-                objectToBePlaced = null;
+    // ----------------- Corutine Functions -----------------
+    IEnumerator CheckForReGrab(Grabber hand, Grabbable newObject, bool right)
+    {
+        HandCollision grip;
+        if (right)
+        {
+            grip = GameObject.Find("RightController/ModelsRight/Green Gloves Right").gameObject.GetComponent<HandCollision>();
+        }
+        else{
+            grip = GameObject.Find("LeftController/ModelsLeft/Green Gloves Left").gameObject.GetComponent<HandCollision>();
+        }
+        while (grip.GripAmount >= 0)
+        {
+            if (grip.GripAmount == 1)
+            {
+                while (grip.GripAmount == 1)
+                {
+                    yield return new WaitForSeconds(0.05f);
+                }
+                hand.ForceGrab = false;
+                newObject.DropItem(hand, true, true);
+                newObject.GameObject().gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                //rightHand.HeldGrabbable = null;
+                //rightHand.EquipGrabbableOnStart = null;
+                yield break;
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.05f);
             }
         }
+        yield break;
     }
 } 
