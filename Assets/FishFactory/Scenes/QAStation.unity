@@ -5109,59 +5109,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 241197403}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &241378903
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 241378905}
-  - component: {fileID: 241378904}
-  m_Layer: 0
-  m_Name: InventoryManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &241378904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 241378903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6e218f74e5f92d42b742bce0a9ac2df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bringGameObjectFromRightPocket: 1
-  rightHolster: {fileID: 6016184936623749204}
-  _bringGameObjectFromLeftPocket: 0
-  leftHolster: {fileID: 3853453734156330782}
-  _bringGameObjectFromRightHand: 1
-  _bringGameObjectFromLeftHand: 0
-  heldItem:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!4 &241378905
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 241378903}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.321913, y: -43.246735, z: 1.1454145}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 43
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &242281599
 GameObject:
   m_ObjectHideFlags: 0
@@ -12852,6 +12799,41 @@ PrefabInstance:
         type: 3}
       propertyPath: sceneName
       value: BleedingStation
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: onPlayerEnter.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: onPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: onPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2001048087}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: onPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: onPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SaveInventory
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: onPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: InventoryManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5072128154923085010, guid: a238cecad7713264d85f8075e47ace51,
+        type: 3}
+      propertyPath: onPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5186266716266228090, guid: a238cecad7713264d85f8075e47ace51,
         type: 3}
@@ -37920,6 +37902,112 @@ Transform:
   m_Father: {fileID: 1188212065}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2001048086
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 574394517555101186, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: _bringGameObjectFromLeftHand
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101186, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: _bringGameObjectFromInventory
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101186, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: _bringGameObjectFromRightHand
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101186, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: _bringGameObjectFromLeftPocket
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101186, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: _bringGameObjectFromRightPocket
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 43
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -8.321913
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -43.246735
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.1454145
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101187, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 574394517555101197, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+        type: 3}
+      propertyPath: m_Name
+      value: InventoryManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4a95e8acfe72e87429a0fdc85c31c658, type: 3}
+--- !u!114 &2001048087 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 574394517555101186, guid: 4a95e8acfe72e87429a0fdc85c31c658,
+    type: 3}
+  m_PrefabInstance: {fileID: 2001048086}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e218f74e5f92d42b742bce0a9ac2df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2001613629
 GameObject:
   m_ObjectHideFlags: 0
@@ -66163,13 +66251,37 @@ MonoBehaviour:
   FreshGrip: 1
   onGrabEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
+        m_MethodName: GetLeftGrabbable
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onAfterGrabEvent:
     m_PersistentCalls:
       m_Calls: []
   onReleaseEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
+        m_MethodName: discardLeftGrabbable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   velocityTracker: {fileID: 0}
 --- !u!4 &2594274422689007975
 Transform:
@@ -76495,13 +76607,37 @@ MonoBehaviour:
   FreshGrip: 1
   onGrabEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
+        m_MethodName: GetRightGrabbable
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onAfterGrabEvent:
     m_PersistentCalls:
       m_Calls: []
   onReleaseEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
+        m_MethodName: discardRightGrabbable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   velocityTracker: {fileID: 0}
 --- !u!4 &3645714275856962707
 Transform:

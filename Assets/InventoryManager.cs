@@ -43,10 +43,6 @@ public class InventoryManager : MonoBehaviour
     [SerializeField]
     private bool _bringGameObjectFromInventory;
 
-    [Tooltip("Bring the game object carried in the inventory to the next scene")]
-    [SerializeField]
-    private GameObject inventoryObject;
-
     // ----------------- Editor Fields For Debug -----------------
 
     [Header("For Debug")]
@@ -70,29 +66,34 @@ public class InventoryManager : MonoBehaviour
 
     void Awake()
     {
-        // Sets the instance of the BringCarriedGameObjects to this object if it does not already exist
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this)
         {
-            Destroy(gameObject);
+            InheritValuesFromOldInstance(Instance);
+            Destroy(Instance.gameObject);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-
-        // Makes the BringCarriedGameObjects object persist between scenes
-        DontDestroyOnLoad(gameObject);
     }
 
     void OnEnable()
     {
-        SceneManager.sceneLoaded += PopulateInventory;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDisable()
     {
-        SceneManager.sceneLoaded -= PopulateInventory;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
 
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        PopulateInventory(scene, mode);
     }
 
     // ----------------- Public Functions -----------------
@@ -112,13 +113,13 @@ public class InventoryManager : MonoBehaviour
         {
             BringObjectFromLeftPocket();
         }
-        if (rightHandObject)
+        if (_bringGameObjectFromRightHand)
         {
-            DontDestroyOnLoad(rightHandObject);
+            GetRightGrabbable();
         }
-        if (leftHandObject)
+        if (_bringGameObjectFromLeftHand)
         {
-            DontDestroyOnLoad(leftHandObject);
+            GetLeftGrabbable();
         }
         if (_bringGameObjectFromInventory)
         {
@@ -126,16 +127,29 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // ----------------- Private Functions -----------------
+
+    private void InheritValuesFromOldInstance(InventoryManager oldInstance)
+    {
+        rightObject = oldInstance.rightObject;
+        leftObject = oldInstance.leftObject;
+        rightHandObject = oldInstance.rightHandObject;
+        leftHandObject = oldInstance.leftHandObject;
+        inventoryObjects = new List<Grabbable>(oldInstance.inventoryObjects);
+    }
     /// <summary>
     /// Function should be an event on the "on grab event" for the right grabber 
     /// </summary>
-    public void GetRightGrabbable(Grabbable obj)
+    private void GetRightGrabbable()
     {
-        if (_bringGameObjectFromRightHand)
+        Grabber rightPocket = GameObject.Find("PlayerController/CameraRig/TrackingSpace/RightHandAnchor/RightControllerAnchor/RightController/Grabber").gameObject.GetComponent<Grabber>();
+        if (rightPocket.HeldGrabbable != null)
         {
-            if (obj.ToString() != "HolsterRight (BNG.Grabbable)")
+            rightHandObject = rightPocket.HeldGrabbable;
+            if (rightHandObject.name != "HolsterRight (BNG.Grabbable)")
             {
-                rightHandObject = obj;
+                rightHandObject.transform.parent = null;
+                DontDestroyOnLoad(rightHandObject);
             }
         }
     }
@@ -143,49 +157,40 @@ public class InventoryManager : MonoBehaviour
     /// <summary>
     /// Function should be an event on the "on grab event" for the left grabber 
     /// </summary>
-    public void GetLeftGrabbable(Grabbable obj)
+    private void GetLeftGrabbable()
     {
-        if (_bringGameObjectFromLeftHand)
+        Grabber leftPocket = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/Grabber").gameObject.GetComponent<Grabber>();
+        if (leftPocket.HeldGrabbable != null)
         {
-            if (obj.ToString() != "HolsterLeft (BNG.Grabbable)")
+            leftHandObject = leftPocket.HeldGrabbable;
+            if (leftHandObject.name != "HolsterLeft (BNG.Grabbable)")
             {
-                leftHandObject = obj;
+                leftHandObject.transform.parent = null;
+                DontDestroyOnLoad(leftHandObject);
             }
         }
     }
 
-    /// <summary>
-    /// Function should be an event on the "on release event" for the right grabber 
-    /// </summary>
-    public void discardRightGrabbable()
-    {
-        rightHandObject = null;
-    }
-
-    /// <summary>
-    /// Function should be an event on the "on release event" for the left grabber 
-    /// </summary>
-    public void discardLeftGrabbable()
-    {
-        leftHandObject = null;
-    }
-
-    // ----------------- Private Functions -----------------
-
     private void BringObjectFromRightPocket()
     {
         SnapZone rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject.GetComponent<SnapZone>();
-        rightObject = rightPocket.HeldItem;
-        rightObject.transform.parent = null;
-        DontDestroyOnLoad(rightObject);
+        if (rightPocket.HeldItem != null)
+        {
+            rightObject = rightPocket.HeldItem;
+            rightObject.transform.parent = null;
+            DontDestroyOnLoad(rightObject);
+        }
     }
 
     private void BringObjectFromLeftPocket()
     {
         SnapZone leftPocket = GameObject.Find("Inventory").transform.GetChild(1).gameObject.GetComponent<SnapZone>();
-        leftObject = leftPocket.HeldItem;
-        leftObject.transform.parent = null;
-        DontDestroyOnLoad(rightObject);
+        if (leftPocket.HeldItem != null)
+        {
+            leftObject = leftPocket.HeldItem;
+            leftObject.transform.parent = null;
+            DontDestroyOnLoad(leftObject);
+        }
     }
 
     private void BringObjectsFromInventory()
@@ -194,10 +199,13 @@ public class InventoryManager : MonoBehaviour
         {
             try
             {
-                Grabbable objectInInventory = inventoryObject.transform.GetChild(i).gameObject.GetComponent<SnapZone>().HeldItem;
-                inventoryObjects.Add(objectInInventory);
-                objectInInventory.transform.parent = null;
-                DontDestroyOnLoad(objectInInventory);
+                Grabbable objectInInventory = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/PopupInventoryAnchor/PopupInventory").transform.GetChild(i).gameObject.GetComponent<SnapZone>().HeldItem;
+                if (objectInInventory)
+                {
+                    inventoryObjects.Add(objectInInventory);
+                    objectInInventory.transform.parent = null;
+                    DontDestroyOnLoad(objectInInventory);
+                }  
             }
             catch (Exception e)
             {}
@@ -212,15 +220,15 @@ public class InventoryManager : MonoBehaviour
         if (rightObject != null)
         {
             SnapZone rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject.GetComponent<SnapZone>();
+            rightPocket.StartingItem = rightObject;
             rightPocket.HeldItem = rightObject;
-            rightObject = null;
         }
 
         if (leftObject != null)
         {
             SnapZone leftPocket = GameObject.Find("Inventory").transform.GetChild(1).gameObject.GetComponent<SnapZone>();
+            leftPocket.StartingItem = leftObject;
             leftPocket.HeldItem = leftObject;
-            leftObject = null;
         }
         
         if (rightHandObject != null)
@@ -228,6 +236,7 @@ public class InventoryManager : MonoBehaviour
             Grabber rightHand = GameObject.Find("RightController/Grabber").gameObject.GetComponent<Grabber>();
             Grabbable newRightObject = Instantiate(rightHandObject);
             Destroy(rightHandObject.GameObject().gameObject);
+            rightHandObject = null;
 
             newRightObject.transform.SetParent(rightHand.transform);
             newRightObject.GameObject().gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -264,7 +273,7 @@ public class InventoryManager : MonoBehaviour
                 SnapZone correctSlot = inventory.transform.GetChild(i).gameObject.GetComponent<SnapZone>();
                 correctSlot.HeldItem = inventoryObjects[i-1];
             }
-            inventoryObjects = null;
+            inventoryObjects.Clear();
         }
     }
 
@@ -290,8 +299,6 @@ public class InventoryManager : MonoBehaviour
                 hand.ForceGrab = false;
                 newObject.DropItem(hand, true, true);
                 newObject.GameObject().gameObject.GetComponent<Rigidbody>().isKinematic = false;
-                //rightHand.HeldGrabbable = null;
-                //rightHand.EquipGrabbableOnStart = null;
                 yield break;
             }
             else
