@@ -33,13 +33,13 @@ public class SpecializedNPCBehavior : MonoBehaviour
         }
 
         // Adjusts the size of the NPCs
-        foreach (GameObject npc in _npcSpawner._npcInstances)
+        /*foreach (GameObject npc in _npcSpawner._npcInstances)
         {
             npc.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
             Transform dialogueCanvas = npc.transform.GetChild(1);
             dialogueCanvas.localPosition = new Vector3(dialogueCanvas.localPosition.x, dialogueCanvas.localPosition.y, 0.55f);
             dialogueCanvas.localScale = new Vector3(0.008f, 0.008f, 0.008f);
-        }
+        }*/
 
         _npc = _npcSpawner._npcInstances[1];
 
