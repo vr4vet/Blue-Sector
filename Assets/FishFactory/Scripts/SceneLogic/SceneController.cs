@@ -37,6 +37,13 @@ public class SceneController : MonoBehaviour
     /// <param name="scene">The name of the scene to change to</param>
     private void ChangeScene(string scene)
     {
+        if (scene == "FishFeeding")
+        {
+            GameManager.Instance.PlaySound("door");
+            SceneManager.LoadScene(scene);
+            return;
+        }
+
         // Check if the player is in the HSE room and if the requirements are fulfilled. Player should only be able to progress after the HSE room is completed.
         if (
             !GameManager.Instance.HSERoomCompleted
