@@ -60,7 +60,7 @@ public class InventoryManager : MonoBehaviour
 
     // ----------------- Private variables -----------------
 
-    private List<Grabbable> inventoryObjects = new List<Grabbable>();
+    private Dictionary<int, Grabbable> inventoryObjects = new Dictionary<int, Grabbable>();
 
     // ----------------- Unity Functions -----------------
 
@@ -135,7 +135,7 @@ public class InventoryManager : MonoBehaviour
         leftObject = oldInstance.leftObject;
         rightHandObject = oldInstance.rightHandObject;
         leftHandObject = oldInstance.leftHandObject;
-        inventoryObjects = new List<Grabbable>(oldInstance.inventoryObjects);
+        inventoryObjects = new Dictionary<int, Grabbable>(oldInstance.inventoryObjects);
     }
     /// <summary>
     /// Function should be an event on the "on grab event" for the right grabber 
@@ -202,7 +202,7 @@ public class InventoryManager : MonoBehaviour
                 Grabbable objectInInventory = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/PopupInventoryAnchor/PopupInventory").transform.GetChild(i).gameObject.GetComponent<SnapZone>().HeldItem;
                 if (objectInInventory)
                 {
-                    inventoryObjects.Add(objectInInventory);
+                    inventoryObjects.Add(i, objectInInventory);
                     objectInInventory.transform.parent = null;
                     DontDestroyOnLoad(objectInInventory);
                 }  
@@ -268,10 +268,10 @@ public class InventoryManager : MonoBehaviour
         if (inventoryObjects.Count > 0)
         {
             GameObject inventory = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/PopupInventoryAnchor/PopupInventory").gameObject;
-            for (int i = 1; i < inventoryObjects.Count + 1; i++)
+            foreach (int key in inventoryObjects.Keys)
             {
-                SnapZone correctSlot = inventory.transform.GetChild(i).gameObject.GetComponent<SnapZone>();
-                correctSlot.HeldItem = inventoryObjects[i-1];
+                SnapZone correctSlot = inventory.transform.GetChild(key).gameObject.GetComponent<SnapZone>();
+                correctSlot.HeldItem = inventoryObjects[key];
             }
             inventoryObjects.Clear();
         }
