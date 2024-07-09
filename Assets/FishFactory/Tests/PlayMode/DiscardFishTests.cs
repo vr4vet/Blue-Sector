@@ -20,14 +20,17 @@ public class DiscardFishTests
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
 
         // Load and instantiate the prefabs and create a fish and discard box
-        var discardBoxPrefab = Resources.Load<GameObject>("Prefabs/FishDiscardBox");
         var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactoryBadFish");
         fish = Object.Instantiate(fishPrefab);
         fish.GetComponent<FactoryFishState>().fishTier = FactoryFishState.Tier.BadQuality;
-        discardBox = Object.Instantiate(discardBoxPrefab);
+        fish.transform.position = new Vector3(10, 10, 10);
 
-        // get the DiscardBadFish script
-        discardScript = discardBox.GetComponentInChildren<DiscardBadFish>();
+            //Create a discard box and add the sorting script and a collider
+       discardBox = GameObject.CreatePrimitive(PrimitiveType.Cube);
+       discardBox.transform.position = new Vector3(0, 0, 0);
+       BoxCollider discardTrigger = discardBox.AddComponent<BoxCollider>();
+       discardTrigger.isTrigger = true;
+       discardScript = discardBox.AddComponent<DiscardBadFish>();
     }
 
     /// <summary>
