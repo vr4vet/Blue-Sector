@@ -45,22 +45,11 @@ public class RatingInterfaceController : MonoBehaviour
         foreach(ButtonController button in buttons) {
             if(button != clicked) {
                 button.SetColor(false);
-<<<<<<< HEAD
-=======
-                Debug.Log("----------------");
-                Debug.Log(gillGuess + " " + button.buttonNmbr);
-                Debug.Log("----------------");
->>>>>>> 56aae4582022e20300f25dbe99abe83a8bbfae42
             } 
             if (gillGuess == button.buttonNmbr) {
                 // This is called if a previously guessed fish is returned to tank
                 // Then the same fish is grabbed again, light up the correct guess button
                 button.SetColor(true);
-<<<<<<< HEAD
-=======
-                Debug.Log("SAGRSG");
-                Debug.Log("GSRGSRG");
->>>>>>> 56aae4582022e20300f25dbe99abe83a8bbfae42
             }
         }
     }
