@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using BNG;
 using Unity.VisualScripting;
 using System.Collections;
+using System.Linq;
 
 
 public class InventoryManager : MonoBehaviour
@@ -62,6 +63,10 @@ public class InventoryManager : MonoBehaviour
 
     private Dictionary<int, Grabbable> inventoryObjects = new Dictionary<int, Grabbable>();
 
+    private GameObject[] fishInScene;
+
+    private GameObject finalFish;
+
     // ----------------- Unity Functions -----------------
 
     void Awake()
@@ -77,6 +82,16 @@ public class InventoryManager : MonoBehaviour
             Destroy(Instance.gameObject);
             Instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+        //StartCoroutine(LogHands());
+    }
+
+    private IEnumerator LogHands()
+    {
+        while (true)
+        {
+            BringObjectFromRightPocket();
+            yield return new WaitForSeconds(1);
         }
     }
 
@@ -105,6 +120,7 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     public void SaveInventory()
     {
+        fishInScene = GameObject.FindGameObjectsWithTag("Fish");
         if (_bringGameObjectFromRightPocket)
         {
             BringObjectFromRightPocket();
@@ -171,14 +187,60 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    private GameObject findBottom(GameObject fish)
+    {
+        GameObject child = fish.transform.GetChild(2).gameObject;
+        while (true)
+        {
+            if (child.transform.childCount > 0)
+            {
+                child = child.transform.GetChild(0).gameObject;
+            }
+            else
+            {
+                return child;
+            }
+        }
+    }
+
+    private GameObject handleFish(Grabbable obj)
+    {
+        foreach (GameObject fish in fishInScene)
+        {
+            if (finalFish == fish)
+            {
+                return null;
+            }
+            Transform tailEnd = fish.transform.Find("Salmon_Armature/Head/Neck/Back_1/Back_2/Back_3/Back_4/Back_5/Tail/Tail_end");
+            if (tailEnd == null)
+            {
+                obj.transform.parent = findBottom(fish).transform;
+                DontDestroyOnLoad(fish);
+                finalFish = fish;
+                return fish;
+            }
+            fishInScene = fishInScene.Where(GameObject => GameObject != fish).ToArray();
+        }
+        return null;
+    }
+
     private void BringObjectFromRightPocket()
     {
         SnapZone rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject.GetComponent<SnapZone>();
         if (rightPocket.HeldItem != null)
         {
             rightObject = rightPocket.HeldItem;
-            rightObject.transform.parent = null;
-            DontDestroyOnLoad(rightObject);
+            if (rightObject.tag == "Bone")
+            {
+                GameObject fishObject = handleFish(rightObject);
+                rightPocket.HeldItem = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
+                rightObject = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
+            }
+            else
+            {
+                rightObject.transform.parent = null;
+                DontDestroyOnLoad(rightObject);
+            }
         }
     }
 
@@ -188,8 +250,15 @@ public class InventoryManager : MonoBehaviour
         if (leftPocket.HeldItem != null)
         {
             leftObject = leftPocket.HeldItem;
-            leftObject.transform.parent = null;
-            DontDestroyOnLoad(leftObject);
+            if (leftObject.tag == "Bone")
+            {
+                handleFish(leftObject);
+            }
+            else
+            {
+                leftObject.transform.parent = null;
+                DontDestroyOnLoad(leftObject);
+            }
         }
     }
 
@@ -220,6 +289,7 @@ public class InventoryManager : MonoBehaviour
         if (rightObject != null)
         {
             SnapZone rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject.GetComponent<SnapZone>();
+            Debug.Log("being heldddddd "+rightObject);
             rightPocket.StartingItem = rightObject;
             rightPocket.HeldItem = rightObject;
         }
@@ -277,7 +347,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // ----------------- Corutine Functions -----------------
+    // ----------------- Helper Functions -----------------
     IEnumerator CheckForReGrab(Grabber hand, Grabbable newObject, bool right)
     {
         HandCollision grip;
