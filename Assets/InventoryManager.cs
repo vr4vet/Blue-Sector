@@ -65,7 +65,7 @@ public class InventoryManager : MonoBehaviour
 
     private GameObject[] fishInScene;
 
-    private GameObject finalFish;
+    private List<GameObject> finalFish = new List<GameObject>();
 
     // ----------------- Unity Functions -----------------
 
@@ -82,16 +82,6 @@ public class InventoryManager : MonoBehaviour
             Destroy(Instance.gameObject);
             Instance = this;
             DontDestroyOnLoad(gameObject);
-        }
-        //StartCoroutine(LogHands());
-    }
-
-    private IEnumerator LogHands()
-    {
-        while (true)
-        {
-            BringObjectFromRightPocket();
-            yield return new WaitForSeconds(1);
         }
     }
 
@@ -145,6 +135,9 @@ public class InventoryManager : MonoBehaviour
 
     // ----------------- Private Functions -----------------
 
+    /// <summary>
+    /// As the old instance is deleted to allow for different settings between scenes the new instance inherits values from the old.
+    /// </summary>
     private void InheritValuesFromOldInstance(InventoryManager oldInstance)
     {
         rightObject = oldInstance.rightObject;
@@ -152,9 +145,11 @@ public class InventoryManager : MonoBehaviour
         rightHandObject = oldInstance.rightHandObject;
         leftHandObject = oldInstance.leftHandObject;
         inventoryObjects = new Dictionary<int, Grabbable>(oldInstance.inventoryObjects);
+        finalFish = new List<GameObject>(oldInstance.finalFish);
     }
+
     /// <summary>
-    /// Function should be an event on the "on grab event" for the right grabber 
+    /// Function gets the held item in the right hand
     /// </summary>
     private void GetRightGrabbable()
     {
@@ -162,6 +157,11 @@ public class InventoryManager : MonoBehaviour
         if (rightPocket.HeldGrabbable != null)
         {
             rightHandObject = rightPocket.HeldGrabbable;
+            if (rightHandObject.tag == "Bone")
+            {
+                rightHandObject = null;
+                return;
+            }
             if (rightHandObject.name != "HolsterRight (BNG.Grabbable)")
             {
                 rightHandObject.transform.parent = null;
@@ -171,7 +171,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Function should be an event on the "on grab event" for the left grabber 
+    /// Function gets the held item in the left hand
     /// </summary>
     private void GetLeftGrabbable()
     {
@@ -179,6 +179,11 @@ public class InventoryManager : MonoBehaviour
         if (leftPocket.HeldGrabbable != null)
         {
             leftHandObject = leftPocket.HeldGrabbable;
+            if (leftHandObject.tag == "Bone")
+            {
+                leftHandObject = null;
+                return;
+            }
             if (leftHandObject.name != "HolsterLeft (BNG.Grabbable)")
             {
                 leftHandObject.transform.parent = null;
@@ -187,36 +192,25 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    private GameObject findBottom(GameObject fish)
-    {
-        GameObject child = fish.transform.GetChild(2).gameObject;
-        while (true)
-        {
-            if (child.transform.childCount > 0)
-            {
-                child = child.transform.GetChild(0).gameObject;
-            }
-            else
-            {
-                return child;
-            }
-        }
-    }
-
+    /// <summary>
+    /// The fish does not function as other grabbables as it has manny grabbables and gets split once its put in the pocket.
+    /// This function finds split fish and puts them back together before saving them
+    /// </summary>
     private GameObject handleFish(Grabbable obj)
     {
         foreach (GameObject fish in fishInScene)
         {
-            if (finalFish == fish)
+            if (finalFish.Contains(fish))
             {
-                return null;
+                return fish;
             }
             Transform tailEnd = fish.transform.Find("Salmon_Armature/Head/Neck/Back_1/Back_2/Back_3/Back_4/Back_5/Tail/Tail_end");
             if (tailEnd == null)
             {
                 obj.transform.parent = findBottom(fish).transform;
+                
+                finalFish.Add(fish);
                 DontDestroyOnLoad(fish);
-                finalFish = fish;
                 return fish;
             }
             fishInScene = fishInScene.Where(GameObject => GameObject != fish).ToArray();
@@ -226,6 +220,7 @@ public class InventoryManager : MonoBehaviour
 
     private void BringObjectFromRightPocket()
     {
+        rightObject = null;
         SnapZone rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject.GetComponent<SnapZone>();
         if (rightPocket.HeldItem != null)
         {
@@ -233,26 +228,40 @@ public class InventoryManager : MonoBehaviour
             if (rightObject.tag == "Bone")
             {
                 GameObject fishObject = handleFish(rightObject);
-                rightPocket.HeldItem = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
-                rightObject = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
+                try
+                {
+                    rightPocket.HeldItem = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
+                    rightObject = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
+                }
+                catch (Exception e)
+                {}
             }
             else
             {
                 rightObject.transform.parent = null;
                 DontDestroyOnLoad(rightObject);
+                finalFish = null;
             }
         }
     }
 
     private void BringObjectFromLeftPocket()
     {
+        leftObject = null;
         SnapZone leftPocket = GameObject.Find("Inventory").transform.GetChild(1).gameObject.GetComponent<SnapZone>();
         if (leftPocket.HeldItem != null)
         {
             leftObject = leftPocket.HeldItem;
             if (leftObject.tag == "Bone")
             {
-                handleFish(leftObject);
+                GameObject fishObject = handleFish(leftObject);
+                try
+                {
+                    leftPocket.HeldItem = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
+                    leftObject = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
+                }
+                catch (Exception e)
+                {}
             }
             else
             {
@@ -271,6 +280,16 @@ public class InventoryManager : MonoBehaviour
                 Grabbable objectInInventory = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/PopupInventoryAnchor/PopupInventory").transform.GetChild(i).gameObject.GetComponent<SnapZone>().HeldItem;
                 if (objectInInventory)
                 {
+                    if (objectInInventory.tag == "Bone")
+                    {
+                        GameObject fishObject = handleFish(leftObject);
+                        try
+                        {
+                            objectInInventory = fishObject.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
+                        }
+                        catch (Exception e)
+                        {}
+                    }
                     inventoryObjects.Add(i, objectInInventory);
                     objectInInventory.transform.parent = null;
                     DontDestroyOnLoad(objectInInventory);
@@ -286,10 +305,15 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     private void PopulateInventory(Scene scene, LoadSceneMode mode)
     {
+        foreach (GameObject fish in finalFish)
+        {
+            SceneManager.MoveGameObjectToScene(fish, SceneManager.GetActiveScene());
+        }
+        finalFish.Clear();
+
         if (rightObject != null)
         {
             SnapZone rightPocket = GameObject.Find("Inventory").transform.GetChild(2).gameObject.GetComponent<SnapZone>();
-            Debug.Log("being heldddddd "+rightObject);
             rightPocket.StartingItem = rightObject;
             rightPocket.HeldItem = rightObject;
         }
@@ -335,6 +359,7 @@ public class InventoryManager : MonoBehaviour
             leftHand.HeldGrabbable = newLeftObject;
             StartCoroutine(CheckForReGrab(leftHand, newLeftObject, false));
         }
+
         if (inventoryObjects.Count > 0)
         {
             GameObject inventory = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/PopupInventoryAnchor/PopupInventory").gameObject;
@@ -377,5 +402,25 @@ public class InventoryManager : MonoBehaviour
             }
         }
         yield break;
+    }
+
+    /// <summary>
+    /// Function finds the last bone not in the inventory of the player.
+    /// This is used to put a fish that is in the pocket back together with the part that is outside the pocket.
+    /// </summary>
+    private GameObject findBottom(GameObject fish)
+    {
+        GameObject child = fish.transform.GetChild(2).gameObject;
+        while (true)
+        {
+            if (child.transform.childCount > 0)
+            {
+                child = child.transform.GetChild(0).gameObject;
+            }
+            else
+            {
+                return child;
+            }
+        }
     }
 } 
