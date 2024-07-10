@@ -17,13 +17,18 @@ public class GuttingFishSortingTest
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-       // create a new test scene
-       SceneManager.CreateScene(TestSceneName);
+        // Create a new test scene
+        SceneManager.CreateScene(TestSceneName);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
 
-       // Load and instantiate the prefabs
+       // Load and instantiate the fish prefab
        var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactorySalmon");
+
+       // Create a fish
        Fish = UnityEngine.Object.Instantiate(fishPrefab);
        Fish.transform.position = new Vector3(10, 10, 10);
+
+       //Create a sorter box and add the sorting script and a collider
        Sorter = GameObject.CreatePrimitive(PrimitiveType.Cube);
        Sorter.transform.position = new Vector3(0, 0, 0);
        BoxCollider SorterTrigger = Sorter.AddComponent<BoxCollider>();
@@ -31,6 +36,10 @@ public class GuttingFishSortingTest
        SortingScript = Sorter.AddComponent<GuttingFishSorting>();
         
     }
+
+    /// <summary>
+    /// Tests to ensure that the same fish is not sorted twice.
+    /// </summary>
     [UnityTest]
     public IEnumerator DoesNotSortAgain()
     {
@@ -46,6 +55,9 @@ public class GuttingFishSortingTest
         );
     }
     
+    /// <summary>
+    /// Tests to ensure that the sorting works for all gutting states.
+    /// </summary>
     [UnityTest]
     public IEnumerator SortGuttingSuccess()
     {
@@ -60,6 +72,7 @@ public class GuttingFishSortingTest
         }
         yield return null;
     }
+    
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
