@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0.51526934, y: -0.4842494, z: -0.4842494, w: 0.51526934}
   m_LocalPosition: {x: 0, y: -0.0014299994, z: 0.0001490003}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5168720932085990087}
   m_RootOrder: 0
@@ -44,7 +45,6 @@ GameObject:
   - component: {fileID: 6253996850361404959}
   - component: {fileID: 6329827000285394255}
   - component: {fileID: 8925351347197520199}
-  - component: {fileID: 5784221072507410674}
   m_Layer: 9
   m_Name: FishFiletPretty
   m_TagString: Destroyable
@@ -62,6 +62,7 @@ Transform:
   m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: -0.5}
   m_LocalPosition: {x: 0.6015, y: 0.030249, z: 2.1577}
   m_LocalScale: {x: 3.2874458, y: 19.632278, z: 1.8146129}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8027295253716591167}
   m_Father: {fileID: 0}
@@ -86,6 +87,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -164,6 +166,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_InteractionLayers:
     m_Bits: 1
+  m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_CustomReticle: {fileID: 0}
   m_FirstHoverEntered:
@@ -196,6 +199,8 @@ MonoBehaviour:
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
   m_OnFirstHoverEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -224,6 +229,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_AttachTransform: {fileID: 8027295253716591167}
+  m_UseDynamicAttach: 0
+  m_MatchAttachPosition: 1
+  m_MatchAttachRotation: 1
+  m_SnapToColliderVolume: 1
   m_AttachEaseInTime: 0.15
   m_MovementType: 2
   m_VelocityDamping: 1
@@ -260,16 +269,6 @@ MonoBehaviour:
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1
   m_AttachPointCompatibilityMode: 0
---- !u!114 &5784221072507410674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5544261965019142269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4951431e405a0cd44be4428e87ffcdc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  identifier: Fillet
+  m_StartingSingleGrabTransformers: []
+  m_StartingMultipleGrabTransformers: []
+  m_AddDefaultGrabTransformers: 1
