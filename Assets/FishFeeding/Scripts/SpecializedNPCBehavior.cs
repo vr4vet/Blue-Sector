@@ -35,7 +35,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
         // Adjusts the size of the NPCs
         foreach (GameObject npc in _npcSpawner._npcInstances)
         {
-            npc.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+            //npc.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
             Transform dialogueCanvas = npc.transform.GetChild(1);
             dialogueCanvas.localPosition = new Vector3(dialogueCanvas.localPosition.x, dialogueCanvas.localPosition.y, 0.55f);
             dialogueCanvas.localScale = new Vector3(0.008f, 0.008f, 0.008f);
@@ -48,8 +48,8 @@ public class SpecializedNPCBehavior : MonoBehaviour
         collisionTrigger.GetComponent<CapsuleCollider>().enabled = false;
         boxCollider = collisionTrigger.AddComponent<BoxCollider>();
         boxCollider.isTrigger = true;
-        boxCollider.center = new Vector3(-0.85f, 0f, 1.11f);
-        boxCollider.size = new Vector3(2.6f, 2f, 2.3f);
+        boxCollider.center = new Vector3(-0.415f, 0f, 1.3f);
+        boxCollider.size = new Vector3(3.467f, 2f, 2.67f);
 
         if (NPCToPlayerReferenceManager.Instance == null)
         {
