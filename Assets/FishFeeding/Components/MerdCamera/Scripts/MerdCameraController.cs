@@ -78,6 +78,16 @@ public sealed class MerdCameraController : MonoBehaviour
             if (value != null)
             {
                 value.targetTexture = TargetTexture;
+
+                // Updates culling mask for cameras
+                value.cullingMask = LayerMask.GetMask("Water", "Fish", "Merd", "UnderwaterShade");
+                foreach (Camera cam in Cameras)
+                {
+                    if (cam != value)
+                    {
+                        cam.GetComponent<Camera>().cullingMask = LayerMask.GetMask("Nothing");
+                    }
+                }
             }
 
             SelectedFishSystemChanged.Invoke(SelectedFishSystem);
@@ -115,6 +125,7 @@ public sealed class MerdCameraController : MonoBehaviour
         if (SelectedCamera != null && MovementTrack?.position != null)
         {
             SelectedCamera.transform.position = MovementTrack.position;
+            SelectedCamera.GetComponent<Camera>().cullingMask = LayerMask.GetMask("Nothing");
         }
     }
 
