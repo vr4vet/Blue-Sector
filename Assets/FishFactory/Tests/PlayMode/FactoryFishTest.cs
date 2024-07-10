@@ -11,30 +11,16 @@ public class FactoryFishTest
 
     private GameObject Fish;
     private FactoryFishState _fishState;
-    private Scene factoryFishScene;
-    private GameManager gameManager;
+    private const string TestSceneName = "DiscardFishTestScene";
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        factoryFishScene = SceneManager.CreateScene("FactoryFishStateTest");
-        SceneManager.SetActiveScene(factoryFishScene);
+        SceneManager.CreateScene(TestSceneName);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(TestSceneName));
         var fishPrefab = Resources.Load<GameObject>("Prefabs/Fish/FishFactoryBadFish");
         Fish = UnityEngine.Object.Instantiate(fishPrefab);
         _fishState = Fish.GetComponent<FactoryFishState>();
-
-         var gameManagerObject = new GameObject();
-        gameManager = gameManagerObject.AddComponent<GameManager>();
-
-        // Load the sound effects
-        var audioManagerPrefab = Resources.Load<GameObject>("Prefabs/AudioManager");
-        var audioManager = UnityEngine.Object.Instantiate(audioManagerPrefab);
-        gameManager.SoundEffects = Resources.LoadAll<AudioClip>("Sounds");
-        gameManager.AudioManager = audioManager;
-
-        //create an audio listener
-        var listener = new GameObject("AudioListener");
-        listener.AddComponent<AudioListener>();
 
     }
 
@@ -84,6 +70,10 @@ public class FactoryFishTest
         GameObject MetalPiece = GameObject.Find("MetalPiece").gameObject;
         Assert.AreNotEqual(MetalPiece,null,"cannot find metal piece");
     }
-
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        SceneManager.UnloadScene(TestSceneName);
+    }
 
 }

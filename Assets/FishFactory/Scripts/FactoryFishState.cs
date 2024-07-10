@@ -68,6 +68,8 @@ public class FactoryFishState : MonoBehaviour
         
         if (fishTier == Tier.BadQuality)
         {
+            if (!GameManager.Instance)
+                return;
             GameManager.Instance.PlaySound("incorrect");
             return;
         }
@@ -75,6 +77,8 @@ public class FactoryFishState : MonoBehaviour
         {
             correctlyBled = true;
             fishMaterial.material = _bleedingFish;
+            if (!GameManager.Instance)
+                return;
             GameManager.Instance.PlaySound("incorrect");
             return;
         }
@@ -82,6 +86,8 @@ public class FactoryFishState : MonoBehaviour
         {
             correctlyBled = true;
             fishMaterial.material = _bleedingFish;
+            if (!GameManager.Instance)
+                return;
             GameManager.Instance.PlaySound("correct");
             return;
         }
@@ -97,6 +103,8 @@ public class FactoryFishState : MonoBehaviour
         if (!correctlyBled)
         {
             correctlyBled = false;
+            if (!GameManager.Instance)
+                return;
             GameManager.Instance.PlaySound("incorrect");
         }
     }
