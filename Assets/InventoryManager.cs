@@ -208,7 +208,7 @@ public class InventoryManager : MonoBehaviour
             if (tailEnd == null)
             {
                 obj.transform.parent = findBottom(fish).transform;
-                
+                fish.transform.parent = null;
                 finalFish.Add(fish);
                 DontDestroyOnLoad(fish);
                 return fish;
@@ -240,7 +240,6 @@ public class InventoryManager : MonoBehaviour
             {
                 rightObject.transform.parent = null;
                 DontDestroyOnLoad(rightObject);
-                finalFish = null;
             }
         }
     }
