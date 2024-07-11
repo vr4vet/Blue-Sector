@@ -565,6 +565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &353550537
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -866,8 +867,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -961,6 +962,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &621840795
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1262,8 +1264,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -1354,6 +1356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!33 &6681058812314130456
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1562,6 +1565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &669745257
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1713,8 +1717,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -2085,6 +2089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &1585522387
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2386,8 +2391,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -2481,6 +2486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &5996645361607201536
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2632,8 +2638,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -2969,6 +2975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &1355815930
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3119,8 +3126,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -3365,8 +3372,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052af0f5f24acc945a2fe57249a37398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentState: 0
-  bleedingFish: {fileID: 0}
+  fishTier: 0
+  guttingState: 0
+  ContainsMetal: 0
+  Stunned: 0
+  correctlyBled: 0
+  _bleedingFish: {fileID: 0}
 --- !u!82 &919132148199949407
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3550,6 +3561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &2090124854
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3851,8 +3863,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -3946,6 +3958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &783987576
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4097,8 +4110,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -4342,6 +4355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!54 &1154117530
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4493,8 +4507,8 @@ MonoBehaviour:
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
   HideHandGraphics: 0
-  ParentToHands: 0
-  ParentHandModel: 1
+  ParentToHands: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -4735,6 +4749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fishState: {fileID: 738748279214121205}
+  knifes: []
 --- !u!33 &7731019822719552465
 MeshFilter:
   m_ObjectHideFlags: 0
