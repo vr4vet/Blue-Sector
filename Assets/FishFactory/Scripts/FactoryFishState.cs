@@ -30,11 +30,11 @@ public class FactoryFishState : MonoBehaviour
     // ------------ Editor Variables ------------
 
     [SerializeField]
-    private Material _bleedingFish;
+    public Material _bleedingFish;
 
     // ------------------ Private Variables ------------------
 
-    private Material metalMat;
+    public Material metalMat;
 
     // ------------ Unity Functions ------------
 
@@ -68,6 +68,8 @@ public class FactoryFishState : MonoBehaviour
         
         if (fishTier == Tier.BadQuality)
         {
+            if (!GameManager.Instance)
+                return;
             GameManager.Instance.PlaySound("incorrect");
             return;
         }
@@ -75,6 +77,8 @@ public class FactoryFishState : MonoBehaviour
         {
             correctlyBled = true;
             fishMaterial.material = _bleedingFish;
+            if (!GameManager.Instance)
+                return;
             GameManager.Instance.PlaySound("incorrect");
             return;
         }
@@ -82,6 +86,8 @@ public class FactoryFishState : MonoBehaviour
         {
             correctlyBled = true;
             fishMaterial.material = _bleedingFish;
+            if (!GameManager.Instance)
+                return;
             GameManager.Instance.PlaySound("correct");
             return;
         }
@@ -97,6 +103,8 @@ public class FactoryFishState : MonoBehaviour
         if (!correctlyBled)
         {
             correctlyBled = false;
+            if (!GameManager.Instance)
+                return;
             GameManager.Instance.PlaySound("incorrect");
         }
     }
@@ -109,6 +117,7 @@ public class FactoryFishState : MonoBehaviour
         ContainsMetal = true;
         GameObject neck = transform.GetChild(2).transform.GetChild(0).transform.GetChild(0).gameObject;
         GameObject Metal = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Metal.name = "MetalPiece";
         Metal.transform.localScale = new Vector3(0.02f,0.025f,0.003f);
         Metal.GetComponent<Renderer>().material = metalMat;
         Metal.transform.SetParent(neck.transform);
