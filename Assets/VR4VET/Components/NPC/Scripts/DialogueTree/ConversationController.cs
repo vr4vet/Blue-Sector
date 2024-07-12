@@ -12,6 +12,7 @@ public class ConversationController : MonoBehaviour
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
     [HideInInspector] private DialogueBoxController _dialogueBoxController;
+    public bool shouldTrigger;
 
     // Start is called before the first frame update
     void Start()

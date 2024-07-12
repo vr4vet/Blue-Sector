@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,9 @@ public class ButtonSpawner : MonoBehaviour
     // max 4 buttons
     [HideInInspector] private GameObject[] _buttonsSpawned = new GameObject[4];
     [HideInInspector] private DialogueBoxController _dialogueBoxController;
+
+    [HideInInspector] public static event Action<string> OnAnswer;
+
 
     void Start() {
         _dialogueBoxController = GetComponent<DialogueBoxController>();

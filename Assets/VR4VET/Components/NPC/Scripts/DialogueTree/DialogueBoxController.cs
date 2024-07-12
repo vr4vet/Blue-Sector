@@ -14,8 +14,8 @@ public class DialogueBoxController : MonoBehaviour
     [SerializeField] public GameObject TTSSpeaker;
     [HideInInspector] public MaintenanceManager manager;
 
-    [HideInInspector] public static event Action OnDialogueStarted;
-    [HideInInspector] public static event Action OnDialogueEnded;
+    [HideInInspector] public static event Action<string> OnDialogueStarted;
+    [HideInInspector] public static event Action<string> OnDialogueEnded;
     [HideInInspector] private bool _skipLineTriggered;
     [HideInInspector] private bool _answerTriggered;
     [HideInInspector] private int _answerIndex;
@@ -96,7 +96,7 @@ public class DialogueBoxController : MonoBehaviour
         // Dialogue 
         ResetBox();
         _dialogueBox.SetActive(true);
-        OnDialogueStarted?.Invoke();
+        OnDialogueStarted?.Invoke(name);
         _activatedCount = 0;
         StartCoroutine(RunDialogue(dialogueTree, startSection));
         // _exitButton.SetActive(true);
@@ -167,7 +167,7 @@ public class DialogueBoxController : MonoBehaviour
         }
         if (dialogueTree.sections[section].endAfterDialogue)
         {
-            OnDialogueEnded?.Invoke();
+            OnDialogueEnded?.Invoke(name);
             ExitConversation();
             yield break;
         }
