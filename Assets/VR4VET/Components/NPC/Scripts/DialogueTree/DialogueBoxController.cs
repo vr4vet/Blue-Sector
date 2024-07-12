@@ -12,44 +12,35 @@ public class DialogueBoxController : MonoBehaviour
     [SerializeField] private GameObject _answerBox;
     [SerializeField] private GameObject _dialogueCanvas;
     [SerializeField] public GameObject TTSSpeaker;
+    [HideInInspector] public MaintenanceManager manager;
 
-    [HideInInspector] public static event Action<string> OnDialogueStarted;
-    [HideInInspector] public static event Action<string> OnDialogueEnded;
+    [HideInInspector] public static event Action OnDialogueStarted;
+    [HideInInspector] public static event Action OnDialogueEnded;
     [HideInInspector] private bool _skipLineTriggered;
     [HideInInspector] private bool _answerTriggered;
     [HideInInspector] private int _answerIndex;
     [SerializeField] private GameObject _skipLineButton;
-    [SerializeField] private GameObject _exitButton;
-    [SerializeField] private GameObject _speakButton; 
+    // [SerializeField] private GameObject _exitButton;
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
-    [HideInInspector] private RectTransform backgroundRect;
-    [HideInInspector] private RectTransform dialogueTextRect;
 
-    public ButtonSpawner buttonSpawner;
+    private ButtonSpawner buttonSpawner;
 
     [HideInInspector] public bool dialogueIsActive;
+    private int _activatedCount = 0;
 
-    // For testing purposes
-    public DialogueTree dialogueTreeRestart;
 
-    private void Awake() 
+    private void Awake()
     {
         buttonSpawner = GetComponent<ButtonSpawner>();
-        if (buttonSpawner == null) 
+        if (buttonSpawner == null)
         {
             Debug.LogError("The NPC missing the Button spawner script");
         }
         ResetBox();
         dialogueIsActive = false;
 
-        // Animation stuff
-        updateAnimator();
-    }
-
-    private void Start()
-    {
         // Assign the event camera
         if (_dialogueCanvas != null)
         {
@@ -75,57 +66,100 @@ public class DialogueBoxController : MonoBehaviour
         {
             Debug.LogError("DialogueCanvas not found or does not have a Canvas component!");
         }
-        // Get the background transform for dimension changes
-        backgroundRect = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
-        dialogueTextRect = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("DialogueText").GetComponent<RectTransform>();
+
+        // Animation stuff
+        updateAnimator();
     }
 
-    public void updateAnimator() {
+    public void updateAnimator()
+    {
         //this.animator = animator;
         this._animator = GetComponentInChildren<Animator>();
         _isTalkingHash = Animator.StringToHash("isTalking");
         _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
     }
 
-    public void updateAnimator(Animator animator) {
+    public void updateAnimator(Animator animator)
+    {
         this._animator = animator;
     }
 
 
-    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
+    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name)
     {
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
         _animator.SetBool(_hasNewDialogueOptionsHash, false);
-        //_animator.SetBool(_isTalkingHash, true);
+        // this.gameObject.GetComponentInChildren<Animator>().SetBool(Animator.StringToHash("hasNewDialogueOptions"), false);
+        // _animator.SetBool(_isTalkingHash, true);
+        GetComponentInChildren<Animator>().SetBool(Animator.StringToHash("isTalking"), true);
         // Dialogue 
         ResetBox();
         _dialogueBox.SetActive(true);
-        OnDialogueStarted?.Invoke(name);
+        OnDialogueStarted?.Invoke();
+        _activatedCount = 0;
         StartCoroutine(RunDialogue(dialogueTree, startSection));
-        _exitButton.SetActive(true);
+        // _exitButton.SetActive(true);
 
     }
 
+    // IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
+    // {
+    //     for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++)
+    //     {
+    //         if (dialogueTree.sections[section].dialogue[0] == "Takk for praten!")
+    //         {
+    //             manager.CompleteStep("Pause", "Snakk med Laila");
+    //             manager.PlaySuccess();
+    //         }
+    //         _dialogueText.text = dialogueTree.sections[section].dialogue[i];
+    //         TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+    //         while (!_skipLineTriggered)
+    //         {
+    //             _skipLineButton.SetActive(true);
+    //             _exitButton.SetActive(true);
+    //             yield return null;
+    //         }
+    //         _skipLineTriggered = false;
+    //         _skipLineButton.SetActive(false);
+    //     }
+    //     if (dialogueTree.sections[section].endAfterDialogue)
+    //     {
+    //         OnDialogueEnded?.Invoke();
+    //         ExitConversation();
+    //         yield break;
+    //     }
+    //     _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
+    //     TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+    //     ShowAnswers(dialogueTree.sections[section].branchPoint);
+    //     while (_answerTriggered == false)
+    //     {
+    //         yield return null;
+    //     }
+    //     _answerTriggered = false;
+    //     _exitButton.SetActive(false);
+    //     _skipLineButton.SetActive(false);
+    //     StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
+    // }
+
     IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
     {
-        // Make the "Speak" restart tree the current tree
-        dialogueTreeRestart = dialogueTree;
-        // Reset the dialogue box dimensions from "Speak" button dimensions
-        backgroundRect.sizeDelta = new Vector2(160,100);
-        dialogueTextRect.sizeDelta = new Vector2(150,60);
-
-        for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
-        {   
-            // Start talking animation
-            _animator.SetBool(_isTalkingHash, true);
-            StartCoroutine(revertToIdleAnimation());
+        for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++)
+        {
+            if (dialogueTree.sections[section].dialogue[0] == "Takk for praten! La oss ta håndtere dødfisken.")
+            {
+                manager.CompleteStep(manager.GetStep("Pause", "Snakk med Laila"));
+            }
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
-            TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+            PlayAudio(dialogueTree.sections[section].dialogueAudio[i]);
+            if (dialogueTree.sections[section].dialogue[i] == "Start oppgaven ved å se video av laks som telles.")
+            {
+                manager.CompleteStep(manager.GetStep("Dødfisk håndtering", "Få info fra Laila"));
+            }
             while (!_skipLineTriggered)
             {
                 _skipLineButton.SetActive(true);
-                _exitButton.SetActive(true);
+                // _exitButton.SetActive(true);
                 yield return null;
             }
             _skipLineTriggered = false;
@@ -133,24 +167,43 @@ public class DialogueBoxController : MonoBehaviour
         }
         if (dialogueTree.sections[section].endAfterDialogue)
         {
-            OnDialogueEnded?.Invoke(name);
+            OnDialogueEnded?.Invoke();
             ExitConversation();
             yield break;
         }
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
-        TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+        PlayAudio(dialogueTree.sections[section].branchPoint.questionAudio);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
         while (_answerTriggered == false)
         {
             yield return null;
         }
         _answerTriggered = false;
-        _exitButton.SetActive(false);
+        // _exitButton.SetActive(false);
         _skipLineButton.SetActive(false);
         StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
     }
 
-    public void ResetBox() 
+    public void PlayAudio(AudioClip audio)
+    {
+        if (audio == null)
+        {
+            return;
+        }
+        //if the gameobject has audiosource
+        if (TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            audioSource.Stop();
+            audioSource.PlayOneShot(audio);
+            return;
+        }
+
+        //otherwise create audiosource
+        AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
+        newAudioSource.PlayOneShot(audio);
+    }
+
+    void ResetBox()
     {
         StopAllCoroutines();
         _dialogueBox.SetActive(false);
@@ -158,8 +211,7 @@ public class DialogueBoxController : MonoBehaviour
         _skipLineTriggered = false;
         _answerTriggered = false;
         _skipLineButton.SetActive(false);
-        _exitButton.SetActive(false);
-          
+        // _exitButton.SetActive(false);
     }
 
     void ShowAnswers(BranchPoint branchPoint)
@@ -175,18 +227,17 @@ public class DialogueBoxController : MonoBehaviour
 
     public void AnswerQuestion(int answer)
     {
+
         _answerIndex = answer;
         _answerTriggered = true;
+        _activatedCount++;
         // remove the buttons
         buttonSpawner.removeAllButtons();
     }
 
-    // Reverts to idle animation after 10.267 seconds
-    // Time is length of talking animation, should be tweaked to not use value
-    private IEnumerator revertToIdleAnimation() {
-        yield return new WaitForSeconds(10.267f);
-        _animator.SetBool(_isTalkingHash, false);
-
+    public int GetActivatedCount()
+    {
+        return _activatedCount;
     }
 
     public void ExitConversation()
@@ -194,16 +245,6 @@ public class DialogueBoxController : MonoBehaviour
         // stop talk-animation
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
-        StartSpeakCanvas(dialogueTreeRestart);
-    }
-
-    public void StartSpeakCanvas(DialogueTree dialogueTree)
-    {
         ResetBox();
-        _dialogueBox.SetActive(true);
-        _dialogueText.text = null;
-        backgroundRect.sizeDelta = new Vector2(50,30);
-        dialogueTextRect.sizeDelta = new Vector2(50,30);
-        buttonSpawner.spawnSpeakButton(dialogueTree);
     }
 }

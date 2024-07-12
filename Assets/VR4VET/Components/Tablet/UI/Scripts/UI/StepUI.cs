@@ -1,8 +1,6 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Task;
 
 public class StepUI : MonoBehaviour
 {
@@ -11,7 +9,7 @@ public class StepUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI txt_name;
     [SerializeField] TextMeshProUGUI txt_description;
 
-    [SerializeField] public Subtask associatedSubTask;
+    private SubTask associatedSubTask;
     private string _name;
     private string _desc;
     public string Name
@@ -29,16 +27,6 @@ public class StepUI : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() {
-        var Step = associatedSubTask.GetStep(txt_description.text);
-        if (Step.Timer != -1) {
-            Debug.Log(associatedSubTask.name);
-            var Timer = Step.Counter.ToString(@"mm\:ss");
-            txt_name.text = Timer;
-        }
-    }
-
-    /*
     public void InitializeButton(string stepName, string description, SubTask s)
     {//initialized when a subtask is chosen
         associatedSubTask = s;
@@ -49,6 +37,7 @@ public class StepUI : MonoBehaviour
         Debug.Log("Initialized new Step with text" + _name + " and description " + _desc);
     }
 
+
     public void RefreshCompletion()
     {
         ToggleCheck(associatedSubTask.CheckStepCompletion(_name));
@@ -58,6 +47,4 @@ public class StepUI : MonoBehaviour
     {
         checkmark.SetActive(b);
     }
-
-    */
 }

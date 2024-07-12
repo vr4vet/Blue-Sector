@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 namespace Task
 {
 
@@ -15,6 +15,7 @@ namespace Task
     public class TaskHolder : MonoBehaviour
     {
         public static TaskHolder Instance;
+
         private List<TaskxTarget> _taskAndTargerts = new List<TaskxTarget>();
 
         [Header("Profession Tasks")]
@@ -36,6 +37,7 @@ namespace Task
             }
         }
 
+
         public Task GetTask(string taskName)
         {
             Task returnTask = null;
@@ -56,11 +58,11 @@ namespace Task
         {
             Skill returnSkill = null;
 
-            foreach (Skill task in skillList)
+            foreach (Skill skill in skillList)
             {
-                if (task.Name == skillName)
+                if (skill.Name == skillName)
                 {
-                    returnSkill = task;
+                    returnSkill = skill;
                     break;
                 }
             }
@@ -68,7 +70,12 @@ namespace Task
             return returnSkill;
         }
 
+
+
     }
+
+
+
     //this sub-class can be usefull in the future to set targets 
     [System.Serializable]
     public class TaskxTarget
