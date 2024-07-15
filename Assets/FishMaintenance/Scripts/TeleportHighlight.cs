@@ -31,7 +31,7 @@ public class TeleportHighlight : MonoBehaviour
         originalSize = boxCollider.size;
         originalGlow = glowRenderer.sharedMaterial;
         originalCylinder = cylinderRenderer.sharedMaterial;
-        playerTeleport.AnchorHitEvent.AddListener(SetTeleportHighlight);
+        //playerTeleport.AnchorHitEvent.AddListener(SetTeleportHighlight);
     }
 
     public void SetTeleportHighlight(GameObject hitAnchor)
