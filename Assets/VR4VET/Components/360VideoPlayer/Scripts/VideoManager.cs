@@ -11,11 +11,14 @@ public class VideoManager : MonoBehaviour
 {
     public static VideoManager videoManager;
     [SerializeField] private SkyboxHolder SkyboxHolder;
+    [SerializeField] private Task.Skill observantBadge;
+    [SerializeField] private DeadfishDialog deadfishDialog;
 
     private LayerMask oldCulingMask;
     private Camera VRCamera;
 
-   [HideInInspector] public VideoPlayer videoPlayer;
+    [HideInInspector] public VideoPlayer videoPlayer;
+    [SerializeField] private MaintenanceManager mm;
 
 
     /// <summary>
@@ -40,23 +43,23 @@ public class VideoManager : MonoBehaviour
     /// Add the clip to the video manager, apply to the skybox and play the video
     /// </summary>
     /// <param name="clip"></param>
-    public void ShowVideo(VideoClip clip)
-	{
+    public void ShowVideo(VideoClip clip, bool startDeadfishDialog)
+    {
         //change the video clip
         videoPlayer.clip = clip;
 
         // play the video using the videoPlayer attatched to the platform
         videoPlayer.Play();
 
-        StartCoroutine(applyVideo());
+        StartCoroutine(applyVideo(startDeadfishDialog));
 
     }
-    
+
     /// <summary>
     /// This method will wait untill the video clip is fully changed then apply it to the skybox
     /// </summary>
     /// <returns></returns>
-    IEnumerator applyVideo()
+    IEnumerator applyVideo(bool startDeadfishDialog)
     {
         while (!videoPlayer.isPlaying)
         {
@@ -69,6 +72,21 @@ public class VideoManager : MonoBehaviour
         // hide everything in sceene exept potantially the player and teleporting prefab (given not recomended setup)
         VRCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         VRCamera.cullingMask = 1 << LayerMask.NameToLayer("360Video");
+
+
+        while (videoPlayer.isPlaying)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        StopVideo();
+        mm.BadgeChanged.Invoke(observantBadge);
+        if (startDeadfishDialog)
+        {
+            deadfishDialog.UpdateDialog();
+        }
+        // Task.Step videoStep = mm.GetStep("Håndforing", "Se 360 Video");
+        // mm.CompleteStep(videoStep);
+
     }
 
 

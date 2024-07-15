@@ -391,7 +391,7 @@ GameObject:
   - component: {fileID: 52030650}
   - component: {fileID: 52030649}
   - component: {fileID: 52030648}
-  - component: {fileID: 52030647}
+  - component: {fileID: 52030654}
   m_Layer: 0
   m_Name: TeleportationAnchor missingRope
   m_TagString: TeleportationAnchor
@@ -419,18 +419,6 @@ Transform:
   m_Father: {fileID: 2137830489}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -4.792, z: 0}
---- !u!114 &52030647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 52030645}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f41a888eb0e9834da955dea29274309, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &52030648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +441,7 @@ MonoBehaviour:
   PlayerTeleported:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 52030647}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -465,7 +453,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 52030647}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -530,7 +518,7 @@ MonoBehaviour:
   OnPlayerTeleported:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 52030647}
+      - m_Target: {fileID: 52030654}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -542,7 +530,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 52030647}
+      - m_Target: {fileID: 52030654}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -591,6 +579,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.5, y: 3.044056, z: 2.5}
   m_Center: {x: -0.0034730413, y: 1.2668915, z: 0.09162903}
+--- !u!114 &52030654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52030645}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bcb64a152bf7c845a5cbe11d99f46e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maintenanceManager: {fileID: 1489536245}
+  grabber: {fileID: 3645714275691989630}
+  grabbableObject: {fileID: 2106315916}
+  equipmentStep: Hent tau
+  step: "Legg til tau p\xE5 merd"
 --- !u!1 &62090896
 GameObject:
   m_ObjectHideFlags: 0
@@ -2277,7 +2282,7 @@ GameObject:
   - component: {fileID: 316135170}
   - component: {fileID: 316135169}
   - component: {fileID: 316135168}
-  - component: {fileID: 316135167}
+  - component: {fileID: 316135174}
   m_Layer: 0
   m_Name: TeleportationAnchor badRope
   m_TagString: TeleportationAnchor
@@ -2305,18 +2310,6 @@ Transform:
   m_Father: {fileID: 2137830489}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -305.121, z: 0}
---- !u!114 &316135167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 316135165}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f41a888eb0e9834da955dea29274309, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &316135168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2339,7 +2332,7 @@ MonoBehaviour:
   PlayerTeleported:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 316135167}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -2351,7 +2344,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 316135167}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -2429,7 +2422,7 @@ MonoBehaviour:
   OnPlayerTeleported:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 316135167}
+      - m_Target: {fileID: 316135174}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -2441,7 +2434,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 316135167}
+      - m_Target: {fileID: 316135174}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -2477,6 +2470,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &316135174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316135165}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bcb64a152bf7c845a5cbe11d99f46e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maintenanceManager: {fileID: 1489536245}
+  grabber: {fileID: 3645714275691989630}
+  grabbableObject: {fileID: 1268998395}
+  equipmentStep: Hent tau
+  step: "Reparer tau p\xE5 merd"
 --- !u!1001 &318205533
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2703,7 +2713,7 @@ MonoBehaviour:
           m_StringArgument: Hent Utstyr
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 374839974}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AddGuidingHands, Assembly-CSharp
         m_MethodName: intoAnchor
         m_Mode: 1
@@ -2824,9 +2834,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 374839967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c558ac823e3ac3459f660b36c2b6f1f, type: 3}
+  m_Script: {fileID: 11500000, guid: 1196745be9a910c49b4d83fb627062a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mm: {fileID: 1489536247}
+  guidingHandSplint: {fileID: 721102301}
+  guidingHandRope: {fileID: 1809855096}
+  guidingHandBucket: {fileID: 671109478}
 --- !u!1 &417255692 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7833681830108147910, guid: 4aace39680f187b4e93ee4aca54c5cc1,
@@ -5637,7 +5651,7 @@ GameObject:
   - component: {fileID: 1127718179}
   - component: {fileID: 1127718178}
   - component: {fileID: 1127718177}
-  - component: {fileID: 1127718176}
+  - component: {fileID: 1127718183}
   m_Layer: 0
   m_Name: TeleportationAnchor splint
   m_TagString: TeleportationAnchor
@@ -5665,18 +5679,6 @@ Transform:
   m_Father: {fileID: 2137830489}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 20.434, z: 0}
---- !u!114 &1127718176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1127718174}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f41a888eb0e9834da955dea29274309, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1127718177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5699,7 +5701,7 @@ MonoBehaviour:
   PlayerTeleported:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1127718176}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -5711,7 +5713,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1127718176}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -5789,7 +5791,7 @@ MonoBehaviour:
   OnPlayerTeleported:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1127718176}
+      - m_Target: {fileID: 1127718183}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -5801,7 +5803,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1127718176}
+      - m_Target: {fileID: 1127718183}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -5837,6 +5839,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &1127718183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127718174}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bcb64a152bf7c845a5cbe11d99f46e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maintenanceManager: {fileID: 1489536245}
+  grabber: {fileID: 3645714275691989630}
+  grabbableObject: {fileID: 109886414}
+  equipmentStep: Hent splinter
+  step: "Legg til splinter p\xE5 kjetting"
 --- !u!4 &1133746095 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d457fd1c4e6db143b622b3bde87b607,
@@ -8143,7 +8162,7 @@ MonoBehaviour:
   BreakDistance: 0
   HideHandGraphics: 0
   ParentToHands: 0
-  ParentHandModel: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
