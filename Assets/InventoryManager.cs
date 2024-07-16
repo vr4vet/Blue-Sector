@@ -44,6 +44,16 @@ public class InventoryManager : MonoBehaviour
     [SerializeField]
     private bool _bringGameObjectFromInventory;
 
+
+    [Header("Blacllisted Items")]
+    [Tooltip("Drag and drop existing game objects that should not be transferable between scenes")]
+    [SerializeField]
+    private List<GameObject> blacklistedGameObjects = new List<GameObject>();
+
+    [Tooltip("Write tags whose objects should not be transferable between scenes")]
+    [SerializeField]
+    private List<String> blacklistedTags = new List<String>();
+
     // ----------------- Editor Fields For Debug -----------------
 
     [Header("For Debug")]
@@ -157,6 +167,11 @@ public class InventoryManager : MonoBehaviour
         if (rightPocket.HeldGrabbable != null)
         {
             rightHandObject = rightPocket.HeldGrabbable;
+            if (isItemBlacklisted(rightHandObject))
+            {
+                rightHandObject = null;
+                return;
+            }
             if (rightHandObject.tag == "Bone")
             {
                 rightHandObject = null;
@@ -179,6 +194,11 @@ public class InventoryManager : MonoBehaviour
         if (leftPocket.HeldGrabbable != null)
         {
             leftHandObject = leftPocket.HeldGrabbable;
+            if (isItemBlacklisted(leftHandObject))
+            {
+                leftHandObject = null;
+                return;
+            }
             if (leftHandObject.tag == "Bone")
             {
                 leftHandObject = null;
@@ -225,6 +245,11 @@ public class InventoryManager : MonoBehaviour
         if (rightPocket.HeldItem != null)
         {
             rightObject = rightPocket.HeldItem;
+            if (isItemBlacklisted(rightObject))
+            {
+                rightObject = null;
+                return;
+            }
             if (rightObject.tag == "Bone")
             {
                 GameObject fishObject = handleFish(rightObject);
@@ -251,6 +276,11 @@ public class InventoryManager : MonoBehaviour
         if (leftPocket.HeldItem != null)
         {
             leftObject = leftPocket.HeldItem;
+            if (isItemBlacklisted(leftObject))
+            {
+                leftObject = null;
+                return;
+            }
             if (leftObject.tag == "Bone")
             {
                 GameObject fishObject = handleFish(leftObject);
@@ -279,6 +309,12 @@ public class InventoryManager : MonoBehaviour
                 Grabbable objectInInventory = GameObject.Find("PlayerController/CameraRig/TrackingSpace/LeftHandAnchor/LeftControllerAnchor/LeftController/PopupInventoryAnchor/PopupInventory").transform.GetChild(i).gameObject.GetComponent<SnapZone>().HeldItem;
                 if (objectInInventory)
                 {
+                    if (isItemBlacklisted(objectInInventory))
+                    {
+                        objectInInventory = null;
+                        continue;
+                    }
+                    
                     if (objectInInventory.tag == "Bone")
                     {
                         GameObject fishObject = handleFish(leftObject);
@@ -421,5 +457,26 @@ public class InventoryManager : MonoBehaviour
                 return child;
             }
         }
+    }
+
+    private bool isItemBlacklisted(Grabbable item)
+    {
+        foreach (GameObject blacklistedGamObject in blacklistedGameObjects)
+        {
+            if (item.gameObject == blacklistedGamObject)
+            {
+                Debug.Log("Blacklisted gameobject");
+                return true;
+            }
+        }
+        foreach (String blacklistedTag in blacklistedTags)
+        {
+            if (item.gameObject.tag == blacklistedTag)
+            {
+                Debug.Log("Blacklisted tag");
+                return true;
+            }
+        }
+        return false;
     }
 } 
