@@ -24,6 +24,8 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
+    [HideInInspector] private RectTransform backgroundRect;
+    [HideInInspector] private RectTransform dialogueTextRect;
 
     public ButtonSpawner buttonSpawner;
 
@@ -73,7 +75,9 @@ public class DialogueBoxController : MonoBehaviour
         {
             Debug.LogError("DialogueCanvas not found or does not have a Canvas component!");
         }
-
+        // Get the background transform for dimension changes
+        backgroundRect = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
+        dialogueTextRect = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("DialogueText").GetComponent<RectTransform>();
     }
 
     public void updateAnimator() {
@@ -105,7 +109,12 @@ public class DialogueBoxController : MonoBehaviour
 
     IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
     {
+        // Make the "Speak" restart tree the current tree
         dialogueTreeRestart = dialogueTree;
+        // Reset the dialogue box dimensions from "Speak" button dimensions
+        backgroundRect.sizeDelta = new Vector2(160,100);
+        dialogueTextRect.sizeDelta = new Vector2(150,60);
+
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
             // Start talking animation
@@ -192,10 +201,9 @@ public class DialogueBoxController : MonoBehaviour
     {
         ResetBox();
         _dialogueBox.SetActive(true);
-        //dialogueIsActive = true;
         _dialogueText.text = null;
-        RectTransform rt = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(50,30);
+        backgroundRect.sizeDelta = new Vector2(50,30);
+        dialogueTextRect.sizeDelta = new Vector2(50,30);
         buttonSpawner.spawnSpeakButton(dialogueTree);
     }
 }
