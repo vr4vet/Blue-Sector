@@ -67,6 +67,11 @@ public class MaintenanceManager : MonoBehaviour
         }
 
     }
+
+    public void invokeBadge(Task.Skill badge)
+    {
+        BadgeChanged.Invoke(badge);
+    }
     public void effectiveBadgeEnabled(bool passed)
     {
         twentySeconds = passed;

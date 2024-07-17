@@ -5,20 +5,21 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Video;
 
 public class VideoManager : MonoBehaviour
 {
     public static VideoManager videoManager;
     [SerializeField] private SkyboxHolder SkyboxHolder;
-    [SerializeField] private Task.Skill observantBadge;
-    [SerializeField] private DeadfishDialog deadfishDialog;
 
     private LayerMask oldCulingMask;
     private Camera VRCamera;
+    private bool specialEventShouldTrigger;
 
     [HideInInspector] public VideoPlayer videoPlayer;
-    [SerializeField] private MaintenanceManager mm;
+    [SerializeField] public UnityEvent onVideoEndAlways;
+    [SerializeField] public UnityEvent specialEventOnVideoEnd;
 
 
     /// <summary>
@@ -43,15 +44,16 @@ public class VideoManager : MonoBehaviour
     /// Add the clip to the video manager, apply to the skybox and play the video
     /// </summary>
     /// <param name="clip"></param>
-    public void ShowVideo(VideoClip clip, bool startDeadfishDialog)
+    public void ShowVideo(VideoClip clip, bool triggerSpecialEvent)
     {
         //change the video clip
         videoPlayer.clip = clip;
+        specialEventShouldTrigger = triggerSpecialEvent;
 
         // play the video using the videoPlayer attatched to the platform
         videoPlayer.Play();
 
-        StartCoroutine(applyVideo(startDeadfishDialog));
+        StartCoroutine(applyVideo());
 
     }
 
@@ -59,7 +61,7 @@ public class VideoManager : MonoBehaviour
     /// This method will wait untill the video clip is fully changed then apply it to the skybox
     /// </summary>
     /// <returns></returns>
-    IEnumerator applyVideo(bool startDeadfishDialog)
+    IEnumerator applyVideo()
     {
         while (!videoPlayer.isPlaying)
         {
@@ -79,14 +81,6 @@ public class VideoManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         StopVideo();
-        mm.BadgeChanged.Invoke(observantBadge);
-        if (startDeadfishDialog)
-        {
-            deadfishDialog.UpdateDialog();
-        }
-        // Task.Step videoStep = mm.GetStep("Håndforing", "Se 360 Video");
-        // mm.CompleteStep(videoStep);
-
     }
 
 
@@ -102,7 +96,11 @@ public class VideoManager : MonoBehaviour
         VRCamera.cullingMask = oldCulingMask;
 
         SkyboxHolder.applyDefaultSkybox();
+
+        onVideoEndAlways.Invoke();
+        if (specialEventShouldTrigger)
+        {
+            specialEventOnVideoEnd.Invoke();
+        }
     }
-
-
 }

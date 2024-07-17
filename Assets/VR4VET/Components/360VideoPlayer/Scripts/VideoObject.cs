@@ -11,10 +11,13 @@ using BNG;
 public class VideoObject : MonoBehaviour
 {
     public VideoClip videoClip;
-    public Task.Subtask subtask;
-    public MaintenanceManager mm;
-    public bool deadfishSetupVideo;
-    public GameObject deadfishAnchor;
+    public bool triggerSpecialEventOnVideoEnd;
+    public bool hideVideoPlayer;
+
+    [Header("Video is a task")]
+    public VideoIsTask videoIsTask;
+    public bool videoIsTaskBool;
+    
 
     private VideoPlayer videoPlayer;
     private int rotataionSpeed = 50;
@@ -33,7 +36,7 @@ public class VideoObject : MonoBehaviour
     {
         hintText = GetComponentInChildren<TextMesh>();
         videoPlayer = VideoManager.videoManager.videoPlayer;
-        // hintText.transform.SetParent(null);
+        hintText.transform.SetParent(null);
         OriginalRotation = transform.rotation;
         OriginalPosition = transform.position;
         //  XRGI = GetComponent<XRGrabInteractable>();
@@ -44,54 +47,54 @@ public class VideoObject : MonoBehaviour
     /// <summary>
     /// Unity update method
     /// </summary>
-    // void LateUpdate()
+    void LateUpdate()
+    {
+        //Text position
+        hintText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        hintText.gameObject.transform.position = transform.position + new Vector3(0, 0.2f, 0);
+
+
+        if (BNGG.BeingHeld)
+        {
+
+            if (!videoPlayer.isPlaying)
+            {
+                if (!VideoIsPlayedOnce)
+                {
+                    PlayVideo();
+                    VideoIsPlayedOnce = true;
+                }
+            }
+
+        }
+        else if (VideoIsPlayedOnce && !videoPlayer.isPlaying)
+        {
+            StopVideo();
+            VideoIsPlayedOnce = false;
+        }
+        else
+        {
+            HeadsetMovement();
+        }
+    }
+
+    // void OnTriggerEnter(Collider other)
     // {
-    //     //Text position
-    //     hintText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-    //     hintText.gameObject.transform.position = transform.position + new Vector3(0, 0.2f, 0);
-
-
-    //     // if (BNGG.BeingHeld)
-    //     // {
-
-    //     //     if (!videoPlayer.isPlaying)
-    //     //     {
-    //     //         if (!VideoIsPlayedOnce)
-    //     //         {
-    //     //             PlayVideo();
-    //     //             VideoIsPlayedOnce = true;
-    //     //         }
-    //     //     }
-
-    //     // }
-    //     else if (VideoIsPlayedOnce && !videoPlayer.isPlaying)
+    //     if (other.gameObject.tag == "Hand")
     //     {
-    //         StopVideo();
-    //         VideoIsPlayedOnce = false;
-    //     }
-    //     else
-    //     {
-    //         HeadsetMovement();
+    //         PlayVideo();
+    //         VideoIsPlayedOnce = true;
     //     }
     // }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Hand")
-        {
-            PlayVideo();
-            VideoIsPlayedOnce = true;
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.gameObject.tag == "Shovel")
-        {
-            PlayVideo();
-            VideoIsPlayedOnce = true;
-        }
-    }
+    // void OnCollisionEnter(Collision collision)
+    // {
+    //     if (collision.collider.gameObject.tag == "Shovel")
+    //     {
+    //         PlayVideo();
+    //         VideoIsPlayedOnce = true;
+    //     }
+    // }
 
 
     /// <summary>
@@ -140,21 +143,27 @@ public class VideoObject : MonoBehaviour
                 headset.hintText.gameObject.SetActive(false);
             }
 
-        VideoManager.videoManager.ShowVideo(videoClip, deadfishSetupVideo);
-        gameObject.SetActive(false);
-        mm.CompleteStep(subtask.GetStep("Se Video"));
+        VideoManager.videoManager.ShowVideo(videoClip, triggerSpecialEventOnVideoEnd);
+        hintText.text = "Release To Stop";
 
-        if(deadfishAnchor)
+        if (hideVideoPlayer)
         {
-            deadfishAnchor.SetActive(true);
+            gameObject.SetActive(false);
+            hintText.text = null;
+        }
+        if(videoIsTaskBool)
+        {
+            videoIsTask.activateGameObjects();
+            videoIsTask.completeTask();
+
         }
 
         //scale
-        // transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
-        // hintText.text = "Release To Stop";
-        // hintText.text = "";
     }
+
+
 
 
 }
