@@ -7,17 +7,19 @@ using UnityEngine;
 using UnityEngine.Video;
 //using UnityEngine.XR.Interaction.Toolkit;
 using BNG;
+using System.Collections;
 
 public class VideoObject : MonoBehaviour
 {
     public VideoClip videoClip;
     public bool triggerSpecialEventOnVideoEnd;
-    public bool hideVideoPlayer;
+    public bool hideVideoPlayerAfterFirstWatch;
 
     [Header("Video is a task")]
     public VideoIsTask videoIsTask;
     public bool videoIsTaskBool;
     
+
 
     private VideoPlayer videoPlayer;
     private int rotataionSpeed = 50;
@@ -39,7 +41,7 @@ public class VideoObject : MonoBehaviour
         hintText.transform.SetParent(null);
         OriginalRotation = transform.rotation;
         OriginalPosition = transform.position;
-        //  XRGI = GetComponent<XRGrabInteractable>();
+      //  XRGI = GetComponent<XRGrabInteractable>();
         BNGG = GetComponent<Grabbable>();
         Headsets = FindObjectsOfType<VideoObject>();
     }
@@ -51,7 +53,7 @@ public class VideoObject : MonoBehaviour
     {
         //Text position
         hintText.gameObject.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        hintText.gameObject.transform.position = transform.position + new Vector3(0, 0.2f, 0);
+        hintText.gameObject.transform.position = transform.position + new Vector3(0, 0.2f ,0);
 
 
         if (BNGG.BeingHeld)
@@ -67,41 +69,22 @@ public class VideoObject : MonoBehaviour
             }
 
         }
-        else if (VideoIsPlayedOnce && !videoPlayer.isPlaying)
+        else if(VideoIsPlayedOnce)
         {
             StopVideo();
             VideoIsPlayedOnce = false;
-        }
-        else
+        }else
         {
             HeadsetMovement();
         }
     }
-
-    // void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.gameObject.tag == "Hand")
-    //     {
-    //         PlayVideo();
-    //         VideoIsPlayedOnce = true;
-    //     }
-    // }
-
-    // void OnCollisionEnter(Collision collision)
-    // {
-    //     if (collision.collider.gameObject.tag == "Shovel")
-    //     {
-    //         PlayVideo();
-    //         VideoIsPlayedOnce = true;
-    //     }
-    // }
 
 
     /// <summary>
     /// Stop the video and make the object start rotating
     /// </summary>
     void StopVideo()
-    {
+    {   
         foreach (VideoObject headset in Headsets)
         {
             headset.gameObject.SetActive(true);
@@ -113,6 +96,12 @@ public class VideoObject : MonoBehaviour
 
         transform.rotation = OriginalRotation; //reset the rotation to start rotation
         hintText.text = "Grab To Play";
+
+        if (hideVideoPlayerAfterFirstWatch && VideoIsPlayedOnce)
+        {
+            hintText.text = null;
+            gameObject.SetActive(false);
+        }
 
     }
 
@@ -146,24 +135,17 @@ public class VideoObject : MonoBehaviour
         VideoManager.videoManager.ShowVideo(videoClip, triggerSpecialEventOnVideoEnd);
         hintText.text = "Release To Stop";
 
-        if (hideVideoPlayer)
-        {
-            gameObject.SetActive(false);
-            hintText.text = null;
-        }
         if(videoIsTaskBool)
         {
             videoIsTask.activateGameObjects();
             videoIsTask.completeTask();
-
+            videoIsTask.invokeBadge();
         }
 
         //scale
         transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
     }
-
-
 
 
 }

@@ -36,7 +36,6 @@ public class HandFeeding : MonoBehaviour
         if (subtask.Compleated())
         {
             bucket.SetActive(false);
-            videoObject.SetActive(false);
         }
 
     }

@@ -17,9 +17,13 @@ public class VideoManager : MonoBehaviour
     private Camera VRCamera;
     private bool specialEventShouldTrigger;
 
+
     [HideInInspector] public VideoPlayer videoPlayer;
+    [SerializeField] public bool videoShouldStopAfterPlayingOnce;
+    //[SerializeField] public bool videoCantBeInterupted;
     [SerializeField] public UnityEvent onVideoEndAlways;
     [SerializeField] public UnityEvent specialEventOnVideoEnd;
+
 
 
     /// <summary>
@@ -45,10 +49,11 @@ public class VideoManager : MonoBehaviour
     /// </summary>
     /// <param name="clip"></param>
     public void ShowVideo(VideoClip clip, bool triggerSpecialEvent)
-    {
+	{
         //change the video clip
         videoPlayer.clip = clip;
         specialEventShouldTrigger = triggerSpecialEvent;
+
 
         // play the video using the videoPlayer attatched to the platform
         videoPlayer.Play();
@@ -56,7 +61,7 @@ public class VideoManager : MonoBehaviour
         StartCoroutine(applyVideo());
 
     }
-
+    
     /// <summary>
     /// This method will wait untill the video clip is fully changed then apply it to the skybox
     /// </summary>
@@ -74,13 +79,23 @@ public class VideoManager : MonoBehaviour
         // hide everything in sceene exept potantially the player and teleporting prefab (given not recomended setup)
         VRCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         VRCamera.cullingMask = 1 << LayerMask.NameToLayer("360Video");
+        
+        // if (videoCantBeInterupted && !videoPlayer.isLooping)
+        // {
+        //     while (videoPlayer.isPlaying)
+        //     {
+        //         yield return new WaitForEndOfFrame();
+        //     }
+        // }
 
-
-        while (videoPlayer.isPlaying)
+        if (videoShouldStopAfterPlayingOnce && !videoPlayer.isLooping)
         {
-            yield return new WaitForEndOfFrame();
+            while (videoPlayer.isPlaying)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            StopVideo();
         }
-        StopVideo();
     }
 
 
@@ -102,5 +117,8 @@ public class VideoManager : MonoBehaviour
         {
             specialEventOnVideoEnd.Invoke();
         }
+
     }
+
+
 }

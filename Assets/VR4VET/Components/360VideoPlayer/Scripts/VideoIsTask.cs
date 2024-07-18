@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class VideoIsTask : MonoBehaviour
 {
@@ -13,6 +15,9 @@ public class VideoIsTask : MonoBehaviour
     [SerializeField]
     public Task.Subtask subtask;
 
+    [SerializeField]
+    public UnityEvent invokeBadgeEvent;
+
     public void activateGameObjects()
     {
         foreach (GameObject gameObject in objectsActivatingAfterVideo)
@@ -24,5 +29,10 @@ public class VideoIsTask : MonoBehaviour
     public void completeTask()
     {
         gameManager.CompleteStep(subtask.GetStep("Se Video"));
+    }
+
+    internal void invokeBadge()
+    {
+        invokeBadgeEvent.Invoke();
     }
 }

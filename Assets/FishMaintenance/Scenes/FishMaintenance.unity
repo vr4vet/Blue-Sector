@@ -1344,6 +1344,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
+      propertyPath: videoCantBeInterupted
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
+        type: 3}
+      propertyPath: hideVideoPlayerAfterFirstWatch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
+        type: 3}
       propertyPath: onPlay.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1445,7 +1455,7 @@ PrefabInstance:
     - target: {fileID: 4234165376520476066, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.417
+      value: 0.59
       objectReference: {fileID: 0}
     - target: {fileID: 4234165376520476066, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -1455,7 +1465,7 @@ PrefabInstance:
     - target: {fileID: 4234165376520476066, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.1251
+      value: -0.098
       objectReference: {fileID: 0}
     - target: {fileID: 4234165376520476066, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -1908,6 +1918,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8751655888749084018, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
         type: 3}
+      propertyPath: m_Looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8751655888749084018, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
+        type: 3}
       propertyPath: m_VideoClip
       value: 
       objectReference: {fileID: 32900000, guid: 79e63d9bf6b86bf44995d09d6d4d5aa8,
@@ -1935,13 +1950,23 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 8751655888749084020, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
         type: 3}
+      propertyPath: videoCantBeInterupted
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8751655888749084020, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
+        type: 3}
+      propertyPath: videoShouldStopAfterPlayingOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8751655888749084020, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
+        type: 3}
       propertyPath: onVideoEnd.m_PersistentCalls.m_Calls.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8751655888749084020, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
         type: 3}
       propertyPath: onVideoEndAlways.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8751655888749084020, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
         type: 3}
@@ -3011,7 +3036,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: hideVideoPlayer
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -3020,8 +3045,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
+      propertyPath: videoCantBeInterupted
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
+        type: 3}
       propertyPath: triggerSpecialEventOnVideoEnd
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
+        type: 3}
+      propertyPath: hideVideoPlayerAfterFirstWatch
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879985, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -3046,7 +3081,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879999, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4234165376520476066, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -3143,6 +3178,22 @@ MonoBehaviour:
   - {fileID: 1436856679}
   gameManager: {fileID: 1489536247}
   subtask: {fileID: 11400000, guid: 18af548c09e4e7843adb82864aa5c94b, type: 2}
+  invokeBadgeEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1489536247}
+        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
+        m_MethodName: invokeBadge
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: b2174b7512c137243bc37151505dfb43,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Skill, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &318205545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5127,7 +5178,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: hideVideoPlayer
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -5141,7 +5192,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
+      propertyPath: videoCantBeInterupted
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
+        type: 3}
       propertyPath: triggerSpecialEventOnVideoEnd
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
+        type: 3}
+      propertyPath: hideVideoPlayerAfterFirstWatch
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879985, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
@@ -5167,7 +5228,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879999, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4234165376520476066, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -5279,6 +5340,9 @@ MonoBehaviour:
   objectsActivatingAfterVideo: []
   gameManager: {fileID: 1489536247}
   subtask: {fileID: 11400000, guid: 18af548c09e4e7843adb82864aa5c94b, type: 2}
+  invokeBadgeEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &812681641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9488,6 +9552,9 @@ MonoBehaviour:
   objectsActivatingAfterVideo: []
   gameManager: {fileID: 1489536247}
   subtask: {fileID: 11400000, guid: b07be59bfff9c5d4084d8abeee6452cf, type: 2}
+  invokeBadgeEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1670187592
 GameObject:
   m_ObjectHideFlags: 0
