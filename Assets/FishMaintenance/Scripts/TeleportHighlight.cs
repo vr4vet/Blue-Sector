@@ -34,21 +34,23 @@ public class TeleportHighlight : MonoBehaviour
         //playerTeleport.AnchorHitEvent.AddListener(SetTeleportHighlight);
     }
 
-    public void SetTeleportHighlight(GameObject hitAnchor)
-    {
-        if (hitAnchor == this.gameObject)
-        {
-            glowRenderer.material = hitGlow;
-            cylinderRenderer.material = hitCylinder;
+    // The method below requires modifications to BNG 
 
-        }
-        else
-        {
-            glowRenderer.material = originalGlow;
-            cylinderRenderer.material = originalCylinder;
+    // public void SetTeleportHighlight(GameObject hitAnchor)
+    // {
+    //     if (hitAnchor == this.gameObject)
+    //     {
+    //         glowRenderer.material = hitGlow;
+    //         cylinderRenderer.material = hitCylinder;
 
-        }
-    }
+    //     }
+    //     else
+    //     {
+    //         glowRenderer.material = originalGlow;
+    //         cylinderRenderer.material = originalCylinder;
+
+    //     }
+    // }
 
     public void PlayerInside()
     {
