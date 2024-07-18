@@ -5,5 +5,5 @@ using BNG;
 
 public class FishTailToHeadRef : MonoBehaviour
 {
-    public Grabbable Head;
+    public GameObject Root;
 }
