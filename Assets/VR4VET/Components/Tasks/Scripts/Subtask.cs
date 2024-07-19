@@ -43,27 +43,19 @@ namespace Task
         public int Points { get => _points; set => _points = value; }
         public List<Skill> RelatedSkills { get => _relatedSkills; set => _relatedSkills = value; }
 
-        //it returns the completed status, if the autocomplete box is selected it will return true when all its steps are completed
-
-        // private void SetStepNumbers()
+        // private void Awake()
         // {
-        //     int stepNumber = 1;
         //     foreach (Step step in StepList)
         //     {
-        //         step.setStepNumber(stepNumber);
-        //         stepNumber++;
+        //         step.ParentSubtask = this;
+        //         step.setStepNumber(StepList.IndexOf(step) + 1);
+
         //     }
         // }
-
-        private void Awake()
-        {
-            foreach (Step step in StepList)
-            {
-                step.ParentSubtask = this;
-                step.setStepNumber(StepList.IndexOf(step) + 1);
-
-            }
-        }
+        
+        
+        
+        //it returns the completed status, if the autocomplete box is selected it will return true when all its steps are completed
         public bool Compleated()
         {
             if (_autocompleate)
@@ -71,7 +63,7 @@ namespace Task
                 _compleated = true;
                 foreach (Step step in StepList)
                 {
-                    if (!step.IsCompeleted())
+                    if (! step.IsCompeleted())
                     {
                         _compleated = false;
                         break;
@@ -84,6 +76,8 @@ namespace Task
         public void SetCompleated(bool isCompleated)
         {
             _compleated = isCompleated;
+            Tablet.TaskListLoader1 taskLoader = GameObject.FindObjectsOfType<Tablet.TaskListLoader1>()[0];
+            taskLoader.updateCheckMarks();
         }
 
         public float GeneralPercent()
@@ -99,7 +93,7 @@ namespace Task
         public void AddPoints(int value)
         {
             _points += value;
-            // Tablet.TaskListLoader1.Ins.UpdateSkillPoints();
+            Tablet.TaskListLoader1.Ins.UpdateSkillPoints();
         }
 
         public Step GetStep(string stepname)
@@ -115,20 +109,6 @@ namespace Task
             return returnStep;
         }
 
-        public int GetCompletedSteps()
-        {
-            int counter = 0;
-            foreach (Step step in StepList)
-            {
-                if (step.IsCompeleted())
-                {
-                    counter++;
-                }
-            }
-            return counter;
-
-        }
-
         public void RandomizeReps()
         {
             if (_repetitionMin != _repetitionMax)
@@ -137,6 +117,5 @@ namespace Task
             }
             else _repetitions = _repetitionMax;
         }
-
     }
 }

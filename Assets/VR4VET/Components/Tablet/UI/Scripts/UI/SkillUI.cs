@@ -24,7 +24,7 @@ public class SkillUI : MonoBehaviour
     //when clicking a singular skill button, it should switch to the AboutSkill screen and refresh skill subtasks, with this as the currentSkill
     public void OnClickSkillUI()
     {//switch to individual list panel in DDD and update values withthat
-        // StaticPanelManager.Instance.OnClickSkill(DynamicDataDisplayer.Instance.GetSkill(skill));
+        StaticPanelManager.Instance.OnClickSkill(DynamicDataDisplayer.Instance.GetSkill(skill));
     }
 
     public void UpdateValue()

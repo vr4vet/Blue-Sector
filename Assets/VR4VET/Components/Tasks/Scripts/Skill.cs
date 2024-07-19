@@ -11,27 +11,41 @@ namespace Task
     [CreateAssetMenu(fileName = "New Skill", menuName = "Tasks/Skill")]
     public class Skill : ScriptableObject
     {
-
+        private int _maxPoints = 100;
+        private int achievedPoints;
         [SerializeField] private string _name;
 
         [Tooltip("Description of this skill"), TextArea(5, 20)]
         [SerializeField] private string _description;
 
-
-        [Tooltip("Description of how to unlock this skill"), TextArea(5, 20)]
-
-        [SerializeField] private string _instructions;
-
         [SerializeField] private Sprite _icon = null;
 
-        [SerializeField] private Subtask _connectedSubtask;
+        [TextArea(5, 20)]
+        [SerializeField] private string _feedback;
+
+        [Header("Related Subtask")]
+        [SerializeField] private List<Subtask> _subtasks = new List<Subtask>();
+
+        //public Dictionary<Subtask, int> _pointsPerSubtask = new Dictionary<Subtask, int>();
+
         public string Name { get => _name; set => _name = value; }
         public string Description { get => _description; set => _description = value; }
 
         public Sprite Icon { get => _icon; set => _icon = value; }
-        public string Instructions { get => _instructions; set => _instructions = value; }
-        public Subtask ConnectedSubtask { get => _connectedSubtask; set => _connectedSubtask = value; }
+        public List<Subtask> Subtasks { get => _subtasks; set => _subtasks = value; }
+        public int MaxPossiblePoints { get => _maxPoints; set => _maxPoints = value; }
+        public string Feedback { get => _feedback; set => _feedback = value; }
         private bool locked = true;
+
+        private void Awake()
+        {
+            foreach (Subtask sub in _subtasks)
+            {
+                //   _pointsPerSubtask.Add(sub, 0);
+                sub.RelatedSkills.Add(this);
+            }
+        }
+
         public void Lock()
         {
             locked = true;
@@ -47,11 +61,20 @@ namespace Task
             return locked;
         }
 
-
         public int GetArchivedPoints()
         {
-            return 0;
-
+            achievedPoints = 0;
+            foreach (Subtask sub in _subtasks)
+            {
+                if (achievedPoints < MaxPossiblePoints)
+                {
+                    achievedPoints += sub.Points;
+                }else
+                {
+                    achievedPoints = MaxPossiblePoints;
+                }
+            }
+            return achievedPoints;
         }
     }
 }
