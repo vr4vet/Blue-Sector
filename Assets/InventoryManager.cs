@@ -73,7 +73,6 @@ public class InventoryManager : MonoBehaviour
 
     private Dictionary<int, Grabbable> inventoryObjects = new Dictionary<int, Grabbable>();
 
-    private GameObject[] fishInScene;
 
     private List<GameObject> finalFish = new List<GameObject>();
 
@@ -120,7 +119,6 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     public void SaveInventory()
     {
-        fishInScene = GameObject.FindGameObjectsWithTag("Fish");
         if (_bringGameObjectFromRightPocket)
         {
             BringObjectFromRightPocket();
@@ -213,30 +211,25 @@ public class InventoryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// The fish does not function as other grabbables as it has manny grabbables and gets split once its put in the pocket.
+    /// The fish does not function as other grabbables as it has many grabbables and gets split once its put in the pocket.
     /// This function finds split fish and puts them back together before saving them
     /// </summary>
     private GameObject handleFish(Grabbable obj)
     {
-        foreach (GameObject fish in fishInScene)
-        {
-            if (finalFish.Contains(fish))
-            {
-                return fish;
-            }
-            Transform tailEnd = fish.transform.Find("Salmon_Armature/Head/Neck/Back_1/Back_2/Back_3/Back_4/Back_5/Tail/Tail_end");
-            if (tailEnd == null)
-            {
-                obj.transform.parent = findBottom(fish).transform;
-                fish.transform.parent = null;
-                finalFish.Add(fish);
-                DontDestroyOnLoad(fish);
-                return fish;
-            }
-            fishInScene = fishInScene.Where(GameObject => GameObject != fish).ToArray();
+        obj.ResetParent();
+        var fish = obj.gameObject;
+        while (true) {
+            fish = fish.transform.parent.gameObject;
+            if (fish.CompareTag("Fish"))
+                break;
+            continue;
+                
         }
-        return null;
-    }
+        fish.transform.parent = null;
+        finalFish.Add(fish);
+        DontDestroyOnLoad(fish);
+        return fish;
+        }
 
     private void BringObjectFromRightPocket()
     {
