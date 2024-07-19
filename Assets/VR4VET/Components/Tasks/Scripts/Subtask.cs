@@ -43,15 +43,15 @@ namespace Task
         public int Points { get => _points; set => _points = value; }
         public List<Skill> RelatedSkills { get => _relatedSkills; set => _relatedSkills = value; }
 
-        // private void Awake()
-        // {
-        //     foreach (Step step in StepList)
-        //     {
-        //         step.ParentSubtask = this;
-        //         step.setStepNumber(StepList.IndexOf(step) + 1);
+        private void Awake()
+        {
+            foreach (Step step in StepList)
+            {
+                step.ParentSubtask = this;
+                step.setStepNumber(StepList.IndexOf(step) + 1);
 
-        //     }
-        // }
+            }
+        }
         
         
         
@@ -107,6 +107,20 @@ namespace Task
                 }
             }
             return returnStep;
+        }
+
+        public int GetCompletedSteps()
+        {
+            int counter = 0;
+            foreach (Step step in StepList)
+            {
+                if (step.IsCompeleted())
+                {
+                    counter++;
+                }
+            }
+            return counter;
+
         }
 
         public void RandomizeReps()
