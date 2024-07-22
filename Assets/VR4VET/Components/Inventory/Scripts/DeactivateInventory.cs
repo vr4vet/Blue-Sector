@@ -24,13 +24,15 @@ public class DeactivateInventory : MonoBehaviour
                     obj.ResetParent();
                     var fish = obj.gameObject;
                     while (true) {
-                        fish = fish.transform.parent.gameObject;
                         if (fish.CompareTag("Fish"))
                             break;
+                        fish = fish.transform.parent.gameObject;
                     }
-                    fish.SetActive(!fish.activeInHierarchy);
+                    
                     var fishHead = fish.transform.GetChild(2).transform.GetChild(0).GetComponent<Grabbable>();
-                   zone.GrabGrabbable(fishHead);
+                    zone.GrabGrabbable(fish.GetComponent<Grabbable>());
+                    fish.transform.parent = zone.gameObject.transform;
+                    fish.SetActive(!fish.activeInHierarchy);
                 }
             }
             gameObject.transform.GetChild(0).gameObject.SetActive(!gameObject.transform.GetChild(0).gameObject.activeInHierarchy);
