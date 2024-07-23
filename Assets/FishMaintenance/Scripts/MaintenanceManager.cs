@@ -143,6 +143,8 @@ public class MaintenanceManager : MonoBehaviour
         }
     }
 
+    
+
     public void NavigateToBoat()
     {
         toBoatArrow.SetActive(true);
@@ -166,7 +168,6 @@ public class MaintenanceManager : MonoBehaviour
 
     public Task.Step GetStep(string subtaskName, string stepName)
     {
-
         Task.Subtask sub = task.GetSubtask(subtaskName);
 
         Task.Step step = sub.GetStep(stepName);

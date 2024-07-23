@@ -34,6 +34,8 @@ public class DialogueBoxController : MonoBehaviour
 
     // For testing purposes
     public DialogueTree dialogueTreeRestart;
+    public bool dialogueEnded;
+    public int timesEnded = 0;
 
     private void Awake() 
     {
@@ -51,6 +53,7 @@ public class DialogueBoxController : MonoBehaviour
 
     private void Start()
     {
+        dialogueEnded = false;
         // Assign the event camera
         if (_dialogueCanvas != null)
         {
@@ -135,6 +138,8 @@ public class DialogueBoxController : MonoBehaviour
         }
         if (dialogueTree.sections[section].endAfterDialogue)
         {
+            dialogueEnded = true;
+            timesEnded++;
             OnDialogueEnded?.Invoke(name);
             ExitConversation();
             yield break;

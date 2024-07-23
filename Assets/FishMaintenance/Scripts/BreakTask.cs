@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BreakTask : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class BreakTask : MonoBehaviour
     [SerializeField] private GameObject breakAnchor;
     private int _activatedCount = 0;
     private Task.Step breakStep;
+    private DialogueBoxController dialogueController;
 
 
 
@@ -26,8 +29,8 @@ public class BreakTask : MonoBehaviour
             Debug.LogError("No NPCSpawner found");
             return;
         }
-
         _npc = _npcSpawner._npcInstances[0];
+        dialogueController = _npc.gameObject.GetComponent<DialogueBoxController>();
     }
 
     // Update is called once per frame
@@ -38,13 +41,13 @@ public class BreakTask : MonoBehaviour
         ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
         if (task.GetSubtask("Håndforing").Compleated() && task.GetSubtask("Runde På Ring").Compleated() && !conversationController.isDialogueActive())
         {
-
             if (conversationController == null)
             {
                 Debug.LogError("The NPC is missing the conversationController");
             }
-            if (breakStep.IsCompeleted())
+            if (dialogueController.dialogueEnded && !breakStep.IsCompeleted() && dialogueController.timesEnded == 1)
             {
+                mm.CompleteStep(breakStep);
                 deadfishTask.SetActive(true);
                 breakAnchor.SetActive(false);
                 conversationController.SetDialogueTreeList(new List<DialogueTree>

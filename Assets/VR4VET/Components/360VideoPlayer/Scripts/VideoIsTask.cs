@@ -16,7 +16,7 @@ public class VideoIsTask : MonoBehaviour
     public Task.Subtask subtask;
 
     [SerializeField]
-    public UnityEvent invokeBadgeEvent;
+    public UnityEvent EventOnVideoPlay;
 
     public void activateGameObjects()
     {
@@ -26,13 +26,8 @@ public class VideoIsTask : MonoBehaviour
         }
     }
 
-    public void completeTask()
+    internal void invokeEventOnVideoPlay()
     {
-        gameManager.CompleteStep(subtask.GetStep("Se Video"));
-    }
-
-    internal void invokeBadge()
-    {
-        invokeBadgeEvent.Invoke();
+        EventOnVideoPlay.Invoke();
     }
 }

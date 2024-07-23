@@ -9,8 +9,10 @@ public class DeadfishDialog : MonoBehaviour
     [SerializeField] private GameObject videoObject;
     [SerializeField] private MaintenanceManager mm;
     [SerializeField] private DialogueTree dialogueTree;
-    private Task.Step videoStep;
+    [SerializeField] public Task.Step videoStep;
     private Task.Step infoStep;
+    private Task.Task task;
+    private DialogueBoxController dialogueController;
 
     // Start is called before the first frame update
     void Start()
@@ -23,14 +25,21 @@ public class DeadfishDialog : MonoBehaviour
         }
 
         _npc = _npcSpawner._npcInstances[0];
-        Task.Task task = mm.MaintenanceTask;
-        Task.Step videoStep = mm.GetStep("Dødfisk håndtering", "Se Video");
+        task = mm.MaintenanceTask;
+        dialogueController = _npc.gameObject.GetComponent<DialogueBoxController>();
+        infoStep = mm.GetStep("Dødfisk håndtering", "Få info fra Laila");
     }
-
+//ye så step må bli riktig for at det skal fungere
+//dialogen er slutt men må mere til for å ikke få begge videoer opp samtidig
+//unity events i dialogue box kanskje der har de endret mye i hvertfall
     void Update()
-    {
-        Task.Step infoStep = mm.GetStep("Dødfisk håndtering", "Få info fra Laila");
-        if (infoStep.IsCompeleted())
+    { 
+        Debug.Log(dialogueController.timesEnded);
+        if (dialogueController.timesEnded == 2)
+        {
+            mm.CompleteStep(infoStep);
+        }
+        if (dialogueController.timesEnded == 2 && dialogueController.dialogueEnded)
         {
             ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
             if (conversationController == null)

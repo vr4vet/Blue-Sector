@@ -138,8 +138,7 @@ public class VideoObject : MonoBehaviour
         if(videoIsTaskBool)
         {
             videoIsTask.activateGameObjects();
-            videoIsTask.completeTask();
-            videoIsTask.invokeBadge();
+            videoIsTask.invokeEventOnVideoPlay();
         }
 
         //scale

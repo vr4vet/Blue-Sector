@@ -18,7 +18,7 @@ public class ConversationController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-
+        //_hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
         _dialogueBoxController = GetComponentInParent<DialogueBoxController>();
         if (_dialogueBoxController == null) {
             Debug.LogError("The NPC is missing the DialogueBoxCOntroller script");
@@ -149,7 +149,10 @@ public class ConversationController : MonoBehaviour
         if (_dialogueTreesSOFormat.Count > 0) {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
-        _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        if (_animator)
+        {
+            _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        }
     }
 
     /// <summary>
