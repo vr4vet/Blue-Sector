@@ -24,14 +24,15 @@ public class ShowMessages : MonoBehaviour
         float pitchAngleX = localRotation.eulerAngles.x;
         // float pitchAngleY = Quaternion.Euler(localRotation.eulerAngles).y;
         // if (Mathf.Abs(pitchAngleX) > 350f && Mathf.Abs(pitchAngleX) < 50f && Mathf.Abs(pitchAngleY) > 300f && Mathf.Abs(pitchAngleY) < 335f)
-        if ((Mathf.Abs(pitchAngleX) < 70f && Mathf.Abs(pitchAngleX) > 0f) || Mathf.Abs(pitchAngleX) > 320f)
-        {
-            screen.SetActive(true);
-        }
-        else
-        {
-            screen.SetActive(false);
+        
+        // if ((Mathf.Abs(pitchAngleX) < 70f && Mathf.Abs(pitchAngleX) > 0f) || Mathf.Abs(pitchAngleX) > 320f)
+        // {
+        //     screen.SetActive(true);
+        // }
+        // else
+        // {
+        //     screen.SetActive(false);
 
-        }
+        // }
     }
 }

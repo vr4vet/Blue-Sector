@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class LoadWatchInfo : MonoBehaviour
 {
     private MaintenanceManager manager;
+    [SerializeField] public WatchManager watchManager;
     private AddInstructionsToWatch watch;
     private Task.TaskHolder taskHolder;
 
@@ -53,17 +54,27 @@ public class LoadWatchInfo : MonoBehaviour
     }
     private void Start()
     {
-        manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
+        if (FindObjectsOfType<MaintenanceManager>().Length > 0)
+        {
+            manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
+            manager.SkillCompleted.AddListener(HandleSkillUnlocked);
+            manager.CurrentSubtask.AddListener(HandleCurrentSubtask);
+            HandleCurrentSubtask(manager.MaintenanceTask.GetSubtask("Hent Utstyr"));
+        }
+        else
+        {
+            watchManager = GameObject.FindObjectsOfType<WatchManager>()[0];
+            watchManager.SkillCompleted.AddListener(HandleSkillUnlocked);
+            watchManager.CurrentSubtask.AddListener(HandleCurrentSubtask);
+            HandleCurrentSubtask(watchManager.Task.GetSubtask("Wash hands"));
+        }
         watch = GameObject.FindObjectsOfType<AddInstructionsToWatch>()[0];
 
         taskHolder = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
-        manager.CurrentSubtask.AddListener(HandleCurrentSubtask);
 
-        manager.SkillCompleted.AddListener(HandleSkillUnlocked);
         originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
 
         // For å fikse bug, bør endres i Maintenancemanager for å oppdatere på start.
-        HandleCurrentSubtask(manager.MaintenanceTask.GetSubtask("Hent Utstyr"));
     }
 
     private void HandleCurrentSubtask(Task.Subtask subtask)

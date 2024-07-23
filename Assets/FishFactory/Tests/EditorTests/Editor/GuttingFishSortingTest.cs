@@ -76,8 +76,8 @@ public class GuttingFishSortingTest
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        UnityEngine.Object.Destroy(Fish);
-        UnityEngine.Object.Destroy(Sorter);
+        UnityEngine.Object.DestroyImmediate(Fish);
+        UnityEngine.Object.DestroyImmediate(Sorter);
         SceneManager.UnloadSceneAsync(TestSceneName);
     }
 }

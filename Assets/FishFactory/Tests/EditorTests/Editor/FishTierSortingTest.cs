@@ -146,14 +146,14 @@ public class FishTierSortingTest
     [TearDown]
     public void TearDown()
     {
-        UnityEngine.Object.Destroy(Tier1Fish);
-        UnityEngine.Object.Destroy(SortingTrigger);
-        UnityEngine.Object.Destroy(SortingButton);
-        UnityEngine.Object.Destroy(gameManager);
-        UnityEngine.Object.Destroy(audioManager);
-        UnityEngine.Object.Destroy(listener);
-        UnityEngine.Object.Destroy(leftHand);
-        UnityEngine.Object.Destroy(rightHand);
+        UnityEngine.Object.DestroyImmediate(Tier1Fish);
+        UnityEngine.Object.DestroyImmediate(SortingTrigger);
+        UnityEngine.Object.DestroyImmediate(SortingButton);
+        UnityEngine.Object.DestroyImmediate(gameManager);
+        UnityEngine.Object.DestroyImmediate(audioManager);
+        UnityEngine.Object.DestroyImmediate(listener);
+        UnityEngine.Object.DestroyImmediate(leftHand);
+        UnityEngine.Object.DestroyImmediate(rightHand);
         SceneManager.UnloadSceneAsync(TestSceneName);
     }
 }

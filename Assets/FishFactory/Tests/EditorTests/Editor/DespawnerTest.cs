@@ -130,15 +130,15 @@ public class DespawnerTest
     [TearDown]
     public void TearDown()
     {
-        UnityEngine.Object.Destroy(Fish);
-        UnityEngine.Object.Destroy(FishWithMetal);
-        UnityEngine.Object.Destroy(Knife);
-        UnityEngine.Object.Destroy(Despawner);
-        UnityEngine.Object.Destroy(gameManager);
-        UnityEngine.Object.Destroy(audioManager);
-        UnityEngine.Object.Destroy(listener);
-        UnityEngine.Object.Destroy(leftHand);
-        UnityEngine.Object.Destroy(rightHand);
+        UnityEngine.Object.DestroyImmediate(Fish);
+        UnityEngine.Object.DestroyImmediate(FishWithMetal);
+        UnityEngine.Object.DestroyImmediate(Knife);
+        UnityEngine.Object.DestroyImmediate(Despawner);
+        UnityEngine.Object.DestroyImmediate(gameManager);
+        UnityEngine.Object.DestroyImmediate(audioManager);
+        UnityEngine.Object.DestroyImmediate(listener);
+        UnityEngine.Object.DestroyImmediate(leftHand);
+        UnityEngine.Object.DestroyImmediate(rightHand);
         SceneManager.UnloadSceneAsync(TestSceneName);
     }
 }

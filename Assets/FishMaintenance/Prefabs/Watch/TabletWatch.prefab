@@ -259,6 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6262614472083065884}
   - component: {fileID: 5864812423342962552}
+  - component: {fileID: 2112471241496487462}
   m_Layer: 0
   m_Name: TabletWatch
   m_TagString: Untagged
@@ -301,6 +302,21 @@ MonoBehaviour:
   screen: {fileID: 5730797039561066770}
   messageScreen: {fileID: 4595177390203285778}
   textMesh: {fileID: 4595177388440558420}
+--- !u!114 &2112471241496487462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6747120130964788902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba090305c50883428df8e6727be7d75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InputAction: {fileID: 4152163271159088786, guid: e39f4b35a6db18348b41eb0262520e69,
+    type: 3}
+  ToggleObject: {fileID: 615987943635580873}
 --- !u!1001 &7116765778574697220
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -503,8 +519,15 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1982662937726650597, guid: 0300be6a2916f224c80883c703b537dc, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0300be6a2916f224c80883c703b537dc, type: 3}
+--- !u!1 &615987943635580873 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7660544907606201549, guid: 0300be6a2916f224c80883c703b537dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 7116765778574697220}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4595177388440558420 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6703200925264246864, guid: 0300be6a2916f224c80883c703b537dc,
@@ -529,6 +552,26 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7116765778574697220}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6074584419924371163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5730797039561066770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335662f46355f954b9d52b7fd0617ab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  subtaskContent: {fileID: 0}
+  subtaskTitle: {fileID: 0}
+  StatusBar: {fileID: 0}
+  ProgressText: {fileID: 0}
+  StatusText: {fileID: 0}
+  skillContent: {fileID: 0}
+  StepItem: {fileID: 0}
+  SkillItem: {fileID: 0}
 --- !u!224 &5730797039561066773 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3261790646418811409, guid: 0300be6a2916f224c80883c703b537dc,

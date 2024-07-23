@@ -44,10 +44,10 @@ public class GameManagerTests
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        Object.Destroy(gameManager);
-        Object.Destroy(listener);
-        Object.Destroy(leftHand);
-        Object.Destroy(rightHand);
+        Object.DestroyImmediate(gameManager);
+        Object.DestroyImmediate(listener);
+        Object.DestroyImmediate(leftHand);
+        Object.DestroyImmediate(rightHand);
         SceneManager.UnloadSceneAsync(TestSceneName);
         
     }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class SanitizeHands : MonoBehaviour
 {
     // Player can put one or both hands into the sanitizer to clean their hands
+    WatchManager watchManager;
 
     /// <summary>
     /// When the player hand collides with the sanitizer, change the hand state to sanitized. The player can put one or both hands into the sanitizer to clean their hands. Both hands must be sanitized before the player can put on gloves.
@@ -25,6 +26,8 @@ public class SanitizeHands : MonoBehaviour
                 GameManager.Instance.RightHand = GameManager.PlayerHandState.Sanitized;
                 GameManager.Instance.PlaySound("correct");
             }
+            watchManager = FindObjectOfType<WatchManager>();
+            watchManager.CompleteSubTask(watchManager.GetSubtask("Wash hands"));
         }
     }
 }

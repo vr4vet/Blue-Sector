@@ -29,12 +29,9 @@ public class DeadfishDialog : MonoBehaviour
         dialogueController = _npc.gameObject.GetComponent<DialogueBoxController>();
         infoStep = mm.GetStep("Dødfisk håndtering", "Få info fra Laila");
     }
-//ye så step må bli riktig for at det skal fungere
-//dialogen er slutt men må mere til for å ikke få begge videoer opp samtidig
-//unity events i dialogue box kanskje der har de endret mye i hvertfall
+
     void Update()
     { 
-        Debug.Log(dialogueController.timesEnded);
         if (dialogueController.timesEnded == 2)
         {
             mm.CompleteStep(infoStep);
