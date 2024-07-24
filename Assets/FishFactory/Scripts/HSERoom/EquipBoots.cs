@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EquipBoots : MonoBehaviour
 {
+    public UnityEvent OnEquip;
     /// <summary>
     /// When the player's feet or body-collider of choice collide with the boots, equip them
     /// </summary>
@@ -16,6 +18,7 @@ public class EquipBoots : MonoBehaviour
             GameManager.Instance.BootsOn = true;
             GameManager.Instance.PlaySound("correct");
             Destroy(gameObject);
+            OnEquip.Invoke();
         }
     }
 }

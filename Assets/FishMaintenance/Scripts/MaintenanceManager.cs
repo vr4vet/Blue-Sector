@@ -106,8 +106,6 @@ public class MaintenanceManager : MonoBehaviour
                 UpdateCurrentSubtask(sub);
 
             }
-
-
         }
       
         if (sub.Compleated())

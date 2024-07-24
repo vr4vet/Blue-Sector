@@ -8334,6 +8334,22 @@ MonoBehaviour:
   - {fileID: 2100000, guid: e411184659f2c154ba0c58b7e03a28e6, type: 2}
   - {fileID: 2100000, guid: a440b3c946e562140a920a019a73e3a6, type: 2}
   - {fileID: 2100000, guid: a32adf19c2f6a804abce8f893b89751c, type: 2}
+  OnWash:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 9d57af7e8f5d0894a9101e17e2b296da,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &819638194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8346,6 +8362,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be206c8e628132f4a95bcae76c169a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnEquip:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: d7b3db3e775ab0a4f941d0c4c5d3164e,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &832758746
 GameObject:
   m_ObjectHideFlags: 0
@@ -8870,6 +8902,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da85ef4e1dca1e47a9ecb61cd4c3147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnEquip:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: f3de5d25c45fd3f41b7d8f8db75fe0cf,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &851053212 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8371362556765122722, guid: 5933e4e08e3fd6d4c99460b5bc91068e,
@@ -26761,55 +26809,6 @@ Transform:
   m_Father: {fileID: 1282179864}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!1 &1298571849
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1298571851}
-  - component: {fileID: 1298571850}
-  m_Layer: 0
-  m_Name: AddInstructionToWatch
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1298571850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1298571849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f281c3da8ff269742a7cddcd894217e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textMesh: {fileID: 1415038532}
-  incoming: {fileID: 8300000, guid: b83313eae965e244c943a50c94e9598c, type: 3}
-  IncomingMessage:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!4 &1298571851
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1298571849}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1764682, y: 1.3934284, z: -12.540869}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 23
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1328786199 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5582427761267303759, guid: aabd3c08d3b33f54dafb54f8da691fd9,
@@ -27006,6 +27005,40 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1337767034}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1343525628 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4376909619194593628, guid: ea7db852323fd6b4986a2685991fe1c5,
+    type: 3}
+  m_PrefabInstance: {fileID: 56749157}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1343525631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343525628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee824185f47a804e89e63b2f541bd36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnDialogueEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 1171702a616b583418280aedf339f412,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1345617758
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28389,6 +28422,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ebc632eb8d8660429db684fc51e52f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnWachedHands:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 9e7bc58a788f58c46a8eca0d022974d5,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1475192289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30453,7 +30502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335662f46355f954b9d52b7fd0617ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  watchManager: {fileID: 0}
+  watchManager: {fileID: 1854900991}
   subtaskContent: {fileID: 711191648}
   subtaskTitle: {fileID: 1631364541}
   StatusBar: {fileID: 131495129}
@@ -30895,6 +30944,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53452c8edc73a164e85317d2c3d66305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnEquip:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 4c06c3dcd869a0243ad97cc86449e19f,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1694505269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32741,6 +32806,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da85ef4e1dca1e47a9ecb61cd4c3147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnEquip:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: f3de5d25c45fd3f41b7d8f8db75fe0cf,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1810032450 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8371362556765122722, guid: 5933e4e08e3fd6d4c99460b5bc91068e,
@@ -33346,6 +33427,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1854900990}
   - component: {fileID: 1854900991}
+  - component: {fileID: 1854900992}
+  - component: {fileID: 1854900993}
   m_Layer: 0
   m_Name: WatchManager
   m_TagString: Untagged
@@ -33366,7 +33449,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1854900991
 MonoBehaviour:
@@ -33381,10 +33464,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   taskHolder: {fileID: 2131181505}
-  success: {fileID: 8300000, guid: 196ac1377cfbe7e43bd0c2d6e40625d0, type: 3}
+  success: {fileID: 8300000, guid: 6b1cd9975aaca634fb7e6a98698580c5, type: 3}
   arrows: []
   pauseAnchor: {fileID: 0}
   stepCount: 0
+--- !u!114 &1854900992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854900988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554d332a1d4fce04c9ff8bdf497cc2a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1854900993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854900988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f281c3da8ff269742a7cddcd894217e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 1415038532}
+  incoming: {fileID: 8300000, guid: b83313eae965e244c943a50c94e9598c, type: 3}
+  IncomingMessage:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1857221029
 GameObject:
   m_ObjectHideFlags: 0

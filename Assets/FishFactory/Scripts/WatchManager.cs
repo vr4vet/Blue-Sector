@@ -45,7 +45,7 @@ public class WatchManager : MonoBehaviour
     {
         feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
-        UpdateCurrentSubtask(task.GetSubtask("Wash hands"));
+        UpdateCurrentSubtask(task.GetSubtask("Get past gate"));
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Subtask sub in task.Subtasks)
@@ -89,8 +89,7 @@ public class WatchManager : MonoBehaviour
             PlayAudio(success);
             stepCount += 1;
             feedbackManager.emptyInstructions();
-
-            Task.Step nextStep = sub.StepList.FirstOrDefault(element => (!element.IsCompeleted()));
+            Task.Step nextStep = sub.StepList.FirstOrDefault(element => !element.IsCompeleted());
             if (nextStep != null)
             {
                 nextStep.CurrentStep = true;
@@ -101,7 +100,8 @@ public class WatchManager : MonoBehaviour
 
 
         }
-      
+        Debug.Log(sub.Compleated());
+        
         if (sub.Compleated())
         {
             string subtaskName = sub.SubtaskName;
@@ -117,7 +117,6 @@ public class WatchManager : MonoBehaviour
             }
 
             Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
-
             if (nextSubtask != null)
             {
                 Task.Step nextStep = nextSubtask.StepList.FirstOrDefault(element => (!element.IsCompeleted()));
@@ -133,7 +132,6 @@ public class WatchManager : MonoBehaviour
     public void UpdateCurrentSubtask(Task.Subtask subtask)
     {
         CurrentSubtask.Invoke(subtask);
-
     }
 
 

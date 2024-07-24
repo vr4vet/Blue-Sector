@@ -6,14 +6,23 @@ public class FeedbackManager : MonoBehaviour
 {
     private AddInstructionsToWatch watch;
     private MaintenanceManager manager;
+    private WatchManager watchManager;
     private Dictionary<string, List<string>> feedback;
 
     void Start()
     {
-        manager = this.gameObject.GetComponent<MaintenanceManager>();
+        if (gameObject.GetComponent<MaintenanceManager>() != null)
+        {
+            manager = this.gameObject.GetComponent<MaintenanceManager>();
+            manager.SubtaskChanged.AddListener(feedbackOnTaskComplete);
+        }
+        else
+        { 
+            watchManager = gameObject.GetComponent<WatchManager>();
+        }
+
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         feedback = new Dictionary<string, List<string>>();
-        manager.SubtaskChanged.AddListener(feedbackOnTaskComplete);
         feedback.Add("Hent Utstyr", new List<string> {
             "Ta med deg utstyr.",
             "Berør utstyret for å ta det med deg.",
