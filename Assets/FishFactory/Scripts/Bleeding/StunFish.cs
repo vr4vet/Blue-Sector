@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class StunFish : MonoBehaviour
 {
+    public UnityEvent OnStun;
     private void OnTriggerEnter(Collider collisionObject)
     {
         if (collisionObject.transform.parent == null || collisionObject.transform.parent.parent == null)
@@ -23,6 +25,7 @@ public class StunFish : MonoBehaviour
         {
             fishState.Stunned = true;
             GameManager.Instance.PlaySound("correct");
+            OnStun.Invoke();
         }
         else
         {

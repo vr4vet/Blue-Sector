@@ -54,6 +54,9 @@ public class LoadWatchInfo : MonoBehaviour
     }
     private void Start()
     {
+        watch = GameObject.FindObjectsOfType<AddInstructionsToWatch>()[0];
+        taskHolder = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
+
         if (FindObjectsOfType<MaintenanceManager>().Length > 0)
         {
             manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
@@ -66,11 +69,9 @@ public class LoadWatchInfo : MonoBehaviour
             watchManager = GameObject.FindObjectsOfType<WatchManager>()[0];
             watchManager.SkillCompleted.AddListener(HandleSkillUnlocked);
             watchManager.CurrentSubtask.AddListener(HandleCurrentSubtask);
-            HandleCurrentSubtask(watchManager.Task.GetSubtask("Wash hands"));
+            
+            HandleCurrentSubtask(watchManager.Task.Subtasks[0]);
         }
-        watch = GameObject.FindObjectsOfType<AddInstructionsToWatch>()[0];
-
-        taskHolder = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
 
         originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
 

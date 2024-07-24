@@ -13,7 +13,7 @@ public class WatchManager : MonoBehaviour
     [SerializeField] private GameObject pauseAnchor;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
-    private Task.Task task => taskHolder.GetTask("Get ready");
+    private Task.Task task;
     private int teleportationAnchorCount;
 
 
@@ -45,7 +45,8 @@ public class WatchManager : MonoBehaviour
     {
         feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
         watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
-        UpdateCurrentSubtask(task.GetSubtask("Get past gate"));
+        task = taskHolder.taskList[0];
+        UpdateCurrentSubtask(task.Subtasks[0]);
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Subtask sub in task.Subtasks)

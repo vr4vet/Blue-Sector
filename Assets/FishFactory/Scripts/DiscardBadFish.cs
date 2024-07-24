@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DiscardBadFish : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class DiscardBadFish : MonoBehaviour
         get { return _discardedFish.Count; }
     }
 
+    public UnityEvent OnDiscard;
+
     private void OnTriggerEnter(Collider collisionObject)
     {
         if (collisionObject.transform.parent == null || collisionObject.transform.parent.parent == null)
@@ -35,6 +38,7 @@ public class DiscardBadFish : MonoBehaviour
         if (!_discardedFish.Contains(fish.gameObject))
         {
             _discardedFish.Add(fish.gameObject);
+            OnDiscard.Invoke();
             // for testing purposes where there is no GameManager Instance
             if (GameManager.Instance != null)
                 HandleAudioFeedback(fish.GetComponent<FactoryFishState>());

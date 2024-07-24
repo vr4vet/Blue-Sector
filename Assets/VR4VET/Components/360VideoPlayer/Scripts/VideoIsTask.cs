@@ -10,12 +10,6 @@ public class VideoIsTask : MonoBehaviour
     public List<GameObject> objectsActivatingAfterVideo = new List<GameObject>();
 
     [SerializeField]
-    public MaintenanceManager gameManager;
-
-    [SerializeField]
-    public Task.Subtask subtask;
-
-    [SerializeField]
     public UnityEvent EventOnVideoPlay;
 
     public void activateGameObjects()
