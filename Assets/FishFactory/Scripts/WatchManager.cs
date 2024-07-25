@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using Task;
 
 public class WatchManager : MonoBehaviour
 {
@@ -10,8 +11,7 @@ public class WatchManager : MonoBehaviour
     [SerializeField] public Task.TaskHolder taskHolder;
     [SerializeField] private AudioClip success;
     [SerializeField] private GameObject[] arrows;
-    [SerializeField] private GameObject pauseAnchor;
-    private AddInstructionsToWatch watch;
+    [SerializeField] public Subtask FirstSubTask;
     private FeedbackManager feedbackManager;
     private Task.Task task;
     private int teleportationAnchorCount;
@@ -43,10 +43,9 @@ public class WatchManager : MonoBehaviour
 
     void Start()
     {
-        feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
-        watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         task = taskHolder.taskList[0];
-        UpdateCurrentSubtask(task.Subtasks[0]);
+        feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
+        UpdateCurrentSubtask(FirstSubTask);
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Subtask sub in task.Subtasks)
@@ -77,8 +76,11 @@ public class WatchManager : MonoBehaviour
 
     public void CompleteStep(Task.Step step)
     {
-
-        Task.Subtask sub = step.ParentSubtask;
+        if (step.IsCompeleted())
+        {
+            return;
+        }
+        Subtask sub = step.ParentSubtask;
         step.CompleateRep();
         UpdateCurrentSubtask(sub);
         // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
@@ -101,7 +103,6 @@ public class WatchManager : MonoBehaviour
 
 
         }
-        Debug.Log(sub.Compleated());
         
         if (sub.Compleated())
         {

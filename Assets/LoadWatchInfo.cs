@@ -70,7 +70,7 @@ public class LoadWatchInfo : MonoBehaviour
             watchManager.SkillCompleted.AddListener(HandleSkillUnlocked);
             watchManager.CurrentSubtask.AddListener(HandleCurrentSubtask);
             
-            HandleCurrentSubtask(watchManager.Task.Subtasks[0]);
+            HandleCurrentSubtask(watchManager.FirstSubTask);
         }
 
         originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
