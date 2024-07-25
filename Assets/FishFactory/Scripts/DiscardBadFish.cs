@@ -38,7 +38,6 @@ public class DiscardBadFish : MonoBehaviour
         if (!_discardedFish.Contains(fish.gameObject))
         {
             _discardedFish.Add(fish.gameObject);
-            OnDiscard.Invoke();
             // for testing purposes where there is no GameManager Instance
             if (GameManager.Instance != null)
                 HandleAudioFeedback(fish.GetComponent<FactoryFishState>());
@@ -61,6 +60,7 @@ public class DiscardBadFish : MonoBehaviour
             || fishState.ContainsMetal == true
         )
         {
+            OnDiscard.Invoke();
             GameManager.Instance.PlaySound("correct");
         }
         else
