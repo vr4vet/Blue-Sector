@@ -10,13 +10,12 @@ public class WatchManager : MonoBehaviour
     public static WatchManager Instance;
     [SerializeField] public Task.TaskHolder taskHolder;
     [SerializeField] private AudioClip success;
-    [SerializeField] private GameObject[] arrows;
     [SerializeField] public Subtask FirstSubTask;
-    private FeedbackManager feedbackManager;
+    [SerializeField] public FeedbackManager feedbackManager;
+    [SerializeField] private GameObject[] arrows;
+    
     private Task.Task task;
     private int teleportationAnchorCount;
-
-
     [HideInInspector] public int stepCount;
 
     public Task.Task Task { get => task; }
@@ -26,25 +25,24 @@ public class WatchManager : MonoBehaviour
     public UnityEvent<Task.Task> TaskCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
     // Start is called before the first frame update
-    private void Awake()
-    {
+    // private void Awake()
+    // {
        
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    //     if (Instance == null)
+    //     {
+    //         Instance = this;
+    //         DontDestroyOnLoad(gameObject);
+    //     }
+    //     else
+    //     {
+    //         Destroy(gameObject);
+    //     }
+    // }
 
 
     void Start()
     {
         task = taskHolder.taskList[0];
-        feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
         UpdateCurrentSubtask(FirstSubTask);
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
@@ -83,7 +81,6 @@ public class WatchManager : MonoBehaviour
         Subtask sub = step.ParentSubtask;
         step.CompleateRep();
         UpdateCurrentSubtask(sub);
-        // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
         if (step.IsCompeleted())
         {
 
@@ -111,11 +108,6 @@ public class WatchManager : MonoBehaviour
             if (task.Compleated())
             {
                 TaskCompleted.Invoke(task);
-            }
-            if (sub.SubtaskName == "Runde På Ring")
-            {
-                Task.Skill skill = taskHolder.GetSkill("Problemløser");
-                BadgeChanged.Invoke(skill);
             }
 
             Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));

@@ -62,6 +62,8 @@ public class LoadWatchInfo : MonoBehaviour
             manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
             manager.SkillCompleted.AddListener(HandleSkillUnlocked);
             manager.CurrentSubtask.AddListener(HandleCurrentSubtask);
+            originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
+
             HandleCurrentSubtask(manager.MaintenanceTask.GetSubtask("Hent Utstyr"));
         }
         else
@@ -69,13 +71,10 @@ public class LoadWatchInfo : MonoBehaviour
             watchManager = GameObject.FindObjectsOfType<WatchManager>()[0];
             watchManager.SkillCompleted.AddListener(HandleSkillUnlocked);
             watchManager.CurrentSubtask.AddListener(HandleCurrentSubtask);
+            originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
             
             HandleCurrentSubtask(watchManager.FirstSubTask);
         }
-
-        originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
-
-        // For å fikse bug, bør endres i Maintenancemanager for å oppdatere på start.
     }
 
     private void HandleCurrentSubtask(Task.Subtask subtask)
@@ -111,7 +110,6 @@ public class LoadWatchInfo : MonoBehaviour
     public void UpdateProgressBar(Task.Task task)
     {
 
-
         RectTransform barTransform = StatusBar.GetComponent<RectTransform>();
         float taskProgress = task.GetProgress() / task.Subtasks.Count * originalTransform.x;
         barTransform.sizeDelta = new Vector2(taskProgress, originalTransform.y);
@@ -130,7 +128,6 @@ public class LoadWatchInfo : MonoBehaviour
     }
     public void LoadSubtasks(Task.Subtask subtask)
     {
-
         subtaskTitle.GetComponent<TMP_Text>().text = subtask.SubtaskName;
 
 

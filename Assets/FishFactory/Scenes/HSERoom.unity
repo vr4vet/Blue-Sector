@@ -3804,6 +3804,40 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 275116462}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &283344063 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4376909619194593628, guid: ea7db852323fd6b4986a2685991fe1c5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1690262014}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &283344066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283344063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee824185f47a804e89e63b2f541bd36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnDialogueEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 39bd1f22efda4ba4784b1b99d5b5dc9b,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &294327932
 GameObject:
   m_ObjectHideFlags: 0
@@ -9189,7 +9223,20 @@ MonoBehaviour:
   sceneName: QAStation
   OnChangeScene:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 8a7d85e3156138d4b8e9839f181fd47d,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &860771505
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9815,7 +9862,20 @@ MonoBehaviour:
   sceneName: BleedingStation
   OnChangeScene:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 8a7d85e3156138d4b8e9839f181fd47d,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &911131564
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -32713,7 +32773,20 @@ MonoBehaviour:
   sceneName: QualityAssuranceStation
   OnChangeScene:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1854900991}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 8a7d85e3156138d4b8e9839f181fd47d,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &1797859510
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -32917,6 +32990,47 @@ PrefabInstance:
         type: 3}
       propertyPath: triggers.Array.data[1]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
+        type: 3}
+      propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
+        type: 3}
+      propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
+        type: 3}
+      propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1854900991}
+    - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
+        type: 3}
+      propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
+        type: 3}
+      propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CompleteStep
+      objectReference: {fileID: 0}
+    - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
+        type: 3}
+      propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: WatchManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
+        type: 3}
+      propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 11400000, guid: 8a7d85e3156138d4b8e9839f181fd47d,
+        type: 2}
+    - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
+        type: 3}
+      propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Task.Step, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1130287885769586043, guid: e5c67fc8af1288446ad73de64928b0bd,
         type: 3}
@@ -33483,8 +33597,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskHolder: {fileID: 2131181505}
   success: {fileID: 8300000, guid: 6b1cd9975aaca634fb7e6a98698580c5, type: 3}
-  arrows: []
   FirstSubTask: {fileID: 11400000, guid: 3af3976dd6f7b114b8cbfc57e4f93093, type: 2}
+  feedbackManager: {fileID: 1854900992}
+  arrows: []
   stepCount: 0
 --- !u!114 &1854900992
 MonoBehaviour:
