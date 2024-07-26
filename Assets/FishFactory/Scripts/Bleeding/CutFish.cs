@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using Task;
 using UnityEngine;
@@ -12,6 +13,13 @@ public class CutFish : MonoBehaviour
     protected KnifeState _knifeState;
 
     public GameObject[] knifes;
+
+    private int numbersCut = 0;
+
+    private bool state;
+
+    private WatchManager watchManager;
+    private TaskHolder taskHolder;
 
 
     void Start()
@@ -40,7 +48,16 @@ public class CutFish : MonoBehaviour
             return;
         if (isGills)
         {
+            numbersCut++;
             _fishState.CutFishGills();
+            if (numbersCut == 20)
+            {
+                watchManager = GameObject.FindObjectOfType<WatchManager>();
+                taskHolder = GameObject.FindObjectOfType<TaskHolder>();
+
+                Task.Skill skill = taskHolder.GetSkill("Adept with the knife");
+                watchManager.BadgeChanged.Invoke(skill);
+            }
         }
         else
         {

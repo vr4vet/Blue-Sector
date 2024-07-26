@@ -21,6 +21,8 @@ public class FishSortingTrigger : MonoBehaviour
     public UnityEvent OnTier2;
     [SerializeField]
     public UnityEvent OnTier3;
+    [SerializeField]
+    public UnityEvent OnXSortedFish;
 
     /// <summary>
     /// When the fish enters the trigger, check if the fish has been sorted and if it has the correct tier
@@ -45,6 +47,7 @@ public class FishSortingTrigger : MonoBehaviour
         string fishState = fish.GetComponent<FactoryFishState>().fishTier.ToString();
         if (fishState == _tierManager.CurrentTier.ToString())
         {
+            _tierManager.correctlySortedFish++;
             GameManager.Instance.PlaySound("correct");
             switch (fishState)
             {
@@ -57,6 +60,10 @@ public class FishSortingTrigger : MonoBehaviour
                 case "Tier3":
                     OnTier3.Invoke();
                     break;
+            }
+            if (_tierManager.correctlySortedFish > 25)
+            {
+                OnXSortedFish.Invoke();
             }
         }
         else

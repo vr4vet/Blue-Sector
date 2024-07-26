@@ -39,11 +39,6 @@ public class DiscardBadFish : MonoBehaviour
         if (!_discardedFish.Contains(fish.gameObject))
         {
             _discardedFish.Add(fish.gameObject);
-            OnDiscard.Invoke();
-            if (_discardedFish.Count == 10)
-            {
-                OnDiscardAfterCount.Invoke();
-            }
             // for testing purposes where there is no GameManager Instance
             if (GameManager.Instance != null)
                 HandleAudioFeedback(fish.GetComponent<FactoryFishState>());
@@ -67,6 +62,10 @@ public class DiscardBadFish : MonoBehaviour
         )
         {
             OnDiscard.Invoke();
+            if (_discardedFish.Count == 10)
+            {
+                OnDiscardAfterCount.Invoke();
+            }
             GameManager.Instance.PlaySound("correct");
         }
         else
