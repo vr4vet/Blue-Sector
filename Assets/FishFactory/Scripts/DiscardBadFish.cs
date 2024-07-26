@@ -23,6 +23,7 @@ public class DiscardBadFish : MonoBehaviour
     }
 
     public UnityEvent OnDiscard;
+    public UnityEvent OnDiscardAfterCount;
 
     private void OnTriggerEnter(Collider collisionObject)
     {
@@ -39,6 +40,10 @@ public class DiscardBadFish : MonoBehaviour
         {
             _discardedFish.Add(fish.gameObject);
             OnDiscard.Invoke();
+            if (_discardedFish.Count == 10)
+            {
+                OnDiscardAfterCount.Invoke();
+            }
             // for testing purposes where there is no GameManager Instance
             if (GameManager.Instance != null)
                 HandleAudioFeedback(fish.GetComponent<FactoryFishState>());

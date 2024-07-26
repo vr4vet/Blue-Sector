@@ -14,15 +14,25 @@ public class HUDMessage : MonoBehaviour
     private CanvasGroup canvasGroup;
 
     private MaintenanceManager manager;
+    private WatchManager watchManager;
 
 
 
     void Start()
     {
-        manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
-        canvasGroup = gameObject.GetComponent<CanvasGroup>();
-        manager.SkillCompleted.AddListener(EnableSkillDisplay);
-        manager.TaskCompleted.AddListener(EnableTaskDisplay);
+        if (FindObjectsOfType<MaintenanceManager>().Length > 0)
+        {
+            manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
+            manager.SkillCompleted.AddListener(EnableSkillDisplay);
+            manager.TaskCompleted.AddListener(EnableTaskDisplay);
+        }
+        else
+        {
+            watchManager = GameObject.FindObjectOfType<WatchManager>();
+            watchManager.SkillCompleted.AddListener(EnableSkillDisplay);
+            watchManager.TaskCompleted.AddListener(EnableTaskDisplay);
+        }
+        canvasGroup = gameObject.GetComponent<CanvasGroup>(); 
     }
 
     public void EnableTaskDisplay(Task.Task task)

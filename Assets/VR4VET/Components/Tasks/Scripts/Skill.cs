@@ -39,10 +39,13 @@ namespace Task
 
         private void Awake()
         {
-            foreach (Subtask sub in _subtasks)
+            if (_subtasks.Count > 0)
             {
-                //   _pointsPerSubtask.Add(sub, 0);
-                sub.RelatedSkills.Add(this);
+                foreach (Subtask sub in _subtasks)
+                {
+                    //   _pointsPerSubtask.Add(sub, 0);
+                    sub.RelatedSkills.Add(this);
+                }
             }
         }
 

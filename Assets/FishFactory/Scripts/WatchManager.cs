@@ -83,9 +83,7 @@ public class WatchManager : MonoBehaviour
         UpdateCurrentSubtask(sub);
         if (step.IsCompeleted())
         {
-
             SubtaskChanged.Invoke(sub);
-
             PlayAudio(success);
             stepCount += 1;
             feedbackManager.emptyInstructions();
@@ -95,10 +93,7 @@ public class WatchManager : MonoBehaviour
                 nextStep.CurrentStep = true;
                 step.CurrentStep = false;
                 UpdateCurrentSubtask(sub);
-
             }
-
-
         }
         
         if (sub.Compleated())

@@ -3,7 +3,9 @@ using UnityEngine.Events;
 
 public class StunFish : MonoBehaviour
 {
+    private int stunnedFish = 0;
     public UnityEvent OnStun;
+    public UnityEvent OnXFishStunned;
     private void OnTriggerEnter(Collider collisionObject)
     {
         if (collisionObject.transform.parent == null || collisionObject.transform.parent.parent == null)
@@ -24,8 +26,13 @@ public class StunFish : MonoBehaviour
         if (fishState.Stunned == false)
         {
             fishState.Stunned = true;
+            stunnedFish++;
             GameManager.Instance.PlaySound("correct");
             OnStun.Invoke();
+            if (stunnedFish == 10)
+            {
+                OnXFishStunned.Invoke();
+            }
         }
         else
         {

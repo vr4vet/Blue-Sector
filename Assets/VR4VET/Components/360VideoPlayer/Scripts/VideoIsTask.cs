@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Task;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,7 +11,13 @@ public class VideoIsTask : MonoBehaviour
     public List<GameObject> objectsActivatingAfterVideo = new List<GameObject>();
 
     [SerializeField]
+    public Step step;
+
+    [SerializeField]
     public UnityEvent EventOnVideoPlay;
+
+    [SerializeField]
+    public UnityEvent EventOnStepCompleted;
 
     public void activateGameObjects()
     {
@@ -23,5 +30,10 @@ public class VideoIsTask : MonoBehaviour
     internal void invokeEventOnVideoPlay()
     {
         EventOnVideoPlay.Invoke();
+        if (step.IsCompeleted())
+        {
+            Debug.Log("yeees");
+            EventOnStepCompleted.Invoke();
+        }
     }
 }
