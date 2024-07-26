@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
@@ -151,7 +153,7 @@ public class SceneController : MonoBehaviour
 
         GameManager.Instance.IsTaskOn = false;
         GameManager.Instance.IsSecondaryTaskOn = false;
-
+        
         // Remove the delegate to prevent memory leaks
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
