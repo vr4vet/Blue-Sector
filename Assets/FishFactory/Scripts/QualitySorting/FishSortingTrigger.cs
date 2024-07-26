@@ -49,21 +49,24 @@ public class FishSortingTrigger : MonoBehaviour
         {
             _tierManager.correctlySortedFish++;
             GameManager.Instance.PlaySound("correct");
-            switch (fishState)
+            if (OnTier1 != null)
             {
-                case "Tier1":
-                    OnTier1.Invoke();
-                    break;
-                case "Tier2":
-                    OnTier2.Invoke();
-                    break;
-                case "Tier3":
-                    OnTier3.Invoke();
-                    break;
-            }
-            if (_tierManager.correctlySortedFish > 25)
-            {
-                OnXSortedFish.Invoke();
+                switch (fishState)
+                {
+                    case "Tier1":
+                        OnTier1.Invoke();
+                        break;
+                    case "Tier2":
+                        OnTier2.Invoke();
+                        break;
+                    case "Tier3":
+                        OnTier3.Invoke();
+                        break;
+                }
+                if (_tierManager.correctlySortedFish > 25)
+                {
+                    OnXSortedFish.Invoke();
+                }
             }
         }
         else

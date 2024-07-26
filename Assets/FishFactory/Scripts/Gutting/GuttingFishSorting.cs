@@ -63,13 +63,16 @@ public class GuttingFishSorting : MonoBehaviour
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
         if (fishState.guttingState == _successOnGuttingSuccess)
         {
-            if (fishState.guttingState == FactoryFishState.GuttingState.GuttingSuccess)
+            if (OnGuttingSuccess != null)
             {
-                OnGuttingSuccess.Invoke();
-            }
-            else if (fishState.guttingState == FactoryFishState.GuttingState.GuttingIncomplete)
-            {
-                OnGuttingIncomplete.Invoke();
+                if (fishState.guttingState == FactoryFishState.GuttingState.GuttingSuccess)
+                {
+                    OnGuttingSuccess.Invoke();
+                }
+                else if (fishState.guttingState == FactoryFishState.GuttingState.GuttingIncomplete)
+                {
+                    OnGuttingIncomplete.Invoke();
+                }
             }
             return true;
         }

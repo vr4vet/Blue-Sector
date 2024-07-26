@@ -28,10 +28,13 @@ public class StunFish : MonoBehaviour
             fishState.Stunned = true;
             stunnedFish++;
             GameManager.Instance.PlaySound("correct");
-            OnStun.Invoke();
-            if (stunnedFish == 10)
+            if (OnStun != null)
             {
-                OnXFishStunned.Invoke();
+                OnStun.Invoke();
+                if (stunnedFish == 10)
+                {
+                    OnXFishStunned.Invoke();
+                }
             }
         }
         else

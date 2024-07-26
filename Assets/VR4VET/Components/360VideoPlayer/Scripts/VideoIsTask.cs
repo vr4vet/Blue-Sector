@@ -32,7 +32,6 @@ public class VideoIsTask : MonoBehaviour
         EventOnVideoPlay.Invoke();
         if (step.IsCompeleted())
         {
-            Debug.Log("yeees");
             EventOnStepCompleted.Invoke();
         }
     }

@@ -63,8 +63,10 @@ public class CutFish : MonoBehaviour
         {
             _fishState.CutFishBody();
         }
-        
-        bool state = _knifeState.DecrementDurabilityCount();
+        if (_knifeState)
+        {
+            state = _knifeState.DecrementDurabilityCount();
+        }
         if (state)
         {
             _fishState.PlaceMetalInFish();
