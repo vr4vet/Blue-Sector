@@ -96,7 +96,7 @@ public class DialogueBoxController : MonoBehaviour
     }
 
 
-    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
+    public void DialogueTrigger(DialogueTree dialogueTree, int startSection, string name) 
     {
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking

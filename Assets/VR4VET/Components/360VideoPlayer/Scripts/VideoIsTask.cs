@@ -30,9 +30,12 @@ public class VideoIsTask : MonoBehaviour
     internal void invokeEventOnVideoPlay()
     {
         EventOnVideoPlay.Invoke();
-        if (step.IsCompeleted())
+        if (step)
         {
-            EventOnStepCompleted.Invoke();
-        }
+            if (step.IsCompeleted())
+            {
+                EventOnStepCompleted.Invoke();
+            }
+        }  
     }
 }

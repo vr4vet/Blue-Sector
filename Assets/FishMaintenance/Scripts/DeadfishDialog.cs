@@ -68,7 +68,7 @@ public class DeadfishDialog : MonoBehaviour
         else
         {
             conversationController.SetDialogueTreeList(dialogueTree);
-            conversationController.startDialog();
+            conversationController.DialogueTrigger();
         }
     }
 }
