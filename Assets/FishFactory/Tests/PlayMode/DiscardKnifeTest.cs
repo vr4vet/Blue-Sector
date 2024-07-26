@@ -114,15 +114,15 @@ public class DiscardKnifeTest
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        UnityEngine.Object.DestroyImmediate(Knife);
-        UnityEngine.Object.DestroyImmediate(Fish);
-        UnityEngine.Object.DestroyImmediate(DiscardBox);
+        UnityEngine.Object.Destroy(Knife);
+        UnityEngine.Object.Destroy(Fish);
+        UnityEngine.Object.Destroy(DiscardBox);
         // Can be removed once issue #521 is complete
-        UnityEngine.Object.DestroyImmediate(gameManager);
-        UnityEngine.Object.DestroyImmediate(audioManager);
-        UnityEngine.Object.DestroyImmediate(listener);
-        UnityEngine.Object.DestroyImmediate(leftHand);
-        UnityEngine.Object.DestroyImmediate(rightHand);
+        UnityEngine.Object.Destroy(gameManager);
+        UnityEngine.Object.Destroy(audioManager);
+        UnityEngine.Object.Destroy(listener);
+        UnityEngine.Object.Destroy(leftHand);
+        UnityEngine.Object.Destroy(rightHand);
         //---------------------------------------
         SceneManager.UnloadSceneAsync(TestSceneName);
     }

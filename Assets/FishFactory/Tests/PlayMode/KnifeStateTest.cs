@@ -69,10 +69,10 @@ public class KnifeStateTest
     [OneTimeTearDown]
     public void OneTimeTearDown() 
     {
-        Object.DestroyImmediate(Knife);
-        Object.DestroyImmediate(Fish);
-        Object.DestroyImmediate(GameManager);
-        Object.DestroyImmediate(AudioManager);
+        Object.Destroy(Knife);
+        Object.Destroy(Fish);
+        Object.Destroy(GameManager);
+        Object.Destroy(AudioManager);
         SceneManager.UnloadSceneAsync(KnifeStateTestScene);
     }
 }

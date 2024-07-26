@@ -91,8 +91,8 @@ public class DiscardFishTests
     [TearDown]
     public void TearDown()
     {
-        Object.DestroyImmediate(fish);
-        Object.DestroyImmediate(discardBox);
+        Object.Destroy(fish);
+        Object.Destroy(discardBox);
         SceneManager.UnloadSceneAsync(TestSceneName);
     }
 }
