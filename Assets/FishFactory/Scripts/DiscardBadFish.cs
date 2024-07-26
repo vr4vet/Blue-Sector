@@ -66,6 +66,7 @@ public class DiscardBadFish : MonoBehaviour
             || fishState.ContainsMetal == true
         )
         {
+            OnDiscard.Invoke();
             GameManager.Instance.PlaySound("correct");
         }
         else
