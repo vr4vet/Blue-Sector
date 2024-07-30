@@ -103,10 +103,6 @@ public class LoadWatchInfo : MonoBehaviour
 
     }
 
-
-
-
-
     public void UpdateProgressBar(Task.Task task)
     {
 

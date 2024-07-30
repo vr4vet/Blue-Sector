@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,14 @@ public class FeedbackManager : MonoBehaviour
     private MaintenanceManager manager;
     private WatchManager watchManager;
     private Dictionary<string, List<string>> feedback;
+
+    [Serializable]
+    public struct WatchInfo {
+    public string step;
+    public List<string> watchFeedback;
+    }
+
+    public WatchInfo[] watchInfo;
 
     void Start()
     {
