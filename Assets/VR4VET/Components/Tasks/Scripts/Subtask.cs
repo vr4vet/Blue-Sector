@@ -76,8 +76,11 @@ namespace Task
         public void SetCompleated(bool isCompleated)
         {
             _compleated = isCompleated;
-            Tablet.TaskListLoader1 taskLoader = GameObject.FindObjectsOfType<Tablet.TaskListLoader1>()[0];
-            taskLoader.updateCheckMarks();
+            if (FindObjectsOfType<Tablet.TaskListLoader1>().Length > 0)
+            {
+                Tablet.TaskListLoader1 taskLoader = GameObject.FindObjectsOfType<Tablet.TaskListLoader1>()[0];
+                taskLoader.updateCheckMarks();
+            }
         }
 
         public float GeneralPercent()

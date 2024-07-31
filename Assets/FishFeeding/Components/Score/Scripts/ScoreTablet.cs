@@ -65,7 +65,7 @@ public class ScoreTablet : MonoBehaviour
         foreach (Subtask subTask in fishFeedTask.Subtasks) {
              subTask.SetCompleated(false);
         }
-        fishFeedTask.Compleated(false);
+        //fishFeedTask.Compleated(false);
         /*Debug.Log("Steer camera: " + fishFeedTask.GetSubtask("Steer the camera").Points);
         Debug.Log("Adjust feeding intensity: " + fishFeedTask.GetSubtask("Adjust feeding intensity").Points);
         Debug.Log("Switch to another cage: " + fishFeedTask.GetSubtask("Switch to another cage").Points);

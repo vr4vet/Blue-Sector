@@ -41,7 +41,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
             dialogueCanvas.localScale = new Vector3(0.008f, 0.008f, 0.008f);
         }
 
-        _npc = _npcSpawner._npcInstances[1];
+        _npc = _npcSpawner._npcInstances[0];
 
         // Disables capsule collider and adds box collider to NPC
         GameObject collisionTrigger = _npc.transform.GetChild(0).gameObject;

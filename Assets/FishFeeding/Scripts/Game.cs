@@ -3,11 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Game : MonoBehaviour
 {
@@ -48,6 +50,9 @@ public class Game : MonoBehaviour
     public bool IsTutorialCompleted { get; set; }
     public bool CanStartGame => InActivatedArea && IsTutorialCompleted;
 
+    public UnityEvent arcadeModeComplete;
+    public UnityEvent advancedModeComplete;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -78,7 +83,6 @@ public class Game : MonoBehaviour
     private void Update()
     {
         UpdateCurrentMerdText();
-
         if (startGame) // only check for pre game things if not started
         {
             UpdateScreenStats();
@@ -121,6 +125,14 @@ public class Game : MonoBehaviour
         {
             FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
             merdScript.SetIdle();
+        }
+        if (currentMode.name == "arcade")
+        {
+            arcadeModeComplete.Invoke();
+        }
+        else
+        {
+            advancedModeComplete.Invoke();
         }
         scoreTablet.GiveFinalTabletScore();
         endScoreText.text = scoring.Score.ToString();

@@ -25,8 +25,10 @@ public class AddInstructionsToWatch : MonoBehaviour
 
         IncomingMessage.Invoke();
 
-
-        textMesh.SetText(text);
+        if (textMesh)
+        {
+            textMesh.SetText(text);
+        }
         PlayAudio();
 
     }
@@ -44,7 +46,10 @@ public class AddInstructionsToWatch : MonoBehaviour
 
     public void emptyInstructions()
     {
-        textMesh.SetText("");
+        if (textMesh)
+        {
+            textMesh.SetText("");
+        }
     }
 
 

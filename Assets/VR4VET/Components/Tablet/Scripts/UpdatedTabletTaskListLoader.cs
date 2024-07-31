@@ -89,12 +89,14 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         _skills = th.skillList;
         originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
 
-
         LoadSkillsPage();
-
     }
     public void UpdateProgressBar(Task.Task task)
     {
+        if (task == null)
+        {
+            return;
+        }
         RectTransform barTransform = StatusBar.GetComponent<RectTransform>();
         float taskProgress = task.GetProgress() / task.Subtasks.Count * originalTransform.x;
         barTransform.sizeDelta = new Vector2(taskProgress, originalTransform.y);
@@ -130,7 +132,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
 
         //loads each skill on the parent object
         Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
-
+        UpdateProgressBar(_tasks[0]);
         for (int i = 0; i < th.skillList.Count; i++)
         {
             GameObject horizontalParent = horizontal1;
@@ -163,7 +165,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             padlock.SetActive(skill.IsLocked());
             completedBackground.SetActive(!skill.IsLocked());
         }
-        UpdateProgressBar(_tasks[0]);
+        
     }
     
     //gets called on Start since the list of task is always the same

@@ -9,6 +9,7 @@ using UnityEngine.Events;
 
 public class TutorialEntry : MonoBehaviour
 {
+    public UnityEvent oncomplete;
     internal Tutorial Tutorial { get; set; }
     public void SetCompleted()
     {
@@ -16,6 +17,7 @@ public class TutorialEntry : MonoBehaviour
             && Tutorial != null
             && Tutorial.Current == this)
         {
+            oncomplete.Invoke();
             Tutorial.MoveNext();
         }
     }
