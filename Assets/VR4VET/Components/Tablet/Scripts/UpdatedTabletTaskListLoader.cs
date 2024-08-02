@@ -89,9 +89,8 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         _skills = th.skillList;
         originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
 
-
         LoadSkillsPage();
-
+        SubTaskPageLoader(_tasks[0].Subtasks[0]);
     }
     public void UpdateProgressBar(Task.Task task)
     {

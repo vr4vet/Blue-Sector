@@ -24,26 +24,10 @@ public class WatchManager : MonoBehaviour
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
     public UnityEvent<Task.Task> TaskCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
-    // Start is called before the first frame update
-    // private void Awake()
-    // {
-       
-    //     if (Instance == null)
-    //     {
-    //         Instance = this;
-    //         DontDestroyOnLoad(gameObject);
-    //     }
-    //     else
-    //     {
-    //         Destroy(gameObject);
-    //     }
-    // }
-
 
     void Start()
     {
         task = taskHolder.taskList[0];
-        UpdateCurrentSubtask(FirstSubTask);
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Subtask sub in task.Subtasks)
@@ -58,7 +42,7 @@ public class WatchManager : MonoBehaviour
         {
             skill.Lock();
         }
-
+        UpdateCurrentSubtask(FirstSubTask);
     }
 
     public void invokeBadge(Task.Skill badge)
