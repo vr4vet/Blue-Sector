@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sections:
   - dialogue:
-    - Welcome to the Fish Labratory. Here you will check the quality of the fish.
+    - Welcome to the Fish Laboratory. Here you will check the quality of the fish.
     - This is done through multiple steps. First  you will have to measure the fish,
-      then disect it and check it's qualities.
+      then dissect it and check it's qualities.
     endAfterDialogue: 0
     branchPoint:
       question: Do you want  to learn more about the different tasks you will do?
@@ -24,7 +24,7 @@ MonoBehaviour:
       - answerLabel: Yes
         nextElement: 1
       - answerLabel: No
-        nextElement: 4
+        nextElement: 7
   - dialogue:
     - First you will measure the weight and length of the fish. This is important
       to figure out it's condition factor.
@@ -35,37 +35,63 @@ MonoBehaviour:
       - answerLabel: Yes
         nextElement: 2
       - answerLabel: No
+        nextElement: 5
+  - dialogue:
+    - The first step is measuring the fish's weight, this is done by using the weight
+      on the table.
+    - First turn on the weight using the top button on the weight
+    - Then place the basket on the weight, remember to press the lower button on
+      the weight to reset it and make sure it is set zero before placing the fish.
+    - Weigh the fish and take note of it's weight.
+    endAfterDialogue: 0
+    branchPoint:
+      question: Did you understand everything?
+      answers:
+      - answerLabel: Can you repeat?
+        nextElement: 2
+      - answerLabel: Yes
         nextElement: 3
   - dialogue:
-    - The first step is measuring it's weight, this is done by using the weight 
-      on the table.
-    - First place the basket on top of the weight, then turn it on. Then place the
-      fish on the basket. Remember to take note of the weight.
-    - You may need to reset the scale to make sure that it shows zero before placing
-      the fish on the scale
     - The next step is measuring the fish's length. This is done by using the tool
       to the right of the weight.
     - 'Make sure the fish is straight and it''s head is placed beside the wall on
       the left of the tool. Then take note of the length. '
-    - Now you need to calculate the condition factor of the fish. This is done by
-      dividing the weight with the lenght of the fish three times, then multiplying
-      by a hundred.
-    - If the condition factor of the fish is below 1 it has bad quality.
     endAfterDialogue: 0
     branchPoint:
-      question: Are you ready to learn about dissecting the fish?
+      question: Did you understand everything?
       answers:
       - answerLabel: Can you repeat?
-        nextElement: 2
-      - answerLabel: No
-        nextElement: 1
-      - answerLabel: Yes
         nextElement: 3
+      - answerLabel: Yes
+        nextElement: 4
+  - dialogue:
+    - Now you need to calculate the condition factor of the fish. This is done by
+      dividing the weight with the length of the fish three times, then multiplying
+      by a hundred.
+    - If the condition factor is below 1, that means the fish has low quality.
+    - Use the calculator on the table to calculate the result
+    endAfterDialogue: 0
+    branchPoint:
+      question: Did you understand everything?
+      answers:
+      - answerLabel: Can you repeat?
+        nextElement: 4
+      - answerLabel: Yes
+        nextElement: 5
   - dialogue:
     - 'Next you will dissect the fish. Place the fish on the cutting board to the
       right of the length measurer. '
     - The first step is checking for any external damages or errors on the fish.
       Check the skin, fins and gills to make sure there are no health issues.
+    endAfterDialogue: 0
+    branchPoint:
+      question: Did you understand everything?
+      answers:
+      - answerLabel: Yes
+        nextElement: 6
+      - answerLabel: No
+        nextElement: 5
+  - dialogue:
     - The next step is inspecting the internal areas of the fish. Cut open the fish
       according to the instructions.
     - 'Look after any internal bleeding or discoloration on the fish organs or any
@@ -76,11 +102,11 @@ MonoBehaviour:
       question: Did you understand everything?
       answers:
       - answerLabel: Yes
-        nextElement: 4
+        nextElement: 7
       - answerLabel: No
-        nextElement: 3
+        nextElement: 6
   - dialogue:
-    - Good luckl!
+    - Good luck!
     endAfterDialogue: 1
     branchPoint:
       question: 
