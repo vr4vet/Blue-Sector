@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Weight : MonoBehaviour
 {
+    [SerializeField]
+    public GameObject fish;
     [Header("Weight settings")]
     public bool RandomWeight;
 

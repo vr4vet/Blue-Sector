@@ -20,15 +20,22 @@ public class ScaleButtons : MonoBehaviour
         switch (buttonType)
         {
             case ButtonType.On:
-                Debug.Log("on");
+                StopAllCoroutines();
+                scale.displayText.SetText("0.000");
+                scale.audio.Play();
+                scale.scaleOn = true;
                 break;
             case ButtonType.Off:
-                Debug.Log("off");
+                StopAllCoroutines();
+                scale.displayText.SetText("");
+                scale.audio.Play();
+                scale.scaleOn = true;
                 break;
             case ButtonType.Reset:
+                StopAllCoroutines();
                 scale.totalWeight = 0;
                 scale.displayText.SetText("0.000");
-                Debug.Log("Weight reset");
+                scale.audio.Play();
                 break;
         }
     }
