@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class RegisterFish : MonoBehaviour
 {
+    public ResultLogger resultLogger;
     public float fishWeight;
     public float fishLength;
     public float conditionRight;
@@ -29,6 +30,17 @@ public class RegisterFish : MonoBehaviour
             conditionRight = ((fishWeight/fishLength)/fishLength)/fishLength;
             conditionRight *= 100;
             conditionRight = (float)Math.Round(conditionRight, 5);
+            resultLogger.activeFishText.SetText("Fish "+ resultLogger.getFishNumber(fishObject).ToString());
+        }
+    }
+    private void OnTriggerExit(Collider collisionObject)
+    {
+        if (collisionObject.GetComponent<Weight>())
+        {
+            fishWeight = 0;
+            fishLength = 0;
+            conditionRight = 0;
+            fishObject = null;
         }
     }
 }

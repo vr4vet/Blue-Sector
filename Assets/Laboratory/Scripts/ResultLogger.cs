@@ -11,19 +11,23 @@ public class ResultLogger : MonoBehaviour
     [SerializeField]
     public RegisterFish plate;
     [SerializeField]
+    public NpcTriggerDialogue npcTriggerDialogue;
+    [SerializeField]
+    public Scale scale;
+    [SerializeField]
     public TMP_Text weight;
     [SerializeField]
     public TMP_Text length;
     [SerializeField]
     public TMP_Text conditionFactor;
     [SerializeField]
+    public TMP_Text correctlyLoggedFish;
+    [SerializeField]
+    public TMP_Text activeFishText;
+    [SerializeField]
     public AudioSource audio;
     [SerializeField]
     public AudioSource audio2;
-    [SerializeField]
-    public NpcTriggerDialogue npcTriggerDialogue;
-    [SerializeField]
-    public Scale scale;
 
     // ----------------- Private Variables -----------------
     private bool UsingDecimals;
@@ -44,11 +48,19 @@ public class ResultLogger : MonoBehaviour
     public bool fishWasLoggedCorectly;
     }
 
-    private LoggedAnswers[] loggedAnswers = new LoggedAnswers[6];
+    private List<LoggedAnswers> loggedAnswers = new List<LoggedAnswers>();
+
+    private LoggedAnswers activeFish;
 
     void Start()
     {
         currentText = weight;
+
+        GameObject[] fishInScene = GameObject.FindGameObjectsWithTag("Fish");
+        foreach (GameObject fish in fishInScene)
+        {
+            logAnswer(fish, 0, 0, 0, false);
+        }
     }
 
     public void OnPressedNumber(int number)
@@ -127,20 +139,31 @@ public class ResultLogger : MonoBehaviour
             audio2.Play();
         }
 
-        logAnswer(plate.fishObject, weightAnswer, lengthAnswer, conditionAnswer, wasLoggedCorectly);
+        if (plate.fishObject)
+        {
+            logAnswer(plate.fishObject, weightAnswer, lengthAnswer, conditionAnswer, wasLoggedCorectly);
+        }
+        else
+        {
+            logAnswer(activeFish.fishObject, weightAnswer, lengthAnswer, conditionAnswer, wasLoggedCorectly);
+        }
         wasLoggedCorectly = false;
     }
 
     private void logAnswer(GameObject fish, float weight, float length, float condition, bool wasFishLoggedCorectly)
     {
-        for (int i = 0; i < loggedAnswers.Length; i++)
+        for (int i = 0; i < loggedAnswers.Count; i++)
         {
             if (loggedAnswers[i].fishObject == fish)
             {
-                loggedAnswers[i].fishWeight = weight;
-                loggedAnswers[i].fishLength = length;
-                loggedAnswers[i].fishConditionFactor = condition;
-                loggedAnswers[i].fishWasLoggedCorectly = wasFishLoggedCorectly;
+                LoggedAnswers updatedAnswer = new LoggedAnswers
+                {
+                    fishWeight = weight,
+                    fishLength = length,
+                    fishConditionFactor = condition,
+                    fishWasLoggedCorectly = wasFishLoggedCorectly
+                };
+                loggedAnswers[i] = updatedAnswer;
                 return;
             }
         }
@@ -150,8 +173,34 @@ public class ResultLogger : MonoBehaviour
         newAnswer.fishLength = length;
         newAnswer.fishConditionFactor = condition;
         newAnswer.fishWasLoggedCorectly = wasFishLoggedCorectly;
-        loggedAnswers.Append(newAnswer);
-        Debug.Log(loggedAnswers);
+        loggedAnswers.Add(newAnswer);
+        setMeasuredFishText();
+    }
+
+    private void setMeasuredFishText()
+    {
+        int fishCorrect = 0;
+        int fishLeft = loggedAnswers.Count;
+        for (int i = 0; i < loggedAnswers.Count; i++)
+        {
+            if (loggedAnswers[i].fishWasLoggedCorectly == true)
+            {
+                fishCorrect++;
+            }
+        }
+        correctlyLoggedFish.SetText(fishCorrect.ToString()+"/"+fishLeft.ToString());
+    }
+
+    public int getFishNumber(GameObject fish)
+    {
+        for (int i = 0; i < loggedAnswers.Count; i++)
+        {
+            if (loggedAnswers[i].fishObject == fish)
+            {
+                return i+1;
+            }
+        }
+        return 0;
     }
 
     // ----------------- Unity event methods -----------------
@@ -177,5 +226,14 @@ public class ResultLogger : MonoBehaviour
         UsingDecimals = false;
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
+    }
+
+    public void setActiveFish(int fishNumber)
+    {
+        if (loggedAnswers.Count >= fishNumber)
+        {
+            activeFish = loggedAnswers[fishNumber-1];
+            activeFishText.SetText("Fish "+ fishNumber.ToString());
+        }
     }
 }

@@ -13,7 +13,10 @@ public class Ruler : MonoBehaviour
         {
             float lengt = collision.GetComponent<Weight>().fish.transform.localScale.x;
             float fishLength = (float)(4.58 * Math.Exp(2.33 * lengt) + 10.31);
-            fishLengths.Add(collision.GetComponent<Weight>().fish, fishLength);
+            if (!fishLengths.ContainsKey(collision.GetComponent<Weight>().fish))
+            {
+                fishLengths.Add(collision.GetComponent<Weight>().fish, fishLength);
+            }
         }
     }
 }
