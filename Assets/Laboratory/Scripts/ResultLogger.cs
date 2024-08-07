@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class ResultLogger : MonoBehaviour
 {
+    // ----------------- Editor Variables -----------------
     [SerializeField]
     public RegisterFish plate;
     [SerializeField]
@@ -20,19 +22,29 @@ public class ResultLogger : MonoBehaviour
     public AudioSource audio2;
     [SerializeField]
     public NpcTriggerDialogue npcTriggerDialogue;
-
     [SerializeField]
     public Scale scale;
 
-
+    // ----------------- Private Variables -----------------
     private bool UsingDecimals;
     private decimal currentValue = 0;
     private int InputDecimals = 0;
     private TMP_Text currentText;
-
     private float weightAnswer;
     private float lengthAnswer;
     private float conditionAnswer;
+    private bool wasLoggedCorectly = false;
+
+    // Struct to store logged fish
+    private struct LoggedAnswers {
+    public GameObject fishObject;
+    public float fishWeight;
+    public float fishLength;
+    public float fishConditionFactor; 
+    public bool fishWasLoggedCorectly;
+    }
+
+    private LoggedAnswers[] loggedAnswers = new LoggedAnswers[6];
 
     void Start()
     {
@@ -77,6 +89,7 @@ public class ResultLogger : MonoBehaviour
         && System.Math.Round(conditionAnswer, 5) == plate.conditionRight
         && scale.tubWasUsed == true)
         {
+            wasLoggedCorectly = true;
             npcTriggerDialogue.response1();
             audio.Play();
         }
@@ -113,8 +126,35 @@ public class ResultLogger : MonoBehaviour
             npcTriggerDialogue.response6();
             audio2.Play();
         }
+
+        logAnswer(plate.fishObject, weightAnswer, lengthAnswer, conditionAnswer, wasLoggedCorectly);
+        wasLoggedCorectly = false;
     }
 
+    private void logAnswer(GameObject fish, float weight, float length, float condition, bool wasFishLoggedCorectly)
+    {
+        for (int i = 0; i < loggedAnswers.Length; i++)
+        {
+            if (loggedAnswers[i].fishObject == fish)
+            {
+                loggedAnswers[i].fishWeight = weight;
+                loggedAnswers[i].fishLength = length;
+                loggedAnswers[i].fishConditionFactor = condition;
+                loggedAnswers[i].fishWasLoggedCorectly = wasFishLoggedCorectly;
+                return;
+            }
+        }
+        LoggedAnswers newAnswer;
+        newAnswer.fishObject = fish;
+        newAnswer.fishWeight = weight;
+        newAnswer.fishLength = length;
+        newAnswer.fishConditionFactor = condition;
+        newAnswer.fishWasLoggedCorectly = wasFishLoggedCorectly;
+        loggedAnswers.Append(newAnswer);
+        Debug.Log(loggedAnswers);
+    }
+
+    // ----------------- Unity event methods -----------------
     public void SwitchToWeight()
     {
         currentText = weight;

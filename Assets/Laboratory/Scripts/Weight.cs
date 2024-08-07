@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Weight : MonoBehaviour
 {
+    // ----------------- Editor Variables -----------------
     [SerializeField]
     public GameObject fish;
     [Header("Weight settings")]
@@ -23,6 +24,8 @@ public class Weight : MonoBehaviour
 
     [SerializeField]
     private float _objectWeight;
+
+    // ----------------- Public Variables -----------------
     public float ObjectWeight
     {
         get { return _objectWeight; }

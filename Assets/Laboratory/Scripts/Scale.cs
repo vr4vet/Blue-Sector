@@ -5,23 +5,24 @@ using UnityEngine;
 
 public class Scale : MonoBehaviour
 {
-    [SerializeField]
-    private BoxCollider boxCollider;
-
+    // ----------------- Editor Variables -----------------
     [SerializeField]
     public AudioSource audio;
-
+    [SerializeField]
     public float totalWeight;
-
+    [SerializeField]
     public TMP_Text displayText;
 
-    private List<GameObject> objectsOnScale = new List<GameObject>();
-
+    // ----------------- Public Variables -----------------
     [HideInInspector]
     public bool scaleOn = false;
-
-    public IEnumerator corutine;
+    
+    [HideInInspector]
     public bool tubWasUsed = false;
+
+    // ----------------- Private Variables -----------------
+    private List<GameObject> objectsOnScale = new List<GameObject>();
+    private IEnumerator corutine;
 
     private void OnTriggerEnter(Collider collisionObject)
     {
