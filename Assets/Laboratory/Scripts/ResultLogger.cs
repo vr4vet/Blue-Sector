@@ -16,8 +16,14 @@ public class ResultLogger : MonoBehaviour
     public TMP_Text conditionFactor;
     [SerializeField]
     public AudioSource audio;
+    [SerializeField]
     public AudioSource audio2;
-    public UnityEvent OnClick;
+    [SerializeField]
+    public NpcTriggerDialogue npcTriggerDialogue;
+
+    [SerializeField]
+    public Scale scale;
+
 
     private bool UsingDecimals;
     private decimal currentValue = 0;
@@ -68,12 +74,43 @@ public class ResultLogger : MonoBehaviour
 
         if (weightAnswer == plate.fishWeight 
         && lengthAnswer == plate.fishLength 
-        && System.Math.Round(conditionAnswer, 5) == System.Math.Round(plate.conditionRight, 5))
+        && System.Math.Round(conditionAnswer, 5) == plate.conditionRight
+        && scale.tubWasUsed == true)
         {
+            npcTriggerDialogue.response1();
             audio.Play();
         }
-        else
+        else if (weightAnswer == plate.fishWeight 
+        && lengthAnswer == plate.fishLength 
+        && System.Math.Round(conditionAnswer, 5) == plate.conditionRight)
         {
+            npcTriggerDialogue.response2();
+            audio2.Play();
+        }
+        else if (weightAnswer == plate.fishWeight 
+        && lengthAnswer == plate.fishLength 
+        && System.Math.Round(conditionAnswer, 5) != plate.conditionRight)
+        {
+            npcTriggerDialogue.response3();
+            audio2.Play();
+        }
+        else if (weightAnswer == plate.fishWeight 
+        && lengthAnswer != plate.fishLength )
+        {
+            npcTriggerDialogue.response4();
+            audio2.Play();
+        }
+        else if (weightAnswer != plate.fishWeight 
+        && lengthAnswer == plate.fishLength )
+        {
+            npcTriggerDialogue.response5();
+            audio2.Play();
+        }
+        else if (weightAnswer != plate.fishWeight 
+        && lengthAnswer != plate.fishLength 
+        && System.Math.Round(conditionAnswer, 5) != System.Math.Round(plate.conditionRight, 5))
+        {
+            npcTriggerDialogue.response6();
             audio2.Play();
         }
     }

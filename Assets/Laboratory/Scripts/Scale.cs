@@ -21,6 +21,7 @@ public class Scale : MonoBehaviour
     public bool scaleOn = false;
 
     public IEnumerator corutine;
+    public bool tubWasUsed = false;
 
     private void OnTriggerEnter(Collider collisionObject)
     {
@@ -39,6 +40,10 @@ public class Scale : MonoBehaviour
             StopAllCoroutines();
             corutine = SetScaleText(totalWeight - collisionObject.GetComponent<Weight>().ObjectWeight);
             StartCoroutine(corutine);
+            if (collisionObject.gameObject.name == "basket_plastic")
+            {
+                tubWasUsed = true;
+            }
         }
     }
    
