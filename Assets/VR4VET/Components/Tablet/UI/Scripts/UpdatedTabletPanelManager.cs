@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UpdatedTabletPanelManager : MonoBehaviour
@@ -14,14 +15,40 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     [SerializeReference] GameObject SubtaskAboutMenu;
     [SerializeReference] GameObject SkillListMenu;
     [SerializeReference] GameObject NotificationAlertMenu;
+
+    [Header("Language selection")]
+    [SerializeField] public Language activeLanguage;
+    [SerializeReference] private TMP_Text skillsMenuTextSkillPage;
+    [SerializeReference] private TMP_Text taskMenuTextSkillPage;
+    [SerializeReference] private TMP_Text skillsMenuTextTaskPage;
+    [SerializeReference] private TMP_Text taskMenuTextTaskPage;
+    [SerializeReference] private TMP_Text skilsHeaderText;
+
+
     private AddInstructionsToWatch watch;
     private MaintenanceManager manager;
     private WatchManager watchManager;
     private List<GameObject> allMenus = new();
 
+    public enum Language
+    {
+        English,
+        Norwegian,
+    }
 
     void Start()
     {
+        if (activeLanguage == Language.English)
+        {
+            skillsMenuTextSkillPage.SetText("Skills");
+            taskMenuTextSkillPage.SetText("Tasks");
+            skillsMenuTextTaskPage.SetText("Skills");
+            taskMenuTextTaskPage.SetText("Tasks");
+
+            skilsHeaderText.SetText("My Skills");
+        }
+
+
         allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu });
 
         foreach (var item in allMenus)
