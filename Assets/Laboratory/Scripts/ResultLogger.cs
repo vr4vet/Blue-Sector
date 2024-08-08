@@ -98,7 +98,7 @@ public class ResultLogger : MonoBehaviour
 
         if (weightAnswer == plate.fishWeight 
         && lengthAnswer == plate.fishLength 
-        && System.Math.Round(conditionAnswer, 5) == plate.conditionRight
+        && (float)System.Math.Round(conditionAnswer, 2) == plate.conditionRight
         && scale.tubWasUsed == true)
         {
             wasLoggedCorectly = true;
@@ -107,14 +107,14 @@ public class ResultLogger : MonoBehaviour
         }
         else if (weightAnswer == plate.fishWeight 
         && lengthAnswer == plate.fishLength 
-        && System.Math.Round(conditionAnswer, 5) == plate.conditionRight)
+        && (float)System.Math.Round(conditionAnswer, 2) == plate.conditionRight)
         {
             npcTriggerDialogue.response2();
             audio2.Play();
         }
         else if (weightAnswer == plate.fishWeight 
         && lengthAnswer == plate.fishLength 
-        && System.Math.Round(conditionAnswer, 5) != plate.conditionRight)
+        && (float)System.Math.Round(conditionAnswer, 2) != plate.conditionRight)
         {
             npcTriggerDialogue.response3();
             audio2.Play();
@@ -133,20 +133,12 @@ public class ResultLogger : MonoBehaviour
         }
         else if (weightAnswer != plate.fishWeight 
         && lengthAnswer != plate.fishLength 
-        && System.Math.Round(conditionAnswer, 5) != System.Math.Round(plate.conditionRight, 5))
+        && System.Math.Round(conditionAnswer, 2) != plate.conditionRight)
         {
             npcTriggerDialogue.response6();
             audio2.Play();
         }
-
-        if (plate.fishObject)
-        {
-            logAnswer(plate.fishObject, weightAnswer, lengthAnswer, conditionAnswer, wasLoggedCorectly);
-        }
-        else
-        {
-            logAnswer(activeFish.fishObject, weightAnswer, lengthAnswer, conditionAnswer, wasLoggedCorectly);
-        }
+        logAnswer(activeFish.fishObject, weightAnswer, lengthAnswer, conditionAnswer, wasLoggedCorectly);
         wasLoggedCorectly = false;
     }
 
@@ -158,12 +150,14 @@ public class ResultLogger : MonoBehaviour
             {
                 LoggedAnswers updatedAnswer = new LoggedAnswers
                 {
+                    fishObject = fish,
                     fishWeight = weight,
                     fishLength = length,
                     fishConditionFactor = condition,
                     fishWasLoggedCorectly = wasFishLoggedCorectly
                 };
                 loggedAnswers[i] = updatedAnswer;
+                setMeasuredFishText();
                 return;
             }
         }
@@ -234,6 +228,7 @@ public class ResultLogger : MonoBehaviour
         {
             activeFish = loggedAnswers[fishNumber-1];
             activeFishText.SetText("Fish "+ fishNumber.ToString());
+            plate.activeFishChanged(activeFish.fishObject);
         }
     }
 }

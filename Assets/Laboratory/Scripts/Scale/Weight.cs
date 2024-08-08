@@ -14,12 +14,12 @@ public class Weight : MonoBehaviour
 
     [SerializeField]
     [Tooltip("The minimum weight that should be allowed if weight is random")]
-    [Range(0, 10)]
+    [Range(100, 4000)]
     private float minWeight;
 
     [SerializeField]
     [Tooltip("The maximum weight that should be allowed if weight is random")]
-    [Range(0, 10)]
+    [Range(100, 4000)]
     private float maxWeight;
 
     [SerializeField]
