@@ -32,16 +32,29 @@ namespace Task
         private List<Skill> _relatedSkills = new List<Skill>();
         private int _points = 0;
         private bool _compleated = false;
+        private Task _parentTask;
 
         //for navigation system
         private Transform _taskPosition;
-
+        public Task ParentTask { get => _parentTask; set => _parentTask = value; }
         public string Description { get => _description; set => _description = value; }
         public List<Step> StepList { get => _stepList; set => _stepList = value; }
         public string SubtaskName { get => _subtaskName; set => _subtaskName = value; }
         public int Points { get => _points; set => _points = value; }
         public List<Skill> RelatedSkills { get => _relatedSkills; set => _relatedSkills = value; }
 
+        private void Awake()
+        {
+            foreach (Step step in StepList)
+            {
+                step.ParentSubtask = this;
+                step.setStepNumber(StepList.IndexOf(step) + 1);
+
+            }
+        }
+        
+        
+        
         //it returns the completed status, if the autocomplete box is selected it will return true when all its steps are completed
         public bool Compleated()
         {
@@ -94,6 +107,20 @@ namespace Task
                 }
             }
             return returnStep;
+        }
+
+        public int GetCompletedSteps()
+        {
+            int counter = 0;
+            foreach (Step step in StepList)
+            {
+                if (step.IsCompeleted())
+                {
+                    counter++;
+                }
+            }
+            return counter;
+
         }
 
         public void RandomizeReps()

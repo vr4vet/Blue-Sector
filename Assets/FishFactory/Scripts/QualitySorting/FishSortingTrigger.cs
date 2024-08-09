@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FishSortingTrigger : MonoBehaviour
 {
@@ -13,6 +14,15 @@ public class FishSortingTrigger : MonoBehaviour
     [Tooltip("The QA machine tier manager")]
     [SerializeField]
     public FishSortingButton _tierManager;
+
+    [SerializeField]
+    public UnityEvent OnTier1;
+    [SerializeField]
+    public UnityEvent OnTier2;
+    [SerializeField]
+    public UnityEvent OnTier3;
+    [SerializeField]
+    public UnityEvent OnXSortedFish;
 
     /// <summary>
     /// When the fish enters the trigger, check if the fish has been sorted and if it has the correct tier
@@ -37,12 +47,33 @@ public class FishSortingTrigger : MonoBehaviour
         string fishState = fish.GetComponent<FactoryFishState>().fishTier.ToString();
         if (fishState == _tierManager.CurrentTier.ToString())
         {
+            _tierManager.correctlySortedFish++;
             GameManager.Instance.PlaySound("correct");
+            if (OnTier1 != null)
+            {
+                switch (fishState)
+                {
+                    case "Tier1":
+                        OnTier1.Invoke();
+                        break;
+                    case "Tier2":
+                        OnTier2.Invoke();
+                        break;
+                    case "Tier3":
+                        OnTier3.Invoke();
+                        break;
+                }
+                if (_tierManager.correctlySortedFish > 25)
+                {
+                    OnXSortedFish.Invoke();
+                }
+            }
         }
         else
         {
             GameManager.Instance.PlaySound("incorrect");
         }
+        
         if (_door)
         {
             StartCoroutine(CloseDoorAfterDelay(_door));

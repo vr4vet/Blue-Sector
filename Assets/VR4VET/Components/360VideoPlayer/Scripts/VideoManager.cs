@@ -5,6 +5,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Video;
 
 public class VideoManager : MonoBehaviour
@@ -14,8 +15,15 @@ public class VideoManager : MonoBehaviour
 
     private LayerMask oldCulingMask;
     private Camera VRCamera;
+    private bool specialEventShouldTrigger;
 
-   [HideInInspector] public VideoPlayer videoPlayer;
+
+    [HideInInspector] public VideoPlayer videoPlayer;
+    [SerializeField] public bool videoShouldStopAfterPlayingOnce;
+    //[SerializeField] public bool videoCantBeInterupted;
+    [SerializeField] public UnityEvent onVideoEndAlways;
+    [SerializeField] public UnityEvent specialEventOnVideoEnd;
+
 
 
     /// <summary>
@@ -40,10 +48,12 @@ public class VideoManager : MonoBehaviour
     /// Add the clip to the video manager, apply to the skybox and play the video
     /// </summary>
     /// <param name="clip"></param>
-    public void ShowVideo(VideoClip clip)
+    public void ShowVideo(VideoClip clip, bool triggerSpecialEvent)
 	{
         //change the video clip
         videoPlayer.clip = clip;
+        specialEventShouldTrigger = triggerSpecialEvent;
+
 
         // play the video using the videoPlayer attatched to the platform
         videoPlayer.Play();
@@ -69,6 +79,23 @@ public class VideoManager : MonoBehaviour
         // hide everything in sceene exept potantially the player and teleporting prefab (given not recomended setup)
         VRCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         VRCamera.cullingMask = 1 << LayerMask.NameToLayer("360Video");
+        
+        // if (videoCantBeInterupted && !videoPlayer.isLooping)
+        // {
+        //     while (videoPlayer.isPlaying)
+        //     {
+        //         yield return new WaitForEndOfFrame();
+        //     }
+        // }
+
+        if (videoShouldStopAfterPlayingOnce && !videoPlayer.isLooping)
+        {
+            while (videoPlayer.isPlaying)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            StopVideo();
+        }
     }
 
 
@@ -84,6 +111,13 @@ public class VideoManager : MonoBehaviour
         VRCamera.cullingMask = oldCulingMask;
 
         SkyboxHolder.applyDefaultSkybox();
+
+        onVideoEndAlways.Invoke();
+        if (specialEventShouldTrigger)
+        {
+            specialEventOnVideoEnd.Invoke();
+        }
+
     }
 
 

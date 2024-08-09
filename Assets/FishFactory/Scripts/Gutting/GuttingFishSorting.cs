@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GuttingFishSorting : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class GuttingFishSorting : MonoBehaviour
     { 
         get { return _sortedFish.Count;}
     }
+    [SerializeField]
+    public UnityEvent OnGuttingSuccess;
+    [SerializeField]
+    public UnityEvent OnGuttingIncomplete;
     // ------------------ Unity Functions ------------------
 
     /// <summary>
@@ -58,11 +63,22 @@ public class GuttingFishSorting : MonoBehaviour
         FactoryFishState fishState = fish.GetComponent<FactoryFishState>();
         if (fishState.guttingState == _successOnGuttingSuccess)
         {
-        return true;
+            if (OnGuttingSuccess != null)
+            {
+                if (fishState.guttingState == FactoryFishState.GuttingState.GuttingSuccess)
+                {
+                    OnGuttingSuccess.Invoke();
+                }
+                else if (fishState.guttingState == FactoryFishState.GuttingState.GuttingIncomplete)
+                {
+                    OnGuttingIncomplete.Invoke();
+                }
+            }
+            return true;
         }
         else
         {
-        return false;
+            return false;
         }
     }
 }

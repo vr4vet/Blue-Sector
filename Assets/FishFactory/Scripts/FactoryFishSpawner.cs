@@ -184,6 +184,7 @@ public class FactoryFishSpawner : MonoBehaviour
         {
             // The prefab to modify and spawn in the spawner
             fishPrefab = _salmonFishPrefab;
+            randomizedTier = FactoryFishState.Tier.Tier1;
             int randomValue = Random.Range(1, 101);
 
             // Get a random state and sets prefab to badfishPrefab if the state is BadQuality
@@ -194,6 +195,14 @@ public class FactoryFishSpawner : MonoBehaviour
             if (_toggleFishTier)
             {
                 randomizedTier = RandomizeFishTier(randomValue);
+            }
+            else
+            {
+                if (randomValue <= _badFishPercent)
+                {
+                    randomizedTier = FactoryFishState.Tier.BadQuality;
+                    fishPrefab = _badfishPrefab;
+                }
             }
             if (_canBeAlive)
             {
@@ -309,23 +318,23 @@ public class FactoryFishSpawner : MonoBehaviour
     {
         FactoryFishState.Tier state;
 
-        if (randomValue <= _tier1Percentage)
-        {
-            state = FactoryFishState.Tier.Tier1;
-        }
-        else if (randomValue <= _tier1Percentage + _tier2Percentage)
-        {
-            state = FactoryFishState.Tier.Tier2;
-        }
-        else if (randomValue <= _tier1Percentage + _tier2Percentage + _tier3Percentage)
-        {
-            state = FactoryFishState.Tier.Tier3;
-        }
-        else 
-        {
-            state = FactoryFishState.Tier.BadQuality;
-            fishPrefab = _badfishPrefab;
-        }
+            if (randomValue <= _tier1Percentage)
+            {
+                state = FactoryFishState.Tier.Tier1;
+            }
+            else if (randomValue <= _tier1Percentage + _tier2Percentage)
+            {
+                state = FactoryFishState.Tier.Tier2;
+            }
+            else if (randomValue <= _tier1Percentage + _tier2Percentage + _tier3Percentage)
+            {
+                state = FactoryFishState.Tier.Tier3;
+            }
+            else 
+            {
+                state = FactoryFishState.Tier.BadQuality;
+                fishPrefab = _badfishPrefab;
+            }
         return state;
     }
 }
