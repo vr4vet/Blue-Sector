@@ -52,7 +52,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         {
             activeArrow = false;
         }
-        anchorArrow.SetActive(activeArrow);
+        //anchorArrow.SetActive(activeArrow);
         cylinder.SetActive(activeArrow);
     }
 
@@ -82,7 +82,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         {
 
             playerInside = true;
-            anchorArrow.SetActive(false);
+            //anchorArrow.SetActive(false);
             if (currentSubtask != subtask)
             {
                 manager.UpdateCurrentSubtask(subtask);
@@ -109,7 +109,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
                 feedbackManager.emptyInstructions();
             }
 
-            anchorArrow.SetActive(activeArrow);
+            //anchorArrow.SetActive(activeArrow);
             cylinder.SetActive(activeArrow);
 
             if (GuidingHandSplint)
