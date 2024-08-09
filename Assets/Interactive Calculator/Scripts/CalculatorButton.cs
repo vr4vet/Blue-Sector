@@ -1,4 +1,5 @@
-﻿using Meta.Voice.Audio;
+﻿using System.Collections;
+using Meta.Voice.Audio;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,8 +24,17 @@ namespace InteractiveCalculator
                     player.Play();
                 }
                 OnClick?.Invoke();
+                //Press();
             }
         }
+        // private void OnTriggerExit(Collider other)
+        // {
+        //     if (other.gameObject.tag == "Finger")
+        //     {
+        //         Release();
+        //     }
+        // }
+        
         private void Press()
         {
             if (_isPressed) return;

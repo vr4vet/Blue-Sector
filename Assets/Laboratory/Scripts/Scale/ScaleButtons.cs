@@ -27,7 +27,7 @@ public class ScaleButtons : MonoBehaviour
         {
             case ButtonType.On:
                 StopAllCoroutines();
-                scale.displayText.SetText("0.000");
+                scale.displayText.SetText("000.0");
                 scale.audio.Play();
                 scale.scaleOn = true;
 
@@ -49,7 +49,7 @@ public class ScaleButtons : MonoBehaviour
             case ButtonType.Reset:
                 StopAllCoroutines();
                 scale.totalWeight = 0;
-                scale.displayText.SetText("0.000");
+                scale.displayText.SetText("000.0");
                 scale.audio.Play();
 
                 if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[3]) {

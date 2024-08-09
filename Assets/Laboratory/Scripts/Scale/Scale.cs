@@ -5,25 +5,28 @@ using UnityEngine;
 
 public class Scale : MonoBehaviour
 {
-    [SerializeField]
-    private BoxCollider boxCollider;
-
+    // ----------------- Editor Variables -----------------
     [SerializeField]
     public AudioSource audio;
-
+    [SerializeField]
     public float totalWeight;
-
+    [SerializeField]
     public TMP_Text displayText;
+    [SerializeField]
+    public GameObject tray;
 
-    private List<GameObject> objectsOnScale = new List<GameObject>();
-
+    // ----------------- Public Variables -----------------
     [HideInInspector]
     public bool scaleOn = false;
-
-    public IEnumerator corutine;
+    
+    [HideInInspector]
     public bool tubWasUsed = false;
 
-    private DialogueBoxController dialogueBoxController;
+    // ----------------- Private Variables -----------------
+    private List<GameObject> objectsOnScale = new List<GameObject>();
+    private IEnumerator corutine;
+
+     private DialogueBoxController dialogueBoxController;
 
     private void Start() {
 
@@ -47,13 +50,17 @@ public class Scale : MonoBehaviour
             StopAllCoroutines();
             corutine = SetScaleText(totalWeight - collisionObject.GetComponent<Weight>().ObjectWeight);
             StartCoroutine(corutine);
-            if (collisionObject.gameObject.name == "basket_plastic" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[2])
+             if (collisionObject.gameObject.tag == "Bone" && objectsOnScale.Contains(tray)&& dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[2])
             {
                 tubWasUsed = true; 
                 
                 dialogueBoxController.SkipLine();
             }
-            
+            else if (collisionObject.gameObject.tag == "Bone" && objectsOnScale.Contains(tray))
+            {
+                tubWasUsed = true;
+            }
+           
         }
     }
    
@@ -91,17 +98,17 @@ public class Scale : MonoBehaviour
                 if (textOut - previousWeight * 0.3f <= 0)
                 {
                     textOut -= previousWeight * 0.3f;
-                    displayText.SetText("0.000");
+                    displayText.SetText("000.0");
                     yield return null;
                 }
                 else
                 {
                     textOut -= previousWeight * 0.3f;
-                    displayText.SetText(System.Math.Round(textOut, 3).ToString());
+                    displayText.SetText(System.Math.Round(textOut, 1).ToString());
                     yield return new WaitForSeconds(0.04f);
                 }
             }
-            displayText.SetText("0.000");
+            displayText.SetText("000.0");
             yield return null;
         }
         else if (previousWeight < totalWeight)
@@ -109,16 +116,16 @@ public class Scale : MonoBehaviour
             while (textOut < (totalWeight*1.1f))
             {
                 textOut += totalWeight * 0.2f;
-                displayText.SetText(System.Math.Round(textOut, 3).ToString());
+                displayText.SetText(System.Math.Round(textOut, 1).ToString());
                 yield return new WaitForSeconds(0.1f);
             }
             while (textOut > totalWeight)
             {
                 textOut -= textOut * 0.12f;
-                displayText.SetText(System.Math.Round(textOut, 3).ToString());
+                displayText.SetText(System.Math.Round(textOut, 1).ToString());
                 yield return new WaitForSeconds(0.08f);
             }
-            displayText.SetText(System.Math.Round(totalWeight, 3).ToString());
+            displayText.SetText(System.Math.Round(totalWeight, 1).ToString());
             yield return null;
         }
 
@@ -127,20 +134,20 @@ public class Scale : MonoBehaviour
             while (textOut > (totalWeight*1.1f))
             {
                 textOut -= textOut * 0.2f;
-                displayText.SetText(System.Math.Round(textOut, 3).ToString());
+                displayText.SetText(System.Math.Round(textOut, 1).ToString());
                 yield return new WaitForSeconds(0.1f);
             }
             while (textOut < totalWeight)
             {
                 textOut += textOut * 0.12f;
-                displayText.SetText(System.Math.Round(textOut, 3).ToString());
+                displayText.SetText(System.Math.Round(textOut, 1).ToString());
                 yield return new WaitForSeconds(0.08f);
             }
             if (totalWeight == 0)
             {
-                displayText.SetText("0.000");
+                displayText.SetText("000.0");
             }
-            displayText.SetText(System.Math.Round(totalWeight, 3).ToString());
+            displayText.SetText(System.Math.Round(totalWeight, 1).ToString());
             yield return null;
         }
         yield return null;
