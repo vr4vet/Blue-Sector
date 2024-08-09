@@ -24,8 +24,11 @@ namespace InteractiveCalculator
         private string currentOperator;
         public bool isOn;
 
+        private DialogueBoxController dialogueBoxController;
+
         void Start()
         {
+            dialogueBoxController = FindObjectOfType<DialogueBoxController>();
             OnPressedClearAll();
         }
 
@@ -187,6 +190,11 @@ namespace InteractiveCalculator
                 UsingDecimals = false;
                 InputDecimals = 0;
                 CurrentDisplayMode = DisplayMode.value;
+            
+                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[2]) {
+                    dialogueBoxController.SkipLine();
+                    
+                }
                 UpdateDisplay();
             }
             catch

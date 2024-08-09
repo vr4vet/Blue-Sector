@@ -23,6 +23,13 @@ public class Scale : MonoBehaviour
     public IEnumerator corutine;
     public bool tubWasUsed = false;
 
+    private DialogueBoxController dialogueBoxController;
+
+    private void Start() {
+
+        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+    }
+
     private void OnTriggerEnter(Collider collisionObject)
     {
         if (!scaleOn)
@@ -40,10 +47,13 @@ public class Scale : MonoBehaviour
             StopAllCoroutines();
             corutine = SetScaleText(totalWeight - collisionObject.GetComponent<Weight>().ObjectWeight);
             StartCoroutine(corutine);
-            if (collisionObject.gameObject.name == "basket_plastic")
+            if (collisionObject.gameObject.name == "basket_plastic" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[2])
             {
-                tubWasUsed = true;
+                tubWasUsed = true; 
+                
+                dialogueBoxController.SkipLine();
             }
+            
         }
     }
    

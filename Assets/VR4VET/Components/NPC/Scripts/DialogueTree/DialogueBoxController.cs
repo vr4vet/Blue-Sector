@@ -7,7 +7,7 @@ using Meta.WitAi.TTS.Utilities;
 
 public class DialogueBoxController : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _dialogueText;
+    [SerializeField] public TextMeshProUGUI _dialogueText;
     [SerializeField] private GameObject _dialogueBox;
     [SerializeField] private GameObject _answerBox;
     [SerializeField] private GameObject _dialogueCanvas;
@@ -26,6 +26,8 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private int _hasNewDialogueOptionsHash;
     [HideInInspector] private RectTransform backgroundRect;
     [HideInInspector] private RectTransform dialogueTextRect;
+
+    private string currentDialogue;
 
     public ButtonSpawner buttonSpawner;
 
@@ -117,14 +119,30 @@ public class DialogueBoxController : MonoBehaviour
 
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
+             currentDialogue = dialogueTree.sections[section].dialogue[i];
+             
+             
+
             // Start talking animation
             _animator.SetBool(_isTalkingHash, true);
             StartCoroutine(revertToIdleAnimation());
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+
+            // Skip line button is disabled for certain dialogues in labratory
+            if ((currentDialogue == dialogueTree.sections[2].dialogue[1] || currentDialogue == dialogueTree.sections[2].dialogue[2] || currentDialogue == dialogueTree.sections[2].dialogue[3] || currentDialogue == dialogueTree.sections[3].dialogue[1] || currentDialogue == dialogueTree.sections[4].dialogue[2]) && dialogueTree.name == "LarsDialogue" )
+            {
+                _skipLineButton.SetActive(false);
+
+            }
+
+            else {
+                _skipLineButton.SetActive(true);
+            }
+            
             while (!_skipLineTriggered)
             {
-                _skipLineButton.SetActive(true);
+                
                 _exitButton.SetActive(true);
                 yield return null;
             }

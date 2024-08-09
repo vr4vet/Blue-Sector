@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class ScaleButtons : MonoBehaviour
 {
+    private DialogueBoxController dialogueBoxController;
     public Scale scale;
     public enum ButtonType
     {
         On,
         Off,
         Reset,
+    }
+
+    private void Start()
+    {
+        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
     }
 
     [SerializeField]
@@ -24,6 +30,15 @@ public class ScaleButtons : MonoBehaviour
                 scale.displayText.SetText("0.000");
                 scale.audio.Play();
                 scale.scaleOn = true;
+
+                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[1]) {
+                    
+                    dialogueBoxController.SkipLine();
+                    Debug.Log(dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[1]);
+
+                    
+                }
+
                 break;
             case ButtonType.Off:
                 StopAllCoroutines();
@@ -36,6 +51,12 @@ public class ScaleButtons : MonoBehaviour
                 scale.totalWeight = 0;
                 scale.displayText.SetText("0.000");
                 scale.audio.Play();
+
+                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[3]) {
+                    dialogueBoxController.SkipLine();
+                    
+                }
+
                 break;
         }
     }
