@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UpdatedTabletPanelManager : MonoBehaviour
 {
-   
-
-
+    [SerializeReference] UpdatedTabletTaskListLoader TaskList;
     //references
     [Header("Menu references")]
     [SerializeReference] GameObject TaskListMenu;
@@ -15,6 +15,9 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     [SerializeReference] GameObject SubtaskAboutMenu;
     [SerializeReference] GameObject SkillListMenu;
     [SerializeReference] GameObject NotificationAlertMenu;
+
+    [SerializeReference] Image SubtaskBackground;
+    [SerializeReference] Image TaskBackground;
 
     [Header("Language selection")]
     [SerializeField] public Language activeLanguage;
@@ -29,6 +32,9 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     private MaintenanceManager manager;
     private WatchManager watchManager;
     private List<GameObject> allMenus = new();
+
+    private bool taskPageOpen = false; 
+    private bool subtaskPageOpen = false;
 
     public enum Language
     {
@@ -83,10 +89,51 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         SwitchMenuTo(SkillListMenu);
     }
 
-    public void OnClickBackToTasks()
+    public void OnClickOpenTasks()
     {
-        //SwitchMenuTo(TaskListMenu);
-        TaskListMenu.SetActive(true);
+        if (subtaskPageOpen)
+        {
+            OnClickOpenSubtask();
+        }
+
+        if (!taskPageOpen)
+        {
+            TaskListMenu.SetActive(true);
+            TaskBackground.color = Color.blue;
+            taskPageOpen = true;
+            TaskList.LoadTaskPage();
+            return;
+        }
+        else if (taskPageOpen)
+        {
+            TaskListMenu.SetActive(false);
+            TaskBackground.color = Color.white;
+            taskPageOpen = false;
+            return; 
+        }
+    }
+
+    public void OnClickOpenSubtask()
+    {
+        if (taskPageOpen)
+        {
+            OnClickOpenTasks();
+        }
+        if (!subtaskPageOpen)
+        {
+            TaskAboutMenu.SetActive(true);
+            SubtaskBackground.color = Color.blue;
+            subtaskPageOpen = true;
+            TaskList.SubtaskPageLoader(TaskList.activeTask);
+            return;
+        }
+        else if (subtaskPageOpen)
+        {
+            TaskAboutMenu.SetActive(false);
+            SubtaskBackground.color = Color.white;
+            subtaskPageOpen = false;
+            return; 
+        }
     }
 
     public void OnClickBackToAboutTask()
@@ -107,18 +154,20 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         b.SetActive(true);
     }
 
-
-    void Update()
-    {
-
-    }
-
     public void OnClickMenuTask()
     {
         SwitchMenuTo(TaskListMenu);
     }
     public void OnClickMenuSkills()
     {
+        if (taskPageOpen)
+        {
+            OnClickOpenTasks();
+        }
+        if (subtaskPageOpen)
+        {
+            OnClickOpenSubtask();
+        }
         SwitchMenuTo(SkillListMenu);
     }
 
@@ -145,11 +194,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     void OnDisable()
     {
         NotificationAlertMenu.SetActive(false);
-    }
-
-    public void OnClickTask()
-    {
-        SwitchMenuTo(TaskAboutMenu);
     }
 
     public void SelectSubtask()

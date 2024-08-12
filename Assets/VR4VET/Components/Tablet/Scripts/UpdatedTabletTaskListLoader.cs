@@ -32,12 +32,6 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
     [SerializeField] private GameObject _skillSubtaskContent;
 
 
-    [Header("task other")]
-    [SerializeField] private TMP_Text _taskNameTab;
-
-    [SerializeField] private TMP_Text _taskFeedback;
-
-
     [Header("subtask other")]
     [SerializeField] private TMP_Text _subtaskNameTab;
 
@@ -68,10 +62,15 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
 
     private Vector2 originalTransform;
 
+    public Task.Task activeTask;
+
     private void Start()
     {
         //setting loading the scriptable objects
         Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
+        _tasks = th.taskList;
+        _skills = th.skillList;
+        activeTask = _tasks[0];
         if (FindObjectsOfType<MaintenanceManager>().Length > 0)
         {
             manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
@@ -85,12 +84,11 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             watchManager.SkillCompleted.AddListener(HandleSkillUnlocked);
         }
         panelManager = gameObject.GetComponent<UpdatedTabletPanelManager>();
-        _tasks = th.taskList;
-        _skills = th.skillList;
+        
         originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
 
         LoadSkillsPage();
-        SubTaskPageLoader(_tasks[0].Subtasks[0]);
+        StepPageLoader(_tasks[0].Subtasks[0]);
     }
     public void UpdateProgressBar(Task.Task task)
     {
@@ -105,7 +103,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         //if the subtask is not null, load the subtask page
         if (subtask != null)
         {
-            SubTaskPageLoader(subtask);
+            StepPageLoader(subtask);
         }
     }
     private void HandleSkillUnlocked(Task.Skill skill)
@@ -162,7 +160,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             padlock.SetActive(skill.IsLocked());
             completedBackground.SetActive(!skill.IsLocked());
         }
-        UpdateProgressBar(_tasks[0]);
+        UpdateProgressBar(activeTask);
     }
     
     //gets called on Start since the list of task is always the same
@@ -173,18 +171,20 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         Task.TaskHolder th = GameObject.FindObjectsOfType<Task.TaskHolder>()[0];
         _tasks = th.taskList;
 
+        //cleaning list before loading the new subtasks
+        foreach (Transform child in taskContent.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
 
         //loads each task on the parent object
         foreach (Task.Task task in _tasks)
         {
-            // Remove line after testing and uncomment line in end of for loop 
-            TaskPageLoader(task);
-
             //task for the list
             GameObject item = Instantiate(_taskListEntry, Vector3.zero, Quaternion.identity);
             item.transform.SetParent(taskContent.transform);
             item.transform.localPosition = Vector3.zero;
-            item.transform.localScale = Vector3.one;
+            item.transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
             item.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
             TMP_Text caption = item.transform.Find("txt_TaskNr").GetComponent<TMP_Text>();
@@ -203,7 +203,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         }
     }
 
-    public void TaskPageLoader(Task.Task task)
+    public void SubtaskPageLoader(Task.Task task)
     {
         //for extra events
         if (_taskPageOpen != null) _taskPageOpen.Invoke();
@@ -220,7 +220,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
             item.transform.SetParent(TaskSubtaskContent.transform);
             item.transform.localPosition = Vector3.zero;
-            item.transform.localScale = Vector3.one;
+            item.transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
             item.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
             TMP_Text caption = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
@@ -236,11 +236,11 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
                 completedButton.SetActive(true);
                 button = item.transform.Find("btn_SubTaskComplete").GetComponent<Button>();
             };
-            button.onClick.AddListener(() => SubTaskPageLoader(sub));
+            button.onClick.AddListener(() => StepPageLoader(sub));
         }
     }
 
-    public void SubTaskPageLoader(Task.Subtask subtask)
+    public void StepPageLoader(Task.Subtask subtask)
     {
         if (_subtaskPageOpen != null) _subtaskPageOpen.Invoke();
 
