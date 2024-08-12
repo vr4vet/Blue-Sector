@@ -129,8 +129,9 @@ public class DialogueBoxController : MonoBehaviour
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
 
-            // Skip line button is disabled for certain dialogues in labratory
-            if ((currentDialogue == dialogueTree.sections[2].dialogue[1] || currentDialogue == dialogueTree.sections[2].dialogue[2] || currentDialogue == dialogueTree.sections[2].dialogue[3] || currentDialogue == dialogueTree.sections[3].dialogue[1] || currentDialogue == dialogueTree.sections[4].dialogue[2]) && dialogueTree.name == "LarsDialogue" )
+            // Disable skip line button for certain dialogues in the labratory scene
+            if ((currentDialogue == dialogueTree.sections[2].dialogue[1] || currentDialogue == dialogueTree.sections[2].dialogue[2] || currentDialogue == dialogueTree.sections[2].dialogue[3] || currentDialogue == dialogueTree.sections[3].dialogue[1] || currentDialogue == dialogueTree.sections[4].dialogue[2] || currentDialogue == dialogueTree.sections[5].dialogue[0] 
+              || currentDialogue == dialogueTree.sections[2].dialogue[4] || currentDialogue == dialogueTree.sections[3].dialogue[2] || currentDialogue == dialogueTree.sections[4].dialogue[3]) && dialogueTree.name == "LarsDialogue" )
             {
                 _skipLineButton.SetActive(false);
 

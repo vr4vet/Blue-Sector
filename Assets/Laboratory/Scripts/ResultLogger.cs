@@ -52,9 +52,13 @@ public class ResultLogger : MonoBehaviour
 
     private LoggedAnswers activeFish;
 
+    private DialogueBoxController dialogueBoxController;
+
+
     void Start()
     {
         currentText = weight;
+        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
 
         GameObject[] fishInScene = GameObject.FindGameObjectsWithTag("Fish");
         foreach (GameObject fish in fishInScene)
@@ -204,6 +208,13 @@ public class ResultLogger : MonoBehaviour
         UsingDecimals = false;
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
+        
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[4]) 
+        {
+            dialogueBoxController.SkipLine();
+        }
+        
+
     }
 
     public void SwitchToLength()
@@ -212,6 +223,11 @@ public class ResultLogger : MonoBehaviour
         UsingDecimals = false;
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
+
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[2]) 
+        {
+            dialogueBoxController.SkipLine();
+        }
     }
 
     public void SwitchToCondition()
@@ -220,7 +236,13 @@ public class ResultLogger : MonoBehaviour
         UsingDecimals = false;
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
+
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[3]) 
+        {
+            dialogueBoxController.SkipLine();
+        }
     }
+
 
     public void setActiveFish(int fishNumber)
     {

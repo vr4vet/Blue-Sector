@@ -50,10 +50,8 @@ public class Scale : MonoBehaviour
             StopAllCoroutines();
             corutine = SetScaleText(totalWeight - collisionObject.GetComponent<Weight>().ObjectWeight);
             StartCoroutine(corutine);
-             if (collisionObject.gameObject.tag == "Bone" && objectsOnScale.Contains(tray)&& dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[2])
+             if (collisionObject.gameObject.name == "basket_plastic" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[2])
             {
-                tubWasUsed = true; 
-                
                 dialogueBoxController.SkipLine();
             }
             else if (collisionObject.gameObject.tag == "Bone" && objectsOnScale.Contains(tray))
