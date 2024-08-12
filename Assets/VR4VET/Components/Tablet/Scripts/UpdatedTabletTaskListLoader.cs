@@ -59,10 +59,9 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
     [SerializeField] private TMP_Text ProgressText;
 
     private List<GameObject> _skillsClones = new List<GameObject>();
-
     private Vector2 originalTransform;
-
     public Task.Task activeTask;
+    private Task.Subtask activeSubtask;
 
     private void Start()
     {
@@ -186,12 +185,18 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             item.transform.localPosition = Vector3.zero;
             item.transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
             item.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
+            
+            TaskUI taskUI = item.transform.GetComponentInChildren<TaskUI>();
+            taskUI.InitializeInterface(task);
             TMP_Text caption = item.transform.Find("txt_TaskNr").GetComponent<TMP_Text>();
             caption.text = task.TaskName;
             Button button = item.transform.Find("btn_Task").GetComponent<Button>();
             GameObject completedButton = item.transform.Find("btn_TaskComplete").gameObject;
             GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
+            if (task == activeTask)
+            {
+                button.GetComponent<Image>().color = Color.blue;
+            }
             if (task.Compleated())
             {
                 checkmark.SetActive(true);
@@ -199,7 +204,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
                 button = item.transform.Find("btn_TaskComplete").GetComponent<Button>();
             };
 
-            button.onClick.AddListener(() => panelManager.OnClickBackToAboutTask());
+            button.onClick.AddListener(() => SubtaskPageLoader(activeTask));
         }
     }
 
@@ -230,6 +235,10 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
             GameObject completedButton = item.transform.Find("btn_SubTaskComplete").gameObject;
             GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
+            if (sub == activeSubtask)
+            {
+                button.GetComponent<Image>().color = Color.blue;
+            }
             if (sub.Compleated())
             {
                 checkmark.SetActive(true);
@@ -243,12 +252,13 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
     public void StepPageLoader(Task.Subtask subtask)
     {
         if (_subtaskPageOpen != null) _subtaskPageOpen.Invoke();
-
+        SubtaskPageLoader(activeTask);
         TaskPageCanvas.SetActive(false);
         subtaskPageCanvas.SetActive(true);
+        activeSubtask = subtask;
 
         _subtaskNameTab.GetComponent<TMP_Text>().text = subtask.SubtaskName;
-        UpdateProgressBar(subtask.ParentTask);
+        UpdateProgressBar(activeTask);
 
         //cleaning list before loading the new subtasks
         foreach (Transform child in _subtaskContent.transform)
