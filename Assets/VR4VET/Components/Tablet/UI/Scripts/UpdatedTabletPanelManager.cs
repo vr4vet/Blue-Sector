@@ -85,7 +85,8 @@ public class UpdatedTabletPanelManager : MonoBehaviour
 
     public void OnClickBackToTasks()
     {
-        SwitchMenuTo(TaskListMenu);
+        //SwitchMenuTo(TaskListMenu);
+        TaskListMenu.SetActive(true);
     }
 
     public void OnClickBackToAboutTask()
