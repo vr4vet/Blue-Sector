@@ -7,16 +7,20 @@ using UnityEngine.UI;
 public class MicroscopeMonitor : MonoBehaviour
 {
     [SerializeField] private float ScrollSpeed = 0.01f;
-    [SerializeField] private List<int> MagnificationLevels = new List<int> { 1, 2, 5, 8 };
+    [SerializeField] private Texture DefaultTexture;
+    private List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
     private RawImage RawImage;
     private Vector2 CurrentXY = new Vector2(0.5f, 0.5f);
-
     private int CurrentMagnificationStep = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         RawImage = GetComponentInChildren<RawImage>();
+        RawImage.texture = DefaultTexture;
+
+        // set initial magnification level
+        SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
     }
 
     private void Update()
@@ -24,6 +28,8 @@ public class MicroscopeMonitor : MonoBehaviour
         // Zooming
         if (Input.GetKeyDown(KeyCode.Keypad1))
             Magnify();
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+            Minimize();
     }
 
     private void FixedUpdate()
@@ -58,16 +64,24 @@ public class MicroscopeMonitor : MonoBehaviour
     public void Magnify()
     {
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
-        float Magnification = 1.0f / MagnificationLevels[CurrentMagnificationStep];
+        SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+    }
+
+    public void Minimize()
+    {
+        CurrentMagnificationStep = (CurrentMagnificationStep - 1) % MagnificationLevels.Count;
+        
+        if (CurrentMagnificationStep < 0)
+            CurrentMagnificationStep = MagnificationLevels.Count - 1;
 
         // UV x and y must be offset to keep looking at the same point of image when zooming
-        if (CurrentMagnificationStep == 0)
-        {
-            CurrentXY = new Vector2(0.5f, 0.5f);
-            RawImage.uvRect = new Rect(0f, 0f, Magnification, Magnification);
-        }
-        else
-            RawImage.uvRect = new Rect(CurrentXY.x - (Magnification * 0.5f), CurrentXY.y - (Magnification * 0.5f), Magnification, Magnification);
+        SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+    }
+
+    private void SetMagnification(float magnification)
+    {
+        // UV x and y must be offset to keep looking at the same point of image when zooming
+        RawImage.uvRect = new Rect(CurrentXY.x - (magnification * 0.5f), CurrentXY.y - (magnification * 0.5f), magnification, magnification);
     }
 
     private void ScrollRight()
@@ -104,5 +118,15 @@ public class MicroscopeMonitor : MonoBehaviour
             CurrentXY.y -= ScrollSpeed;
             RawImage.uvRect = new Rect(RawImage.uvRect.x, RawImage.uvRect.y - ScrollSpeed, RawImage.uvRect.width, RawImage.uvRect.height);
         }
+    }
+
+    public void SetTexture(Texture texture)
+    {
+        RawImage.texture = texture;
+    }
+
+    public void SetDefaultTexture()
+    {
+        RawImage.texture = DefaultTexture;
     }
 }
