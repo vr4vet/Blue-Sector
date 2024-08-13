@@ -148,6 +148,11 @@ public class ResultLogger : MonoBehaviour
 
     private void logAnswer(GameObject fish, float weight, float length, float condition, bool wasFishLoggedCorectly)
     {
+        if (fish == null)
+        {
+            audio2.Play();
+            return;
+        }
         for (int i = 0; i < loggedAnswers.Count; i++)
         {
             if (loggedAnswers[i].fishObject == fish)

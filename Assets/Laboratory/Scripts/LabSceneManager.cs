@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class LabSceneManager : MonoBehaviour
 {
+    public string sceneToTeleport;
+
     public UnityEvent unityEvent;
+
     private void OnTriggerEnter(Collider other) {
         unityEvent.Invoke();
-        SceneManager.LoadScene("Laboratory");
+        SceneManager.LoadScene(sceneToTeleport);
     }
 }
