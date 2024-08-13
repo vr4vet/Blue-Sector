@@ -26,6 +26,9 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     [SerializeReference] private TMP_Text skillsMenuTextTaskPage;
     [SerializeReference] private TMP_Text taskMenuTextTaskPage;
     [SerializeReference] private TMP_Text skilsHeaderText;
+    [SerializeReference] private TMP_Text taskButtonText;
+    [SerializeReference] private TMP_Text taskPageHeader;
+    [SerializeReference] private TMP_Text subtaskPageHeader;
 
 
     private AddInstructionsToWatch watch;
@@ -50,8 +53,21 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             taskMenuTextSkillPage.SetText("Tasks");
             skillsMenuTextTaskPage.SetText("Skills");
             taskMenuTextTaskPage.SetText("Tasks");
-
             skilsHeaderText.SetText("My Skills");
+            taskButtonText.SetText("Tasks");
+            taskPageHeader.SetText("All tasks");
+            subtaskPageHeader.SetText("All subtasks");
+        }
+        else if (activeLanguage == Language.Norwegian)
+        {
+            skillsMenuTextSkillPage.SetText("Ferdigheter");
+            taskMenuTextSkillPage.SetText("Oppgaver");
+            skillsMenuTextTaskPage.SetText("Ferdigheter");
+            taskMenuTextTaskPage.SetText("Oppgaver");
+            skilsHeaderText.SetText("Mine ferdigheter");
+            taskButtonText.SetText("Opg.");
+            taskPageHeader.SetText("Alle oppgaver");
+            subtaskPageHeader.SetText("Alle deloppgaver");
         }
 
 

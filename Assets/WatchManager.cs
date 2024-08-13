@@ -18,7 +18,7 @@ public class WatchManager : MonoBehaviour
     private int teleportationAnchorCount;
     [HideInInspector] public int stepCount;
 
-    public Task.Task Task { get => task; }
+    public Task.Task Task { get => task; set => task = value; }
     public UnityEvent<Task.Skill?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
