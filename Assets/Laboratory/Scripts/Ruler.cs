@@ -25,7 +25,7 @@ public class Ruler : MonoBehaviour
     {
         if (collision.GetType() == typeof(CapsuleCollider) && collision.GetComponent<Weight>())
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[1]) 
+            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[0]) 
             {
                 dialogueBoxController.SkipLine();
                 

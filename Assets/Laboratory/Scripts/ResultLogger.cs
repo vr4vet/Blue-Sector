@@ -209,7 +209,7 @@ public class ResultLogger : MonoBehaviour
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
         
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[4]) 
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[3]) 
         {
             dialogueBoxController.SkipLine();
         }
@@ -224,7 +224,7 @@ public class ResultLogger : MonoBehaviour
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
 
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[2]) 
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[1]) 
         {
             dialogueBoxController.SkipLine();
         }
@@ -237,7 +237,7 @@ public class ResultLogger : MonoBehaviour
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
 
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[3]) 
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[1]) 
         {
             dialogueBoxController.SkipLine();
         }

@@ -14,82 +14,128 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sections:
   - dialogue:
-    - Welcome to the Fish Laboratory. Here you will check the quality of the fish.
-    - This is done through multiple steps. First  you will have to measure the fish,
-      then dissect it and check it's qualities.
+    - 'Welcome to the Fish Laboratory. Here you will check the quality of the fish.
+
+'
+    - ' This is done through multiple steps. First  you will have to measure the
+      fish, then dissect it and check it''s qualities.'
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Do you want  to learn more about the different tasks you will do?
       answers:
       - answerLabel: Yes
         nextElement: 1
       - answerLabel: No
-        nextElement: 7
+        nextElement: 10
   - dialogue:
     - First you will measure the weight and length of the fish. This is important
       to figure out it's condition factor.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Do you want to learn more about how to measure the fish?
       answers:
       - answerLabel: Yes
         nextElement: 2
       - answerLabel: No
-        nextElement: 5
+        nextElement: 8
   - dialogue:
-    - The first step is measuring the fish's weight, this is done by using the weight
-      on the table.
-    - First turn on the weight using the top button on the weight
-    - Then place the basket on the weight,
-    - Remember to press the lower button on the weight to reset it and make sure
-      it is set zero.
-    - Press the weight button on the numpad
-    - Now write down it's weight. Come back when you are done
+    - 'The first step is measuring the fish''s weight, this is done by using the
+      weight on the table.
+
+'
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
-      question: Did you understand everything?
+      question: Do you want to hear how you measure the weight?
       answers:
-      - answerLabel: Can you repeat?
-        nextElement: 2
       - answerLabel: Yes
         nextElement: 3
+      - answerLabel: No
+        nextElement: 4
   - dialogue:
-    - The next step is measuring the fish's length. This is done by using the tool
+    - ' First turn on the weight using the top button on the weight'
+    - ' Then place the basket on the weight.'
+    - ' Remember to press the lower button on the weight to reset it and make sure
+      it is set zero. '
+    - Then press the weight button on the numpad and write down the weight
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: Are you ready for the next step
+      answers:
+      - answerLabel: Yes
+        nextElement: 4
+      - answerLabel: No
+        nextElement: 3
+  - dialogue:
+    - 'The next step is measuring the fish''s length. This is done by using the ruler
       to the right of the weight.
+
+'
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Do you want to hear how you measure the length of the fish?
+      answers:
+      - answerLabel: Yes
+        nextElement: 5
+      - answerLabel: No
+        nextElement: 6
+  - dialogue:
     - 'Make sure the fish is straight and it''s head is placed beside the wall on
       the left of the tool. '
-    - Press the length button on the numpad
-    - Now write down it's weight. Come back when you are done
+    - Then press the length button on the numpad and write down the length of the
+      fish.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 1
     branchPoint:
-      question: Did you understand everything?
+      question: Are you ready for the next step
       answers:
-      - answerLabel: Can you repeat?
-        nextElement: 3
       - answerLabel: Yes
-        nextElement: 4
-  - dialogue:
-    - Now you need to calculate the condition factor of the fish. This is done by
-      dividing the weight with the length of the fish three times, then multiplying
-      by a hundred.
-    - If the condition factor is below 1, that means the fish has low quality.
-    - Use the calculator on the table to calculate the result
-    - Press the condition factor button on the numpad
-    - Now write down it's condition factor. Come back when you are done
-    endAfterDialogue: 0
-    branchPoint:
-      question: Did you understand everything?
-      answers:
-      - answerLabel: Can you repeat?
-        nextElement: 4
-      - answerLabel: Yes
+        nextElement: 6
+      - answerLabel: No
         nextElement: 5
   - dialogue:
+    - 'Now you need to calculate the condition factor of the fish. This is done by
+      dividing the weight with the length of the fish three times, then multiplying
+      by a hundred.
+
+'
+    - 'If the condition factor is below 1, that means the fish has low quality.
+
+'
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Did you understand everything?
+      answers:
+      - answerLabel: Can you repeat?
+        nextElement: 6
+      - answerLabel: Yes
+        nextElement: 7
+  - dialogue:
+    - Use the calculator on the table to calculate the result
+    - Then press the condition factor button on the numpad and write down the weight.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: Are you ready for the next step?
+      answers:
+      - answerLabel: Yes
+        nextElement: 8
+      - answerLabel: No
+        nextElement: 7
+  - dialogue:
     - 'Next you will dissect the fish. Place the fish on the cutting board to the
-      right of the length measurer. '
+      right of the length measurer.
+
+'
     - The first step is checking for any external damages or errors on the fish.
       Check the skin, fins and gills to make sure there are no health issues.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Did you understand everything?
       answers:
@@ -98,12 +144,15 @@ MonoBehaviour:
       - answerLabel: No
         nextElement: 5
   - dialogue:
-    - The next step is inspecting the internal areas of the fish. Cut open the fish
+    - 'The next step is inspecting the internal areas of the fish. Cut open the fish
       according to the instructions.
-    - 'Look after any internal bleeding or discoloration on the fish organs or any
-      other damages. '
+
+'
+    - Look after any internal bleeding or discoloration on the fish organs or any
+      other damages.
     - Remember to be careful when handling the fish to avoid causing any damage.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Did you understand everything?
       answers:
@@ -114,6 +163,7 @@ MonoBehaviour:
   - dialogue:
     - Good luck!
     endAfterDialogue: 1
+    disabkeSkipLineButton: 0
     branchPoint:
       question: 
       answers: []
