@@ -2007,6 +2007,17 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8846557901297510159, guid: ec2da074d6520b2458f58e6c014dec5b,
+        type: 3}
+      propertyPath: taskHolder
+      value: 
+      objectReference: {fileID: 2131181505}
+    - target: {fileID: 8846557901297510159, guid: ec2da074d6520b2458f58e6c014dec5b,
+        type: 3}
+      propertyPath: FirstSubTask
+      value: 
+      objectReference: {fileID: 11400000, guid: 3af3976dd6f7b114b8cbfc57e4f93093,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2da074d6520b2458f58e6c014dec5b, type: 3}
 --- !u!1 &147480501 stripped
@@ -2354,7 +2365,20 @@ MonoBehaviour:
   sceneName: QAStation
   OnChangeScene:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1337922650}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 8a7d85e3156138d4b8e9839f181fd47d,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &175386701
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3919,7 +3943,7 @@ MonoBehaviour:
   OnDialogueEnd:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -3935,7 +3959,7 @@ MonoBehaviour:
   OnCompletedStep:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: invokeBadge
         m_Mode: 2
@@ -8739,7 +8763,7 @@ MonoBehaviour:
   OnWash:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -8767,7 +8791,7 @@ MonoBehaviour:
   OnEquip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -8783,7 +8807,7 @@ MonoBehaviour:
   OnQuick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: invokeBadge
         m_Mode: 2
@@ -9323,7 +9347,7 @@ MonoBehaviour:
   OnEquip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -9602,7 +9626,7 @@ MonoBehaviour:
   OnChangeScene:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -10253,7 +10277,7 @@ MonoBehaviour:
   OnChangeScene:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -25898,6 +25922,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cdea428d48e2bb488d33d5f75c39bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1337922650 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8846557901297510159, guid: ec2da074d6520b2458f58e6c014dec5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 147480500}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147480501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29db5976fba96784798bb5cf09d177fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1343525628 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4376909619194593628, guid: ea7db852323fd6b4986a2685991fe1c5,
@@ -25920,7 +25956,7 @@ MonoBehaviour:
   OnDialogueEnd:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -27322,7 +27358,7 @@ MonoBehaviour:
   OnWachedHands:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -29946,7 +29982,7 @@ MonoBehaviour:
   OnEquip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -31848,7 +31884,7 @@ MonoBehaviour:
   OnEquip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1854900991}
+      - m_Target: {fileID: 1337922650}
         m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
@@ -31958,7 +31994,7 @@ PrefabInstance:
         type: 3}
       propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1854900991}
+      objectReference: {fileID: 1337922650}
     - target: {fileID: 719392542250545875, guid: e5c67fc8af1288446ad73de64928b0bd,
         type: 3}
       propertyPath: OnChangeScene.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -32546,7 +32582,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1854900990
 Transform:
   m_ObjectHideFlags: 0
@@ -35192,7 +35228,7 @@ PrefabInstance:
     - target: {fileID: 2281686386275440643, guid: fa1492a389a7b4c4082875a471f440a4,
         type: 3}
       propertyPath: taskList.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2281686386275440643, guid: fa1492a389a7b4c4082875a471f440a4,
         type: 3}

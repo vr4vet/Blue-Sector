@@ -91,8 +91,11 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             watchManager.CurrentSubtask.AddListener(OnCurrentSubtaskChanged);
             watchManager.SkillCompleted.AddListener(OnSkillCompleted);
         }
-        watch = GameObject.FindObjectsOfType<AddInstructionsToWatch>()[0];
-        watch.IncomingMessage.AddListener(SetAlertMenu);
+        if (FindObjectsOfType<AddInstructionsToWatch>().Length > 0)
+        {
+            watch = GameObject.FindObjectsOfType<AddInstructionsToWatch>()[0];
+            watch.IncomingMessage.AddListener(SetAlertMenu);
+        }
     }
 
     private void OnCurrentSubtaskChanged(Task.Subtask subtask)

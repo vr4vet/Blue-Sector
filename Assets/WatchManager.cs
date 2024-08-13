@@ -70,7 +70,10 @@ public class WatchManager : MonoBehaviour
             SubtaskChanged.Invoke(sub);
             PlayAudio(success);
             stepCount += 1;
-            feedbackManager.emptyInstructions();
+            if (feedbackManager)
+            {
+                feedbackManager.emptyInstructions();
+            }
             Task.Step nextStep = sub.StepList.FirstOrDefault(element => !element.IsCompeleted());
             if (nextStep != null)
             {
