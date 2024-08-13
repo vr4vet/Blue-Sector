@@ -209,7 +209,7 @@ public class ResultLogger : MonoBehaviour
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
         
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[3]) 
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[4]) 
         {
             dialogueBoxController.SkipLine();
         }

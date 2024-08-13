@@ -25,6 +25,9 @@ public class Weight : MonoBehaviour
     [SerializeField]
     private float _objectWeight;
 
+    private DialogueBoxController dialogueBoxController;
+    private Dictionary<GameObject,float> fishLengths = new Dictionary<GameObject, float>();
+
     // ----------------- Public Variables -----------------
     public float ObjectWeight
     {
@@ -34,6 +37,7 @@ public class Weight : MonoBehaviour
 
     void Start()
     {
+        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
         if (RandomWeight)
         {
             _objectWeight = RandomizeWeight();
@@ -44,5 +48,28 @@ public class Weight : MonoBehaviour
     {
         _objectWeight = UnityEngine.Random.Range(minWeight, maxWeight);
         return _objectWeight;
+    }
+
+     private void OnTriggerEnter(Collider collision) 
+    {
+        
+        if (collision.GetType() == typeof(CapsuleCollider) && collision.GetComponent<Weight>())
+        {
+            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[3]) 
+            {
+                dialogueBoxController.SkipLine();
+            }
+
+            
+           
+            
+
+            float lengt = collision.GetComponent<Weight>().fish.transform.localScale.x;
+            float fishLength = (float)(4.58 * Math.Exp(2.33 * lengt) + 10.31);
+            if (!fishLengths.ContainsKey(collision.GetComponent<Weight>().fish))
+            {
+                fishLengths.Add(collision.GetComponent<Weight>().fish, fishLength);
+            }
+        }
     }
 }
