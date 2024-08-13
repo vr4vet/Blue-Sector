@@ -20,7 +20,7 @@ public class MicroscopeApplyTexture : MonoBehaviour
         {
             Debug.Log("Held item found!");
             SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>().SetMicroscopeMonitorTexture();
+            SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>().SetMicroscopeSlide();
         }
-
     }
 }

@@ -1,6 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.WebApi;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +11,8 @@ public class MicroscopeMonitor : MonoBehaviour
     private RawImage RawImage;
     private Vector2 CurrentXY = new Vector2(0.5f, 0.5f);
     private int CurrentMagnificationStep = 0;
+    private TextMeshProUGUI MagnificationLevelOverlay;
+    private MicroscopeSlide CurrentSlide;
 
     // Start is called before the first frame update
     void Start()
@@ -19,8 +20,11 @@ public class MicroscopeMonitor : MonoBehaviour
         RawImage = GetComponentInChildren<RawImage>();
         RawImage.texture = DefaultTexture;
 
+        MagnificationLevelOverlay = transform.Find("Canvas/Panel/Factor").GetComponent<TextMeshProUGUI>();
+
         // set initial magnification level
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+        SetMagnificationLevelOverlay();
     }
 
     private void Update()
@@ -65,6 +69,7 @@ public class MicroscopeMonitor : MonoBehaviour
     {
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+        SetMagnificationLevelOverlay();
     }
 
     public void Minimize()
@@ -76,6 +81,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
         // UV x and y must be offset to keep looking at the same point of image when zooming
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+        SetMagnificationLevelOverlay();
     }
 
     private void SetMagnification(float magnification)
@@ -125,8 +131,26 @@ public class MicroscopeMonitor : MonoBehaviour
         RawImage.texture = texture;
     }
 
+    public void SetTexture()
+    {
+        if (CurrentSlide.UseSeparateMagnificationTextures)
+        {
+
+        }
+    }
+
     public void SetDefaultTexture()
     {
         RawImage.texture = DefaultTexture;
+    }
+
+    private void SetMagnificationLevelOverlay()
+    {
+        MagnificationLevelOverlay.SetText(MagnificationLevels[CurrentMagnificationStep].ToString() + "x");
+    }
+
+    public void SetCurrentSlide(MicroscopeSlide slide)
+    {
+        CurrentSlide = slide;
     }
 }
