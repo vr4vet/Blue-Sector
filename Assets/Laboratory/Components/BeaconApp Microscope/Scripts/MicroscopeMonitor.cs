@@ -7,12 +7,14 @@ public class MicroscopeMonitor : MonoBehaviour
 {
     [SerializeField] private float ScrollSpeed = 0.01f;
     [SerializeField] private Texture DefaultTexture;
-    private List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
+    public List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
     private RawImage RawImage;
     private Vector2 CurrentXY = new Vector2(0.5f, 0.5f);
-    private int CurrentMagnificationStep = 0;
+    private int CurrentMagnificationStep, CurrentSeparateMagnificationStep = 0;
+    private int CurrentImageIndex = 0;
     private TextMeshProUGUI MagnificationLevelOverlay;
     private MicroscopeSlide CurrentSlide;
+
 
     // Start is called before the first frame update
     void Start()
@@ -68,8 +70,28 @@ public class MicroscopeMonitor : MonoBehaviour
     public void Magnify()
     {
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
+        CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
+
+        Debug.Log("Magnification step: " + CurrentMagnificationStep);
+        if (CurrentSlide.UseSeparateMagnificationTextures)
+        {
+            if (CurrentSlide.textures[CurrentImageIndex] != null)
+            {
+                SetTexture(CurrentSlide.textures[CurrentImageIndex]);
+                CurrentMagnificationStep = 0;
+            }
+            SetMagnificationLevelOverlay(MagnificationLevels[CurrentImageIndex]);
+        }
+        else
+            SetMagnificationLevelOverlay();
+
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
-        SetMagnificationLevelOverlay();
+
+        /*        CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
+
+                // UV x and y must be offset to keep looking at the same point of image when zooming
+                SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+                SetMagnificationLevelOverlay();*/
     }
 
     public void Minimize()
@@ -84,9 +106,9 @@ public class MicroscopeMonitor : MonoBehaviour
         SetMagnificationLevelOverlay();
     }
 
-    private void SetMagnification(float magnification)
+    public void SetMagnification(float magnification)
     {
-        // UV x and y must be offset to keep looking at the same point of image when zooming
+        // UV x and y must be offset to keep looking at the same point of image when zooming 
         RawImage.uvRect = new Rect(CurrentXY.x - (magnification * 0.5f), CurrentXY.y - (magnification * 0.5f), magnification, magnification);
     }
 
@@ -131,14 +153,6 @@ public class MicroscopeMonitor : MonoBehaviour
         RawImage.texture = texture;
     }
 
-    public void SetTexture()
-    {
-        if (CurrentSlide.UseSeparateMagnificationTextures)
-        {
-
-        }
-    }
-
     public void SetDefaultTexture()
     {
         RawImage.texture = DefaultTexture;
@@ -147,6 +161,11 @@ public class MicroscopeMonitor : MonoBehaviour
     private void SetMagnificationLevelOverlay()
     {
         MagnificationLevelOverlay.SetText(MagnificationLevels[CurrentMagnificationStep].ToString() + "x");
+    }
+
+    private void SetMagnificationLevelOverlay(int level)
+    {
+        MagnificationLevelOverlay.SetText(level + "x");
     }
 
     public void SetCurrentSlide(MicroscopeSlide slide)

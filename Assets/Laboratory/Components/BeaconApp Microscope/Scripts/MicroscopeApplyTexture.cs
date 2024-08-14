@@ -15,12 +15,13 @@ public class MicroscopeApplyTexture : MonoBehaviour
 
     public void ApplyTexture()
     {
-        Debug.Log("Applying texture");
-        if (SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>())
+        MicroscopeSlide CurrentMicroscopeSlide = SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>();
+        
+        //if (SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>())
+        if (CurrentMicroscopeSlide)
         {
-            Debug.Log("Held item found!");
-            SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>().SetMicroscopeMonitorTexture();
-            SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>().SetMicroscopeSlide();
+            CurrentMicroscopeSlide.SetMicroscopeMonitorTexture();
+            CurrentMicroscopeSlide.SetMicroscopeSlide();
         }
     }
 }
