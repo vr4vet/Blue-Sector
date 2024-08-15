@@ -18,7 +18,7 @@ public class ConversationController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-
+        //_hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
         _dialogueBoxController = GetComponentInParent<DialogueBoxController>();
         if (_dialogueBoxController == null) {
             Debug.LogError("The NPC is missing the DialogueBoxCOntroller script");
@@ -48,6 +48,16 @@ public class ConversationController : MonoBehaviour
         this._animator = animator;
     }
 
+    public bool isDialogueActive()
+    {
+        return _dialogueBoxController.dialogueIsActive;
+    }
+
+    public int GetActivatedCount()
+    {
+        return _dialogueBoxController.GetActivatedCount();
+    }
+
     
     /// <summary>
     /// Start the dialogue when the Player is close enough
@@ -62,7 +72,7 @@ public class ConversationController : MonoBehaviour
             //_dialogueBoxController.startSpeakCanvas(_dialogueTree);
             _oldDialogueTree = _dialogueTree;
             if (_dialogueTree != null) {
-                _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
+                _dialogueBoxController.DialogueTrigger(_dialogueTree, 0, "NPC");
             } else {
                 // Commented out because not all NPC's should have a dialogue tree, therefor not an error
 
@@ -76,12 +86,14 @@ public class ConversationController : MonoBehaviour
     /// Should be connected to event of your choosing
     /// Only triggers if there is a new dialogue tree
     /// </summary>
-    void DialogueTrigger() {
+    public void DialogueTrigger() {
         if (_oldDialogueTree != _dialogueTree) {
             // Change the old tree to be the current tree, to ensure no repeats
             _oldDialogueTree = _dialogueTree;
             if (_dialogueTree != null) {
-                _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
+                _dialogueBoxController.DialogueTrigger(_dialogueTree, 0, "NPC");
+            } else {
+                Debug.LogError("TheDialohueTree of the NPC is null");
             }
         }
     }
@@ -131,7 +143,10 @@ public class ConversationController : MonoBehaviour
         if (_dialogueTreesSOFormat.Count > 0) {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
-        _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        if (_animator)
+        {
+            _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        }
     }
 
     /// <summary>

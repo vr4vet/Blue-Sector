@@ -125,6 +125,6 @@ public class ButtonSpawner : MonoBehaviour
         buttonTransfrom.localPosition = buttonLocation;
         button.GetComponentInChildren<TextMeshProUGUI>().text = "Speak";
         
-        _buttonsSpawned[0].GetComponent<Button>().onClick.AddListener(() => {_dialogueBoxController.StartDialogue(dialogueTree, 0, "NPC");});
+        _buttonsSpawned[0].GetComponent<Button>().onClick.AddListener(() => {_dialogueBoxController.DialogueTrigger(dialogueTree, 0, "NPC");});
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
@@ -12,7 +13,7 @@ public class SceneController : MonoBehaviour
     [SerializeField]
     private string sceneName;
 
-    public UnityEvent onPlayerEnter;
+    public UnityEvent OnChangeScene;
 
     // ----------------- Unity Functions -----------------
 
@@ -24,7 +25,7 @@ public class SceneController : MonoBehaviour
     {
         if (collisionObject.gameObject.name == "Grabber")
         {
-            onPlayerEnter.Invoke();
+            OnChangeScene.Invoke();
             ChangeScene(sceneName);
         }
     }
