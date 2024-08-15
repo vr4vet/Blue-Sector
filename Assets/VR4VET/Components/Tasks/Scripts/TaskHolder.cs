@@ -15,6 +15,7 @@ namespace Task
     public class TaskHolder : MonoBehaviour
     {
         public static TaskHolder Instance;
+        public bool shouldBeSingelton;
         private List<TaskxTarget> _taskAndTargerts = new List<TaskxTarget>();
 
         [Header("Profession Tasks")]
@@ -25,15 +26,19 @@ namespace Task
         //making the task holder a singleton
         private void Awake()
         {
-            if (Instance == null)
+            if (shouldBeSingelton)
             {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
+                if (Instance == null)
+                {
+                    Instance = this;
+                    DontDestroyOnLoad(gameObject);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
-            else
-            {
-                Destroy(gameObject);
-            }
+            
         }
 
         public Task GetTask(string taskName)

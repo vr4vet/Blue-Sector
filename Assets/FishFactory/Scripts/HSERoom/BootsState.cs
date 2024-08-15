@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BootsState : MonoBehaviour
 {
@@ -38,6 +39,9 @@ public class BootsState : MonoBehaviour
     [SerializeField]
     private List<Material> materials = new List<Material>();
 
+    public UnityEvent OnWash;
+
+
     // ----------------- Private Variables -----------------
 
     private float scrubbingDuration = 0f;
@@ -66,6 +70,7 @@ public class BootsState : MonoBehaviour
                 boots = BootsStatus.Clean;
                 GameManager.Instance.PlaySound("correct");
                 gameObject.GetComponent<MeshRenderer>().material = materials[3]; // Clean
+                OnWash.Invoke();
             }
         }
     }
