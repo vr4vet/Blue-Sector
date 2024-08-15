@@ -22,12 +22,13 @@ MonoBehaviour:
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
-      question: Do you want  to learn more about the different tasks you will do?
+      question: Do you want to learn more about the work that is done here or start
+        with the tasks
       answers:
-      - answerLabel: Yes
+      - answerLabel: Start with the tasks
         nextElement: 1
-      - answerLabel: No
-        nextElement: 10
+      - answerLabel: Learn more
+        nextElement: 11
   - dialogue:
     - First you will measure the weight and length of the fish. This is important
       to figure out it's condition factor.
@@ -170,3 +171,27 @@ MonoBehaviour:
     branchPoint:
       question: 
       answers: []
+  - dialogue:
+    - The fish laboratory is important for getting information on the health of the
+      fish. This information is used to better regulate the feeding and treatment
+      of the fish. And to ensure that the fish welfare is good by cheking for any
+      sickness or other health issues.
+    - In the laboratory the condition factor of the fish is calculated which is used
+      to determine how well fed the fish is, and it is important for regulating the
+      feeding of the fish
+    - The fish is dissected to see if there are any issues with the fish, like sickness
+      or damages
+    - The living conditions of the fish are also checked  by analyzing different
+      plankton samples in the microscope, as some plankton can be harmful for the
+      fish.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: 'Are you ready to move on to the instructions?
+
+'
+      answers:
+      - answerLabel: Yes
+        nextElement: 1
+      - answerLabel: Can you repeat?
+        nextElement: 11
