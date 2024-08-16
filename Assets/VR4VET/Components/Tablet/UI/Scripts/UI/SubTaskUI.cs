@@ -23,7 +23,12 @@ public class SubTaskUI : MonoBehaviour
         }
     }
 
-
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Finger")
+        {
+            btn.onClick.Invoke();
+        }
+    }
 
 
 
@@ -67,7 +72,6 @@ public class SubTaskUI : MonoBehaviour
     //selects this particular subtask, navigates to this subtask's interface representation, and refreshes the UI to display the related skills
     public void OnClickSubTaskUI()
     {
-
         DynamicDataDisplayer.Instance.OnClickSubTask(this._subTask);
     }
 }

@@ -10,6 +10,9 @@ public class FishSortingButton : MonoBehaviour
     [SerializeField]
     private GameObject _colorPanel;
 
+    [HideInInspector]
+    public int correctlySortedFish = 0;
+
     // ------------------ Public Variables ------------------
     public enum FishTier
     {

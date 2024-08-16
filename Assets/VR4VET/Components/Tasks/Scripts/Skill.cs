@@ -18,6 +18,8 @@ namespace Task
         [Tooltip("Description of this skill"), TextArea(5, 20)]
         [SerializeField] private string _description;
 
+        [SerializeField] private Sprite _icon = null;
+
         [TextArea(5, 20)]
         [SerializeField] private string _feedback;
 
@@ -28,17 +30,38 @@ namespace Task
 
         public string Name { get => _name; set => _name = value; }
         public string Description { get => _description; set => _description = value; }
+
+        public Sprite Icon { get => _icon; set => _icon = value; }
         public List<Subtask> Subtasks { get => _subtasks; set => _subtasks = value; }
         public int MaxPossiblePoints { get => _maxPoints; set => _maxPoints = value; }
         public string Feedback { get => _feedback; set => _feedback = value; }
+        private bool locked = true;
 
         private void Awake()
         {
-            foreach (Subtask sub in _subtasks)
+            if (_subtasks.Count > 0)
             {
-                //   _pointsPerSubtask.Add(sub, 0);
-                sub.RelatedSkills.Add(this);
+                foreach (Subtask sub in _subtasks)
+                {
+                    //   _pointsPerSubtask.Add(sub, 0);
+                    sub.RelatedSkills.Add(this);
+                }
             }
+        }
+
+        public void Lock()
+        {
+            locked = true;
+        }
+        public void Unlock()
+        {
+            locked = false;
+        }
+
+
+        public bool IsLocked()
+        {
+            return locked;
         }
 
         public int GetArchivedPoints()

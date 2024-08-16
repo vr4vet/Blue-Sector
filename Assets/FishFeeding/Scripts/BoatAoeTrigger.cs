@@ -1,9 +1,12 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BoxCollider))]
 public class BoatAoeTrigger : MonoBehaviour
 {
+    public bool MaintenanceBoat;
     /// <summary>
     /// Gets an event that is fired when the player enters the box collider.
     /// </summary>
@@ -18,6 +21,11 @@ public class BoatAoeTrigger : MonoBehaviour
     {
         if (IsPlayer(other))
         {
+            if (MaintenanceBoat)
+            {
+                SceneManager.LoadScene("FishFeeding");
+                return;
+            }
             OnPlayerEnter.Invoke();
         }
 
