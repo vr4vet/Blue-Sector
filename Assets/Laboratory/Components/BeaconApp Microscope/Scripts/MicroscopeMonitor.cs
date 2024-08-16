@@ -72,7 +72,6 @@ public class MicroscopeMonitor : MonoBehaviour
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
 
-        Debug.Log("Magnification step: " + CurrentMagnificationStep);
         if (CurrentSlide.UseSeparateMagnificationTextures)
         {
             if (CurrentSlide.textures[CurrentImageIndex] != null)
@@ -86,24 +85,31 @@ public class MicroscopeMonitor : MonoBehaviour
             SetMagnificationLevelOverlay();
 
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
-
-        /*        CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
-
-                // UV x and y must be offset to keep looking at the same point of image when zooming
-                SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
-                SetMagnificationLevelOverlay();*/
+        PreventOutOfBoundsCoordinates();
     }
 
     public void Minimize()
     {
         CurrentMagnificationStep = (CurrentMagnificationStep - 1) % MagnificationLevels.Count;
-        
+        CurrentImageIndex = (CurrentImageIndex - 1) % MagnificationLevels.Count;
+
         if (CurrentMagnificationStep < 0)
             CurrentMagnificationStep = MagnificationLevels.Count - 1;
 
-        // UV x and y must be offset to keep looking at the same point of image when zooming
+        if (CurrentSlide.UseSeparateMagnificationTextures)
+        {
+            if (CurrentSlide.textures[CurrentImageIndex] != null)
+            {
+                SetTexture(CurrentSlide.textures[CurrentImageIndex]);
+                CurrentMagnificationStep = 0;
+            }
+            SetMagnificationLevelOverlay(MagnificationLevels[CurrentImageIndex]);
+        }
+        else
+            SetMagnificationLevelOverlay();
+
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
-        SetMagnificationLevelOverlay();
+        PreventOutOfBoundsCoordinates();
     }
 
     public void SetMagnification(float magnification)
@@ -114,7 +120,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void ScrollRight()
     {
-        if (RawImage.uvRect.x < 1 - RawImage.uvRect.width)
+        if (RawImage.uvRect.x < 1 - RawImage.uvRect.width - ScrollSpeed)
         {
             CurrentXY.x += ScrollSpeed;
             RawImage.uvRect = new Rect(RawImage.uvRect.x + ScrollSpeed, RawImage.uvRect.y, RawImage.uvRect.width, RawImage.uvRect.height);
@@ -123,7 +129,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void ScrollLeft()
     {
-        if (RawImage.uvRect.x > 0.01f)
+        if (RawImage.uvRect.x > 0 + ScrollSpeed)
         {
             CurrentXY.x -= ScrollSpeed;
             RawImage.uvRect = new Rect(RawImage.uvRect.x - ScrollSpeed, RawImage.uvRect.y, RawImage.uvRect.width, RawImage.uvRect.height);
@@ -132,7 +138,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void ScrollUp()
     {
-        if (RawImage.uvRect.y < 1 - RawImage.uvRect.height)
+        if (RawImage.uvRect.y < 1 - RawImage.uvRect.height - ScrollSpeed)
         {
             CurrentXY.y += ScrollSpeed;
             RawImage.uvRect = new Rect(RawImage.uvRect.x, RawImage.uvRect.y + ScrollSpeed, RawImage.uvRect.width, RawImage.uvRect.height);
@@ -141,7 +147,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void ScrollDown()
     {
-        if (RawImage.uvRect.y > 0.01f)
+        if (RawImage.uvRect.y > 0 + ScrollSpeed)
         {
             CurrentXY.y -= ScrollSpeed;
             RawImage.uvRect = new Rect(RawImage.uvRect.x, RawImage.uvRect.y - ScrollSpeed, RawImage.uvRect.width, RawImage.uvRect.height);
@@ -171,5 +177,19 @@ public class MicroscopeMonitor : MonoBehaviour
     public void SetCurrentSlide(MicroscopeSlide slide)
     {
         CurrentSlide = slide;
+    }
+
+    private void PreventOutOfBoundsCoordinates()
+    {
+        if (RawImage.uvRect.x < 0)
+            CurrentXY.x = 0f;
+        if (RawImage.uvRect.x >= 1 - RawImage.uvRect.width)
+            CurrentXY.x = 0.5f;
+        if (RawImage.uvRect.y < 0)
+            CurrentXY.y = 0f;
+        if (RawImage.uvRect.y >= 1 - RawImage.uvRect.height)
+            CurrentXY.y = 0.5f;
+
+        RawImage.uvRect = new Rect(CurrentXY.x, CurrentXY.y, RawImage.uvRect.width, RawImage.uvRect.height);
     }
 }
