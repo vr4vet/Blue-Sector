@@ -13,12 +13,11 @@ public class ConversationController : MonoBehaviour
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
     [HideInInspector] private DialogueBoxController _dialogueBoxController;
-    public bool shouldTrigger;
 
     // Start is called before the first frame update
     void Start()
     {   
-        //_hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
+
         _dialogueBoxController = GetComponentInParent<DialogueBoxController>();
         if (_dialogueBoxController == null) {
             Debug.LogError("The NPC is missing the DialogueBoxCOntroller script");
@@ -30,7 +29,6 @@ public class ConversationController : MonoBehaviour
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
         updateAnimator();
-        shouldTrigger = true;
     }
 
     public void updateAnimator()
@@ -48,31 +46,29 @@ public class ConversationController : MonoBehaviour
         this._animator = animator;
     }
 
-    public bool isDialogueActive()
+    public bool isDialogueActive() 
     {
         return _dialogueBoxController.dialogueIsActive;
     }
-
+    
     public int GetActivatedCount()
     {
         return _dialogueBoxController.GetActivatedCount();
     }
-
-    
     /// <summary>
     /// Start the dialogue when the Player is close enough
     /// </summary>
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
     {   
-        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && shouldTrigger && !_dialogueBoxController.dialogueIsActive && _oldDialogueTree != _dialogueTree) 
+        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && _dialogueTree.shouldTriggerOnProximity && !_dialogueBoxController.dialogueIsActive && _oldDialogueTree != _dialogueTree) 
         {
             // string json = JsonUtility.ToJson(dialogueTree);
             // Debug.Log(json);
             //_dialogueBoxController.startSpeakCanvas(_dialogueTree);
             _oldDialogueTree = _dialogueTree;
             if (_dialogueTree != null) {
-                _dialogueBoxController.DialogueTrigger(_dialogueTree, 0, "NPC");
+                _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
             } else {
                 // Commented out because not all NPC's should have a dialogue tree, therefor not an error
 
@@ -91,10 +87,38 @@ public class ConversationController : MonoBehaviour
             // Change the old tree to be the current tree, to ensure no repeats
             _oldDialogueTree = _dialogueTree;
             if (_dialogueTree != null) {
-                _dialogueBoxController.DialogueTrigger(_dialogueTree, 0, "NPC");
+                _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
             } else {
-                Debug.LogError("TheDialohueTree of the NPC is null");
+                Debug.LogError("The dialogueTree of the NPC is null");
             }
+        }
+    }
+
+    /// <summary>
+    ///  Method to tigger dialogue
+    ///  Should be connected to event of your choosing
+    ///  Triggers no matter if the same tree has been triggered before
+    /// </summary>
+    public void DialogueTriggerAbsolute() {
+        if (_dialogueTree != null) {
+            _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
+        } else {
+            Debug.LogError("The dialogueTree of the NPC is null");
+        }
+    }
+
+    /// <summary>
+    /// Method to trigger a comment
+    /// Comments are dialogue without a dialogue box
+    /// Comment content is the current dialogue tree
+    /// Use different sections for different comments
+    /// Triggered on call with no prerequesites
+    /// </summary>
+    public void CommentTrigger(int section = 0) {
+        if (_dialogueTree != null) {
+            _dialogueBoxController.StartComment(_dialogueTree,  section, "NPC");
+        } else {
+            Debug.LogError("The dialogueTree of the NPC is null (COMMENT)");
         }
     }
 
@@ -243,6 +267,10 @@ public class ConversationController : MonoBehaviour
             _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
             _animator.SetBool(_hasNewDialogueOptionsHash, true);
         }
+    }
+
+    public DialogueTree GetDialogueTree() {
+        return _dialogueTree;
     }
 
 
