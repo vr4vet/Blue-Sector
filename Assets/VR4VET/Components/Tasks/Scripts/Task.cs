@@ -33,6 +33,14 @@ namespace Task
         public string TaskName { get => _taskName; set => _taskName = value; }
         public string Feedback { get => _feedback; set => _feedback = value; }
 
+        private void Awake()
+        {
+            foreach (Subtask sub in _subtasks)
+            {
+                sub.ParentTask = this;
+            }
+        }
+        
         public void Compleated(bool value)
         {
             _compleated = value;
@@ -55,6 +63,19 @@ namespace Task
                 }
             }
             return _compleated;
+        }
+
+        public float GetProgress()
+        {
+            float progress = 0;
+            foreach (Subtask sub in _subtasks)
+            {
+                if (sub.Compleated())
+                {
+                    progress += 1;
+                }
+            }
+            return progress;
         }
 
         public bool CheckSubtaksCompleated()

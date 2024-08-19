@@ -357,10 +357,8 @@ public class StaticPanelManager : MonoBehaviour
 
     }
 
-    public void SelectSubTask(SubTask b)
+    public void SelectSubTask()
     {
-
-
         SwitchMenuTo(SubtaskAboutMenu);
     }
 

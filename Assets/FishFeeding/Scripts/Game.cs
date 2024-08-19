@@ -154,14 +154,10 @@ public class Game : MonoBehaviour
             foodWasteFillImage.enabled = true;
             foodWasteFillImage.color = yellowColor;
         }
-        else if (foodWasteSlider.value == 0.2f)
+        else if (foodWasteSlider.value == 0.2f || foodWasteSlider.value == 0.0f)
         {
             foodWasteFillImage.enabled = true;
             foodWasteFillImage.color = greenColor;
-        }
-        else if (foodWasteSlider.value == 0.0f)
-        {
-            foodWasteFillImage.enabled = false;
         }
 
         deadFishText.text = scoring.DeadFish.ToString();

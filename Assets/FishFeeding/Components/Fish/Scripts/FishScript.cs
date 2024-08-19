@@ -85,6 +85,7 @@ public class FishScript : MonoBehaviour
     private void GenerateDestination()
     {
         FishSystemScript.FishState state = fishSystemScript.state;
+        FishSystemScript.FeedingIntensity feedingIntensity = fishSystemScript.feedingIntensity;
         Vector3 fishPosition = transform.localPosition;
 
         if (dead)
@@ -94,7 +95,7 @@ public class FishScript : MonoBehaviour
 
         if (state != FishSystemScript.FishState.Idle && !randomFish)
         {
-            if (state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying)
+            if (feedingIntensity == FishSystemScript.FeedingIntensity.High && (state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying))
             {
                 destinationY = Random.Range(fullnessDivider, top - 0.5f);
             }
