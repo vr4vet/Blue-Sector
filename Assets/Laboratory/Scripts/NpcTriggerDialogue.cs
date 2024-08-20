@@ -27,27 +27,27 @@ public class NpcTriggerDialogue : MonoBehaviour
    
    // Everything correct
    public void response1() {
-         dialogueBoxController.StartDialogue(dialogueTree, 0, npcName);
+         dialogueBoxController.DialogueTrigger(dialogueTree, 0, npcName);
    }
 // Forgot basket
    public void response2() {
-         dialogueBoxController.StartDialogue(dialogueTree, 1, npcName);
+         dialogueBoxController.DialogueTrigger(dialogueTree, 1, npcName);
    }
 // Wrong condition factor
    public void response3() {
-         dialogueBoxController.StartDialogue(dialogueTree, 2, npcName);
+         dialogueBoxController.DialogueTrigger(dialogueTree, 2, npcName);
    }
 // Wrong length
    public void response4() {
-         dialogueBoxController.StartDialogue(dialogueTree, 3, npcName);
+         dialogueBoxController.DialogueTrigger(dialogueTree, 3, npcName);
    }
 // Wrong weight
    public void response5() {
-         dialogueBoxController.StartDialogue(dialogueTree, 4, npcName);
+         dialogueBoxController.DialogueTrigger(dialogueTree, 4, npcName);
    }
 // Everything is wrong
    public void response6() {
-         dialogueBoxController.StartDialogue(dialogueTree, 5, npcName);
+         dialogueBoxController.DialogueTrigger(dialogueTree, 5, npcName);
    }
    
 }
