@@ -13,7 +13,6 @@ public class RevolvingNosePiece : MonoBehaviour
         {
             transform.RotateAround(GetComponent<BoxCollider>().bounds.center, transform.up, -90f);
             MicroscopeMonitor.Magnify();
-        }
-            
+        }    
     }
 }

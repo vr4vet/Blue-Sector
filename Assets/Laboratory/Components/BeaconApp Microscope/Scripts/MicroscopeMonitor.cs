@@ -38,9 +38,6 @@ public class MicroscopeMonitor : MonoBehaviour
             Magnify();
         if (Input.GetKeyDown(KeyCode.Keypad2))
             Minimize();
-
-        Debug.Log("UVrect x: " + RawImage.uvRect.x);
-        Debug.Log("UVrect y: " + RawImage.uvRect.y);
     }
 
     private void FixedUpdate()
@@ -123,7 +120,7 @@ public class MicroscopeMonitor : MonoBehaviour
         RawImage.uvRect = new Rect(CurrentXY.x - (magnification * 0.5f), CurrentXY.y - (magnification * 0.5f), magnification, magnification);
     }
 
-    private void ScrollRight()
+    public void ScrollRight()
     {
         if (RawImage.uvRect.x < 1 - RawImage.uvRect.width - ScrollSpeed)
         {
@@ -132,7 +129,7 @@ public class MicroscopeMonitor : MonoBehaviour
         }
     }
 
-    private void ScrollLeft()
+    public void ScrollLeft()
     {
         if (RawImage.uvRect.x > ScrollSpeed)
         {
@@ -141,7 +138,7 @@ public class MicroscopeMonitor : MonoBehaviour
         }
     }
 
-    private void ScrollUp()
+    public void ScrollUp()
     {
         if (RawImage.uvRect.y < 1 - RawImage.uvRect.height - ScrollSpeed)
         {
@@ -150,7 +147,7 @@ public class MicroscopeMonitor : MonoBehaviour
         }
     }
 
-    private void ScrollDown()
+    public void ScrollDown()
     {
         if (RawImage.uvRect.y > ScrollSpeed)
         {
@@ -194,5 +191,10 @@ public class MicroscopeMonitor : MonoBehaviour
             ScrollUp();
         while (RawImage.uvRect.y >= 1 - RawImage.uvRect.height)
             ScrollDown();
+    }
+
+    public void SetScrollSpeed(float ScrollSpeed)
+    {
+        this.ScrollSpeed = ScrollSpeed;
     }
 }
