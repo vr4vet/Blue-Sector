@@ -13,6 +13,7 @@ public class MicroscopeMonitor : MonoBehaviour
     private int CurrentMagnificationStep, CurrentSeparateMagnificationStep = 0;
     private int CurrentImageIndex = 0;
     private TextMeshProUGUI MagnificationLevelOverlay;
+    private TextMeshProUGUI SpeedOverlay;
     private MicroscopeSlide CurrentSlide;
 
 
@@ -22,9 +23,8 @@ public class MicroscopeMonitor : MonoBehaviour
         RawImage = GetComponentInChildren<RawImage>();
         RawImage.texture = DefaultTexture;
 
-        MagnificationLevelOverlay = transform.Find("Canvas/Panel/Factor").GetComponent<TextMeshProUGUI>();
-
-        //RawImage.uvRect = new Rect(CurrentXY.x, CurrentXY.y, MagnificationLevels[CurrentMagnificationStep], MagnificationLevels[CurrentMagnificationStep]);
+        MagnificationLevelOverlay = transform.Find("Canvas/MagnificationText/Factor").GetComponent<TextMeshProUGUI>();
+        SpeedOverlay = transform.Find("Canvas/SpeedText/Factor").GetComponent<TextMeshProUGUI>();
 
         // set initial magnification level
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
@@ -74,7 +74,7 @@ public class MicroscopeMonitor : MonoBehaviour
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
 
-        if (CurrentSlide.UseSeparateMagnificationTextures)
+        if (CurrentSlide != null && CurrentSlide.UseSeparateMagnificationTextures)
         {
             if (CurrentSlide.textures[CurrentImageIndex] != null)
             {
@@ -98,7 +98,7 @@ public class MicroscopeMonitor : MonoBehaviour
         if (CurrentMagnificationStep < 0)
             CurrentMagnificationStep = MagnificationLevels.Count - 1;
 
-        if (CurrentSlide.UseSeparateMagnificationTextures)
+        if (CurrentSlide != null && CurrentSlide.UseSeparateMagnificationTextures)
         {
             if (CurrentSlide.textures[CurrentImageIndex] != null)
             {
@@ -191,6 +191,12 @@ public class MicroscopeMonitor : MonoBehaviour
             ScrollUp();
         while (RawImage.uvRect.y >= 1 - RawImage.uvRect.height)
             ScrollDown();
+    }
+
+    public void SetScrollSpeed(float ScrollSpeed, int Factor)
+    {
+        this.ScrollSpeed = ScrollSpeed;
+        SpeedOverlay.SetText(Factor + "x");
     }
 
     public void SetScrollSpeed(float ScrollSpeed)
