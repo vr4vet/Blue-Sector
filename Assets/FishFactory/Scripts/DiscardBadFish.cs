@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DiscardBadFish : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class DiscardBadFish : MonoBehaviour
     {
         get { return _discardedFish.Count; }
     }
+
+    public UnityEvent OnDiscard;
+    public UnityEvent OnDiscardAfterCount;
 
     private void OnTriggerEnter(Collider collisionObject)
     {
@@ -57,6 +61,11 @@ public class DiscardBadFish : MonoBehaviour
             || fishState.ContainsMetal == true
         )
         {
+            OnDiscard.Invoke();
+            if (_discardedFish.Count == 10)
+            {
+                OnDiscardAfterCount.Invoke();
+            }
             GameManager.Instance.PlaySound("correct");
         }
         else
