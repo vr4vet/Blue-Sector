@@ -24,6 +24,8 @@ public class MicroscopeMonitor : MonoBehaviour
 
         MagnificationLevelOverlay = transform.Find("Canvas/Panel/Factor").GetComponent<TextMeshProUGUI>();
 
+        //RawImage.uvRect = new Rect(CurrentXY.x, CurrentXY.y, MagnificationLevels[CurrentMagnificationStep], MagnificationLevels[CurrentMagnificationStep]);
+
         // set initial magnification level
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
         SetMagnificationLevelOverlay();
@@ -36,6 +38,9 @@ public class MicroscopeMonitor : MonoBehaviour
             Magnify();
         if (Input.GetKeyDown(KeyCode.Keypad2))
             Minimize();
+
+        Debug.Log("UVrect x: " + RawImage.uvRect.x);
+        Debug.Log("UVrect y: " + RawImage.uvRect.y);
     }
 
     private void FixedUpdate()
@@ -129,7 +134,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void ScrollLeft()
     {
-        if (RawImage.uvRect.x > 0 + ScrollSpeed)
+        if (RawImage.uvRect.x > ScrollSpeed)
         {
             CurrentXY.x -= ScrollSpeed;
             RawImage.uvRect = new Rect(RawImage.uvRect.x - ScrollSpeed, RawImage.uvRect.y, RawImage.uvRect.width, RawImage.uvRect.height);
@@ -147,7 +152,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void ScrollDown()
     {
-        if (RawImage.uvRect.y > 0 + ScrollSpeed)
+        if (RawImage.uvRect.y > ScrollSpeed)
         {
             CurrentXY.y -= ScrollSpeed;
             RawImage.uvRect = new Rect(RawImage.uvRect.x, RawImage.uvRect.y - ScrollSpeed, RawImage.uvRect.width, RawImage.uvRect.height);
@@ -181,15 +186,13 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void PreventOutOfBoundsCoordinates()
     {
-        if (RawImage.uvRect.x < 0)
-            CurrentXY.x = 0f;
-        if (RawImage.uvRect.x >= 1 - RawImage.uvRect.width)
-            CurrentXY.x = 0.5f;
-        if (RawImage.uvRect.y < 0)
-            CurrentXY.y = 0f;
-        if (RawImage.uvRect.y >= 1 - RawImage.uvRect.height)
-            CurrentXY.y = 0.5f;
-
-        RawImage.uvRect = new Rect(CurrentXY.x, CurrentXY.y, RawImage.uvRect.width, RawImage.uvRect.height);
+        while (RawImage.uvRect.x < ScrollSpeed)       
+            ScrollRight();
+        while (RawImage.uvRect.x >= 1 - RawImage.uvRect.width)
+            ScrollLeft();
+        while (RawImage.uvRect.y < ScrollSpeed)
+            ScrollUp();
+        while (RawImage.uvRect.y >= 1 - RawImage.uvRect.height)
+            ScrollDown();
     }
 }
