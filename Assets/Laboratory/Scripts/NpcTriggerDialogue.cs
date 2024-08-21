@@ -31,7 +31,7 @@ public class NpcTriggerDialogue : MonoBehaviour
    }
 // Forgot basket
    public void response2() {
-         dialogueBoxController.StartDialoguer(dialogueTree, 1, npcName);
+         dialogueBoxController.StartDialogue(dialogueTree, 1, npcName);
    }
 // Wrong condition factor
    public void response3() {
