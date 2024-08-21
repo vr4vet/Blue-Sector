@@ -7,16 +7,22 @@ public class MicroscopeMonitor : MonoBehaviour
 {
     private float ScrollSpeed = 0.01f;
     private float ScrollSpeedConstant = 0.01f;
+
     [SerializeField] private Texture DefaultTexture;
-    public List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
-    private int SpeedModifier = 1;
     private RawImage RawImage;
+    private int SpeedModifier = 1;
+    
+    public List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
     private Vector2 CurrentXY = new Vector2(0.5f, 0.5f);
     private int CurrentMagnificationStep, CurrentSeparateMagnificationStep = 0;
     private int CurrentImageIndex = 0;
+
     private TextMeshProUGUI MagnificationLevelOverlay;
     private TextMeshProUGUI SpeedOverlay;
+
     private MicroscopeSlide CurrentSlide;
+    [SerializeField] private RevolvingNosePiece RevolvingNosePiece;
+
 
 
     // Start is called before the first frame update
@@ -71,6 +77,17 @@ public class MicroscopeMonitor : MonoBehaviour
             ScrollDown();
     }
 
+    /// <summary>
+    /// The Magnify() and Minimize() methods work in three different ways:
+    /// - When a slide containts only one image (must be the first slot).
+    /// - When some of a slide's image slots contain an image (again, the first slot must contain an image).
+    /// - When all of a slide's image slots contains an image.
+    /// 
+    /// The code interated through the image slots. A new image is always magnified by a factor of 2. 
+    /// If a slot is empty, it simply goes to the next magnification level in the MagnificationLevels list.
+    /// Therefore, this can function perfectly as a reading aid or similair, simply a monitor that magnifies some image, or 
+    /// it could swap images every time, or a hybrid.
+    /// </summary>
     public void Magnify()
     {
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
@@ -87,6 +104,9 @@ public class MicroscopeMonitor : MonoBehaviour
         }
         else
             SetMagnificationLevelOverlay();
+
+        // rotate nose piece
+        RevolvingNosePiece.transform.RotateAround(RevolvingNosePiece.GetComponent<BoxCollider>().bounds.center, RevolvingNosePiece.transform.up, -90f);
 
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
         PreventOutOfBoundsCoordinates();
@@ -111,6 +131,9 @@ public class MicroscopeMonitor : MonoBehaviour
         }
         else
             SetMagnificationLevelOverlay();
+
+        // rotate nose piece
+        RevolvingNosePiece.transform.RotateAround(RevolvingNosePiece.GetComponent<BoxCollider>().bounds.center, RevolvingNosePiece.transform.up, 90f);
 
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
         PreventOutOfBoundsCoordinates();

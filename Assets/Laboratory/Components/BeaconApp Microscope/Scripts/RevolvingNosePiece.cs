@@ -11,7 +11,6 @@ public class RevolvingNosePiece : MonoBehaviour
         // check if player hand
         if (other.name == "Grabber")
         {
-            transform.RotateAround(GetComponent<BoxCollider>().bounds.center, transform.up, -90f);
             MicroscopeMonitor.Magnify();
         }    
     }
