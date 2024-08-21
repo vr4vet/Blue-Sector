@@ -23,4 +23,5 @@ public struct Answer
 {
     public string answerLabel;
     public int nextElement;
+    public bool endAfterAnswer;
 }

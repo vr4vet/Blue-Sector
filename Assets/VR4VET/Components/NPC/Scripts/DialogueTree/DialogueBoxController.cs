@@ -26,16 +26,11 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private int _hasNewDialogueOptionsHash;
     [HideInInspector] private RectTransform backgroundRect;
     [HideInInspector] private RectTransform dialogueTextRect;
-
+    [HideInInspector] public ButtonSpawner buttonSpawner;
     private string currentDialogue;
-
-    public ButtonSpawner buttonSpawner;
-
     [HideInInspector] public bool dialogueIsActive;
     private int _activatedCount = 0;
-
-    // For testing purposes
-    public DialogueTree dialogueTreeRestart;
+    [HideInInspector]public DialogueTree dialogueTreeRestart;
     public bool dialogueEnded;
     public int timesEnded = 0;
 
@@ -98,7 +93,7 @@ public class DialogueBoxController : MonoBehaviour
     }
 
 
-    public void DialogueTrigger(DialogueTree dialogueTree, int startSection, string name) 
+    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
     {
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
@@ -172,7 +167,39 @@ public class DialogueBoxController : MonoBehaviour
         _answerTriggered = false;
         _exitButton.SetActive(false);
         _skipLineButton.SetActive(false);
-        StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
+        if (dialogueTree.sections[section].branchPoint.answers[_answerIndex].endAfterAnswer) {
+            // Exit conversation if the answer is set to exit after answer
+            ExitConversation();
+        } else {
+            // Continue to section of the dialogue the answer points to
+            StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
+        }
+    }
+
+    public void StartComment(DialogueTree dialogueTree, int startSection, string name) {
+        // Reset dialogue box if active
+        dialogueIsActive = false;
+        ResetBox();
+        // Similar to startDialogue but don't activate the dialogue box
+        dialogueIsActive = true;
+        _animator.SetBool(_hasNewDialogueOptionsHash, false);
+        OnDialogueStarted?.Invoke(name);
+        RunComment(dialogueTree, startSection);
+    }
+
+    void RunComment(DialogueTree dialogueTree, int section) {
+        // Runs the current section with no dialogue box, then exits
+        _animator.SetBool(_isTalkingHash, true);
+        StartCoroutine(ExitComment());
+        _dialogueText.text = dialogueTree.sections[section].dialogue[0];
+        TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+    }
+
+    private IEnumerator ExitComment() {
+        // When 9 seconds have passed, stop the animation and exit the comment dialogue
+        yield return new WaitForSeconds(9.0f);
+        _animator.SetBool(_isTalkingHash, false);
+        dialogueIsActive = false;
     }
 
     public void ResetBox() 
@@ -183,8 +210,7 @@ public class DialogueBoxController : MonoBehaviour
         _skipLineTriggered = false;
         _answerTriggered = false;
         _skipLineButton.SetActive(false);
-        _exitButton.SetActive(false);
-          
+        _exitButton.SetActive(false); 
     }
 
     void ShowAnswers(BranchPoint branchPoint)
@@ -210,9 +236,8 @@ public class DialogueBoxController : MonoBehaviour
     // Reverts to idle animation after 10.267 seconds
     // Time is length of talking animation, should be tweaked to not use value
     private IEnumerator revertToIdleAnimation() {
-        yield return new WaitForSeconds(10.267f);
+        yield return new WaitForSeconds(9.0f);
         _animator.SetBool(_isTalkingHash, false);
-
     }
 
     public int GetActivatedCount()
@@ -225,12 +250,15 @@ public class DialogueBoxController : MonoBehaviour
         // stop talk-animation
         _animator.SetBool(_isTalkingHash, false);
         dialogueIsActive = false;
-        StartSpeakCanvas(dialogueTreeRestart);
+        ResetBox();
+        if (dialogueTreeRestart.speakButtonOnExit) {
+            // Only start speak canvas if option is not turned off
+            StartSpeakCanvas(dialogueTreeRestart);
+        }
     }
 
     public void StartSpeakCanvas(DialogueTree dialogueTree)
     {
-        ResetBox();
         _dialogueBox.SetActive(true);
         _dialogueText.text = null;
         backgroundRect.sizeDelta = new Vector2(50,30);
