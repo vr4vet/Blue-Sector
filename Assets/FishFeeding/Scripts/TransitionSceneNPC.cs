@@ -20,9 +20,9 @@ public class TransitionSceneNPC : MonoBehaviour
         {
             destinationScene = "HSERoom";
         }
-        else if (answer == "Fish maintenance")
+        else if (answer == "Laboratory")
         {
-            destinationScene = "FishMaintenance";
+            destinationScene = "Laboratory";
         }
     }
 

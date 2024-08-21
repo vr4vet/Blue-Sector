@@ -7,7 +7,7 @@ using Meta.WitAi.TTS.Utilities;
 
 public class DialogueBoxController : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _dialogueText;
+    [SerializeField] public TextMeshProUGUI _dialogueText;
     [SerializeField] private GameObject _dialogueBox;
     [SerializeField] private GameObject _answerBox;
     [SerializeField] private GameObject _dialogueCanvas;
@@ -27,6 +27,7 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private RectTransform backgroundRect;
     [HideInInspector] private RectTransform dialogueTextRect;
     [HideInInspector] public ButtonSpawner buttonSpawner;
+    private string currentDialogue;
     [HideInInspector] public bool dialogueIsActive;
     private int _activatedCount = 0;
     [HideInInspector]public DialogueTree dialogueTreeRestart;
@@ -118,14 +119,30 @@ public class DialogueBoxController : MonoBehaviour
 
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
+             currentDialogue = dialogueTree.sections[section].dialogue[i];
+             
+             
+
             // Start talking animation
             _animator.SetBool(_isTalkingHash, true);
             StartCoroutine(revertToIdleAnimation());
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+
+            
+            // Check if the current section should have disabled the skip line button
+            if (dialogueTree.sections[section].disabkeSkipLineButton)
+            {
+                _skipLineButton.SetActive(false);
+            }
+
+            else {
+                _skipLineButton.SetActive(true);
+            }
+            
             while (!_skipLineTriggered)
             {
-                _skipLineButton.SetActive(true);
+                
                 _exitButton.SetActive(true);
                 yield return null;
             }
