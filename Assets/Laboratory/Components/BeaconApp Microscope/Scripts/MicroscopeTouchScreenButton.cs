@@ -15,8 +15,7 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
 
     private void Start()
     {
-        MicroscopeMonitor = transform.root.GetComponent<MicroscopeMonitor>();
-        MicroscopeMonitor.SetScrollSpeedConstant(0.001f); // default speed of 0.01 is too quick for a simple button press
+        MicroscopeMonitor = transform.root.GetComponentInChildren<MicroscopeMonitor>();
     }
 
     private void FixedUpdate()
@@ -49,6 +48,7 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
         // check if player finger tip
         if (other.name == "tip_collider_i")
         {
+            MicroscopeMonitor.SetScrollSpeedConstant(0.001f); // default speed of 0.01 is too quick for a simple button press
             IsTouched = true;
                 
             switch (input)
