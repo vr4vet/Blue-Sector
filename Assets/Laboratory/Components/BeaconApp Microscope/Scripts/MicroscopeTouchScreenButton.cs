@@ -6,9 +6,6 @@ using UnityEngine;
 public class MicroscopeTouchScreenButton : MonoBehaviour
 {
     private bool IsTouched = false;
-    //private List<int> Speeds= new List<int>(){1, 2, 3, 4, 5};
-    //private int CurrentSpeedIndex = 0;
-    private int CurrentSpeed = 1;
     [SerializeField] private Input input;
     private enum Input
     {
@@ -19,7 +16,7 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
     private void Start()
     {
         MicroscopeMonitor = transform.root.GetComponent<MicroscopeMonitor>();
-        MicroscopeMonitor.SetScrollSpeed(0.001f * CurrentSpeed); // default speed of 0.01 is too quick for a simple button press
+        MicroscopeMonitor.SetScrollSpeedConstant(0.001f); // default speed of 0.01 is too quick for a simple button press
     }
 
     private void FixedUpdate()
@@ -63,15 +60,10 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
                     MicroscopeMonitor.Minimize();
                     break;
                 case Input.Faster:
-                    if (CurrentSpeed < 5)
-                        CurrentSpeed += 1;
-                    MicroscopeMonitor.SetScrollSpeed(0.001f * CurrentSpeed, CurrentSpeed);
-                    Debug.Log("Faser: " + CurrentSpeed);
+                    MicroscopeMonitor.IncreaseScrollSpeed();
                     break;
                 case Input.Slower:
-                    if (CurrentSpeed > 0)
-                        CurrentSpeed -= 1;
-                    MicroscopeMonitor.SetScrollSpeed(0.001f * CurrentSpeed, CurrentSpeed);
+                    MicroscopeMonitor.DecreaseScrollSpeed();
                     break;
                 default:
                     break;
