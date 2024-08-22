@@ -83,7 +83,7 @@ public class MicroscopeMonitor : MonoBehaviour
     /// - When some of a slide's image slots contain an image (again, the first slot must contain an image).
     /// - When all of a slide's image slots contains an image.
     /// 
-    /// The code interated through the image slots. A new image is always magnified by a factor of 2. 
+    /// The code interated through the image slots. A new image is always magnified by a factor of 2, unless found while minimizing with a distance larger than 1 from the original index.
     /// If a slot is empty, it simply goes to the next magnification level in the MagnificationLevels list.
     /// Therefore, this can function perfectly as a reading aid or similair, simply a monitor that magnifies some image, or 
     /// it could swap images every time, or a hybrid.
@@ -120,6 +120,9 @@ public class MicroscopeMonitor : MonoBehaviour
         if (CurrentMagnificationStep < 0)
             CurrentMagnificationStep = MagnificationLevels.Count - 1;
 
+        if (CurrentImageIndex < 0)
+            CurrentImageIndex = MagnificationLevels.Count - 1;
+
         if (CurrentSlide != null && CurrentSlide.UseSeparateMagnificationTextures)
         {
             if (CurrentSlide.textures[CurrentImageIndex] != null)
@@ -127,6 +130,22 @@ public class MicroscopeMonitor : MonoBehaviour
                 SetTexture(CurrentSlide.textures[CurrentImageIndex]);
                 CurrentMagnificationStep = 0;
             }
+            else
+            {
+                // iterate backwards until an image is found, and set magnification accordingly
+                int CurrentImageSlot = CurrentImageIndex == 0 ? MagnificationLevels.Count - 1 : CurrentImageIndex - 1;
+                while (CurrentImageSlot != CurrentImageIndex)
+                {
+                    if (CurrentSlide.textures[CurrentImageSlot] != null)
+                    {
+                        SetTexture(CurrentSlide.textures[CurrentImageSlot]);
+                        CurrentMagnificationStep = CurrentImageIndex - CurrentImageSlot;
+                        break;
+                    }
+                    CurrentImageSlot--;
+                }
+            }
+
             SetMagnificationLevelOverlay(MagnificationLevels[CurrentImageIndex]);
         }
         else
