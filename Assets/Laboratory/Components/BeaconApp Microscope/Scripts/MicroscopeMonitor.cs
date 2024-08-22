@@ -134,16 +134,12 @@ public class MicroscopeMonitor : MonoBehaviour
             {
                 // iterate backwards until an image is found, and set magnification accordingly
                 int CurrentImageSlot = CurrentImageIndex == 0 ? MagnificationLevels.Count - 1 : CurrentImageIndex - 1;
-                while (CurrentImageSlot != CurrentImageIndex)
-                {
-                    if (CurrentSlide.textures[CurrentImageSlot] != null)
-                    {
-                        SetTexture(CurrentSlide.textures[CurrentImageSlot]);
-                        CurrentMagnificationStep = CurrentImageIndex - CurrentImageSlot;
-                        break;
-                    }
+
+                while (CurrentSlide.textures[CurrentImageSlot] == null)
                     CurrentImageSlot--;
-                }
+
+                SetTexture(CurrentSlide.textures[CurrentImageSlot]);
+                CurrentMagnificationStep = CurrentImageIndex - CurrentImageSlot;
             }
 
             SetMagnificationLevelOverlay(MagnificationLevels[CurrentImageIndex]);
