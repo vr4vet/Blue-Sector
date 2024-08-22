@@ -105,9 +105,7 @@ public class MicroscopeMonitor : MonoBehaviour
         else
             SetMagnificationLevelOverlay();
 
-        // rotate nose piece
-        RevolvingNosePiece.transform.RotateAround(RevolvingNosePiece.GetComponent<BoxCollider>().bounds.center, RevolvingNosePiece.transform.up, -90f);
-
+        RotateRevolvingNosePiece(false);
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
         PreventOutOfBoundsCoordinates();
     }
@@ -147,9 +145,7 @@ public class MicroscopeMonitor : MonoBehaviour
         else
             SetMagnificationLevelOverlay();
 
-        // rotate nose piece
-        RevolvingNosePiece.transform.RotateAround(RevolvingNosePiece.GetComponent<BoxCollider>().bounds.center, RevolvingNosePiece.transform.up, 90f);
-
+        RotateRevolvingNosePiece(true);
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
         PreventOutOfBoundsCoordinates();
     }
@@ -260,5 +256,10 @@ public class MicroscopeMonitor : MonoBehaviour
             SpeedModifier--;
             SetScrollSpeed();
         }
+    }
+
+    private void RotateRevolvingNosePiece(bool Right)
+    {
+        RevolvingNosePiece.RotateNosePiece(Right);
     }
 }
