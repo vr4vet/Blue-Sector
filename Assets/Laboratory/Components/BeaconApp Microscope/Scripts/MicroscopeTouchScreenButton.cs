@@ -56,10 +56,12 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
             switch (input)
             {
                 case Input.Magnify:
-                    MicroscopeMonitor.Magnify();
+                    if (!MicroscopeMonitor.RevolvingNosePiece.IsRotating())
+                        MicroscopeMonitor.Magnify();
                     break;
                 case Input.Minimize:
-                    MicroscopeMonitor.Minimize();
+                    if (!MicroscopeMonitor.RevolvingNosePiece.IsRotating())
+                        MicroscopeMonitor.Minimize();
                     break;
                 case Input.Faster:
                     MicroscopeMonitor.IncreaseScrollSpeed();

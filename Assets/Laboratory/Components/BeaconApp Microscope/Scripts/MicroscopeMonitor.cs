@@ -21,7 +21,7 @@ public class MicroscopeMonitor : MonoBehaviour
     private TextMeshProUGUI SpeedOverlay;
 
     private MicroscopeSlide CurrentSlide;
-    [SerializeField] private RevolvingNosePiece RevolvingNosePiece;
+    [SerializeField] public RevolvingNosePiece RevolvingNosePiece;
 
 
 
@@ -42,6 +42,9 @@ public class MicroscopeMonitor : MonoBehaviour
     private void Update()
     {
         // Zooming
+        if (RevolvingNosePiece.IsRotating())
+            return;
+
         if (Input.GetKeyDown(KeyCode.Keypad1))
             Magnify();
         if (Input.GetKeyDown(KeyCode.Keypad2))
@@ -90,6 +93,9 @@ public class MicroscopeMonitor : MonoBehaviour
     /// </summary>
     public void Magnify()
     {
+        if (RevolvingNosePiece.IsRotating())
+            return;
+
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
 
@@ -112,6 +118,9 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void Minimize()
     {
+        if (RevolvingNosePiece.IsRotating())
+            return;
+
         CurrentMagnificationStep = (CurrentMagnificationStep - 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex - 1) % MagnificationLevels.Count;
 

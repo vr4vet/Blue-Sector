@@ -5,6 +5,7 @@ using UnityEngine;
 public class RevolvingNosePiece : MonoBehaviour
 {
     [SerializeField] private MicroscopeMonitor MicroscopeMonitor;
+    [SerializeField] private AudioSource ClickSound;
     private float RotationSpeed = 10f;
     private bool Rotating = false;
     private bool RotatingDirection = false; // false is left, true is right
@@ -23,7 +24,6 @@ public class RevolvingNosePiece : MonoBehaviour
     {
         if (Rotating)
         {
-            Debug.Log(RotationDegrees);
             if (RotationDegrees > 0f)
             {
                 transform.RotateAround(GetComponent<BoxCollider>().bounds.center, transform.up, RotatingDirection ? -RotationSpeed : RotationSpeed);
@@ -33,6 +33,8 @@ public class RevolvingNosePiece : MonoBehaviour
             {
                 Rotating = false;
                 RotationDegrees = 90f;
+                ClickSound.time = 0.1f; // skip the silence at the start of clip
+                ClickSound.Play();
             }
                 
         }
@@ -40,7 +42,15 @@ public class RevolvingNosePiece : MonoBehaviour
 
     public void RotateNosePiece(bool Right)
     {
-        Rotating = true;
-        RotatingDirection = Right;
+        if (!Rotating!)
+        {
+            Rotating = true;
+            RotatingDirection = Right;
+        }
+    }
+
+    public bool IsRotating()
+    {
+        return Rotating;
     }
 }
