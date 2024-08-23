@@ -93,9 +93,6 @@ public class MicroscopeMonitor : MonoBehaviour
     /// </summary>
     public void Magnify()
     {
-        if (RevolvingNosePiece.IsRotating())
-            return;
-
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
 
@@ -105,7 +102,7 @@ public class MicroscopeMonitor : MonoBehaviour
             {
                 SetTexture(CurrentSlide.textures[CurrentImageIndex]);
                 CurrentMagnificationStep = 0;
-            }
+            } 
             SetMagnificationLevelOverlay(MagnificationLevels[CurrentImageIndex]);
         }
         else
@@ -118,9 +115,6 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void Minimize()
     {
-        if (RevolvingNosePiece.IsRotating())
-            return;
-
         CurrentMagnificationStep = (CurrentMagnificationStep - 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex - 1) % MagnificationLevels.Count;
 

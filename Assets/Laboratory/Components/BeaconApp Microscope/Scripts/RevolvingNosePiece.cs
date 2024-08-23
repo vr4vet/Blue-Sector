@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class RevolvingNosePiece : MonoBehaviour
 {
@@ -9,15 +10,6 @@ public class RevolvingNosePiece : MonoBehaviour
     private float RotationSpeed = 10f;
     private bool Rotating = false;
     private bool RotatingDirection = false; // false is left, true is right
-
-    private void OnTriggerEnter(Collider other)
-    {
-        // check if player hand
-        if (other.name == "Grabber" || other.name == "tip_collider_i")
-        {
-            MicroscopeMonitor.Magnify();
-        }    
-    }
 
     private float RotationDegrees = 90f;
     private void FixedUpdate()
@@ -31,18 +23,22 @@ public class RevolvingNosePiece : MonoBehaviour
             }
             else
             {
+                if (RotatingDirection)
+                    MicroscopeMonitor.Magnify();
+                else
+                    MicroscopeMonitor.Minimize();
+
                 Rotating = false;
                 RotationDegrees = 90f;
                 ClickSound.time = 0.1f; // skip the silence at the start of clip
                 ClickSound.Play();
-            }
-                
+            }   
         }
     }
 
     public void RotateNosePiece(bool Right)
     {
-        if (!Rotating!)
+        if (!Rotating)
         {
             Rotating = true;
             RotatingDirection = Right;
