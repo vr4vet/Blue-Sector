@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2013550375451430847}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0354, y: 1.0354, z: 1.0354}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5258877634020352508}
@@ -60,9 +60,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2013550375451430847}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0.2
-  m_AngularDrag: 0.05
+  m_Mass: 0.001
+  m_Drag: 0.01
+  m_AngularDrag: 0.01
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
@@ -103,7 +103,7 @@ MonoBehaviour:
   BeingHeld: 0
   GrabButton: 2
   Grabtype: 2
-  GrabPhysics: 4
+  GrabPhysics: 0
   GrabMechanic: 0
   GrabSpeed: 15
   RemoteGrabbable: 0
@@ -114,8 +114,8 @@ MonoBehaviour:
   BreakDistance: 0.5
   HideHandGraphics: 0
   ParentToHands: 1
-  ParentHandModel: 1
-  SnapHandModel: 1
+  ParentHandModel: 0
+  SnapHandModel: 0
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
   ForceDisableKinematicOnDrop: 0
