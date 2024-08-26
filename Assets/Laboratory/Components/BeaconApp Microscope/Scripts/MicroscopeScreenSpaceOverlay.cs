@@ -10,6 +10,8 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     private bool CameraSet = false;
     private BNG.BNGPlayerController PlayerController;
     private Camera PlayerCamera;
+    private RawImage RawImage;
+
     [SerializeField] private MicroscopeMonitor MicroscopeMonitor;
 
     // Start is called before the first frame update
@@ -19,6 +21,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         StartTime = Time.time;
         PlayerController = FindObjectOfType<BNG.BNGPlayerController>();
         PlayerCamera = PlayerController.transform.Find("CameraRig/TrackingSpace/CenterEyeAnchor").transform.GetComponent<Camera>();
+        RawImage = GetComponent<Canvas>().transform.GetComponentInChildren<RawImage>();
 
         // disable the microscope overlay so the player can see their environment
         PlayerCamera.cullingMask = LayerMask.GetMask(
@@ -43,8 +46,8 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
     public void EnableOverlay()
     {
-        GetComponent<Canvas>().transform.GetComponentInChildren<RawImage>().texture = MicroscopeMonitor.GetComponentInChildren<RawImage>().texture;
-        GetComponent<Canvas>().transform.GetComponentInChildren<RawImage>().uvRect = MicroscopeMonitor.GetComponentInChildren<RawImage>().uvRect;
+        RawImage.texture = MicroscopeMonitor.GetComponentInChildren<RawImage>().texture;
+        RawImage.uvRect = MicroscopeMonitor.GetComponentInChildren<RawImage>().uvRect;
         PlayerCamera.cullingMask = LayerMask.GetMask(
     /*"Default", "TransparentFX",
     "Ignore Raycast", "Water",
