@@ -20,7 +20,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Canvas>().enabled = true;
+        //GetComponent<Canvas>().enabled = true;
         StartTime = Time.time;
         PlayerController = FindObjectOfType<BNG.BNGPlayerController>();
         PlayerCamera = PlayerController.transform.Find("CameraRig/TrackingSpace/CenterEyeAnchor").transform.GetComponent<Camera>();
@@ -89,6 +89,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
     public void EnableOverlay()
     {
+        GetComponent<Canvas>().enabled = true;
         //InitialRotationZ = HeadCollider.transform.eulerAngles.z;
         //RawImage.transform.rotation *= Quaternion.Euler(1, 1, 0);
         InitialRotation = HeadCollider.transform.localRotation;
@@ -100,6 +101,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
     public void DisableOverlay()
     {
+        GetComponent<Canvas>().enabled = false;
         OverlayEnabled = false;
         PlayerCamera.cullingMask = LayerMask.GetMask(
             "Default", "TransparentFX",
