@@ -14,7 +14,7 @@ public class MicroscopeMonitor : MonoBehaviour
     
     public List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
     private Vector2 CurrentXY = new Vector2(0.5f, 0.5f);
-    private int CurrentMagnificationStep, CurrentSeparateMagnificationStep = 0;
+    private int CurrentMagnificationStep, CurrentSeparateMagnificationStep, CurrentCustomMagnificationLevel = 0;
     private int CurrentImageIndex = 0;
 
     private TextMeshProUGUI MagnificationLevelOverlay;
@@ -22,6 +22,9 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private MicroscopeSlide CurrentSlide;
     [SerializeField] public RevolvingNosePiece RevolvingNosePiece;
+
+    [SerializeField] private bool UseCustomMagnificationLevels = false;
+    [SerializeField] private List<int> CustomMagnificationLevels = new List<int>();
 
 
 
@@ -36,7 +39,11 @@ public class MicroscopeMonitor : MonoBehaviour
 
         // set initial magnification level
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
-        SetMagnificationLevelOverlay();
+
+        if (UseCustomMagnificationLevels)
+            SetMagnificationLevelOverlay(CustomMagnificationLevels[0]);
+        else
+            SetMagnificationLevelOverlay();
     }
 
     private void Update()
@@ -95,6 +102,7 @@ public class MicroscopeMonitor : MonoBehaviour
     {
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
+        CurrentCustomMagnificationLevel = (CurrentCustomMagnificationLevel + 1) % MagnificationLevels.Count;
 
         if (CurrentSlide != null && CurrentSlide.UseSeparateMagnificationTextures)
         {
@@ -111,18 +119,26 @@ public class MicroscopeMonitor : MonoBehaviour
         RotateRevolvingNosePiece(false);
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
         PreventOutOfBoundsCoordinates();
+
+        if (UseCustomMagnificationLevels)
+            SetMagnificationLevelOverlay(CustomMagnificationLevels[CurrentCustomMagnificationLevel]);
+            
     }
 
     public void Minimize()
     {
         CurrentMagnificationStep = (CurrentMagnificationStep - 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex - 1) % MagnificationLevels.Count;
+        CurrentCustomMagnificationLevel = (CurrentCustomMagnificationLevel - 1) % MagnificationLevels.Count;
 
         if (CurrentMagnificationStep < 0)
             CurrentMagnificationStep = MagnificationLevels.Count - 1;
 
         if (CurrentImageIndex < 0)
             CurrentImageIndex = MagnificationLevels.Count - 1;
+
+        if (CurrentCustomMagnificationLevel < 0)
+            CurrentCustomMagnificationLevel = MagnificationLevels.Count - 1;
 
         if (CurrentSlide != null && CurrentSlide.UseSeparateMagnificationTextures)
         {
@@ -142,7 +158,6 @@ public class MicroscopeMonitor : MonoBehaviour
                 SetTexture(CurrentSlide.textures[CurrentImageSlot]);
                 CurrentMagnificationStep = CurrentImageIndex - CurrentImageSlot;
             }
-
             SetMagnificationLevelOverlay(MagnificationLevels[CurrentImageIndex]);
         }
         else
@@ -151,6 +166,9 @@ public class MicroscopeMonitor : MonoBehaviour
         RotateRevolvingNosePiece(true);
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
         PreventOutOfBoundsCoordinates();
+
+        if (UseCustomMagnificationLevels)
+            SetMagnificationLevelOverlay(CustomMagnificationLevels[CurrentMagnificationStep]);
     }
 
     public void SetMagnification(float magnification)

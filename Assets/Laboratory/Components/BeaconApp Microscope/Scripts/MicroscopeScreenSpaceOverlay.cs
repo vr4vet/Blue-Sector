@@ -43,7 +43,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         {
             GetComponent<Canvas>().worldCamera = PlayerCamera;
             CameraSet = true;
-            Debug.Log(GetComponent<Canvas>().worldCamera);
         }   
     }
 
