@@ -2,21 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.UI;
 
 public class MicroscopeOverlayTrigger : MonoBehaviour
 {
     private Collider HeadCollider;
-    //private Vector3 HeadColliderImpactPosition;
-
     private MicroscopeScreenSpaceOverlay MicroscopeOverlay;
     private BoxCollider BoxCollider;
     private PostProcessVolume VignetteVolume;
+    private PostProcessVolume DarkenVolume;
 
     // Start is called before the first frame update
     void Start()
     {
         MicroscopeOverlay = GetComponentInChildren<MicroscopeScreenSpaceOverlay>();
-        VignetteVolume = GetComponentInChildren<PostProcessVolume>();
+        VignetteVolume = transform.Find("Vignette").GetComponent<PostProcessVolume>();
+        DarkenVolume = transform.Find("Darken").GetComponent<PostProcessVolume>();
+
         BoxCollider = GetComponent<BoxCollider>();
     }
 
@@ -24,9 +26,10 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
     {
         if (other.name == "HeadCollision")
         {
-            HeadCollider = other; 
+            MicroscopeOverlay.SetHeadCollider(other); 
             MicroscopeOverlay.EnableOverlay();
             VignetteVolume.isGlobal = true;
+            DarkenVolume.isGlobal = true;
         }        
     }
 
@@ -34,9 +37,20 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
     {
         if (other.name == "HeadCollision")
         {
-            HeadCollider = null;
+            MicroscopeOverlay.SetHeadCollider(null);
             MicroscopeOverlay.DisableOverlay();
             VignetteVolume.isGlobal = false;
+            DarkenVolume.isGlobal = false;
         }
+    }
+
+    public void AdjustDarkening(float adjustment)
+    {
+        DarkenVolume.weight = adjustment;
+    }
+
+    public float GetCurrentDarkening()
+    {
+        return DarkenVolume.weight;
     }
 }
