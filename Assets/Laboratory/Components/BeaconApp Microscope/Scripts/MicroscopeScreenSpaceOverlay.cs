@@ -52,16 +52,16 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         {
             // roll math found at https://sunday-lab.blogspot.com/2008/04/get-pitch-yaw-roll-from-quaternion.html
             Quaternion rotation = HeadCollider.transform.localRotation;
-            float roll = Mathf.Atan2(2 * (rotation.x * rotation.y + rotation.w * rotation.z), rotation.w * rotation.w + rotation.x * rotation.x - rotation.y * rotation.y - rotation.z * rotation.z);
+            float roll = Mathf.Abs(Mathf.Atan2(2 * (rotation.x * rotation.y + rotation.w * rotation.z), rotation.w * rotation.w + rotation.x * rotation.x - rotation.y * rotation.y - rotation.z * rotation.z));
             
             float rotationOffset = Vector3.Angle((trigger.transform.position - HeadCollider.transform.position), HeadCollider.transform.forward);
 
             // dim overlay when head is rotated or rolled
-            if (Mathf.Abs(roll) > 0.1f)
-                trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), Mathf.Abs(roll) * 3f, 2f * Time.deltaTime));
+            if (roll > 0.1f)
+                trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), roll * 3f, 2f * Time.deltaTime));
             else if (rotationOffset > 20f)
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), rotationOffset * 0.02f, 2f * Time.deltaTime));
-            else if (Mathf.Abs(roll) <= 0.1f && rotationOffset <= 20f)
+            else// if (roll <= 0.1f && rotationOffset <= 20f)
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), 0f, 2f * Time.deltaTime));
 
         }

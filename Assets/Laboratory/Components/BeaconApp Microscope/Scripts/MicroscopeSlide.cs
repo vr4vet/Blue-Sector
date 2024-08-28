@@ -23,4 +23,9 @@ public class MicroscopeSlide : MonoBehaviour
         microscopeMonitor.SetCurrentSlide(this);
     }
 
+    public void RemoveMicroscopeSlide()
+    {
+        microscopeMonitor.SetCurrentSlide(null);
+    }
+
 }
