@@ -57,8 +57,6 @@ public class MicroscopeMonitor : MonoBehaviour
             Magnify();
         if (Input.GetKeyDown(KeyCode.Keypad2))
             Minimize();
-
-        Debug.Log(CurrentCustomMagnificationLevel);
     }
 
     private void FixedUpdate()
