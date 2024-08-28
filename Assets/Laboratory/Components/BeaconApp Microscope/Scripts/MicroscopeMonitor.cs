@@ -21,6 +21,7 @@ public class MicroscopeMonitor : MonoBehaviour
     private TextMeshProUGUI SpeedOverlay;
 
     private MicroscopeSlide CurrentSlide;
+    private bool HasSlide = false;
     [SerializeField] public RevolvingNosePiece RevolvingNosePiece;
 
     [SerializeField] private bool UseCustomMagnificationLevels = false;
@@ -56,6 +57,8 @@ public class MicroscopeMonitor : MonoBehaviour
             Magnify();
         if (Input.GetKeyDown(KeyCode.Keypad2))
             Minimize();
+
+        Debug.Log(CurrentCustomMagnificationLevel);
     }
 
     private void FixedUpdate()
@@ -122,7 +125,9 @@ public class MicroscopeMonitor : MonoBehaviour
 
         if (UseCustomMagnificationLevels)
             SetMagnificationLevelOverlay(CustomMagnificationLevels[CurrentCustomMagnificationLevel]);
-            
+
+        if (!HasSlide)
+            SetDefaultTexture();       
     }
 
     public void Minimize()
@@ -153,7 +158,12 @@ public class MicroscopeMonitor : MonoBehaviour
                 int CurrentImageSlot = CurrentImageIndex == 0 ? MagnificationLevels.Count - 1 : CurrentImageIndex - 1;
 
                 while (CurrentSlide.textures[CurrentImageSlot] == null)
+                {
                     CurrentImageSlot--;
+                    if (CurrentImageSlot < 0)
+                        Debug.LogError("First image slot of microscope slide is empty!");
+                }
+                    
 
                 SetTexture(CurrentSlide.textures[CurrentImageSlot]);
                 CurrentMagnificationStep = CurrentImageIndex - CurrentImageSlot;
@@ -168,7 +178,10 @@ public class MicroscopeMonitor : MonoBehaviour
         PreventOutOfBoundsCoordinates();
 
         if (UseCustomMagnificationLevels)
-            SetMagnificationLevelOverlay(CustomMagnificationLevels[CurrentMagnificationStep]);
+            SetMagnificationLevelOverlay(CustomMagnificationLevels[CurrentCustomMagnificationLevel]);
+
+        if (!HasSlide)
+            SetDefaultTexture();
     }
 
     public void SetMagnification(float magnification)
@@ -221,6 +234,7 @@ public class MicroscopeMonitor : MonoBehaviour
     public void SetDefaultTexture()
     {
         RawImage.texture = DefaultTexture;
+        HasSlide = false;
     }
 
     private void SetMagnificationLevelOverlay()
@@ -236,6 +250,18 @@ public class MicroscopeMonitor : MonoBehaviour
     public void SetCurrentSlide(MicroscopeSlide slide)
     {
         CurrentSlide = slide;
+        HasSlide = true;
+        int imageIndex = CurrentImageIndex;
+        if (CurrentSlide.UseSeparateMagnificationTextures)
+        {
+            while (CurrentSlide.textures[imageIndex] == null)
+            {
+                imageIndex--;
+                if (imageIndex < 0)
+                    Debug.LogError("First image slot of microscope slide is empty!");
+            }
+            SetTexture(CurrentSlide.textures[imageIndex]);
+        }
     }
 
     private void PreventOutOfBoundsCoordinates()
