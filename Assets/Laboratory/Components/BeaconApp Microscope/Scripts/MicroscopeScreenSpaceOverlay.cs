@@ -46,42 +46,22 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         }   
     }
 
-    private float OldPlayerRotationZ;
-    private float InitialRotationZ;
-    private Quaternion InitialRotation;
     private void Update()
     {
         if (OverlayEnabled)
         {
-            // the commented out code is multple attempts at correcting the image's rotation when the user rolls their head
-
-            //Debug.Log("Enabled");
-            //Debug.Log(HeadCollider.transform.eulerAngles);
-
-            //float OffsetZ = HeadCollider.transform.eulerAngles.z - OldPlayerRotationZ;
-            //RotateImage(0, 0, -OffsetZ);
-            //RotateImage(0, 0, HeadCollider.transform.eulerAngles.z -  InitialRotationZ);
-            //RawImage.transform.rotation *= Quaternion.Euler(1, 1, 3);
-            //Quaternion inverse = Quaternion.Inverse(HeadCollider.transform.rotation);
-            //RawImage.transform.rotation *= Quaternion.Euler(1, 1, inverse.eulerAngles.z);    
-            //RotateImage(0, 0, );
-
-            //Debug.Log("All: " + InitialRotation * Quaternion.Inverse(HeadCollider.transform.rotation));
-/*            float rotationOffset = Mathf.Max(
-                Mathf.Abs((InitialRotation * Quaternion.Inverse(HeadCollider.transform.localRotation)).x),
-                Mathf.Abs((InitialRotation * Quaternion.Inverse(HeadCollider.transform.localRotation)).y),
-                Mathf.Abs((InitialRotation * Quaternion.Inverse(HeadCollider.transform.localRotation)).z)
-                );*/
-
-            //Debug.Log("Max: " + rotationOffset);
-            /*            if (rotationOffset > 0.05f)
-                            trigger.AdjustDarkening(rotationOffset * 3f);*/
-
-            // dim overlay when head is rotated
+            // roll math found at https://sunday-lab.blogspot.com/2008/04/get-pitch-yaw-roll-from-quaternion.html
+            Quaternion rotation = HeadCollider.transform.localRotation;
+            float roll = Mathf.Atan2(2 * (rotation.x * rotation.y + rotation.w * rotation.z), rotation.w * rotation.w + rotation.x * rotation.x - rotation.y * rotation.y - rotation.z * rotation.z);
+            
             float rotationOffset = Vector3.Angle((trigger.transform.position - HeadCollider.transform.position), HeadCollider.transform.forward);
-            if (rotationOffset > 20f)
+
+            // dim overlay when head is rotated or rolled
+            if (Mathf.Abs(roll) > 0.1f)
+                trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), Mathf.Abs(roll) * 3f, 2f * Time.deltaTime));
+            else if (rotationOffset > 20f)
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), rotationOffset * 0.02f, 2f * Time.deltaTime));
-            else
+            else if (Mathf.Abs(roll) <= 0.1f && rotationOffset <= 20f)
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), 0f, 2f * Time.deltaTime));
 
         }
@@ -90,13 +70,11 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     public void EnableOverlay()
     {
         GetComponent<Canvas>().enabled = true;
-        //InitialRotationZ = HeadCollider.transform.eulerAngles.z;
-        //RawImage.transform.rotation *= Quaternion.Euler(1, 1, 0);
-        InitialRotation = HeadCollider.transform.localRotation;
         OverlayEnabled = true;
+
         RawImage.texture = MicroscopeMonitor.GetComponentInChildren<RawImage>().texture;
         RawImage.uvRect = MicroscopeMonitor.GetComponentInChildren<RawImage>().uvRect;
-        PlayerCamera.cullingMask = LayerMask.GetMask("MicroscopeOverlay");
+        PlayerCamera.cullingMask = LayerMask.GetMask("MicroscopeOverlay");  // cull everything except for microscope overlay, making only that visible
     }
 
     public void DisableOverlay()
@@ -108,7 +86,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             "Ignore Raycast", "Water",
             "UI", "Fish", "Merd",
             "UnderwaterShade", "Grabbable", "Player",
-            "Menu", "Hand", "Bone");
+            "Menu", "Hand", "Bone");    // cull nothing except for microscope overlay, making all other objects visible
     }
 
     public void RotateImage(float x, float y, float z)
