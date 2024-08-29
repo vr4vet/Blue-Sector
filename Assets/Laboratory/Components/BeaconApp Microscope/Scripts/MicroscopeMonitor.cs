@@ -27,6 +27,7 @@ public class MicroscopeMonitor : MonoBehaviour
     [SerializeField] private bool UseCustomMagnificationLevels = false;
     [SerializeField] private List<int> CustomMagnificationLevels = new List<int>();
 
+    private float AspectRatio;
 
 
     // Start is called before the first frame update
@@ -37,6 +38,8 @@ public class MicroscopeMonitor : MonoBehaviour
 
         MagnificationLevelOverlay = transform.Find("Canvas/MagnificationText/Factor").GetComponent<TextMeshProUGUI>();
         SpeedOverlay = transform.Find("Canvas/SpeedText/Factor").GetComponent<TextMeshProUGUI>();
+
+        AspectRatio = GetComponentInChildren<RectTransform>().sizeDelta.x / GetComponentInChildren<RectTransform>().sizeDelta.y;
 
         // set initial magnification level
         SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
@@ -185,7 +188,7 @@ public class MicroscopeMonitor : MonoBehaviour
     public void SetMagnification(float magnification)
     {
         // UV x and y must be offset to keep looking at the same point of image when zooming 
-        RawImage.uvRect = new Rect(CurrentXY.x - (magnification * 0.5f), CurrentXY.y - (magnification * 0.5f), magnification, magnification);
+        RawImage.uvRect = new Rect(CurrentXY.x - (magnification * 0.5f), CurrentXY.y - (magnification / AspectRatio * 0.5f), magnification, magnification / AspectRatio);
     }
 
     public void ScrollRight()
@@ -306,5 +309,25 @@ public class MicroscopeMonitor : MonoBehaviour
     private void RotateRevolvingNosePiece(bool Right)
     {
         RevolvingNosePiece.RotateNosePiece(Right);
+    }
+
+    public float GetAspectRatio()
+    {
+        return AspectRatio;
+    }
+
+    public Rect GetUVRect()
+    {
+        return RawImage.uvRect;
+    }
+
+    public float GetMagnification()
+    {
+        return 1.0f / MagnificationLevels[CurrentMagnificationStep];
+    }
+
+    public Vector2 GetCurrentXY()
+    {
+        return CurrentXY;
     }
 }

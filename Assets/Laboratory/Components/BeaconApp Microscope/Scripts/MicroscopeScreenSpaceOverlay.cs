@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,7 +70,16 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         OverlayEnabled = true;
 
         RawImage.texture = MicroscopeMonitor.GetComponentInChildren<RawImage>().texture;
-        RawImage.uvRect = MicroscopeMonitor.GetComponentInChildren<RawImage>().uvRect;
+        //RawImage.uvRect = MicroscopeMonitor.GetComponentInChildren<RawImage>().uvRect;
+
+        Debug.Log(MicroscopeMonitor.GetMagnification());
+
+        RawImage.uvRect = new Rect(
+            MicroscopeMonitor.GetUVRect().x,
+            MicroscopeMonitor.GetCurrentXY().y - (MicroscopeMonitor.GetMagnification() * MicroscopeMonitor.GetAspectRatio() * 0.25f),
+            MicroscopeMonitor.GetUVRect().width,
+            MicroscopeMonitor.GetUVRect().height * MicroscopeMonitor.GetAspectRatio());
+
         PlayerCamera.cullingMask = LayerMask.GetMask("MicroscopeOverlay");  // cull everything except for microscope overlay, making only that visible
     }
 
