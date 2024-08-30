@@ -321,9 +321,14 @@ public class MicroscopeMonitor : MonoBehaviour
         return RawImage.uvRect;
     }
 
+    public int GetMagnificationLevel()
+    {
+        return MagnificationLevels[CurrentMagnificationStep];
+    }
+
     public float GetMagnification()
     {
-        return 1.0f / MagnificationLevels[CurrentMagnificationStep];
+        return 1 / MagnificationLevels[CurrentMagnificationStep];
     }
 
     public Vector2 GetCurrentXY()
