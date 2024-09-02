@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class MicroscopeSlide : MonoBehaviour
 {
-    [SerializeField] private Texture texture;
+    [SerializeField] private Sprite texture;
     [SerializeField] private MicroscopeMonitor microscopeMonitor;
     [SerializeField] public bool UseSeparateMagnificationTextures = false;
-    [SerializeField] public List<Texture> textures = new List<Texture>();
+    [SerializeField] public List<Sprite> textures = new List<Sprite>();
 
     public void SetMicroscopeMonitorTexture()
     {

@@ -48,8 +48,8 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
         // check if player finger tip
         if (other.name == "tip_collider_i")
         {
-            MicroscopeMonitor.SetScrollSpeedConstant(0.001f); // default speed of 0.01 is too quick for a simple button press
-            MicroscopeMonitor.SetScrollSpeed();
+            //MicroscopeMonitor.SetScrollSpeedConstant(0.001f); // default speed of 0.01 is too quick for a simple button press
+            //MicroscopeMonitor.SetScrollSpeed();
 
             IsTouched = true;
                 

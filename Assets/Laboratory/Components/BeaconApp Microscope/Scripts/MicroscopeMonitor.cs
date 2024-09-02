@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class MicroscopeMonitor : MonoBehaviour
 {
-    private float ScrollSpeed = 0.01f;
+    private float ScrollSpeed = 1f;
     private float ScrollSpeedConstant = 0.01f;
 
-    [SerializeField] private Texture DefaultTexture;
-    private RawImage RawImage;
+    [SerializeField] private Sprite DefaultTexture;
+    private Image Image;
     private int SpeedModifier = 1;
     
     public List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
@@ -33,11 +33,11 @@ public class MicroscopeMonitor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        RawImage = GetComponentInChildren<RawImage>();
-        RawImage.texture = DefaultTexture;
+        Image = transform.Find("Canvas/Panel/Image").GetComponent<Image>();
+        Image.sprite = DefaultTexture;
 
-        MagnificationLevelOverlay = transform.Find("Canvas/MagnificationText/Factor").GetComponent<TextMeshProUGUI>();
-        SpeedOverlay = transform.Find("Canvas/SpeedText/Factor").GetComponent<TextMeshProUGUI>();
+        MagnificationLevelOverlay = transform.Find("Canvas/Panel/MagnificationText/Factor").GetComponent<TextMeshProUGUI>();
+        SpeedOverlay = transform.Find("Canvas/Panel/SpeedText/Factor").GetComponent<TextMeshProUGUI>();
 
         AspectRatio = GetComponentInChildren<RectTransform>().sizeDelta.x / GetComponentInChildren<RectTransform>().sizeDelta.y;
 
@@ -48,6 +48,11 @@ public class MicroscopeMonitor : MonoBehaviour
             SetMagnificationLevelOverlay(CustomMagnificationLevels[0]);
         else
             SetMagnificationLevelOverlay();
+
+        // scaling image to fit canvas
+        float ratio = GetComponentInChildren<RectTransform>().sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
+        Image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Image.GetComponent<RectTransform>().sizeDelta.x * ratio);
+        Image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Image.GetComponent<RectTransform>().sizeDelta.y * ratio);
     }
 
     private void Update()
@@ -114,7 +119,7 @@ public class MicroscopeMonitor : MonoBehaviour
             {
                 SetTexture(CurrentSlide.textures[CurrentImageIndex]);
                 CurrentMagnificationStep = 0;
-            } 
+            }
             SetMagnificationLevelOverlay(MagnificationLevels[CurrentImageIndex]);
         }
         else
@@ -187,54 +192,43 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void SetMagnification(float magnification)
     {
-        // UV x and y must be offset to keep looking at the same point of image when zooming 
-        RawImage.uvRect = new Rect(CurrentXY.x - (magnification * 0.5f), CurrentXY.y - (magnification / AspectRatio * 0.5f), magnification, magnification / AspectRatio);
+        //Image.GetComponent<RectTransform>().sizeDelta
+        int Scale = GetMagnificationLevel();
+        Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
     }
 
     public void ScrollRight()
     {
-        if (RawImage.uvRect.x < 1 - RawImage.uvRect.width - ScrollSpeed)
-        {
-            CurrentXY.x += ScrollSpeed;
-            RawImage.uvRect = new Rect(RawImage.uvRect.x + ScrollSpeed, RawImage.uvRect.y, RawImage.uvRect.width, RawImage.uvRect.height);
-        }
+        CurrentXY.x += ScrollSpeed;
+        Image.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed, 0f, 0f);
     }
 
     public void ScrollLeft()
     {
-        if (RawImage.uvRect.x > ScrollSpeed)
-        {
-            CurrentXY.x -= ScrollSpeed;
-            RawImage.uvRect = new Rect(RawImage.uvRect.x - ScrollSpeed, RawImage.uvRect.y, RawImage.uvRect.width, RawImage.uvRect.height);
-        }
+        CurrentXY.x -= ScrollSpeed;
+        Image.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed, 0f, 0f);
     }
 
     public void ScrollUp()
     {
-        if (RawImage.uvRect.y < 1 - RawImage.uvRect.height - ScrollSpeed)
-        {
-            CurrentXY.y += ScrollSpeed;
-            RawImage.uvRect = new Rect(RawImage.uvRect.x, RawImage.uvRect.y + ScrollSpeed, RawImage.uvRect.width, RawImage.uvRect.height);
-        }
+        CurrentXY.y += ScrollSpeed;
+        Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed, 0f);
     }
 
     public void ScrollDown()
     {
-        if (RawImage.uvRect.y > ScrollSpeed)
-        {
-            CurrentXY.y -= ScrollSpeed;
-            RawImage.uvRect = new Rect(RawImage.uvRect.x, RawImage.uvRect.y - ScrollSpeed, RawImage.uvRect.width, RawImage.uvRect.height);
-        }
+        CurrentXY.x -= ScrollSpeed;
+        Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed, 0f);
     }
 
-    public void SetTexture(Texture texture)
+    public void SetTexture(Sprite texture)
     {
-        RawImage.texture = texture;
+        Image.sprite = texture;
     }
 
     public void SetDefaultTexture()
     {
-        RawImage.texture = DefaultTexture;
+        Image.sprite= DefaultTexture;
         HasSlide = false;
     }
 
@@ -267,19 +261,19 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void PreventOutOfBoundsCoordinates()
     {
-        while (RawImage.uvRect.x < ScrollSpeed)       
+/*        while (RawImage.uvRect.x < ScrollSpeed)       
             ScrollRight();
         while (RawImage.uvRect.x >= 1 - RawImage.uvRect.width)
             ScrollLeft();
         while (RawImage.uvRect.y < ScrollSpeed)
             ScrollUp();
         while (RawImage.uvRect.y >= 1 - RawImage.uvRect.height)
-            ScrollDown();
+            ScrollDown();*/
     }
 
     public void SetScrollSpeed()
     {
-        this.ScrollSpeed = ScrollSpeedConstant * SpeedModifier;
+        this.ScrollSpeed *= SpeedModifier;
         SpeedOverlay.SetText(SpeedModifier + "x");
     }
 
@@ -316,11 +310,6 @@ public class MicroscopeMonitor : MonoBehaviour
         return AspectRatio;
     }
 
-    public Rect GetUVRect()
-    {
-        return RawImage.uvRect;
-    }
-
     public int GetMagnificationLevel()
     {
         return MagnificationLevels[CurrentMagnificationStep];
@@ -334,5 +323,15 @@ public class MicroscopeMonitor : MonoBehaviour
     public Vector2 GetCurrentXY()
     {
         return CurrentXY;
+    }
+
+    public Vector3 GetImagePosition()
+    {
+        return Image.GetComponent<RectTransform>().localPosition;
+    }
+
+    public Sprite GetImage()
+    {
+        return Image.sprite;
     }
 }
