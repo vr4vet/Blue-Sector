@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MicroscopeMonitor : MonoBehaviour
 {
-    private float ScrollSpeed = 1f;
+    private float ScrollSpeed = 2f;
     private float ScrollSpeedConstant = 0.01f;
 
     [SerializeField] private Sprite DefaultTexture;
@@ -13,7 +13,7 @@ public class MicroscopeMonitor : MonoBehaviour
     private int SpeedModifier = 1;
     
     public List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
-    private Vector2 CurrentXY = new Vector2(0.5f, 0.5f);
+    private Vector2 CurrentXY = new Vector2(0f, 0f);
     private int CurrentMagnificationStep, CurrentSeparateMagnificationStep, CurrentCustomMagnificationLevel = 0;
     private int CurrentImageIndex = 0;
 
@@ -133,7 +133,7 @@ public class MicroscopeMonitor : MonoBehaviour
             SetMagnificationLevelOverlay(CustomMagnificationLevels[CurrentCustomMagnificationLevel]);
 
         if (!HasSlide)
-            SetDefaultTexture();       
+            SetDefaultTexture();
     }
 
     public void Minimize()
@@ -188,37 +188,39 @@ public class MicroscopeMonitor : MonoBehaviour
 
         if (!HasSlide)
             SetDefaultTexture();
+
+        
     }
 
     public void SetMagnification(float magnification)
-    {
-        //Image.GetComponent<RectTransform>().sizeDelta
+    {        
         int Scale = GetMagnificationLevel();
         Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+        Image.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
     }
 
     public void ScrollRight()
     {
-        CurrentXY.x += ScrollSpeed;
-        Image.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed, 0f, 0f);
+        CurrentXY.x -= ScrollSpeed;
+        Image.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
     }
 
     public void ScrollLeft()
     {
-        CurrentXY.x -= ScrollSpeed;
-        Image.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed, 0f, 0f);
+        CurrentXY.x += ScrollSpeed;
+        Image.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
     }
 
     public void ScrollUp()
     {
-        CurrentXY.y += ScrollSpeed;
-        Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed, 0f);
+        CurrentXY.y -= ScrollSpeed;
+        Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
     }
 
     public void ScrollDown()
     {
-        CurrentXY.x -= ScrollSpeed;
-        Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed, 0f);
+        CurrentXY.y += ScrollSpeed;
+        Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
     }
 
     public void SetTexture(Sprite texture)
@@ -305,11 +307,6 @@ public class MicroscopeMonitor : MonoBehaviour
         RevolvingNosePiece.RotateNosePiece(Right);
     }
 
-    public float GetAspectRatio()
-    {
-        return AspectRatio;
-    }
-
     public int GetMagnificationLevel()
     {
         return MagnificationLevels[CurrentMagnificationStep];
@@ -328,6 +325,11 @@ public class MicroscopeMonitor : MonoBehaviour
     public Vector3 GetImagePosition()
     {
         return Image.GetComponent<RectTransform>().localPosition;
+    }
+
+    public RectTransform GetImageRectTransform()
+    {
+        return Image.GetComponent<RectTransform>();
     }
 
     public Sprite GetImage()

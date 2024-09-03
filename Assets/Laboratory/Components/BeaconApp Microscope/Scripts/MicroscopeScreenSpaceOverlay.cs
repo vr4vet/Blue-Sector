@@ -26,6 +26,9 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         Image = GetComponent<Canvas>().transform.GetComponentInChildren<Image>();
         trigger = transform.parent.GetComponent<MicroscopeOverlayTrigger>();
 
+        //Image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, MicroscopeMonitor.GetComponentInChildren<RectTransform>().sizeDelta.x);
+        //Image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, MicroscopeMonitor.GetComponentInChildren<RectTransform>().sizeDelta.y);
+
         // disable the microscope overlay so the player can see their environment
         PlayerCamera.cullingMask = LayerMask.GetMask(
             "Default", "TransparentFX", 
@@ -116,9 +119,14 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
                 Image.GetComponent<RectTransform>().localPosition = new Vector3(NormalizedX, NormalizedY, Image.GetComponent<RectTransform>().localPosition.z);*/
 
-        Image.GetComponent<RectTransform>().localPosition = MicroscopeMonitor.GetImagePosition();
+        //Image.GetComponent<RectTransform>().localPosition = MicroscopeMonitor.GetImagePosition();
+        //Image.GetComponent<RectTransform>().localPosition = new Vector3(MicroscopeMonitor.GetImagePosition().x / 10f, MicroscopeMonitor.GetImagePosition().y / 10f, MicroscopeMonitor.GetImagePosition().z / 10f);
         //Image.GetComponent<RectTransform>().localPosition = new Vector3(-50f, NormalizedY, Image.GetComponent<RectTransform>().localPosition.z);
-
+        float ratio = MicroscopeMonitor.GetImageRectTransform().sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
+        float heightRatio = MicroscopeMonitor.GetImageRectTransform().sizeDelta.y / Image.GetComponent<RectTransform>().sizeDelta.y;
+        //Image.GetComponent<RectTransform>().localPosition = new Vector3(MicroscopeMonitor.GetImagePosition().x, MicroscopeMonitor.GetImagePosition().y, Image.GetComponent<RectTransform>().localPosition.z);
+        //Image.GetComponent<RectTransform>().localPosition = new Vector3(MicroscopeMonitor.GetImagePosition().x / widthRatio, MicroscopeMonitor.GetImagePosition().y, Image.GetComponent<RectTransform>().localPosition.z);
+        Image.GetComponent<RectTransform>().localPosition = MicroscopeMonitor.GetImagePosition() / ratio;
         int Scale = MicroscopeMonitor.GetMagnificationLevel();
         Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
 
