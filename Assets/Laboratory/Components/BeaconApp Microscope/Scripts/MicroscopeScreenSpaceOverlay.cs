@@ -37,6 +37,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             "UnderwaterShade", "Grabbable", "Player",
             "Menu", "Hand", "Bone");
 
+        // checking if system is Quest 3
         if (SystemInfo.deviceModel == "Oculus Quest")
         {
             AndroidJavaClass build = new AndroidJavaClass("android.os.Build");
@@ -47,7 +48,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             {
                 Quest3 = true;
             }
-                
         }
     }
 
@@ -90,43 +90,16 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         GetComponent<Canvas>().enabled = true;
         OverlayEnabled = true;
 
-        //RawImage.texture = MicroscopeMonitor.GetComponentInChildren<RawImage>().texture;
-        //Texture texture = MicroscopeMonitor.GetComponentInChildren<Image>().texture;
-        //Image.sprite = Sprite.Create((Texture2D)texture, new Rect(0, 0, texture.width, texture.height), new Vector2(texture.width / 2, texture.height / 2));
         Image.sprite = MicroscopeMonitor.GetImage();
-        /*
-                Texture texture = MicroscopeMonitor.GetComponentInChildren<RawImage>().texture;
-                Image.sprite = Sprite.Create((Texture2D)texture, new Rect(0, 0, texture.width, texture.height), new Vector2(texture.width / 2, texture.height / 2));
 
-                // need this to correct image on Quest 2 (positioned and scaled too low on y-axis otherwise). not sure why these exact values work as they were discovered through trial and error.
-                *//*        float OffsetY = .25f;
-                        float ScaleModifierY = .85f;
-                        float ScaleModifierX = .85f;
-                        if (!Quest3)
-                        {
-                            OffsetY = .265f;
-                            ScaleModifierY = .9f;
-                            ScaleModifierX = .8f;
-                        }*//*
+        // need this to correct image on Quest 3 (positioned too high)
+        float OffsetY = 0f;
+        if (Quest3)
+            OffsetY = -50f;
 
-                float NormalizedX = Normalize(MicroscopeMonitor.GetCurrentXY().x, 0f, 1f, 100f, -100f) * 2; // normalize function seems wrong, but times 2 gives correct answer...
-                Debug.Log(NormalizedX);
-
-                NormalizedX = Normalize(NormalizedX, 100f, -100f, 25f * MicroscopeMonitor.GetMagnificationLevel(), -25f * MicroscopeMonitor.GetMagnificationLevel());   // normalize again to account for magnification
-
-                float NormalizedY = (Normalize(MicroscopeMonitor.GetCurrentXY().y, 0f, 1f, 100f, -100f) * 2)*//* * (1 / MicroscopeMonitor.GetAspectRatio() * 2)*//*;
-                NormalizedY = Normalize(NormalizedY, 100f, -100f, 25f * MicroscopeMonitor.GetMagnificationLevel(), -25f * MicroscopeMonitor.GetMagnificationLevel());
-
-                Image.GetComponent<RectTransform>().localPosition = new Vector3(NormalizedX, NormalizedY, Image.GetComponent<RectTransform>().localPosition.z);*/
-
-        //Image.GetComponent<RectTransform>().localPosition = MicroscopeMonitor.GetImagePosition();
-        //Image.GetComponent<RectTransform>().localPosition = new Vector3(MicroscopeMonitor.GetImagePosition().x / 10f, MicroscopeMonitor.GetImagePosition().y / 10f, MicroscopeMonitor.GetImagePosition().z / 10f);
-        //Image.GetComponent<RectTransform>().localPosition = new Vector3(-50f, NormalizedY, Image.GetComponent<RectTransform>().localPosition.z);
         float ratio = MicroscopeMonitor.GetImageRectTransform().sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
-        float heightRatio = MicroscopeMonitor.GetImageRectTransform().sizeDelta.y / Image.GetComponent<RectTransform>().sizeDelta.y;
-        //Image.GetComponent<RectTransform>().localPosition = new Vector3(MicroscopeMonitor.GetImagePosition().x, MicroscopeMonitor.GetImagePosition().y, Image.GetComponent<RectTransform>().localPosition.z);
-        //Image.GetComponent<RectTransform>().localPosition = new Vector3(MicroscopeMonitor.GetImagePosition().x / widthRatio, MicroscopeMonitor.GetImagePosition().y, Image.GetComponent<RectTransform>().localPosition.z);
-        Image.GetComponent<RectTransform>().localPosition = MicroscopeMonitor.GetImagePosition() / ratio;
+        Image.GetComponent<RectTransform>().localPosition = (MicroscopeMonitor.GetImagePosition() + new Vector3(0f, OffsetY, 0f)) / ratio;
+        
         int Scale = MicroscopeMonitor.GetMagnificationLevel();
         Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
 
@@ -143,11 +116,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             "UI", "Fish", "Merd",
             "UnderwaterShade", "Grabbable", "Player",
             "Menu", "Hand", "Bone");    // cull nothing except for microscope overlay, making all other objects visible
-    }
-
-    public void RotateImage(float x, float y, float z)
-    {
-        //RawImage.transform.Rotate(x, y, z);
     }
 
     public void SetHeadCollider(Collider HeadCollider)
