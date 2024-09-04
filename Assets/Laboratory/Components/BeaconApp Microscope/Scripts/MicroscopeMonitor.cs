@@ -201,26 +201,50 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollRight()
     {
-        CurrentXY.x -= ScrollSpeed;
-        Image.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+        float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
+        float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
+        //if (HorisontallyWithinBounds())
+        //if (Image.GetComponent<RectTransform>().localPosition.x < (monitorWidth / 2) + (monitorWidth * ((GetMagnificationLevel() / 2) - 1))) // can scroll 1/2 + ((magnification / 2) - 1) monitor widths
+        if (Image.GetComponent<RectTransform>().localPosition.x > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
+        {
+            CurrentXY.x -= ScrollSpeed;
+            Image.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+        }
     }
 
     public void ScrollLeft()
     {
-        CurrentXY.x += ScrollSpeed;
-        Image.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+        float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
+        float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
+        //if (HorisontallyWithinBounds())
+        //if (Image.GetComponent<RectTransform>().localPosition.x < (monitorWidth / 2) + (monitorWidth * ((GetMagnificationLevel() / 2) - 1))) // can scroll 1/2 + ((magnification / 2) - 1) monitor widths
+        if (Image.GetComponent<RectTransform>().localPosition.x < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
+        {
+            CurrentXY.x += ScrollSpeed;
+            Image.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+        }
     }
 
     public void ScrollUp()
     {
-        CurrentXY.y -= ScrollSpeed;
-        Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
+        float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
+        float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
+        if (Image.GetComponent<RectTransform>().localPosition.y > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))    
+        {
+            CurrentXY.y -= ScrollSpeed;
+            Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
+        }
     }
 
     public void ScrollDown()
     {
-        CurrentXY.y += ScrollSpeed;
-        Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
+        float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
+        float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
+        if (Image.GetComponent<RectTransform>().localPosition.y < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
+        {
+            CurrentXY.y += ScrollSpeed;
+            Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
+        }
     }
 
     public void SetTexture(Sprite texture)
@@ -335,5 +359,29 @@ public class MicroscopeMonitor : MonoBehaviour
     public Sprite GetImage()
     {
         return Image.sprite;
+    }
+
+    private bool HorisontallyWithinBounds()
+    {
+        float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
+
+        // can scroll 1/2 + ((magnification / 2) - 1) monitor widths
+        if (Image.GetComponent<RectTransform>().localPosition.x < 0)
+        {
+            Debug.Log("Negativ");
+            return Image.GetComponent<RectTransform>().localPosition.x > -((monitorWidth / 2) + (monitorWidth * ((GetMagnificationLevel() / 2) - 1)));
+        }
+        else
+        {
+            Debug.Log("Positiv");
+            return Image.GetComponent<RectTransform>().localPosition.x < (monitorWidth / 2) + (monitorWidth * ((GetMagnificationLevel() / 2) - 1));
+        }
+         
+    }
+
+    private bool VerticallyWithinBounds()
+    {
+        float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
+        return Mathf.Abs(Image.GetComponent<RectTransform>().localPosition.y) < (monitorHeight / 2) + (monitorHeight * ((GetMagnificationLevel() / 2) - 1));    // can scroll 1/2 + ((magnification / 2) - 1) monitor heights
     }
 }
