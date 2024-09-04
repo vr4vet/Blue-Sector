@@ -203,8 +203,6 @@ public class MicroscopeMonitor : MonoBehaviour
     {
         float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
         float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
-        //if (HorisontallyWithinBounds())
-        //if (Image.GetComponent<RectTransform>().localPosition.x < (monitorWidth / 2) + (monitorWidth * ((GetMagnificationLevel() / 2) - 1))) // can scroll 1/2 + ((magnification / 2) - 1) monitor widths
         if (Image.GetComponent<RectTransform>().localPosition.x > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
         {
             CurrentXY.x -= ScrollSpeed;
@@ -216,8 +214,6 @@ public class MicroscopeMonitor : MonoBehaviour
     {
         float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
         float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
-        //if (HorisontallyWithinBounds())
-        //if (Image.GetComponent<RectTransform>().localPosition.x < (monitorWidth / 2) + (monitorWidth * ((GetMagnificationLevel() / 2) - 1))) // can scroll 1/2 + ((magnification / 2) - 1) monitor widths
         if (Image.GetComponent<RectTransform>().localPosition.x < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
         {
             CurrentXY.x += ScrollSpeed;
@@ -287,14 +283,16 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void PreventOutOfBoundsCoordinates()
     {
-/*        while (RawImage.uvRect.x < ScrollSpeed)       
+        float ratioWidth = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.x;
+        float ratioHeight = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.y;
+        while (Image.GetComponent<RectTransform>().localPosition.x >= (ratioWidth / 2))
             ScrollRight();
-        while (RawImage.uvRect.x >= 1 - RawImage.uvRect.width)
+        while (Image.GetComponent<RectTransform>().localPosition.x <= -(ratioWidth / 2))
             ScrollLeft();
-        while (RawImage.uvRect.y < ScrollSpeed)
+        while (Image.GetComponent<RectTransform>().localPosition.y >= (ratioHeight / 2))
             ScrollUp();
-        while (RawImage.uvRect.y >= 1 - RawImage.uvRect.height)
-            ScrollDown();*/
+        while (Image.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
+            ScrollDown();
     }
 
     public void SetScrollSpeed()
@@ -359,29 +357,5 @@ public class MicroscopeMonitor : MonoBehaviour
     public Sprite GetImage()
     {
         return Image.sprite;
-    }
-
-    private bool HorisontallyWithinBounds()
-    {
-        float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
-
-        // can scroll 1/2 + ((magnification / 2) - 1) monitor widths
-        if (Image.GetComponent<RectTransform>().localPosition.x < 0)
-        {
-            Debug.Log("Negativ");
-            return Image.GetComponent<RectTransform>().localPosition.x > -((monitorWidth / 2) + (monitorWidth * ((GetMagnificationLevel() / 2) - 1)));
-        }
-        else
-        {
-            Debug.Log("Positiv");
-            return Image.GetComponent<RectTransform>().localPosition.x < (monitorWidth / 2) + (monitorWidth * ((GetMagnificationLevel() / 2) - 1));
-        }
-         
-    }
-
-    private bool VerticallyWithinBounds()
-    {
-        float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
-        return Mathf.Abs(Image.GetComponent<RectTransform>().localPosition.y) < (monitorHeight / 2) + (monitorHeight * ((GetMagnificationLevel() / 2) - 1));    // can scroll 1/2 + ((magnification / 2) - 1) monitor heights
     }
 }
