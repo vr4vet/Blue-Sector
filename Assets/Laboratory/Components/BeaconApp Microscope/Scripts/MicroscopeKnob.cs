@@ -20,9 +20,6 @@ public class MicroscopeKnob : MonoBehaviour
 
     public void ScrollMicroscope()
     {
-        MicroscopeMonitor.SetScrollSpeedConstant(0.01f); // need faster scroll speed to make scroll wheels usable
-        MicroscopeMonitor.SetScrollSpeed();
-
         if (axis == Axis.X)
             MicroscopeMonitor.ScrollX(transform.eulerAngles.y > PreviousRotation);
         else

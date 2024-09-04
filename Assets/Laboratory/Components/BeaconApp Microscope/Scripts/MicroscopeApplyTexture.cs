@@ -17,7 +17,6 @@ public class MicroscopeApplyTexture : MonoBehaviour
     {
         MicroscopeSlide CurrentMicroscopeSlide = SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>();
         
-        //if (SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>())
         if (CurrentMicroscopeSlide)
         {
             CurrentMicroscopeSlide.SetMicroscopeMonitorTexture();

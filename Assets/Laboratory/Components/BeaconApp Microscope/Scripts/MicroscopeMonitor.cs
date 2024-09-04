@@ -6,11 +6,10 @@ using UnityEngine.UI;
 public class MicroscopeMonitor : MonoBehaviour
 {
     private float ScrollSpeed = 2f;
-    private float ScrollSpeedConstant = 0.01f;
+    private float SpeedModifier = 1;
 
     [SerializeField] private Sprite DefaultTexture;
     private Image Image;
-    private int SpeedModifier = 1;
     
     public List<int> MagnificationLevels = new List<int> { 2, 4, 8, 16 };
     private Vector2 CurrentXY = new Vector2(0f, 0f);
@@ -297,29 +296,24 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void SetScrollSpeed()
     {
-        this.ScrollSpeed *= SpeedModifier;
+        this.ScrollSpeed = 2f * SpeedModifier;
         SpeedOverlay.SetText(SpeedModifier + "x");
-    }
-
-    public void SetScrollSpeedConstant(float ScrollSpeedConstant)
-    {
-        this.ScrollSpeedConstant = ScrollSpeedConstant;
     }
 
     public void IncreaseScrollSpeed()
     {
         if (SpeedModifier < 3)
         {
-            SpeedModifier++;
+            SpeedModifier += 0.5f;
             SetScrollSpeed();
         }
     }
 
     public void DecreaseScrollSpeed()
     {
-        if (SpeedModifier > 1)
+        if (SpeedModifier > 0.5f)
         {
-            SpeedModifier--;
+            SpeedModifier -= 0.5f;
             SetScrollSpeed();
         }
     }

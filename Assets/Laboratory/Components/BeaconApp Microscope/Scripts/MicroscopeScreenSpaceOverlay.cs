@@ -26,9 +26,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         Image = GetComponent<Canvas>().transform.GetComponentInChildren<Image>();
         trigger = transform.parent.GetComponent<MicroscopeOverlayTrigger>();
 
-        //Image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, MicroscopeMonitor.GetComponentInChildren<RectTransform>().sizeDelta.x);
-        //Image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, MicroscopeMonitor.GetComponentInChildren<RectTransform>().sizeDelta.y);
-
         // disable the microscope overlay so the player can see their environment
         PlayerCamera.cullingMask = LayerMask.GetMask(
             "Default", "TransparentFX", 
@@ -63,9 +60,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
     private void Update()
     {
-
-        //Debug.Log(Utils.GetSystemHeadsetType());
-        //Debug.Log(SystemInfo.deviceModel);
         if (OverlayEnabled)
         {
             // roll math found at https://sunday-lab.blogspot.com/2008/04/get-pitch-yaw-roll-from-quaternion.html
@@ -81,7 +75,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), rotationOffset * 0.02f, 2f * Time.deltaTime));
             else// if (roll <= 0.1f && rotationOffset <= 20f)
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), 0f, 2f * Time.deltaTime));
-
         }
     }
 
