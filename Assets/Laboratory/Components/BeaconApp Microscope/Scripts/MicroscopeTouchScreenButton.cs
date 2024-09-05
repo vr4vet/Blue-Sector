@@ -1,6 +1,3 @@
-using BNG;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MicroscopeTouchScreenButton : MonoBehaviour
@@ -83,4 +80,6 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
             IsTouched = false;
         }
     }
+
+    
 }
