@@ -55,17 +55,28 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         {
             GetComponent<Canvas>().worldCamera = PlayerCamera;
             CameraSet = true;
-        }   
+        }
+        //Debug.Log(PlayerController.name);
     }
 
     private void Update()
     {
         if (OverlayEnabled)
         {
-            // roll math found at https://sunday-lab.blogspot.com/2008/04/get-pitch-yaw-roll-from-quaternion.html
-            Quaternion rotation = HeadCollider.transform.localRotation;
-            float roll = Mathf.Abs(Mathf.Atan2(2 * (rotation.x * rotation.y + rotation.w * rotation.z), rotation.w * rotation.w + rotation.x * rotation.x - rotation.y * rotation.y - rotation.z * rotation.z));
-            
+            // Calculating roll. Code heavily based on https://github.com/fredsa/unity-1st-person-racing/blob/master/Assets/Standard%20Assets/Vehicles/Aircraft/Scripts/AeroplaneController.cs
+            float roll = 0;
+            var flatForward = HeadCollider.transform.forward;
+            flatForward.y = 0;
+            // If the flat forward vector is non-zero (which would only happen if the player's head was pointing exactly straight upwards)
+            if (flatForward.sqrMagnitude > 0)
+            {
+                flatForward.Normalize();
+                var flatRight = Vector3.Cross(Vector3.up, flatForward);
+                var localFlatRight = HeadCollider.transform.InverseTransformDirection(flatRight);
+                roll = Mathf.Abs(Mathf.Atan2(localFlatRight.y, localFlatRight.x));
+            }
+
+            // calculating the rotation offset from the eye pieces (other words: checking if the player look directly into them)
             float rotationOffset = Vector3.Angle((trigger.transform.position - HeadCollider.transform.position), HeadCollider.transform.forward);
 
             // dim overlay when head is rotated or rolled
