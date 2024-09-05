@@ -14,7 +14,11 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
     [SerializeField] private MicroscopeMonitor MicroscopeMonitor;
 
-    private bool Quest3 = false;
+    private QuestDevice Device;
+    private enum QuestDevice
+    {
+        Quest2, Quest3, QuestPro
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -34,17 +38,17 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             "UnderwaterShade", "Grabbable", "Player",
             "Menu", "Hand", "Bone");
 
-        // checking if system is Quest 3
+        // checking if system is Quest 2, Quest 3, or Quest Pro
         if (SystemInfo.deviceModel == "Oculus Quest")
         {
             AndroidJavaClass build = new AndroidJavaClass("android.os.Build");
             string device = build.GetStatic<string>("DEVICE");
-            //Debug.Log(device);
-            //Debug.Log(device.Contains("eureka"));
-            if (device.Contains("eureka"))
-            {
-                Quest3 = true;
-            }
+            if (device.Contains("hollywood"))
+                Device = QuestDevice.Quest2;
+            else if (device.Contains("eureka"))
+                Device = QuestDevice.Quest3;
+            else if (device.Contains("seacliff"))
+                Device = QuestDevice.QuestPro;
         }
     }
 
@@ -96,10 +100,14 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
         Image.sprite = MicroscopeMonitor.GetImage();
 
-        // need this to correct image on Quest 3 (positioned too high)
+        // need this to correct image on Quest 3 and Quest Pro (positioned too high)
         float OffsetY = 0f;
-        if (Quest3)
+        if (Device == QuestDevice.Quest2)
+            OffsetY = 0f;
+        else if (Device == QuestDevice.Quest3)
             OffsetY = -50f;
+        else if (Device == QuestDevice.QuestPro)
+            OffsetY = -60f;
 
         float ratio = MicroscopeMonitor.GetImageRectTransform().sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
         Image.GetComponent<RectTransform>().localPosition = (MicroscopeMonitor.GetImagePosition() + new Vector3(0f, OffsetY, 0f)) / ratio;
