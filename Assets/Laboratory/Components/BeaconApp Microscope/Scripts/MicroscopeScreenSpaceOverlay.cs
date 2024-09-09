@@ -134,10 +134,4 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     {
         this.HeadCollider = HeadCollider;
     }
-
-    // found this function at https://stackoverflow.com/questions/51161098/normalize-range-100-to-100-to-0-to-3
-    private float Normalize(float val, float valmin, float valmax, float min, float max)
-    {
-        return (((val - valmin) / (valmax - valmin)) * (max - min)) + min;
-    }
 }
