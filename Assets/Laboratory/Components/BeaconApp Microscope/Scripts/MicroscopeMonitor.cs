@@ -200,15 +200,15 @@ public class MicroscopeMonitor : MonoBehaviour
     public void SetMagnification()
     {
         int Scale = GetMagnificationLevel();
-        if (!SlideWithGrid)
-        {
-            Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
-            Image.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
-        }
-        else
+        if (SlideWithGrid)
         {
             Grid.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
             Grid.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
+        }
+        else
+        {
+            Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+            Image.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
         }
         
 
@@ -217,44 +217,96 @@ public class MicroscopeMonitor : MonoBehaviour
     public void ScrollRight()
     {
         float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
-        float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
-        if (Image.GetComponent<RectTransform>().localPosition.x > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
+
+        if (SlideWithGrid)
         {
-            CurrentXY.x -= ScrollSpeed;
-            Image.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+            float ratio = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
+            if (Grid.GetComponent<RectTransform>().localPosition.x > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
+            {
+                CurrentXY.x -= ScrollSpeed;
+                Grid.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+            }
+        }
+        else
+        {
+            float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
+            if (Image.GetComponent<RectTransform>().localPosition.x > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
+            {
+                CurrentXY.x -= ScrollSpeed;
+                Image.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+            }
         }
     }
 
     public void ScrollLeft()
     {
         float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
-        float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
-        if (Image.GetComponent<RectTransform>().localPosition.x < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
+
+        if (SlideWithGrid)
         {
-            CurrentXY.x += ScrollSpeed;
-            Image.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+            float ratio = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
+            if (Grid.GetComponent<RectTransform>().localPosition.x < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
+            {
+                CurrentXY.x += ScrollSpeed;
+                Grid.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+            }
+        }
+        else
+        {
+            float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
+            if (Image.GetComponent<RectTransform>().localPosition.x < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
+            {
+                CurrentXY.x += ScrollSpeed;
+                Image.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
+            }
         }
     }
 
     public void ScrollUp()
     {
         float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
-        float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
-        if (Image.GetComponent<RectTransform>().localPosition.y > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))    
+
+        if (SlideWithGrid)
         {
-            CurrentXY.y -= ScrollSpeed;
-            Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
+            float ratio = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
+            if (Grid.GetComponent<RectTransform>().localPosition.y > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
+            {
+                CurrentXY.y -= ScrollSpeed;
+                Grid.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
+            }
+        }
+        else
+        {
+            float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
+            if (Image.GetComponent<RectTransform>().localPosition.y > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
+            {
+                CurrentXY.y -= ScrollSpeed;
+                Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
+            }
         }
     }
 
     public void ScrollDown()
     {
         float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
-        float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
-        if (Image.GetComponent<RectTransform>().localPosition.y < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
+
+        if (SlideWithGrid)
         {
-            CurrentXY.y += ScrollSpeed;
-            Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
+            float ratio = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
+            if (Grid.GetComponent<RectTransform>().localPosition.y < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
+            {
+                CurrentXY.y += ScrollSpeed;
+                Grid.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
+            }
+        }
+        else
+        {
+            float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
+            if (Image.GetComponent<RectTransform>().localPosition.y < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
+            {
+                CurrentXY.y += ScrollSpeed;
+                Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
+            }
         }
     }
 
@@ -308,10 +360,14 @@ public class MicroscopeMonitor : MonoBehaviour
     {
         this.Grid = grid;
         Image.enabled = false;
-        Grid.transform.SetParent(transform.Find("Canvas/Panel/"));
-        SetMagnification();
-        Grid.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
 
+        Grid = GameObject.Instantiate(Grid);
+        Grid.transform.SetParent(transform.Find("Canvas/Panel/"));
+        Grid.transform.SetAsFirstSibling();  // give highest position among siblings to ensure UI elements are drawn on top
+        
+        SetMagnification();
+        
+        Grid.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
         float ratio = GetComponentInChildren<RectTransform>().sizeDelta.x / Grid.GetComponent<RectTransform>().sizeDelta.x;
         Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Grid.GetComponent<RectTransform>().sizeDelta.x * ratio);
         Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Grid.GetComponent<RectTransform>().sizeDelta.y * ratio);
@@ -321,16 +377,33 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private void PreventOutOfBoundsCoordinates()
     {
-        float ratioWidth = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.x;
-        float ratioHeight = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.y;
-        while (Image.GetComponent<RectTransform>().localPosition.x >= (ratioWidth / 2))
-            ScrollRight();
-        while (Image.GetComponent<RectTransform>().localPosition.x <= -(ratioWidth / 2))
-            ScrollLeft();
-        while (Image.GetComponent<RectTransform>().localPosition.y >= (ratioHeight / 2))
-            ScrollUp();
-        while (Image.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
-            ScrollDown();
+        if (SlideWithGrid)
+        {
+            float ratioWidth = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.x;
+            float ratioHeight = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.y;
+            while (Grid.GetComponent<RectTransform>().localPosition.x >= (ratioWidth / 2))
+                ScrollRight();
+            while (Grid.GetComponent<RectTransform>().localPosition.x <= -(ratioWidth / 2))
+                ScrollLeft();
+            while (Grid.GetComponent<RectTransform>().localPosition.y >= (ratioHeight / 2))
+                ScrollUp();
+            while (Image.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
+                ScrollDown();
+        }
+        else
+        {
+            float ratioWidth = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.x;
+            float ratioHeight = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.y;
+            while (Image.GetComponent<RectTransform>().localPosition.x >= (ratioWidth / 2))
+                ScrollRight();
+            while (Image.GetComponent<RectTransform>().localPosition.x <= -(ratioWidth / 2))
+                ScrollLeft();
+            while (Image.GetComponent<RectTransform>().localPosition.y >= (ratioHeight / 2))
+                ScrollUp();
+            while (Image.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
+                ScrollDown();
+        }
+
     }
 
     public void SetScrollSpeed()
