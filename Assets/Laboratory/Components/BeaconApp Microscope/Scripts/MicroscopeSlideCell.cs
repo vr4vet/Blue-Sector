@@ -19,4 +19,14 @@ public class MicroscopeSlideCell : MonoBehaviour
     {
         
     }
+
+    public int GetAmountOfPlankton()
+    {
+        return AmountOfPlankton;
+    }
+
+    public Image GetImage()
+    {
+        return Image; 
+    }
 }

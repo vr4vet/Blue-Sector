@@ -1,4 +1,5 @@
 using BNG;
+using UnityEditor;
 using UnityEngine;
 
 public class MicroscopeApplyTexture : MonoBehaviour
@@ -14,11 +15,23 @@ public class MicroscopeApplyTexture : MonoBehaviour
     public void ApplyTexture()
     {
         MicroscopeSlide CurrentMicroscopeSlide = SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>();
-        
+        MicroscopeSlideWithGrid CurrentMicroscopeSlideWithGrid = SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlideWithGrid>();
+
+        if (CurrentMicroscopeSlideWithGrid != null)
+            Debug.Log("The slide has a grid");
+        if (CurrentMicroscopeSlide != null)
+            Debug.Log("The slide does not have a grid");
+
         if (CurrentMicroscopeSlide)
         {
             CurrentMicroscopeSlide.SetMicroscopeMonitorTexture();
             CurrentMicroscopeSlide.SetMicroscopeSlide();
         }
+        if (CurrentMicroscopeSlideWithGrid)
+        {
+            CurrentMicroscopeSlideWithGrid.SetMicroscopeSlide();
+            CurrentMicroscopeSlideWithGrid.SetMicroscopeGrid();
+        }
+            
     }
 }

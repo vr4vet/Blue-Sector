@@ -20,7 +20,13 @@ public class MicroscopeMonitor : MonoBehaviour
     private TextMeshProUGUI SpeedOverlay;
 
     private MicroscopeSlide CurrentSlide;
+    
+    private MicroscopeSlideWithGrid CurrentSlideWithGrid;
+    private GameObject Grid;
+    private bool SlideWithGrid = false;
+
     private bool HasSlide = false;
+
     [SerializeField] public RevolvingNosePiece RevolvingNosePiece;
 
     [SerializeField] private bool UseCustomMagnificationLevels = false;
@@ -41,7 +47,7 @@ public class MicroscopeMonitor : MonoBehaviour
         AspectRatio = GetComponentInChildren<RectTransform>().sizeDelta.x / GetComponentInChildren<RectTransform>().sizeDelta.y;
 
         // set initial magnification level
-        SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+        SetMagnification();
 
         if (UseCustomMagnificationLevels)
             SetMagnificationLevelOverlay(CustomMagnificationLevels[0]);
@@ -125,7 +131,7 @@ public class MicroscopeMonitor : MonoBehaviour
             SetMagnificationLevelOverlay();
 
         RotateRevolvingNosePiece(false);
-        SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+        SetMagnification();
         PreventOutOfBoundsCoordinates();
 
         if (UseCustomMagnificationLevels)
@@ -179,7 +185,7 @@ public class MicroscopeMonitor : MonoBehaviour
             SetMagnificationLevelOverlay();
 
         RotateRevolvingNosePiece(true);
-        SetMagnification(1.0f / MagnificationLevels[CurrentMagnificationStep]);
+        SetMagnification();
         PreventOutOfBoundsCoordinates();
 
         if (UseCustomMagnificationLevels)
@@ -191,11 +197,21 @@ public class MicroscopeMonitor : MonoBehaviour
         
     }
 
-    public void SetMagnification(float magnification)
-    {        
+    public void SetMagnification()
+    {
         int Scale = GetMagnificationLevel();
-        Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
-        Image.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
+        if (!SlideWithGrid)
+        {
+            Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+            Image.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
+        }
+        else
+        {
+            Grid.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+            Grid.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
+        }
+        
+
     }
 
     public void ScrollRight()
@@ -267,6 +283,7 @@ public class MicroscopeMonitor : MonoBehaviour
     {
         CurrentSlide = slide;
         HasSlide = true;
+        SlideWithGrid = false;
         int imageIndex = CurrentImageIndex;
         if (CurrentSlide.UseSeparateMagnificationTextures)
         {
@@ -278,6 +295,28 @@ public class MicroscopeMonitor : MonoBehaviour
             }
             SetTexture(CurrentSlide.textures[imageIndex]);
         }
+    }
+
+    public void SetCurrentSlideWithGrid(MicroscopeSlideWithGrid slide)
+    {
+        CurrentSlideWithGrid = slide;
+        SlideWithGrid = true;
+        HasSlide = true;
+    }
+
+    public void SetGrid(GameObject grid)
+    {
+        this.Grid = grid;
+        Image.enabled = false;
+        Grid.transform.SetParent(transform.Find("Canvas/Panel/"));
+        SetMagnification();
+        Grid.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
+
+        float ratio = GetComponentInChildren<RectTransform>().sizeDelta.x / Grid.GetComponent<RectTransform>().sizeDelta.x;
+        Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Grid.GetComponent<RectTransform>().sizeDelta.x * ratio);
+        Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Grid.GetComponent<RectTransform>().sizeDelta.y * ratio);
+
+        Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(Grid.GetComponent<RectTransform>().sizeDelta.x / 10, Grid.GetComponent<RectTransform>().sizeDelta.y / 5);
     }
 
     private void PreventOutOfBoundsCoordinates()
