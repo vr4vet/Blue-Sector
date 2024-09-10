@@ -17,11 +17,6 @@ public class MicroscopeApplyTexture : MonoBehaviour
         MicroscopeSlide CurrentMicroscopeSlide = SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlide>();
         MicroscopeSlideWithGrid CurrentMicroscopeSlideWithGrid = SnapZone.HeldItem.gameObject.GetComponent<MicroscopeSlideWithGrid>();
 
-        if (CurrentMicroscopeSlideWithGrid != null)
-            Debug.Log("The slide has a grid");
-        if (CurrentMicroscopeSlide != null)
-            Debug.Log("The slide does not have a grid");
-
         if (CurrentMicroscopeSlide)
         {
             CurrentMicroscopeSlide.SetMicroscopeMonitorTexture();

@@ -69,14 +69,14 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         {
             // Calculating roll. Code heavily based on https://github.com/fredsa/unity-1st-person-racing/blob/master/Assets/Standard%20Assets/Vehicles/Aircraft/Scripts/AeroplaneController.cs
             float roll = 0;
-            var flatForward = HeadCollider.transform.forward;
+            Vector3 flatForward = HeadCollider.transform.forward;
             flatForward.y = 0;
             // If the flat forward vector is non-zero (which would only happen if the player's head was pointing exactly straight upwards)
             if (flatForward.sqrMagnitude > 0)
             {
                 flatForward.Normalize();
-                var flatRight = Vector3.Cross(Vector3.up, flatForward);
-                var localFlatRight = HeadCollider.transform.InverseTransformDirection(flatRight);
+                Vector3 flatRight = Vector3.Cross(Vector3.up, flatForward);
+                Vector3 localFlatRight = HeadCollider.transform.InverseTransformDirection(flatRight);
                 roll = Mathf.Abs(Mathf.Atan2(localFlatRight.y, localFlatRight.x));
             }
 
@@ -88,7 +88,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), roll * 3f, 2f * Time.deltaTime));
             else if (rotationOffset > 20f)
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), rotationOffset * 0.02f, 2f * Time.deltaTime));
-            else// if (roll <= 0.1f && rotationOffset <= 20f)
+            else
                 trigger.AdjustDarkening(Mathf.Lerp(trigger.GetCurrentDarkening(), 0f, 2f * Time.deltaTime));
         }
     }

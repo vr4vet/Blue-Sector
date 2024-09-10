@@ -318,7 +318,9 @@ public class MicroscopeMonitor : MonoBehaviour
     public void SetDefaultTexture()
     {
         Image.sprite= DefaultTexture;
+        Image.enabled = true;
         HasSlide = false;
+        Destroy(Grid);
     }
 
     private void SetMagnificationLevelOverlay()
@@ -387,7 +389,7 @@ public class MicroscopeMonitor : MonoBehaviour
                 ScrollLeft();
             while (Grid.GetComponent<RectTransform>().localPosition.y >= (ratioHeight / 2))
                 ScrollUp();
-            while (Image.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
+            while (Grid.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
                 ScrollDown();
         }
         else
@@ -463,5 +465,10 @@ public class MicroscopeMonitor : MonoBehaviour
     public Sprite GetImage()
     {
         return Image.sprite;
+    }
+
+    public GameObject GetGrid()
+    {
+        return Grid;
     }
 }

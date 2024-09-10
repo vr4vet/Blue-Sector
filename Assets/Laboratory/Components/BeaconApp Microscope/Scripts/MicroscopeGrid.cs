@@ -12,12 +12,16 @@ public class MicroscopeGrid : MonoBehaviour
         {
             TotalAmountOfPlankton += cell.GetAmountOfPlankton();
         }
-        Debug.Log(TotalAmountOfPlankton);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public int GetTotalAmountOfPlankton()
+    {
+        return TotalAmountOfPlankton;
     }
 }
