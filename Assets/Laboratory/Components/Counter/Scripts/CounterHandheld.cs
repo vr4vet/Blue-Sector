@@ -10,38 +10,50 @@ public class CounterHandheld : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //NumberedWheels[3].transform.Rotate(36.5f, 0, 0);
-        //InvokeRepeating("Increment", 0f, 0.1f);
+        Count = UnityEngine.Random.Range(0, 9999);  // start with random value so the player is required to reset the counter
+        SetNumberedWheels();
     }
 
     public void Increment()
     {
-        if (Count < 9999)
-            Count++;
-        else
-        {
-            Count = 0;
-            NumberedWheels[0].transform.localEulerAngles = Vector3.zero;
-            NumberedWheels[1].transform.localEulerAngles = Vector3.zero;
-            NumberedWheels[2].transform.localEulerAngles = Vector3.zero;
-            NumberedWheels[3].transform.localEulerAngles = Vector3.zero;
-        }
+        Count = (Count + 1) % 10000;
+        SetNumberedWheels();
+    }
 
+    public void ResetCounter()
+    {
+        Count = 0;
+        SetNumberedWheels();
+    }
+
+    /// <summary>
+    /// Here I'm using the Normalize() method to translate the digits into degrees. 
+    /// That way, the digit value, which is 0 - 9, is translated into degrees, 0 - 324.
+    /// The reason for using 324 degrees is because each number is placed at ((360 / 10) * digit) degrees, where 324 represents the digit 9. 
+    /// </summary>
+    private void SetNumberedWheels()
+    {
         string CountString = Count.ToString();
         if (Count < 10)
         {
             NumberedWheels[0].transform.localEulerAngles = new Vector3(Normalize((float)Char.GetNumericValue(CountString[0]), 0, 9, 0, 360 - 36), 0, 0);
+            NumberedWheels[1].transform.localEulerAngles = Vector3.zero;
+            NumberedWheels[2].transform.localEulerAngles = Vector3.zero;
+            NumberedWheels[3].transform.localEulerAngles = Vector3.zero;
         }
         else if (Count < 100)
         {
             NumberedWheels[0].transform.localEulerAngles = new Vector3(Normalize((float)Char.GetNumericValue(CountString[^1]), 0, 9, 0, 360 - 36), 0, 0);
             NumberedWheels[1].transform.localEulerAngles = new Vector3(Normalize((float)Char.GetNumericValue(CountString[^2]), 0, 9, 0, 360 - 36), 0, 0);
+            NumberedWheels[2].transform.localEulerAngles = Vector3.zero;
+            NumberedWheels[3].transform.localEulerAngles = Vector3.zero;
         }
         else if (Count < 1000)
         {
             NumberedWheels[0].transform.localEulerAngles = new Vector3(Normalize((float)Char.GetNumericValue(CountString[^1]), 0, 9, 0, 360 - 36), 0, 0);
             NumberedWheels[1].transform.localEulerAngles = new Vector3(Normalize((float)Char.GetNumericValue(CountString[^2]), 0, 9, 0, 360 - 36), 0, 0);
             NumberedWheels[2].transform.localEulerAngles = new Vector3(Normalize((float)Char.GetNumericValue(CountString[^3]), 0, 9, 0, 360 - 36), 0, 0);
+            NumberedWheels[3].transform.localEulerAngles = Vector3.zero;
         }
         else if (Count < 10000)
         {
@@ -50,12 +62,6 @@ public class CounterHandheld : MonoBehaviour
             NumberedWheels[2].transform.localEulerAngles = new Vector3(Normalize((float)Char.GetNumericValue(CountString[^3]), 0, 9, 0, 360 - 36), 0, 0);
             NumberedWheels[3].transform.localEulerAngles = new Vector3(Normalize((float)Char.GetNumericValue(CountString[^4]), 0, 9, 0, 360 - 36), 0, 0);
         }
-    }
-
-    public void ResetCounter()
-    {
-        Count = 9999;
-        Increment();
     }
 
     // found this function at https://stackoverflow.com/questions/51161098/normalize-range-100-to-100-to-0-to-3
