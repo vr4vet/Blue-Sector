@@ -360,10 +360,9 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void SetGrid(GameObject grid)
     {
-        this.Grid = grid;
         Image.enabled = false;
 
-        Grid = GameObject.Instantiate(Grid);
+        Grid = GameObject.Instantiate(grid);
         Grid.transform.SetParent(transform.Find("Canvas/Panel/"));
         Grid.transform.SetAsFirstSibling();  // give highest position among siblings to ensure UI elements are drawn on top
         
@@ -457,6 +456,11 @@ public class MicroscopeMonitor : MonoBehaviour
         return Image.GetComponent<RectTransform>().localPosition;
     }
 
+    public Vector3 GetGridPosition()
+    {
+        return Grid.GetComponent<RectTransform>().localPosition;
+    }
+
     public RectTransform GetImageRectTransform()
     {
         return Image.GetComponent<RectTransform>();
@@ -470,5 +474,10 @@ public class MicroscopeMonitor : MonoBehaviour
     public GameObject GetGrid()
     {
         return Grid;
+    }
+
+    public bool IsDisplayingGrid()
+    {
+        return SlideWithGrid;
     }
 }

@@ -1,5 +1,4 @@
 using BNG;
-using UnityEditor;
 using UnityEngine;
 
 public class MicroscopeApplyTexture : MonoBehaviour

@@ -9,6 +9,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     private BNG.BNGPlayerController PlayerController;
     private Camera PlayerCamera;
     private Image Image;
+    private GameObject Grid;
     private Collider HeadCollider;
     MicroscopeOverlayTrigger trigger;
 
@@ -98,8 +99,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         GetComponent<Canvas>().enabled = true;
         OverlayEnabled = true;
 
-        Image.sprite = MicroscopeMonitor.GetImage();
-
         // need this to correct image on Quest 3 and Quest Pro (positioned too high)
         float OffsetY = 0f;
         if (Device == QuestDevice.Quest2)
@@ -109,17 +108,51 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         else if (Device == QuestDevice.QuestPro)
             OffsetY = -60f;
 
-        float ratio = MicroscopeMonitor.GetImageRectTransform().sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
-        Image.GetComponent<RectTransform>().localPosition = (MicroscopeMonitor.GetImagePosition() + new Vector3(0f, OffsetY, 0f)) / ratio;
-        
-        int Scale = MicroscopeMonitor.GetMagnificationLevel();
-        Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+        if (MicroscopeMonitor.IsDisplayingGrid())
+        {
+            Image.enabled = false;
+            Grid = GameObject.Instantiate(MicroscopeMonitor.GetGrid());
+            Grid.layer = LayerMask.NameToLayer("MicroscopeOverlay");
+            Grid.transform.SetParent(transform);
+            Grid.transform.SetAsFirstSibling();  // give highest position among siblings to ensure UI elements are drawn on top
+
+            Grid.GetComponent<RectTransform>().localEulerAngles = Vector3.zero; // make overlay face player
+
+            // resize grid and its cells to fit eye pieces
+            float sizeRatio = Grid.GetComponent<RectTransform>().sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
+            float gridAspectRatio = Grid.GetComponent<RectTransform>().sizeDelta.x / Grid.GetComponent<RectTransform>().sizeDelta.y;
+            float gridOffset = Grid.GetComponent<RectTransform>().sizeDelta.y - Image.GetComponent<RectTransform>().sizeDelta.y;
+            //Grid.GetComponent<RectTransform>().localPosition = (MicroscopeMonitor.GetGridPosition() + new Vector3(0f, OffsetY, 0f)) / sizeRatio;
+            Grid.GetComponent<RectTransform>().localPosition = (new Vector3(MicroscopeMonitor.GetGridPosition().x, MicroscopeMonitor.GetGridPosition().y + OffsetY, MicroscopeMonitor.GetGridPosition().z) / sizeRatio);
+            Debug.Log(Grid.GetComponent<RectTransform>().localPosition);
+            Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Grid.GetComponent<RectTransform>().sizeDelta.x / sizeRatio);
+            Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Grid.GetComponent<RectTransform>().sizeDelta.y / sizeRatio);
+            Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(Grid.GetComponent<RectTransform>().sizeDelta.x / 10, Grid.GetComponent<RectTransform>().sizeDelta.y / 5);
+
+            // apply the same magnification as monitor
+            int Scale = MicroscopeMonitor.GetMagnificationLevel();
+            Grid.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+        }
+        else
+        {
+            Image.enabled = true;
+            Image.sprite = MicroscopeMonitor.GetImage();
+
+            float ratio = MicroscopeMonitor.GetImageRectTransform().sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
+            Image.GetComponent<RectTransform>().localPosition = (MicroscopeMonitor.GetImagePosition() + new Vector3(0f, OffsetY, 0f)) / ratio;
+
+            int Scale = MicroscopeMonitor.GetMagnificationLevel();
+            Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+        }
 
         PlayerCamera.cullingMask = LayerMask.GetMask("MicroscopeOverlay");  // cull everything except for microscope overlay, making only that visible
     }
 
     public void DisableOverlay()
     {
+        if (Grid  != null)
+            GameObject.Destroy(Grid);
+
         GetComponent<Canvas>().enabled = false;
         OverlayEnabled = false;
         PlayerCamera.cullingMask = LayerMask.GetMask(
