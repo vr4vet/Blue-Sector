@@ -4,6 +4,7 @@ using UnityEngine;
 public class MicroscopeApplyTexture : MonoBehaviour
 {
     private SnapZone SnapZone;
+
     // Start is called before the first frame update
     void Start()
     {

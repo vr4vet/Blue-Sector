@@ -116,22 +116,21 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             Grid.transform.SetParent(transform);
             Grid.transform.SetAsFirstSibling();  // give highest position among siblings to ensure UI elements are drawn on top
 
-            Grid.GetComponent<RectTransform>().localEulerAngles = Vector3.zero; // make overlay face player
+            RectTransform gridTransform = Grid.GetComponent<RectTransform>();
 
-            // resize grid and its cells to fit eye pieces
-            float sizeRatio = Grid.GetComponent<RectTransform>().sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
-            float gridAspectRatio = Grid.GetComponent<RectTransform>().sizeDelta.x / Grid.GetComponent<RectTransform>().sizeDelta.y;
-            float gridOffset = Grid.GetComponent<RectTransform>().sizeDelta.y - Image.GetComponent<RectTransform>().sizeDelta.y;
-            //Grid.GetComponent<RectTransform>().localPosition = (MicroscopeMonitor.GetGridPosition() + new Vector3(0f, OffsetY, 0f)) / sizeRatio;
-            Grid.GetComponent<RectTransform>().localPosition = (new Vector3(MicroscopeMonitor.GetGridPosition().x, MicroscopeMonitor.GetGridPosition().y + OffsetY, MicroscopeMonitor.GetGridPosition().z) / sizeRatio);
-            Debug.Log(Grid.GetComponent<RectTransform>().localPosition);
-            Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Grid.GetComponent<RectTransform>().sizeDelta.x / sizeRatio);
-            Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Grid.GetComponent<RectTransform>().sizeDelta.y / sizeRatio);
-            Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(Grid.GetComponent<RectTransform>().sizeDelta.x / 10, Grid.GetComponent<RectTransform>().sizeDelta.y / 5);
+            // make overlay face player
+            gridTransform.localEulerAngles = Vector3.zero; 
+
+            // resize grid and its cells to match image and fit eye pieces
+            float sizeRatio = gridTransform.sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
+            gridTransform.localPosition = (new Vector3(MicroscopeMonitor.GetGridPosition().x, MicroscopeMonitor.GetGridPosition().y + OffsetY, MicroscopeMonitor.GetGridPosition().z) / sizeRatio);
+            gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, gridTransform.sizeDelta.x / sizeRatio);
+            gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridTransform.sizeDelta.y / sizeRatio);
+            Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(gridTransform.sizeDelta.x / 10, gridTransform.sizeDelta.y / 5);
 
             // apply the same magnification as monitor
             int Scale = MicroscopeMonitor.GetMagnificationLevel();
-            Grid.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+            gridTransform.localScale = new Vector3(Scale, Scale, Scale);
         }
         else
         {

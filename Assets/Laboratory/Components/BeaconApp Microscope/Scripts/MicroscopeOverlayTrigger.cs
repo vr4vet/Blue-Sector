@@ -3,9 +3,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class MicroscopeOverlayTrigger : MonoBehaviour
 {
-    private Collider HeadCollider;
     private MicroscopeScreenSpaceOverlay MicroscopeOverlay;
-    private BoxCollider BoxCollider;
     private PostProcessVolume VignetteVolume;
     private PostProcessVolume DarkenVolume;
 
@@ -15,8 +13,6 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
         MicroscopeOverlay = GetComponentInChildren<MicroscopeScreenSpaceOverlay>();
         VignetteVolume = transform.Find("Vignette").GetComponent<PostProcessVolume>();
         DarkenVolume = transform.Find("Darken").GetComponent<PostProcessVolume>();
-
-        BoxCollider = GetComponent<BoxCollider>();
     }
 
     private void OnTriggerEnter(Collider other)

@@ -12,12 +12,6 @@ public class MicroscopeGrid : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public int GetTotalAmountOfPlankton()
     {
         return TotalAmountOfPlankton;
