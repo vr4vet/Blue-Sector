@@ -20,6 +20,10 @@ public class TransitionSceneNPC : MonoBehaviour
         {
             destinationScene = "HSERoom";
         }
+        else if (answer == "Laboratory")
+        {
+            destinationScene = "Laboratory";
+        }
     }
 
     public void ChangeScene()

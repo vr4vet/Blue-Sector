@@ -7,7 +7,7 @@ using Meta.WitAi.TTS.Utilities;
 
 public class DialogueBoxController : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _dialogueText;
+    [SerializeField] public TextMeshProUGUI _dialogueText;
     [SerializeField] private GameObject _dialogueBox;
     [SerializeField] private GameObject _answerBox;
     [SerializeField] private GameObject _dialogueCanvas;
@@ -24,13 +24,20 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
+    [HideInInspector] private RectTransform backgroundRect;
+    [HideInInspector] private RectTransform dialogueTextRect;
+
+    private string currentDialogue;
 
     public ButtonSpawner buttonSpawner;
 
     [HideInInspector] public bool dialogueIsActive;
+    private int _activatedCount = 0;
 
     // For testing purposes
     public DialogueTree dialogueTreeRestart;
+    public bool dialogueEnded;
+    public int timesEnded = 0;
 
     private void Awake() 
     {
@@ -48,6 +55,7 @@ public class DialogueBoxController : MonoBehaviour
 
     private void Start()
     {
+        dialogueEnded = false;
         // Assign the event camera
         if (_dialogueCanvas != null)
         {
@@ -73,7 +81,9 @@ public class DialogueBoxController : MonoBehaviour
         {
             Debug.LogError("DialogueCanvas not found or does not have a Canvas component!");
         }
-
+        // Get the background transform for dimension changes
+        backgroundRect = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
+        dialogueTextRect = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("DialogueText").GetComponent<RectTransform>();
     }
 
     public void updateAnimator() {
@@ -88,7 +98,7 @@ public class DialogueBoxController : MonoBehaviour
     }
 
 
-    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
+    public void DialogueTrigger(DialogueTree dialogueTree, int startSection, string name) 
     {
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
@@ -98,6 +108,7 @@ public class DialogueBoxController : MonoBehaviour
         ResetBox();
         _dialogueBox.SetActive(true);
         OnDialogueStarted?.Invoke(name);
+        _activatedCount = 0;
         StartCoroutine(RunDialogue(dialogueTree, startSection));
         _exitButton.SetActive(true);
 
@@ -105,17 +116,38 @@ public class DialogueBoxController : MonoBehaviour
 
     IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
     {
+        // Make the "Speak" restart tree the current tree
         dialogueTreeRestart = dialogueTree;
+        // Reset the dialogue box dimensions from "Speak" button dimensions
+        backgroundRect.sizeDelta = new Vector2(160,100);
+        dialogueTextRect.sizeDelta = new Vector2(150,60);
+
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
+             currentDialogue = dialogueTree.sections[section].dialogue[i];
+             
+             
+
             // Start talking animation
             _animator.SetBool(_isTalkingHash, true);
             StartCoroutine(revertToIdleAnimation());
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+
+            
+            // Check if the current section should have disabled the skip line button
+            if (dialogueTree.sections[section].disabkeSkipLineButton)
+            {
+                _skipLineButton.SetActive(false);
+            }
+
+            else {
+                _skipLineButton.SetActive(true);
+            }
+            
             while (!_skipLineTriggered)
             {
-                _skipLineButton.SetActive(true);
+                
                 _exitButton.SetActive(true);
                 yield return null;
             }
@@ -124,6 +156,8 @@ public class DialogueBoxController : MonoBehaviour
         }
         if (dialogueTree.sections[section].endAfterDialogue)
         {
+            dialogueEnded = true;
+            timesEnded++;
             OnDialogueEnded?.Invoke(name);
             ExitConversation();
             yield break;
@@ -168,6 +202,7 @@ public class DialogueBoxController : MonoBehaviour
     {
         _answerIndex = answer;
         _answerTriggered = true;
+        _activatedCount++;
         // remove the buttons
         buttonSpawner.removeAllButtons();
     }
@@ -178,6 +213,11 @@ public class DialogueBoxController : MonoBehaviour
         yield return new WaitForSeconds(10.267f);
         _animator.SetBool(_isTalkingHash, false);
 
+    }
+
+    public int GetActivatedCount()
+    {
+        return _activatedCount;
     }
 
     public void ExitConversation()
@@ -192,10 +232,9 @@ public class DialogueBoxController : MonoBehaviour
     {
         ResetBox();
         _dialogueBox.SetActive(true);
-        //dialogueIsActive = true;
         _dialogueText.text = null;
-        RectTransform rt = _dialogueBox.transform.Find("BasicDialogueItems").transform.Find("Background").GetComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(50,30);
+        backgroundRect.sizeDelta = new Vector2(50,30);
+        dialogueTextRect.sizeDelta = new Vector2(50,30);
         buttonSpawner.spawnSpeakButton(dialogueTree);
     }
 }

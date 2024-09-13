@@ -10,6 +10,9 @@ public class FishSortingButton : MonoBehaviour
     [SerializeField]
     private GameObject _colorPanel;
 
+    [HideInInspector]
+    public int correctlySortedFish = 0;
+
     // ------------------ Public Variables ------------------
     public enum FishTier
     {
@@ -74,6 +77,9 @@ public class FishSortingButton : MonoBehaviour
                 Debug.LogError("Invalid tier number");
                 break;
         }
-        _colorPanel.GetComponent<Renderer>().material = material;
+        if (_colorPanel)
+        {
+            _colorPanel.GetComponent<Renderer>().material = material;
+        }
     }
 }

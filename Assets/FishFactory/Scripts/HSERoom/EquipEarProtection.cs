@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EquipEarProtection : MonoBehaviour
 {
+
+    public UnityEvent OnEquip;
     /// <summary>
     /// When the player head collides with the ear protection, equip it
     /// </summary>
@@ -13,6 +16,7 @@ public class EquipEarProtection : MonoBehaviour
             GameManager.Instance.EarProtectionOn = true;
             GameManager.Instance.PlaySound("correct");
             Destroy(gameObject);
+            OnEquip.Invoke();
         }
     }
 }
