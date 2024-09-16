@@ -190,11 +190,15 @@ namespace InteractiveCalculator
                 UsingDecimals = false;
                 InputDecimals = 0;
                 CurrentDisplayMode = DisplayMode.value;
-            
-                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[0]) {
-                    dialogueBoxController.SkipLine();
-                    
+
+                if (dialogueBoxController.dialogueTreeRestart != null)
+                {
+                    if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[0])
+                    {
+                        dialogueBoxController.SkipLine();
+                    }
                 }
+
                 UpdateDisplay();
             }
             catch

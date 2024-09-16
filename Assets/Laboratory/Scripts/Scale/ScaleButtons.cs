@@ -30,13 +30,12 @@ public class ScaleButtons : MonoBehaviour
                 scale.displayText.SetText("000.0");
                 scale.audio.Play();
                 scale.scaleOn = true;
-
-                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0]) {
-                    
-                    dialogueBoxController.SkipLine();
-                    Debug.Log(dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[1]);
-
-                    
+                if (dialogueBoxController.dialogueTreeRestart != null)
+                {
+                    if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0])
+                    {
+                        dialogueBoxController.SkipLine();
+                    }
                 }
 
                 break;
