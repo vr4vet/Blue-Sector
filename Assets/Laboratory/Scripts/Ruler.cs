@@ -30,15 +30,6 @@ public class Ruler : MonoBehaviour
                 dialogueBoxController.SkipLine();
                 
             }
-           
-            
-
-            float lengt = collision.GetComponent<Weight>().fish.transform.localScale.x;
-            float fishLength = (float)(4.58 * Math.Exp(2.33 * lengt) + 10.31);
-            if (!fishLengths.ContainsKey(collision.GetComponent<Weight>().fish))
-            {
-                fishLengths.Add(collision.GetComponent<Weight>().fish, fishLength);
-            }
         }
     }
 }
