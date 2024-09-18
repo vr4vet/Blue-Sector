@@ -7,6 +7,8 @@ public class MicroscopeMonitor : MonoBehaviour
 {
     private float ScrollSpeed = 2f;
     private float SpeedModifier = 1;
+    
+    private DialogueBoxController dialogueBoxController;
 
     [SerializeField] private Sprite DefaultTexture;
     private Image Image;
@@ -38,6 +40,7 @@ public class MicroscopeMonitor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
         Image = transform.Find("Canvas/Panel/Image").GetComponent<Image>();
         Image.sprite = DefaultTexture;
 
@@ -114,6 +117,10 @@ public class MicroscopeMonitor : MonoBehaviour
     /// </summary>
     public void Magnify()
     {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[3])
+        {
+            dialogueBoxController.SkipLine();
+        }
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
         CurrentCustomMagnificationLevel = (CurrentCustomMagnificationLevel + 1) % MagnificationLevels.Count;
@@ -143,6 +150,11 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void Minimize()
     {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[3])
+        {
+            dialogueBoxController.SkipLine();
+        }
+        
         CurrentMagnificationStep = (CurrentMagnificationStep - 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex - 1) % MagnificationLevels.Count;
         CurrentCustomMagnificationLevel = (CurrentCustomMagnificationLevel - 1) % MagnificationLevels.Count;
@@ -216,6 +228,11 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollRight()
     {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
+        {
+            dialogueBoxController.SkipLine();
+        }
+        
         float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
 
         if (SlideWithGrid)
@@ -240,6 +257,11 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollLeft()
     {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
+        {
+            dialogueBoxController.SkipLine();
+        }
+        
         float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
 
         if (SlideWithGrid)
@@ -264,6 +286,11 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollUp()
     {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
+        {
+            dialogueBoxController.SkipLine();
+        }
+        
         float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
 
         if (SlideWithGrid)
@@ -288,6 +315,11 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollDown()
     {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
+        {
+            dialogueBoxController.SkipLine();
+        }
+        
         float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
 
         if (SlideWithGrid)
@@ -339,6 +371,11 @@ public class MicroscopeMonitor : MonoBehaviour
         HasSlide = true;
         SlideWithGrid = false;
         int imageIndex = CurrentImageIndex;
+        
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
+        {
+            dialogueBoxController.SkipLine();
+        }
         if (CurrentSlide.UseSeparateMagnificationTextures)
         {
             while (CurrentSlide.textures[imageIndex] == null)
@@ -356,6 +393,11 @@ public class MicroscopeMonitor : MonoBehaviour
         CurrentSlideWithGrid = slide;
         SlideWithGrid = true;
         HasSlide = true;
+        
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
+        {
+            dialogueBoxController.SkipLine();
+        }
     }
 
     public void SetGrid(GameObject grid)
@@ -411,6 +453,11 @@ public class MicroscopeMonitor : MonoBehaviour
     {
         this.ScrollSpeed = 2f * SpeedModifier;
         SpeedOverlay.SetText(SpeedModifier + "x");
+        
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[2])
+        {
+            dialogueBoxController.SkipLine();
+        }
     }
 
     public void IncreaseScrollSpeed()
