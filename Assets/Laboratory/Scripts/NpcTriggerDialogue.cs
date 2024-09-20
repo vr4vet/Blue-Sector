@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using BNG;
 
 public class NpcTriggerDialogue : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class NpcTriggerDialogue : MonoBehaviour
    public DialogueTree feedbackDialogueTree;
    [SerializeField]
    public DialogueTree larsDialogueTree;
+   [SerializeField]
+   public DialogueTree conditionFactorDialogueTree;
+   [SerializeField]
+   public DialogueTree microscopeDialogueTree;
+   [SerializeField]
+   public DialogueTree dissectDialogueTree;
    [SerializeField]  
    public string npcName;
 
@@ -22,6 +29,7 @@ public class NpcTriggerDialogue : MonoBehaviour
    private void Start()
    {
        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+       ButtonSpawner.OnAnswer += ButtonSpawner_OnAnswer;
    }  
    
    private void Update()
@@ -31,8 +39,32 @@ public class NpcTriggerDialogue : MonoBehaviour
            ChangeToLars();
            
        }
+
+       /*if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0])
+       {
+           dialogueBoxController.StartDialogue(conditionFactorDialogueTree, 0, npcName);
+       }*/
    }
-   
+
+   private void ButtonSpawner_OnAnswer(string answer)
+   {
+       if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+       {
+           if (answer == "Calculating condition factor")
+           {
+               dialogueBoxController.StartDialogue(conditionFactorDialogueTree, 0, npcName);
+           }
+           else if (answer == "Analyzing plankton samples")
+           {
+               dialogueBoxController.StartDialogue(microscopeDialogueTree, 0, npcName);
+           }
+           else if (answer == "Dissecting fish (Still in development)")
+           {
+               dialogueBoxController.StartDialogue(dissectDialogueTree, 0, npcName);
+           }
+       }
+   }
+
    private void OnTriggerEnter(Collider other)
    {
       triggerEvent.Invoke();

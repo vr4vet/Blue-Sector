@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: LarsDialogue
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - 'Welcome to the Fish Laboratory. Here you will check the quality and health
+      of the fish.
+
+'
+    - You will be able to try out multiple tasks that we do in the laboratory.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Do you want to learn more about the work that is done here or start
+        with the tasks?
+      answers:
+      - answerLabel: Start with the tasks
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Learn more
+        nextElement: 2
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Which task do you want to begin with?
+      answers:
+      - answerLabel: Calculating condition factor
+        nextElement: 3
+        endAfterAnswer: 0
+      - answerLabel: Analyzing plankton samples
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Dissecting fish (Still in development)
+        nextElement: 1
+        endAfterAnswer: 0
+  - dialogue:
+    - The fish laboratory is important for getting information on the health of the
+      fish. This information is used to better regulate the feeding and treatment
+      of the fish. And to ensure that the fish welfare is good by cheking for any
+      sickness or other health issues.
+    - In the laboratory the condition factor of the fish is calculated which is used
+      to determine how well fed the fish is, and it is important for regulating the
+      feeding of the fish
+    - The fish is dissected to see if there are any issues with the fish, like sickness
+      or damages
+    - The living conditions of the fish are also checked  by analyzing different
+      plankton samples in the microscope, as some plankton can be harmful for the
+      fish.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: 'Are you ready to move on to the instructions?
+
+'
+      answers:
+      - answerLabel: Yes
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Can you repeat?
+        nextElement: 2
+        endAfterAnswer: 0
+  - dialogue:
+    - Test
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: '
+
+'
+      answers: []
