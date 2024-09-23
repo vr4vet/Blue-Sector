@@ -25,27 +25,31 @@ MonoBehaviour:
     disabkeSkipLineButton: 0
     branchPoint:
       question: Do you want to learn more about the work that is done here or start
-        with the tasks
+        with the tasks?
       answers:
       - answerLabel: Start with the tasks
         nextElement: 1
         endAfterAnswer: 0
       - answerLabel: Learn more
-        nextElement: 12
+        nextElement: 11
         endAfterAnswer: 0
   - dialogue:
-    - First you will measure the weight and length of the fish. This is important
-      to figure out it's condition factor.
+    - 'Now you will choose which task to begin with
+
+'
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
-      question: Do you want to learn more about how to measure the fish?
+      question: Which task do you want to begin?
       answers:
-      - answerLabel: Yes
+      - answerLabel: Calculating condition factor
         nextElement: 2
         endAfterAnswer: 0
-      - answerLabel: No
-        nextElement: 8
+      - answerLabel: Analyzing plankton samples
+        nextElement: 12
+        endAfterAnswer: 0
+      - answerLabel: Dissecting the fish (Still in development)
+        nextElement: 1
         endAfterAnswer: 0
   - dialogue:
     - 'The first step is measuring the fish''s weight, this is done by using the
@@ -246,8 +250,14 @@ MonoBehaviour:
     - On the left side of the microscope there is a counter. Grab it with your left
       hand and press the button on your index finger to count.
     - To reset the counter to zero press the top button on the counter.
-    endAfterDialogue: 1
+    endAfterDialogue: 0
     disabkeSkipLineButton: 1
     branchPoint:
-      question: 
-      answers: []
+      question: Do you want me to go over it again or continue?
+      answers:
+      - answerLabel: Explain again
+        nextElement: 13
+        endAfterAnswer: 0
+      - answerLabel: Continue
+        nextElement: 1
+        endAfterAnswer: 0

@@ -26,11 +26,15 @@ public class NpcTriggerDialogue : MonoBehaviour
    
    private void Update()
    {
-       if (dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0])
+       if (dialogueBoxController.dialogueTreeRestart != null)
        {
-           ChangeToLars();
+           if (dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0])
+           {
+               ChangeToLars();
            
+           }
        }
+
    }
    
    private void OnTriggerEnter(Collider other)
@@ -65,7 +69,7 @@ public class NpcTriggerDialogue : MonoBehaviour
    
    public void ChangeToLars()
    {
-       dialogueBoxController.StartDialogue(larsDialogueTree, 12, npcName);
+       dialogueBoxController.StartDialogue(larsDialogueTree, 1, npcName);
    }
    
 }
