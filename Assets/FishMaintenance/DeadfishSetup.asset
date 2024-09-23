@@ -12,18 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
   m_Name: DeadfishSetup
   m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
   sections:
   - dialogue:
-    - "For \xE5 hente ut d\xF8dfisk trekkes en slange til bunnen av merden."
-    - "Denne slangen transporterer d\xF8de laks fra bunnen og opp til brettet. Disse
-      telles og skyves ned i et kar."
-    - "Start oppgaven ved \xE5 se video av laks som telles."
-    dialogueAudio:
-    - {fileID: 8300000, guid: 2b57f917212b2764aadecd94af907c14, type: 3}
-    - {fileID: 8300000, guid: 993deac109072704c86dc6d2489eda1c, type: 3}
-    - {fileID: 8300000, guid: 097f5bc9e77db5b488ebc06e38f7f899, type: 3}
+    - To retrieve dead fish, a hose is pulled to the bottom of the cage.
+    - This hose transports dead salmon from the bottom up to the board. These are
+      counted and pushed into a tub.
+    - Start the task by watching the video of salmon being counted.
     endAfterDialogue: 1
+    disabkeSkipLineButton: 0
     branchPoint:
       question: 
-      questionAudio: {fileID: 0}
       answers: []
