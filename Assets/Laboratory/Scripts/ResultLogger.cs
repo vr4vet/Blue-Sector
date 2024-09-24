@@ -241,11 +241,6 @@ public class ResultLogger : MonoBehaviour
         UsingDecimals = false;
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
-
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[1]) 
-        {
-            dialogueBoxController.SkipLine();
-        }
     }
 
 

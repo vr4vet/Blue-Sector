@@ -5,23 +5,33 @@ using UnityEngine;
 public class CounterHandheld : MonoBehaviour
 {
     [SerializeField] private List<GameObject> NumberedWheels = new List<GameObject>();
-    private int Count = 0;
+    private int Count = 0; 
+    private DialogueBoxController dialogueBoxController;
 
     // Start is called before the first frame update
     void Start()
     {
+        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
         Count = UnityEngine.Random.Range(0, 9999);  // start with random value so the player is required to reset the counter
         SetNumberedWheels();
     }
 
     public void Increment()
     {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[4]) 
+        {
+            dialogueBoxController.SkipLine();
+        }
         Count = (Count + 1) % 10000;
         SetNumberedWheels();
     }
 
     public void ResetCounter()
     {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[5]) 
+        {
+            dialogueBoxController.SkipLine();
+        }
         Count = 0;
         SetNumberedWheels();
     }

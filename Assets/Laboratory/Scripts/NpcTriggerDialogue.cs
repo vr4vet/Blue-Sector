@@ -1,15 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class NpcTriggerDialogue : MonoBehaviour
 {
    // ----------------- Editor Variables -----------------
    [SerializeField]   
    public UnityEvent triggerEvent;
-   [SerializeField]     
-   public DialogueTree dialogueTree;
+   [FormerlySerializedAs("dialogueTree")] [SerializeField]     
+   public DialogueTree feedbackDialogueTree;
+   [SerializeField]
+   public DialogueTree larsDialogueTree;
    [SerializeField]  
    public string npcName;
 
@@ -20,6 +24,19 @@ public class NpcTriggerDialogue : MonoBehaviour
        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
    }  
    
+   private void Update()
+   {
+       if (dialogueBoxController.dialogueTreeRestart != null)
+       {
+           if (dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0])
+           {
+               ChangeToLars();
+           
+           }
+       }
+
+   }
+   
    private void OnTriggerEnter(Collider other)
    {
       triggerEvent.Invoke();
@@ -27,27 +44,32 @@ public class NpcTriggerDialogue : MonoBehaviour
    
    // Everything correct
    public void response1() {
-         dialogueBoxController.StartDialogue(dialogueTree, 0, npcName);
+         dialogueBoxController.StartDialogue(feedbackDialogueTree, 0, npcName);
    }
 // Forgot basket
    public void response2() {
-         dialogueBoxController.StartDialogue(dialogueTree, 1, npcName);
+         dialogueBoxController.StartDialogue(feedbackDialogueTree, 1, npcName);
    }
 // Wrong condition factor
    public void response3() {
-         dialogueBoxController.StartDialogue(dialogueTree, 2, npcName);
+         dialogueBoxController.StartDialogue(feedbackDialogueTree, 2, npcName);
    }
 // Wrong length
    public void response4() {
-         dialogueBoxController.StartDialogue(dialogueTree, 3, npcName);
+         dialogueBoxController.StartDialogue(feedbackDialogueTree, 3, npcName);
    }
 // Wrong weight
    public void response5() {
-         dialogueBoxController.StartDialogue(dialogueTree, 4, npcName);
+         dialogueBoxController.StartDialogue(feedbackDialogueTree, 4, npcName);
    }
 // Everything is wrong
    public void response6() {
-         dialogueBoxController.StartDialogue(dialogueTree, 5, npcName);
+         dialogueBoxController.StartDialogue(feedbackDialogueTree, 5, npcName);
+   }
+   
+   public void ChangeToLars()
+   {
+       dialogueBoxController.StartDialogue(larsDialogueTree, 1, npcName);
    }
    
 }
