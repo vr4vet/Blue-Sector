@@ -12,41 +12,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
   m_Name: NpcFeedback
   m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
   sections:
   - dialogue:
     - Well done! You have completed all the steps
     endAfterDialogue: 1
+    disabkeSkipLineButton: 0
     branchPoint:
-      question: 
-      answers: []
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 6
+        endAfterAnswer: 0
   - dialogue:
     - Good, but next time remember to put the basket on the weight
     endAfterDialogue: 1
+    disabkeSkipLineButton: 0
     branchPoint:
-      question: 
-      answers: []
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 6
+        endAfterAnswer: 0
   - dialogue:
     - Good, but the condition factor is wrong. Remember that it should be the weight
       divided with the length of the fish three times, then multiplied by a hundred.
-    endAfterDialogue: 1
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
-      question: 
-      answers: []
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 6
+        endAfterAnswer: 0
   - dialogue:
     - Good, but the length of the fish is incorrect, you could try measuring again
-    endAfterDialogue: 1
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
-      question: 
-      answers: []
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 6
+        endAfterAnswer: 0
   - dialogue:
     - Good, but the weigth of the fish is incorrect, you could try measuring again
-    endAfterDialogue: 1
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
-      question: 
-      answers: []
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 6
+        endAfterAnswer: 0
   - dialogue:
     - That wasn't quite right, Are you sure you did all the steps correct?
-    endAfterDialogue: 1
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 6
+        endAfterAnswer: 0
+  - dialogue:
+    - Back to Lars Dialogue
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: 
       answers: []
