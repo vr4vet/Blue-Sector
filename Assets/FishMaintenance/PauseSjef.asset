@@ -1,0 +1,205 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: PauseSjef
+  m_EditorClassIdentifier: 
+  sections:
+  - dialogue:
+    - Bra jobba, la oss ta en pause.
+    dialogueAudio:
+    - {fileID: 8300000, guid: b61ef288b4e6f1d46a2dfc3bf02d55f1, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Det er viktig \xE5 ta pauser iblant n\xE5r man jobber med krevende
+        oppgaver. "
+      questionAudio: {fileID: 8300000, guid: 4b1e80fc2779a9840865e529ee631d71, type: 3}
+      answers:
+      - answerLabel: "Kan du fortelle mer om hvordan sikkerheten ivaretas p\xE5 oppdrettsanlegg?"
+        nextElement: 1
+      - answerLabel: Kult, hvor ofte tar man pauser i dette yrket?
+        nextElement: 2
+  - dialogue:
+    - Korrekt bekledning gir grunnleggende sikkerhet.
+    - 'Alle skal bruke flytevest, selv om det er sjelden noen faller i vannet. '
+    - "Bekledningen inkluderer ogs\xE5 hjelm, st\xF8vler og yttert\xF8y. "
+    dialogueAudio:
+    - {fileID: 8300000, guid: 21526623fdcf15944a527dea2acc99f0, type: 3}
+    - {fileID: 8300000, guid: 6f1278a84d422014eb99b31884c0927c, type: 3}
+    - {fileID: 8300000, guid: af8ab2e9b4e5afc45bf76e14a9305ad6, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Alle skal ogs\xE5 ha radio for \xE5 kunne kommunisere p\xE5 tvers
+        av anlegget. "
+      questionAudio: {fileID: 8300000, guid: 79ab073d3b268f241a7a1d499690af7a, type: 3}
+      answers:
+      - answerLabel: Hvordan jobber dere sammen?
+        nextElement: 3
+      - answerLabel: "Hvilke oppgaver er vanlige p\xE5 oppdrettsanlegg?"
+        nextElement: 4
+  - dialogue:
+    - "Hvor ofte man tar pauser kan variere, men lunsj utgj\xF8r  en fast pause midt
+      p\xE5 dagen."
+    dialogueAudio:
+    - {fileID: 8300000, guid: 1f83093ccb50e8147a7780310fbabf36, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Pausene anses ogs\xE5 som en viktig ressurs for \xE5 planlegge arbeidet."
+      questionAudio: {fileID: 8300000, guid: 6994db348c184114e8f7b142d6fd94b5, type: 3}
+      answers:
+      - answerLabel: Hvordan jobber dere sammen?
+        nextElement: 3
+      - answerLabel: "Hvilke oppgaver er vanlige p\xE5 oppdrettsanlegg?"
+        nextElement: 4
+  - dialogue:
+    - "Vi jobber alltid sammen for \xE5 st\xF8tte hverandre ved behov."
+    - God kommunikasjon og tydelig rolleavklaring er viktig.
+    - "F\xF8r vi starter krevende oppgaver har vi alltid et m\xF8te for \xE5 planlegge
+      hvordan vi skal gjennomf\xF8re dem."
+    dialogueAudio:
+    - {fileID: 8300000, guid: bb19cb99b49527c44b21a0b5ed9e0c30, type: 3}
+    - {fileID: 8300000, guid: b87f3575fa78f574e98e43e26b7e8336, type: 3}
+    - {fileID: 8300000, guid: 293b14adc7cb7fa46b9efbb4f785b52e, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Dette sikrer at vi utf\xF8rer oppgavene p\xE5 en trygg m\xE5te."
+      questionAudio: {fileID: 8300000, guid: 808be9ae47452c240bc5c08c557b1b3c, type: 3}
+      answers:
+      - answerLabel: "Hvilke oppgaver er vanlige p\xE5 et oppdrettsanlegg?"
+        nextElement: 4
+      - answerLabel: Hvilken utdanning kan man ta?
+        nextElement: 5
+  - dialogue:
+    - "Hver merd blir daglig kontrollert i en \"runde p\xE5 ring\". Det inneb\xE6rer
+      \xE5 g\xE5 minst en runde p\xE5 hver merd og sjekke at alt er i orden."
+    - "I hver merd er det et stort antall laks, og noen av dem kan d\xF8. Disse m\xE5
+      tas ut og telles daglig."
+    - "Ukentlig utf\xF8res lusetelling, der antallet lus p\xE5 laksen kontrolleres
+      samtidig som helsen til laksen sjekkes."
+    dialogueAudio:
+    - {fileID: 8300000, guid: 3756f4679333bc34e8f08b603c863736, type: 3}
+    - {fileID: 8300000, guid: 3c94a8badc092f943830a134dab476ef, type: 3}
+    - {fileID: 8300000, guid: 70585dcd79d658247912225142c56a8a, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "En r\xF8kter har disse oppgavene, mens andre roller p\xE5 arbeidsplassen
+        har ulike ansvarsomr\xE5der."
+      questionAudio: {fileID: 8300000, guid: 972cf2d8db8592a4086cdf91b5fca22b, type: 3}
+      answers:
+      - answerLabel: Hvilken utdanning kan man ta?
+        nextElement: 5
+  - dialogue:
+    - "P\xE5 videreg\xE5ende skole tilbys utdanning innen akvakultur p\xE5 bl\xE5
+      linje. Etter to \xE5r er det mulig \xE5 g\xE5 videre som l\xE6rling for \xE5
+      f\xE5 fagbrev."
+    - "Man kan ogs\xE5 f\xE5 oppl\xE6ring i arbeid som r\xF8kter uten relevant utdanning
+      eller erfaring. Etter fem \xE5r i jobben kan man ta fagbrev om \xF8nskelig. "
+    - Snakk gjerne med veilederen din eller sjekk ut utdanning.no for mer informasjon.
+    dialogueAudio:
+    - {fileID: 8300000, guid: 2c3d1d3eb2610ad45a2d2beacc0108a1, type: 3}
+    - {fileID: 8300000, guid: 35ab48070c111e14cb8d63bd0b6a317a, type: 3}
+    - {fileID: 8300000, guid: 2b84eda0cce932d48b6f17e4e111d688, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      questionAudio: {fileID: 8300000, guid: 593d4555b2518914ba0a94ef94354c25, type: 3}
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 6
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 7
+      - answerLabel: Vanlige oppgaver
+        nextElement: 8
+      - answerLabel: Nei
+        nextElement: 9
+  - dialogue:
+    - Korrekt bekledning gir grunnleggende sikkerhet.
+    - 'Alle skal bruke flytevest, selv om det er sjelden noen faller i vannet. '
+    - "Bekledningen inkluderer ogs\xE5 hjelm, st\xF8vler og yttert\xF8y. "
+    - "Alle skal ogs\xE5 ha radio for \xE5 kunne kommunisere p\xE5 tvers av anlegget. "
+    dialogueAudio:
+    - {fileID: 8300000, guid: 21526623fdcf15944a527dea2acc99f0, type: 3}
+    - {fileID: 8300000, guid: 6f1278a84d422014eb99b31884c0927c, type: 3}
+    - {fileID: 8300000, guid: af8ab2e9b4e5afc45bf76e14a9305ad6, type: 3}
+    - {fileID: 8300000, guid: 79ab073d3b268f241a7a1d499690af7a, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      questionAudio: {fileID: 8300000, guid: 593d4555b2518914ba0a94ef94354c25, type: 3}
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 6
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 7
+      - answerLabel: Vanlige oppgaver
+        nextElement: 8
+      - answerLabel: Nei
+        nextElement: 9
+  - dialogue:
+    - "Vi jobber alltid sammen for \xE5 st\xF8tte hverandre ved behov."
+    - God kommunikasjon og tydelig rolleavklaring er viktig.
+    - "F\xF8r vi starter krevende oppgaver har vi alltid et m\xF8te for \xE5 planlegge
+      hvordan vi skal gjennomf\xF8re dem."
+    - "Dette sikrer at vi utf\xF8rer oppgavene p\xE5 en trygg m\xE5te."
+    dialogueAudio:
+    - {fileID: 8300000, guid: bb19cb99b49527c44b21a0b5ed9e0c30, type: 3}
+    - {fileID: 8300000, guid: b87f3575fa78f574e98e43e26b7e8336, type: 3}
+    - {fileID: 8300000, guid: 293b14adc7cb7fa46b9efbb4f785b52e, type: 3}
+    - {fileID: 8300000, guid: 808be9ae47452c240bc5c08c557b1b3c, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      questionAudio: {fileID: 8300000, guid: 593d4555b2518914ba0a94ef94354c25, type: 3}
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 6
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 7
+      - answerLabel: Vanlige oppgaver
+        nextElement: 8
+      - answerLabel: Nei
+        nextElement: 9
+  - dialogue:
+    - "Hver merd blir daglig kontrollert i en \"runde p\xE5 ring\". Det inneb\xE6rer
+      \xE5 g\xE5 minst en runde p\xE5 hver merd og sjekke at alt er i orden."
+    - "I hver merd er det et stort antall laks, og noen av dem kan d\xF8. Disse m\xE5
+      tas ut og telles daglig."
+    - "Ukentlig utf\xF8res lusetelling, der antallet lus p\xE5 laksen kontrolleres
+      samtidig som helsen til laksen sjekkes."
+    - "En r\xF8kter har disse oppgavene, mens andre roller p\xE5 arbeidsplassen har
+      ulike ansvarsomr\xE5der."
+    dialogueAudio:
+    - {fileID: 8300000, guid: 3756f4679333bc34e8f08b603c863736, type: 3}
+    - {fileID: 8300000, guid: 3c94a8badc092f943830a134dab476ef, type: 3}
+    - {fileID: 8300000, guid: 70585dcd79d658247912225142c56a8a, type: 3}
+    - {fileID: 8300000, guid: 972cf2d8db8592a4086cdf91b5fca22b, type: 3}
+    endAfterDialogue: 0
+    branchPoint:
+      question: "Er det noe mer du lurer p\xE5?"
+      questionAudio: {fileID: 8300000, guid: 593d4555b2518914ba0a94ef94354c25, type: 3}
+      answers:
+      - answerLabel: "Sikkerhet p\xE5 anlegget"
+        nextElement: 6
+      - answerLabel: Hvordan jobbe sammen
+        nextElement: 7
+      - answerLabel: Vanlige oppgaver
+        nextElement: 8
+      - answerLabel: Nei
+        nextElement: 9
+  - dialogue:
+    - "Takk for praten! La oss ta h\xE5ndtere d\xF8dfisken."
+    dialogueAudio:
+    - {fileID: 8300000, guid: 2f53758e588a9bd4aa6c1cd76215599d, type: 3}
+    endAfterDialogue: 1
+    branchPoint:
+      question: 
+      questionAudio: {fileID: 0}
+      answers: []
