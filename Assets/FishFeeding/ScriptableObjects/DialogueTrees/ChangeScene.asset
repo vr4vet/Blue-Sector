@@ -16,6 +16,7 @@ MonoBehaviour:
   - dialogue:
     - Hello, here you can travel to other areas to experience other work tasks!
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Which area do you want to travel to?
       answers:
@@ -23,13 +24,14 @@ MonoBehaviour:
         nextElement: 1
       - answerLabel: Fish factory
         nextElement: 1
-      - answerLabel: Laboratory (coming soon)
-        nextElement: 2
+      - answerLabel: Laboratory
+        nextElement: 1
       - answerLabel: Fish maintenance
         nextElement: 1
   - dialogue:
     - Please step onto the boat when you are ready to embark.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Do you want me to repeat?
       answers:
@@ -38,6 +40,7 @@ MonoBehaviour:
   - dialogue:
     - This area is currently under development but will soon be available!
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Please choose another destination.
       answers:

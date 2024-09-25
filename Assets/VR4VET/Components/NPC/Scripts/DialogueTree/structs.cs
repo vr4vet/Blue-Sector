@@ -6,6 +6,7 @@ public struct DialogueSection
     [TextArea]
     public string[] dialogue;
     public bool endAfterDialogue;
+    public bool disabkeSkipLineButton;
     public BranchPoint branchPoint;
 }
 
@@ -22,4 +23,5 @@ public struct Answer
 {
     public string answerLabel;
     public int nextElement;
+    public bool endAfterAnswer;
 }

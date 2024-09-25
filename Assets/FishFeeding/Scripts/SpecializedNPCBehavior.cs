@@ -20,6 +20,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
     private bool walking;
     private BoxCollider boxCollider;
     public GrabbableUnityEvents grabbableUnityEvents;
+    private bool rotating;
 
 
     // Start is called before the first frame update
@@ -96,6 +97,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
         currentPath = -1;
 
         walking = false;
+        rotating = false;
     }
 
     // Update is called once per frame
@@ -111,11 +113,12 @@ public class SpecializedNPCBehavior : MonoBehaviour
                 NavMeshPath path = new NavMeshPath();
                 _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
                 _agent.SetPath(path);
-                if (_agent.remainingDistance < 0.01f)
+                if (_agent.remainingDistance < 0.9f)
                 {
                     currentPosition++;
                     if (currentPosition == paths[currentPath].Count)
                     {
+                        rotating = true;
                         walking = false;
                         currentPosition = 0;
                         _conversationController.NextDialogueTree();
@@ -135,6 +138,24 @@ public class SpecializedNPCBehavior : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (rotating)
+        {
+            // Rotates NPC to last destination point
+            Vector3 destination = paths[currentPath][paths[currentPath].Count - 1].position;
+            Vector3 lookPos = destination - _npc.transform.position;
+            lookPos.y = 0;
+            Quaternion rotation = Quaternion.LookRotation(lookPos);
+            _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
+
+            float rotationOffset = Vector3.Angle((lookPos - _npc.transform.position), _npc.transform.forward);
+
+            if (rotationOffset < 0.01f) 
+                rotating = false;
+        }
+    }
+
     public void DialogueTransition(string name) 
     {
         if (name != _npc.name) { return; }
@@ -145,7 +166,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
 
     private void SetFalseNPCTrigger(Grabber grabber)
     {
-        _conversationController.shouldTrigger = false;
+        _conversationController.GetDialogueTree().shouldTriggerOnProximity = false;
     }
 
     private void SetTrueNPCTrigger()
@@ -156,7 +177,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
     private IEnumerator Timer()
     {
         yield return new WaitForSeconds(1f);
-        _conversationController.shouldTrigger = true;
+        _conversationController.GetDialogueTree().shouldTriggerOnProximity = true;
     }
 
     void OnDestroy()
