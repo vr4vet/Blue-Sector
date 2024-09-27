@@ -31,9 +31,12 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
-        currentSubtask = manager.MaintenanceTask.GetSubtask("Hent Utstyr");
+        //Debug.Log(manager.MaintenanceTask == null);
+        currentSubtask = manager.MaintenanceTask.GetSubtask("Get equipment");
 
-        if (subtask.SubtaskName != "Hent Utstyr")
+
+
+        if (subtask.SubtaskName != "Get equipment")
         {
             step = subtask.GetStep(stepName);
             manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
@@ -87,7 +90,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             {
                 manager.UpdateCurrentSubtask(subtask);
             }
-            else if (subtask.SubtaskName == "Hent Utstyr")
+            else if (subtask.SubtaskName == "Get equipment")
             {
                 manager.UpdateCurrentSubtask(subtask);
             }

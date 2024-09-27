@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
+using UnityEditor;
 public class MaintenanceManager : MonoBehaviour
 {
     public static MaintenanceManager Instance;
@@ -16,7 +17,7 @@ public class MaintenanceManager : MonoBehaviour
     private bool twentySeconds = false;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
-    private Task.Task task => taskHolder.GetTask("Vedlikehold");
+    private Task.Task task => taskHolder.GetTask("Maintenance");
     private int teleportationAnchorCount;
 
 
@@ -48,8 +49,10 @@ public class MaintenanceManager : MonoBehaviour
     void Start()
     {
         feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
-        watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
-        UpdateCurrentSubtask(task.GetSubtask("Hent Utstyr"));
+        //watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
+        //Debug.Log(task == null);
+        //Debug.Log(task.GetSubtask("Get equipment") == null);
+        UpdateCurrentSubtask(task.GetSubtask("Get equipment"));
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Subtask sub in task.Subtasks)
@@ -93,7 +96,7 @@ public class MaintenanceManager : MonoBehaviour
             feedbackManager.emptyInstructions();
             if (sub.SubtaskName == "Runde På Ring" && twentySeconds)
             {
-                Task.Skill skill = taskHolder.GetSkill("Effektiv");
+                Task.Skill skill = taskHolder.GetSkill("Efficient");
                 BadgeChanged.Invoke(skill);
             }
 

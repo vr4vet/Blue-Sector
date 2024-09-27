@@ -11,15 +11,15 @@ public class AddGuidingHands : MonoBehaviour
 
     public void intoAnchor()
     {
-        if (!mm.GetStep("Hent Utstyr", "Hent splinter").IsCompeleted())
+        if (!mm.GetStep("Get equipment", "Get splinter pin").IsCompeleted())
         {
             guidingHandSplint.SetActive(true);
         }
-        if (!mm.GetStep("Hent Utstyr", "Hent tau").IsCompeleted())
+        if (!mm.GetStep("Get equipment", "Get rope").IsCompeleted())
         {
             guidingHandRope.SetActive(true);
         }
-        if (!mm.GetStep("Hent Utstyr", "Hent bøtte og spade").IsCompeleted())
+        if (!mm.GetStep("Get equipment", "Get bucket and spade").IsCompeleted())
         {
             guidingHandBucket.SetActive(true);
         }

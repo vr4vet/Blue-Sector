@@ -16,7 +16,8 @@ public class DailyCheckStep : MonoBehaviour
     {
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
-        if (manager.GetStep("Hent Utstyr", equipmentStep).IsCompeleted())
+        Debug.Log(manager.GetStep("Get equipment", equipmentStep) == null);
+        if (manager.GetStep("Get equipment", equipmentStep).IsCompeleted())
         {
             SetEquipmentActive();
         }
