@@ -28,15 +28,15 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     void Start()
     {
         step = subtask.GetStep(stepName);
+        Debug.Log(step == null);
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
-        //Debug.Log(manager.MaintenanceTask == null);
-        currentSubtask = manager.MaintenanceTask.GetSubtask("Get equipment");
+        currentSubtask = manager.MaintenanceTask.GetSubtask("Get Equipment");
 
 
 
-        if (subtask.SubtaskName != "Get equipment")
+        if (subtask.SubtaskName != "Get Equipment")
         {
             step = subtask.GetStep(stepName);
             manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
@@ -46,6 +46,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     public void CurrentSubtaskUpdate(Task.Subtask currentSub)
     {
         currentSubtask = currentSub;
+        Debug.Log(step == null);
         if (step.CurrentStep && !playerInside)
         {
 
@@ -90,7 +91,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
             {
                 manager.UpdateCurrentSubtask(subtask);
             }
-            else if (subtask.SubtaskName == "Get equipment")
+            else if (subtask.SubtaskName == "Get Equipment")
             {
                 manager.UpdateCurrentSubtask(subtask);
             }
@@ -132,7 +133,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
                 gameObject.SetActive(false);
                 return;
             }
-            else if (subtask.SubtaskName == "Runde På Ring" && step.IsCompeleted())
+            else if (subtask.SubtaskName == "Daily Round" && step.IsCompeleted())
             {
                 gameObject.SetActive(false);
                 return;

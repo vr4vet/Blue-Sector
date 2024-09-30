@@ -42,9 +42,9 @@ public class DeadfishTank : MonoBehaviour
         BNG.Grabbable hoettGrabbable = hoett.GetComponent<BNG.Grabbable>();
         grabberRight.GrabGrabbable(hoettGrabbable);
 
-        if (manager.getTeleportationAnchorCount() > 10)
+        if (manager.GetTeleportationAnchorCount() > 10)
         {
-            feedbackManager.addFeedback("Dødfisk håndtering");
+            //feedbackManager.AddFeedback("Dødfisk håndtering");
         }
         else
         {

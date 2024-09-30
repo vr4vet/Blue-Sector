@@ -37,9 +37,9 @@ public class BreakTask : MonoBehaviour
     void Update()
     {
         Task.Task task = mm.MaintenanceTask;
-        Task.Step breakStep = mm.GetStep("Pause", "Snakk med Laila");
+        Task.Step breakStep = mm.GetStep("Pause", "Talk to Laila");
         ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
-        if (task.GetSubtask("Håndforing").Compleated() && task.GetSubtask("Runde På Ring").Compleated() && !conversationController.isDialogueActive())
+        if (task.GetSubtask("Hand-feeding").Compleated() && task.GetSubtask("Daily Round").Compleated() && !conversationController.isDialogueActive())
         {
             if (conversationController == null)
             {

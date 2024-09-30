@@ -26,7 +26,7 @@ public class HandFeeding : MonoBehaviour
 
 
         dropItem = gameObject.GetComponent<DropItem>();
-        step = subtask.GetStep("Kast mat til fisken");
+        step = subtask.GetStep("Throw food to the fish");
     }
 
     // Update is called once per frame
@@ -45,14 +45,14 @@ public class HandFeeding : MonoBehaviour
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
 
-        if (manager.GetStep("Hent Utstyr", "Hent bøtte og spade").IsCompeleted())
+        if (manager.GetStep("Get Equipment", "Get bucket and spade").IsCompeleted())
         {
             SetEquipmentActive();
 
         }
         else
         {
-            feedbackManager.equipmentFeedback("Håndforing");
+            feedbackManager.equipmentFeedback("Handfeeding");
         }
 
     }
@@ -69,10 +69,10 @@ public class HandFeeding : MonoBehaviour
 
     public void SetEquipmentActive()
     {
-        feedbackManager.addFeedback("Håndforing");
+        //feedbackManager.AddFeedback("Handfeeding");
         bucket.SetActive(true);
         shovel.SetActive(true);
-        if(! subtask.GetStep("Se Video").IsCompeleted())videoObject.SetActive(true);
+        if(! subtask.GetStep("Watch video").IsCompeleted())videoObject.SetActive(true);
         // BNG.Grabbable bucketGrabbable = bucket.GetComponent<BNG.Grabbable>();
         BNG.Grabbable shovelGrabbable = shovel.GetComponent<BNG.Grabbable>();
         // grabberLeft.GrabGrabbable(bucketGrabbable);

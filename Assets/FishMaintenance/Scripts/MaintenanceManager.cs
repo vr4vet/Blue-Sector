@@ -52,7 +52,7 @@ public class MaintenanceManager : MonoBehaviour
         //watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         //Debug.Log(task == null);
         //Debug.Log(task.GetSubtask("Get equipment") == null);
-        UpdateCurrentSubtask(task.GetSubtask("Get equipment"));
+        UpdateCurrentSubtask(task.GetSubtask("Get Equipment"));
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Subtask sub in task.Subtasks)
@@ -61,7 +61,7 @@ public class MaintenanceManager : MonoBehaviour
             {
                 step.Reset();
                 step.CurrentStep = false;
-                if(step.StepName == "Skyv dødfisken i karet") step.setStepNumber(1);
+                if(step.StepName == "Push the dead fish into the tub") step.setStepNumber(1);
             }
         }
         foreach (Task.Skill skill in taskHolder.skillList)
@@ -71,11 +71,11 @@ public class MaintenanceManager : MonoBehaviour
 
     }
 
-    public void invokeBadge(Task.Skill badge)
+    public void InvokeBadge(Task.Skill badge)
     {
         BadgeChanged.Invoke(badge);
     }
-    public void effectiveBadgeEnabled(bool passed)
+    public void EffectiveBadgeEnabled(bool passed)
     {
         twentySeconds = passed;
     }
@@ -94,7 +94,7 @@ public class MaintenanceManager : MonoBehaviour
             PlayAudio(success);
             stepCount += 1;
             feedbackManager.emptyInstructions();
-            if (sub.SubtaskName == "Runde På Ring" && twentySeconds)
+            if (sub.SubtaskName == "Daily Round" && twentySeconds)
             {
                 Task.Skill skill = taskHolder.GetSkill("Efficient");
                 BadgeChanged.Invoke(skill);
@@ -119,9 +119,9 @@ public class MaintenanceManager : MonoBehaviour
             {
                 TaskCompleted.Invoke(task);
             }
-            if (sub.SubtaskName == "Runde På Ring")
+            if (subtaskName == "Daily Round")
             {
-                Task.Skill skill = taskHolder.GetSkill("Problemløser");
+                Task.Skill skill = taskHolder.GetSkill("Problem solver");
                 BadgeChanged.Invoke(skill);
             }
 
@@ -135,8 +135,9 @@ public class MaintenanceManager : MonoBehaviour
                 UpdateCurrentSubtask(nextSubtask);
             }
 
-
-            if ((subtaskName == "Runde På Ring" && task.GetSubtask("Håndforing").Compleated()) || (subtaskName == "Håndforing" && task.GetSubtask("Runde På Ring").Compleated()))
+            Debug.Log(task.GetSubtask("HandFeeding") == null);
+            Debug.Log(task.GetSubtask("Daily Round") == null);
+            if ((subtaskName == "Daily Round" && task.GetSubtask("Hand-feeding").Compleated()) || (subtaskName == "Hand-feeding" && task.GetSubtask("Daily Round").Compleated()))
             {
                 NavigateToBoat();
             }
@@ -192,12 +193,12 @@ public class MaintenanceManager : MonoBehaviour
         newAudioSource.PlayOneShot(audio);
     }
 
-    public void incrementTeleportationAnchorCount()
+    public void IncrementTeleportationAnchorCount()
     {
         teleportationAnchorCount += 1;
     }
 
-    public int getTeleportationAnchorCount()
+    public int GetTeleportationAnchorCount()
     {
         return teleportationAnchorCount;
     }
