@@ -59,6 +59,8 @@ public class BreakTask : MonoBehaviour
             }
             else
             {
+                Debug.Log("dialogueTree: " + dialogueTree == null);
+                Debug.Log("conversationController: " + conversationController == null);
                 conversationController.SetDialogueTreeList(dialogueTree);
             }
         }

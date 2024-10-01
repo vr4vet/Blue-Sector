@@ -26,7 +26,7 @@ public class DeadfishTank : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (subtask.GetStep("Skyv dødfisken i karet").IsCompeleted()) dropItem.DropAll();
+        if (subtask.GetStep("Push the dead fish into the tub").IsCompeleted()) dropItem.DropAll();
     }
 
     void OnEnable()
@@ -51,7 +51,7 @@ public class DeadfishTank : MonoBehaviour
             foreach (GameObject deadfish in additionalFish)
             {
                 deadfish.SetActive(true);
-                subtask.GetStep("Skyv dødfisken i karet").RepetionNumber = 4;
+                subtask.GetStep("Push the dead fish into the tub").RepetionNumber = 4;
             }
         }
     }
