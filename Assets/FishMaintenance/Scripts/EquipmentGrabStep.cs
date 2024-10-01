@@ -15,7 +15,7 @@ public class EquipmentGrabStep : MonoBehaviour
 
         if (other.name == "Grabber")
         {
-            Debug.Log(manager.GetStep("Get Equipment", step) == null);
+            //Debug.Log(manager.GetStep("Get Equipment", step) == null);
             Task.Step completedStep = manager.GetStep("Get Equipment", step);
             
             //Debug.Log(completedStep == null);

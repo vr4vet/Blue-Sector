@@ -28,7 +28,6 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
     void Start()
     {
         step = subtask.GetStep(stepName);
-        Debug.Log(step == null);
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
@@ -40,13 +39,14 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         {
             step = subtask.GetStep(stepName);
             manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
-            // activeSubtask = manager.GetSubtask(subTask);
+            //activeSubtask = manager.GetSubtask(subTask);
         }
     }
     public void CurrentSubtaskUpdate(Task.Subtask currentSub)
     {
         currentSubtask = currentSub;
-        Debug.Log(step == null);
+        //Debug.Log(step == null);
+        //Debug.Log(currentSub.SubtaskName);
         if (step.CurrentStep && !playerInside)
         {
 
@@ -87,14 +87,9 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
             playerInside = true;
             //anchorArrow.SetActive(false);
+
             if (currentSubtask != subtask)
-            {
                 manager.UpdateCurrentSubtask(subtask);
-            }
-            else if (subtask.SubtaskName == "Get Equipment")
-            {
-                manager.UpdateCurrentSubtask(subtask);
-            }
         }
 
     }

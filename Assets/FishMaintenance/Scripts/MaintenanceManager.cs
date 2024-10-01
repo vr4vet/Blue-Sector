@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
 using UnityEditor;
+using Task;
 public class MaintenanceManager : MonoBehaviour
 {
     public static MaintenanceManager Instance;
-    [SerializeField] private Task.TaskHolder taskHolder;
-    [SerializeField] private AudioClip success;
+    [SerializeField] public Task.TaskHolder taskHolder;
+    [SerializeField] public AudioClip success;
     [SerializeField] private AudioClip equipmentPickup;
     [SerializeField] private GameObject[] arrows;
     [SerializeField] private GameObject toBoatArrow;
@@ -17,13 +18,13 @@ public class MaintenanceManager : MonoBehaviour
     private bool twentySeconds = false;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
-    private Task.Task task => taskHolder.GetTask("Maintenance");
+    private Task.Task Task => taskHolder.GetTask("Maintenance");
     private int teleportationAnchorCount;
 
 
     [HideInInspector] public int stepCount;
 
-    public Task.Task MaintenanceTask { get => task; }
+    public Task.Task MaintenanceTask { get => Task; }
 
     public UnityEvent<Task.Skill?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
@@ -52,10 +53,10 @@ public class MaintenanceManager : MonoBehaviour
         //watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
         //Debug.Log(task == null);
         //Debug.Log(task.GetSubtask("Get equipment") == null);
-        UpdateCurrentSubtask(task.GetSubtask("Get Equipment"));
+        UpdateCurrentSubtask(Task.GetSubtask("Get Equipment"));
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
-        foreach (Task.Subtask sub in task.Subtasks)
+        foreach (Task.Subtask sub in Task.Subtasks)
         {
             foreach (Task.Step step in sub.StepList)
             {
@@ -69,6 +70,16 @@ public class MaintenanceManager : MonoBehaviour
             skill.Lock();
         }
 
+    }
+
+    private void Update()
+    {
+        /*        if (taskHolder != null)
+                    foreach (Subtask subtask in taskHolder.taskList[0].Subtasks)
+                    {
+                        if (!subtask.Compleated())
+                            Debug.Log(subtask.SubtaskName);
+                    }*/
     }
 
     public void InvokeBadge(Task.Skill badge)
@@ -115,9 +126,9 @@ public class MaintenanceManager : MonoBehaviour
         {
             string subtaskName = sub.SubtaskName;
             SubtaskChanged.Invoke(sub);
-            if (task.Compleated())
+            if (Task.Compleated())
             {
-                TaskCompleted.Invoke(task);
+                TaskCompleted.Invoke(Task);
             }
             if (subtaskName == "Daily Round")
             {
@@ -125,7 +136,7 @@ public class MaintenanceManager : MonoBehaviour
                 BadgeChanged.Invoke(skill);
             }
 
-            Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
+            Task.Subtask nextSubtask = Task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
 
             if (nextSubtask != null)
             {
@@ -135,9 +146,7 @@ public class MaintenanceManager : MonoBehaviour
                 UpdateCurrentSubtask(nextSubtask);
             }
 
-            Debug.Log(task.GetSubtask("HandFeeding") == null);
-            Debug.Log(task.GetSubtask("Daily Round") == null);
-            if ((subtaskName == "Daily Round" && task.GetSubtask("Hand-feeding").Compleated()) || (subtaskName == "Hand-feeding" && task.GetSubtask("Daily Round").Compleated()))
+            if ((subtaskName == "Daily Round" && Task.GetSubtask("Hand-feeding").Compleated()) || (subtaskName == "Hand-feeding" && Task.GetSubtask("Daily Round").Compleated()))
             {
                 NavigateToBoat();
             }
@@ -170,7 +179,7 @@ public class MaintenanceManager : MonoBehaviour
 
     public Task.Step GetStep(string subtaskName, string stepName)
     {
-        Task.Subtask sub = task.GetSubtask(subtaskName);
+        Task.Subtask sub = Task.GetSubtask(subtaskName);
 
         Task.Step step = sub.GetStep(stepName);
         return step;

@@ -15,7 +15,7 @@ public class FishForce : MonoBehaviour
     {
         Rigidbody rb = gameObject.GetComponent<Rigidbody>();
         rb.AddForce(0.7f, 1f, 0, ForceMode.Impulse);
-        gameObject.GetComponent<Outline>().enabled = true;
+        //gameObject.GetComponent<Outline>().enabled = true;
     }
 
     public void OnTriggerExit(Collider other)
