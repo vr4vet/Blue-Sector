@@ -10,7 +10,7 @@ public class PourDetector : MonoBehaviour
     private Stream currentStream = null;
 
     private void Update() {
-        bool pourCheck = CalculatePourAngle() < pourThreshold;
+        bool pourCheck = CalculatePourAngle() > pourThreshold;
         if(isPouring != pourCheck) {
             isPouring = pourCheck;
             if(isPouring) {

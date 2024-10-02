@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
   m_Name: WelfareGuideTree
   m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
   sections:
   - dialogue:
     - 'In this simulation, you are going to count lice and check for gill disease
@@ -20,13 +22,16 @@ MonoBehaviour:
       will have to put them in the wake up tank.
     - Remember to be careful when handling the fish.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Are you ready for the instructions?
       answers:
       - answerLabel: Yes
         nextElement: 1
+        endAfterAnswer: 0
       - answerLabel: No, please repeat
         nextElement: 0
+        endAfterAnswer: 0
   - dialogue:
     - It's important not to grab the fish before they are anesthesized.
     - 'You should administer no more than 30 ml anesthesia for every 100 liters of
@@ -35,29 +40,35 @@ MonoBehaviour:
       could get hurt. '
     - The fish should not be anesthesized for more than 5 minutes.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Should we continue to the next step?
       answers:
       - answerLabel: Yes
         nextElement: 2
+        endAfterAnswer: 0
       - answerLabel: No, please repeat this step
         nextElement: 1
+        endAfterAnswer: 0
   - dialogue:
-    - 'To check the fish, grab them and place them on the table to the left of the
-      tank. '
+    - 'To check the fish, grab them and place them on the table in the middle  of
+      the tanks. '
     - To check for gill disease, look for white spots or discoloration on the gills
       of the fish. Then rate the disease from 1 to 5, with a higher score meaning
       more discoloration.
     - To check for lice, look for brown spots on the skin of the fish. Count the
       amount of lice and log it.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Should we continue to the last step?
       answers:
       - answerLabel: Yes
         nextElement: 3
+        endAfterAnswer: 0
       - answerLabel: No, please repeat this step
         nextElement: 2
+        endAfterAnswer: 0
   - dialogue:
     - Place the fish in the green tank when you have logged the gill disease and
       lice count. In this tank the fish will wake up.
@@ -66,22 +77,29 @@ MonoBehaviour:
     - See your scores for each fish on the yellow screen when you place them in the
       tank.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
       question: Do you need to repeat any of the steps?
       answers:
       - answerLabel: Yes, anesthesizing the fish
         nextElement: 1
+        endAfterAnswer: 0
       - answerLabel: Yes, the fish checking
         nextElement: 2
+        endAfterAnswer: 0
       - answerLabel: Yes, the last step
         nextElement: 3
+        endAfterAnswer: 0
       - answerLabel: No
         nextElement: 4
+        endAfterAnswer: 0
   - dialogue:
     - Good luck, feel free to talk to me again to repeat the instructions.
     endAfterDialogue: 1
+    disabkeSkipLineButton: 0
     branchPoint:
       question: 
       answers:
       - answerLabel: Yes, anesthesizing the fish
         nextElement: 1
+        endAfterAnswer: 0
