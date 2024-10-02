@@ -24,6 +24,14 @@ public class TransitionSceneNPC : MonoBehaviour
         {
             destinationScene = "Laboratory";
         }
+        else if (answer == "Maintenance boat")
+        {
+            destinationScene = "FishMaintenance";
+        }
+        else if (answer == "Feeding station")
+        {
+            destinationScene = "FishFeeding";
+        }
     }
 
     public void ChangeScene()
