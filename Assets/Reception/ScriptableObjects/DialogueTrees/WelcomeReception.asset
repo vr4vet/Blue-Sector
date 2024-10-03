@@ -16,20 +16,22 @@ MonoBehaviour:
   speakButtonOnExit: 1
   sections:
   - dialogue:
-    - "Welcome to Blue Sector! Here, you have the opportunity to try out various
-      work tasks within the maritime sector. Whether it\u2019s handling feeding responsibilities,
-      factory duties, laboratory tasks, or tasks on the fishing boat, we\u2019ve
-      got you covered. Dive in and explore all the exciting roles we have to offer!"
-    - "I see you\u2019re ready to get started with your tasks. To handle the feeding,
-      maintenance, and  duties at the factory, you\u2019ll need to take the motorboat.
-      It\u2019s docked right in front of the reception, just outside. Hop on and
-      it will take you directly to the factory. Safe travels and good luck with your
-      work!"
-    - "For the laboratory-related duties, you\u2019ll find the laboratory next door
-      to the reception, just to the left. Head over there and you\u2019ll get all
-      the instructions you need."
-    endAfterDialogue: 1
+    - Welcome to Blue Sector! Here you have the opportunity to try out various work
+      tasks within the maritime sector. Whether it's handling feeding responsibilities,
+      factory duties, laboratory tasks or tasks on the fishing boat, we've got you
+      covered.
+    - I see you're ready to get started with your tasks. To handle the feeding, maintenance,
+      and duties at the factory, you'll need to take the motorboat. It's docked right
+      in front of the reception, just outside. Hop on and it will take you directly
+      to your destination.
+    - For the laboratory-related duties, you'll find the laboratory next door to
+      the reception, just to the left. Head over there and touch the handle of the
+      door to get inside.
+    endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
-      question: 
-      answers: []
+      question: Good luck!
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 0
+        endAfterAnswer: 0
