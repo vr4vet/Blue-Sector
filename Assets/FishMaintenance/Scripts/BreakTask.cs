@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class BreakTask : MonoBehaviour
 {
@@ -100,7 +96,7 @@ public class BreakTask : MonoBehaviour
                 breakStep.SetCompleated(true);
                 mm.UpdateCurrentSubtask(mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish"));
 
-                // moving on to dead fish dialogue
+                // moving on to dead fish intro dialogue
                 if (conversationController.GetDialogueTree().name == "PauseBoss")
                 {
                     conversationController.NextDialogueTree();
@@ -108,8 +104,8 @@ public class BreakTask : MonoBehaviour
                     deadIntroDialoguePlayed = true;
                     deadFishPumpVideo.SetActive(true);
 
-                    mm.PlayAudio(mm.success);
-                    mm.InvokeBadge(mm.taskHolder.GetSkill("Observant"));
+                    //mm.PlayAudio(mm.success);
+                    //mm.InvokeBadge(mm.taskHolder.GetSkill("Observant"));
                 }
 
 
@@ -119,14 +115,14 @@ public class BreakTask : MonoBehaviour
                 breakTaskDone = true;
             }
 
-            if (deadIntroDialoguePlayed && !deadIntroDone && breakTaskDone) // when the dead fish dialogue had finished
+            if (deadIntroDialoguePlayed && !deadIntroDone && breakTaskDone) // when the dead fish dialogue has finished
             {
                 Debug.Log(conversationController.GetDialogueTree().name);
                 if (!deadFishPumpVideo.activeSelf && conversationController.GetDialogueTree().name == "DeadfishSetup")
                 {
+                    // moving on to dead fish counting dialogue
                     conversationController.NextDialogueTree();
                     conversationController.DialogueTrigger();
-                    deadIntroDialoguePlayed = true;
                     deadFishCountVideo.SetActive(true);
                     deadFishBreakAnchor.SetActive(true);
 
@@ -139,14 +135,18 @@ public class BreakTask : MonoBehaviour
             }
         }
 
+/*        if (mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish").GetStep("Push the dead fish into the tub").IsCompeleted())
+            Debug.Log("Completed");
+
         if (mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish").Compleated())
         {
+            Debug.Log("Completed");
             if (conversationController.GetDialogueTree().name == "DeadfishExplanation")
             {
                 conversationController.NextDialogueTree();
                 conversationController.DialogueTrigger();
             }
-        }
+        }*/
     }
 
     private void OnTriggerEnter(Collider other)

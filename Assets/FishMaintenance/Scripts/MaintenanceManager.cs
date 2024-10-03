@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
-using UnityEditor;
-using Task;
 public class MaintenanceManager : MonoBehaviour
 {
     public static MaintenanceManager Instance;
@@ -51,8 +47,7 @@ public class MaintenanceManager : MonoBehaviour
     {
         feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
         //watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
-        //Debug.Log(task == null);
-        //Debug.Log(task.GetSubtask("Get equipment") == null);
+
         UpdateCurrentSubtask(Task.GetSubtask("Get Equipment"));
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
@@ -72,19 +67,17 @@ public class MaintenanceManager : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        /*        if (taskHolder != null)
-                    foreach (Subtask subtask in taskHolder.taskList[0].Subtasks)
-                    {
-                        if (!subtask.Compleated())
-                            Debug.Log(subtask.SubtaskName);
-                    }*/
-    }
-
     public void InvokeBadge(Task.Skill badge)
     {
         BadgeChanged.Invoke(badge);
+    }
+
+    public void InvokeBadgeString(string badgeName)
+    {
+        if (taskHolder.GetSkill(badgeName) == null)
+            Debug.LogError("Skill " + badgeName + " does not exist");
+        else
+            BadgeChanged.Invoke(taskHolder.GetSkill(badgeName));
     }
     public void EffectiveBadgeEnabled(bool passed)
     {
@@ -96,7 +89,7 @@ public class MaintenanceManager : MonoBehaviour
         Task.Subtask sub = step.ParentSubtask;
         step.CompleateRep();
         UpdateCurrentSubtask(sub);
-        // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
+
         if (step.IsCompeleted())
         {
 

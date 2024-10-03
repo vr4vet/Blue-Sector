@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DeadfishTank : MonoBehaviour
@@ -16,17 +14,34 @@ public class DeadfishTank : MonoBehaviour
     private DropItem dropItem;
     private FeedbackManager feedbackManager;
     private MaintenanceManager manager;
+    
+    private GameObject _npc;
+    private DialogueBoxController dialogueController;
+    private ConversationController conversationController;
 
     // Start is called before the first frame update
     void Start()
     {
         dropItem = gameObject.GetComponent<DropItem>();
+        _npc = FindObjectOfType<NPCSpawner>()._npcInstances[0];
+        dialogueController = _npc.GetComponent<DialogueBoxController>();
+        conversationController = _npc.GetComponentInChildren<ConversationController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (subtask.GetStep("Push the dead fish into the tub").IsCompeleted()) dropItem.DropAll();
+        if (subtask.GetStep("Push the dead fish into the tub").IsCompeleted())
+        {
+            dropItem.DropAll();
+
+            // moving on to congratulations conversation
+            if (conversationController.GetDialogueTree().name == "DeadfishExplanation")
+            {
+                conversationController.NextDialogueTree();
+                conversationController.DialogueTrigger();
+            }
+        }
     }
 
     void OnEnable()
