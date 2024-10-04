@@ -16,7 +16,7 @@ public class DailyCheckStep : MonoBehaviour
     {
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
-        if (manager.GetStep("Hent Utstyr", equipmentStep).IsCompeleted())
+        if (manager.GetStep("Get Equipment", equipmentStep).IsCompeleted())
         {
             SetEquipmentActive();
         }
@@ -28,7 +28,7 @@ public class DailyCheckStep : MonoBehaviour
 
     public void SetEquipmentActive()
     {
-        feedbackManager.addFeedback(step);
+        //feedbackManager.AddFeedback(step);
         grabbableObject.SetActive(true);
         BNG.Grabbable grabbable = grabbableObject.GetComponent<BNG.Grabbable>();
         grabber.GrabGrabbable(grabbable);

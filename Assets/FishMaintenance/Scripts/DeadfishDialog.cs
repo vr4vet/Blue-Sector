@@ -27,7 +27,7 @@ public class DeadfishDialog : MonoBehaviour
         _npc = _npcSpawner._npcInstances[0];
         task = mm.MaintenanceTask;
         dialogueController = _npc.gameObject.GetComponent<DialogueBoxController>();
-        infoStep = mm.GetStep("Dødfisk håndtering", "Få info fra Laila");
+        infoStep = mm.GetStep("Handling of dead fish", "Get info from Laila");
     }
 
     void Update()

@@ -21,7 +21,7 @@ public class AddInstructionsToWatch : MonoBehaviour
     public void addInstructions(string text)
     {
 
-        StartCoroutine(sendHaptics());
+        //StartCoroutine(sendHaptics());
 
         IncomingMessage.Invoke();
 

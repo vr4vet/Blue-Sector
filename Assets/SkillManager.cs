@@ -31,11 +31,11 @@ public class SkillManager : MonoBehaviour
             manager = this.gameObject.GetComponent<MaintenanceManager>();
             manager.BadgeChanged.AddListener(CompleteSkill);
         }
-        else if (gameObject.GetComponent<WatchManager>() != null)
+/*        else if (gameObject.GetComponent<WatchManager>() != null)
         {
             watchManager = this.gameObject.GetComponent<WatchManager>();
             watchManager.BadgeChanged.AddListener(CompleteSkill);
-        }
+        }*/
 
 
     }
