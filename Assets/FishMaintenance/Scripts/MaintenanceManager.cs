@@ -97,7 +97,7 @@ public class MaintenanceManager : MonoBehaviour
 
             PlayAudio(success);
             stepCount += 1;
-            feedbackManager.emptyInstructions();
+            //feedbackManager.emptyInstructions();
             if (sub.SubtaskName == "Daily Round" && twentySeconds)
             {
                 Task.Skill skill = taskHolder.GetSkill("Efficient");

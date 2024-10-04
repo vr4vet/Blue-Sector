@@ -102,11 +102,11 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
 
             playerInside = false;
-            if (feedbackManager.getText() != "Bra jobba! Følg pilene rundt merden.")
+/*            if (feedbackManager.getText() != "Bra jobba! Følg pilene rundt merden.")
             {
                 feedbackManager.StopMoreFeedback();
                 feedbackManager.emptyInstructions();
-            }
+            }*/
 
             //anchorArrow.SetActive(activeArrow);
             cylinder.SetActive(activeArrow);
