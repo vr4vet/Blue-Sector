@@ -23,8 +23,8 @@ public class DeadfishCollide : MonoBehaviour
     {
         if (other.CompareTag("Deadfish"))
         {
-            mm.CompleteStep(subtask.GetStep("Skyv dødfisken i karet"));
-            other.GetComponent<Outline>().enabled = false;
+            mm.CompleteStep(subtask.GetStep("Push the dead fish into the tub"));
+            //other.GetComponent<Outline>().enabled = false;
             PlayAudio();
         }
     }
