@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: WelcomeReception
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - Welcome to Blue Sector! Here you have the opportunity to try out various work
+      tasks within the maritime sector. Whether it's handling feeding responsibilities,
+      factory duties, laboratory tasks or tasks on the fishing boat, we've got you
+      covered.
+    - I see you're ready to get started with your tasks. To handle the feeding, maintenance,
+      and duties at the factory, you'll need to take the motorboat. It's docked right
+      in front of the reception, just outside. Hop on and it will take you directly
+      to your destination.
+    - For the laboratory-related duties, you'll find the laboratory next door to
+      the reception, just to the left. Head over there and touch the handle of the
+      door to get inside.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Good luck!
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 0
+        endAfterAnswer: 0
