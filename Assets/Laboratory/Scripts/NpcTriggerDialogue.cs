@@ -17,6 +17,9 @@ public class NpcTriggerDialogue : MonoBehaviour
    public DialogueTree larsDialogueTree;
    [SerializeField]  
    public string npcName;
+
+   public GameObject fishPrefab;
+   
    public GameObject basket;
    public GameObject fish;
    public GameObject scale;
@@ -24,17 +27,34 @@ public class NpcTriggerDialogue : MonoBehaviour
    public GameObject numPad;
    public GameObject handheldCounter;
    public GameObject slider;
+   public GameObject fishPosition;
+   
+   private Vector3 _basketPosition;
+   private Quaternion _basketRotation;
+   private Vector3 _handheldCounterPosition;
+   private Quaternion _handheldCounterRotation;
+   private Vector3 _sliderPosition;
+  
 
    private DialogueBoxController dialogueBoxController;
 
    private void Start()
    {
        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
-       // fish.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+       // Save the initial positions of the objects
+       _basketPosition = basket.transform.position;
+       _basketRotation = basket.transform.rotation;
+       _handheldCounterPosition = handheldCounter.transform.position;
+       _handheldCounterRotation = handheldCounter.transform.rotation;
+       _sliderPosition = slider.transform.position;
+       
+       
+       
    }  
    
    private void Update()
    {
+       // Check the current dialogue and if it is the correct one, change the dialogue
        if (dialogueBoxController.dialogueTreeRestart != null)
        {
            if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[0].dialogue[1])
@@ -80,10 +100,13 @@ public class NpcTriggerDialogue : MonoBehaviour
    {
        dialogueBoxController.StartDialogue(larsDialogueTree, 1, npcName);
        
-       basket.transform.position = new Vector3(-3.2309f, 0.874f, -1.8569f);
-       basket.transform.rotation = Quaternion.Euler(270f, 358.180023f, 0.0f);
-         
-       // fish.transform.position = new Vector3(-3.2342f, 0.895799994f, -2.30819988f);
+       basket.transform.position = _basketPosition;
+       basket.transform.rotation = _basketRotation;
+       
+       
+       Destroy(fish);
+       Instantiate(fishPrefab, fishPosition.transform.position, fishPosition.transform.rotation);
+       
        
        scale.GetComponent<Scale>().totalWeight = 0;
        
@@ -96,11 +119,13 @@ public class NpcTriggerDialogue : MonoBehaviour
        numPad.GetComponent<ResultLogger>().length.SetText("Length");
        numPad.GetComponent<ResultLogger>().conditionFactor.SetText("Condition Factor");
        
-       handheldCounter.transform.position = new Vector3(-3.19779992f, 0.883899987f, 1.10399997f);
-       handheldCounter.transform.rotation = Quaternion.Euler(270f, 76.1088028f, 0.0f);
+       handheldCounter.transform.position = _handheldCounterPosition;
+       handheldCounter.transform.rotation = _handheldCounterRotation;
        
-       slider.transform.position = new Vector3(-3.21790004f, 0.862619996f, 1.67770004f);
-       slider.GetComponent<MicroscopeSlide>().RemoveMicroscopeSlide();
+       slider.transform.position = _sliderPosition;
+       
+       
+       //slider.GetComponent<MicroscopeSlide>().RemoveMicroscopeSlide();
 
    }
    
