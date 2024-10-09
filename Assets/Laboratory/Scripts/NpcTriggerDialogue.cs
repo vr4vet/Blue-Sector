@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BNG;
 using InteractiveCalculator;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,13 +28,14 @@ public class NpcTriggerDialogue : MonoBehaviour
    public GameObject numPad;
    public GameObject handheldCounter;
    public GameObject slider;
-   public GameObject fishPosition;
+   public GameObject microscopeSnapPoint;
    
    private Vector3 _basketPosition;
    private Quaternion _basketRotation;
    private Vector3 _handheldCounterPosition;
    private Quaternion _handheldCounterRotation;
-   private Vector3 _sliderPosition;
+   private Vector3 _fishPosition;
+   private Quaternion _fishRotation;
   
 
    private DialogueBoxController dialogueBoxController;
@@ -46,7 +48,9 @@ public class NpcTriggerDialogue : MonoBehaviour
        _basketRotation = basket.transform.rotation;
        _handheldCounterPosition = handheldCounter.transform.position;
        _handheldCounterRotation = handheldCounter.transform.rotation;
-       _sliderPosition = slider.transform.position;
+       _fishPosition = fish.transform.position;
+       _fishRotation = fish.transform.rotation;
+         
        
        
        
@@ -57,7 +61,7 @@ public class NpcTriggerDialogue : MonoBehaviour
        // Check the current dialogue and if it is the correct one, change the dialogue
        if (dialogueBoxController.dialogueTreeRestart != null)
        {
-           if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[0].dialogue[1])
+           if (dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0])
            {
                ChangeToLars();
            
@@ -105,7 +109,7 @@ public class NpcTriggerDialogue : MonoBehaviour
        
        
        Destroy(fish);
-       Instantiate(fishPrefab, fishPosition.transform.position, fishPosition.transform.rotation);
+       Instantiate(fishPrefab, _fishPosition, _fishRotation);
        
        
        scale.GetComponent<Scale>().totalWeight = 0;
@@ -122,11 +126,7 @@ public class NpcTriggerDialogue : MonoBehaviour
        handheldCounter.transform.position = _handheldCounterPosition;
        handheldCounter.transform.rotation = _handheldCounterRotation;
        
-       slider.transform.position = _sliderPosition;
-       
-       
-       //slider.GetComponent<MicroscopeSlide>().RemoveMicroscopeSlide();
-
+       microscopeSnapPoint.GetComponent<SnapZone>().OnDetachEvent.Invoke(null);
    }
    
 }
