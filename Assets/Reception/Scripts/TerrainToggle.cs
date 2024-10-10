@@ -5,6 +5,8 @@ using UnityEngine;
 public class TerrainToggle : MonoBehaviour
 {
     private GameObject TerrainDetailed, TerrainSimple;
+    [SerializeField] private GameObject DistantRoads;
+    [SerializeField] private GameObject SimplifiedRoads;
 
     // Start is called before the first frame update
     void Start()
@@ -12,6 +14,7 @@ public class TerrainToggle : MonoBehaviour
         TerrainDetailed = GameObject.Find("OceanFloor");
         TerrainSimple = GameObject.Find("OceanFloorSprites");
         TerrainSimple.SetActive(false);
+        SimplifiedRoads.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,6 +24,8 @@ public class TerrainToggle : MonoBehaviour
             TerrainDetailed.GetComponent<Terrain>().drawHeightmap = false;
             TerrainDetailed.GetComponent<Terrain>().drawTreesAndFoliage = false;
             TerrainSimple.SetActive(true);
+            DistantRoads.SetActive(false);
+            SimplifiedRoads.SetActive(true);
         }
     }
 
@@ -32,5 +37,7 @@ public class TerrainToggle : MonoBehaviour
             TerrainDetailed.GetComponent<Terrain>().drawTreesAndFoliage = true;
             TerrainSimple.SetActive(false);
         }
+        DistantRoads.SetActive(true);
+        SimplifiedRoads.SetActive(false);
     }
 }
