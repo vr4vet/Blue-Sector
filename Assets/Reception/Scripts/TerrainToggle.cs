@@ -11,15 +11,15 @@ public class TerrainToggle : MonoBehaviour
     {
         TerrainDetailed = GameObject.Find("OceanFloor");
         TerrainSimple = GameObject.Find("OceanFloorSprites");
-        TerrainDetailed.SetActive(false);
-        TerrainSimple.SetActive(true);
+        TerrainSimple.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            TerrainDetailed.SetActive(false);
+            TerrainDetailed.GetComponent<Terrain>().drawHeightmap = false;
+            TerrainDetailed.GetComponent<Terrain>().drawTreesAndFoliage = false;
             TerrainSimple.SetActive(true);
         }
     }
@@ -28,7 +28,8 @@ public class TerrainToggle : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            TerrainDetailed.SetActive(true);
+            TerrainDetailed.GetComponent<Terrain>().drawHeightmap = true;
+            TerrainDetailed.GetComponent<Terrain>().drawTreesAndFoliage = true;
             TerrainSimple.SetActive(false);
         }
     }
