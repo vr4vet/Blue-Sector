@@ -16,7 +16,8 @@ public class TransitionSceneNPC : MonoBehaviour
         if (answer == "Welfare station")
         {
             destinationScene = "FishWelfare";
-        } else if (answer == "Fish factory")
+        } 
+        else if (answer == "Fish factory")
         {
             destinationScene = "HSERoom";
         }
@@ -32,6 +33,12 @@ public class TransitionSceneNPC : MonoBehaviour
         {
             destinationScene = "FishFeeding";
         }
+        else if (answer == "Reception area")
+        {
+            destinationScene = "ReceptionOutdoor";
+        }
+
+        GetComponent<SceneController>().SceneName = destinationScene;
     }
 
     public void ChangeScene()
@@ -39,7 +46,8 @@ public class TransitionSceneNPC : MonoBehaviour
         if (destinationScene != null)
         {
             GetComponent<AudioSource>().Play();
-            GetComponent<SceneLoader>().LoadScene(destinationScene);
+            //GetComponent<SceneLoader>().LoadScene(destinationScene);
+            //GetComponent<SceneController>().SceneName = destinationScene;
         }
     }
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9205844495485363411}
   - component: {fileID: 2667665649058245418}
   - component: {fileID: 9205844495485363437}
+  - component: {fileID: 1816515325261925563}
   m_Layer: 0
   m_Name: TransitionAoeTrigger
   m_TagString: Untagged
@@ -59,6 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 005a53031615eef4c8b77b94c05a5e61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaintenanceBoat: 0
   OnPlayerEnter:
     m_PersistentCalls:
       m_Calls:
@@ -92,3 +94,20 @@ MonoBehaviour:
   loadSceneMode: 0
   UseSceenFader: 1
   ScreenFadeTime: 1
+--- !u!114 &1816515325261925563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9205844495485363439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73ada6a9e0a1f3a469acf2f1e81cf605, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: 
+  isDoor: 0
+  OnChangeScene:
+    m_PersistentCalls:
+      m_Calls: []
