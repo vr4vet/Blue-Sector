@@ -18,7 +18,7 @@ public class SceneController : MonoBehaviour
         get { return sceneName; }
     }
 
-    [Tooltip("Whether the trigger is a door and should play a door sound")]
+    [Tooltip("Whether the trigger is a door or boat. The appropriate sound is played.")]
     [SerializeField]
     private MeansOfTransportation meansOfTransportation = MeansOfTransportation.Door;
     private enum MeansOfTransportation
@@ -26,6 +26,11 @@ public class SceneController : MonoBehaviour
         Door,
         Boat
     }
+
+    [Tooltip("The loading screen that appears when a new scene is loading.")]
+    [SerializeField]
+    private GameObject LoadingScreen;
+
 
     public UnityEvent OnChangeScene;
 
@@ -91,7 +96,8 @@ public class SceneController : MonoBehaviour
         if (meansOfTransportation == MeansOfTransportation.Boat)
             GameManager.Instance.PlaySound("MotorBoatDriving");
 
-        SceneManager.LoadScene(scene);
+        //SceneManager.LoadScene(scene);
+        StartCoroutine(LoadNextScene(scene));
     }
 
     /// <summary>
@@ -104,6 +110,30 @@ public class SceneController : MonoBehaviour
         string targetSpawnLocation = SceneManager.GetActiveScene().name + "To" + scene;
         switch (targetSpawnLocation)
         {
+            case "FishMaintenanceToReceptionOutdoor":
+                GameManager.Instance.NextScenePlayerPosition = new Vector3(
+                    5.6f,
+                    1.03299999f,//0.5f,
+                    78.5f
+                );
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
+                break;
+            case "FishWelfareToReceptionOutdoor":
+                GameManager.Instance.NextScenePlayerPosition = new Vector3(
+                    5.6f,
+                    1.03299999f,//0.5f,
+                    78.5f
+                );
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
+                break;
+            case "FishFeedingToFishMaintenance":
+                GameManager.Instance.NextScenePlayerPosition = new Vector3(
+                    22.679f,
+                    1.37f,//0.5f,
+                    -63.986f
+                );
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -175.287f, 0f);
+                break;
             case "FishFeedingToHSERoom":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     -4.114f,
@@ -128,6 +158,14 @@ public class SceneController : MonoBehaviour
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -270f, 0f);
                 break;
+            case "ReceptionOutdoorToFishMaintenance":
+                GameManager.Instance.NextScenePlayerPosition = new Vector3(
+                    22.679f,
+                    1.37f,//0.5f,
+                    -63.986f
+                );
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -175.287f, 0f);
+                break;
             case "ReceptionOutdoorToLaboratory":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     2.212f,
@@ -135,6 +173,14 @@ public class SceneController : MonoBehaviour
                     -0.225f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -47.564f, 0f);
+                break;
+            case "ReceptionOutdoorToFishWelfare":
+                GameManager.Instance.NextScenePlayerPosition = new Vector3(
+                    34f,
+                    1.438f,//0.5f,
+                    -35.416f
+                );
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 180f, 0f);
                 break;
             case "HSERoomToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
@@ -222,9 +268,6 @@ public class SceneController : MonoBehaviour
         GameManager.Instance.IsTaskOn = false;
         GameManager.Instance.IsSecondaryTaskOn = false;
 
-/*        // Tell GameManager if the current scene is a factory scene
-        GameManager.Instance.IsFactoryScene = IsFactoryScene(scene.name);*/
-
         // Load gloves if one of the factory scenes
         if (IsFactoryScene(scene.name))
             GameManager.Instance.LoadGlovesMaterials();
@@ -234,4 +277,26 @@ public class SceneController : MonoBehaviour
     }
 
     private bool IsFactoryScene(string scene) { return scene == "BleedingStation" || scene == "HSERoom" || scene == "QAStation"; }
+
+    /// <summary>
+    /// Load the next scene. Intantiate loading screen and fill the bar as it loads.
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <returns></returns>
+    private IEnumerator LoadNextScene(string scene)
+    {
+        if (LoadingScreen == null)
+        {
+            SceneManager.LoadScene(scene);
+            yield return null;
+        }
+
+        AsyncOperation loadLevel = SceneManager.LoadSceneAsync(scene);
+        GameObject loadingScreen = Instantiate(LoadingScreen);
+        while (!loadLevel.isDone)
+        {
+            loadingScreen.GetComponent<LoadingScreen>().BarFillAmount(Mathf.Clamp01(loadLevel.progress / .9f));
+            yield return null;
+        }
+    }
 }
