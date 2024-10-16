@@ -47,5 +47,5 @@ public class BoatAoeTrigger : MonoBehaviour
         }
     }
 
-    private static bool IsPlayer(Collider collider) => collider.gameObject.tag == "Player";
+    private static bool IsPlayer(Collider collider) => collider.gameObject.tag == "Player" || collider.gameObject.name == "Grabber";
 }

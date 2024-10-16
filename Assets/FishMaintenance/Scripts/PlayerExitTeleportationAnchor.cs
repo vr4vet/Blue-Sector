@@ -31,18 +31,22 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
         manager = maintenanceManager.GetComponent<MaintenanceManager>();
         feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
         manager.SubtaskChanged.AddListener(OnSubtaskCompleted);
-        currentSubtask = manager.MaintenanceTask.GetSubtask("Hent Utstyr");
+        currentSubtask = manager.MaintenanceTask.GetSubtask("Get Equipment");
 
-        if (subtask.SubtaskName != "Hent Utstyr")
+
+
+        if (subtask.SubtaskName != "Get Equipment")
         {
             step = subtask.GetStep(stepName);
             manager.CurrentSubtask.AddListener(CurrentSubtaskUpdate);
-            // activeSubtask = manager.GetSubtask(subTask);
+            //activeSubtask = manager.GetSubtask(subTask);
         }
     }
     public void CurrentSubtaskUpdate(Task.Subtask currentSub)
     {
         currentSubtask = currentSub;
+        //Debug.Log(step == null);
+        //Debug.Log(currentSub.SubtaskName);
         if (step.CurrentStep && !playerInside)
         {
 
@@ -83,14 +87,9 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
             playerInside = true;
             //anchorArrow.SetActive(false);
+
             if (currentSubtask != subtask)
-            {
                 manager.UpdateCurrentSubtask(subtask);
-            }
-            else if (subtask.SubtaskName == "Hent Utstyr")
-            {
-                manager.UpdateCurrentSubtask(subtask);
-            }
         }
 
     }
@@ -103,11 +102,11 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
 
 
             playerInside = false;
-            if (feedbackManager.getText() != "Bra jobba! Følg pilene rundt merden.")
+/*            if (feedbackManager.getText() != "Bra jobba! Følg pilene rundt merden.")
             {
                 feedbackManager.StopMoreFeedback();
                 feedbackManager.emptyInstructions();
-            }
+            }*/
 
             //anchorArrow.SetActive(activeArrow);
             cylinder.SetActive(activeArrow);
@@ -129,7 +128,7 @@ public class PlayerExitTeleportationAnchor : MonoBehaviour
                 gameObject.SetActive(false);
                 return;
             }
-            else if (subtask.SubtaskName == "Runde På Ring" && step.IsCompeleted())
+            else if (subtask.SubtaskName == "Daily Round" && step.IsCompeleted())
             {
                 gameObject.SetActive(false);
                 return;

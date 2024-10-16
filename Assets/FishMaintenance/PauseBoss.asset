@@ -1,0 +1,198 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: PauseBoss
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - Good job! Let's take a break.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: It is important to take breaks when performing demanding tasks.
+      answers:
+      - answerLabel: Can you tell more about how safety is taken care of?
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Cool! How often do you take breaks in this profession?
+        nextElement: 2
+        endAfterAnswer: 0
+  - dialogue:
+    - Correct clothing provides basic safety.
+    - "Everyone must wear a life jacket, although it is rare for someone to fall
+      into the water.\r"
+    - The clothing also includes a helmet, boots and outerwear.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Everyone must also have a radio to be able to communicate across
+        the facility.
+      answers:
+      - answerLabel: How do you work together?
+        nextElement: 3
+        endAfterAnswer: 0
+      - answerLabel: What tasks are common at fish farms?
+        nextElement: 4
+        endAfterAnswer: 0
+  - dialogue:
+    - How often you take breaks can vary, but we always take a lunch break in the
+      middle of the day.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: "\rThe breaks are also considered an important resource for planning
+        work."
+      answers:
+      - answerLabel: How do you work together?
+        nextElement: 3
+        endAfterAnswer: 0
+      - answerLabel: What tasks are common at fish farms?
+        nextElement: 4
+        endAfterAnswer: 0
+  - dialogue:
+    - We always work together to support each other when needed.
+    - Good communication and clear roles are important.
+    - Before we start demanding tasks, we always have a meeting to plan how we will
+      carry them out.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: This ensures that we carry out the tasks in a safe manner.
+      answers:
+      - answerLabel: What tasks are common at fish farms?
+        nextElement: 4
+        endAfterAnswer: 0
+      - answerLabel: What kind of education can I take?
+        nextElement: 5
+        endAfterAnswer: 0
+  - dialogue:
+    - Each cage is checked daily in a "daily round". This means going at least one
+      round on each cage and checking that everything is in order.
+    - In each cage there are a large number of salmon, and some of them may die.
+      These must be taken out and counted daily.
+    - A weekly lice count is conducted, during which both the number of lice on the
+      salmon and the overall health of the salmon are assessed.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: A fish farm worker has these tasks, while other roles in the workplace
+        have different areas of responsibility.
+      answers:
+      - answerLabel: What kind of education can I take?
+        nextElement: 5
+        endAfterAnswer: 0
+  - dialogue:
+    - In Norwegian high school, education in aquaculture is offered through a specialized
+      program. After two years, it is possible to continue as an apprentice to obtain
+      a trade certificate.
+    - You can also get training in work as a fish farmer without relevant education
+      or experience. After five years in the job, you can take a trade certificate
+      if desired.
+    - Feel free to talk to your supervisor or check out utdanning.no for more information.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Is there anything else you are wondering about?
+      answers:
+      - answerLabel: Security at the facility
+        nextElement: 6
+        endAfterAnswer: 0
+      - answerLabel: How to work together
+        nextElement: 7
+        endAfterAnswer: 0
+      - answerLabel: Common tasks
+        nextElement: 8
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 9
+        endAfterAnswer: 0
+  - dialogue:
+    - Correct clothing provides basic safety.
+    - "Everyone must wear a life jacket, although it is rare for someone to fall
+      into the water.\r"
+    - The clothing also includes a helmet, boots and outerwear.
+    - Everyone must also have a radio to be able to communicate across the facility.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Is there anything else you are wondering about?
+      answers:
+      - answerLabel: Security at the facility
+        nextElement: 6
+        endAfterAnswer: 0
+      - answerLabel: How to work together
+        nextElement: 7
+        endAfterAnswer: 0
+      - answerLabel: Common tasks
+        nextElement: 8
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 9
+        endAfterAnswer: 0
+  - dialogue:
+    - We always work together to support each other when needed.
+    - Good communication and clear roles are important.
+    - Before we start demanding tasks, we always have a meeting to plan how we will
+      carry them out.
+    - This ensures that we carry out the tasks in a safe manner.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Is there anything else you are wondering about?
+      answers:
+      - answerLabel: Security at the facility
+        nextElement: 6
+        endAfterAnswer: 0
+      - answerLabel: How to work together
+        nextElement: 7
+        endAfterAnswer: 0
+      - answerLabel: Common tasks
+        nextElement: 8
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 9
+        endAfterAnswer: 0
+  - dialogue:
+    - Each cage is checked daily in a "daily round". This means going at least one
+      round on each cage and checking that everything is in order.
+    - In each cage there are a large number of salmon, and some of them may die.
+      These must be taken out and counted daily.
+    - A weekly lice count is conducted, during which both the number of lice on the
+      salmon and the overall health of the salmon are assessed.
+    - A fish farm worker has these tasks, while other roles in the workplace have
+      different areas of responsibility.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Is there anything else you are wondering about?
+      answers:
+      - answerLabel: Security at the facility
+        nextElement: 6
+        endAfterAnswer: 0
+      - answerLabel: How to work together
+        nextElement: 7
+        endAfterAnswer: 0
+      - answerLabel: Common tasks
+        nextElement: 8
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 9
+        endAfterAnswer: 0
+  - dialogue:
+    - Thanks for the chat! Let's deal with the dead fish.
+    endAfterDialogue: 1
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: 
+      answers: []

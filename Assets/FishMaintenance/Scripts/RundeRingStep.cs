@@ -12,13 +12,13 @@ public class RundeRingStep : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "rundeRing")
+        if (other.gameObject.CompareTag("rundeRing"))
         {
             fixedItem.SetActive(true);
             gameObject.SetActive(false);
             handheldItem.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
             handheldItem.SetActive(false);
-            Task.Step completedStep = manager.GetStep("Runde På Ring", step);
+            Task.Step completedStep = manager.GetStep("Daily Round", step);
             manager.CompleteStep(completedStep);
         }
     }

@@ -13,9 +13,12 @@ public class EquipmentGrabStep : MonoBehaviour
     void OnTriggerStay(Collider other)
     {
 
-        if (other.CompareTag("Hand"))
+        if (other.name == "Grabber")
         {
-            Task.Step completedStep = manager.GetStep("Hent Utstyr", step);
+            //Debug.Log(manager.GetStep("Get Equipment", step) == null);
+            Task.Step completedStep = manager.GetStep("Get Equipment", step);
+            
+            //Debug.Log(completedStep == null);
             manager.CompleteStep(completedStep);
             gameObject.SetActive(false);
             guidingHand.SetActive(false);

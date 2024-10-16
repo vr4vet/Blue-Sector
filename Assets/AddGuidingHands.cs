@@ -9,17 +9,17 @@ public class AddGuidingHands : MonoBehaviour
     [SerializeField] private GameObject guidingHandRope;
     [SerializeField] private GameObject guidingHandBucket;
 
-    public void intoAnchor()
+    public void IntoAnchor()
     {
-        if (!mm.GetStep("Hent Utstyr", "Hent splinter").IsCompeleted())
+        if (!mm.GetStep("Get Equipment", "Get splinter pin").IsCompeleted())
         {
             guidingHandSplint.SetActive(true);
         }
-        if (!mm.GetStep("Hent Utstyr", "Hent tau").IsCompeleted())
+        if (!mm.GetStep("Get Equipment", "Get rope").IsCompeleted())
         {
             guidingHandRope.SetActive(true);
         }
-        if (!mm.GetStep("Hent Utstyr", "Hent bøtte og spade").IsCompeleted())
+        if (!mm.GetStep("Get Equipment", "Get bucket and spade").IsCompeleted())
         {
             guidingHandBucket.SetActive(true);
         }
