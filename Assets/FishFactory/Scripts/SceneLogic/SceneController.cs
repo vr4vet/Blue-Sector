@@ -65,12 +65,6 @@ public class SceneController : MonoBehaviour
     /// <param name="scene">The name of the scene to change to</param>
     private void ChangeScene(string scene)
     {
-        /*        if (scene == "FishFeeding")
-                {
-                    GameManager.Instance.PlaySound("door");
-                    SceneManager.LoadScene(scene);
-                    return;
-                }*/
 
         // Check if the player is in the HSE room and if the requirements are fulfilled. Player should only be able to progress after the HSE room is completed or if going to a non-factory scene.
         if (
@@ -85,7 +79,7 @@ public class SceneController : MonoBehaviour
 
         // Set the target location (exit door) the player should be placed by after the scene change
         SetPlayerTargetLocation(scene);
-
+        
         // Adds a delegate to trigger when the scene is loaded
         // The delegate will move the player to the correct location
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -96,8 +90,13 @@ public class SceneController : MonoBehaviour
         if (meansOfTransportation == MeansOfTransportation.Boat)
             GameManager.Instance.PlaySound("MotorBoatDriving");
 
-        //SceneManager.LoadScene(scene);
-        StartCoroutine(LoadNextScene(scene));
+        // Load scene
+        // Display loading screen if set in inspector
+        if (LoadingScreen == null)
+            SceneManager.LoadScene(scene);
+        else
+            StartCoroutine(LoadSceneWithLoadingScreen(scene));
+
     }
 
     /// <summary>
@@ -113,23 +112,23 @@ public class SceneController : MonoBehaviour
             case "FishMaintenanceToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     5.6f,
-                    1.03299999f,//0.5f,
-                    78.5f
+                    0.67f,
+                    80f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
                 break;
             case "FishWelfareToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     5.6f,
-                    1.03299999f,//0.5f,
-                    78.5f
+                    0.67f,
+                    80f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
                 break;
             case "FishFeedingToFishMaintenance":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     22.679f,
-                    1.37f,//0.5f,
+                    1.37f,
                     -63.986f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -175.287f, 0f);
@@ -137,31 +136,39 @@ public class SceneController : MonoBehaviour
             case "FishFeedingToHSERoom":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     -4.114f,
-                    1.014f,//0.5f,
+                    1.014f,
                     -12.793f
                 );
-                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -270f, 0f);
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 90f, 0f);
                 break;
             case "FishFeedingToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     5.6f,
-                    1.03299999f,//0.5f,
-                    78.5f
+                    0.67f,
+                    80f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
+                break;
+            case "ReceptionOutdoorToFishFeeding":
+                GameManager.Instance.NextScenePlayerPosition = new Vector3(
+                    0.149f,
+                    2.302f,
+                    -4.467f
+                );
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -21.806f, 0f);
                 break;
             case "ReceptionOutdoorToHSERoom":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     -4.114f,
-                    1.014f,//0.5f,
+                    1.014f,
                     -12.793f
                 );
-                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -270f, 0f);
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 90f, 0f);
                 break;
             case "ReceptionOutdoorToFishMaintenance":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     22.679f,
-                    1.37f,//0.5f,
+                    1.37f,
                     -63.986f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -175.287f, 0f);
@@ -169,7 +176,7 @@ public class SceneController : MonoBehaviour
             case "ReceptionOutdoorToLaboratory":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     2.212f,
-                    1.025f,//0.5f,
+                    1.025f,
                     -0.225f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -47.564f, 0f);
@@ -177,7 +184,7 @@ public class SceneController : MonoBehaviour
             case "ReceptionOutdoorToFishWelfare":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     34f,
-                    1.438f,//0.5f,
+                    1.438f,
                     -35.416f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 180f, 0f);
@@ -185,8 +192,8 @@ public class SceneController : MonoBehaviour
             case "HSERoomToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     5.6f,
-                    1.03299999f,//0.5f,
-                    78.5f
+                    0.67f,
+                    80f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
                 break;
@@ -212,7 +219,7 @@ public class SceneController : MonoBehaviour
                     1.01400006f,
                     -5.0000000f
                 );
-                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 270f, 0f);
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, -90f, 0f);
                 break;
             case "BleedingStationToQAStation":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
@@ -228,7 +235,7 @@ public class SceneController : MonoBehaviour
                     1.01400006f,
                     -3.93300009f
                 );
-                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 90f, 0f);
                 break;
             case "QAStationToBleedingStation":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
@@ -256,8 +263,9 @@ public class SceneController : MonoBehaviour
             return;
         }
 
-        // Moving the player will not work if the XR Rig prefab does not have the Player tag!
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        // Moving the player will not work if the XR Rig in the scene does not have the name "XR Rig Advanced VR4VET"
+        //GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = GameObject.Find("XR Rig Advanced VR4VET");
         player.transform.position = GameManager.Instance.NextScenePlayerPosition;
         player.transform.eulerAngles = GameManager.Instance.NextScenePlayerRotation;
 
@@ -283,19 +291,13 @@ public class SceneController : MonoBehaviour
     /// </summary>
     /// <param name="scene"></param>
     /// <returns></returns>
-    private IEnumerator LoadNextScene(string scene)
+    private IEnumerator LoadSceneWithLoadingScreen(string scene)
     {
-        if (LoadingScreen == null)
-        {
-            SceneManager.LoadScene(scene);
-            yield return null;
-        }
-
-        AsyncOperation loadLevel = SceneManager.LoadSceneAsync(scene);
         GameObject loadingScreen = Instantiate(LoadingScreen);
+        AsyncOperation loadLevel = SceneManager.LoadSceneAsync(scene);
         while (!loadLevel.isDone)
         {
-            loadingScreen.GetComponent<LoadingScreen>().BarFillAmount(Mathf.Clamp01(loadLevel.progress / .9f));
+            loadingScreen.GetComponent<LoadingScreen>().SetFillAmount(Mathf.Clamp01(loadLevel.progress / .9f));
             yield return null;
         }
     }

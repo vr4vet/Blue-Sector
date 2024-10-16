@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 9205844495485363436}
   - component: {fileID: 9205844495485363411}
   - component: {fileID: 2667665649058245418}
-  - component: {fileID: 9205844495485363437}
   - component: {fileID: 1816515325261925563}
   m_Layer: 0
   m_Name: TransitionAoeTrigger
@@ -63,7 +62,7 @@ MonoBehaviour:
   OnPlayerEnter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9205844495485363437}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BNG.SceneLoader, Assembly-CSharp
         m_MethodName: LoadScene
         m_Mode: 5
@@ -78,21 +77,6 @@ MonoBehaviour:
   OnPlayerExit:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &9205844495485363437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9205844495485363439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b6475f5812b7c740b6b82e4b0f347cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loadSceneMode: 0
-  UseSceenFader: 1
-  ScreenFadeTime: 1
 --- !u!114 &1816515325261925563
 MonoBehaviour:
   m_ObjectHideFlags: 0
