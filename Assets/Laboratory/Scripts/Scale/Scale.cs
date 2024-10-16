@@ -14,6 +14,7 @@ public class Scale : MonoBehaviour
     public TMP_Text displayText;
     [SerializeField]
     public GameObject tray;
+    public NpcTriggerDialogue npcTriggerDialogue;
 
     // ----------------- Public Variables -----------------
     [HideInInspector]
@@ -23,7 +24,7 @@ public class Scale : MonoBehaviour
     public bool tubWasUsed = false;
 
     // ----------------- Private Variables -----------------
-    private List<GameObject> objectsOnScale = new List<GameObject>();
+    public List<GameObject> objectsOnScale = new List<GameObject>();
     private IEnumerator corutine;
 
      private DialogueBoxController dialogueBoxController;
@@ -31,34 +32,94 @@ public class Scale : MonoBehaviour
     private void Start() {
 
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+        
     }
 
     private void OnTriggerEnter(Collider collisionObject)
     {
         if (!scaleOn)
         {
-            return;
+            if (collisionObject.gameObject.name is "basket_plastic" or "counter_handheld" or "MicroscopeSlideModel" || collisionObject.gameObject.tag == "Bone")
+            {
+                if (collisionObject.gameObject.name == "basket_plastic")
+                {
+                    
+                    collisionObject.transform.position = ObjectPositions.Instance._basketPosition;
+                    collisionObject.transform.rotation = ObjectPositions.Instance._basketRotation;
+                    npcTriggerDialogue.Error1();
+                }
+                else if (collisionObject.gameObject.name == "counter_handheld")
+                {
+                    collisionObject.transform.position = ObjectPositions.Instance._handheldCounterPosition;
+                    collisionObject.transform.rotation = ObjectPositions.Instance._handheldCounterRotation;
+                    npcTriggerDialogue.Error1();
+                }
+                else if (collisionObject.gameObject.name == "MicroscopeSlideModel")
+                {
+                    collisionObject.transform.position = ObjectPositions.Instance._microscopeSlidePosition;
+                    collisionObject.transform.rotation = ObjectPositions.Instance._microscopeSlideRotation;
+                    npcTriggerDialogue.Error1();
+                }
+                else if (collisionObject.gameObject.tag == "Bone")
+                {
+                    npcTriggerDialogue.Error4();
+                }
+            }
         }
+        
         if (objectsOnScale.Contains(collisionObject.gameObject))
         {
             return;
         }
-        else if (collisionObject.GetComponent<Weight>())
+        
+        else if (collisionObject.GetComponent<Weight>() && scaleOn)
         {
             objectsOnScale.Add(collisionObject.gameObject);
             totalWeight += collisionObject.GetComponent<Weight>().ObjectWeight;
             StopAllCoroutines();
             corutine = SetScaleText(totalWeight - collisionObject.GetComponent<Weight>().ObjectWeight);
             StartCoroutine(corutine);
-             if (collisionObject.gameObject.name == "basket_plastic" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[1])
+             if (collisionObject.gameObject.name == "basket_plastic" && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[1])
             {
                 dialogueBoxController.SkipLine();
             }
             else if (collisionObject.gameObject.tag == "Bone" && objectsOnScale.Contains(tray))
             {
+                Debug.Log("Bone on tray");
                 tubWasUsed = true;
             }
            
+        }
+        else if (collisionObject.gameObject.name != "basket_plastic" && scaleOn)
+        {
+            
+            //Destroy(collisionObject.gameObject);
+
+            if (collisionObject.gameObject.name is "counter_handheld" or "MicroscopeSlideModel")
+            {
+                if (collisionObject.gameObject.name == "counter_handheld")
+                {
+                    collisionObject.transform.position = ObjectPositions.Instance._handheldCounterPosition;
+                    collisionObject.transform.rotation = ObjectPositions.Instance._handheldCounterRotation;
+                    npcTriggerDialogue.Error2();
+                }
+                else if (collisionObject.gameObject.name == "MicroscopeSlideModel")
+                {
+                    collisionObject.transform.position = ObjectPositions.Instance._microscopeSlidePosition;
+                    collisionObject.transform.rotation = ObjectPositions.Instance._microscopeSlideRotation;
+                    npcTriggerDialogue.Error2();
+                }
+            }
+
+            if (collisionObject.gameObject.tag == "Bone")
+            {
+                if (!objectsOnScale.Contains(tray))
+                {
+                    npcTriggerDialogue.Error3();
+                }
+            }
+          
+                
         }
     }
    

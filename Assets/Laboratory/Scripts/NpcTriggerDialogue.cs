@@ -6,6 +6,7 @@ using InteractiveCalculator;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEditor;
 
 public class NpcTriggerDialogue : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class NpcTriggerDialogue : MonoBehaviour
    public DialogueTree feedbackDialogueTree;
    [SerializeField]
    public DialogueTree larsDialogueTree;
+   [SerializeField]
+   public DialogueTree errorFeedbackDialogueTree;
    [SerializeField]  
    public string npcName;
 
@@ -61,9 +64,10 @@ public class NpcTriggerDialogue : MonoBehaviour
        // Check the current dialogue and if it is the correct one, change the dialogue
        if (dialogueBoxController.dialogueTreeRestart != null)
        {
-           if (dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0])
+           if ((dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0]) || (dialogueBoxController.dialogueTreeRestart.name == "ErrorFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0]))
            {
-               ChangeToLars();
+               Debug.Log(dialogueBoxController.dialogueTreeRestart.name);
+               ChangeToLars(dialogueBoxController.dialogueTreeRestart.name);
            
            }
        }
@@ -100,33 +104,76 @@ public class NpcTriggerDialogue : MonoBehaviour
          dialogueBoxController.StartDialogue(feedbackDialogueTree, 5, npcName);
    }
    
-   public void ChangeToLars()
-   {
-       dialogueBoxController.StartDialogue(larsDialogueTree, 1, npcName);
-       
-       basket.transform.position = _basketPosition;
-       basket.transform.rotation = _basketRotation;
-       
-       
-       Destroy(fish);
+   // When the player places a object on the weight scale before turning it on
+   public void Error1() {
+         
+         dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 0, npcName);
+         
+   }
+   
+   // When the player places the wrong object on the weight scale
+   public void Error2() {
+         dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 2, npcName);
+   }
+   
+   // When the player places the fish without using the basket
+   public void Error3() {
+         GameObject[] instances = GameObject.FindGameObjectsWithTag("Fish");
+         foreach (GameObject instance in instances)
+         {
+             Destroy(instance);
+         }
+         Instantiate(fishPrefab, _fishPosition, _fishRotation);
+         dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 3, npcName);
+   }
+   
+   // When the player places the fish before turning on the weight
+   public void Error4() {
+       GameObject[] instances = GameObject.FindGameObjectsWithTag("Fish");
+       foreach (GameObject instance in instances)
+       {
+           Destroy(instance);
+       }
        Instantiate(fishPrefab, _fishPosition, _fishRotation);
+       dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 0, npcName);
+   }
+   
+   public void ChangeToLars(string dialogueName)
+   {
+       Debug.Log(dialogueName);
+       if (dialogueName == "NpcFeedback")
+       {
+           dialogueBoxController.StartDialogue(larsDialogueTree, 1, npcName);
+       
+           basket.transform.position = _basketPosition;
+           basket.transform.rotation = _basketRotation;
        
        
-       scale.GetComponent<Scale>().totalWeight = 0;
+           Destroy(fish);
+           Instantiate(fishPrefab, _fishPosition, _fishRotation);
        
-       calculator.GetComponent<Calculator>().OnPressedClearAll();
        
-       numPad.GetComponent<ResultLogger>().SwitchToCondition();
-       numPad.GetComponent<ResultLogger>().SwitchToLength();
-       numPad.GetComponent<ResultLogger>().SwitchToWeight();
-       numPad.GetComponent<ResultLogger>().weight.SetText("Weight");
-       numPad.GetComponent<ResultLogger>().length.SetText("Length");
-       numPad.GetComponent<ResultLogger>().conditionFactor.SetText("Condition Factor");
+           scale.GetComponent<Scale>().totalWeight = 0;
        
-       handheldCounter.transform.position = _handheldCounterPosition;
-       handheldCounter.transform.rotation = _handheldCounterRotation;
+           calculator.GetComponent<Calculator>().OnPressedClearAll();
        
-       microscopeSnapPoint.GetComponent<SnapZone>().OnDetachEvent.Invoke(null);
+           numPad.GetComponent<ResultLogger>().SwitchToCondition();
+           numPad.GetComponent<ResultLogger>().SwitchToLength();
+           numPad.GetComponent<ResultLogger>().SwitchToWeight();
+           numPad.GetComponent<ResultLogger>().weight.SetText("Weight");
+           numPad.GetComponent<ResultLogger>().length.SetText("Length");
+           numPad.GetComponent<ResultLogger>().conditionFactor.SetText("Condition Factor");
+       
+           handheldCounter.transform.position = _handheldCounterPosition;
+           handheldCounter.transform.rotation = _handheldCounterRotation;
+       
+           microscopeSnapPoint.GetComponent<SnapZone>().OnDetachEvent.Invoke(null); 
+       }
+       else if (dialogueName == "ErrorFeedback")
+       {
+           dialogueBoxController.StartDialogue(larsDialogueTree, 0, npcName);
+       }
+
    }
    
 }
