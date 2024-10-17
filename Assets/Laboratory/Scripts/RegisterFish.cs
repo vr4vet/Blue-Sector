@@ -47,7 +47,7 @@ public class RegisterFish : MonoBehaviour
             // Calculate condition factor
             conditionRight = ((fishWeight/fishLength)/fishLength)/fishLength;
             conditionRight *= 100;
-            conditionRight = (float)Math.Round(conditionRight, 2);
+            conditionRight = (float)Math.Truncate(conditionRight * 100) / 100;
             
         }
         else if (collisionObject.gameObject.name == "basket_plastic")
