@@ -42,6 +42,7 @@ public class NpcTriggerDialogue : MonoBehaviour
   
 
    private DialogueBoxController dialogueBoxController;
+   private int _dialogueIndex;
 
    private void Start()
    {
@@ -77,6 +78,22 @@ public class NpcTriggerDialogue : MonoBehaviour
    private void OnTriggerEnter(Collider other)
    {
       triggerEvent.Invoke();
+   }
+
+   // Find the index of the current dialogue section
+   public void FindDialogueSection()
+   {
+       for (int i = 0; i < dialogueBoxController.dialogueTreeRestart.sections.Length; i++)
+       {
+           for (int j = 0; j < dialogueBoxController.dialogueTreeRestart.sections[i].dialogue.Length; j++)
+           {
+               if (dialogueBoxController.dialogueTreeRestart.sections[i].dialogue[j] == dialogueBoxController._dialogueText.text)
+               {
+                   _dialogueIndex = i;
+                   break;
+               }
+           }
+       }
    }
    
    // Everything correct
@@ -171,7 +188,7 @@ public class NpcTriggerDialogue : MonoBehaviour
        }
        else if (dialogueName == "ErrorFeedback")
        {
-           dialogueBoxController.StartDialogue(larsDialogueTree, 0, npcName);
+           dialogueBoxController.StartDialogue(larsDialogueTree, _dialogueIndex, npcName);
        }
 
    }

@@ -39,6 +39,7 @@ public class Scale : MonoBehaviour
     {
         if (!scaleOn)
         {
+            npcTriggerDialogue.FindDialogueSection();
             if (collisionObject.gameObject.name is "basket_plastic" or "counter_handheld" or "MicroscopeSlideModel" || collisionObject.gameObject.tag == "Bone")
             {
                 if (collisionObject.gameObject.name == "basket_plastic")
@@ -93,7 +94,7 @@ public class Scale : MonoBehaviour
         else if (collisionObject.gameObject.name != "basket_plastic" && scaleOn)
         {
             
-            //Destroy(collisionObject.gameObject);
+            npcTriggerDialogue.FindDialogueSection();
 
             if (collisionObject.gameObject.name is "counter_handheld" or "MicroscopeSlideModel")
             {
