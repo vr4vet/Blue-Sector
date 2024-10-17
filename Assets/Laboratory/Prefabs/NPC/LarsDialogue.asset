@@ -16,11 +16,11 @@ MonoBehaviour:
   speakButtonOnExit: 1
   sections:
   - dialogue:
-    - 'Welcome to the Fish Laboratory. Here you will check the quality of the fish.
-
-'
-    - ' This is done through multiple steps. First  you will have to measure the
-      fish, then dissect it and check it''s qualities.'
+    - Welcome to the Fish Laboratory. Here you will check the quality of the fish
+      and its environment.
+    - This will be done through multiple steps. First, you will have to measure a
+      fish, then dissect it and check its indicators of health. You will then have
+      to analyse algae content in a water sample.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
@@ -52,10 +52,8 @@ MonoBehaviour:
         nextElement: 1
         endAfterAnswer: 0
   - dialogue:
-    - 'The first step is measuring the fish''s weight, this is done by using the
-      weight on the table.
-
-'
+    - The first step is measuring the fish's weight, this is done by using the weighing
+      scale on the table.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
@@ -68,12 +66,12 @@ MonoBehaviour:
         nextElement: 4
         endAfterAnswer: 0
   - dialogue:
-    - ' First turn on the weight using the top button on the weight'
-    - ' Then place the basket on the weight.'
+    - ' First, turn on the weighing scale using the top button.'
+    - Then place the basket on the metal plate on top of the weighing scale.
     - ' Remember to press the lower button on the weight to reset it and make sure
       it is set zero. '
     - Place the fish on the basket and look at the weight screen
-    - Then press the weight button on the numpad and write down the weight
+    - Then press the weight button on the number keypad and input the weight
     endAfterDialogue: 0
     disabkeSkipLineButton: 1
     branchPoint:
@@ -86,10 +84,8 @@ MonoBehaviour:
         nextElement: 3
         endAfterAnswer: 0
   - dialogue:
-    - 'The next step is measuring the fish''s length. This is done by using the ruler
-      to the right of the weight.
-
-'
+    - The next step is measuring the fish's length. This is done by using the measuring
+      board to the right of the weighing scale.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
@@ -102,10 +98,10 @@ MonoBehaviour:
         nextElement: 6
         endAfterAnswer: 0
   - dialogue:
-    - Make sure the fish is straight and it's head is placed beside the wall on the
-      left of the tool. The correct measurement is where the middle part of the tail
-      ends.
-    - Then press the length button on the numpad and write down the length of the
+    - "Make sure the fish is straight and its head is placed beside the wall on the
+      left of the measuring board. You should measure from this wall to the centre
+      of the fork in the fish\u2019s tail."
+    - Then press the length button on the number keypad and input the length of the
       fish.
     endAfterDialogue: 0
     disabkeSkipLineButton: 1
@@ -119,12 +115,10 @@ MonoBehaviour:
         nextElement: 5
         endAfterAnswer: 0
   - dialogue:
-    - 'Now you need to calculate the condition factor of the fish. This is done by
-      dividing the weight with the length of the fish three times, then multiplying
+    - Now you need to calculate the condition factor of the fish. This is done by
+      dividing the weight  by the length of the fish three times, then multiplying
       by a hundred.
-
-'
-    - 'If the condition factor is below 1, that means the fish has low quality.
+    - 'If the condition factor is below 1, that means the fish is of low quality.
 
 '
     endAfterDialogue: 0
@@ -140,8 +134,9 @@ MonoBehaviour:
         endAfterAnswer: 0
   - dialogue:
     - Use the calculator on the table to calculate the result
-    - Then press the condition factor button on the numpad and write down the weight.
-      Only include two decimals.Then press the equal button.
+    - Place the fish on the plate of the number keypad
+    - Then press the condition factor button on the number keykpad and input the
+      condition factor. Only include two decimals.Then press the equal button.
     endAfterDialogue: 0
     disabkeSkipLineButton: 1
     branchPoint:
@@ -154,12 +149,13 @@ MonoBehaviour:
         nextElement: 7
         endAfterAnswer: 0
   - dialogue:
-    - 'Next you will dissect the fish. Place the fish on the cutting board to the
-      right of the length measurer.
+    - ' Next you will dissect the fish. Place the fish on the dissection board to
+      the right of the length measuring board. The fish has been humanely culled.'
+    - 'The first step is to check for any external damage to the fish. Check for
+      scale loss, blood spots, lesions, fin damage, and gill condition to make sure
+      there are no health issues.
 
 '
-    - The first step is checking for any external damages or errors on the fish.
-      Check the skin, fins and gills to make sure there are no health issues.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
@@ -172,12 +168,12 @@ MonoBehaviour:
         nextElement: 5
         endAfterAnswer: 0
   - dialogue:
-    - 'The next step is inspecting the internal areas of the fish. Cut open the fish
+    - The next step is inspecting the internal areas of the fish. Cut open the fish
       according to the instructions.
-
-'
-    - Look after any internal bleeding or discoloration on the fish organs or any
-      other damages.
+    - "Look for any internal bleeding, blood spots, discoloration to the fish\u2019s
+      organs or any other damage. "
+    - Are you able to identify the key organs such as the liver, heart, stomach,
+      kidney, swim bladder, and reproductive organs?
     - Remember to be careful when handling the fish to avoid causing any damage.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
@@ -198,18 +194,17 @@ MonoBehaviour:
       question: 
       answers: []
   - dialogue:
-    - The fish laboratory is important for getting information on the health of the
-      fish. This information is used to better regulate the feeding and treatment
-      of the fish. And to ensure that the fish welfare is good by checking for any
-      sickness or other health issues.
-    - In the laboratory the condition factor of the fish is calculated which is used
-      to determine how well fed the fish is, and it is important for regulating the
-      feeding of the fish
-    - The fish is dissected to see if there are any issues with the fish, like sickness
-      or damages
-    - The living conditions of the fish are also checked  by analyzing different
-      plankton samples in the microscope, as some plankton can be harmful for the
-      fish.
+    - The fish laboratory is important for gathering information on the health of
+      the fish. This information is used to better regulate the feeding and treatment
+      of the fish. By checking for any sickness or other health issues, information
+      on the fish welfare can be obtained.
+    - In the laboratory the condition factor of the fish is calculated. This is used
+      to determine how well fed the fish is, and is important for regulating the
+      feeding of the fish.
+    - The fish is dissected to see if there are any issues, like sickness or damage.
+    - The environmental conditions of the fish are also checked by analysing water
+      samples with the microscope, as some plankton found in the water can be harmful
+      to the fish.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
@@ -224,9 +219,8 @@ MonoBehaviour:
         nextElement: 11
         endAfterAnswer: 0
   - dialogue:
-    - Now you are going to analyze a plankton sample in the microscope. Your goal
-      is to look after different organisms in the sample, and count how many there
-      are.
+    - Now you are going to analyze a water sample in the microscope. Your goal is
+      to look after different organisms in the sample, and count how many there are.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
@@ -240,11 +234,11 @@ MonoBehaviour:
         nextElement: 12
         endAfterAnswer: 0
   - dialogue:
-    - First place the plankton sample under the scope, this is the blue rectangle
-      to the right of the microscope.
+    - First place the water sample under the scope, this is the blue rectangle to
+      the right of the microscope.
     - Now you can see the sample on the screen, press one of the big arrows to move
       around.
-    - Try to change the speed of how fast you move around by pressing plus or
+    - Try to change the speed of how you fast you move around by pressing plus or
       minus.
     - Zoom in or out by scrolling the nosepieces over the sample
     - On the left side of the microscope there is a counter. Grab it with your left

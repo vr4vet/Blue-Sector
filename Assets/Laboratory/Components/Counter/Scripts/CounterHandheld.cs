@@ -18,9 +18,12 @@ public class CounterHandheld : MonoBehaviour
 
     public void Increment()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[4]) 
+        if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
         {
-            dialogueBoxController.SkipLine();
+            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[4])
+            {
+                dialogueBoxController.SkipLine();
+            }
         }
         Count = (Count + 1) % 10000;
         SetNumberedWheels();

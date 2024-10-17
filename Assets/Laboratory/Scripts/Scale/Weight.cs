@@ -55,7 +55,7 @@ public class Weight : MonoBehaviour
 
         if (collision.GetType() == typeof(CapsuleCollider) && collision.GetComponent<Weight>())
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[3])
+            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[3] && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" )
             {
                 dialogueBoxController.SkipLine();
             }

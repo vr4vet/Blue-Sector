@@ -191,7 +191,7 @@ namespace InteractiveCalculator
                 InputDecimals = 0;
                 CurrentDisplayMode = DisplayMode.value;
 
-                if (dialogueBoxController.dialogueTreeRestart != null)
+                if (dialogueBoxController.dialogueTreeRestart != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
                 {
                     if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[0])
                     {
