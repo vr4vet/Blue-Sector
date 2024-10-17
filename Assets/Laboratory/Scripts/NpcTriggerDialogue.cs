@@ -155,6 +155,10 @@ public class NpcTriggerDialogue : MonoBehaviour
        dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 0, npcName);
    }
    
+   public void Error5() {
+         dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 4, npcName);
+   }
+   
    public void ChangeToLars(string dialogueName)
    {
        Debug.Log(dialogueName);

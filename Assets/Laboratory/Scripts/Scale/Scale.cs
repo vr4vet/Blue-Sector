@@ -27,7 +27,7 @@ public class Scale : MonoBehaviour
     public List<GameObject> objectsOnScale = new List<GameObject>();
     private IEnumerator corutine;
 
-     private DialogueBoxController dialogueBoxController;
+    private DialogueBoxController dialogueBoxController;
 
     private void Start() {
 
