@@ -47,7 +47,7 @@ public class TransitionSceneNPC : MonoBehaviour
             GetComponent<SceneController>().SceneName = destinationScene;
     }
 
-    public void ChangeScene()
+/*    public void ChangeScene()
     {
         if (destinationScene != null)
         {
@@ -55,7 +55,7 @@ public class TransitionSceneNPC : MonoBehaviour
             //GetComponent<SceneLoader>().LoadScene(destinationScene);
             //GetComponent<SceneController>().SceneName = destinationScene;
         }
-    }
+    }*/
 
     private void OnDestroy()
     {
