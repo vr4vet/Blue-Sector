@@ -1,9 +1,14 @@
 using System;
 using System.Collections;
+using System.Net.Mime;
+using BNG;
 using TMPro;
 using UnityEngine;
 // Import of the TTS namespace
 using Meta.WitAi.TTS.Utilities;
+using UnityEngine.UI;
+using Button = UnityEngine.UIElements.Button;
+using Image = UnityEngine.UIElements.Image;
 
 public class DialogueBoxController : MonoBehaviour
 {
@@ -128,16 +133,12 @@ public class DialogueBoxController : MonoBehaviour
             StartCoroutine(revertToIdleAnimation());
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
-
+            _skipLineButton.SetActive(true);
             
             // Check if the current section should have disabled the skip line button
             if (dialogueTree.sections[section].disabkeSkipLineButton)
             {
-                _skipLineButton.SetActive(false);
-            }
-
-            else {
-                _skipLineButton.SetActive(true);
+                _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
             }
             
             while (!_skipLineTriggered)
@@ -147,8 +148,8 @@ public class DialogueBoxController : MonoBehaviour
                 yield return null;
             }
             _skipLineTriggered = false;
-            _skipLineButton.SetActive(false);
         }
+        
         if (dialogueTree.sections[section].endAfterDialogue)
         {
             dialogueEnded = true;
