@@ -149,6 +149,14 @@ public class SceneController : MonoBehaviour
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
                 break;
+            case "LaboratoryToReceptionOutdoor":
+                GameManager.Instance.NextScenePlayerPosition = new Vector3(
+                    36.733f,
+                    1.366f,
+                    106.079f
+                );
+                GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 180f, 0f);
+                break;
             case "ReceptionOutdoorToFishFeeding":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     0.149f,
