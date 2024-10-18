@@ -42,7 +42,7 @@ public class SceneController : MonoBehaviour
     /// <param name="collisionObject">The player collider</param>
     private void OnTriggerEnter(Collider collisionObject)
     {
-        if (sceneName != null)
+        if (sceneName != "" && sceneName != null)
         {
             if (
                 meansOfTransportation == MeansOfTransportation.Door && collisionObject.gameObject.name == "Grabber" 

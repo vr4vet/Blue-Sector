@@ -13,6 +13,7 @@ public class TransitionSceneNPC : MonoBehaviour
 
     private void ButtonSpawner_OnAnswer(string answer)
     {
+        bool validDestination = true;
         if (answer == "Welfare station")
         {
             destinationScene = "FishWelfare";
@@ -37,8 +38,13 @@ public class TransitionSceneNPC : MonoBehaviour
         {
             destinationScene = "ReceptionOutdoor";
         }
+        else
+            validDestination = false;
 
-        GetComponent<SceneController>().SceneName = destinationScene;
+        // Check if the player's given answer is a valid destination scene before passing it to SceneController
+        // Prevents SceneController from attempting to load non-existent scenes. 
+        if (validDestination)
+            GetComponent<SceneController>().SceneName = destinationScene;
     }
 
     public void ChangeScene()
