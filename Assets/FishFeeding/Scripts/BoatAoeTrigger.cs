@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(BoxCollider))]
 public class BoatAoeTrigger : MonoBehaviour
 {
-    public bool MaintenanceBoat;
+    //public bool MaintenanceBoat;
+    
     /// <summary>
     /// Gets an event that is fired when the player enters the box collider.
     /// </summary>
@@ -21,11 +22,11 @@ public class BoatAoeTrigger : MonoBehaviour
     {
         if (IsPlayer(other))
         {
-            if (MaintenanceBoat)
+/*            if (MaintenanceBoat)
             {
                 SceneManager.LoadScene("FishFeeding");
                 return;
-            }
+            }*/
             OnPlayerEnter.Invoke();
         }
 
@@ -47,5 +48,5 @@ public class BoatAoeTrigger : MonoBehaviour
         }
     }
 
-    private static bool IsPlayer(Collider collider) => collider.gameObject.tag == "Player";
+    private static bool IsPlayer(Collider collider) => collider.gameObject.tag == "Player" || collider.gameObject.name == "Grabber";
 }

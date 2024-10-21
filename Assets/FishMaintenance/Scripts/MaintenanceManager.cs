@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
 public class MaintenanceManager : MonoBehaviour
 {
-    public static MaintenanceManager Instance;
-    [SerializeField] private Task.TaskHolder taskHolder;
-    [SerializeField] private AudioClip success;
+    //public static MaintenanceManager Instance;
+    [SerializeField] public Task.TaskHolder taskHolder;
+    [SerializeField] public AudioClip success;
     [SerializeField] private AudioClip equipmentPickup;
     [SerializeField] private GameObject[] arrows;
     [SerializeField] private GameObject toBoatArrow;
@@ -16,13 +14,13 @@ public class MaintenanceManager : MonoBehaviour
     private bool twentySeconds = false;
     private AddInstructionsToWatch watch;
     private FeedbackManager feedbackManager;
-    private Task.Task task => taskHolder.GetTask("Vedlikehold");
+    private Task.Task Task => taskHolder.GetTask("Maintenance");
     private int teleportationAnchorCount;
 
 
     [HideInInspector] public int stepCount;
 
-    public Task.Task MaintenanceTask { get => task; }
+    public Task.Task MaintenanceTask { get => Task; }
 
     public UnityEvent<Task.Skill?> BadgeChanged { get; } = new();
     public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
@@ -30,7 +28,7 @@ public class MaintenanceManager : MonoBehaviour
     public UnityEvent<Task.Task> TaskCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
     // Start is called before the first frame update
-    private void Awake()
+/*    private void Awake()
     {
        
         if (Instance == null)
@@ -42,23 +40,24 @@ public class MaintenanceManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
+    }*/
 
 
     void Start()
     {
         feedbackManager = this.gameObject.GetComponent<FeedbackManager>();
-        watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
-        UpdateCurrentSubtask(task.GetSubtask("Hent Utstyr"));
+        //watch = this.gameObject.GetComponent<AddInstructionsToWatch>();
+
+        UpdateCurrentSubtask(Task.GetSubtask("Get Equipment"));
 
         // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
-        foreach (Task.Subtask sub in task.Subtasks)
+        foreach (Task.Subtask sub in Task.Subtasks)
         {
             foreach (Task.Step step in sub.StepList)
             {
                 step.Reset();
                 step.CurrentStep = false;
-                if(step.StepName == "Skyv dødfisken i karet") step.setStepNumber(1);
+                if(step.StepName == "Push the dead fish into the tub") step.setStepNumber(1);
             }
         }
         foreach (Task.Skill skill in taskHolder.skillList)
@@ -68,11 +67,19 @@ public class MaintenanceManager : MonoBehaviour
 
     }
 
-    public void invokeBadge(Task.Skill badge)
+    public void InvokeBadge(Task.Skill badge)
     {
         BadgeChanged.Invoke(badge);
     }
-    public void effectiveBadgeEnabled(bool passed)
+
+    public void InvokeBadgeString(string badgeName)
+    {
+        if (taskHolder.GetSkill(badgeName) == null)
+            Debug.LogError("Skill " + badgeName + " does not exist");
+        else
+            BadgeChanged.Invoke(taskHolder.GetSkill(badgeName));
+    }
+    public void EffectiveBadgeEnabled(bool passed)
     {
         twentySeconds = passed;
     }
@@ -82,7 +89,7 @@ public class MaintenanceManager : MonoBehaviour
         Task.Subtask sub = step.ParentSubtask;
         step.CompleateRep();
         UpdateCurrentSubtask(sub);
-        // Task.Skill skill = taskHolder.GetSkill("Kommunikasjon");
+
         if (step.IsCompeleted())
         {
 
@@ -90,10 +97,10 @@ public class MaintenanceManager : MonoBehaviour
 
             PlayAudio(success);
             stepCount += 1;
-            feedbackManager.emptyInstructions();
-            if (sub.SubtaskName == "Runde På Ring" && twentySeconds)
+            //feedbackManager.emptyInstructions();
+            if (sub.SubtaskName == "Daily Round" && twentySeconds)
             {
-                Task.Skill skill = taskHolder.GetSkill("Effektiv");
+                Task.Skill skill = taskHolder.GetSkill("Efficient");
                 BadgeChanged.Invoke(skill);
             }
 
@@ -112,17 +119,17 @@ public class MaintenanceManager : MonoBehaviour
         {
             string subtaskName = sub.SubtaskName;
             SubtaskChanged.Invoke(sub);
-            if (task.Compleated())
+            if (Task.Compleated())
             {
-                TaskCompleted.Invoke(task);
+                TaskCompleted.Invoke(Task);
             }
-            if (sub.SubtaskName == "Runde På Ring")
+            if (subtaskName == "Daily Round")
             {
-                Task.Skill skill = taskHolder.GetSkill("Problemløser");
+                Task.Skill skill = taskHolder.GetSkill("Problem solver");
                 BadgeChanged.Invoke(skill);
             }
 
-            Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
+            Task.Subtask nextSubtask = Task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
 
             if (nextSubtask != null)
             {
@@ -132,8 +139,7 @@ public class MaintenanceManager : MonoBehaviour
                 UpdateCurrentSubtask(nextSubtask);
             }
 
-
-            if ((subtaskName == "Runde På Ring" && task.GetSubtask("Håndforing").Compleated()) || (subtaskName == "Håndforing" && task.GetSubtask("Runde På Ring").Compleated()))
+            if ((subtaskName == "Daily Round" && Task.GetSubtask("Hand-feeding").Compleated()) || (subtaskName == "Hand-feeding" && Task.GetSubtask("Daily Round").Compleated()))
             {
                 NavigateToBoat();
             }
@@ -166,7 +172,7 @@ public class MaintenanceManager : MonoBehaviour
 
     public Task.Step GetStep(string subtaskName, string stepName)
     {
-        Task.Subtask sub = task.GetSubtask(subtaskName);
+        Task.Subtask sub = Task.GetSubtask(subtaskName);
 
         Task.Step step = sub.GetStep(stepName);
         return step;
@@ -189,12 +195,12 @@ public class MaintenanceManager : MonoBehaviour
         newAudioSource.PlayOneShot(audio);
     }
 
-    public void incrementTeleportationAnchorCount()
+    public void IncrementTeleportationAnchorCount()
     {
         teleportationAnchorCount += 1;
     }
 
-    public int getTeleportationAnchorCount()
+    public int GetTeleportationAnchorCount()
     {
         return teleportationAnchorCount;
     }
