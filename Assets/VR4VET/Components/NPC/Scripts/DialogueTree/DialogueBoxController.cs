@@ -163,8 +163,10 @@ public class DialogueBoxController : MonoBehaviour
         ShowAnswers(dialogueTree.sections[section].branchPoint);
         while (_answerTriggered == false)
         {
+            _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
             yield return null;
         }
+        _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
         _answerTriggered = false;
         _exitButton.SetActive(false);
         _skipLineButton.SetActive(false);
