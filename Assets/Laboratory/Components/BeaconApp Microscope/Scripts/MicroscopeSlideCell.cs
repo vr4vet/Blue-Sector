@@ -3,16 +3,31 @@ using UnityEngine.UI;
 
 public class MicroscopeSlideCell : MonoBehaviour
 {
-    [SerializeField] private Image Image;
-    [SerializeField] private int AmountOfPlankton;
+    [SerializeField] private int ChaetocerosAmount;
+    [SerializeField] private int PseudoNitzschiaAmount;
+    [SerializeField] private int SkeletonemaAmount;
 
-    public int GetAmountOfPlankton()
+    public int GetTotalPlanktonCount()
     {
-        return AmountOfPlankton;
+        return ChaetocerosAmount + PseudoNitzschiaAmount + SkeletonemaAmount;
     }
 
-    public Image GetImage()
+    public int GetChaetocerosCount()
     {
-        return Image; 
+        return ChaetocerosAmount; 
     }
+
+    public int GetPseudoNitzschiaCount()
+{
+        return PseudoNitzschiaAmount;
+    }
+
+    public int GetSkeletonemaCount()
+    {
+        return SkeletonemaAmount;
+    }
+
+
+
+
 }

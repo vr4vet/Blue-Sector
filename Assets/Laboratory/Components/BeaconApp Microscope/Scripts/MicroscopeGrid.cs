@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MicroscopeGrid : MonoBehaviour
@@ -8,8 +9,11 @@ public class MicroscopeGrid : MonoBehaviour
     {
         foreach (MicroscopeSlideCell cell in transform.Find("Panel").GetComponentsInChildren<MicroscopeSlideCell>())
         {
-            TotalAmountOfPlankton += cell.GetAmountOfPlankton();
+            TotalAmountOfPlankton += cell.GetTotalPlanktonCount();
+            cell.gameObject.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, 90 * (int)(Random.Range(0, 0.4f) * 10));
+            //Debug.Log(90 * (int)(Random.Range(0, 0.4f) * 10));
         }
+        
     }
 
     public int GetTotalAmountOfPlankton()
