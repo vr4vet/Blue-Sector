@@ -7,10 +7,10 @@ public class MicroscopeGrid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach (MicroscopeSlideCell cell in transform.Find("Panel").GetComponentsInChildren<MicroscopeSlideCell>())
+        foreach (MicroscopeSlideCell cell in transform.Find("Grid").GetComponentsInChildren<MicroscopeSlideCell>())
         {
             TotalAmountOfPlankton += cell.GetTotalPlanktonCount();
-            cell.gameObject.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, 90 * (int)(Random.Range(0, 0.4f) * 10));
+            //cell.gameObject.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, 90 * (int)(Random.Range(0, 0.4f) * 10));
             //Debug.Log(90 * (int)(Random.Range(0, 0.4f) * 10));
         }
         

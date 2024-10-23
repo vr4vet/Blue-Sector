@@ -128,9 +128,23 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridTransform.sizeDelta.y / sizeRatio);
             Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(gridTransform.sizeDelta.x / 10, gridTransform.sizeDelta.y / 5);
 
+            // resize and reposition plankton images within each cell to match original layout
+            foreach (Image plankton in Grid.transform.Find("Grid").GetComponentsInChildren<Image>())
+            {
+                //Debug.Log(plankton.name);
+                if (!plankton.name.Contains("MicroscopeSlideCell"))
+                {
+                    Debug.Log(plankton.name);
+                    plankton.GetComponent<RectTransform>().localPosition /= sizeRatio;
+                    plankton.GetComponent<RectTransform>().localScale /= sizeRatio;
+                }
+            }
+            Grid.transform.Find("Grid").GetComponent<RectTransform>().localScale = Vector3.one; // the parent grid is affected for some reason and needs to be reset
+
             // apply the same magnification as monitor
             int Scale = MicroscopeMonitor.GetMagnificationLevel();
             gridTransform.localScale = new Vector3(Scale, Scale, Scale);
+            
         }
         else
         {
