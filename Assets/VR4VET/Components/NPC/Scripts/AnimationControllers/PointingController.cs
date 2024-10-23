@@ -1,0 +1,84 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Tutorials.Core.Editor;
+using UnityEngine;
+
+public class PointingController : MonoBehaviour
+{
+    public GameObject npc;
+    private GameObject ObjectToLookAt;
+    
+    
+    private DialogueBoxController dialogueBoxController;
+    // Start is called before the first frame update
+    void Start()
+    {
+        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+        // Get the NPC object
+        npc = GameObject.Find("Ch16_nonPBR(Clone)");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Set the direction the NPC should look at
+        
+        /* if (npc != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && isMoving == true)
+        {
+            if (dialogueText.Contains("scale"))
+            {
+                ObjectToLookAt = GameObject.Find("scale");
+            }
+            
+            else if (dialogueText.Contains("board"))
+            {
+                ObjectToLookAt = GameObject.Find("ruler");
+            }
+            
+            Vector3 direction = ObjectToLookAt.transform.position - npc.transform.position;
+            direction.y = 0;
+            if (direction != Vector3.zero)
+            {
+                npc.transform.rotation = Quaternion.LookRotation(direction);
+            }
+        } */
+    }
+    
+    public void ChangeDirection(string dialogueText)
+    {
+        // Set the direction the NPC should look at
+        if (npc != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+        {
+            if (dialogueText.Contains("scale"))
+            {
+                ObjectToLookAt = GameObject.Find("scale");
+            }
+            
+            else if (dialogueText.Contains("board"))
+            {
+                ObjectToLookAt = GameObject.Find("ruler");
+            }
+            
+            else if (dialogueText.Contains("calculator"))
+            {
+                ObjectToLookAt = GameObject.Find("Calculator_1978");
+            }
+            else if (dialogueText.Contains("microscope"))
+            {
+                ObjectToLookAt = GameObject.Find("MicroscopeComplete");
+            }
+            
+            Vector3 direction = ObjectToLookAt.transform.position - npc.transform.position;
+            direction.y = 0;
+            if (direction != Vector3.zero)
+            {
+                npc.transform.rotation = Quaternion.LookRotation(direction);
+            }
+        } 
+        
+    }
+    
+}
+
+

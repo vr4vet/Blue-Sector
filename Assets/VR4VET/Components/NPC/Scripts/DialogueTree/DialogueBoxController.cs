@@ -29,6 +29,7 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
+    [HideInInspector] private int _isPointingHash;
     [HideInInspector] private RectTransform backgroundRect;
     [HideInInspector] private RectTransform dialogueTextRect;
     [HideInInspector] public ButtonSpawner buttonSpawner;
@@ -38,6 +39,7 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector]public DialogueTree dialogueTreeRestart;
     public bool dialogueEnded;
     public int timesEnded = 0;
+    private GameObject _pointingController;
 
     private void Awake() 
     {
@@ -55,6 +57,7 @@ public class DialogueBoxController : MonoBehaviour
 
     private void Start()
     {
+        _pointingController = GameObject.Find("PointingController");
         dialogueEnded = false;
         // Assign the event camera
         if (_dialogueCanvas != null)
@@ -91,6 +94,7 @@ public class DialogueBoxController : MonoBehaviour
         this._animator = GetComponentInChildren<Animator>();
         _isTalkingHash = Animator.StringToHash("isTalking");
         _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
+        _isPointingHash = Animator.StringToHash("isPointing");
     }
 
     public void updateAnimator(Animator animator) {
@@ -127,18 +131,30 @@ public class DialogueBoxController : MonoBehaviour
              currentDialogue = dialogueTree.sections[section].dialogue[i];
              
              
-
+            _animator.SetBool(_isPointingHash, false);
             // Start talking animation
             _animator.SetBool(_isTalkingHash, true);
             StartCoroutine(revertToIdleAnimation());
             _dialogueText.text = dialogueTree.sections[section].dialogue[i];
+            _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
             _skipLineButton.SetActive(true);
+            
             
             // Check if the current section should have disabled the skip line button
             if (dialogueTree.sections[section].disabkeSkipLineButton)
             {
                 _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
+            }
+
+            if (dialogueTree.sections[section].point)
+            {
+                _pointingController.GetComponent<PointingController>().ChangeDirection(dialogueTree.sections[section].dialogue[i]);
+                _animator.SetBool(_isTalkingHash, false);
+                _animator.SetBool(_isPointingHash, true);
+                // yield return new WaitForSeconds(8.5f);
+                // _animator.speed = 0;
+
             }
             
             while (!_skipLineTriggered)
