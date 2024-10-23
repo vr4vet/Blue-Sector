@@ -81,7 +81,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
                 roll = Mathf.Abs(Mathf.Atan2(localFlatRight.y, localFlatRight.x));
             }
 
-            // calculating the rotation offset from the eye pieces (other words: checking if the player look directly into them)
+            // calculating the rotation offset from the eye pieces (other words: checking if the player looks directly into them)
             float rotationOffset = Vector3.Angle((trigger.transform.position - HeadCollider.transform.position), HeadCollider.transform.forward);
 
             // dim overlay when head is rotated or rolled
@@ -123,7 +123,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
             // resize grid and its cells to match image and fit eye pieces
             float sizeRatio = gridTransform.sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
-            gridTransform.localPosition = (new Vector3(MicroscopeMonitor.GetGridPosition().x, MicroscopeMonitor.GetGridPosition().y + OffsetY, MicroscopeMonitor.GetGridPosition().z) / sizeRatio);
+            gridTransform.localPosition = new Vector3(MicroscopeMonitor.GetGridPosition().x, MicroscopeMonitor.GetGridPosition().y + OffsetY, MicroscopeMonitor.GetGridPosition().z) / sizeRatio;
             gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, gridTransform.sizeDelta.x / sizeRatio);
             gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridTransform.sizeDelta.y / sizeRatio);
             Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(gridTransform.sizeDelta.x / 10, gridTransform.sizeDelta.y / 5);
@@ -131,10 +131,8 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             // resize and reposition plankton images within each cell to match original layout
             foreach (Image plankton in Grid.transform.Find("Grid").GetComponentsInChildren<Image>())
             {
-                //Debug.Log(plankton.name);
                 if (!plankton.name.Contains("MicroscopeSlideCell"))
                 {
-                    Debug.Log(plankton.name);
                     plankton.GetComponent<RectTransform>().localPosition /= sizeRatio;
                     plankton.GetComponent<RectTransform>().localScale /= sizeRatio;
                 }
