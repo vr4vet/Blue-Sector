@@ -8,6 +8,7 @@ public class PointingController : MonoBehaviour
 {
     public GameObject npc;
     private GameObject ObjectToLookAt;
+    private Transform _initialPosition;
     
     
     private DialogueBoxController dialogueBoxController;
@@ -17,6 +18,8 @@ public class PointingController : MonoBehaviour
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
         // Get the NPC object
         npc = GameObject.Find("Ch16_nonPBR(Clone)");
+        // Save the initial position of the NPC
+        _initialPosition = npc.transform;
     }
 
     // Update is called once per frame
@@ -47,6 +50,7 @@ public class PointingController : MonoBehaviour
     
     public void ChangeDirection(string dialogueText)
     {
+        npc.transform.position = _initialPosition.position;
         // Set the direction the NPC should look at
         if (npc != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
         {
