@@ -130,7 +130,7 @@ public class DialogueBoxController : MonoBehaviour
         {   
              currentDialogue = dialogueTree.sections[section].dialogue[i];
              
-             
+            _pointingController.GetComponent<PointingController>().ResetDirection();
             _animator.SetBool(_isPointingHash, false);
             // Start talking animation
             _animator.SetBool(_isTalkingHash, true);
