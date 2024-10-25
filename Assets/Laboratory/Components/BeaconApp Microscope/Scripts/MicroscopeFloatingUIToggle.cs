@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MicroscopeFloatingUIToggle : MonoBehaviour
 {
@@ -25,12 +26,9 @@ public class MicroscopeFloatingUIToggle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(openScale);
-        //Debug.Log(scalingUp);
         // keyboard input for debugging and testing purposes
         if (Input.GetKeyDown(KeyCode.O))
             EnableAndScaleUp();
-
         if (Input.GetKeyDown(KeyCode.P))
             DisableAndScaleDown();
         if (Input.GetKeyDown(KeyCode.U))
@@ -41,7 +39,7 @@ public class MicroscopeFloatingUIToggle : MonoBehaviour
         {
             if (scalingUp)
             {
-                if ((float)Math.Truncate(rectTransform.localScale.x * 1000) / 1000 == openScale.x - 0.001) // check first 3 decimals to prevent excessive precision and time spent scaling
+                if ((float)Math.Truncate(rectTransform.localScale.x * 1000) / 1000 == openScale.x - 0.001) // check first 3 decimals to prevent excessive precision/time spent scaling. subtraction prevents infinite interpolation
                     isScaling = false;
 
                 float newScale = Mathf.Lerp(rectTransform.localScale.x, openScale.x, 5f * Time.deltaTime);
@@ -49,11 +47,10 @@ public class MicroscopeFloatingUIToggle : MonoBehaviour
                 float newPositionZ = Mathf.Lerp(rectTransform.localPosition.z, openPosition.z, 5f * Time.deltaTime);
                 rectTransform.localScale = Vector3.one * newScale;
                 rectTransform.localPosition = new Vector3(newPositionX, openPosition.y, newPositionZ);
-
             }
             if (!scalingUp)
             {
-                if ((float)Math.Truncate(rectTransform.localScale.x * 100) / 100 == 0) // check first 2 decimals to prevent excessive precision and time spent scaling
+                if (rectTransform.localScale.x <= openScale.x / 6 /*(float)Math.Truncate(rectTransform.localScale.x * 100) / 100 == 0*/)
                 {
                     isScaling = false;
                     canvas.enabled = false;
@@ -84,7 +81,6 @@ public class MicroscopeFloatingUIToggle : MonoBehaviour
         canvas.enabled = true;
         scalingUp = true;
         isScaling = true;
-
     }
 
     public void DisableAndScaleDown()
@@ -96,4 +92,24 @@ public class MicroscopeFloatingUIToggle : MonoBehaviour
         isScaling = true;
     }
 
+    public bool IsEnabled()
+    {
+        return canvas.enabled;
+    }
+
+    /// <summary>
+    /// Disable the target UI canvas before this. Useful for nested UIs, for example when closing the microscope's info-submit UI without closing the numpad UI first.
+    /// </summary>
+    /// <param name="target"></param>
+    public void DisableAndScaleDownTargetThenThis(MicroscopeFloatingUIToggle target)
+    {
+        // disable target UI and then this after a short wait if target is enabled. otherwise simply disable this as ususal
+        if (target.IsEnabled())
+        {
+            target.DisableAndScaleDown();
+            Invoke("DisableAndScaleDown", .25f);
+        }
+        else
+            DisableAndScaleDown();
+    }
 }

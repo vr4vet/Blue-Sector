@@ -5474,11 +5474,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8890316492092107883}
         m_TargetAssemblyTypeName: MicroscopeFloatingUIToggle, Assembly-CSharp
-        m_MethodName: DisableAndScaleDown
-        m_Mode: 1
+        m_MethodName: DisableAndScaleDownTargetThenThis
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 388908808225637462}
+          m_ObjectArgumentAssemblyTypeName: MicroscopeFloatingUIToggle, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7057,7 +7057,6 @@ GameObject:
   - component: {fileID: 5515023601267240351}
   - component: {fileID: 3256588025265755067}
   - component: {fileID: 1093181196988110830}
-  - component: {fileID: 7561501113490492176}
   m_Layer: 5
   m_Name: ButtonClose
   m_TagString: Untagged
@@ -7180,47 +7179,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7561501113490492176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7010573722779816297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 6636919786855982338}
-          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-          m_MethodName: set_enabled
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 6636919786855982338}
-          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-          m_MethodName: set_enabled
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
 --- !u!1 &7048470114901847553
 GameObject:
   m_ObjectHideFlags: 0
