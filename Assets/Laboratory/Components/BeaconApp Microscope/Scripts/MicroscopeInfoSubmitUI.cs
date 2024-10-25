@@ -57,7 +57,7 @@ public class MicroscopeInfoSubmitUI : MonoBehaviour
         Debug.Log("Specimen " + specimen + ": " + correctAnswer);
 
         // checking if the player has provided an answer in the input field
-        string inputString = InputFields[specimen].text;
+        string inputString = InputFields[specimen].text.Replace(" ", "").Replace("|", "");
         if (inputString == string.Empty)
         {
             MarkIncorrect(specimen);
