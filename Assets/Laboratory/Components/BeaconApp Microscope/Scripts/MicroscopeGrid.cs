@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MicroscopeGrid : MonoBehaviour
@@ -21,14 +20,14 @@ public class MicroscopeGrid : MonoBehaviour
     }
 
     public int GetTotalAmountOfPlankton()
-        { return TotalPlanktonAmount; }
+    { return TotalPlanktonAmount; }
 
     public int GetTotalAmountOfChaetoceros()
-        { return TotalChaetocerosAmount; }
+    { return TotalChaetocerosAmount; }
 
     public int GetTotalAmountOfPseudoNitzschia()
-        { return TotalPseudoNitzschiaAmount; }
+    { return TotalPseudoNitzschiaAmount; }
 
     public int GetTotalAmountOfSkeletonema()
-        { return TotalSkeletonemaAmount; }
+    { return TotalSkeletonemaAmount; }
 }

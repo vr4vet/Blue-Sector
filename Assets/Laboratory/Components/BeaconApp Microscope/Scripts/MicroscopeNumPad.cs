@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MicroscopeNumPad : MonoBehaviour
 {
@@ -15,7 +12,8 @@ public class MicroscopeNumPad : MonoBehaviour
 
     public void EnterDigit(int digit)
     {
-        currentInputField.text += digit.ToString();
+        if (currentInputField.text.Length < 8)
+            currentInputField.text += digit.ToString();
     }
 
     public void ClearInputField()

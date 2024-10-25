@@ -25,14 +25,14 @@ public class MicroscopeSlideWithGrid : MonoBehaviour
     }
 
     public int GetTotalAmountOfPlankton()
-    { return GridScript.GetTotalAmountOfPlankton(); }
+    { return MicroscopeMonitor.GetGrid().GetComponent<MicroscopeGrid>().GetTotalAmountOfPlankton(); }
 
     public int GetTotalAmountOfChaetoceros()
-    { return GridScript.GetTotalAmountOfChaetoceros(); }
+    { return MicroscopeMonitor.GetGrid().GetComponent<MicroscopeGrid>().GetTotalAmountOfChaetoceros(); }
 
     public int GetTotalAmountOfPseudoNitzschia()
-    { return GridScript.GetTotalAmountOfPseudoNitzschia(); }
+    { return MicroscopeMonitor.GetGrid().GetComponent<MicroscopeGrid>().GetTotalAmountOfPseudoNitzschia(); }
 
     public int GetTotalAmountOfSkeletonema()
-    { return GridScript.GetTotalAmountOfSkeletonema(); }
+    { return MicroscopeMonitor.GetGrid().GetComponent<MicroscopeGrid>().GetTotalAmountOfSkeletonema(); }
 }
