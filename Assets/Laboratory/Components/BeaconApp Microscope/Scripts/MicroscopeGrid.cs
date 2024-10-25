@@ -3,13 +3,17 @@ using UnityEngine;
 
 public class MicroscopeGrid : MonoBehaviour
 {
-    private int TotalAmountOfPlankton = 0;
+    private int TotalPlanktonAmount, TotalChaetocerosAmount, TotalPseudoNitzschiaAmount, TotalSkeletonemaAmount = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         foreach (MicroscopeSlideCell cell in transform.Find("Grid").GetComponentsInChildren<MicroscopeSlideCell>())
         {
-            TotalAmountOfPlankton += cell.GetTotalPlanktonCount();
+            TotalPlanktonAmount += cell.GetTotalPlanktonCount();
+            TotalChaetocerosAmount += cell.GetChaetocerosCount();
+            TotalPseudoNitzschiaAmount += cell.GetPseudoNitzschiaCount();
+            TotalSkeletonemaAmount += cell.GetSkeletonemaCount();
             //cell.gameObject.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, 90 * (int)(Random.Range(0, 0.4f) * 10));
             //Debug.Log(90 * (int)(Random.Range(0, 0.4f) * 10));
         }
@@ -17,7 +21,14 @@ public class MicroscopeGrid : MonoBehaviour
     }
 
     public int GetTotalAmountOfPlankton()
-    {
-        return TotalAmountOfPlankton;
-    }
+        { return TotalPlanktonAmount; }
+
+    public int GetTotalAmountOfChaetoceros()
+        { return TotalChaetocerosAmount; }
+
+    public int GetTotalAmountOfPseudoNitzschia()
+        { return TotalPseudoNitzschiaAmount; }
+
+    public int GetTotalAmountOfSkeletonema()
+        { return TotalSkeletonemaAmount; }
 }

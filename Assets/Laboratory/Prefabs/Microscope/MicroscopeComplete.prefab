@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 3966572880207058344}
   - component: {fileID: 2193789724053796912}
   - component: {fileID: 8890316492092107883}
+  - component: {fileID: 169613914232507983}
   m_Layer: 5
   m_Name: MicroscopeInfoSubmit
   m_TagString: Untagged
@@ -400,6 +401,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31a0e7e1243be7945bb05ca7de627fbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &169613914232507983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368308975330665688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97944b9f77d4d6148855d893ffa22910, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &383611911186698796
@@ -7477,7 +7490,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4167898558475646810}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 169613914232507983}
+        m_TargetAssemblyTypeName: MicroscopeInfoSubmitUI, Assembly-CSharp
+        m_MethodName: Submit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8413939849882244604
 MonoBehaviour:
   m_ObjectHideFlags: 0
