@@ -20,7 +20,8 @@ public class PointingController : MonoBehaviour
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
         // Get the NPC object
         npc = GameObject.Find("Ch16_nonPBR(Clone)");
-        // Save the initial position of the NPC
+        
+        // Save the initial position and rotation of the NPC
         _initialPosition = npc.transform.position;
         _initialRotation = npc.transform.rotation;
         
@@ -28,6 +29,7 @@ public class PointingController : MonoBehaviour
     
     public void ChangeDirection(string dialogueText)
     {
+        // Reset the position of the NPC to make sure it stays in the same place
         npc.transform.position = _initialPosition;
         
         // Set the direction the NPC should look at
@@ -66,6 +68,7 @@ public class PointingController : MonoBehaviour
         
     }
 
+    // Reset the direction of the NPC
     public void ResetDirection()
     {
         npc.transform.rotation = _initialRotation;

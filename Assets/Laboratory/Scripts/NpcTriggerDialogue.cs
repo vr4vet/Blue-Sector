@@ -62,12 +62,11 @@ public class NpcTriggerDialogue : MonoBehaviour
    
    private void Update()
    {
-       // Check the current dialogue and if it is the correct one, change the dialogue
+       // Checks if the dialogue is supposed to return to the Lars Dialouge tree and call the ChangeToLars method
        if (dialogueBoxController.dialogueTreeRestart != null)
        {
            if ((dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0]) || (dialogueBoxController.dialogueTreeRestart.name == "ErrorFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0]))
            {
-               Debug.Log(dialogueBoxController.dialogueTreeRestart.name);
                ChangeToLars(dialogueBoxController.dialogueTreeRestart.name);
            
            }
@@ -83,14 +82,22 @@ public class NpcTriggerDialogue : MonoBehaviour
    // Find the index of the current dialogue section
    public void FindDialogueSection()
    {
-       for (int i = 0; i < dialogueBoxController.dialogueTreeRestart.sections.Length; i++)
+       // Only stores the dialogue section index if the dialogue is LarsDialogue
+       if (dialogueBoxController.dialogueTreeRestart.name != "LarsDialogue")
        {
-           for (int j = 0; j < dialogueBoxController.dialogueTreeRestart.sections[i].dialogue.Length; j++)
+           return;
+       }
+       else
+       {
+           for (int i = 0; i < dialogueBoxController.dialogueTreeRestart.sections.Length; i++)
            {
-               if (dialogueBoxController.dialogueTreeRestart.sections[i].dialogue[j] == dialogueBoxController._dialogueText.text)
+               for (int j = 0; j < dialogueBoxController.dialogueTreeRestart.sections[i].dialogue.Length; j++)
                {
-                   _dialogueIndex = i;
-                   break;
+                   if (dialogueBoxController.dialogueTreeRestart.sections[i].dialogue[j] == dialogueBoxController._dialogueText.text)
+                   {
+                       _dialogueIndex = i;
+                       break;
+                   }
                }
            }
        }
@@ -135,6 +142,7 @@ public class NpcTriggerDialogue : MonoBehaviour
    
    // When the player places the fish without using the basket
    public void Error3() {
+       // Destroy the fish to return it to its original position
          GameObject[] instances = GameObject.FindGameObjectsWithTag("Fish");
          foreach (GameObject instance in instances)
          {
@@ -155,13 +163,14 @@ public class NpcTriggerDialogue : MonoBehaviour
        dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 0, npcName);
    }
    
+   // When the player places something that is not a fish on the number keypad
    public void Error5() {
          dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 4, npcName);
    }
    
    public void ChangeToLars(string dialogueName)
    {
-       Debug.Log(dialogueName);
+       // Runs when the player has completed calculating the condition factor and resets everything in the scene.
        if (dialogueName == "NpcFeedback")
        {
            dialogueBoxController.StartDialogue(larsDialogueTree, 1, npcName);
@@ -190,6 +199,7 @@ public class NpcTriggerDialogue : MonoBehaviour
        
            microscopeSnapPoint.GetComponent<SnapZone>().OnDetachEvent.Invoke(null); 
        }
+       // Runs when the player has made a mistake and returns the dialogue to the same section the player was in when they made the mistake.
        else if (dialogueName == "ErrorFeedback")
        {
            dialogueBoxController.StartDialogue(larsDialogueTree, _dialogueIndex, npcName);

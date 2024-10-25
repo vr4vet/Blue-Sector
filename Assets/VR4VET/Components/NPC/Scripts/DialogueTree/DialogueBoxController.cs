@@ -146,15 +146,12 @@ public class DialogueBoxController : MonoBehaviour
             {
                 _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
             }
-
+            // Check if the current dialogue section should have the NPC pointing
             if (dialogueTree.sections[section].point)
             {
                 _pointingController.GetComponent<PointingController>().ChangeDirection(dialogueTree.sections[section].dialogue[i]);
                 _animator.SetBool(_isTalkingHash, false);
                 _animator.SetBool(_isPointingHash, true);
-                // yield return new WaitForSeconds(8.5f);
-                // _animator.speed = 0;
-
             }
             
             while (!_skipLineTriggered)
