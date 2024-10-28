@@ -15,7 +15,10 @@ public class MicroscopeNumPad : MonoBehaviour
 
             // ensure input field does not contain indicator symbols before moving on to the new input field selected by player
             if (currentInputField != null)
-                currentInputField.text = currentInputField.text.Replace(" ", "").Replace("|", "");
+            {
+                RemoveCurrentInputField();
+            }
+                //RemoveIndicator();
 
             currentInputField = value;
             StartIndicatorCycle();
@@ -33,7 +36,8 @@ public class MicroscopeNumPad : MonoBehaviour
             StopIndicatorCycle();
 
             RemoveIndicator();
-            currentInputField.text = currentInputField.text.Replace(" ", "") + digit.ToString();
+            RemoveEmptySpaces();
+            currentInputField.text += digit.ToString();
 
             StartIndicatorCycle();
         }     
@@ -49,6 +53,7 @@ public class MicroscopeNumPad : MonoBehaviour
         // stop cycle and remove all indicator symbols to stop content from changing in inactive input fields
         StopIndicatorCycle();
         RemoveIndicator();
+        RemoveEmptySpaces();
         currentInputField = null; 
     }
 
@@ -62,7 +67,10 @@ public class MicroscopeNumPad : MonoBehaviour
             return;
 
         if (!IndicatedLast)
-            currentInputField.text = currentInputField.text.Replace(" ", "") + "|";
+        {
+            RemoveEmptySpaces();
+            currentInputField.text += "|";
+        }
         else
             RemoveIndicator();
 
@@ -72,6 +80,11 @@ public class MicroscopeNumPad : MonoBehaviour
     private void RemoveIndicator()
     {
         currentInputField.text = currentInputField.text.Replace("|", " ");
+    }
+
+    private void RemoveEmptySpaces()
+    {
+        currentInputField.text = currentInputField.text.Replace(" ", "");
     }
 
     private void StopIndicatorCycle()

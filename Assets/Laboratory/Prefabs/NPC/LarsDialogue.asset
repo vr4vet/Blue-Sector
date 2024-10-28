@@ -253,5 +253,51 @@ MonoBehaviour:
         nextElement: 13
         endAfterAnswer: 0
       - answerLabel: Continue
-        nextElement: 1
+        nextElement: 14
         endAfterAnswer: 0
+  - dialogue:
+    - Great! Let's start with the task. There are three kinds of plankton in the
+      sample. You can use the sheet to the left of the micoscope which you can use
+      to keep track as you are counting. Remember to use the counter as well. Talk
+      with me when you are finished counting.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Are you done counting?
+      answers:
+      - answerLabel: Yes
+        nextElement: 15
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 14
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: How many skibidi boinks where there?
+      answers:
+      - answerLabel: 5
+        nextElement: 16
+        endAfterAnswer: 0
+      - answerLabel: 4
+        nextElement: 16
+        endAfterAnswer: 0
+      - answerLabel: 2
+        nextElement: 16
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: How many boinki boinks where there?
+      answers:
+      - answerLabel: 5
+        nextElement: 15
+        endAfterAnswer: 1
+      - answerLabel: 4
+        nextElement: 14
+        endAfterAnswer: 1
+      - answerLabel: 2
+        nextElement: 14
+        endAfterAnswer: 1
