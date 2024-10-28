@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 // Import of the TTS namespace
 using Meta.WitAi.TTS.Utilities;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Button = UnityEngine.UIElements.Button;
 using Image = UnityEngine.UIElements.Image;
@@ -128,9 +129,13 @@ public class DialogueBoxController : MonoBehaviour
 
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
-             currentDialogue = dialogueTree.sections[section].dialogue[i];
+            currentDialogue = dialogueTree.sections[section].dialogue[i];
              
-            _pointingController.GetComponent<PointingController>().ResetDirection();
+            if (_pointingController != null)
+            {
+                _pointingController.GetComponent<PointingController>().ResetDirection();
+            }
+            
             _animator.SetBool(_isPointingHash, false);
             // Start talking animation
             _animator.SetBool(_isTalkingHash, true);
@@ -233,6 +238,11 @@ public class DialogueBoxController : MonoBehaviour
     {
         // Reveals the selectable answers and sets their text values
         buttonSpawner.spawnAnswerButtons(branchPoint.answers);
+        _animator.SetBool(_isPointingHash, false);
+        if (_pointingController != null)
+        {
+            _pointingController.GetComponent<PointingController>().ResetDirection();
+        }
     }
 
     public void SkipLine()
@@ -265,6 +275,11 @@ public class DialogueBoxController : MonoBehaviour
     {
         // stop talk-animation
         _animator.SetBool(_isTalkingHash, false);
+        _animator.SetBool(_isPointingHash, false);
+        if (_pointingController != null)
+        {
+            _pointingController.GetComponent<PointingController>().ResetDirection();
+        }
         dialogueIsActive = false;
         ResetBox();
         if (dialogueTreeRestart.speakButtonOnExit) {
