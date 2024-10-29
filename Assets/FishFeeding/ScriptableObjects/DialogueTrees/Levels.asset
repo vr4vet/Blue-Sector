@@ -12,13 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
   m_Name: Levels
   m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
   sections:
   - dialogue:
     - Here you are going to choose the difficulty level of the task.
     - 'Choose basic if you have never played before and advanced level if you know
       how to play and are ready for a challenge. '
-    - Press one of the red buttons and follow me!
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    branchPoint:
+      question: Which difficulity do you want to play on?
+      answers:
+      - answerLabel: Basic
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Advanced
+        nextElement: 2
+        endAfterAnswer: 0
+  - dialogue:
+    - Basic
     endAfterDialogue: 1
+    disabkeSkipLineButton: 0
+    point: 0
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue:
+    - Advanced
+    endAfterDialogue: 1
+    disabkeSkipLineButton: 0
+    point: 0
     branchPoint:
       question: 
       answers: []
