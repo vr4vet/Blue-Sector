@@ -38,8 +38,12 @@ public class MicroscopeInfoSubmitUI : MonoBehaviour
             VerifyAnswer(i);
     }
 
-    private void VerifyAnswer(int specimen)
+    public bool VerifyAnswer(int specimen)
     {
+        // the player has not even put the slide onto the microscope
+        if (Slide == null)
+            return false;
+
         // fetching the actual amount of individuals of the specimen
         int correctAnswer;
         if (specimen == 0)
@@ -51,7 +55,7 @@ public class MicroscopeInfoSubmitUI : MonoBehaviour
         else
         {
             Debug.LogError(specimen + " is not a valid index");
-            return;
+            return false;
         }
 
         Debug.Log("Specimen " + specimen + ": " + correctAnswer);
@@ -61,7 +65,7 @@ public class MicroscopeInfoSubmitUI : MonoBehaviour
         if (inputString == string.Empty)
         {
             MarkIncorrect(specimen);
-            return;
+            return false;
         }
 
         // comparing the provided answer with the actual amount. an inaccuracy of 5 is accepted
@@ -69,12 +73,22 @@ public class MicroscopeInfoSubmitUI : MonoBehaviour
         if (int.TryParse(inputString, out submittedAnswer))
         {
             if (Mathf.Abs(correctAnswer - submittedAnswer) <= 5)
+            {
                 MarkCorrect(specimen);
+                return true;
+            }
             else
+            {
                 MarkIncorrect(specimen);
+                return false;
+            }
         }
         else
+        {
             Debug.LogError($"Could not parse '{inputString}' to an int");
+            return false;
+        }
+
     }
 
     private void MarkCorrect(int specimen)
@@ -88,4 +102,5 @@ public class MicroscopeInfoSubmitUI : MonoBehaviour
         // red colour
         InputFieldHighlights[specimen].color = new Color32(0xFF, 0x00, 0x00, 255);
     }
+
 }

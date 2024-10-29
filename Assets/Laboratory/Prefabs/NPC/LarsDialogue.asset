@@ -231,7 +231,7 @@ MonoBehaviour:
         nextElement: 13
         endAfterAnswer: 0
       - answerLabel: Skip to the task
-        nextElement: 12
+        nextElement: 14
         endAfterAnswer: 0
   - dialogue:
     - First place the water sample under the scope, this is the blue rectangle to
@@ -256,10 +256,9 @@ MonoBehaviour:
         nextElement: 14
         endAfterAnswer: 0
   - dialogue:
-    - Great! Let's start with the task. There are three kinds of plankton in the
-      sample. You can use the sheet to the left of the micoscope which you can use
-      to keep track as you are counting. Remember to use the counter as well. Talk
-      with me when you are finished counting.
+    - Let's start with the task. There are three kinds of plankton in the sample.
+      Write your answers on the note sheet to the left of the microscope. Tell me
+      when you are finished counting, and I will take a look at your answers.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
@@ -271,33 +270,63 @@ MonoBehaviour:
       - answerLabel: No
         nextElement: 14
         endAfterAnswer: 0
+  - dialogue:
+    - Let me see. I'm double-checking your answers.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: 
+      answers: []
   - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: That's correct! Great job! Do you want to try again, or move on to
+        another task?
+      answers:
+      - answerLabel: Try again
+        nextElement: 14
+        endAfterAnswer: 0
+      - answerLabel: Try another task
+        nextElement: 1
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: That wasn't quite correct. Do you want to try again?
+      answers:
+      - answerLabel: Yes
+        nextElement: 14
+        endAfterAnswer: 0
+      - answerLabel: No, tell me the correct answer
+        nextElement: 18
+        endAfterAnswer: 0
+  - dialogue:
+    - There are 100 Chaetoceros diatom, 350 Pseudo-nitzschia, and 150 Skeletonema.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
-      question: How many skibidi boinks where there?
+      question: Do you want to hear that again?
       answers:
-      - answerLabel: 5
-        nextElement: 16
+      - answerLabel: Yes
+        nextElement: 18
         endAfterAnswer: 0
-      - answerLabel: 4
-        nextElement: 16
-        endAfterAnswer: 0
-      - answerLabel: 2
-        nextElement: 16
+      - answerLabel: No
+        nextElement: 1
         endAfterAnswer: 0
   - dialogue: []
     endAfterDialogue: 0
-    disabkeSkipLineButton: 0
+    disabkeSkipLineButton: 1
     branchPoint:
-      question: How many boinki boinks where there?
+      question: You need to analyse the water sample before submitting your answer.
       answers:
-      - answerLabel: 5
-        nextElement: 15
-        endAfterAnswer: 1
-      - answerLabel: 4
+      - answerLabel: Okay
         nextElement: 14
-        endAfterAnswer: 1
-      - answerLabel: 2
-        nextElement: 14
-        endAfterAnswer: 1
+        endAfterAnswer: 0
+      - answerLabel: Explain the task
+        nextElement: 12
+        endAfterAnswer: 0
+      - answerLabel: Try something else
+        nextElement: 1
+        endAfterAnswer: 0
