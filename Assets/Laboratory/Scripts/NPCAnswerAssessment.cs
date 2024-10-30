@@ -29,7 +29,7 @@ public class NPCAnswerAssessment : MonoBehaviour
             if (startTime == 0)
                 startTime = Time.time;
 
-            if (Time.time - startTime >= 5) // npc 'thinks' for 5 seconds
+            if (Time.time - startTime >= 8) // npc 'thinks' for 8 seconds
             {
                 startTime = 0;
 
@@ -66,4 +66,7 @@ public class NPCAnswerAssessment : MonoBehaviour
 
     public void SetCurrentSlideWithGrid(MicroscopeSlideWithGrid slide)
         { this.slide = slide; }
+
+    public void RemoveCurrentSlide()
+        { this.slide = null; }
 }

@@ -113,9 +113,16 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         {
             Image.enabled = false;
             Grid = GameObject.Instantiate(MicroscopeMonitor.GetGrid());
+
+            // fetch already generated rotations to ensure cells are rotated the same as on the monitor
+            Grid.GetComponent<MicroscopeGrid>().RotateCells(MicroscopeMonitor.GetGridCellRotations());
+            
+            // make microscope overlay canvas visible only
             Grid.layer = LayerMask.NameToLayer("MicroscopeOverlay");
+
+            // make this parent and give highest position among siblings to ensure UI elements are drawn on top
             Grid.transform.SetParent(transform);
-            Grid.transform.SetAsFirstSibling();  // give highest position among siblings to ensure UI elements are drawn on top
+            Grid.transform.SetAsFirstSibling();  
 
             RectTransform gridTransform = Grid.GetComponent<RectTransform>();
 
