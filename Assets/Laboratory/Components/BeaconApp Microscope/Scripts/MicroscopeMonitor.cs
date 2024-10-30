@@ -410,12 +410,18 @@ public class MicroscopeMonitor : MonoBehaviour
         
         SetMagnification();
         
+        // placing grid canvas flat onto monitor
         Grid.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
-        float ratio = GetComponentInChildren<RectTransform>().sizeDelta.x / Grid.GetComponent<RectTransform>().sizeDelta.x;
-        Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Grid.GetComponent<RectTransform>().sizeDelta.x * ratio);
-        Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Grid.GetComponent<RectTransform>().sizeDelta.y * ratio);
 
-        Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(Grid.GetComponent<RectTransform>().sizeDelta.x / 10, Grid.GetComponent<RectTransform>().sizeDelta.y / 5);
+        // rescaling canvas to fit screen
+        float biggestCanvas = Mathf.Max(GetComponentInChildren<RectTransform>().sizeDelta.x, Grid.GetComponent<RectTransform>().sizeDelta.x);
+        float smallestCanvas = Mathf.Min(GetComponentInChildren<RectTransform>().sizeDelta.x, Grid.GetComponent<RectTransform>().sizeDelta.x);
+        float ratio = biggestCanvas / smallestCanvas;
+
+        if (biggestCanvas == GetComponentInChildren<RectTransform>().sizeDelta.x)
+            Grid.GetComponent<RectTransform>().localScale *= ratio;
+        else
+            Grid.GetComponent<RectTransform>().localScale /= ratio;
     }
 
     private void PreventOutOfBoundsCoordinates()

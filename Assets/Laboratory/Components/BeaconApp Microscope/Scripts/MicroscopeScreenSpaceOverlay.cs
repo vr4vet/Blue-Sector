@@ -104,9 +104,10 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         if (Device == QuestDevice.Quest2)
             OffsetY = 0f;
         else if (Device == QuestDevice.Quest3)
-            OffsetY = -50f;
+            OffsetY = -5f;
         else if (Device == QuestDevice.QuestPro)
-            OffsetY = -60f;
+            OffsetY = -6f;
+
 
         if (MicroscopeMonitor.IsDisplayingGrid())
         {
@@ -118,31 +119,20 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
             RectTransform gridTransform = Grid.GetComponent<RectTransform>();
 
-            // make overlay face player
-            gridTransform.localEulerAngles = Vector3.zero; 
+            // make overlay face player and make scale (1, 1, 1) before adjusting
+            gridTransform.localEulerAngles = Vector3.zero;
+            gridTransform.localScale = Vector3.one;
 
-            // resize grid and its cells to match image and fit eye pieces
+            // resize grid to match image and fit eye pieces
             float sizeRatio = gridTransform.sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
-            gridTransform.localPosition = new Vector3(MicroscopeMonitor.GetGridPosition().x, MicroscopeMonitor.GetGridPosition().y + OffsetY, MicroscopeMonitor.GetGridPosition().z) / sizeRatio;
-            gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, gridTransform.sizeDelta.x / sizeRatio);
-            gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridTransform.sizeDelta.y / sizeRatio);
-            Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(gridTransform.sizeDelta.x / 10, gridTransform.sizeDelta.y / 5);
-
-            // resize and reposition plankton images within each cell to match original layout
-            foreach (Image plankton in Grid.transform.Find("Grid").GetComponentsInChildren<Image>())
-            {
-                if (!plankton.name.Contains("MicroscopeSlideCell"))
-                {
-                    plankton.GetComponent<RectTransform>().localPosition /= sizeRatio;
-                    plankton.GetComponent<RectTransform>().localScale /= sizeRatio;
-                }
-            }
-            Grid.transform.Find("Grid").GetComponent<RectTransform>().localScale = Vector3.one; // the parent grid is affected for some reason and needs to be reset
+            gridTransform.localScale /= sizeRatio;
 
             // apply the same magnification as monitor
-            int Scale = MicroscopeMonitor.GetMagnificationLevel();
-            gridTransform.localScale = new Vector3(Scale, Scale, Scale);
-            
+            gridTransform.localScale *= MicroscopeMonitor.GetMagnificationLevel();
+
+            // fetch unscaled position of grid and adjust using current scaling 
+            gridTransform.localPosition = new Vector3(MicroscopeMonitor.GetCurrentXY().x, MicroscopeMonitor.GetCurrentXY().y, 0) * gridTransform.localScale.x;
+            gridTransform.localPosition += new Vector3(0, OffsetY, 0);
         }
         else
         {
