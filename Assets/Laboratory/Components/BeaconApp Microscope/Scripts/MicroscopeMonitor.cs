@@ -66,7 +66,7 @@ public class MicroscopeMonitor : MonoBehaviour
         Image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Image.GetComponent<RectTransform>().sizeDelta.y * ratio);
     }
 
-    private void Update()
+/*    private void Update()
     {
         // Zooming
         if (RevolvingNosePiece.IsRotating())
@@ -89,7 +89,7 @@ public class MicroscopeMonitor : MonoBehaviour
             ScrollUp();
         if (Input.GetKey(KeyCode.DownArrow))
             ScrollDown();
-    }
+    }*/
 
     public void ScrollX(bool right)
     {
@@ -395,11 +395,7 @@ public class MicroscopeMonitor : MonoBehaviour
     private void PreventOutOfBoundsCoordinates()
     {
         // decide if the water sample is a grid or not before scrolling
-        GameObject sample;
-        if (SlideWithGrid)
-            sample = Grid;
-        else
-            sample = Image.gameObject;
+        GameObject sample = GetSample();
 
         // decide if sample has scrolled too far, and scroll back if necessary
         float ratioWidth = (sample.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.x;
