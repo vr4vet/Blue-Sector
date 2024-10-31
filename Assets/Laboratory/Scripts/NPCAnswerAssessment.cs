@@ -55,8 +55,8 @@ public class NPCAnswerAssessment : MonoBehaviour
                     // dynamically adding dialogue with correct answers. this could be a risky operation!
                     dialogueBoxController.dialogueTreeRestart.sections[18].dialogue[0] =
                         $"There are {slide.GetTotalAmountOfChaetoceros()} Chaetoceros diatom, " +
-                        $"{slide.GetTotalAmountOfPseudoNitzschia()} Pseudo-nitzschia, " +
-                        $"and {slide.GetTotalAmountOfSkeletonema()} Skeletonema.";
+                        $"{slide.GetTotalAmountOfPseudoNitzschia()} Pseudo-nitzschia diatom, " +
+                        $"and {slide.GetTotalAmountOfSkeletonema()} Skeletonema diatom.";
 
                     dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 17, "LarsDialogue");
                 }
