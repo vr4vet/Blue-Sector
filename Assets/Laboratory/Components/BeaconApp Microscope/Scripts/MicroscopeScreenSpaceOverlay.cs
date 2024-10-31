@@ -102,11 +102,11 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         // need this to correct image on Quest 3 and Quest Pro (positioned too high)
         float OffsetY = 0f;
         if (Device == QuestDevice.Quest2)
-            OffsetY = 0f;
+            OffsetY = -1f;
         else if (Device == QuestDevice.Quest3)
-            OffsetY = -5f;
+            OffsetY = -4f;
         else if (Device == QuestDevice.QuestPro)
-            OffsetY = -6f;
+            OffsetY = -5f;
 
 
         if (MicroscopeMonitor.IsDisplayingGrid())
