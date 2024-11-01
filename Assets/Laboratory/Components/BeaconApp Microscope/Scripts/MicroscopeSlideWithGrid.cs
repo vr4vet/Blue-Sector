@@ -7,7 +7,7 @@ public class MicroscopeSlideWithGrid : MonoBehaviour
 
     [SerializeField] private MicroscopeMonitor MicroscopeMonitor;
     [SerializeField] private MicroscopeInfoSubmitUI MicroscopeInfoSubmitUI;
-    [SerializeField] private NPCAnswerAssessment NPCAnswerAssessment;
+    [SerializeField] private NPCMicroscopeTask NPCMicroscopeTask;
 
     private void Start()
     {
@@ -18,7 +18,7 @@ public class MicroscopeSlideWithGrid : MonoBehaviour
     {
         MicroscopeMonitor.SetCurrentSlideWithGrid(this);
         MicroscopeInfoSubmitUI.SetCurrentSlideWithGrid(this);
-        NPCAnswerAssessment.SetCurrentSlideWithGrid(this);
+        NPCMicroscopeTask.SetCurrentSlideWithGrid(this);
     }
 
     public void SetMicroscopeGrid()

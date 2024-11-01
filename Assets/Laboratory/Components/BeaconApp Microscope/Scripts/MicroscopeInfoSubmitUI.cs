@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class MicroscopeInfoSubmitUI : MonoBehaviour
 {
-    private MicroscopeSlideWithGrid Slide;
+    [HideInInspector] public MicroscopeSlideWithGrid Slide;
     private List<TMP_InputField> InputFields = new List<TMP_InputField>();
     private List<Image> InputFieldHighlights = new List<Image>();
 
@@ -101,6 +101,29 @@ public class MicroscopeInfoSubmitUI : MonoBehaviour
     {
         // red colour
         InputFieldHighlights[specimen].color = new Color32(0xFF, 0x00, 0x00, 255);
+    }
+
+    public void MarkReset(int specimen)
+    {
+        // clear colour
+        InputFieldHighlights[specimen].color = Color.clear;
+    }
+
+    public void MarkResetAll()
+    {
+        foreach (Image highlight in InputFieldHighlights)
+            highlight.color = Color.clear;
+    }
+
+    public void ClearInputField(int inputField)
+    {
+        InputFields[inputField].text = string.Empty;
+    }
+
+    public void ClearAllInputFields()
+    {
+        foreach (TMP_InputField inputField in InputFields)
+            inputField.text = string.Empty;
     }
 
 }
