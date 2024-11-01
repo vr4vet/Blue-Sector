@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 // Import of the TTS namespace
 using Meta.WitAi.TTS.Utilities;
+using Unity.VisualScripting;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Button = UnityEngine.UIElements.Button;
@@ -129,11 +130,9 @@ public class DialogueBoxController : MonoBehaviour
 
         for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
         {   
-            currentDialogue = dialogueTree.sections[section].dialogue[i];
-             
             if (_pointingController != null)
             {
-                _pointingController.GetComponent<PointingController>().ResetDirection();
+                _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
             }
             
             _animator.SetBool(_isPointingHash, false);
@@ -154,9 +153,17 @@ public class DialogueBoxController : MonoBehaviour
             // Check if the current dialogue section should have the NPC pointing
             if (dialogueTree.sections[section].point)
             {
-                _pointingController.GetComponent<PointingController>().ChangeDirection(dialogueTree.sections[section].dialogue[i]);
-                _animator.SetBool(_isTalkingHash, false);
-                _animator.SetBool(_isPointingHash, true);
+                if (_pointingController != null)
+                {
+                    _pointingController.GetComponent<PointingController>().ChangeDirection(dialogueTree.sections[section].dialogue[i], talkingNpc: this.gameObject);
+                    _animator.SetBool(_isTalkingHash, false);
+                    _animator.SetBool(_isPointingHash, true);
+                }
+                else
+                {
+                    Debug.Log("PointingController not found in the scene");
+                }
+               
             }
             
             while (!_skipLineTriggered)
@@ -241,7 +248,7 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isPointingHash, false);
         if (_pointingController != null)
         {
-            _pointingController.GetComponent<PointingController>().ResetDirection();
+            _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
         }
     }
 
@@ -278,7 +285,7 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isPointingHash, false);
         if (_pointingController != null)
         {
-            _pointingController.GetComponent<PointingController>().ResetDirection();
+            _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
         }
         dialogueIsActive = false;
         ResetBox();
