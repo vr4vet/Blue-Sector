@@ -180,8 +180,9 @@ public class DialogueBoxController : MonoBehaviour
             } else {
                 holdBToTalkMessage.enabled = false; // hide the msg that you can talk to the NPC
             }
-            
-            AddDialogueToContext(_dialogueText.text);
+            if (_AIConversationController != null) {
+                AddDialogueToContext(_dialogueText.text);
+            }
             if (useWitAI)
             {
                 TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
@@ -371,18 +372,20 @@ public class DialogueBoxController : MonoBehaviour
         // Set text to generic question
         _dialogueText.text = "That is all I have to say.";
 
-        // NPC will speak generic question
-        if (useWitAI)
-        {
-            TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
-        }
-        else
-        {
-            StartCoroutine(_AIResponseToSpeech.OpenAIDictate(_dialogueText.text));
-        }
+        if (_AIConversationController != null) {
+            // NPC will speak generic question
+            if (useWitAI)
+            {
+                TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+            }
+            else
+            {
+                StartCoroutine(_AIResponseToSpeech.OpenAIDictate(_dialogueText.text));
+            }
 
-        // Display generic question
-        StartCoroutine(DisplayResponse(_dialogueText.text));
+            // Display generic question
+            StartCoroutine(DisplayResponse(_dialogueText.text));
+        }
     }
 
     public IEnumerator DisplayResponse(string response)
