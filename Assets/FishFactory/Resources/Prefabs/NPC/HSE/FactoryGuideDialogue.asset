@@ -12,19 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
   m_Name: FactoryGuideDialogue
   m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
   sections:
   - dialogue:
-    - Hello, once you are fully prepared you may choose to progress into the fish
-      factory.
+    - Hello. Once you are fully prepared you may enter the fish factory.
     - The door to your right leads to the bleeding station, while the door on your
       left leads to the quality assurance station.
     - You will receive more information from my colleagues at each station.
     - Be sure to grab the handle of the doors firmly, as they can be a bit hard to
       get open!
-    endAfterDialogue: 1
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
     branchPoint:
-      question: Good luck! Choose between the bleeding station on your right and
-        the quality assurance on your left.
+      question: Good luck!
       answers:
-      - answerLabel: Could you repeat that?
+      - answerLabel: Repeat?
         nextElement: 0
+        endAfterAnswer: 0
+      - answerLabel: Finish
+        nextElement: 0
+        endAfterAnswer: 1
