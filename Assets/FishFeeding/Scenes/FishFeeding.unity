@@ -315,18 +315,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
---- !u!114 &45037282 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2570462701782028591, guid: 12ee6c50f9832c247a378f804297c417,
-    type: 3}
-  m_PrefabInstance: {fileID: 1549695878288151456}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad179a9e83dba5142adaaf7737678e8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &50669155 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3135961585540015331, guid: 2792debbecad18844823e745210ef306,
@@ -7553,7 +7541,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1947489646}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1565203625
+--- !u!114 &1565203628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7562,11 +7550,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 1565203621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d82803d95c69006458d875e37e53cad8, type: 3}
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueTransitions: {fileID: 1854036319}
-  grabbableUnityEvents: {fileID: 45037282}
+  m_Actions: {fileID: -944628639613478452, guid: 3643ec762f7b29040bcf1e1f41812b6f,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 761fe0b5-248c-4aa9-ba9e-1e59e85dfdf1
+    m_ActionName: Default/Menu[/Keyboard/0]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 805c5d69-a0ba-4fc2-b407-360c8c61f029
+    m_ActionName: Default/Speak
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Default
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1001 &1568927445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19229,7 +19242,7 @@ PrefabInstance:
     - target: {fileID: 4376909619194593627, guid: ea7db852323fd6b4986a2685991fe1c5,
         type: 3}
       propertyPath: _nPCs.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4376909619194593627, guid: ea7db852323fd6b4986a2685991fe1c5,
         type: 3}
@@ -19249,6 +19262,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 349ae61ba25bad84db8414d48d6008d7,
         type: 2}
+    - target: {fileID: 4376909619194593627, guid: ea7db852323fd6b4986a2685991fe1c5,
+        type: 3}
+      propertyPath: globalContextPrompt
+      value: "You are an AI assistant NPC in a VR game for vulnerable and/or unemployed
+        people. You are listening and talking via TTS and STT. In this game, users
+        can try working at a fish factory as a fun game to see if they are interested
+        in this job. The experience should be as real as possible, so never say that
+        you are programmed or not real, never answer questions about how your functionality
+        like TTS or SST works, and never refer to the setting as a game. You should
+        act like a friendly assistant and give short and helpful answers. It should
+        seem like you are a real person in the setting that the users are talking
+        to.\r\n\r\nUse max 280 characters\r"
+      objectReference: {fileID: 0}
     - target: {fileID: 4376909619194593628, guid: ea7db852323fd6b4986a2685991fe1c5,
         type: 3}
       propertyPath: m_Name

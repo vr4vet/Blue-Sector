@@ -13,19 +13,23 @@ MonoBehaviour:
   m_Name: Fiona
   m_EditorClassIdentifier: 
   NameOfNPC: Fish feeding guide Fiona
-  NpcPrefab: {fileID: 142329030213301039, guid: ff4da975a925d9447a923de91bf35e65,
+  NpcPrefab: {fileID: 142329030213301039, guid: e7688eb2defac4631a6bb6be0a3dbe4d,
     type: 3}
   CharacterModel: {fileID: 919132149155446097, guid: a1a55d60d3409a042a197e765853ec7c,
     type: 3}
   CharacterAvatar: {fileID: 9000000, guid: a1a55d60d3409a042a197e765853ec7c, type: 3}
-  VoicePresetId: 15
+  selectedTTSProvider: 0
+  WitVoiceId: 0
+  OpenAiVoiceId: 
   SpawnPosition: {x: -0.7, y: 1.736, z: -2.8}
   SpawnRotation: {x: 0, y: 155.258, z: 0}
   ShouldFollow: 0
   DialogueTreesSO:
-  - {fileID: 11400000, guid: 74b9a48561a30c74281c587a27925f7b, type: 2}
+  - {fileID: 11400000, guid: 7cfb59c895050dd41b60bae117373f18, type: 2}
   DialogueTreeJSON: []
   runtimeAnimatorController: {fileID: 9100000, guid: acb4b9981fa45ce46adb4867634b31ab,
     type: 2}
   SpatialBlend: 0
   MinDistance: 0
+  contextPrompt: Your name is Fiona. You are a fish feeding guide.
+  maxTokens: 1000
