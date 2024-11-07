@@ -155,7 +155,7 @@ public class DialogueBoxController : MonoBehaviour
             {
                 if (_pointingController != null)
                 {
-                    _pointingController.GetComponent<PointingController>().ChangeDirection(dialogueTree.sections[section].dialogue[i], talkingNpc: this.gameObject);
+                    _pointingController.GetComponent<PointingController>().ChangeDirection(section, talkingNpc: this.gameObject);
                     _animator.SetBool(_isTalkingHash, false);
                     _animator.SetBool(_isPointingHash, true);
                 }

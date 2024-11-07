@@ -8,15 +8,13 @@ using UnityEngine;
 public class PointingController : MonoBehaviour
 {
     private List<NpcData> npcs;
-    private GameObject ObjectToLookAt;
-    private DialogueBoxController dialogueBoxController;
-    // Start is called before the first frame update
+    private GameObject _objectToLookAt;
+    
     void Start()
     {
-        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
-        
         // This list will store necessary data for each NPC in the scene
         npcs = new List<NpcData>();
+        HashSet<Transform> parentSet = new HashSet<Transform>();
         
         GameObject[] allGameObjects = FindObjectsOfType<GameObject>();
 
@@ -26,10 +24,17 @@ public class PointingController : MonoBehaviour
             // Check if the name contains "PBR", which means it is an NPC model
             if (obj.name.Contains("PBR"))
             {
-                // Store the initial position and rotation of the NPC which would be used to reset it position
-                Vector3 initialPosition = obj.transform.position;
-                Quaternion initialRotation = obj.transform.rotation;
-                npcs.Add(new NpcData(obj, initialPosition, initialRotation));
+                Transform parentTransform = obj.transform.parent;
+                if (parentTransform != null && !parentSet.Contains(parentTransform))
+                {
+                    // Store the initial position and rotation of the NPC which would be used to reset it position and add it to the list
+                    Vector3 initialPosition = obj.transform.position;
+                    Quaternion initialRotation = obj.transform.rotation;
+                    npcs.Add(new NpcData(obj, initialPosition, initialRotation));
+                    
+                    // This set is used to avoid adding the same NPC model multiple times, which happens for some unknown reason
+                    parentSet.Add(parentTransform);
+                }
             }
         }
 
@@ -50,7 +55,7 @@ public class PointingController : MonoBehaviour
         }
     }
     
-    public void ChangeDirection(string dialogueText, GameObject talkingNpc)
+    public void ChangeDirection(int section, GameObject talkingNpc)
     {
         // Find the correct NPC based on the currently speaking NPC in the scene
         NpcData npcData = npcs.Find(npc => npc.Npc.name == talkingNpc.name);
@@ -60,42 +65,26 @@ public class PointingController : MonoBehaviour
         {
             // Reset the position of the NPC to make sure it stays in the same place
             npcData.Npc.transform.position = npcData.InitialPosition;
+            // The object to look at is stored in the dialogue tree
+            _objectToLookAt = talkingNpc.GetComponent<DialogueBoxController>().dialogueTreeRestart.sections[section].objectToLookAt;
+            // Find the object in the scene which corresponds to the prefab that is set in the dialogue tree
+            _objectToLookAt = GameObject.Find(_objectToLookAt.name);
             
-            if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+            if (_objectToLookAt == null)
             {
-               if (dialogueText.Contains("scale"))
-               {
-                   ObjectToLookAt = GameObject.Find("scale");
-               }
-                           
-               else if (dialogueText.Contains("board"))
-               {
-                   ObjectToLookAt = GameObject.Find("ruler");
-               }
-                           
-               else if (dialogueText.Contains("calculator"))
-               {
-                   ObjectToLookAt = GameObject.Find("Calculator_1978");
-               }
-               else if (dialogueText.Contains("microscope"))
-               {
-                   ObjectToLookAt = GameObject.Find("MicroscopeComplete");
-               }
-               else if (dialogueText.Contains("number keypad"))
-               {
-                   ObjectToLookAt = GameObject.Find("NumPad");
-               } 
-            }
-            
-            // Look at the correct object based on the dialogue text
-            Vector3 direction = ObjectToLookAt.transform.position - npcData.Npc.transform.position;
-            direction.y = 0;
-            if (direction != Vector3.zero)
+                Debug.Log("Object to look at not found");
+            } 
+            else
             {
-                npcData.Npc.transform.rotation = Quaternion.LookRotation(direction);
+                // Look at the correct object based on the dialogue text
+                Vector3 direction = _objectToLookAt.transform.position - npcData.Npc.transform.position;
+                direction.y = 0;
+                if (direction != Vector3.zero)
+                {
+                    npcData.Npc.transform.rotation = Quaternion.LookRotation(direction);
+                }
             }
         } 
-        
     }
 
     // Reset the direction of the NPC
@@ -107,9 +96,11 @@ public class PointingController : MonoBehaviour
         { 
             npcData.Npc.transform.rotation = npcData.InitialRotation;
         }
-        
+        else
+        {
+            Debug.Log("NPC not found");
+        }
     }
-    
 }
 
 
