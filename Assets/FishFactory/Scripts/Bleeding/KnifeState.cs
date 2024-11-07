@@ -73,7 +73,7 @@ public class KnifeState : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.y <= -1.0f)
+        if (transform.position.y <= 0)
         {
             transform.position = new Vector3(4.56f, 0.962f, -9.352f);
         }
