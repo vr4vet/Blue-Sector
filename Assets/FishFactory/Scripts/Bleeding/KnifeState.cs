@@ -35,6 +35,8 @@ public class KnifeState : MonoBehaviour
             _durabilityCount = RandomizeDurability();
         }
         UpdateKnifeVisibility();
+
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("FishKnife"));
     }
 
     // ---------------- Public Functions ----------------
