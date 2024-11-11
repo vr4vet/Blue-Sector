@@ -140,6 +140,13 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
             // fetch unscaled position of grid and adjust using current scaling 
             gridTransform.localPosition = new Vector3(MicroscopeMonitor.GetCurrentXY().x, MicroscopeMonitor.GetCurrentXY().y, 0) * gridTransform.localScale.x;
             gridTransform.localPosition += new Vector3(0, OffsetY, 0);
+
+            // enable plankton ring highlights if requested by player
+            if (MicroscopeMonitor.PlankonHighlightsEnabled())
+            {
+                foreach (MicroscopeSlideCell cell in Grid.GetComponentsInChildren<MicroscopeSlideCell>())
+                    cell.EnablePlanktonHighlights();
+            }
         }
         else
         {

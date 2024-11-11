@@ -27,6 +27,15 @@ public class MicroscopeSlideCell : MonoBehaviour
         return SkeletonemaAmount;
     }
 
+    public void EnablePlanktonHighlights()
+    {
+        transform.Find("rings").gameObject.SetActive(true);
+    }
+
+    public void DisablePlanktonHighlights()
+    {
+        transform.Find("rings").gameObject.SetActive(false);
+    }
 
 
 

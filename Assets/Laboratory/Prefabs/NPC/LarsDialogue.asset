@@ -219,7 +219,7 @@ MonoBehaviour:
         nextElement: 11
         endAfterAnswer: 0
   - dialogue:
-    - Now you are going to analyze a water sample in the microscope. Your goal is
+    - Now you are going to analyse a water sample in the microscope. Your goal is
       to look after different organisms in the sample, and count how many there are.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
@@ -255,20 +255,22 @@ MonoBehaviour:
       - answerLabel: Continue
         nextElement: 14
         endAfterAnswer: 0
-  - dialogue:
-    - Let's start with the task. There are three kinds of plankton in the sample.
-      Write your answers on the note sheet to the left of the microscope. Tell me
-      when you are finished counting, and I will take a look at your answers.
+  - dialogue: []
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     branchPoint:
-      question: Are you done counting?
+      question: There are three kinds of plankton in the sample. Write your answers
+        on the note sheet to the left of the microscope. Tell me when you are finished
+        counting or if you have any questions.
       answers:
-      - answerLabel: Yes
+      - answerLabel: Check answers
         nextElement: 15
         endAfterAnswer: 0
-      - answerLabel: No
-        nextElement: 14
+      - answerLabel: How does the microscope work?
+        nextElement: 13
+        endAfterAnswer: 0
+      - answerLabel: I need assistance
+        nextElement: 20
         endAfterAnswer: 0
   - dialogue:
     - Let me see. I'm double-checking your answers.
@@ -319,8 +321,8 @@ MonoBehaviour:
     endAfterDialogue: 0
     disabkeSkipLineButton: 1
     branchPoint:
-      question: You need to analyse the water sample before submitting your answer.
-        Place the water sample under the scope of the microscope.
+      question: You need to start analysing the water sample first. Place the water
+        sample under the scope of the microscope.
       answers:
       - answerLabel: Okay
         nextElement: 14
@@ -330,4 +332,45 @@ MonoBehaviour:
         endAfterAnswer: 0
       - answerLabel: Try something else
         nextElement: 1
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: I can highlight all of the plankton in the water sample. Each individual
+        will be surrounded by ring, with each genus having a different colour. Do
+        you want me to do that?
+      answers:
+      - answerLabel: Yes
+        nextElement: 21
+        endAfterAnswer: 0
+      - answerLabel: No, remove the highlights
+        nextElement: 21
+        endAfterAnswer: 0
+  - dialogue:
+    - Okay, give me a few seconds!
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: I have now highlighted the plankton. Tell me when you are ready to
+        move on with the task.
+      answers:
+      - answerLabel: I'm ready
+        nextElement: 14
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: I have now removed the highlighting of the plankton. Tell me when
+        you are ready to move on with the task.
+      answers:
+      - answerLabel: I'm ready
+        nextElement: 14
         endAfterAnswer: 0

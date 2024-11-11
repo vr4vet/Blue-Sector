@@ -1,5 +1,6 @@
 using BNG;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class NPCMicroscopeTask : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class NPCMicroscopeTask : MonoBehaviour
     private MicroscopeSlideWithGrid slide;
     [SerializeField] private MicroscopeInfoSubmitUI planktonNotepad;
     private ObjectPositions objectPositions;
+
+    public UnityEvent EnablePlanktonHighlights;
+    public UnityEvent DisablePlanktonHighlights;
+    private bool HighLightPlankton = false;
 
 
     // Start is called before the first frame update
@@ -21,18 +26,21 @@ public class NPCMicroscopeTask : MonoBehaviour
             Debug.LogError("Could not find dialogueBoxController! There are likely no NPCs in the scene!");
 
         objectPositions = ObjectPositions.Instance;
+
+        ButtonSpawner.OnAnswer += ButtonSpawner_OnAnswer;
     }
 
     private bool haveBeenReset = false;
     private float startTime = 0;
     private void Update()
     {
-
         if (dialogueBoxController.dialogueTreeRestart.name != "LarsDialogue")
             return;
 
         // checking if NPC is currently letting the player select task. if so, reset the microscope task. 
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0]
+            ||
+            dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
         {
             // prevent uneccessary resources spent on constantly resetting objects (the operations included are expensive)
             if (haveBeenReset)
@@ -95,6 +103,37 @@ public class NPCMicroscopeTask : MonoBehaviour
                 }
             }
         }
+
+        // checking if NPC is attempting to highlight plankton
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[21].dialogue[0])
+        {
+            if (startTime == 0)
+                startTime = Time.time;
+
+            if (Time.time - startTime >= 5) // npc 'thinks' for 8 seconds
+            {
+                startTime = 0;
+
+                // checking if player has placed slide onto microscope
+                if (slide == null)
+                {
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 19, "LarsDialogue");
+                    return;
+                }
+
+                // highlighting plankton
+                if (HighLightPlankton)
+                {
+                    EnablePlanktonHighlights.Invoke();
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 22, "LarsDialogue");
+                }     
+                else
+                {
+                    DisablePlanktonHighlights.Invoke();
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 23, "LarsDialogue");
+                }   
+            }
+        }
     }
 
     private void RestoreSlidePositionAndHierarchy()
@@ -125,6 +164,22 @@ public class NPCMicroscopeTask : MonoBehaviour
         if (!objectPositions.skeletonemaPoster.GetComponent<Grabbable>().BeingHeld)
             objectPositions.skeletonemaPoster.transform.SetPositionAndRotation(objectPositions._skeletonemaPosterPosition, objectPositions._skeletonemaPosterRotation);
     }
+
+    /// <summary>
+    /// Storing the player's answer when asked if they want to have plankton highlighted.
+    /// </summary>
+    /// <param name="answer"></param>
+    private void ButtonSpawner_OnAnswer(string answer)
+    {
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[20].branchPoint.question)
+        {
+            if (answer == "Yes")
+                HighLightPlankton = true;
+            else
+                HighLightPlankton = false;
+        }
+    }
+
     public void SetCurrentSlideWithGrid(MicroscopeSlideWithGrid slide)
         { this.slide = slide; }
 

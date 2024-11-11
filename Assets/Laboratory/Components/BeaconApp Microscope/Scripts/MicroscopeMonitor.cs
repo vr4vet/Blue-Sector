@@ -39,6 +39,8 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private List<int> GridCellRotations = new List<int>();
 
+    private bool PlanktonHighlights = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -499,5 +501,29 @@ public class MicroscopeMonitor : MonoBehaviour
             return Grid;
         else
             return Image.gameObject;
+    }
+
+    public void OnEnablePlanktonHighlights()
+    {
+        PlanktonHighlights = true;
+        foreach (MicroscopeSlideCell cell in Grid.GetComponentsInChildren<MicroscopeSlideCell>())
+        {
+            cell.EnablePlanktonHighlights();
+        }
+
+    }
+
+    public void OnDisablePlanktonHighlights()
+    {
+        PlanktonHighlights = false;
+        foreach (MicroscopeSlideCell cell in Grid.GetComponentsInChildren<MicroscopeSlideCell>())
+        {
+            cell.DisablePlanktonHighlights();
+        }
+    }
+
+    public bool PlankonHighlightsEnabled()
+    {
+        return PlanktonHighlights;
     }
 }
