@@ -8,7 +8,6 @@ public struct DialogueSection
     public bool endAfterDialogue;
     public bool disabkeSkipLineButton;
     public bool point;
-    [SerializeField]
     public GameObject objectToLookAt;
     public BranchPoint branchPoint;
 }
