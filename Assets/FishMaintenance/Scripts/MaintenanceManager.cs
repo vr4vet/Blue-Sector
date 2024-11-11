@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Linq;
 public class MaintenanceManager : MonoBehaviour
 {
-    public static MaintenanceManager Instance;
+    //public static MaintenanceManager Instance;
     [SerializeField] public Task.TaskHolder taskHolder;
     [SerializeField] public AudioClip success;
     [SerializeField] private AudioClip equipmentPickup;
@@ -28,7 +28,7 @@ public class MaintenanceManager : MonoBehaviour
     public UnityEvent<Task.Task> TaskCompleted { get; } = new();
     public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
     // Start is called before the first frame update
-    private void Awake()
+/*    private void Awake()
     {
        
         if (Instance == null)
@@ -40,7 +40,7 @@ public class MaintenanceManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
+    }*/
 
 
     void Start()

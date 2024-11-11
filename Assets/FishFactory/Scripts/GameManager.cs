@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -201,6 +203,12 @@ public class GameManager : MonoBehaviour
 
     // ----------------- Unity Functions -----------------
 
+    private bool isFactoryScene = false;
+    public bool IsFactoryScene
+    {
+        get { return isFactoryScene; }
+        set { isFactoryScene = value; }
+    }
     void Awake()
     {
         // Sets the instance of the GameManager to this object if it does not already exist
@@ -220,7 +228,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // If the game objects are not set, find them in the current scene
+        // If the game objects are not set, find them in the current scene.
         //TODO: The objects are not searchable at the at the loading of the scene, so this is a workaround
         // This is a limitation of the current implementation of the game, and should be fixed at a later stage
         if (_leftHandGameObj == null || _rightHandGameObj == null || _audioManager == null)
@@ -260,6 +268,9 @@ public class GameManager : MonoBehaviour
                 break;
             case "door":
                 audioSource.clip = _soundEffects[3];
+                break;
+            case "MotorBoatDriving":
+                audioSource.clip = _soundEffects[5];
                 break;
         }
         audioSource.Play();
@@ -321,5 +332,14 @@ public class GameManager : MonoBehaviour
         {
             _rightHandGameObj.GetComponent<Renderer>().material = _steelGlove;
         }
+    }
+
+    /// <summary>
+    /// Loads the materials used when equipping gloves in the HSE room
+    /// </summary>
+    public void LoadGlovesMaterials()
+    {
+        _blueGlove = Resources.Load<Material>("Materials/BlueGlove");
+        _steelGlove = Resources.Load<Material>("Materials/SteelGlove");
     }
 }
