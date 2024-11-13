@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class DiscardKnife : MonoBehaviour
@@ -26,7 +27,7 @@ public class DiscardKnife : MonoBehaviour
         {
             HandleAudioFeedback(Knife.GetComponent<KnifeState>());
             Destroy(Knife);
-            if (Knife.name == "BackupFishKnife")
+            if (Knife.name == "BackupFishKnife" || Knife.name == "FishKnife")
             {
                 Vector3 pos = new Vector3(4.56f,0.962f,-9.352f);
                 GameObject newKnife = Instantiate(_newKnifePrefab, pos, Quaternion.identity);
