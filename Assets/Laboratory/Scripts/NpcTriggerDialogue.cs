@@ -42,11 +42,13 @@ public class NpcTriggerDialogue : MonoBehaviour
   
 
    private DialogueBoxController dialogueBoxController;
+   private WalkingNpc _walkingNpc;
    private int _dialogueIndex;
 
    private void Start()
    {
        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+       _walkingNpc = FindObjectOfType<WalkingNpc>();
        // Save the initial positions of the objects
        _basketPosition = basket.transform.position;
        _basketRotation = basket.transform.rotation;
@@ -54,10 +56,6 @@ public class NpcTriggerDialogue : MonoBehaviour
        _handheldCounterRotation = handheldCounter.transform.rotation;
        _fishPosition = fish.transform.position;
        _fishRotation = fish.transform.rotation;
-         
-       
-       
-       
    }  
    
    private void Update()
@@ -69,6 +67,14 @@ public class NpcTriggerDialogue : MonoBehaviour
            {
                ChangeToLars(dialogueBoxController.dialogueTreeRestart.name);
            
+           }
+
+           if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+           {
+               if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0])
+               {
+                   _walkingNpc.DialogueTransition("Labratory guide Larry");
+               }
            }
        }
 

@@ -6,10 +6,10 @@ using UnityEngine;
 public class NpcData
 {
     public GameObject Npc { get; set; }
-    public Vector3 InitialPosition { get; set; }
+    public float InitialPosition { get; set; }
     public Quaternion InitialRotation { get; set; }
 
-    public NpcData(GameObject npc, Vector3 initialPosition, Quaternion initialRotation)
+    public NpcData(GameObject npc, float initialPosition, Quaternion initialRotation)
     {
         Npc = npc;
         InitialPosition = initialPosition;
