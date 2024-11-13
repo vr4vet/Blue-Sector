@@ -95,7 +95,7 @@ public class NPCMicroscopeTask : MonoBehaviour
                 {
                     // dynamically adding dialogue with correct answers. this could be a risky operation!
                     dialogueBoxController.dialogueTreeRestart.sections[18].dialogue[0] =
-                        $"There are {slide.GetTotalAmountOfChaetoceros()} Chaetoceros diatom, " +
+                        $"I counted {slide.GetTotalAmountOfChaetoceros()} Chaetoceros diatom, " +
                         $"{slide.GetTotalAmountOfPseudoNitzschia()} Pseudo-nitzschia diatom, " +
                         $"and {slide.GetTotalAmountOfSkeletonema()} Skeletonema diatom.";
 
