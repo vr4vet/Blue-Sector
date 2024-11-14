@@ -12,7 +12,7 @@ public class DropWhenStretched : MonoBehaviour
     private List<float> distances = new List<float>();
     private DropTheFish drop;
     private int GrabCount = 0;
-    private bool FishCollides = false;
+    private int FishCollides = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -23,8 +23,8 @@ public class DropWhenStretched : MonoBehaviour
     private float WaitBeforeDrop = 0;
     // Update is called once per frame
     void Update()
-    { 
-        if (GrabCount == 0 || FishCollides)
+    {
+        if (GrabCount == 0 || FishCollides > 0 && GrabCount < 2)
         {
             return;
         }
@@ -60,6 +60,7 @@ public class DropWhenStretched : MonoBehaviour
                     }
                 }
             }
+
         }      
     }
     public void DistanceLength()
@@ -112,15 +113,13 @@ public class DropWhenStretched : MonoBehaviour
         return false;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void JointCollisionIncrease()
     {
-        if (collision.collider.CompareTag("SortingSquare"))
-            FishCollides = true;
+        FishCollides++;
     }
-
-    private void OnCollisionExit(Collision collision)
+    
+    public void JointCollisionDecrease()
     {
-        if (collision.collider.CompareTag("SortingSquare"))
-            FishCollides = false;
+        FishCollides--;
     }
 }

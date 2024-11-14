@@ -13,4 +13,16 @@ public class WhichJointGrabbed : MonoBehaviour
     {
         Grabbed = false;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("SortingSquare"))
+            WhenStretched.JointCollisionIncrease();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("SortingSquare"))
+            WhenStretched.JointCollisionDecrease();
+    }
 }
