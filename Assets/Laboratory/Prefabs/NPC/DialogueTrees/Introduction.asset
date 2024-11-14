@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: Introduction
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - Welcome to the Fish Laboratory. Here you will check the quality of the fish
+      and its environment.
+    - This will be done through multiple steps.  You can measure the fish, dissect
+      it and analyze algae from a water sample.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Do you want to learn more about the work that is done here or start
+        with the tasks?
+      answers:
+      - answerLabel: Start with the tasks
+        nextElement: 2
+        endAfterAnswer: 0
+      - answerLabel: Learn more
+        nextElement: 1
+        endAfterAnswer: 0
+  - dialogue:
+    - The fish laboratory is important for gathering information on the health of
+      the fish. This information is used to better regulate the feeding and treatment
+      of the fish. By checking for any sickness or other health issues, information
+      on the fish welfare can be obtained.
+    - In the laboratory the condition factor of the fish is calculated. This is used
+      to determine how well fed the fish is, and is important for regulating the
+      feeding of the fish.
+    - The fish is dissected to see if there are any issues, like sickness or damage.
+    - The environmental conditions of the fish are also checked by analysing water
+      samples with the microscope, as some plankton found in the water can be harmful
+      to the fish.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Are you ready to move on to the instructions?
+      answers:
+      - answerLabel: Yes
+        nextElement: 2
+        endAfterAnswer: 0
+      - answerLabel: Can you repeat?
+        nextElement: 1
+        endAfterAnswer: 0
+  - dialogue:
+    - Now you will choose which task to begin with
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Which task do you want to begin with?
+      answers:
+      - answerLabel: Calculating condition factor
+        nextElement: 3
+        endAfterAnswer: 0
+      - answerLabel: Analyzing plankton samples
+        nextElement: 0
+        endAfterAnswer: 1
+      - answerLabel: Dissecting the fish (Still in development)
+        nextElement: 0
+        endAfterAnswer: 1
+  - dialogue:
+    - Follow me!
+    endAfterDialogue: 1
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: 
+      answers: []

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: MicroscopeDialogue
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - Now you are going to analyze a water sample in the microscope. Your goal is
+      to look after different organisms in the sample, and count how many there are.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Do you want to learn how to use the microscope or go straight to
+        the task?
+      answers:
+      - answerLabel: Learn how to use the microscope
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Start with the tasks
+        nextElement: 0
+        endAfterAnswer: 0
+  - dialogue:
+    - First place the water sample under the scope, this is the blue rectangle to
+      the right of the microscope.
+    - Now you can see the sample on the screen, press one of the big arrows to move
+      around.
+    - Try to change the speed of how you fast you move around by pressing plus or
+      minus.
+    - Zoom in or out by scrolling the nosepieces over the sample
+    - On the left side of the microscope there is a counter. Grab it with your left
+      hand and press the button on your index finger to count.
+    - To reset the counter to zero press the top button on the counter.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 1
+    objectToLookAt: {fileID: 2897439329450102196, guid: 51c09a19815062d4b8086734b17c33af,
+      type: 3}
+    branchPoint:
+      question: Do you want me to go over it again or continue?
+      answers:
+      - answerLabel: Explain again
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Continue
+        nextElement: 0
+        endAfterAnswer: 0
