@@ -13,6 +13,7 @@ public class NPCMicroscopeTask : MonoBehaviour
     public UnityEvent EnablePlanktonHighlights;
     public UnityEvent DisablePlanktonHighlights;
     private bool HighLightPlankton = false;
+    private bool ResetAfterTryingAgain = false;
 
 
     // Start is called before the first frame update
@@ -46,23 +47,32 @@ public class NPCMicroscopeTask : MonoBehaviour
             if (haveBeenReset)
                 return;
 
-            // resetting water sample position
-            RestoreSlidePositionAndHierarchy();
-
-            // emptying note sheet input fields and removing red or green marking
-            planktonNotepad.ClearAllInputFields();
-            planktonNotepad.MarkResetAll();
-
-            if (!objectPositions.planktonNotepad.GetComponent<Grabbable>().BeingHeld)
-                objectPositions.planktonNotepad.transform.SetPositionAndRotation(objectPositions._planktonNotepadPosition, objectPositions._planktonNotepadRotation);
-            
-            // resetting position of counter, note sheet, and informational posters
-            RestorePostersPosition();
+            // resetting water sample, counter, note sheet, and informational posters
+            ResetWaterSample();
+            ResetHandheldCounter();
+            ResetPosters();
+            ResetPlanktonNoteSheet();
 
             haveBeenReset = true;
         }
         else
             haveBeenReset = false;
+
+        // reset microscope task if the player chose to try again after failing or succeeding in counting plankton
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[14].branchPoint.question)
+        {
+            if (ResetAfterTryingAgain)
+            {
+                // resetting water sample, counter, note sheet, and informational posters
+                ResetWaterSample();
+                ResetHandheldCounter();
+                ResetPosters();
+                ResetPlanktonNoteSheet();
+
+                ResetAfterTryingAgain = false;
+            }
+            return;
+        }
 
         // checking if NPC is currently verifying plankton count. jump to the appropriate dialogue section depending on if correct or incorrect.
         if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[15].dialogue[0])
@@ -102,6 +112,7 @@ public class NPCMicroscopeTask : MonoBehaviour
                     dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 17, "LarsDialogue");
                 }
             }
+            return;
         }
 
         // checking if NPC is attempting to highlight plankton
@@ -136,7 +147,7 @@ public class NPCMicroscopeTask : MonoBehaviour
         }
     }
 
-    private void RestoreSlidePositionAndHierarchy()
+    private void ResetWaterSample()
     {
         GameObject child = GameObject.Find("MicroscopeSlideModel");
 
@@ -153,16 +164,30 @@ public class NPCMicroscopeTask : MonoBehaviour
         child.transform.localEulerAngles = Vector3.zero;
     }
 
-    private void RestorePostersPosition()
+    private void ResetPosters()
     {
-        if (!objectPositions.handheldCounter.GetComponent<Grabbable>().BeingHeld)
-            objectPositions.handheldCounter.transform.SetPositionAndRotation(objectPositions._handheldCounterPosition, objectPositions._handheldCounterRotation);
         if (!objectPositions.chaetocerosPoster.GetComponent<Grabbable>().BeingHeld)
             objectPositions.chaetocerosPoster.transform.SetPositionAndRotation(objectPositions._chaetocerosPosterPosition, objectPositions._chaetocerosPosterRotation);
         if (!objectPositions.pseudoNitzschiaPoster.GetComponent<Grabbable>().BeingHeld)
             objectPositions.pseudoNitzschiaPoster.transform.SetPositionAndRotation(objectPositions._pseudoNitzschiaPosterPosition, objectPositions._pseudoNitzschiaPosterRotation);
         if (!objectPositions.skeletonemaPoster.GetComponent<Grabbable>().BeingHeld)
             objectPositions.skeletonemaPoster.transform.SetPositionAndRotation(objectPositions._skeletonemaPosterPosition, objectPositions._skeletonemaPosterRotation);
+        if (!objectPositions.planktonBasicsPoster.GetComponent<Grabbable>().BeingHeld)
+            objectPositions.planktonBasicsPoster.transform.SetPositionAndRotation(objectPositions._planktonBasicsPosterPosition, objectPositions._planktonBasicsPosterRotation);
+    }
+
+    private void ResetPlanktonNoteSheet()
+    {
+        planktonNotepad.ClearAllInputFields();
+        planktonNotepad.MarkResetAll();
+        if (!objectPositions.planktonNotepad.GetComponent<Grabbable>().BeingHeld)
+            objectPositions.planktonNotepad.transform.SetPositionAndRotation(objectPositions._planktonNotepadPosition, objectPositions._planktonNotepadRotation);
+    }
+
+    private void ResetHandheldCounter()
+    {
+        if (!objectPositions.handheldCounter.GetComponent<Grabbable>().BeingHeld)
+            objectPositions.handheldCounter.transform.SetPositionAndRotation(objectPositions._handheldCounterPosition, objectPositions._handheldCounterRotation);
     }
 
     /// <summary>
@@ -177,6 +202,14 @@ public class NPCMicroscopeTask : MonoBehaviour
                 HighLightPlankton = true;
             else
                 HighLightPlankton = false;
+        }
+
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[16].branchPoint.question 
+            || 
+            dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[17].branchPoint.question)
+        {
+            if (answer == "Try again" || answer == "Yes")
+                ResetAfterTryingAgain = true;
         }
     }
 

@@ -14,6 +14,7 @@ public class ObjectPositions : MonoBehaviour
     public GameObject chaetocerosPoster;
     public GameObject pseudoNitzschiaPoster;
     public GameObject skeletonemaPoster;
+    public GameObject planktonBasicsPoster;
 
     [HideInInspector] public Vector3 _basketPosition;
     [HideInInspector] public Quaternion _basketRotation;
@@ -31,6 +32,8 @@ public class ObjectPositions : MonoBehaviour
     [HideInInspector] public Quaternion _pseudoNitzschiaPosterRotation;
     [HideInInspector] public Vector3 _skeletonemaPosterPosition;
     [HideInInspector] public Quaternion _skeletonemaPosterRotation;
+    [HideInInspector] public Vector3 _planktonBasicsPosterPosition;
+    [HideInInspector] public Quaternion _planktonBasicsPosterRotation;
 
     private void Awake()
     {
@@ -64,5 +67,7 @@ public class ObjectPositions : MonoBehaviour
         _pseudoNitzschiaPosterRotation = pseudoNitzschiaPoster.transform.rotation;
         _skeletonemaPosterPosition = skeletonemaPoster.transform.position;
         _skeletonemaPosterRotation = skeletonemaPoster.transform.rotation;
+        _planktonBasicsPosterPosition = planktonBasicsPoster.transform.position;
+        _planktonBasicsPosterRotation = planktonBasicsPoster.transform.rotation;
     }
 }
