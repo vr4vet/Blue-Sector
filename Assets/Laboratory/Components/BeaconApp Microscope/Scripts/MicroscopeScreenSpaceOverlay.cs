@@ -81,7 +81,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
                 roll = Mathf.Abs(Mathf.Atan2(localFlatRight.y, localFlatRight.x));
             }
 
-            // calculating the rotation offset from the eye pieces (other words: checking if the player look directly into them)
+            // calculating the rotation offset from the eye pieces (other words: checking if the player looks directly into them)
             float rotationOffset = Vector3.Angle((trigger.transform.position - HeadCollider.transform.position), HeadCollider.transform.forward);
 
             // dim overlay when head is rotated or rolled
@@ -102,35 +102,51 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         // need this to correct image on Quest 3 and Quest Pro (positioned too high)
         float OffsetY = 0f;
         if (Device == QuestDevice.Quest2)
-            OffsetY = 0f;
+            OffsetY = -1f;
         else if (Device == QuestDevice.Quest3)
-            OffsetY = -50f;
+            OffsetY = -4f;
         else if (Device == QuestDevice.QuestPro)
-            OffsetY = -60f;
+            OffsetY = -5f;
+
 
         if (MicroscopeMonitor.IsDisplayingGrid())
         {
             Image.enabled = false;
             Grid = GameObject.Instantiate(MicroscopeMonitor.GetGrid());
+
+            // fetch already generated rotations to ensure cells are rotated the same as on the monitor
+            Grid.GetComponent<MicroscopeGrid>().RotateCells(MicroscopeMonitor.GetGridCellRotations());
+            
+            // make microscope overlay canvas visible only
             Grid.layer = LayerMask.NameToLayer("MicroscopeOverlay");
+
+            // make this parent and give highest position among siblings to ensure UI elements are drawn on top
             Grid.transform.SetParent(transform);
-            Grid.transform.SetAsFirstSibling();  // give highest position among siblings to ensure UI elements are drawn on top
+            Grid.transform.SetAsFirstSibling();  
 
             RectTransform gridTransform = Grid.GetComponent<RectTransform>();
 
-            // make overlay face player
-            gridTransform.localEulerAngles = Vector3.zero; 
+            // make overlay face player and make scale (1, 1, 1) before adjusting
+            gridTransform.localEulerAngles = Vector3.zero;
+            gridTransform.localScale = Vector3.one;
 
-            // resize grid and its cells to match image and fit eye pieces
+            // resize grid to match image and fit eye pieces
             float sizeRatio = gridTransform.sizeDelta.x / Image.GetComponent<RectTransform>().sizeDelta.x;
-            gridTransform.localPosition = (new Vector3(MicroscopeMonitor.GetGridPosition().x, MicroscopeMonitor.GetGridPosition().y + OffsetY, MicroscopeMonitor.GetGridPosition().z) / sizeRatio);
-            gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, gridTransform.sizeDelta.x / sizeRatio);
-            gridTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridTransform.sizeDelta.y / sizeRatio);
-            Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(gridTransform.sizeDelta.x / 10, gridTransform.sizeDelta.y / 5);
+            gridTransform.localScale /= sizeRatio;
 
             // apply the same magnification as monitor
-            int Scale = MicroscopeMonitor.GetMagnificationLevel();
-            gridTransform.localScale = new Vector3(Scale, Scale, Scale);
+            gridTransform.localScale *= MicroscopeMonitor.GetMagnificationLevel();
+
+            // fetch unscaled position of grid and adjust using current scaling 
+            gridTransform.localPosition = new Vector3(MicroscopeMonitor.GetCurrentXY().x, MicroscopeMonitor.GetCurrentXY().y, 0) * gridTransform.localScale.x;
+            gridTransform.localPosition += new Vector3(0, OffsetY, 0);
+
+            // enable plankton ring highlights if requested by player
+            if (MicroscopeMonitor.PlankonHighlightsEnabled())
+            {
+                foreach (MicroscopeSlideCell cell in Grid.GetComponentsInChildren<MicroscopeSlideCell>())
+                    cell.EnablePlanktonHighlights();
+            }
         }
         else
         {
