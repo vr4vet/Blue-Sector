@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Tablet;
 
 public class StaticPanelManager : MonoBehaviour
 {
@@ -111,8 +110,6 @@ public class StaticPanelManager : MonoBehaviour
 
     public void OnClickBackToTasks()
     {
-        TaskListLoader1 taskListLoader1 = GetComponent<TaskListLoader1>();
-        taskListLoader1.UpdateTaskPage();
         SwitchMenuTo(TaskListMenu);
     }
 
@@ -172,7 +169,6 @@ public class StaticPanelManager : MonoBehaviour
         }
         //run whatever graphical resetting methods here if we do things like expanding/collapsing categories | clear text areas of text here as well
         b.SetActive(true);
-        Debug.Log("Now displaying: " + b);
     }
 
     void Start()
@@ -194,8 +190,6 @@ public class StaticPanelManager : MonoBehaviour
     #region MainMenu
     public void OnClickMenuTask()
     {
-        TaskListLoader1 taskListLoader1 = GetComponent<TaskListLoader1>();
-        taskListLoader1.UpdateTaskPage();
         SwitchMenuTo(TaskListMenu);
     }
     public void OnClickMenuSkills()
@@ -210,8 +204,7 @@ public class StaticPanelManager : MonoBehaviour
 
     public void OnClickMenuScore()
     {
-        // SwitchMenuTo(ScoreListMenu);
-        SwitchMenuTo(ScoreMenu);
+        SwitchMenuTo(ScoreListMenu);
     }
 
 
@@ -357,8 +350,10 @@ public class StaticPanelManager : MonoBehaviour
 
     }
 
-    public void SelectSubTask()
+    public void SelectSubTask(SubTask b)
     {
+
+
         SwitchMenuTo(SubtaskAboutMenu);
     }
 

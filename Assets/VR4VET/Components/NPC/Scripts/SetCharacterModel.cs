@@ -15,7 +15,7 @@ public class SetCharacterModel : MonoBehaviour
     [HideInInspector] private Vector3 _spawnLocation;
     [SerializeField] private GameObject _characterModelPrefab; // what should the NPC look like
     [SerializeField] private Avatar _avatar; // The animation avatar belonging to the model
-    [SerializeField] private int _voicePresetId; // what should the NPC sound like
+    [SerializeField] private int _WitVoiceId; // what should the NPC sound like
     [SerializeField] private RuntimeAnimatorController _runtimeAnimatorController;
     // The model with rig
     [HideInInspector] private GameObject _bonesAndSkin;
@@ -27,10 +27,12 @@ public class SetCharacterModel : MonoBehaviour
     // Animator and its parameters
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _isTalkingHash;
+    [HideInInspector] private int _isListeningHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
     [HideInInspector] private int _velocityYHash;
     [HideInInspector] private int _velocityXHash;
     [HideInInspector] private bool _isTalking;
+    [HideInInspector] private bool _isListening;
     [HideInInspector] private bool _hasNewDialogueOptions;
     [HideInInspector] private float _velocityY;
     [HideInInspector] private float _velocityX;
@@ -49,10 +51,12 @@ public class SetCharacterModel : MonoBehaviour
 
     private void PrepareAnimationValues() {
         _isTalkingHash = Animator.StringToHash("isTalking");
+        _isListeningHash = Animator.StringToHash("isListening");
         _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
         _velocityYHash = Animator.StringToHash("VelocityY");
         _velocityXHash = Animator.StringToHash("VelocityX");
         _isTalking = false;
+        _isListening = false;
         _hasNewDialogueOptions = false;
         _velocityY = 0;
         _velocityX = 0;
@@ -105,7 +109,7 @@ public class SetCharacterModel : MonoBehaviour
         {
             // Change the voice of the NPC
             ttsSpeaker.ClearVoiceOverride();
-            ttsSpeaker.GetComponentInChildren<TTSSpeaker>().SetVoiceOverride(ttsWitService.GetAllPresetVoiceSettings()[_voicePresetId]);
+            ttsSpeaker.GetComponentInChildren<TTSSpeaker>().SetVoiceOverride(ttsWitService.GetAllPresetVoiceSettings()[_WitVoiceId]);
         }
 
         // Attach rigbuilder to the head of the NPC to enable looking at player
@@ -167,7 +171,7 @@ public class SetCharacterModel : MonoBehaviour
         }
     }
 
-    public void ChangeCharacter(GameObject characterModelPrefab, Avatar avatar, RuntimeAnimatorController runtimeAnimatorController, int voicePresetId)
+    public void ChangeCharacter(GameObject characterModelPrefab, Avatar avatar, RuntimeAnimatorController runtimeAnimatorController, int WitVoiceId)
     {
         // keep a reference to the old stuff, so it safely can be destroyed later
         _oldbonesAndSkin = _bonesAndSkin;
@@ -176,7 +180,7 @@ public class SetCharacterModel : MonoBehaviour
         this._avatar = avatar;
         this._runtimeAnimatorController = runtimeAnimatorController;
         SaveOldAnimationValues();
-        this._voicePresetId = voicePresetId;
+        this._WitVoiceId = WitVoiceId;
         // destory the old stuff
         Destroy(_oldbonesAndSkin);
         // Add the new model and set the saved values to the new animator
@@ -193,6 +197,7 @@ public class SetCharacterModel : MonoBehaviour
     private void SaveOldAnimationValues() {
         if (_runtimeAnimatorController.name.Contains("NPCHumanoidAnimationController")) {
             _isTalking = _animator.GetBool(_isTalkingHash);
+            _isListening = _animator.GetBool(_isListeningHash);
             _hasNewDialogueOptions = _animator.GetBool(_hasNewDialogueOptionsHash);
             _velocityX = _animator.GetFloat(_velocityXHash);
             _velocityY = _animator.GetFloat(_velocityYHash);
@@ -204,6 +209,7 @@ public class SetCharacterModel : MonoBehaviour
     private void SetNewAnimationValues() {
         if (_runtimeAnimatorController.name.Contains("NPCHumanoidAnimationController")) {
             _animator.SetBool(_isTalkingHash, _isTalking);
+            _animator.SetBool(_isListeningHash, _isListening);
             _animator.SetBool(_hasNewDialogueOptionsHash, _hasNewDialogueOptions);
             _animator.SetFloat(_velocityXHash, _velocityX);
             _animator.SetFloat(_velocityYHash, _velocityY);

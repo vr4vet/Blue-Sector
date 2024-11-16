@@ -360,8 +360,7 @@ namespace Tablet
                     item.transform.localPosition = Vector3.zero;
                     item.transform.localScale = Vector3.one;
                     item.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                    item.GetComponent<StepUI>().associatedSubTask = subtask;
-
+                  
                     TMP_Text caption = item.transform.Find("txt_Desc").GetComponent<TMP_Text>();
                     GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
                     if (step.IsCompeleted()) checkmark.SetActive(true);

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ContentPageChanger : MonoBehaviour
 {
-    public List<GameObject> content = new();
+    List<GameObject> content = new();
     [SerializeReference] TextMeshProUGUI pageLabel;
     [SerializeField] int entriesPerPage = 3;
     int currentPage = 1;
@@ -21,7 +21,6 @@ public class ContentPageChanger : MonoBehaviour
     void Start()
     {
         ClearChildrenOnStart();
-        Refresh();
     }
 
     void ClearChildrenOnStart()
@@ -47,9 +46,7 @@ public class ContentPageChanger : MonoBehaviour
 
     public void Refresh()
     {
-        currentPage = 1;
-        content.Clear();
-        Debug.Log(content.Count);
+
         GetAllChildren();
         VieWCurrentPage();
     }
@@ -58,8 +55,7 @@ public class ContentPageChanger : MonoBehaviour
     {
         if (content.Contains(b))
         {
-            return;
-            //throw new System.Exception(name +" - ContentPageChanger.AddChild() - Managed list already contains object =>" + b.name);
+            throw new System.Exception(name +" - ContentPageChanger.AddChild() - Managed list already contains object =>" + b.name);
         }
         content.Add(b);
     }
@@ -70,19 +66,20 @@ public class ContentPageChanger : MonoBehaviour
         {
             // Get the i-th child transform
             Transform childTransform = transform.GetChild(i);
+            Debug.Log("Adding child " + childTransform.name + " to ContentPageChanger");
             // Do something with the child transform
             AddChild(childTransform.gameObject);
         }
     }
 
-    public void ChangePage(bool backwards)
+    public void ChangePage(bool forward)
     {
-        if (backwards)
+        Debug.Log("Clicked page change btn.");
+        if (forward)
         {
             currentPage = Mathf.Clamp(currentPage - 1, 1, pageCount);
         }
         else currentPage = Mathf.Clamp(currentPage + 1, 1, pageCount);
-
         VieWCurrentPage();
     }
     public void VieWCurrentPage()
@@ -97,12 +94,7 @@ public class ContentPageChanger : MonoBehaviour
         foreach (var item in objectsToActivate)
         {
             item.SetActive(true);
-            Debug.Log(item);
         }
-
-        if (pageLabel)
-        {
-            pageLabel.text = currentPage.ToString() + "/" + pageCount.ToString();
-        }
+        pageLabel.text = currentPage.ToString() + "/" + pageCount.ToString();
     }
 }

@@ -32,19 +32,6 @@ public class TaskUI : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Finger")
-        {           
-            UpdatedTabletTaskListLoader tl = FindObjectOfType<UpdatedTabletTaskListLoader>();
-            WatchManager manager = FindObjectOfType<WatchManager>();
-            manager.Task = _task;
-            tl.activeTask = _task;
-            tl.LoadTaskPage();
-            tl.SubtaskPageLoader(_task);
-            tl.StepPageLoader(_task.Subtasks[0]);
-        }
-    }
-
 
     public void OnClickTaskUI()
     {

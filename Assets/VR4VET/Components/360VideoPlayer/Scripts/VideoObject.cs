@@ -7,19 +7,10 @@ using UnityEngine;
 using UnityEngine.Video;
 //using UnityEngine.XR.Interaction.Toolkit;
 using BNG;
-using System.Collections;
 
 public class VideoObject : MonoBehaviour
 {
     public VideoClip videoClip;
-    public bool triggerSpecialEventOnVideoEnd;
-    public bool hideVideoPlayerAfterFirstWatch;
-
-    [Header("Video is a task")]
-    public VideoIsTask videoIsTask;
-    public bool videoIsTaskBool;
-    
-
 
     private VideoPlayer videoPlayer;
     private int rotataionSpeed = 50;
@@ -84,7 +75,7 @@ public class VideoObject : MonoBehaviour
     /// Stop the video and make the object start rotating
     /// </summary>
     void StopVideo()
-    {   
+    {
         foreach (VideoObject headset in Headsets)
         {
             headset.gameObject.SetActive(true);
@@ -96,12 +87,6 @@ public class VideoObject : MonoBehaviour
 
         transform.rotation = OriginalRotation; //reset the rotation to start rotation
         hintText.text = "Grab To Play";
-
-        if (hideVideoPlayerAfterFirstWatch && VideoIsPlayedOnce)
-        {
-            hintText.text = null;
-            gameObject.SetActive(false);
-        }
 
     }
 
@@ -132,18 +117,12 @@ public class VideoObject : MonoBehaviour
                 headset.hintText.gameObject.SetActive(false);
             }
 
-        VideoManager.videoManager.ShowVideo(videoClip, triggerSpecialEventOnVideoEnd);
-        hintText.text = "Release To Stop";
-
-        if(videoIsTaskBool)
-        {
-            videoIsTask.activateGameObjects();
-            videoIsTask.invokeEventOnVideoPlay();
-        }
+        VideoManager.videoManager.ShowVideo(videoClip);
 
         //scale
         transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
+        hintText.text = "Release To Stop";
     }
 
 
