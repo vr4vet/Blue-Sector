@@ -23,6 +23,8 @@ MonoBehaviour:
       to analyse algae content in a water sample.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Do you want to learn more about the work that is done here or start
         with the tasks?
@@ -39,6 +41,8 @@ MonoBehaviour:
 '
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Which task do you want to begin?
       answers:
@@ -56,6 +60,8 @@ MonoBehaviour:
       scale on the table.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Do you want to hear how you measure the weight?
       answers:
@@ -74,6 +80,9 @@ MonoBehaviour:
     - Then press the weight button on the number keypad and input the weight
     endAfterDialogue: 0
     disabkeSkipLineButton: 1
+    point: 1
+    objectToLookAt: {fileID: 7868651888966732728, guid: e37a40b9f5dad55488e503e1c99cef05,
+      type: 3}
     branchPoint:
       question: Are you ready for the next step
       answers:
@@ -88,6 +97,8 @@ MonoBehaviour:
       board to the right of the weighing scale.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Do you want to hear how you measure the length of the fish?
       answers:
@@ -105,6 +116,9 @@ MonoBehaviour:
       fish.
     endAfterDialogue: 0
     disabkeSkipLineButton: 1
+    point: 1
+    objectToLookAt: {fileID: 7595012409698520178, guid: 1af57d0723e771f4b8c24ca0fa610b03,
+      type: 3}
     branchPoint:
       question: Are you ready for the next step
       answers:
@@ -123,6 +137,8 @@ MonoBehaviour:
 '
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Did you understand everything?
       answers:
@@ -139,6 +155,9 @@ MonoBehaviour:
       condition factor. Only include two decimals.Then press the equal button.
     endAfterDialogue: 0
     disabkeSkipLineButton: 1
+    point: 1
+    objectToLookAt: {fileID: 6091671911770336954, guid: fdf804fec619cd341a8d2228f0c6c22f,
+      type: 3}
     branchPoint:
       question: Are you ready for the next step?
       answers:
@@ -158,6 +177,8 @@ MonoBehaviour:
 '
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Did you understand everything?
       answers:
@@ -177,6 +198,8 @@ MonoBehaviour:
     - Remember to be careful when handling the fish to avoid causing any damage.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Did you understand everything?
       answers:
@@ -190,6 +213,8 @@ MonoBehaviour:
     - Good luck!
     endAfterDialogue: 1
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: 
       answers: []
@@ -207,6 +232,8 @@ MonoBehaviour:
       to the fish.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: 'Are you ready to move on to the instructions?
 
@@ -219,10 +246,12 @@ MonoBehaviour:
         nextElement: 11
         endAfterAnswer: 0
   - dialogue:
-    - Now you are going to analyze a water sample in the microscope. Your goal is
+    - Now you are going to analyse a water sample in the microscope. Your goal is
       to look after different organisms in the sample, and count how many there are.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Do you want to learn how to use the microscope or go straight to
         the task?
@@ -231,7 +260,7 @@ MonoBehaviour:
         nextElement: 13
         endAfterAnswer: 0
       - answerLabel: Skip to the task
-        nextElement: 12
+        nextElement: 14
         endAfterAnswer: 0
   - dialogue:
     - First place the water sample under the scope, this is the blue rectangle to
@@ -246,6 +275,9 @@ MonoBehaviour:
     - To reset the counter to zero press the top button on the counter.
     endAfterDialogue: 0
     disabkeSkipLineButton: 1
+    point: 1
+    objectToLookAt: {fileID: 2897439329450102196, guid: 51c09a19815062d4b8086734b17c33af,
+      type: 3}
     branchPoint:
       question: Do you want me to go over it again or continue?
       answers:
@@ -253,5 +285,124 @@ MonoBehaviour:
         nextElement: 13
         endAfterAnswer: 0
       - answerLabel: Continue
+        nextElement: 14
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: There are three kinds of plankton in the sample. Write your answers
+        on the note sheet to the left of the microscope. Tell me when you are finished
+        counting or if you have any questions.
+      answers:
+      - answerLabel: Check answers
+        nextElement: 15
+        endAfterAnswer: 0
+      - answerLabel: How does the microscope work?
+        nextElement: 13
+        endAfterAnswer: 0
+      - answerLabel: I need assistance
+        nextElement: 20
+        endAfterAnswer: 0
+  - dialogue:
+    - Let me see. I'm double-checking your answers.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: That's correct! Great job! Do you want to try again, or move on to
+        another task?
+      answers:
+      - answerLabel: Try again
+        nextElement: 14
+        endAfterAnswer: 0
+      - answerLabel: Try another task
         nextElement: 1
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: That wasn't quite correct. Do you want to try again?
+      answers:
+      - answerLabel: Yes
+        nextElement: 14
+        endAfterAnswer: 0
+      - answerLabel: No, tell me the correct answer
+        nextElement: 18
+        endAfterAnswer: 0
+  - dialogue:
+    - There are 100 Chaetoceros diatom, 350 Pseudo-nitzschia, and 150 Skeletonema.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    branchPoint:
+      question: Do you want to hear that again?
+      answers:
+      - answerLabel: Yes
+        nextElement: 18
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 1
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: You need to start analysing the water sample first. Place the water
+        sample under the scope of the microscope.
+      answers:
+      - answerLabel: Okay
+        nextElement: 14
+        endAfterAnswer: 0
+      - answerLabel: Explain the task
+        nextElement: 12
+        endAfterAnswer: 0
+      - answerLabel: Try something else
+        nextElement: 1
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: I can highlight all of the plankton in the water sample. Each individual
+        will be surrounded by ring, with each genus having a different colour. Do
+        you want me to do that?
+      answers:
+      - answerLabel: Yes
+        nextElement: 21
+        endAfterAnswer: 0
+      - answerLabel: No, remove the highlights
+        nextElement: 21
+        endAfterAnswer: 0
+  - dialogue:
+    - Okay, give me a few seconds!
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: I have now highlighted the plankton. Tell me when you are ready to
+        move on with the task.
+      answers:
+      - answerLabel: I'm ready
+        nextElement: 14
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    branchPoint:
+      question: I have now removed the highlighting of the plankton. Tell me when
+        you are ready to move on with the task.
+      answers:
+      - answerLabel: I'm ready
+        nextElement: 14
         endAfterAnswer: 0

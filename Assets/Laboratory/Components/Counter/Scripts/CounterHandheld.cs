@@ -18,7 +18,7 @@ public class CounterHandheld : MonoBehaviour
 
     public void Increment()
     {
-        if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+        if (dialogueBoxController != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
         {
             if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[4])
             {
@@ -31,9 +31,12 @@ public class CounterHandheld : MonoBehaviour
 
     public void ResetCounter()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[5]) 
+        if (dialogueBoxController != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
         {
-            dialogueBoxController.SkipLine();
+            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[5])
+            {
+                dialogueBoxController.SkipLine();
+            }
         }
         Count = 0;
         SetNumberedWheels();
