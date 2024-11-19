@@ -277,6 +277,9 @@ public class SceneController : MonoBehaviour
         player.transform.position = GameManager.Instance.NextScenePlayerPosition;
         player.transform.eulerAngles = GameManager.Instance.NextScenePlayerRotation;
 
+        GameObject player_child = GameObject.Find("PlayerController");
+        player_child.transform.localPosition = new Vector3(0, 0, 0);
+
         // Reset the new player position
         GameManager.Instance.NextScenePlayerPosition = new Vector3(0, 0, 0);
         GameManager.Instance.NextScenePlayerRotation = new Vector3(0, 0, 0);
