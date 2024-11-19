@@ -17,7 +17,7 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
     // The player transform.
     public Transform Player;
 
-    
+
     // The different states the tooltip might be in.
     public enum StateOptions
     {
@@ -54,9 +54,10 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
     // Reference in the script to see if tooltip is expanded or minimized.
     private bool _isOpen;
     // The text-to-speech button of the tooltip
-    private Button _textToSpeechButton;
+    private GameObject _textToSpeechButton;
     // The text-to-speech service that used
     private TTSSpeaker _speaker;
+    [SerializeField] private Sprite[] _speakerIcons;
 
     // Event used by the tooltip manager to close other tooltips when this one activates.
     public TTActivationEvent ActivationEvent;
@@ -106,7 +107,7 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
         _panel = transform.Find("Card");
         _closeButton = _panel.Find("Button").GetComponent<Button>();
         _closeButton.onClick.AddListener(Deactivate);
-        _textToSpeechButton = _panel.Find("TextToSpeech").GetComponent<Button>();
+        _textToSpeechButton = _panel.Find("TextToSpeech").gameObject;
         _speaker = transform.GetComponentInChildren<TTSSpeaker>();
         _animator = _panel.GetComponent<Animator>();
         _animator.SetBool("open", (StartingState == StateOptions.Minimized)? false:true);
@@ -193,5 +194,31 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
     public void PlayAudio()
     {
         _speaker.Speak($"{(Header.Equals("Tooltip header goes here!") ? String.Empty : Header + ".")} {TextContent}");
+        InvokeRepeating("AnimateSpeaker", 0, 0.5f);
+    }
+
+    private int step = 0;
+    private void AnimateSpeaker()
+    {
+        if (step == 0)
+        {
+            _textToSpeechButton.GetComponent<Image>().sprite = _speakerIcons[2];
+        }
+        else if (step == 1)
+            _textToSpeechButton.GetComponent<Image>().sprite = _speakerIcons[1];
+        else if (step == 2)
+        {
+            _textToSpeechButton.GetComponent<Image>().sprite = _speakerIcons[0];
+        }
+
+        step = (step + 1) % 3;
+    }
+
+    public void SetDefaultSpeakerIcon()
+    {
+        if (IsInvoking("AnimateSpeaker"))
+            CancelInvoke("AnimateSpeaker");
+
+        _textToSpeechButton.GetComponent<Image>().sprite = _speakerIcons[0];
     }
 }
