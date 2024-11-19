@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO.Pipes;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using Meta.WitAi.TTS.Utilities;
 
 // Create an event that stores data.
 [System.Serializable]
@@ -56,6 +53,10 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
     private Animator _animator;
     // Reference in the script to see if tooltip is expanded or minimized.
     private bool _isOpen;
+    // The text-to-speech button of the tooltip
+    private Button _textToSpeechButton;
+    // The text-to-speech service that used
+    private TTSSpeaker _speaker;
 
     // Event used by the tooltip manager to close other tooltips when this one activates.
     public TTActivationEvent ActivationEvent;
@@ -105,6 +106,8 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
         _panel = transform.Find("Card");
         _closeButton = _panel.Find("Button").GetComponent<Button>();
         _closeButton.onClick.AddListener(Deactivate);
+        _textToSpeechButton = _panel.Find("TextToSpeech").GetComponent<Button>();
+        _speaker = transform.GetComponentInChildren<TTSSpeaker>();
         _animator = _panel.GetComponent<Animator>();
         _animator.SetBool("open", (StartingState == StateOptions.Minimized)? false:true);
 
@@ -179,9 +182,16 @@ public class TooltipScript : MonoBehaviour, IPointerClickHandler
     {
         if (_panel != null || _animator != null)
         {
-        _isOpen = _animator.GetBool("open");
-        _animator.SetBool("open", !_isOpen);
-        Debug.Log("The animation is " + _animator.GetBool("open"));
+            _isOpen = _animator.GetBool("open");
+            _animator.SetBool("open", !_isOpen);
+            Debug.Log("The animation is " + _animator.GetBool("open"));
         }
+    }
+
+    // Trigger text-to-speech with the text content of the tooltip.
+    // The header is not read if it is unchanged from the default string value.
+    public void PlayAudio()
+    {
+        _speaker.Speak($"{(Header.Equals("Tooltip header goes here!") ? String.Empty : Header + ".")} {TextContent}");
     }
 }
