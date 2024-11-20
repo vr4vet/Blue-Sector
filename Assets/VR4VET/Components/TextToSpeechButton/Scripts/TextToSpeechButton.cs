@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 
 public class TextToSpeechButton : MonoBehaviour
 {
-    [Tooltip("The root of the object which contains text content to be read by text-to-speech. This script will attempt to fetch the text content automatically")]
-    [SerializeField] private GameObject TargetObject;
+    [Tooltip("Objects which contain the desired text content. This script will attempt to fetch the text content automatically")]
+    [SerializeField] private List<GameObject> TargetObjects = new List<GameObject>();
 
     [Tooltip("Point to the TTS instance for this object here")]
     [SerializeField] private GameObject TTSSpeaker;
@@ -20,6 +21,13 @@ public class TextToSpeechButton : MonoBehaviour
     private Sprite _speakerImageMedium;
     private Sprite _speakerImageSilent;
 
+    [Tooltip("The class of the objects' text content. Some canvases use  UnityEngine.UI.Text, while others use TMPro.TMP_Text (TextMeshPro)")]
+    [SerializeField] private textType TextType = textType.Text;
+    private enum textType
+    {
+        Text, TextMeshPro
+    }
+
     [Tooltip("Strings added to this list will be removed from the text that is acquired automatically.")]
     [SerializeField] private List<string> ExcludeStrings = new List<string>();
 
@@ -31,7 +39,10 @@ public class TextToSpeechButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // fetching the text-to-speech object, and making SetDefaultSpeakerIcon() listen to the event that fires when voice over is finished
         _speaker = TTSSpeaker.GetComponentInChildren<TTSSpeaker>();
+        _speaker.Events.OnAudioClipPlaybackFinished.AddListener(delegate { SetDefaultSpeakerIcon(); });
+        _speaker.Events.OnAudioClipPlaybackCancelled.AddListener(delegate { SetDefaultSpeakerIcon(); });
         _defaultSpeakerImage = TargetSpeakerImage.sprite;
 
         // loading the different speaker sprites from resources for animating later
@@ -50,14 +61,35 @@ public class TextToSpeechButton : MonoBehaviour
         string _ttsString = string.Empty;
 
         // Adding automatically discovered text to _ttsString, and adding spaces and dots if necessary 
-        foreach (Text text in TargetObject.GetComponentsInChildren<Text>())
+        if (TextType == textType.Text)
         {
-            _ttsString += text.text;
+            foreach (GameObject targetObject in TargetObjects)
+            {
+                foreach (Text text in targetObject.GetComponentsInChildren<Text>())
+                {
+                    _ttsString += text.text;
 
-            if (_ttsString.Last() != '.')
-                _ttsString += ". ";
-            else
-                _ttsString += " ";
+                    if (_ttsString.Last() != '.')
+                        _ttsString += ". ";
+                    else
+                        _ttsString += " ";
+                }
+            }
+        }
+        else if (TextType == textType.TextMeshPro)
+        {
+            foreach (GameObject targetObject in TargetObjects)
+            {
+                foreach (TMP_Text text in targetObject.GetComponentsInChildren<TMP_Text>())
+                {
+                    _ttsString += text.text;
+
+                    if (_ttsString.Last() != '.')
+                        _ttsString += ". ";
+                    else
+                        _ttsString += " ";
+                }
+            }
         }
 
         // Removing content that should be excluded
@@ -86,7 +118,7 @@ public class TextToSpeechButton : MonoBehaviour
         step = (step + 1) % 3;
     }
 
-    public void SetDefaultSpeakerIcon()
+    private void SetDefaultSpeakerIcon()
     {
         if (IsInvoking("AnimateSpeaker"))
             CancelInvoke("AnimateSpeaker");

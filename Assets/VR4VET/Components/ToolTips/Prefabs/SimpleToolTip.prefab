@@ -146,9 +146,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f253ab7fe4937fc44b1bfecd5829aaf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetObject: {fileID: 5360422001454874250}
+  TargetObjects:
+  - {fileID: 5360422000931054188}
+  - {fileID: 5360422001577558892}
   TTSSpeaker: {fileID: 7758223974701924196}
   TargetSpeakerImage: {fileID: 5924338891683179553}
+  TextType: 0
   ExcludeStrings:
   - Tooltip header goes here!
   - Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
@@ -529,7 +532,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 20
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5360422001454874244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,76 +1050,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 2034465899013345413}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 2034465899013345413}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDefaultSpeakerIcon
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDefaultSpeakerIcon
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TextToSpeechButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TextToSpeechButton, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
-        type: 3}
-      propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e367470fd89ce4db9a48a82e72fe8f3b, type: 3}
