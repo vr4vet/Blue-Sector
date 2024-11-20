@@ -9,7 +9,7 @@ public class TextToSpeechButton : MonoBehaviour
     [Tooltip("The root of the object which contains text content to be read by text-to-speech. This script will attempt to fetch the text content automatically")]
     [SerializeField] private GameObject TargetObject;
 
-    [Tooltip("Point to the TTS prefab here")]
+    [Tooltip("Point to the TTS instance for this object here")]
     [SerializeField] private GameObject TTSSpeaker;
     private TTSSpeaker _speaker;
 
