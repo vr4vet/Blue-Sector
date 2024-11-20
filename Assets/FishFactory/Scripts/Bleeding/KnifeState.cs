@@ -35,6 +35,8 @@ public class KnifeState : MonoBehaviour
             _durabilityCount = RandomizeDurability();
         }
         UpdateKnifeVisibility();
+
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("FishKnife"));
     }
 
     // ---------------- Public Functions ----------------
@@ -68,4 +70,16 @@ public class KnifeState : MonoBehaviour
         _regularKnife.SetActive(_durabilityCount > 0);
         _chippedKnife.SetActive(_durabilityCount <= 0);
     }
+
+
+
+    private void Update()
+    {
+        if (transform.position.y <= 0 && transform.root == transform)
+        {
+            transform.position = new Vector3(4.56f, 0.962f, -9.352f);
+        }
+    }
+ 
 }
+
