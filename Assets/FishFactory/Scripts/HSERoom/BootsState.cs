@@ -48,6 +48,11 @@ public class BootsState : MonoBehaviour
 
     // ----------------- Functions -----------------
 
+    private void Start()
+    {
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Boots"));
+    }
+
     /// <summary>
     /// Check if the boots are scrubbed with the scrubber. Only checks for "collisions" with the scrubber object.
     /// Uses deltatime to manage the time it takes to scrub and clean the boots.
@@ -67,6 +72,7 @@ public class BootsState : MonoBehaviour
 
             if (scrubbingLeft <= 0)
             {
+                transform.gameObject.layer = LayerMask.NameToLayer("Grabbable");
                 boots = BootsStatus.Clean;
                 GameManager.Instance.PlaySound("correct");
                 gameObject.GetComponent<MeshRenderer>().material = materials[3]; // Clean
