@@ -110,13 +110,13 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
-    agentSlope: 45
+    agentSlope: 13.7
     agentClimb: 0.4
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
-    minRegionArea: 2
-    manualCellSize: 0
-    cellSize: 0.16666667
+    minRegionArea: 50
+    manualCellSize: 1
+    cellSize: 0.08
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -14718,6 +14718,38 @@ Transform:
   m_Father: {fileID: 785985354}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &299495600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 299495601}
+  m_Layer: 0
+  m_Name: DialogueTransition2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &299495601
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299495600}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.2259073, y: -0.06327522, z: 4.5815496}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1814735391}
+  m_Father: {fileID: 0}
+  m_RootOrder: 27
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &300766723
 GameObject:
   m_ObjectHideFlags: 0
@@ -21708,6 +21740,37 @@ Transform:
   - {fileID: 1158656744}
   - {fileID: 1670297711}
   m_Father: {fileID: 519301345}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &437888276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 437888277}
+  m_Layer: 0
+  m_Name: Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &437888277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437888276}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.143, y: 1.425, z: -3.869}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1814735391}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &440209055
@@ -38915,7 +38978,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 763563595}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.452, y: -0.027, z: -0.0835}
+  m_LocalPosition: {x: -0.452, y: -0.027, z: -0.4256}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -69370,6 +69433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueTransitions: {fileID: 624787845}
+  dialogueTransitions2: {fileID: 299495600}
 --- !u!1 &1354668908
 GameObject:
   m_ObjectHideFlags: 0
@@ -79304,10 +79368,11 @@ MonoBehaviour:
   triggerEvent:
     m_PersistentCalls:
       m_Calls: []
-  feedbackDialogueTree: {fileID: 11400000, guid: 8b6eb96102b58f548b1dc3ae400cc8a9,
+  feedbackDialogueTree: {fileID: 11400000, guid: 6a238f60b92f88348ac5531ebf3ee66a,
     type: 2}
-  larsDialogueTree: {fileID: 11400000, guid: 4bd86f002821bfd46919e372deda05c7, type: 2}
-  errorFeedbackDialogueTree: {fileID: 11400000, guid: c5517ad876ffd8841b336bfbf0b46457,
+  larsDialogueTree: {fileID: 11400000, guid: 4a0bb79cf1ecd8244a116d718cd21e8a, type: 2}
+  introDialogueTree: {fileID: 11400000, guid: d05353bc3b47f0a4b9a8716ba64eaa3b, type: 2}
+  errorFeedbackDialogueTree: {fileID: 11400000, guid: dd2180fe7d7193a41aa8d8d40a360815,
     type: 2}
   npcName: Labratory Lars
   fishPrefab: {fileID: 4447070333770235521, guid: 4de89651534ce3941875d0cb4be6c2ab,
@@ -79320,6 +79385,7 @@ MonoBehaviour:
   handheldCounter: {fileID: 1395462120}
   slider: {fileID: 1063645112}
   microscopeSnapPoint: {fileID: 512384328}
+  currentDialogue: 
 --- !u!1 &1563986326
 GameObject:
   m_ObjectHideFlags: 0
@@ -91765,6 +91831,38 @@ CapsuleCollider:
   m_Height: 0.05
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1814735390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1814735391}
+  m_Layer: 0
+  m_Name: Path
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1814735391
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814735390}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 437888277}
+  m_Father: {fileID: 299495601}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1814842580
 GameObject:
   m_ObjectHideFlags: 0

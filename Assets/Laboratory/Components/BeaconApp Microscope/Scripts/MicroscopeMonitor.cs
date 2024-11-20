@@ -117,7 +117,7 @@ public class MicroscopeMonitor : MonoBehaviour
     /// </summary>
     public void Magnify()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[3])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }
@@ -150,7 +150,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void Minimize()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[3])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }
@@ -228,7 +228,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollRight()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }
@@ -257,7 +257,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollLeft()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }
@@ -286,7 +286,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollUp()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }
@@ -315,7 +315,7 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollDown()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }
@@ -372,7 +372,7 @@ public class MicroscopeMonitor : MonoBehaviour
         SlideWithGrid = false;
         int imageIndex = CurrentImageIndex;
         
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }
@@ -394,7 +394,7 @@ public class MicroscopeMonitor : MonoBehaviour
         SlideWithGrid = true;
         HasSlide = true;
         
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }
@@ -454,7 +454,7 @@ public class MicroscopeMonitor : MonoBehaviour
         this.ScrollSpeed = 2f * SpeedModifier;
         SpeedOverlay.SetText(SpeedModifier + "x");
         
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[2])
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             dialogueBoxController.SkipLine();
         }

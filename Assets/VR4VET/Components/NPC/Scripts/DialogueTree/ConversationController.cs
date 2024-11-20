@@ -250,6 +250,25 @@ public class ConversationController : MonoBehaviour
         }
     }
 
+    public void StartDialogueTree(string dialogueTreeName)
+    {
+        _dialogueTree = _dialogueTreesSOFormat.Find(x => x.name == dialogueTreeName);
+        if (_dialogueTree != null)
+        {
+            _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
+            if (_animator == null) 
+            { 
+                GameObject parent = this.transform.parent.gameObject; 
+                _animator = parent.GetComponentInChildren<Animator>(); 
+            }
+            _animator.SetBool(_hasNewDialogueOptionsHash, true);
+        }
+        else
+        {
+            Debug.LogError("The dialogueTree of the NPC is null");
+        }
+    }
+
     /// <summary>
     /// Go to the prior dialogueTree.
     /// The NPC will signal through animation that the dialogue changed. 

@@ -14,18 +14,22 @@ public class WalkingNpc : MonoBehaviour
     [HideInInspector] private int _velocityYHash;
     private ConversationController _conversationController;
     [SerializeField] private GameObject dialogueTransitions;
+    [SerializeField] private GameObject dialogueTransitions2;
     [SerializeField] private List<List<Transform>> paths;
+    [SerializeField] private List<List<Transform>> paths2;
     private int currentPosition;
     private int currentPath;
     private bool walking;
     private BoxCollider boxCollider;
     private bool rotating;
+    private GameObject _npcFeedback;
 
 
     // Start is called before the first frame update
     void Start()
     {
         _npcSpawner = GetComponent<NPCSpawner>();
+        _npcFeedback = GameObject.Find("NPCFeedback");
         if (_npcSpawner == null)
         {
             Debug.LogError("No NPCSpawner found");
@@ -86,7 +90,18 @@ public class WalkingNpc : MonoBehaviour
             }
             paths.Add(path);
         }
-        Debug.Log("Very long sentence: that is a very long sentence that appears in the console log and is used to test the line wrapping feature of the code editor.");
+        
+        paths2 = new List<List<Transform>>();
+        foreach (Transform child in dialogueTransitions2.transform)
+        {
+            List<Transform> path = new List<Transform>();
+            foreach (Transform grandchild in child)
+            {
+                path.Add(grandchild);
+            }
+            paths2.Add(path);
+        }
+        
 
         DialogueBoxController.OnDialogueEnded += DialogueTransition;
 
@@ -106,28 +121,58 @@ public class WalkingNpc : MonoBehaviour
             //Debug.Log(_agent.remainingDistance);
             if (walking)
             {
-                if (currentPath == -1) { return; }
-                NavMeshPath path = new NavMeshPath();
-                _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
-                _agent.SetPath(path);
-                if (_agent.remainingDistance < 0.9f)
+                if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the measuring equipment")
                 {
-                    currentPosition++;
-                    if (currentPosition == paths[currentPath].Count)
+                    if (currentPath == -1) { return; }
+                    NavMeshPath path = new NavMeshPath();
+                    _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
+                    _agent.SetPath(path);
+                    if (_agent.remainingDistance < 1.8f)
                     {
-                        rotating = true;
-                        walking = false;
-                        currentPosition = 0;
-                        _conversationController.NextDialogueTree();
-
-                        // Adjusts the size of the box collider when the NPC is in the control room
-                        if (currentPath == 0)
+                        currentPosition++;
+                        if (currentPosition == paths[currentPath].Count)
                         {
-                            boxCollider.center = new Vector3(-0.11f, 0f, 1.6f);
-                            boxCollider.size = new Vector3(3.2f, 2f, 3.7f);
+                            rotating = true;
+                            walking = false;
+                            currentPosition = 0;
+                            
+                            _conversationController.StartDialogueTree("LarsDialogue");
+                            
+                            // Adjusts the size of the box collider when the NPC is in the control room
+                            if (currentPath == 0)
+                            {
+                                boxCollider.center = new Vector3(-0.11f, 0f, 1.6f);
+                                boxCollider.size = new Vector3(3.2f, 2f, 3.7f);
+                            }
                         }
-                    }
-                } 
+                    } 
+                }
+                else if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the microscope")
+                {
+                    if (currentPath == -1) { return; }
+                    NavMeshPath path = new NavMeshPath();
+                    _agent.CalculatePath(paths2[currentPath][currentPosition].position, path);
+                    _agent.SetPath(path);
+                    if (_agent.remainingDistance < 1.2f)
+                    {
+                        currentPosition++;
+                        if (currentPosition == paths2[currentPath].Count)
+                        {
+                            rotating = true;
+                            walking = false;
+                            currentPosition = 0;
+                            
+                            _conversationController.StartDialogueTree("MicroscopeDialogue");
+
+                            // Adjusts the size of the box collider when the NPC is in the control room
+                            if (currentPath == 0)
+                            {
+                                boxCollider.center = new Vector3(-0.11f, 0f, 1.6f);
+                                boxCollider.size = new Vector3(3.2f, 2f, 3.7f);
+                            }
+                        }
+                    }   
+                }
             }
         }
         else {
@@ -139,26 +184,55 @@ public class WalkingNpc : MonoBehaviour
     {
         if (rotating)
         {
-            // Rotates NPC to last destination point
-            Vector3 destination = paths[currentPath][paths[currentPath].Count - 1].position;
-            Vector3 lookPos = destination - _npc.transform.position;
-            lookPos.y = 0;
-            Quaternion rotation = Quaternion.LookRotation(lookPos);
-            _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
+            if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the measuring equipment")
+            {
+                // Rotates NPC to last destination point
+                Vector3 destination = paths[currentPath][paths[currentPath].Count - 1].position;
+                Vector3 lookPos = destination - _npc.transform.position;
+                lookPos.y = 0;
+                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
 
-            float rotationOffset = Vector3.Angle((lookPos - _npc.transform.position), _npc.transform.forward);
+                float rotationOffset = Vector3.Angle((lookPos - _npc.transform.position), _npc.transform.forward);
 
-            if (rotationOffset < 0.01f) 
-                rotating = false;
+                if (rotationOffset < 0.01f) 
+                    rotating = false;  
+            } 
+            else if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the microscope")
+            {
+                // Rotates NPC to last destination point
+                Vector3 destination = paths2[currentPath][paths2[currentPath].Count - 1].position;
+                Vector3 lookPos = destination - _npc.transform.position;
+                lookPos.y = 0;
+                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
+
+                float rotationOffset = Vector3.Angle((lookPos - _npc.transform.position), _npc.transform.forward);
+
+                if (rotationOffset < 0.01f) 
+                    rotating = false;    
+            }
         }
     }
 
-    public void DialogueTransition(string name) 
+    public void DialogueTransition(string name)
     {
-        if (name != _npc.name) { return; }
-        currentPath++;
-        if (currentPath >= paths.Count) { return; }
-        walking = true;
+        currentPath = -1;
+        if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the measuring equipment")
+        {
+            if (name != _npc.name) { return; }
+            currentPath++;
+            if (currentPath >= paths.Count) { return; }
+            walking = true;  
+        } 
+        else if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the microscope")
+        {
+            if (name != _npc.name) { return; }
+            currentPath++;
+            if (currentPath >= paths2.Count) { return; }
+            walking = true; 
+        }
+        
     }
 
     private void SetFalseNPCTrigger(Grabber grabber)
