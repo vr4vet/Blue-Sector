@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-
+using BNG;
 
 public class SceneController : MonoBehaviour
 {
@@ -274,11 +274,11 @@ public class SceneController : MonoBehaviour
         // Moving the player will not work if the XR Rig in the scene does not have the name "XR Rig Advanced VR4VET"
         //GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject player = GameObject.Find("XR Rig Advanced VR4VET");
-        player.transform.position = GameManager.Instance.NextScenePlayerPosition;
-        player.transform.eulerAngles = GameManager.Instance.NextScenePlayerRotation;
+        Vector3 position = GameManager.Instance.NextScenePlayerPosition;
+        Quaternion rotation = Quaternion.Euler(GameManager.Instance.NextScenePlayerRotation);
 
-        GameObject player_child = GameObject.Find("PlayerController");
-        player_child.transform.localPosition = new Vector3(0, 0, 0);
+        player.GetComponentInChildren<PlayerTeleport>().TeleportPlayer(position, rotation);
+
 
         // Reset the new player position
         GameManager.Instance.NextScenePlayerPosition = new Vector3(0, 0, 0);
