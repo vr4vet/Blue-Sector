@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3243282986978062589}
   - component: {fileID: 5924338891683179553}
   - component: {fileID: 3583932685802777790}
+  - component: {fileID: 2034465899013345413}
   m_Layer: 5
   m_Name: TextToSpeech
   m_TagString: Untagged
@@ -121,9 +122,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7585566050700926868}
-        m_TargetAssemblyTypeName: TooltipScript, Assembly-CSharp
-        m_MethodName: PlayAudio
+      - m_Target: {fileID: 2034465899013345413}
+        m_TargetAssemblyTypeName: TextToSpeechButton, Assembly-CSharp
+        m_MethodName: PlayTTS
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -133,6 +134,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2034465899013345413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3608123157715520415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f253ab7fe4937fc44b1bfecd5829aaf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetObject: {fileID: 5360422001454874250}
+  TTSSpeaker: {fileID: 7758223974701924196}
+  TargetSpeakerImage: {fileID: 5924338891683179553}
+  ExcludeStrings:
+  - Tooltip header goes here!
+  - Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.  
+    At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+    no sea takimata sanctus est Lorem ipsum dolor sit amet.   Consetetur sadipscing
+    elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+    erat, sed diam voluptua.
+  UseManualText: 0
+  ManualStringContent: 
 --- !u!1 &5360422000205188362
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,10 +574,6 @@ MonoBehaviour:
     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\r\r\n\nConsetetur
     sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
     magna aliquyam erat, sed diam voluptua."
-  _speakerIcons:
-  - {fileID: 21300000, guid: 6d8181ef0b65bdb4694837de9346bca0, type: 3}
-  - {fileID: 21300000, guid: 09716bff0f6635e44993a9ef5fdc3109, type: 3}
-  - {fileID: 21300000, guid: 4244f67ea4040a84b891355e31da97d5, type: 3}
   ActivationEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1050,12 +1072,12 @@ PrefabInstance:
         type: 3}
       propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 7585566050700926868}
+      objectReference: {fileID: 2034465899013345413}
     - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
         type: 3}
       propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 7585566050700926868}
+      objectReference: {fileID: 2034465899013345413}
     - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
         type: 3}
       propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -1079,12 +1101,12 @@ PrefabInstance:
     - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
         type: 3}
       propertyPath: _events.OnAudioClipPlaybackFinished.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TooltipScript, Assembly-CSharp
+      value: TextToSpeechButton, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
         type: 3}
       propertyPath: _events.OnAudioClipPlaybackCancelled.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TooltipScript, Assembly-CSharp
+      value: TextToSpeechButton, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9114436032504741911, guid: e367470fd89ce4db9a48a82e72fe8f3b,
         type: 3}
@@ -1101,6 +1123,12 @@ PrefabInstance:
 --- !u!4 &1310036526972185613 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3930362426592730576, guid: e367470fd89ce4db9a48a82e72fe8f3b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2640618505831756253}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7758223974701924196 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5697021728676007609, guid: e367470fd89ce4db9a48a82e72fe8f3b,
     type: 3}
   m_PrefabInstance: {fileID: 2640618505831756253}
   m_PrefabAsset: {fileID: 0}
