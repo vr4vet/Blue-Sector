@@ -105,12 +105,13 @@ public class TextToSpeechButton : MonoBehaviour
         // Removing content that should be excluded
         if (ExcludeStrings.Count > 0)
             foreach (string text in ExcludeStrings)
-                _ttsString.Replace(text, string.Empty);
+                _ttsString = _ttsString.Replace(text, string.Empty);
 
         // Place manually entered text last if 'After' is selected
         if (ManualTextType == manualTextType.After)
             _ttsString += ManualStringContent;
 
+        Debug.Log(_ttsString);
         return _ttsString;
     }
 
