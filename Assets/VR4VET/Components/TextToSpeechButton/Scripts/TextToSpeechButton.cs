@@ -52,8 +52,6 @@ public class TextToSpeechButton : MonoBehaviour
     {
         // fetching the text-to-speech object, and making SetDefaultSpeakerIcon() listen to the event that fires when voice over is finished
         _speaker = TTSSpeaker.GetComponentInChildren<TTSSpeaker>();
-        _speaker.Events.OnAudioClipPlaybackFinished.AddListener(delegate { SetDefaultSpeakerIcon(); });
-        _speaker.Events.OnAudioClipPlaybackCancelled.AddListener(delegate { SetDefaultSpeakerIcon(); });
         _defaultSpeakerImage = TargetSpeakerImage.sprite;
 
         // loading the different speaker sprites from resources for animating later
@@ -73,14 +71,12 @@ public class TextToSpeechButton : MonoBehaviour
 
         // Place manually entered text first if 'Before' is selected
         if (ManualTextType == manualTextType.Before)
-        {
             _ttsString += ManualStringContent;
-        }
 
-        // Adding automatically discovered text to _ttsString, and adding spaces and dots if necessary 
-        if (TextType == textType.Text)
+        // Adding automatically discovered text to _ttsString, and adding spaces and dots if necessary
+        foreach (GameObject targetObject in TargetObjects)
         {
-            foreach (GameObject targetObject in TargetObjects)
+            if (TextType == textType.Text)
             {
                 foreach (Text text in targetObject.GetComponentsInChildren<Text>())
                 {
@@ -92,10 +88,7 @@ public class TextToSpeechButton : MonoBehaviour
                         _ttsString += " ";
                 }
             }
-        }
-        else if (TextType == textType.TextMeshPro)
-        {
-            foreach (GameObject targetObject in TargetObjects)
+            else if (TextType == textType.TextMeshPro)
             {
                 foreach (TMP_Text text in targetObject.GetComponentsInChildren<TMP_Text>())
                 {
@@ -114,7 +107,7 @@ public class TextToSpeechButton : MonoBehaviour
             foreach (string text in ExcludeStrings)
                 _ttsString.Replace(text, string.Empty);
 
-        // Place manually entered text first if 'After' is selected
+        // Place manually entered text last if 'After' is selected
         if (ManualTextType == manualTextType.After)
             _ttsString += ManualStringContent;
 
@@ -123,23 +116,39 @@ public class TextToSpeechButton : MonoBehaviour
 
     /// <summary>
     /// This should be placed in the button's On Click event.
-    /// Unfortunately the AnimateSpeaker method has to be called repeatedly as a coroutine (in this case recursivley) in order to function when Time.timeScale is 0.
-    /// An example where Time.timeScale is set to 0 is when the main menu pauses the game.
     /// </summary>
+    private float buttonPressTime = Mathf.NegativeInfinity;
     public void PlayTTS()
     {
-        _speaker.Speak(GenerateTextContent());
+        // Prevent unwanted double clicks
+        if (Time.realtimeSinceStartup - buttonPressTime < .4)
+            return;
 
-        animate = true;
-        StartCoroutine(AnimateSpeaker(.5f));
+        buttonPressTime = Time.realtimeSinceStartup;
+
+        if (_speaker.IsSpeaking)
+            _speaker.StopSpeaking();
+        else
+        {
+            _speaker.Speak(GenerateTextContent());
+            StartCoroutine(AnimateSpeaker(0));
+        }
     }
 
-    private bool animate = false;
+    /// <summary>
+    /// This method swaps the speaker button icon every half second to animate sound waves while the text-to-speech is talking.
+    /// Unfortunately has to be called repeatedly as a coroutine (in this case recursivley) in order to function when Time.timeScale is 0.
+    /// An example where Time.timeScale is set to 0 is when the main menu pauses the game.
+    /// </summary>
     private int step = 0;
     private IEnumerator AnimateSpeaker(float waitTime)
     {
-        if (animate)
+        yield return new WaitForSecondsRealtime(waitTime);
+
+        if (_speaker.IsActive)
         {
+            StartCoroutine(AnimateSpeaker(.5f));
+
             if (step == 0)
                 TargetSpeakerImage.sprite = _speakerImageSilent;
             else if (step == 1)
@@ -150,17 +159,9 @@ public class TextToSpeechButton : MonoBehaviour
             step = (step + 1) % 3;
         }
         else
-            SetDefaultSpeakerIcon();
-
-        yield return new WaitForSecondsRealtime(waitTime);
-        
-        StartCoroutine(AnimateSpeaker(.5f));
-
-    }
-
-    private void SetDefaultSpeakerIcon()
-    {
-        animate = false;
-        TargetSpeakerImage.sprite = _defaultSpeakerImage;
+        {
+            step = 0;
+            TargetSpeakerImage.sprite = _defaultSpeakerImage;
+        }
     }
 }
