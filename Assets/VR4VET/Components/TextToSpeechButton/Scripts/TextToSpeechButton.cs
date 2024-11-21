@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
+using System.Collections;
 
 public class TextToSpeechButton : MonoBehaviour
 {
@@ -31,8 +32,18 @@ public class TextToSpeechButton : MonoBehaviour
     [Tooltip("Strings added to this list will be removed from the text that is acquired automatically.")]
     [SerializeField] private List<string> ExcludeStrings = new List<string>();
 
-    [Tooltip("Enable this if text-to-speech voice over says unintended things. It will then read from the text box below instead.")]
-    [SerializeField] private bool UseManualText = false;
+    [Tooltip("How much the manually inputted text will override the automatically discovered text.\n" +
+             "\nNone: Only automatically discovered text will be used. \n" +
+             "\nAll: Content in 'Manual String Content' only.\n" +
+             "\nBefore: Content in 'Manual String Content' will be placed before.\n" +
+             "\nAfter: Content in 'Manual String Content' will be placed after.")]
+    [SerializeField] private manualTextType ManualTextType = manualTextType.None;
+    private enum manualTextType
+    {
+        None, All, Before, After
+    }
+
+    [Tooltip("Type what the text-to-speech will say here if using manual text")]
     [SerializeField] private string ManualStringContent;
 
 
@@ -53,12 +64,18 @@ public class TextToSpeechButton : MonoBehaviour
 
     private string GenerateTextContent()
     {   
-        // Return manually entered text if enabled
-        if (UseManualText)
+        // Return manually entered text if 'All' is selected
+        if (ManualTextType == manualTextType.All)
             return ManualStringContent;
 
         // The final string that will be sent to the text-to-speech service
         string _ttsString = string.Empty;
+
+        // Place manually entered text first if 'Before' is selected
+        if (ManualTextType == manualTextType.Before)
+        {
+            _ttsString += ManualStringContent;
+        }
 
         // Adding automatically discovered text to _ttsString, and adding spaces and dots if necessary 
         if (TextType == textType.Text)
@@ -97,32 +114,53 @@ public class TextToSpeechButton : MonoBehaviour
             foreach (string text in ExcludeStrings)
                 _ttsString.Replace(text, string.Empty);
 
+        // Place manually entered text first if 'After' is selected
+        if (ManualTextType == manualTextType.After)
+            _ttsString += ManualStringContent;
+
         return _ttsString;
     }
+
+    /// <summary>
+    /// This should be placed in the button's On Click event.
+    /// Unfortunately the AnimateSpeaker method has to be called repeatedly as a coroutine (in this case recursivley) in order to function when Time.timeScale is 0.
+    /// An example where Time.timeScale is set to 0 is when the main menu pauses the game.
+    /// </summary>
     public void PlayTTS()
     {
         _speaker.Speak(GenerateTextContent());
-        InvokeRepeating("AnimateSpeaker", 0, 0.5f);
+
+        animate = true;
+        StartCoroutine(AnimateSpeaker(.5f));
     }
 
+    private bool animate = false;
     private int step = 0;
-    private void AnimateSpeaker()
+    private IEnumerator AnimateSpeaker(float waitTime)
     {
-        if (step == 0)
-            TargetSpeakerImage.sprite = _speakerImageSilent;
-        else if (step == 1)
-            TargetSpeakerImage.sprite = _speakerImageMedium;
-        else if (step == 2)
-            TargetSpeakerImage.sprite = _speakerImageFull;
+        if (animate)
+        {
+            if (step == 0)
+                TargetSpeakerImage.sprite = _speakerImageSilent;
+            else if (step == 1)
+                TargetSpeakerImage.sprite = _speakerImageMedium;
+            else if (step == 2)
+                TargetSpeakerImage.sprite = _speakerImageFull;
 
-        step = (step + 1) % 3;
+            step = (step + 1) % 3;
+        }
+        else
+            SetDefaultSpeakerIcon();
+
+        yield return new WaitForSecondsRealtime(waitTime);
+        
+        StartCoroutine(AnimateSpeaker(.5f));
+
     }
 
     private void SetDefaultSpeakerIcon()
     {
-        if (IsInvoking("AnimateSpeaker"))
-            CancelInvoke("AnimateSpeaker");
-
+        animate = false;
         TargetSpeakerImage.sprite = _defaultSpeakerImage;
     }
 }
