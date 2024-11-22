@@ -118,7 +118,7 @@ public class BreakTask : MonoBehaviour
             if (deadIntroDialoguePlayed && !deadIntroDone && breakTaskDone) // when the dead fish dialogue has finished
             {
                 Debug.Log(conversationController.GetDialogueTree().name);
-                if (!deadFishPumpVideo.activeSelf && conversationController.GetDialogueTree().name == "DeadfishSetup")
+                if (!deadFishPumpVideo.activeSelf && conversationController.GetDialogueTree().name == "DeadfishSetup") // activeSelf set to false when video is finished
                 {
                     // moving on to dead fish counting dialogue
                     conversationController.NextDialogueTree();
