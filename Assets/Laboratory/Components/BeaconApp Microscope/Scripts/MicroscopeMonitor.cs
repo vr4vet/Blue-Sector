@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 public class MicroscopeMonitor : MonoBehaviour
@@ -36,6 +37,10 @@ public class MicroscopeMonitor : MonoBehaviour
 
     private float AspectRatio;
 
+    private List<int> GridCellRotations = new List<int>();
+
+    private bool PlanktonHighlights = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -63,7 +68,7 @@ public class MicroscopeMonitor : MonoBehaviour
         Image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Image.GetComponent<RectTransform>().sizeDelta.y * ratio);
     }
 
-    private void Update()
+/*    private void Update()
     {
         // Zooming
         if (RevolvingNosePiece.IsRotating())
@@ -86,7 +91,7 @@ public class MicroscopeMonitor : MonoBehaviour
             ScrollUp();
         if (Input.GetKey(KeyCode.DownArrow))
             ScrollDown();
-    }
+    }*/
 
     public void ScrollX(bool right)
     {
@@ -117,10 +122,11 @@ public class MicroscopeMonitor : MonoBehaviour
     /// </summary>
     public void Magnify()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[3])
-        {
+        // skip NPC dialogue forwards when player successfully changes the magnification
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[3])
             dialogueBoxController.SkipLine();
-        }
+
+        // keep track of the different indexes for magnification
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
         CurrentCustomMagnificationLevel = (CurrentCustomMagnificationLevel + 1) % MagnificationLevels.Count;
@@ -150,15 +156,16 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void Minimize()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[3])
-        {
+        // skip NPC dialogue forwards when player successfully changes the magnification
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[3])
             dialogueBoxController.SkipLine();
-        }
-        
+
+        // keep track of the different indexes for magnification
         CurrentMagnificationStep = (CurrentMagnificationStep - 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex - 1) % MagnificationLevels.Count;
         CurrentCustomMagnificationLevel = (CurrentCustomMagnificationLevel - 1) % MagnificationLevels.Count;
 
+        // 'wrap around' to the highest magnification level if minimizing from the lowest magnification level
         if (CurrentMagnificationStep < 0)
             CurrentMagnificationStep = MagnificationLevels.Count - 1;
 
@@ -205,140 +212,92 @@ public class MicroscopeMonitor : MonoBehaviour
 
         if (!HasSlide)
             SetDefaultTexture();
-
-        
     }
 
     public void SetMagnification()
     {
-        int Scale = GetMagnificationLevel();
-        if (SlideWithGrid)
-        {
-            Grid.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
-            Grid.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
-        }
-        else
-        {
-            Image.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
-            Image.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
-        }
-        
+        // decide if the water sample is a grid or not before setting magnification
+        GameObject sample = GetSample();
 
+        // perform the magnification by scaling the sample canvas
+        int Scale = GetMagnificationLevel();
+        sample.GetComponent<RectTransform>().localScale = new Vector3(Scale, Scale, Scale);
+        sample.GetComponent<RectTransform>().localPosition = new Vector3(CurrentXY.x * Scale, CurrentXY.y * Scale, Image.GetComponent<RectTransform>().position.z);
     }
 
     public void ScrollRight()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
-        {
+        // skip NPC dialogue forwards when player successfully scrolls
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
             dialogueBoxController.SkipLine();
-        }
-        
-        float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
 
-        if (SlideWithGrid)
+        // decide if the water sample is a grid or not before scrolling
+        GameObject sample = GetSample();
+
+        // perform the scrolling while ensuring it doesn't go beyond edges of monitor
+        float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
+        float ratio = (sample.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
+        if (sample.GetComponent<RectTransform>().localPosition.x > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
         {
-            float ratio = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
-            if (Grid.GetComponent<RectTransform>().localPosition.x > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
-            {
-                CurrentXY.x -= ScrollSpeed;
-                Grid.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
-            }
-        }
-        else
-        {
-            float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
-            if (Image.GetComponent<RectTransform>().localPosition.x > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
-            {
-                CurrentXY.x -= ScrollSpeed;
-                Image.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
-            }
+            CurrentXY.x -= ScrollSpeed;
+            sample.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
         }
     }
 
     public void ScrollLeft()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
-        {
+        // skip NPC dialogue forwards when player successfully scrolls
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
             dialogueBoxController.SkipLine();
-        }
-        
-        float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
 
-        if (SlideWithGrid)
+        // decide if the water sample is a grid or not before scrolling
+        GameObject sample = GetSample();
+
+        // perform the scrolling while ensuring it doesn't go beyond edges of monitor
+        float monitorWidth = GetComponentInChildren<RectTransform>().sizeDelta.x;
+        float ratio = (sample.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
+        if (sample.GetComponent<RectTransform>().localPosition.x < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
         {
-            float ratio = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
-            if (Grid.GetComponent<RectTransform>().localPosition.x < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
-            {
-                CurrentXY.x += ScrollSpeed;
-                Grid.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
-            }
-        }
-        else
-        {
-            float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - monitorWidth;
-            if (Image.GetComponent<RectTransform>().localPosition.x < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
-            {
-                CurrentXY.x += ScrollSpeed;
-                Image.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
-            }
+            CurrentXY.x += ScrollSpeed;
+            sample.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
         }
     }
 
     public void ScrollUp()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
-        {
+        // skip NPC dialogue forwards when player successfully scrolls
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
             dialogueBoxController.SkipLine();
-        }
-        
-        float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
 
-        if (SlideWithGrid)
+        // decide if the water sample is a grid or not before scrolling
+        GameObject sample = GetSample();
+
+        // perform the scrolling while ensuring it doesn't go beyond edges of monitor
+        float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
+        float ratio = (sample.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
+        if (sample.GetComponent<RectTransform>().localPosition.y > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
         {
-            float ratio = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
-            if (Grid.GetComponent<RectTransform>().localPosition.y > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
-            {
-                CurrentXY.y -= ScrollSpeed;
-                Grid.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
-            }
-        }
-        else
-        {
-            float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
-            if (Image.GetComponent<RectTransform>().localPosition.y > -(ratio / 2) + (ScrollSpeed * GetMagnificationLevel()))
-            {
-                CurrentXY.y -= ScrollSpeed;
-                Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
-            }
+            CurrentXY.y -= ScrollSpeed;
+            sample.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
         }
     }
 
     public void ScrollDown()
     {
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
-        {
+        // skip NPC dialogue forwards when player successfully scrolls
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[1])
             dialogueBoxController.SkipLine();
-        }
-        
-        float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
 
-        if (SlideWithGrid)
+        // decide if the water sample is a grid or not before scrolling
+        GameObject sample = GetSample();
+
+        // perform the scrolling while ensuring it doesn't go beyond edges of monitor
+        float monitorHeight = GetComponentInChildren<RectTransform>().sizeDelta.y;
+        float ratio = (sample.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
+        if (sample.GetComponent<RectTransform>().localPosition.y < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
         {
-            float ratio = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
-            if (Grid.GetComponent<RectTransform>().localPosition.y < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
-            {
-                CurrentXY.y += ScrollSpeed;
-                Grid.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
-            }
-        }
-        else
-        {
-            float ratio = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - monitorHeight;
-            if (Image.GetComponent<RectTransform>().localPosition.y < (ratio / 2) - (ScrollSpeed * GetMagnificationLevel()))
-            {
-                CurrentXY.y += ScrollSpeed;
-                Image.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
-            }
+            CurrentXY.y += ScrollSpeed;
+            sample.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
         }
     }
 
@@ -352,7 +311,9 @@ public class MicroscopeMonitor : MonoBehaviour
         Image.sprite= DefaultTexture;
         Image.enabled = true;
         HasSlide = false;
-        Destroy(Grid);
+
+        if (Grid != null)
+            Destroy(Grid);
     }
 
     private void SetMagnificationLevelOverlay()
@@ -371,11 +332,11 @@ public class MicroscopeMonitor : MonoBehaviour
         HasSlide = true;
         SlideWithGrid = false;
         int imageIndex = CurrentImageIndex;
-        
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
-        {
+
+        // skip NPC dialogue forwards when player successfully places sample under the scope
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
             dialogueBoxController.SkipLine();
-        }
+
         if (CurrentSlide.UseSeparateMagnificationTextures)
         {
             while (CurrentSlide.textures[imageIndex] == null)
@@ -393,71 +354,72 @@ public class MicroscopeMonitor : MonoBehaviour
         CurrentSlideWithGrid = slide;
         SlideWithGrid = true;
         HasSlide = true;
-        
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
-        {
+
+        // skip NPC dialogue forwards when player successfully places sample under the scope
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[0])
             dialogueBoxController.SkipLine();
-        }
     }
 
     public void SetGrid(GameObject grid)
     {
         Image.enabled = false;
-
         Grid = GameObject.Instantiate(grid);
+
+        // make grid fetch its amount of plankton. neccessary to let NPC verify the player's answer
+        Grid.GetComponent<MicroscopeGrid>().FetchPlanktonCount(); 
+
+        // randomly rotate grid cells and store in list the first time the sample is placed under scope. otherwise read from list and restore rotation from the first time
+        if (GridCellRotations.Count == 0)
+            GridCellRotations = Grid.GetComponent<MicroscopeGrid>().RandomlyRotateCells();
+        else
+            Grid.GetComponent<MicroscopeGrid>().RotateCells(GridCellRotations);
+
+        // give highest position among siblings to ensure UI elements are drawn on top
         Grid.transform.SetParent(transform.Find("Canvas/Panel/"));
-        Grid.transform.SetAsFirstSibling();  // give highest position among siblings to ensure UI elements are drawn on top
+        Grid.transform.SetAsFirstSibling();  
         
         SetMagnification();
         
+        // placing grid canvas flat onto monitor
         Grid.GetComponent<RectTransform>().localEulerAngles = Vector3.zero;
-        float ratio = GetComponentInChildren<RectTransform>().sizeDelta.x / Grid.GetComponent<RectTransform>().sizeDelta.x;
-        Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Grid.GetComponent<RectTransform>().sizeDelta.x * ratio);
-        Grid.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Grid.GetComponent<RectTransform>().sizeDelta.y * ratio);
 
-        Grid.GetComponentInChildren<GridLayoutGroup>().cellSize = new Vector2(Grid.GetComponent<RectTransform>().sizeDelta.x / 10, Grid.GetComponent<RectTransform>().sizeDelta.y / 5);
+        // rescaling canvas to fit screen
+        float biggestCanvas = Mathf.Max(GetComponentInChildren<RectTransform>().sizeDelta.x, Grid.GetComponent<RectTransform>().sizeDelta.x);
+        float smallestCanvas = Mathf.Min(GetComponentInChildren<RectTransform>().sizeDelta.x, Grid.GetComponent<RectTransform>().sizeDelta.x);
+        float ratio = biggestCanvas / smallestCanvas;
+
+        if (biggestCanvas == GetComponentInChildren<RectTransform>().sizeDelta.x)
+            Grid.GetComponent<RectTransform>().localScale *= ratio;
+        else
+            Grid.GetComponent<RectTransform>().localScale /= ratio;
     }
 
     private void PreventOutOfBoundsCoordinates()
     {
-        if (SlideWithGrid)
-        {
-            float ratioWidth = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.x;
-            float ratioHeight = (Grid.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.y;
-            while (Grid.GetComponent<RectTransform>().localPosition.x >= (ratioWidth / 2))
-                ScrollRight();
-            while (Grid.GetComponent<RectTransform>().localPosition.x <= -(ratioWidth / 2))
-                ScrollLeft();
-            while (Grid.GetComponent<RectTransform>().localPosition.y >= (ratioHeight / 2))
-                ScrollUp();
-            while (Grid.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
-                ScrollDown();
-        }
-        else
-        {
-            float ratioWidth = (Image.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.x;
-            float ratioHeight = (Image.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.y;
-            while (Image.GetComponent<RectTransform>().localPosition.x >= (ratioWidth / 2))
-                ScrollRight();
-            while (Image.GetComponent<RectTransform>().localPosition.x <= -(ratioWidth / 2))
-                ScrollLeft();
-            while (Image.GetComponent<RectTransform>().localPosition.y >= (ratioHeight / 2))
-                ScrollUp();
-            while (Image.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
-                ScrollDown();
-        }
+        // decide if the water sample is a grid or not before scrolling
+        GameObject sample = GetSample();
 
+        // decide if sample has scrolled too far, and scroll back if necessary
+        float ratioWidth = (sample.GetComponentInChildren<RectTransform>().sizeDelta.x * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.x;
+        float ratioHeight = (sample.GetComponentInChildren<RectTransform>().sizeDelta.y * GetMagnificationLevel()) - GetComponentInChildren<RectTransform>().sizeDelta.y;
+        while (sample.GetComponent<RectTransform>().localPosition.x >= (ratioWidth / 2))
+            ScrollRight();
+        while (sample.GetComponent<RectTransform>().localPosition.x <= -(ratioWidth / 2))
+            ScrollLeft();
+        while (sample.GetComponent<RectTransform>().localPosition.y >= (ratioHeight / 2))
+            ScrollUp();
+        while (sample.GetComponent<RectTransform>().localPosition.y <= -(ratioHeight / 2))
+            ScrollDown();
     }
 
     public void SetScrollSpeed()
     {
         this.ScrollSpeed = 2f * SpeedModifier;
         SpeedOverlay.SetText(SpeedModifier + "x");
-        
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[2])
-        {
+
+        // skip NPC dialogue forwards when player successfully adjusts scrolling speed
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[2])
             dialogueBoxController.SkipLine();
-        }
     }
 
     public void IncreaseScrollSpeed()
@@ -508,6 +470,11 @@ public class MicroscopeMonitor : MonoBehaviour
         return Grid.GetComponent<RectTransform>().localPosition;
     }
 
+    public List<int> GetGridCellRotations()
+    {
+        return GridCellRotations; 
+    }
+
     public RectTransform GetImageRectTransform()
     {
         return Image.GetComponent<RectTransform>();
@@ -525,6 +492,38 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public bool IsDisplayingGrid()
     {
-        return SlideWithGrid;
+        return Grid != null;
+    }
+
+    private GameObject GetSample()
+    {
+        if (SlideWithGrid)
+            return Grid;
+        else
+            return Image.gameObject;
+    }
+
+    public void OnEnablePlanktonHighlights()
+    {
+        PlanktonHighlights = true;
+        foreach (MicroscopeSlideCell cell in Grid.GetComponentsInChildren<MicroscopeSlideCell>())
+        {
+            cell.EnablePlanktonHighlights();
+        }
+
+    }
+
+    public void OnDisablePlanktonHighlights()
+    {
+        PlanktonHighlights = false;
+        foreach (MicroscopeSlideCell cell in Grid.GetComponentsInChildren<MicroscopeSlideCell>())
+        {
+            cell.DisablePlanktonHighlights();
+        }
+    }
+
+    public bool PlankonHighlightsEnabled()
+    {
+        return PlanktonHighlights;
     }
 }
