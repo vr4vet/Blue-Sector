@@ -37,8 +37,8 @@ public class TextToSpeechButton : MonoBehaviour
              "\nAll: Content in 'Manual String Content' only.\n" +
              "\nBefore: Content in 'Manual String Content' will be placed before.\n" +
              "\nAfter: Content in 'Manual String Content' will be placed after.")]
-    [SerializeField] private manualTextType ManualTextType = manualTextType.None;
-    private enum manualTextType
+    [SerializeField] private ManualTextType manualTextType = ManualTextType.None;
+    private enum ManualTextType
     {
         None, All, Before, After
     }
@@ -63,14 +63,14 @@ public class TextToSpeechButton : MonoBehaviour
     private string GenerateTextContent()
     {   
         // Return manually entered text if 'All' is selected
-        if (ManualTextType == manualTextType.All)
+        if (manualTextType == ManualTextType.All)
             return ManualStringContent;
 
         // The final string that will be sent to the text-to-speech service
         string _ttsString = string.Empty;
 
         // Place manually entered text first if 'Before' is selected
-        if (ManualTextType == manualTextType.Before)
+        if (manualTextType == ManualTextType.Before)
             _ttsString += ManualStringContent;
 
         // Adding automatically discovered text to _ttsString, and adding spaces and dots if necessary
@@ -108,10 +108,9 @@ public class TextToSpeechButton : MonoBehaviour
                 _ttsString = _ttsString.Replace(text, string.Empty);
 
         // Place manually entered text last if 'After' is selected
-        if (ManualTextType == manualTextType.After)
+        if (manualTextType == ManualTextType.After)
             _ttsString += ManualStringContent;
 
-        Debug.Log(_ttsString);
         return _ttsString;
     }
 
