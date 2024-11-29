@@ -32,7 +32,6 @@ public class NpcTriggerDialogue : MonoBehaviour
    public GameObject calculator;
    public GameObject numPad;
    public GameObject handheldCounter;
-   public GameObject slider;
    public GameObject microscopeSnapPoint;
    
    private Vector3 _basketPosition;

@@ -127,7 +127,7 @@ public class WalkingNpc : MonoBehaviour
                     NavMeshPath path = new NavMeshPath();
                     _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
                     _agent.SetPath(path);
-                    if (_agent.remainingDistance < 1.8f)
+                    if (_agent.remainingDistance > 0.1f)
                     {
                         currentPosition++;
                         if (currentPosition == paths[currentPath].Count)
@@ -153,7 +153,7 @@ public class WalkingNpc : MonoBehaviour
                     NavMeshPath path = new NavMeshPath();
                     _agent.CalculatePath(paths2[currentPath][currentPosition].position, path);
                     _agent.SetPath(path);
-                    if (_agent.remainingDistance < 1.2f)
+                    if (_agent.remainingDistance > 0.1f)
                     {
                         currentPosition++;
                         if (currentPosition == paths2[currentPath].Count)
