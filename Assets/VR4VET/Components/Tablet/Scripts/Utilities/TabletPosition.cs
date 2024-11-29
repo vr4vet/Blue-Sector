@@ -95,6 +95,8 @@ public class TabletPosition : MonoBehaviour
         _tabletIsOpened = true;
         if ((int)type == 1)
             ToggleTablet();
+
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Tablet"));
     }
 
     /// <summary>

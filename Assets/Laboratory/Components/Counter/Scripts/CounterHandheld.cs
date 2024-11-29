@@ -18,7 +18,7 @@ public class CounterHandheld : MonoBehaviour
 
     public void Increment()
     {
-        if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+        if (dialogueBoxController != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
         {
             if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
             {

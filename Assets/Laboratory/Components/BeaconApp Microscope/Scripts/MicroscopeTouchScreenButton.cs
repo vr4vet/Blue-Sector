@@ -6,7 +6,7 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
     [SerializeField] private Input input;
     private enum Input
     {
-        Up, Down, Left, Right, Magnify, Minimize, Faster, Slower
+        Up, Down, Left, Right, Magnify, Minimize, Faster, Slower, InfoSubmit
     }
     private MicroscopeMonitor MicroscopeMonitor;
 

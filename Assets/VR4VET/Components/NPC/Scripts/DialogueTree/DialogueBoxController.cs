@@ -197,6 +197,9 @@ public class DialogueBoxController : MonoBehaviour
         _skipLineButton.SetActive(false);
         if (dialogueTree.sections[section].branchPoint.answers[_answerIndex].endAfterAnswer) {
             // Exit conversation if the answer is set to exit after answer
+            dialogueEnded = true;
+            timesEnded++;
+            OnDialogueEnded?.Invoke(name);
             ExitConversation();
         } else {
             // Continue to section of the dialogue the answer points to

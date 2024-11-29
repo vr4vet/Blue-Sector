@@ -5,6 +5,7 @@ public class FactoryFishSpawner : MonoBehaviour
 {
     // ----------------- Editor Variables -----------------
 
+
     [Header("Fish Spawner Settings")]
     [SerializeField]
     private bool _isSpawnerOn = true;
@@ -123,6 +124,8 @@ public class FactoryFishSpawner : MonoBehaviour
     void Start()
     {
         StartCoroutine(SpawnFish());
+        
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Bone"));
     }
 
     void Update()
