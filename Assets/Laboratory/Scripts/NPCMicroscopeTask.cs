@@ -196,6 +196,10 @@ public class NPCMicroscopeTask : MonoBehaviour
     /// <param name="answer"></param>
     private void ButtonSpawner_OnAnswer(string answer)
     {
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "LarsDialogue")
+            return;
+
         if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[20].branchPoint.question)
         {
             if (answer == "Yes")
