@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MicroscopeMonitor : MonoBehaviour
 {
-    private float ScrollSpeed = 2f;
+    private float ScrollSpeed;
     private float SpeedModifier = 1;
     
     private DialogueBoxController dialogueBoxController;
@@ -56,6 +56,9 @@ public class MicroscopeMonitor : MonoBehaviour
 
         // set initial magnification level
         SetMagnification();
+
+        // set initial scrol speed
+        SetScrollSpeed();
 
         if (UseCustomMagnificationLevels)
             SetMagnificationLevelOverlay(CustomMagnificationLevels[0]);
@@ -110,15 +113,15 @@ public class MicroscopeMonitor : MonoBehaviour
     }
 
     /// <summary>
-    /// The Magnify() and Minimize() methods work in three different ways:
+    /// The Magnify() and Minimize() methods work in four different ways:
     /// - When a slide containts only one image (must be the first slot).
     /// - When some of a slide's image slots contain an image (again, the first slot must contain an image).
     /// - When all of a slide's image slots contains an image.
+    /// - When a slide with a grid layout is used.
     /// 
-    /// The code interated through the image slots. A new image is always magnified by a factor of 2, unless found while minimizing with a distance larger than 1 from the original index.
     /// If a slot is empty, it simply goes to the next magnification level in the MagnificationLevels list.
-    /// Therefore, this can function perfectly as a reading aid or similair, simply a monitor that magnifies some image, or 
-    /// it could swap images every time, or a hybrid.
+    /// Therefore, this can function as a reading aid or similair (simply a monitor that magnifies some image), or 
+    /// it could swap images every time, or a hybrid, or lastly, displaying the entire grid layout manipulating it like a sigle image.
     /// </summary>
     public void Magnify()
     {
@@ -414,16 +417,16 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void SetScrollSpeed()
     {
-        this.ScrollSpeed = 2f * SpeedModifier;
+        this.ScrollSpeed = .25f * SpeedModifier;
         SpeedOverlay.SetText(SpeedModifier + "x");
-
-        // skip NPC dialogue forwards when player successfully adjusts scrolling speed
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[2])
-            dialogueBoxController.SkipLine();
     }
 
     public void IncreaseScrollSpeed()
     {
+        // skip NPC dialogue forwards when player successfully adjusts scrolling speed
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[2])
+            dialogueBoxController.SkipLine();
+
         if (SpeedModifier < 3)
         {
             SpeedModifier += 0.5f;
@@ -433,6 +436,10 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void DecreaseScrollSpeed()
     {
+        // skip NPC dialogue forwards when player successfully adjusts scrolling speed
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[13].dialogue[2])
+            dialogueBoxController.SkipLine();
+
         if (SpeedModifier > 0.5f)
         {
             SpeedModifier -= 0.5f;
