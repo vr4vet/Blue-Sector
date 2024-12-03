@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MicroscopeMonitor : MonoBehaviour
 {
-    private float ScrollSpeed = 2f;
+    private float ScrollSpeed;
     private float SpeedModifier = 1;
     
     private DialogueBoxController dialogueBoxController;
@@ -56,6 +56,9 @@ public class MicroscopeMonitor : MonoBehaviour
 
         // set initial magnification level
         SetMagnification();
+
+        // set initial scrol speed
+        SetScrollSpeed();
 
         if (UseCustomMagnificationLevels)
             SetMagnificationLevelOverlay(CustomMagnificationLevels[0]);
@@ -110,24 +113,19 @@ public class MicroscopeMonitor : MonoBehaviour
     }
 
     /// <summary>
-    /// The Magnify() and Minimize() methods work in three different ways:
+    /// The Magnify() and Minimize() methods work in four different ways:
     /// - When a slide containts only one image (must be the first slot).
     /// - When some of a slide's image slots contain an image (again, the first slot must contain an image).
     /// - When all of a slide's image slots contains an image.
+    /// - When a slide with a grid layout is used.
     /// 
-    /// The code interated through the image slots. A new image is always magnified by a factor of 2, unless found while minimizing with a distance larger than 1 from the original index.
     /// If a slot is empty, it simply goes to the next magnification level in the MagnificationLevels list.
-    /// Therefore, this can function perfectly as a reading aid or similair, simply a monitor that magnifies some image, or 
-    /// it could swap images every time, or a hybrid.
+    /// Therefore, this can function as a reading aid or similair (simply a monitor that magnifies some image), or 
+    /// it could swap images every time, or a hybrid, or lastly, displaying the entire grid layout manipulating it like a sigle image.
     /// </summary>
     public void Magnify()
     {
-        // skip NPC dialogue forwards when player successfully changes the magnification
-        if (dialogueBoxController != null &&
-            dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            dialogueBoxController.SkipLine();
-        }
+
         // keep track of the different indexes for magnification
         CurrentMagnificationStep = (CurrentMagnificationStep + 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex + 1) % MagnificationLevels.Count;
@@ -154,15 +152,19 @@ public class MicroscopeMonitor : MonoBehaviour
 
         if (!HasSlide)
             SetDefaultTexture();
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully changes the magnification
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3])
+            dialogueBoxController.SkipLine();
     }
 
     public void Minimize()
     {
-        // skip NPC dialogue forwards when player successfully changes the magnification
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController != null)
-        {
-            dialogueBoxController.SkipLine();
-        }
+
         // keep track of the different indexes for magnification
         CurrentMagnificationStep = (CurrentMagnificationStep - 1) % MagnificationLevels.Count;
         CurrentImageIndex = (CurrentImageIndex - 1) % MagnificationLevels.Count;
@@ -215,6 +217,14 @@ public class MicroscopeMonitor : MonoBehaviour
 
         if (!HasSlide)
             SetDefaultTexture();
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully changes the magnification
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3])
+            dialogueBoxController.SkipLine();
     }
 
     public void SetMagnification()
@@ -230,11 +240,6 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void ScrollRight()
     {
-        // skip NPC dialogue forwards when player successfully scrolls
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            dialogueBoxController.SkipLine();
-        }
 
         // decide if the water sample is a grid or not before scrolling
         GameObject sample = GetSample();
@@ -247,15 +252,18 @@ public class MicroscopeMonitor : MonoBehaviour
             CurrentXY.x -= ScrollSpeed;
             sample.GetComponent<RectTransform>().localPosition += new Vector3(-ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
         }
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully scrolls
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
+            dialogueBoxController.SkipLine();
     }
 
     public void ScrollLeft()
     {
-        // skip NPC dialogue forwards when player successfully scrolls
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            dialogueBoxController.SkipLine();
-        }
 
         // decide if the water sample is a grid or not before scrolling
         GameObject sample = GetSample();
@@ -268,15 +276,18 @@ public class MicroscopeMonitor : MonoBehaviour
             CurrentXY.x += ScrollSpeed;
             sample.GetComponent<RectTransform>().localPosition += new Vector3(ScrollSpeed * GetMagnificationLevel(), 0f, 0f);
         }
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully scrolls
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
+            dialogueBoxController.SkipLine();
     }
 
     public void ScrollUp()
     {
-        // skip NPC dialogue forwards when player successfully scrolls
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            dialogueBoxController.SkipLine();
-        }
 
         // decide if the water sample is a grid or not before scrolling
         GameObject sample = GetSample();
@@ -289,15 +300,18 @@ public class MicroscopeMonitor : MonoBehaviour
             CurrentXY.y -= ScrollSpeed;
             sample.GetComponent<RectTransform>().localPosition += new Vector3(0f, -ScrollSpeed * GetMagnificationLevel(), 0f);
         }
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully scrolls
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
+            dialogueBoxController.SkipLine();
     }
 
     public void ScrollDown()
     {
-        // skip NPC dialogue forwards when player successfully scrolls
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            dialogueBoxController.SkipLine();
-        }
 
         // decide if the water sample is a grid or not before scrolling
         GameObject sample = GetSample();
@@ -310,6 +324,14 @@ public class MicroscopeMonitor : MonoBehaviour
             CurrentXY.y += ScrollSpeed;
             sample.GetComponent<RectTransform>().localPosition += new Vector3(0f, ScrollSpeed * GetMagnificationLevel(), 0f);
         }
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully scrolls
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
+            dialogueBoxController.SkipLine();
     }
 
     public void SetTexture(Sprite texture)
@@ -343,12 +365,8 @@ public class MicroscopeMonitor : MonoBehaviour
         HasSlide = true;
         SlideWithGrid = false;
         int imageIndex = CurrentImageIndex;
-        
-        // skip NPC dialogue forwards when player successfully places sample under the scope
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            dialogueBoxController.SkipLine();
-        }
+
+
         if (CurrentSlide.UseSeparateMagnificationTextures)
         {
             while (CurrentSlide.textures[imageIndex] == null)
@@ -359,6 +377,14 @@ public class MicroscopeMonitor : MonoBehaviour
             }
             SetTexture(CurrentSlide.textures[imageIndex]);
         }
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully places sample under the scope
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
+            dialogueBoxController.SkipLine();
     }
 
     public void SetCurrentSlideWithGrid(MicroscopeSlideWithGrid slide)
@@ -366,12 +392,14 @@ public class MicroscopeMonitor : MonoBehaviour
         CurrentSlideWithGrid = slide;
         SlideWithGrid = true;
         HasSlide = true;
-        
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
         // skip NPC dialogue forwards when player successfully places sample under the scope
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
             dialogueBoxController.SkipLine();
-        }
     }
 
     public void SetGrid(GameObject grid)
@@ -428,32 +456,44 @@ public class MicroscopeMonitor : MonoBehaviour
 
     public void SetScrollSpeed()
     {
-        this.ScrollSpeed = 2f * SpeedModifier;
+        this.ScrollSpeed = .25f * SpeedModifier;
         SpeedOverlay.SetText(SpeedModifier + "x");
-        
-        // skip NPC dialogue forwards when player successfully adjusts scrolling speed
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            dialogueBoxController.SkipLine();
-        }
     }
 
     public void IncreaseScrollSpeed()
     {
+
         if (SpeedModifier < 3)
         {
             SpeedModifier += 0.5f;
             SetScrollSpeed();
         }
+        
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully adjusts scrolling speed
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2])
+            dialogueBoxController.SkipLine();
     }
 
     public void DecreaseScrollSpeed()
     {
+
         if (SpeedModifier > 0.5f)
         {
             SpeedModifier -= 0.5f;
             SetScrollSpeed();
         }
+
+        // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+            return;
+
+        // skip NPC dialogue forwards when player successfully adjusts scrolling speed
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2])
+            dialogueBoxController.SkipLine();
     }
 
     private void RotateRevolvingNosePiece(bool Right)
