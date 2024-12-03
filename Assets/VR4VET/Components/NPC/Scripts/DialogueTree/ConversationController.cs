@@ -250,8 +250,10 @@ public class ConversationController : MonoBehaviour
         }
     }
 
+    // Start a specific dialogue tree from the dialogue tree list
     public void StartDialogueTree(string dialogueTreeName)
     {
+        // Find the dialogue tree based on the given name
         _dialogueTree = _dialogueTreesSOFormat.Find(x => x.name == dialogueTreeName);
         if (_dialogueTree != null)
         {

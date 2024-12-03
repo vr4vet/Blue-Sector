@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+// This script is a modified version of the SpezializedNpcBehaviour script in fish feeding, this version is used in the laboratory scene and should be able to handle multiple points for the NPC to walk to.
 public class WalkingNpc : MonoBehaviour
 {
     [HideInInspector] private NPCSpawner _npcSpawner;
@@ -79,7 +80,8 @@ public class WalkingNpc : MonoBehaviour
         {
             _conversationController = _npc.GetComponentInChildren<ConversationController>();
         }
-
+        
+        // Add the first path
         paths = new List<List<Transform>>();
         foreach (Transform child in dialogueTransitions.transform)
         {
@@ -91,6 +93,7 @@ public class WalkingNpc : MonoBehaviour
             paths.Add(path);
         }
         
+        // Add the second path
         paths2 = new List<List<Transform>>();
         foreach (Transform child in dialogueTransitions2.transform)
         {
@@ -121,6 +124,7 @@ public class WalkingNpc : MonoBehaviour
             //Debug.Log(_agent.remainingDistance);
             if (walking)
             {
+                // The path is chosen based on the current dialogue
                 if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the measuring equipment")
                 {
                     if (currentPath == -1) { return; }
