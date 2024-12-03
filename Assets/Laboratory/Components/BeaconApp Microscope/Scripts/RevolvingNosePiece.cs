@@ -10,7 +10,7 @@ public class RevolvingNosePiece : MonoBehaviour
 
     private void Start()
     {
-        // initial rotation to position the smallest lense (lowest magnification) above water sample
+        // initial rotation to position the smallest lens (lowest magnification) above water sample
         transform.RotateAround(GetComponent<BoxCollider>().bounds.center, transform.up, 90f);
     }
 
