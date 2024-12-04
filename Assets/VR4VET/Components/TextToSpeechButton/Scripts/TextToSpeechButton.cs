@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 public class TextToSpeechButton : MonoBehaviour
 {
     [Tooltip("Objects which contain the desired text content. This script will attempt to fetch the text content automatically")]
-    [SerializeField] private List<GameObject> TargetObjects = new List<GameObject>();
+    [SerializeField] private List<GameObject> TargetObjects = new();
 
     [Tooltip("Point to the TTS instance for this object here")]
     [SerializeField] private GameObject TTSSpeaker;
@@ -31,7 +31,7 @@ public class TextToSpeechButton : MonoBehaviour
     }
 
     [Tooltip("Strings added to this list will be removed from the text that is acquired automatically.")]
-    [SerializeField] private List<string> ExcludeStrings = new List<string>();
+    [SerializeField] private List<string> ExcludeStrings = new();
 
     [Tooltip("How much the manually inputted text will override the automatically discovered text.\n" +
              "\nNone: Only automatically discovered text will be used. \n" +
@@ -62,6 +62,30 @@ public class TextToSpeechButton : MonoBehaviour
     }
 
     /// <summary>
+    /// This should be placed in the button's On Click event.
+    /// </summary>
+    private float buttonPressTime = Mathf.NegativeInfinity;
+    public void PlayTTS()
+    {
+        // Prevent unwanted double clicks
+        if (Time.realtimeSinceStartup - buttonPressTime < .4)
+            return;
+
+        buttonPressTime = Time.realtimeSinceStartup;
+
+        // stop tts if currently running, otherwise manipulate text content before sending to tts service
+        if (_speaker.IsSpeaking)
+            _speaker.Stop();
+        else
+        {
+            string fetchedTextContent = FetchTextContent();
+            string[] splitTextContent = GenerateSplitTextContent(fetchedTextContent);
+            StartCoroutine(_speaker.SpeakQueuedAsync(splitTextContent));
+            StartCoroutine(AnimateSpeaker(0));
+        }
+    }
+
+    /// <summary>
     /// Searches through children of the objects in 'TargetObjects' and discovers text content of the selected class set in 'manualTextType'. 
     /// Overrides using manual text if 'manualTextType' is not set to 'None'.
     /// </summary>
@@ -89,9 +113,7 @@ public class TextToSpeechButton : MonoBehaviour
                     _ttsString += text.text;
 
                     if (_ttsString.Last() != '.')
-                        _ttsString += ". ";
-                    else
-                        _ttsString += " ";
+                        _ttsString += ".";
                 }
             }
             else if (TextType == textType.TextMeshPro)
@@ -101,9 +123,7 @@ public class TextToSpeechButton : MonoBehaviour
                     _ttsString += text.text;
 
                     if (_ttsString.Last() != '.')
-                        _ttsString += ". ";
-                    else
-                        _ttsString += " ";
+                        _ttsString += ".";
                 }
             }
         }
@@ -120,28 +140,6 @@ public class TextToSpeechButton : MonoBehaviour
         return _ttsString;
     }
 
-    /// <summary>
-    /// This should be placed in the button's On Click event.
-    /// </summary>
-    private float buttonPressTime = Mathf.NegativeInfinity;
-    public void PlayTTS()
-    {
-        // Prevent unwanted double clicks
-        if (Time.realtimeSinceStartup - buttonPressTime < .4)
-            return;
-
-        buttonPressTime = Time.realtimeSinceStartup;
-
-        if (_speaker.IsSpeaking)
-            _speaker.Stop();
-        else
-        {
-            string fetchedTextContent = FetchTextContent();
-            string[] splitTextContent = GenerateSplitTextContent(fetchedTextContent);
-            StartCoroutine(_speaker.SpeakQueuedAsync(splitTextContent));
-            StartCoroutine(AnimateSpeaker(0));
-        }
-    }
 
     /// <summary>
     /// Split the text content into sections that are <= 280 chars long to respect the TTS service's char limit
@@ -157,13 +155,13 @@ public class TextToSpeechButton : MonoBehaviour
             if (!string.IsNullOrEmpty(cleanedString))
             {
                 char lastChar = cleanedString.Last();
-                strings.Add(cleanedString + (lastChar.Equals('!') || lastChar.Equals('?') ? string.Empty : "." ) + " ");
+                strings.Add(cleanedString + (char.IsLetterOrDigit(lastChar) ? "." : string.Empty) + " "); // place a dot at end of sentence if last character is letter or digit
             }
         }
 
         List<string> stringsFinal = new();
         string tmp = string.Empty;
-        // make each element of 'stringsFinal' as long as possible and <= 280 chars
+        // make each element of 'stringsFinal' as long as possible while <= 280 chars
         for (int i = 0; i < strings.Count; i++)
         {
             if ((tmp + strings[i]).Length > 280)
