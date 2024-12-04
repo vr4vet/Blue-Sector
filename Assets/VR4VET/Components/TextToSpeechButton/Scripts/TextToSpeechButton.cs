@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using TMPro;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 public class TextToSpeechButton : MonoBehaviour
 {
@@ -60,13 +61,18 @@ public class TextToSpeechButton : MonoBehaviour
         _speakerImageSilent = Resources.Load<Sprite>("Sprites/Button (6)");
     }
 
-    private string GenerateTextContent()
+    /// <summary>
+    /// Searches through children of the objects in 'TargetObjects' and discovers text content of the selected class set in 'manualTextType'. 
+    /// Overrides using manual text if 'manualTextType' is not set to 'None'.
+    /// </summary>
+    /// <returns></returns>
+    private string FetchTextContent()
     {   
         // Return manually entered text if 'All' is selected
         if (manualTextType == ManualTextType.All)
             return ManualStringContent;
 
-        // The final string that will be sent to the text-to-speech service
+        // The final string that will be returned
         string _ttsString = string.Empty;
 
         // Place manually entered text first if 'Before' is selected
@@ -127,12 +133,52 @@ public class TextToSpeechButton : MonoBehaviour
         buttonPressTime = Time.realtimeSinceStartup;
 
         if (_speaker.IsSpeaking)
-            _speaker.StopSpeaking();
+            _speaker.Stop();
         else
         {
-            _speaker.Speak(GenerateTextContent());
+            string fetchedTextContent = FetchTextContent();
+            string[] splitTextContent = GenerateSplitTextContent(fetchedTextContent);
+            StartCoroutine(_speaker.SpeakQueuedAsync(splitTextContent));
             StartCoroutine(AnimateSpeaker(0));
         }
+    }
+
+    /// <summary>
+    /// Split the text content into sections that are <= 280 chars long to respect the TTS service's char limit
+    /// </summary>
+    /// <param name="input"></param>
+    private string[] GenerateSplitTextContent(string input)
+    {
+        List<string> strings = new();
+        // split string at each '.' char while respecting '!' and '?'. special characters are removed to prevent text-to-speech from saying weird things
+        foreach(string s in input.Split('.'))
+        {
+            string cleanedString = Regex.Replace(s.Trim(), "<\\/?[bi]>", string.Empty);
+            if (!string.IsNullOrEmpty(cleanedString))
+            {
+                char lastChar = cleanedString.Last();
+                strings.Add(cleanedString + (lastChar.Equals('!') || lastChar.Equals('?') ? string.Empty : "." ) + " ");
+            }
+        }
+
+        List<string> stringsFinal = new();
+        string tmp = string.Empty;
+        // make each element of 'stringsFinal' as long as possible and <= 280 chars
+        for (int i = 0; i < strings.Count; i++)
+        {
+            if ((tmp + strings[i]).Length > 280)
+            {
+                stringsFinal.Add(tmp);
+                tmp = string.Empty + strings[i];
+            }
+            else
+                tmp += strings[i];
+                
+            // ensure the the last string is added
+            if (i == strings.Count - 1)
+                stringsFinal.Add(tmp);
+        }
+        return stringsFinal.ToArray();
     }
 
     /// <summary>
