@@ -140,7 +140,7 @@ public class DialogueBoxController : MonoBehaviour
         OnDialogueStarted?.Invoke(name);
         _activatedCount = 0;
         StartCoroutine(RunDialogue(dialogueTree, startSection));
-        _exitButton.SetActive(true);
+        //_exitButton.SetActive(true);
 
     }
 
@@ -168,6 +168,7 @@ public class DialogueBoxController : MonoBehaviour
                 _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
             }
 
+            _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             if (_dialogueText.text.Length > 280)
             {
                 _dialogueText.text = _dialogueText.text.Substring(0, 280);
@@ -189,7 +190,6 @@ public class DialogueBoxController : MonoBehaviour
             // Start talking animation
             _animator.SetBool(_isTalkingHash, true);
             StartCoroutine(revertToIdleAnimation());
-            _dialogueText.text = dialogueTree.sections[section].dialogue[i];
             _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
             //TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
             _skipLineButton.SetActive(true);
@@ -243,7 +243,7 @@ public class DialogueBoxController : MonoBehaviour
             while (!_skipLineTriggered)
             {
                 
-                _exitButton.SetActive(true);
+                //_exitButton.SetActive(true);
                 yield return null;
             }
             _skipLineTriggered = false;

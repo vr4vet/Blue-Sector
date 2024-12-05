@@ -105,7 +105,7 @@ public class AIConversationController : MonoBehaviour
         if (growing)
         {
             // Increase the scale of the icon
-            currentScale += animationSpeed * Time.deltaTime;
+            currentScale += animationSpeed * 0.02f;
             
             // Check if the scale has reached or exceeded the maximum limit
             if (currentScale >= maxScale)
@@ -118,7 +118,7 @@ public class AIConversationController : MonoBehaviour
         else
         {
             // Decrease the scale of the icon
-            currentScale -= animationSpeed * Time.deltaTime;
+            currentScale -= animationSpeed * 0.02f;
             
             // Check if the scale has reached or fallen below the minimum limit
             if (currentScale <= minScale)
