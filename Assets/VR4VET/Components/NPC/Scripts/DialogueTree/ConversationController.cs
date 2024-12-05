@@ -13,11 +13,20 @@ public class ConversationController : MonoBehaviour
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
     [HideInInspector] private DialogueBoxController _dialogueBoxController;
+    [SerializeField] public AIConversationController _AIConversationController;
+
+    [HideInInspector] public bool playerInsideTrigger = false;
+
+    [HideInInspector] public bool isTalkable;
 
     // Start is called before the first frame update
     void Start()
-    {   
-
+    {
+        _AIConversationController = GetComponentInParent<AIConversationController>();
+        if (_AIConversationController == null)
+        {
+            Debug.Log("AIConversationController component not found. Add it if the NPC needs AI abilities.");
+        }
         _dialogueBoxController = GetComponentInParent<DialogueBoxController>();
         if (_dialogueBoxController == null) {
             Debug.LogError("The NPC is missing the DialogueBoxCOntroller script");
@@ -29,6 +38,24 @@ public class ConversationController : MonoBehaviour
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
         updateAnimator();
+    }
+
+    void Update()
+    {
+        // This code is for testing AI speech solution on computer with a keyboard using "E"
+        isTalkable = _dialogueBoxController.isTalkable;
+        if (playerInsideTrigger && isTalkable)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                _AIConversationController.StartRecording();
+                _dialogueBoxController.startThinking();
+            }
+            if (Input.GetKeyUp(KeyCode.E))
+            {
+                _AIConversationController.EndRecording();
+            }
+        }
     }
 
     public void updateAnimator()
@@ -60,20 +87,32 @@ public class ConversationController : MonoBehaviour
     /// </summary>
     /// <param name="other"></param>
     void OnTriggerEnter(Collider other)
-    {   
-        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && _dialogueTree.shouldTriggerOnProximity && !_dialogueBoxController.dialogueIsActive && _oldDialogueTree != _dialogueTree) 
+    {
+        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider))
         {
-            // string json = JsonUtility.ToJson(dialogueTree);
-            // Debug.Log(json);
-            //_dialogueBoxController.startSpeakCanvas(_dialogueTree);
-            _oldDialogueTree = _dialogueTree;
-            if (_dialogueTree != null) {
-                _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
-            } else {
-                // Commented out because not all NPC's should have a dialogue tree, therefor not an error
+            playerInsideTrigger = true;
+            Debug.Log("Inside range to talk.");
 
-                //Debug.LogError("The dialogueTree of the NPC is null");
+            // Show dialogue box
+            _dialogueBoxController.ShowDialogueBox();
+            if (_dialogueTree.shouldTriggerOnProximity && !_dialogueBoxController.dialogueIsActive && _oldDialogueTree != _dialogueTree)
+            {
+                _oldDialogueTree = _dialogueTree;
+                if (_dialogueTree != null)
+                {
+                    _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC");
+                }
             }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider))
+        {
+            playerInsideTrigger = false;
+            Debug.Log("Outside range to talk.");
+            _dialogueBoxController.HideDialogueBox();
         }
     }
 
