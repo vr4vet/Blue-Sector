@@ -4,7 +4,8 @@ using UnityEngine;
 // Tests for various audio functionality
 public class AudioTests
 {
-	private AudioSource audioSource;
+#if UNITY_EDITOR
+    private AudioSource audioSource;
 	private AudioClip testClip;
 	private string microphoneName;
 	private string[] audioFileNames = { "alloy", "echo", "fable", "nova", "onyx", "shimmer" };
@@ -77,4 +78,5 @@ public class AudioTests
 		// Verify playback state immediately without waiting for it to finish
 		Assert.AreEqual(testClip, audioSource.clip, "AudioSource is not playing the expected test clip.");
 	}
+#endif
 }

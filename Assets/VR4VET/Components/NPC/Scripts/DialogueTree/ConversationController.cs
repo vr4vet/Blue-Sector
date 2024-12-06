@@ -44,7 +44,7 @@ public class ConversationController : MonoBehaviour
     {
         // This code is for testing AI speech solution on computer with a keyboard using "E"
         isTalkable = _dialogueBoxController.isTalkable;
-        if (playerInsideTrigger && isTalkable)
+        if (playerInsideTrigger && isTalkable && !_dialogueBoxController.dialogueEnded)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -78,6 +78,11 @@ public class ConversationController : MonoBehaviour
         return _dialogueBoxController.dialogueIsActive;
     }
     
+    public DialogueBoxController GetDialogueBoxController()
+    {
+        return _dialogueBoxController;
+    }
+
     public int GetActivatedCount()
     {
         return _dialogueBoxController.GetActivatedCount();

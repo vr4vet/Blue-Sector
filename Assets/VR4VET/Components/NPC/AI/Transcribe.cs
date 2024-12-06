@@ -44,7 +44,8 @@ public class Transcribe : MonoBehaviour
 
         // Initialize subtitles
         subtitle = GameObject.Find("SubtitleUI").GetComponentInChildren<TextMeshProUGUI>();
-	}
+        subtitle.transform.parent.gameObject.SetActive(false);
+    }
 
 	public void Update() {
 		// Check if the "L" key is pressed
@@ -75,6 +76,7 @@ public class Transcribe : MonoBehaviour
         {
             whisper.UpdateLanguage(currentLanguage);
             _stream.StartStream();
+            microphoneRecord.SelectedMicDevice = Microphone.devices[0];
             microphoneRecord.StartRecord();
         }
     }
@@ -102,6 +104,8 @@ public class Transcribe : MonoBehaviour
     /* Function for setting subtitles and creating a TTS request (AIRequest) once the transcription has finialized. */
     private void OnFinished(string finalResult)
     {
+
+        subtitle.transform.parent.gameObject.SetActive(true);
         print("Stream finished!");
 
         Debug.Log(finalResult);
@@ -134,5 +138,6 @@ public class Transcribe : MonoBehaviour
     {
         yield return new WaitForSeconds(SUBTITLE_DURATION);
         subtitle.text = "";
+        subtitle.transform.parent.gameObject.SetActive(false);
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine.TestTools;
 // Tests for loading environment variable (for OpenAI key)
 public class PreLoadTests
 {
+#if UNITY_EDITOR
     private const string TestEnvFileName = ".env_test";
     private string testEnvFilePath;
 
@@ -52,4 +53,5 @@ public class PreLoadTests
         Assert.AreEqual("TestValue", Environment.GetEnvironmentVariable("TEST_KEY"));
         Assert.AreEqual("AnotherValue", Environment.GetEnvironmentVariable("ANOTHER_KEY"));
     }
+#endif
 }

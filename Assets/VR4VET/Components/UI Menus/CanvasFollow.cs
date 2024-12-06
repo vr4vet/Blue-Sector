@@ -20,19 +20,14 @@ public class CanvasFollow : MonoBehaviour
         public Vector3 Foward;
     }
 
-    [SerializeField] private GameObject player;
     [SerializeField] private int _delay = 30;
     [SerializeField] private float _distanceToCamera;
     private Camera _cam;
-    private float _height;
-    private Quaternion delayCamRotation;
     private Queue<PastPosition> lapins = new Queue<PastPosition>();
     [SerializeField] private Vector2 offset = Vector2.zero;
 
     private void Start()
     {
-        if (!player) player = GameObject.FindGameObjectWithTag("Player");
-        _height = this.GetComponent<RectTransform>().rect.height * this.GetComponent<RectTransform>().localScale.y / 2;
         _cam = Camera.main;
     }
 
@@ -73,7 +68,6 @@ public class CanvasFollow : MonoBehaviour
             transform.LookAt(transform.position + _cam.transform.rotation * Vector3.forward, _cam.transform.rotation * Vector3.up);
 
             //change the Y position to fix one (height) , and the X,Z rotation to 0 )
-            //transform.position = new Vector3(transform.position.x, _height, transform.position.z);
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
         }

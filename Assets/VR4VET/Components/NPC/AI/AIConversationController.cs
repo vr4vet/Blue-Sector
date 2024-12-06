@@ -51,7 +51,7 @@ public class AIConversationController : MonoBehaviour
     stops. */
     public void PressButton(InputAction.CallbackContext context)
 	{
-		if (context.started && _ConversationController.playerInsideTrigger && _ConversationController.isTalkable)
+		if (context.started && _ConversationController.playerInsideTrigger && _ConversationController.isTalkable && !_ConversationController.GetDialogueBoxController().dialogueEnded)
 		{
             StartRecording();
 		}

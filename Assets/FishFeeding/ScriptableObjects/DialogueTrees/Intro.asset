@@ -12,12 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
   m_Name: Intro
   m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
   sections:
   - dialogue:
     - 'Welcome to the food station! This is a fish farming facility where you''re
       an intern. '
     - Your task is to feed the fish in the control room. Go up the stairs to continue.
+    interruptableElements: 0000
     endAfterDialogue: 1
+    dialogueEnd: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Ready to start the fish feeding task?
       answers: []

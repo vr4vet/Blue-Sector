@@ -113,6 +113,8 @@ public class DialogueBoxController : MonoBehaviour
                 Debug.Log("AIConversationController component not found. Add it if the NPC needs AI abilities.");
             }
         }
+
+        _AIResponseToSpeech.SetTTSSpeaker(TTSSpeaker.GetComponent<TTSSpeaker>());
     }
 
     public void updateAnimator() {
@@ -131,6 +133,7 @@ public class DialogueBoxController : MonoBehaviour
     public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
     {
         dialogueIsActive = true;
+        dialogueEnded = false;
         // stop I-have-something-to-tell-you-animation and start talking
         _animator.SetBool(_hasNewDialogueOptionsHash, false);
         //_animator.SetBool(_isTalkingHash, true);
@@ -254,8 +257,12 @@ public class DialogueBoxController : MonoBehaviour
             dialogueEnded = true;
             timesEnded++;
             OnDialogueEnded?.Invoke(name);
-            //ExitConversation();
-            StartDynamicQuery(dialogueTree);
+            if (dialogueTree.sections[section].dialogueEnd == DialogueEnd.Default)
+                ExitConversation();
+            else
+                StartDynamicQuery(dialogueTree);
+            
+            holdBToTalkMessage.enabled = false;
             yield break;
         }
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
@@ -460,7 +467,7 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isTalkingHash, true);
         _dialogueText.text = response;
         _exitButton.SetActive(false);
-        _skipLineButton.SetActive(false);
+        //_skipLineButton.SetActive(false);
 
         // Wait for the player to exit the conversation
         // while (_exitButton.activeSelf)

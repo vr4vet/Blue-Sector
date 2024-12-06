@@ -5,6 +5,8 @@ using UnityEngine;
 // Tests for the presence of required character models and animations
 public class AssetsTests
 {
+
+#if UNITY_EDITOR
 	private readonly string basePath = Path.Combine(Application.dataPath, "VR4VET", "Components", "NPC", "Animations");
 	private readonly string gesturesPath = Path.Combine(Application.dataPath, "VR4VET", "Components", "NPC", "Animations", "Gestures");
 	private readonly string locomotionPath = Path.Combine(Application.dataPath, "VR4VET", "Components", "NPC", "Animations", "Locomotion");
@@ -91,4 +93,5 @@ public class AssetsTests
 			Assert.IsTrue(File.Exists(fullPath), $"File '{fileName}' is missing in the characterModels folder.");
 		}
 	}
+#endif
 }

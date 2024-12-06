@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class EnvLoader
 {
+#if UNITY_EDITOR
     // Function for loading the environment variable defined in the project's root
     public static void Load(string fileName = ".env")
     {
@@ -36,4 +37,5 @@ public static class EnvLoader
 	{
 		Load();
 	}
+#endif
 }

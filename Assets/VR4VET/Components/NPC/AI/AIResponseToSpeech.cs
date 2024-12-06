@@ -11,8 +11,8 @@ public class AIResponseToSpeech : MonoBehaviour
     private string key;
     private AudioSource audioSource;
     public bool readyToAnswer = false;
-    public GameObject TTSSpeaker;
-    private TTSSpeaker ttsSpeakerComponent;
+    //public GameObject TTSSpeaker;
+    private TTSSpeaker TTSSpeaker;
     private string newResponseText;
     public string OpenAiVoiceId;
 
@@ -33,18 +33,18 @@ public class AIResponseToSpeech : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
-
+/*
         if (TTSSpeaker == null)
         {
-            TTSSpeaker = GetComponentInChildren<TTSSpeaker>()?.gameObject;
+*//*            TTSSpeaker = GetComponentInChildren<TTSSpeaker>()?.gameObject;
             if (TTSSpeaker == null)
-            {
+            {*//*
                 Debug.LogError("TTSSpeaker GameObject is not assigned in AIResponseToSpeech and couldn't be found.");
                 return;
-            }
-        }
-        ttsSpeakerComponent = TTSSpeaker.GetComponent<TTSSpeaker>();
-        if (ttsSpeakerComponent == null)
+            //}
+        }*/
+        //ttsSpeakerComponent = TTSSpeaker.GetComponent<TTSSpeaker>();
+        if (TTSSpeaker == null)
         {
             Debug.LogError("TTSSpeaker component not found on the assigned or found TTSSpeaker GameObject.");
             return;
@@ -119,9 +119,9 @@ public class AIResponseToSpeech : MonoBehaviour
         readyToAnswer = false;
         Debug.Log("Dictating text: " + responseText);
 
-        if (ttsSpeakerComponent != null)
+        if (TTSSpeaker != null)
         {
-            ttsSpeakerComponent.Speak(responseText);
+            TTSSpeaker.Speak(responseText);
             Debug.Log("Playing audio response from WitAI.");
         }
         else
@@ -129,13 +129,15 @@ public class AIResponseToSpeech : MonoBehaviour
             Debug.LogError("TTSSpeaker component is missing or not assigned.");
         }
 
-        //  Wait until the speaking is finished
-        while (ttsSpeakerComponent.IsSpeaking)
-        {
-            yield return null;
-        }
-
         // Indicate that the AI is ready to answer again
         readyToAnswer = true;
+
+        yield return null;
+        
+    }
+
+    public void SetTTSSpeaker(TTSSpeaker TTSSpeaker)
+    {
+        this.TTSSpeaker = TTSSpeaker;
     }
 }
