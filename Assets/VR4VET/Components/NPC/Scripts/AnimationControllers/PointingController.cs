@@ -92,6 +92,10 @@ public class PointingController : MonoBehaviour
         
         if (npcData != null)
         { 
+            // The NPC is reset to it's initial rotation. The initial rotation always updated in case the NPC has moved 
+            Vector3 rotation = npcData.InitialRotation.eulerAngles; 
+            rotation.y = npcData.Npc.transform.parent.rotation.eulerAngles.y;
+            npcData.InitialRotation = Quaternion.Euler(rotation);
             npcData.Npc.transform.rotation = npcData.InitialRotation;
         }
         else
