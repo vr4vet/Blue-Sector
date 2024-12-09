@@ -44,7 +44,7 @@ public class Transcribe : MonoBehaviour
 
         // Initialize subtitles
         subtitle = GameObject.Find("SubtitleUI").GetComponentInChildren<TextMeshProUGUI>();
-        subtitle.transform.parent.gameObject.SetActive(false);
+        subtitle.GetComponentInChildren<Image>().enabled = false;
     }
 
 	public void Update() {
@@ -71,6 +71,8 @@ public class Transcribe : MonoBehaviour
     /* Function for initializing the Whisper transcription, called by AIConversationController */
 	public void StartRecording(AIConversationController _AIConversationController)
     {
+        subtitle.GetComponentInChildren<Image>().enabled = true;
+        StartCoroutine(DisplayTranscriptionProcessing());
         this._AIConversationController = _AIConversationController; // Set current conversation reference
         if (!microphoneRecord.IsRecording)
         {
@@ -104,10 +106,9 @@ public class Transcribe : MonoBehaviour
     /* Function for setting subtitles and creating a TTS request (AIRequest) once the transcription has finialized. */
     private void OnFinished(string finalResult)
     {
-
-        subtitle.transform.parent.gameObject.SetActive(true);
         print("Stream finished!");
 
+        StopAllCoroutines();
         Debug.Log(finalResult);
 
 		if (finalResult.Contains("[ Inaudible ]")) {
@@ -138,6 +139,20 @@ public class Transcribe : MonoBehaviour
     {
         yield return new WaitForSeconds(SUBTITLE_DURATION);
         subtitle.text = "";
-        subtitle.transform.parent.gameObject.SetActive(false);
+        subtitle.GetComponentInChildren<Image>().enabled = false;
+    }
+
+    public IEnumerator DisplayTranscriptionProcessing()
+    {
+        // While waiting for a response, display thinking dialogue
+        while (true)
+        {
+            subtitle.text = ".";
+            yield return new WaitForSeconds(0.5f);
+            subtitle.text = "..";
+            yield return new WaitForSeconds(0.5f);
+            subtitle.text = "...";
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }

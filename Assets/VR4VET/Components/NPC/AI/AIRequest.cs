@@ -181,6 +181,10 @@ public class AIRequest : MonoBehaviour
                 }
                 else if (_dialogueBoxController.useWitAI == true)
                 {
+                    // Limit response length to stay within WitAI character limit
+                    if (responseText.Length > 280)
+                        responseText = responseText.Substring(0, 280);
+
                     StartCoroutine(_AIResponseToSpeech.WitAIDictate(responseText));
 
                     // Display the thinking dialogue while waiting for the response
