@@ -23,6 +23,10 @@ public class ScaleButtons : MonoBehaviour
 
     private void OnTriggerEnter(Collider collisionObject)
     {
+        if (collisionObject.name == "CollisionTriggerHandler")
+        {
+            return;
+        }
         switch (buttonType)
         {
             case ButtonType.On:
