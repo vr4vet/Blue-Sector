@@ -1,0 +1,210 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: MicroscopeDialogue
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - Now you are going to analyze a water sample in the microscope. Your goal is
+      to look after different organisms in the sample, and count how many there are.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Do you want to learn how to use the microscope or go straight to
+        the task?
+      answers:
+      - answerLabel: Learn how to use the microscope
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Start with the tasks
+        nextElement: 3
+        endAfterAnswer: 0
+  - dialogue:
+    - First place the water sample under the scope, this is the blue rectangle to
+      the right of the microscope.
+    - Now you can see the sample on the screen, press one of the big arrows to move
+      around.
+    - Try to change the speed of how fast you move around by pressing plus or
+      minus.
+    - Zoom in or out by scrolling the nosepieces over the sample
+    - On the left side of the microscope there is a counter. Grab it with your left
+      hand and press the button on your index finger to count.
+    - To reset the counter to zero press the top button on the counter.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 1
+    objectToLookAt: {fileID: 2897439329450102196, guid: 51c09a19815062d4b8086734b17c33af,
+      type: 3}
+    branchPoint:
+      question: Do you want me to go over it again or continue?
+      answers:
+      - answerLabel: Explain again
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: Choose another task
+        nextElement: 2
+        endAfterAnswer: 0
+      - answerLabel: Continue
+        nextElement: 3
+        endAfterAnswer: 0
+  - dialogue:
+    - Intro
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: There are three kinds of plankton in the sample. Write your answers
+        on the note sheet to the left of the microscope. Tell me when you are finished
+        counting or if you have any questions.
+      answers:
+      - answerLabel: Check answers
+        nextElement: 4
+        endAfterAnswer: 0
+      - answerLabel: How does the microscope work?
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: I need assistance
+        nextElement: 9
+        endAfterAnswer: 0
+  - dialogue:
+    - Let me see. I'm double-checking your answers.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: That's correct! Great job! Do you want to try again, or move on to
+        another task?
+      answers:
+      - answerLabel: Try again
+        nextElement: 3
+        endAfterAnswer: 0
+      - answerLabel: Try another task
+        nextElement: 2
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: That wasn't quite correct. Do you want to try again?
+      answers:
+      - answerLabel: Yes
+        nextElement: 3
+        endAfterAnswer: 0
+      - answerLabel: No, tell me the correct answer
+        nextElement: 7
+        endAfterAnswer: 0
+  - dialogue:
+    - There are 100 Chaetoceros diatom, 350 Pseudo-nitzschia, and 150 Skeletonema.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Do you want to hear that again?
+      answers:
+      - answerLabel: Yes
+        nextElement: 7
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 2
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: You need to start analysing the water sample first. Place the water
+        sample under the scope of the microscope.
+      answers:
+      - answerLabel: Okay
+        nextElement: 3
+        endAfterAnswer: 0
+      - answerLabel: Explain the task
+        nextElement: 0
+        endAfterAnswer: 0
+      - answerLabel: Try something else
+        nextElement: 2
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: I can highlight all of the plankton in the water sample. Each individual
+        will be surrounded by ring, with each genus having a different colour. Do
+        you want me to do that?
+      answers:
+      - answerLabel: Yes
+        nextElement: 10
+        endAfterAnswer: 0
+      - answerLabel: No, remove the highlights
+        nextElement: 10
+        endAfterAnswer: 0
+  - dialogue:
+    - Okay, give me a few seconds!
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: I have now highlighted the plankton. Tell me when you are ready to
+        move on with the task.
+      answers:
+      - answerLabel: I'm ready
+        nextElement: 3
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 1
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: I have now removed the highlighting of the plankton. Tell me when
+        you are ready to move on with the task.
+      answers:
+      - answerLabel: I'm ready
+        nextElement: 3
+        endAfterAnswer: 0

@@ -249,10 +249,10 @@ public class DialogueBoxController : MonoBehaviour
         // Reveals the selectable answers and sets their text values
         buttonSpawner.spawnAnswerButtons(branchPoint.answers);
         _animator.SetBool(_isPointingHash, false);
-        /*if (_pointingController != null )
+        if (_pointingController != null )
         {
             _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
-        }*/
+        }
     }
 
     public void SkipLine()
@@ -286,10 +286,10 @@ public class DialogueBoxController : MonoBehaviour
         // stop talk-animation
         _animator.SetBool(_isTalkingHash, false);
         _animator.SetBool(_isPointingHash, false);
-       /* if (_pointingController != null)
+        if (_pointingController != null)
         {
             _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
-        }*/
+        }
         dialogueIsActive = false;
         ResetBox();
         if (dialogueTreeRestart.speakButtonOnExit) {

@@ -24,7 +24,7 @@ public class RegisterFish : MonoBehaviour
         {
             if (dialogueBoxController.dialogueTreeRestart != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
             {
-                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[1])
+                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[1])
                 {
                     dialogueBoxController.SkipLine();
                 }

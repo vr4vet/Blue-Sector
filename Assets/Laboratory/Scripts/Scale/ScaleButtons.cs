@@ -23,6 +23,10 @@ public class ScaleButtons : MonoBehaviour
 
     private void OnTriggerEnter(Collider collisionObject)
     {
+        if (collisionObject.name == "CollisionTriggerHandler")
+        {
+            return;
+        }
         switch (buttonType)
         {
             case ButtonType.On:
@@ -32,7 +36,7 @@ public class ScaleButtons : MonoBehaviour
                 scale.scaleOn = true;
                 if (dialogueBoxController.dialogueTreeRestart != null)
                 {
-                    if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0])
+                    if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
                     {
                         dialogueBoxController.SkipLine();
                     }
@@ -51,7 +55,7 @@ public class ScaleButtons : MonoBehaviour
                 scale.displayText.SetText("000.0");
                 scale.audio.Play();
 
-                if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[2]) {
+                if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2]) {
                     dialogueBoxController.SkipLine();
                     
                 }
