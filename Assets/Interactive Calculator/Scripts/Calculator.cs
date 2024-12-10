@@ -193,7 +193,7 @@ namespace InteractiveCalculator
 
                 if (dialogueBoxController.dialogueTreeRestart != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
                 {
-                    if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[0])
+                    if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[0])
                     {
                         dialogueBoxController.SkipLine();
                     }
