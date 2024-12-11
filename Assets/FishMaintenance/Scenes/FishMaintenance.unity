@@ -7483,11 +7483,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
-      propertyPath: hideVideoPlayerAfterFirstWatch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
-        type: 3}
       propertyPath: onPlay.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -7650,11 +7645,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 5203972293542085776, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
-        type: 3}
-      propertyPath: m_Text
-      value: "Ber\xF8r for \xE5 spille av video"
       objectReference: {fileID: 0}
     - target: {fileID: 5203972293542085776, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -11913,6 +11903,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8751655888749084019, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
         type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8751655888749084019, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -15711,11 +15706,6 @@ PrefabInstance:
       propertyPath: triggerSpecialEventOnVideoEnd
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
-        type: 3}
-      propertyPath: hideVideoPlayerAfterFirstWatch
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 907931764449879985, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: m_Name
@@ -15811,11 +15801,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
-    - target: {fileID: 5203972293542085776, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
-        type: 3}
-      propertyPath: m_Text
-      value: "Ber\xF8r for \xE5 spille av video"
-      objectReference: {fileID: 0}
     - target: {fileID: 5203972293542085777, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -15884,6 +15869,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 8300000, guid: 9613dcbb58e447747a03e9b0e4ce7562,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 812681642}
+        m_TargetAssemblyTypeName: VideoObject, Assembly-CSharp
+        m_MethodName: HideVideoPlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -15975,7 +15972,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onGrab:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 812681642}
+        m_TargetAssemblyTypeName: VideoObject, Assembly-CSharp
+        m_MethodName: HideVideoPlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -16039,6 +16048,18 @@ MonoBehaviour:
   onSnapZoneExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &318205551 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 318205533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318205535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617e52c29d780a6439dbb86976e93ff0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &319390870
 GameObject:
   m_ObjectHideFlags: 0
@@ -18141,7 +18162,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 374839967}
-  m_LocalRotation: {x: -0, y: -0.86602545, z: -0, w: 0.49999994}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -5.873, y: 0.060000002, z: 8.292}
   m_LocalScale: {x: 1.5, y: 1, z: 1.5}
   m_ConstrainProportionsScale: 0
@@ -18154,7 +18175,7 @@ Transform:
   - {fileID: 671109477}
   m_Father: {fileID: 2137830489}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: -120, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &374839969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18275,8 +18296,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.6747742, y: 4.336277, z: 1.8593111}
-  m_Center: {x: 0.43939307, y: 0.62078094, z: 0.38984254}
+  m_Size: {x: 0.8619584, y: 0.83583015, z: 0.8971461}
+  m_Center: {x: -0.014441569, y: 0.086916715, z: 0.05678308}
 --- !u!114 &374839974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39650,11 +39671,6 @@ PrefabInstance:
       propertyPath: triggerSpecialEventOnVideoEnd
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
-        type: 3}
-      propertyPath: hideVideoPlayerAfterFirstWatch
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 907931764449879985, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: m_Name
@@ -39749,11 +39765,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 5203972293542085776, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
-        type: 3}
-      propertyPath: m_Text
-      value: "Ber\xF8r for \xE5 spille av video"
       objectReference: {fileID: 0}
     - target: {fileID: 5203972293542085777, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -39915,6 +39926,18 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &812681642 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 812681628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812681630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617e52c29d780a6439dbb86976e93ff0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &812827001
 GameObject:
   m_ObjectHideFlags: 0
@@ -71080,6 +71103,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 318205551}
+        m_TargetAssemblyTypeName: VideoObject, Assembly-CSharp
+        m_MethodName: HideVideoPlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!65 &1436856686
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -71091,8 +71126,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.2288222, y: 4.336277, z: 1.2198322}
-  m_Center: {x: 0.16857171, y: 0.62078094, z: 0.29379222}
+  m_Size: {x: 1.2288221, y: 0.5500869, z: 1.2198322}
+  m_Center: {x: 0.16857171, y: 0.119579285, z: 0.2938012}
 --- !u!114 &1436856687
 MonoBehaviour:
   m_ObjectHideFlags: 0

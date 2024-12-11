@@ -14,17 +14,12 @@ public class BreakTask : MonoBehaviour
 
     [SerializeField] private GameObject deadFishBreakAnchor;
 
-    
-
-    private int _activatedCount = 0;
-    private Task.Step breakStep;
     private DialogueBoxController dialogueController;
     private ConversationController conversationController;
 
     private bool breakDialoguePlayed = false;
     private bool breakTaskDone = false;
     private bool deadIntroDialoguePlayed = false;
-    private bool deadIntroDone = false;
 
 
 
@@ -41,50 +36,6 @@ public class BreakTask : MonoBehaviour
         dialogueController = _npc.GetComponent<DialogueBoxController>();
         conversationController = _npc.GetComponentInChildren<ConversationController>();
     }
-
-    // Update is called once per frame
-    /*    void Update()
-        {
-            Task.Task task = mm.MaintenanceTask;
-            Task.Step breakStep = mm.GetStep("Pause", "Talk to Laila");
-            ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
-            //Debug.Log(conversationController.isDialogueActive());
-            //Debug.Log(dialogueController.dialogueEnded);
-            if (task.GetSubtask("Hand-feeding").Compleated() && task.GetSubtask("Daily Round").Compleated() && !conversationController.isDialogueActive())
-            {
-                if (conversationController == null)
-                {
-                    Debug.LogError("The NPC is missing the conversationController");
-                }
-                if (dialogueController.dialogueEnded && !breakStep.IsCompeleted() && dialogueController.timesEnded == 1)
-                {
-                    mm.CompleteStep(breakStep);
-                    deadfishTask.SetActive(true);
-                    breakAnchor.SetActive(false);
-                    conversationController.SetDialogueTreeList(new List<DialogueTree>
-                    {
-                        null
-                    });
-                    this.enabled = false;
-                    return;
-                }
-                else
-                {
-                    conversationController.SetDialogueTreeList(dialogueTree);
-                }
-            }
-            if (_activatedCount == 3)
-            {
-                mm.BadgeChanged.Invoke(skillBadge);
-            }
-            else
-            {
-                int updatedCount = conversationController.GetActivatedCount();
-                if (_activatedCount < 4) _activatedCount = updatedCount;
-
-            }
-
-        }*/
 
     private void Update()
     {
@@ -103,50 +54,31 @@ public class BreakTask : MonoBehaviour
                     conversationController.DialogueTrigger();
                     deadIntroDialoguePlayed = true;
                     deadFishPumpVideo.SetActive(true);
-
-                    //mm.PlayAudio(mm.success);
-                    //mm.InvokeBadge(mm.taskHolder.GetSkill("Observant"));
                 }
-
-
-
-                //breakAnchor.SetActive(false);
-                //gameObject.SetActive(false);
                 breakTaskDone = true;
             }
 
-            if (deadIntroDialoguePlayed && !deadIntroDone && breakTaskDone) // when the dead fish dialogue has finished
+            if (deadIntroDialoguePlayed && breakTaskDone) // when the dead fish dialogue has finished
             {
-                Debug.Log(conversationController.GetDialogueTree().name);
-                if (!deadFishPumpVideo.activeSelf && conversationController.GetDialogueTree().name == "DeadfishSetup") // activeSelf set to false when video is finished
+                if (conversationController.GetDialogueTree().name != "DeadfishSetup")
+                    return;
+
+                //Debug.Log(conversationController.GetDialogueTree().name);
+                if (mm.GetStep("Handling of dead fish", "Watch video").RepetionsCompleated >= 1 && conversationController.GetDialogueTree().name == "DeadfishSetup") // activeSelf set to false when video is finished
                 {
                     // moving on to dead fish counting dialogue
                     conversationController.NextDialogueTree();
                     conversationController.DialogueTrigger();
+                    deadFishPumpVideo.GetComponent<VideoObject>().HideVideoPlayer();
                     deadFishCountVideo.SetActive(true);
                     deadFishBreakAnchor.SetActive(true);
 
                     mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish").GetStep("Get info from Laila").SetCompleated(true);
                     mm.PlayAudio(mm.success);
                     mm.InvokeBadge(skillBadge);
-
-                    deadIntroDone = true;
                 }
             }
         }
-
-/*        if (mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish").GetStep("Push the dead fish into the tub").IsCompeleted())
-            Debug.Log("Completed");
-
-        if (mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish").Compleated())
-        {
-            Debug.Log("Completed");
-            if (conversationController.GetDialogueTree().name == "DeadfishExplanation")
-            {
-                conversationController.NextDialogueTree();
-                conversationController.DialogueTrigger();
-            }
-        }*/
     }
 
     private void OnTriggerEnter(Collider other)
