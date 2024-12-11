@@ -16,11 +16,14 @@ MonoBehaviour:
   speakButtonOnExit: 1
   sections:
   - dialogue:
-    - Hello. My name is Bent and welcome to the Bleeding Station!
-    - Your task here is to euthanize fish in a humane way.
+    - Hello. My name is Bernard and welcome to the Bleeding Station!
+    - Your task here is to manually process the fish which have not gone through
+      the automatic bleeding machine.
     - "This is done by cutting the gills of stunned fish.\r"
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Are you ready to learn more?
       answers:
@@ -38,6 +41,8 @@ MonoBehaviour:
       working.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Have you completed this course?
       answers:
@@ -51,6 +56,8 @@ MonoBehaviour:
     - Great! You should know that fish should not be alive for more than 15 seconds.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Let's continue.
       answers:
@@ -64,9 +71,14 @@ MonoBehaviour:
       according to Tesco\u2019s requirements for fish welfare.\r"
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
-      question: 
-      answers: []
+      question: It is important to not cause unnecessary distress for the fish!
+      answers:
+      - answerLabel: Understood, sir!
+        nextElement: 4
+        endAfterAnswer: 0
   - dialogue:
     - "You will find a knife in your right pocket. When the knife is not in use it
       should be placed in your pocket.\r"
@@ -80,6 +92,8 @@ MonoBehaviour:
       beside it.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Did you understand everything?
       answers:
@@ -101,6 +115,8 @@ MonoBehaviour:
       belt. Such inedible fish should be thrown in the basket next to the stun machine.\r"
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Is that clear?
       answers:
@@ -115,6 +131,8 @@ MonoBehaviour:
     - All fish must be cut before they move to the next station!
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Is there anything else you wish to know?
       answers:
