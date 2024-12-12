@@ -25,7 +25,6 @@ public class WalkingNpc : MonoBehaviour
     private bool rotating;
     private GameObject _npcFeedback;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -131,9 +130,10 @@ public class WalkingNpc : MonoBehaviour
                     NavMeshPath path = new NavMeshPath();
                     _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
                     _agent.SetPath(path);
-                    if (_agent.remainingDistance > 0.1f)
+                    if (_agent.remainingDistance < 1.8f)
                     {
                         currentPosition++;
+                        currentPosition = 2;
                         if (currentPosition == paths[currentPath].Count)
                         {
                             rotating = true;
@@ -157,9 +157,11 @@ public class WalkingNpc : MonoBehaviour
                     NavMeshPath path = new NavMeshPath();
                     _agent.CalculatePath(paths2[currentPath][currentPosition].position, path);
                     _agent.SetPath(path);
-                    if (_agent.remainingDistance > 0.1f)
+                    if (_agent.remainingDistance < 0.9f)
                     {
                         currentPosition++;
+                        currentPosition = 2;
+                        
                         if (currentPosition == paths2[currentPath].Count)
                         {
                             rotating = true;
