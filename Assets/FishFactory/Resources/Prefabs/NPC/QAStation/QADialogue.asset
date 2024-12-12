@@ -22,6 +22,8 @@ MonoBehaviour:
       out. Please step on the platform next to me to use the sorting machine.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Are you ready to learn how to use the sorting machine?
       answers:
@@ -40,6 +42,8 @@ MonoBehaviour:
       used to sort the fish.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Are you ready to learn how to use the buttons?
       answers:
@@ -58,6 +62,8 @@ MonoBehaviour:
       you only need to worry about the tree buttons closest to you.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Are you ready to learn more?
       answers:
@@ -80,6 +86,8 @@ MonoBehaviour:
       button to change the active tier.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Have you understood how the machine works?
       answers:
@@ -87,7 +95,7 @@ MonoBehaviour:
         nextElement: 2
         endAfterAnswer: 0
       - answerLabel: Could you explain how the machine works again?
-        nextElement: 1
+        nextElement: 5
         endAfterAnswer: 0
       - answerLabel: Yes!
         nextElement: 4
@@ -101,9 +109,47 @@ MonoBehaviour:
       He is waiting over by the gutting machine.
     endAfterDialogue: 1
     disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Good luck!
       answers:
       - answerLabel: Could you repeat that?
         nextElement: 0
+        endAfterAnswer: 0
+  - dialogue:
+    - The sorting machine is made up of a button panel with 6 buttons on the front
+      and a button on the side. Apart from the button panel there are four slots
+      where the fish can be placed.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Which slot you place the fish in does not matter. You can use whatever
+        slot is available regardless of the quality of the fish. It's the buttons
+        that are used to sort the fish.
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 5
+        endAfterAnswer: 0
+      - answerLabel: Got it!
+        nextElement: 6
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Have you understood how the machine works?
+      answers:
+      - answerLabel: No, could you explain the buttons again?
+        nextElement: 2
+        endAfterAnswer: 0
+      - answerLabel: Could you explain how the machine works again?
+        nextElement: 5
+        endAfterAnswer: 0
+      - answerLabel: Yes!
+        nextElement: 4
         endAfterAnswer: 0
