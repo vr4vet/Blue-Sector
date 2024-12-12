@@ -99,8 +99,7 @@ public class VideoObject : MonoBehaviour
 
         if (hideVideoPlayerAfterFirstWatch && VideoIsPlayedOnce)
         {
-            hintText.text = null;
-            gameObject.SetActive(false);
+            HideVideoPlayer();
         }
 
     }
@@ -145,6 +144,19 @@ public class VideoObject : MonoBehaviour
         transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
     }
+
+    public void HideVideoPlayer()
+    {
+        hintText.text = null;
+        gameObject.SetActive(false);
+    }
+
+    public void ShowVideoPlayer()
+    {
+        hintText.text = hintText.text = "Grab To Play"; ;
+        gameObject.SetActive(true);
+    }
+
 
 
 }
