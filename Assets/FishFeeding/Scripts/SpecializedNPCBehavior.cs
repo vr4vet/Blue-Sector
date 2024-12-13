@@ -149,7 +149,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(lookPos);
             _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
 
-            float rotationOffset = Vector3.Angle((lookPos - _npc.transform.position), _npc.transform.forward);
+            float rotationOffset = Vector3.Angle((new Vector3(destination.x, _npc.transform.position.y, destination.z) - _npc.transform.position), _npc.transform.forward);
 
             if (rotationOffset < 0.01f) 
                 rotating = false;

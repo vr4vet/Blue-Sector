@@ -25,7 +25,6 @@ public class WalkingNpc : MonoBehaviour
     private bool rotating;
     private GameObject _npcFeedback;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -131,9 +130,10 @@ public class WalkingNpc : MonoBehaviour
                     NavMeshPath path = new NavMeshPath();
                     _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
                     _agent.SetPath(path);
-                    if (_agent.remainingDistance > 0.1f)
+                    if (_agent.remainingDistance < 1.8f)
                     {
                         currentPosition++;
+                        currentPosition = 2;
                         if (currentPosition == paths[currentPath].Count)
                         {
                             rotating = true;
@@ -157,9 +157,11 @@ public class WalkingNpc : MonoBehaviour
                     NavMeshPath path = new NavMeshPath();
                     _agent.CalculatePath(paths2[currentPath][currentPosition].position, path);
                     _agent.SetPath(path);
-                    if (_agent.remainingDistance > 0.1f)
+                    if (_agent.remainingDistance < 0.9f)
                     {
                         currentPosition++;
+                        currentPosition = 2;
+                        
                         if (currentPosition == paths2[currentPath].Count)
                         {
                             rotating = true;
@@ -197,7 +199,7 @@ public class WalkingNpc : MonoBehaviour
                 Quaternion rotation = Quaternion.LookRotation(lookPos);
                 _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
 
-                float rotationOffset = Vector3.Angle((lookPos - _npc.transform.position), _npc.transform.forward);
+                float rotationOffset = Vector3.Angle((new Vector3(destination.x, _npc.transform.position.y, destination.z) - _npc.transform.position), _npc.transform.forward);
 
                 if (rotationOffset < 0.01f) 
                     rotating = false;  
@@ -211,7 +213,7 @@ public class WalkingNpc : MonoBehaviour
                 Quaternion rotation = Quaternion.LookRotation(lookPos);
                 _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
 
-                float rotationOffset = Vector3.Angle((lookPos - _npc.transform.position), _npc.transform.forward);
+                float rotationOffset = Vector3.Angle((new Vector3(destination.x, _npc.transform.position.y, destination.z) - _npc.transform.position), _npc.transform.forward);
 
                 if (rotationOffset < 0.01f) 
                     rotating = false;    
