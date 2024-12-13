@@ -16,8 +16,11 @@ MonoBehaviour:
   speakButtonOnExit: 1
   sections:
   - dialogue:
-    - Now you are going to analyze a water sample in the microscope. Your goal is
+    - Now you are going to analyse a water sample in the microscope. Your goal is
       to look after different organisms in the sample, and count how many there are.
+    - The sample is simplified for learning purposes. The slide only has 50 squares,
+      and there's less than 50 plankton of each type. A typical slide can have 1000
+      squares and a much higher plankton count.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     point: 0
@@ -35,10 +38,9 @@ MonoBehaviour:
   - dialogue:
     - First place the water sample under the scope, this is the blue rectangle to
       the right of the microscope.
-    - Now you can see the sample on the screen, press one of the big arrows to move
+    - Now you can see the sample on the screen. Press one of the big arrows to move
       around.
-    - Try to change the speed of how you fast you move around by pressing plus or
-      minus.
+    - Try to change the speed of how fast you move around by pressing plus or minus.
     - Zoom in or out by scrolling the nosepieces over the sample
     - On the left side of the microscope there is a counter. Grab it with your left
       hand and press the button on your index finger to count.
@@ -54,8 +56,11 @@ MonoBehaviour:
       - answerLabel: Explain again
         nextElement: 1
         endAfterAnswer: 0
-      - answerLabel: Continue
+      - answerLabel: Choose another task
         nextElement: 2
+        endAfterAnswer: 0
+      - answerLabel: Continue
+        nextElement: 3
         endAfterAnswer: 0
   - dialogue:
     - Intro
@@ -124,7 +129,8 @@ MonoBehaviour:
         nextElement: 7
         endAfterAnswer: 0
   - dialogue:
-    - There are 100 Chaetoceros diatom, 350 Pseudo-nitzschia, and 150 Skeletonema.
+    - I counted 13 Chaetoceros diatom, 48 Pseudo-nitzschia diatom, and 38 Skeletonema
+      diatom.
     endAfterDialogue: 0
     disabkeSkipLineButton: 0
     point: 0

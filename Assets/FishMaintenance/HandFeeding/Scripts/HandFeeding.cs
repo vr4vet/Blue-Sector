@@ -63,7 +63,7 @@ public class HandFeeding : MonoBehaviour
         {
 
             bucket.SetActive(false);
-            videoObject.SetActive(false);
+            videoObject.GetComponent<VideoObject>().HideVideoPlayer();
         }
     }
 
