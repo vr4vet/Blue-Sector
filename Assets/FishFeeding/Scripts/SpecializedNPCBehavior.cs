@@ -20,7 +20,6 @@ public class SpecializedNPCBehavior : MonoBehaviour
     private bool walking;
     private BoxCollider boxCollider;
     public GrabbableUnityEvents grabbableUnityEvents;
-    private bool rotating;
 
 
     // Start is called before the first frame update
@@ -97,65 +96,42 @@ public class SpecializedNPCBehavior : MonoBehaviour
         currentPath = -1;
 
         walking = false;
-        rotating = false;
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {  
         if (_animator != null) 
         {
             _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
-            //Debug.Log(_agent.remainingDistance);
+            
             if (walking)
             {
-                if (currentPath == -1) { return; }
-                NavMeshPath path = new NavMeshPath();
-                _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
-                _agent.SetPath(path);
-                if (_agent.remainingDistance < 0.2f)
+                if (currentPosition < paths[currentPath].Count)
                 {
-                    currentPosition++;
-                    if (currentPosition == paths[currentPath].Count)
+                    NavMeshPath path = new NavMeshPath();
+                    _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
+                    _agent.SetPath(path);
+                    if (_agent.remainingDistance < 0.2f)
                     {
-                        rotating = true;
-                        walking = false;
-                        currentPosition = 0;
-                        _conversationController.NextDialogueTree();
-
-                        // Adjusts the size of the box collider when the NPC is in the control room
-                        if (currentPath == 0)
-                        {
-                            boxCollider.center = new Vector3(-0.11f, 0f, 1.6f);
-                            boxCollider.size = new Vector3(3.2f, 2f, 3.7f);
-                        }
-                    }
-                } 
+                        currentPosition++;
+                    }   
+                }
+                
+                else if (currentPosition >= paths[currentPath].Count)
+                {
+                    walking = false;
+                    _conversationController.NextDialogueTree();
+                    
+                }
             }
         }
-        else {
+        else 
+        {
             _animator = _npc.GetComponentInChildren<Animator>();
         }
     }
-
-    void FixedUpdate()
-    {
-        if (rotating)
-        {
-            // Rotates NPC to last destination point
-            Vector3 destination = paths[currentPath][paths[currentPath].Count - 1].position;
-            Vector3 lookPos = destination - _npc.transform.position;
-            lookPos.y = 0;
-            Quaternion rotation = Quaternion.LookRotation(lookPos);
-            _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
-
-            float rotationOffset = Vector3.Angle((new Vector3(destination.x, _npc.transform.position.y, destination.z) - _npc.transform.position), _npc.transform.forward);
-
-            if (rotationOffset < 0.01f) 
-                rotating = false;
-        }
-    }
-
+    
     public void DialogueTransition(string name) 
     {
         if (name != _npc.name) { return; }
@@ -183,6 +159,11 @@ public class SpecializedNPCBehavior : MonoBehaviour
     void OnDestroy()
     {
         DialogueBoxController.OnDialogueEnded -= DialogueTransition;
+    }
+
+    private void CreatePaths()
+    {
+        
     }
 
 }
