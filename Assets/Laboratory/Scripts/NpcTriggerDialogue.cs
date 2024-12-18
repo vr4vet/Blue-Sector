@@ -17,6 +17,8 @@ public class NpcTriggerDialogue : MonoBehaviour
    public DialogueTree feedbackDialogueTree;
    [SerializeField]
    public DialogueTree larsDialogueTree;
+   [SerializeField] 
+   public DialogueTree introDialogueTree;
    [SerializeField]
    public DialogueTree errorFeedbackDialogueTree;
    [SerializeField]  
@@ -30,7 +32,6 @@ public class NpcTriggerDialogue : MonoBehaviour
    public GameObject calculator;
    public GameObject numPad;
    public GameObject handheldCounter;
-   public GameObject slider;
    public GameObject microscopeSnapPoint;
    
    private Vector3 _basketPosition;
@@ -43,10 +44,12 @@ public class NpcTriggerDialogue : MonoBehaviour
 
    private DialogueBoxController dialogueBoxController;
    private int _dialogueIndex;
+   public string currentDialogue;
 
    private void Start()
    {
        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+       //_walkingNpc = FindObjectOfType<WalkingNpc>();
        // Save the initial positions of the objects
        _basketPosition = basket.transform.position;
        _basketRotation = basket.transform.rotation;
@@ -54,10 +57,6 @@ public class NpcTriggerDialogue : MonoBehaviour
        _handheldCounterRotation = handheldCounter.transform.rotation;
        _fishPosition = fish.transform.position;
        _fishRotation = fish.transform.rotation;
-         
-       
-       
-       
    }  
    
    private void Update()
@@ -65,10 +64,19 @@ public class NpcTriggerDialogue : MonoBehaviour
        // Checks if the dialogue is supposed to return to the Lars Dialouge tree and call the ChangeToLars method
        if (dialogueBoxController.dialogueTreeRestart != null)
        {
-           if ((dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0]) || (dialogueBoxController.dialogueTreeRestart.name == "ErrorFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0]))
+           if ((dialogueBoxController.dialogueTreeRestart.name == "NpcFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0]) 
+               || (dialogueBoxController.dialogueTreeRestart.name == "ErrorFeedback" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0]))
            {
-               ChangeToLars(dialogueBoxController.dialogueTreeRestart.name);
+               ResetDialogue(dialogueBoxController.dialogueTreeRestart.name);
            
+           }
+           else if (dialogueBoxController.dialogueTreeRestart.name == "Introduction" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0] || dialogueBoxController.dialogueTreeRestart.name == "Introduction" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
+           {
+               currentDialogue = dialogueBoxController._dialogueText.text;
+           }
+           else if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[0])
+           {
+               ResetDialogue(dialogueBoxController.dialogueTreeRestart.name);
            }
        }
 
@@ -167,13 +175,13 @@ public class NpcTriggerDialogue : MonoBehaviour
    public void Error5() {
          dialogueBoxController.StartDialogue(errorFeedbackDialogueTree, 4, npcName);
    }
-   
-   public void ChangeToLars(string dialogueName)
+
+   private void ResetDialogue(string dialogueName)
    {
        // Runs when the player has completed calculating the condition factor and resets everything in the scene.
        if (dialogueName == "NpcFeedback")
        {
-           dialogueBoxController.StartDialogue(larsDialogueTree, 1, npcName);
+           dialogueBoxController.StartDialogue(introDialogueTree, 2, npcName);
        
            basket.transform.position = _basketPosition;
            basket.transform.rotation = _basketRotation;
@@ -204,7 +212,11 @@ public class NpcTriggerDialogue : MonoBehaviour
        {
            dialogueBoxController.StartDialogue(larsDialogueTree, _dialogueIndex, npcName);
        }
-
+       
+       else if (dialogueName == "MicroscopeDialogue")
+       {
+           dialogueBoxController.StartDialogue(introDialogueTree, 2, npcName);
+       }
    }
    
 }

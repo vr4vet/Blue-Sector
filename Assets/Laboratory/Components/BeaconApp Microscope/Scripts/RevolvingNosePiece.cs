@@ -8,6 +8,12 @@ public class RevolvingNosePiece : MonoBehaviour
     private bool Rotating = false;
     private bool RotatingDirection = false; // false is left, true is right
 
+    private void Start()
+    {
+        // initial rotation to position the smallest lens (lowest magnification) above water sample
+        transform.RotateAround(GetComponent<BoxCollider>().bounds.center, transform.up, 90f);
+    }
+
     private float RotationDegrees = 90f;
     private void FixedUpdate()
     {
@@ -21,9 +27,9 @@ public class RevolvingNosePiece : MonoBehaviour
             else
             {
                 if (RotatingDirection)
-                    MicroscopeMonitor.Magnify();
-                else
                     MicroscopeMonitor.Minimize();
+                else
+                    MicroscopeMonitor.Magnify();
 
                 Rotating = false;
                 RotationDegrees = 90f;
