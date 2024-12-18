@@ -113,7 +113,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
                 NavMeshPath path = new NavMeshPath();
                 _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
                 _agent.SetPath(path);
-                if (_agent.remainingDistance < 0.9f)
+                if (_agent.remainingDistance < 0.2f)
                 {
                     currentPosition++;
                     if (currentPosition == paths[currentPath].Count)
