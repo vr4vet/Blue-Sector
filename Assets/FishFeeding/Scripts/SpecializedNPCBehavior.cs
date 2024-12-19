@@ -6,9 +6,7 @@ using UnityEngine.AI;
 
 public class SpecializedNPCBehavior : MonoBehaviour
 {
-    [HideInInspector] private NPCSpawner _npcSpawner;
     [HideInInspector] private GameObject _npc;
-
     [HideInInspector] private NavMeshAgent _agent;
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _velocityYHash;
@@ -19,29 +17,30 @@ public class SpecializedNPCBehavior : MonoBehaviour
     private int currentPath;
     private bool walking;
     private BoxCollider boxCollider;
-    public GrabbableUnityEvents grabbableUnityEvents;
+    
 
 
     // Start is called before the first frame update
     void Start()
     {
-        _npcSpawner = GetComponent<NPCSpawner>();
-        if (_npcSpawner == null)
+        if (GameObject.Find("DialogueTransitions") == null)
         {
-            Debug.LogError("No NPCSpawner found");
-            return;
+            Debug.LogError("No DialogueTransitions found");
         }
-
+        else
+        {
+            dialogueTransitions = GameObject.Find("DialogueTransitions");
+        }
+        
+        _npc = gameObject;
         // Adjusts the size of the NPCs
-        foreach (GameObject npc in _npcSpawner._npcInstances)
-        {
-            //npc.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-            Transform dialogueCanvas = npc.transform.GetChild(1);
-            dialogueCanvas.localPosition = new Vector3(dialogueCanvas.localPosition.x, dialogueCanvas.localPosition.y, 0.55f);
-            dialogueCanvas.localScale = new Vector3(0.008f, 0.008f, 0.008f);
-        }
+        //npc.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+        Transform dialogueCanvas = _npc.transform.GetChild(1);
+        dialogueCanvas.localPosition = new Vector3(dialogueCanvas.localPosition.x, dialogueCanvas.localPosition.y, 0.55f);
+        dialogueCanvas.localScale = new Vector3(0.008f, 0.008f, 0.008f);
+        
 
-        _npc = _npcSpawner._npcInstances[1];
+        
 
         // Disables capsule collider and adds box collider to NPC
         GameObject collisionTrigger = _npc.transform.GetChild(0).gameObject;
@@ -67,7 +66,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
         }
         if (_animator == null)
         {
-            Debug.LogError("THe NPC is missing the Animator");
+            Debug.LogError("The NPC is missing the Animator");
             return;
         }
 
@@ -88,9 +87,6 @@ public class SpecializedNPCBehavior : MonoBehaviour
         }
 
         DialogueBoxController.OnDialogueEnded += DialogueTransition;
-
-        grabbableUnityEvents.onGrab.AddListener(SetFalseNPCTrigger);
-        grabbableUnityEvents.onRelease.AddListener(SetTrueNPCTrigger);
 
         currentPosition = 0;
         currentPath = -1;
@@ -122,6 +118,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
                 {
                     walking = false;
                     _conversationController.NextDialogueTree();
+                    currentPosition = 0;
                     
                 }
             }
