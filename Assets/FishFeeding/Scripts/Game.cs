@@ -43,9 +43,6 @@ public class Game : MonoBehaviour
     public bool InActivatedArea { get; set; }
     public bool IsTutorialCompleted { get; set; }
     public bool CanStartGame => InActivatedArea && IsTutorialCompleted;
-    
-/*    private GameObject _supervisorSuzie;
-    private DialogueBoxController _suzieDialogueBox;*/
 
     // Start is called before the first frame update
     private void Start()
@@ -72,9 +69,6 @@ public class Game : MonoBehaviour
         modesClass.OnFinishedLoading += InitializeMode;
 
         ButtonSpawner.OnAnswer += SetLevel;
-
-/*        _supervisorSuzie = GameObject.Find("Supervisor Suzie");
-        _suzieDialogueBox = _supervisorSuzie.GetComponent<DialogueBoxController>();*/
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
@@ -109,18 +103,6 @@ public class Game : MonoBehaviour
             scoring.StartScoring();
             StartCoroutine(Timer());
         }
-
-/*        if (_suzieDialogueBox._dialogueText.text == "Basic")
-        {
-            modesClass.ChangeTo(0);
-            _suzieDialogueBox.SkipLine();
-        }
-        
-        if (_suzieDialogueBox._dialogueText.text == "Advanced")
-        {
-            modesClass.ChangeTo(1);
-            _suzieDialogueBox.SkipLine();   
-        }*/
     }
 
     private void SetLevel(string level)
