@@ -1,244 +1,100 @@
 using BNG;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-// This script is a modified version of the SpezializedNpcBehaviour script in fish feeding, this version is used in the laboratory scene and should be able to handle multiple points for the NPC to walk to.
+/// <summary>
+/// A general purpose script to make an NPC walk along a path.
+/// </summary>
 public class WalkingNpc : MonoBehaviour
 {
-    [HideInInspector] private NPCSpawner _npcSpawner;
-    [HideInInspector] private GameObject _npc;
-
     [HideInInspector] private NavMeshAgent _agent;
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _velocityYHash;
     private ConversationController _conversationController;
-    [SerializeField] private GameObject dialogueTransitions;
-    [SerializeField] private GameObject dialogueTransitions2;
-    [SerializeField] private List<List<Transform>> paths;
-    [SerializeField] private List<List<Transform>> paths2;
-    private int currentPosition;
-    private int currentPath;
-    private bool walking;
     private BoxCollider boxCollider;
-    private bool rotating;
-    private GameObject _npcFeedback;
+    private bool rotating = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        _npcSpawner = GetComponent<NPCSpawner>();
-        _npcFeedback = GameObject.Find("NPCFeedback");
-        if (_npcSpawner == null)
-        {
-            Debug.LogError("No NPCSpawner found");
-            return;
-        }
-
-        // Adjusts the size of the NPCs
-        foreach (GameObject npc in _npcSpawner._npcInstances)
-        {
-            //npc.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-            Transform dialogueCanvas = npc.transform.GetChild(1);
-            dialogueCanvas.localPosition = new Vector3(dialogueCanvas.localPosition.x, dialogueCanvas.localPosition.y, 0.55f);
-            dialogueCanvas.localScale = new Vector3(0.008f, 0.008f, 0.008f);
-        }
-
-        _npc = _npcSpawner._npcInstances[0];
-
-        // Disables capsule collider and adds box collider to NPC
-        GameObject collisionTrigger = _npc.transform.GetChild(0).gameObject;
-        collisionTrigger.GetComponent<CapsuleCollider>().enabled = false;
-        boxCollider = collisionTrigger.AddComponent<BoxCollider>();
-        boxCollider.isTrigger = true;
-        boxCollider.center = new Vector3(-0.415f, 0f, 1.3f);
-        boxCollider.size = new Vector3(3.467f, 2f, 2.67f);
-
-        if (NPCToPlayerReferenceManager.Instance == null)
-        {
-            Debug.LogError("NPCManager instance was not found. Please ensure it exists in the scene.");
-            return;
-        }
-
-        _agent = _npc.GetComponent<NavMeshAgent>();
-        _animator = _npc.GetComponentInChildren<Animator>();
+        // Setting up navigation agent
+        _agent = GetComponent<NavMeshAgent>();
         _velocityYHash = Animator.StringToHash("VelocityY");
         if (_agent == null)
         {
             Debug.LogError("THe NPC is missing the NavMeshAgent");
             return;
         }
-        if (_animator == null)
-        {
-            Debug.LogError("THe NPC is missing the Animator");
-            return;
-        } 
 
-        if (_npc != null)
-        {
-            _conversationController = _npc.GetComponentInChildren<ConversationController>();
-        }
-        
-        // Add the first path
-        paths = new List<List<Transform>>();
-        foreach (Transform child in dialogueTransitions.transform)
-        {
-            List<Transform> path = new List<Transform>();
-            foreach (Transform grandchild in child)
-            {
-                path.Add(grandchild);
-            }
-            paths.Add(path);
-        }
-        
-        // Add the second path
-        paths2 = new List<List<Transform>>();
-        foreach (Transform child in dialogueTransitions2.transform)
-        {
-            List<Transform> path = new List<Transform>();
-            foreach (Transform grandchild in child)
-            {
-                path.Add(grandchild);
-            }
-            paths2.Add(path);
-        }
-        
-
-        DialogueBoxController.OnDialogueEnded += DialogueTransition;
-
-        currentPosition = 0;
-        currentPath = -1;
-
-        walking = false;
-        rotating = false;
+        _conversationController = GetComponentInChildren<ConversationController>();
     }
 
+    private Transform _rotationDestination;
     // Update is called once per frame
     void Update()
     {
-        if (_animator != null) 
+        if (_animator == null)
         {
-            _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
-            //Debug.Log(_agent.remainingDistance);
-            if (walking)
-            {
-                // The path is chosen based on the current dialogue
-                if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the measuring equipment")
-                {
-                    if (currentPath == -1) { return; }
-                    NavMeshPath path = new NavMeshPath();
-                    _agent.CalculatePath(paths[currentPath][currentPosition].position, path);
-                    _agent.SetPath(path);
-                    if (_agent.remainingDistance < 1.8f)
-                    {
-                        currentPosition++;
-                        currentPosition = 2;
-                        if (currentPosition == paths[currentPath].Count)
-                        {
-                            rotating = true;
-                            walking = false;
-                            currentPosition = 0;
-                            
-                            _conversationController.StartDialogueTree("LarsDialogue");
-                            
-                            // Adjusts the size of the box collider when the NPC is in the control room
-                            if (currentPath == 0)
-                            {
-                                boxCollider.center = new Vector3(-0.11f, 0f, 1.6f);
-                                boxCollider.size = new Vector3(3.2f, 2f, 3.7f);
-                            }
-                        }
-                    } 
-                }
-                else if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the microscope")
-                {
-                    if (currentPath == -1) { return; }
-                    NavMeshPath path = new NavMeshPath();
-                    _agent.CalculatePath(paths2[currentPath][currentPosition].position, path);
-                    _agent.SetPath(path);
-                    if (_agent.remainingDistance < 0.9f)
-                    {
-                        currentPosition++;
-                        currentPosition = 2;
-                        
-                        if (currentPosition == paths2[currentPath].Count)
-                        {
-                            rotating = true;
-                            walking = false;
-                            currentPosition = 0;
-                            
-                            _conversationController.StartDialogueTree("MicroscopeDialogue");
-
-                            // Adjusts the size of the box collider when the NPC is in the control room
-                            if (currentPath == 0)
-                            {
-                                boxCollider.center = new Vector3(-0.11f, 0f, 1.6f);
-                                boxCollider.size = new Vector3(3.2f, 2f, 3.7f);
-                            }
-                        }
-                    }   
-                }
-            }
+            _animator = GetComponentInChildren<Animator>();
+            return;
         }
-        else {
-            _animator = _npc.GetComponentInChildren<Animator>();
-        }
-    }
 
-    void FixedUpdate()
-    {
+        // ensure animation speed matches walking speed
+        _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
+
+        // preventing model from getting off-centered
+        _animator.transform.localPosition = Vector3.zero;
+
+        // rotation in Update() to ensure smooth rotation
         if (rotating)
         {
-            if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the measuring equipment")
-            {
-                // Rotates NPC to last destination point
-                Vector3 destination = paths[currentPath][paths[currentPath].Count - 1].position;
-                Vector3 lookPos = destination - _npc.transform.position;
-                lookPos.y = 0;
-                Quaternion rotation = Quaternion.LookRotation(lookPos);
-                _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
+            Vector3 lookPos = _rotationDestination.position - transform.position;
+            lookPos.y = 0;
+            Quaternion rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 3f * Time.deltaTime);
 
-                float rotationOffset = Vector3.Angle((new Vector3(destination.x, _npc.transform.position.y, destination.z) - _npc.transform.position), _npc.transform.forward);
-
-                if (rotationOffset < 0.01f) 
-                    rotating = false;  
-            } 
-            else if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the microscope")
-            {
-                // Rotates NPC to last destination point
-                Vector3 destination = paths2[currentPath][paths2[currentPath].Count - 1].position;
-                Vector3 lookPos = destination - _npc.transform.position;
-                lookPos.y = 0;
-                Quaternion rotation = Quaternion.LookRotation(lookPos);
-                _npc.transform.rotation = Quaternion.Slerp(_npc.transform.rotation, rotation, 0.04f);
-
-                float rotationOffset = Vector3.Angle((new Vector3(destination.x, _npc.transform.position.y, destination.z) - _npc.transform.position), _npc.transform.forward);
-
-                if (rotationOffset < 0.01f) 
-                    rotating = false;    
-            }
+            float rotationOffset = Vector3.Angle(new Vector3(_rotationDestination.transform.position.x, transform.position.y, _rotationDestination.transform.position.z) 
+                                                  - transform.position, transform.forward);
+            Debug.Log(rotationOffset);
+            if (rotationOffset < 0.01f)
+                rotating = false;
         }
     }
 
-    public void DialogueTransition(string name)
+    /// <summary>
+    /// Makes NPC walk along path, one target/point at a time sequentially. 
+    /// The path can contain an arbitrary amount of targets/points >= 1.
+    /// Each target makes the NPC either walk or turn towards itself, and has the option to change the NPC's current dialogue tree on arrival.
+    /// </summary>
+    /// <param name="pathToFollow"></param>
+    /// <returns></returns>
+    private IEnumerator FollowPath(GameObject pathToFollow)
     {
-        currentPath = -1;
-        if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the measuring equipment")
+        NavMeshPath path = new();
+
+        foreach (NPCPathPoint target in pathToFollow.GetComponentsInChildren<NPCPathPoint>())
         {
-            if (name != _npc.name) { return; }
-            currentPath++;
-            if (currentPath >= paths.Count) { return; }
-            walking = true;  
-        } 
-        else if (_npcFeedback.GetComponent<NpcTriggerDialogue>().currentDialogue == "Follow me to the microscope")
-        {
-            if (name != _npc.name) { return; }
-            currentPath++;
-            if (currentPath >= paths2.Count) { return; }
-            walking = true; 
+            // determine if current destination should be walked or rotated towards
+            if (target.GetTargetType() == NPCPathPoint.TargetType.Walk)
+            {
+                _agent.CalculatePath(target.transform.position, path);
+                _agent.SetPath(path);
+            }
+            else if (target.GetTargetType() == NPCPathPoint.TargetType.Rotate)
+            {
+                _rotationDestination = target.transform;
+                rotating = true;
+            }
+
+            // wait until NPC has arrived and/or finished rotating
+            while (rotating || _agent.remainingDistance >= 0.1f)
+                yield return null;
+
+            // change to the target's conversation tree if set
+            if (!target.GetNextConversationTree().Equals(string.Empty))
+                _conversationController.StartDialogueTree(target.GetNextConversationTree());
         }
-        
     }
 
     private void SetFalseNPCTrigger(Grabber grabber)
@@ -257,8 +113,32 @@ public class WalkingNpc : MonoBehaviour
         _conversationController.GetDialogueTree().shouldTriggerOnProximity = true;
     }
 
-    void OnDestroy()
+    /// <summary>
+    /// Public method to externally make NPC walk along a path.
+    /// </summary>
+    /// <param name="pathName"></param>
+    public void WalkPath(string pathName)
     {
-        DialogueBoxController.OnDialogueEnded -= DialogueTransition;
+        GameObject path = GameObject.Find(pathName);
+        StartCoroutine(FollowPath(path));
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_agent == null)
+            return;
+
+        if (rotating)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(_rotationDestination.position, .25f);
+            Gizmos.DrawLine(_agent.transform.position, _rotationDestination.position);
+        }
+        else
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(_agent.destination, .25f);
+            Gizmos.DrawLine(_agent.transform.position, _agent.destination);
+        }
     }
 }

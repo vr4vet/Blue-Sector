@@ -1,12 +1,8 @@
 using BNG;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.XR.CoreUtils;
-using UnityEditor;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -48,8 +44,8 @@ public class Game : MonoBehaviour
     public bool IsTutorialCompleted { get; set; }
     public bool CanStartGame => InActivatedArea && IsTutorialCompleted;
     
-    private GameObject _supervisorSuzie;
-    private DialogueBoxController _suzieDialogueBox;
+/*    private GameObject _supervisorSuzie;
+    private DialogueBoxController _suzieDialogueBox;*/
 
     // Start is called before the first frame update
     private void Start()
@@ -74,9 +70,11 @@ public class Game : MonoBehaviour
         tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<Tutorial>().ToList());
         modesClass.OnModeChanged += ModesClass_OnModeChanged;
         modesClass.OnFinishedLoading += InitializeMode;
-        
-        _supervisorSuzie = GameObject.Find("Supervisor Suzie");
-        _suzieDialogueBox = _supervisorSuzie.GetComponent<DialogueBoxController>();
+
+        ButtonSpawner.OnAnswer += SetLevel;
+
+/*        _supervisorSuzie = GameObject.Find("Supervisor Suzie");
+        _suzieDialogueBox = _supervisorSuzie.GetComponent<DialogueBoxController>();*/
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
@@ -112,7 +110,7 @@ public class Game : MonoBehaviour
             StartCoroutine(Timer());
         }
 
-        if (_suzieDialogueBox._dialogueText.text == "Basic")
+/*        if (_suzieDialogueBox._dialogueText.text == "Basic")
         {
             modesClass.ChangeTo(0);
             _suzieDialogueBox.SkipLine();
@@ -122,7 +120,15 @@ public class Game : MonoBehaviour
         {
             modesClass.ChangeTo(1);
             _suzieDialogueBox.SkipLine();   
-        }
+        }*/
+    }
+
+    private void SetLevel(string level)
+    {
+        if (level.Equals("Basic"))
+            modesClass.ChangeTo(0);
+        else if (level.Equals("Advanced"))
+            modesClass.ChangeTo(1);
     }
 
     /* Starts a timer and gives the score after a certain amount of time. */
@@ -242,5 +248,10 @@ public class Game : MonoBehaviour
                 IsTutorialCompleted = false;
             }
         });
+    }
+
+    private void OnDestroy()
+    {
+        ButtonSpawner.OnAnswer -= SetLevel;
     }
 }

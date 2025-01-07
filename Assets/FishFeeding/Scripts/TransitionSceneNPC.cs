@@ -1,4 +1,3 @@
-using BNG;
 using UnityEngine;
 
 public class TransitionSceneNPC : MonoBehaviour
@@ -46,16 +45,6 @@ public class TransitionSceneNPC : MonoBehaviour
         if (validDestination)
             GetComponent<SceneController>().SceneName = destinationScene;
     }
-
-/*    public void ChangeScene()
-    {
-        if (destinationScene != null)
-        {
-            GetComponent<AudioSource>().Play();
-            //GetComponent<SceneLoader>().LoadScene(destinationScene);
-            //GetComponent<SceneController>().SceneName = destinationScene;
-        }
-    }*/
 
     private void OnDestroy()
     {
