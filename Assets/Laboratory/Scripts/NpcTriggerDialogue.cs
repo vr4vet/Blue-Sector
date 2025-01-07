@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using BNG;
 using InteractiveCalculator;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
-using UnityEditor;
 
 public class NpcTriggerDialogue : MonoBehaviour
 {

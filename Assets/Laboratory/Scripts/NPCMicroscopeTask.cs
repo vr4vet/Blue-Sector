@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 public class NPCMicroscopeTask : MonoBehaviour
 {
-    private string playerAnswer;
     private DialogueBoxController dialogueBoxController;
     private MicroscopeSlideWithGrid slide;
     [SerializeField] private MicroscopeInfoSubmitUI planktonNotepad;
@@ -37,6 +36,9 @@ public class NPCMicroscopeTask : MonoBehaviour
     {
         /*if (dialogueBoxController.dialogueTreeRestart.name != "Introduction" || (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue"))
             return;*/
+
+        if (dialogueBoxController.dialogueTreeRestart == null)
+            return;
 
         // checking if NPC is currently letting the player select task. if so, reset the microscope task. 
         if ((dialogueBoxController.dialogueTreeRestart.name == "Introduction" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[0])

@@ -12,7 +12,6 @@ public class WalkingNpc : MonoBehaviour
     [HideInInspector] private Animator _animator;
     [HideInInspector] private int _velocityYHash;
     private ConversationController _conversationController;
-    private BoxCollider boxCollider;
     private bool rotating = false;
 
     // Start is called before the first frame update
@@ -56,7 +55,7 @@ public class WalkingNpc : MonoBehaviour
 
             float rotationOffset = Vector3.Angle(new Vector3(_rotationDestination.transform.position.x, transform.position.y, _rotationDestination.transform.position.z) 
                                                   - transform.position, transform.forward);
-            Debug.Log(rotationOffset);
+
             if (rotationOffset < 0.01f)
                 rotating = false;
         }
