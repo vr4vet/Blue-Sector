@@ -21,6 +21,7 @@ MonoBehaviour:
     - This will be done through multiple steps.  You can measure the fish, dissect
       it and analyze algae from a water sample.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
     point: 0
     objectToLookAt: {fileID: 0}
@@ -31,9 +32,11 @@ MonoBehaviour:
       - answerLabel: Start with the tasks
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Learn more
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - The fish laboratory is important for gathering information on the health of
       the fish. This information is used to better regulate the feeding and treatment
@@ -47,6 +50,7 @@ MonoBehaviour:
       samples with the microscope, as some plankton found in the water can be harmful
       to the fish.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
     point: 0
     objectToLookAt: {fileID: 0}
@@ -56,12 +60,15 @@ MonoBehaviour:
       - answerLabel: Yes
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Can you repeat?
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Now you will choose which task to begin with
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
     point: 0
     objectToLookAt: {fileID: 0}
@@ -71,15 +78,19 @@ MonoBehaviour:
       - answerLabel: Calculating condition factor
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Analyzing plankton samples
         nextElement: 4
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Dissecting the fish (Still in development)
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Follow me to the measuring equipment
     endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: ConditionFactorPath
     disabkeSkipLineButton: 0
     point: 0
     objectToLookAt: {fileID: 0}
@@ -89,6 +100,7 @@ MonoBehaviour:
   - dialogue:
     - Follow me to the microscope
     endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: MicroscopePath
     disabkeSkipLineButton: 0
     point: 0
     objectToLookAt: {fileID: 0}

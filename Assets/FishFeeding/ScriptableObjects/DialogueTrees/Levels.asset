@@ -20,33 +20,18 @@ MonoBehaviour:
     - 'Choose basic if you have never played before and advanced level if you know
       how to play and are ready for a challenge. '
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
     point: 0
     objectToLookAt: {fileID: 0}
     branchPoint:
-      question: Which difficulty do you want to play on?
+      question: Select a difficulty level and follow me!
       answers:
       - answerLabel: Basic
         nextElement: 1
-        endAfterAnswer: 0
+        endAfterAnswer: 1
+        walkOrTurnTowardsAfterAnswer: ControlRoomPath
       - answerLabel: Advanced
         nextElement: 2
-        endAfterAnswer: 0
-  - dialogue:
-    - Basic
-    endAfterDialogue: 1
-    disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
-    branchPoint:
-      question: 
-      answers: []
-  - dialogue:
-    - Advanced
-    endAfterDialogue: 1
-    disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
-    branchPoint:
-      question: 
-      answers: []
+        endAfterAnswer: 1
+        walkOrTurnTowardsAfterAnswer: ControlRoomPath

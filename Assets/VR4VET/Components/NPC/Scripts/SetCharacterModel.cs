@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using BNG;
-using Meta.WitAi;
 using Meta.WitAi.TTS.Integrations;
 using Meta.WitAi.TTS.Utilities;
-using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 

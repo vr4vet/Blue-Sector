@@ -1,16 +1,9 @@
 using System;
 using System.Collections;
-using System.Net.Mime;
-using BNG;
 using TMPro;
 using UnityEngine;
 // Import of the TTS namespace
 using Meta.WitAi.TTS.Utilities;
-using Unity.VisualScripting;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
-using Button = UnityEngine.UIElements.Button;
-using Image = UnityEngine.UIElements.Image;
 
 public class DialogueBoxController : MonoBehaviour
 {
@@ -125,16 +118,16 @@ public class DialogueBoxController : MonoBehaviour
         // Make the "Speak" restart tree the current tree
         dialogueTreeRestart = dialogueTree;
         // Reset the dialogue box dimensions from "Speak" button dimensions
-        backgroundRect.sizeDelta = new Vector2(160,100);
-        dialogueTextRect.sizeDelta = new Vector2(150,60);
+        backgroundRect.sizeDelta = new Vector2(160, 100);
+        dialogueTextRect.sizeDelta = new Vector2(150, 60);
 
-        for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
-        {   
+        for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++)
+        {
             if (_pointingController != null && dialogueTree.sections[section].point)
             {
                 _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
             }
-            
+
             _animator.SetBool(_isPointingHash, false);
             // Start talking animation
             _animator.SetBool(_isTalkingHash, true);
@@ -143,8 +136,8 @@ public class DialogueBoxController : MonoBehaviour
             _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
             TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
             _skipLineButton.SetActive(true);
-            
-            
+
+
             // Check if the current section should have disabled the skip line button
             if (dialogueTree.sections[section].disabkeSkipLineButton)
             {
@@ -163,18 +156,23 @@ public class DialogueBoxController : MonoBehaviour
                 {
                     Debug.Log("PointingController not found in the scene");
                 }
-               
+
             }
-            
+
             while (!_skipLineTriggered)
             {
-                
+
                 _exitButton.SetActive(true);
                 yield return null;
             }
             _skipLineTriggered = false;
         }
-        
+
+        if (!dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue.Equals(string.Empty))
+        {
+            GetComponent<WalkingNpc>().WalkPath(dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue);
+        }
+
         if (dialogueTree.sections[section].endAfterDialogue)
         {
             dialogueEnded = true;
@@ -195,6 +193,12 @@ public class DialogueBoxController : MonoBehaviour
         _answerTriggered = false;
         _exitButton.SetActive(false);
         _skipLineButton.SetActive(false);
+
+        if (!dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer.Equals(string.Empty))
+        {
+            GetComponent<WalkingNpc>().WalkPath(dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer);
+        }
+
         if (dialogueTree.sections[section].branchPoint.answers[_answerIndex].endAfterAnswer) {
             // Exit conversation if the answer is set to exit after answer
             dialogueEnded = true;
