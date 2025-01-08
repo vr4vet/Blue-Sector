@@ -8,9 +8,9 @@ using UnityEngine.AI;
 /// </summary>
 public class WalkingNpc : MonoBehaviour
 {
-    [HideInInspector] private NavMeshAgent _agent;
-    [HideInInspector] private Animator _animator;
-    [HideInInspector] private int _velocityYHash;
+    private NavMeshAgent _agent;
+    private Animator _animator;
+    private int _velocityYHash;
     private ConversationController _conversationController;
     private bool rotating = false;
 
