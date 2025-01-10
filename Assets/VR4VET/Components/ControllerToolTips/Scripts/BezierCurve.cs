@@ -198,5 +198,23 @@ namespace Unity.VRTemplate
             if (m_Time >= 1f)
                 m_Time = 0f;
         }
+
+        public void SetPoints(Transform startPoint, Transform endPoint)
+        {
+            m_StartPoint = startPoint;
+            m_EndPoint = endPoint;
+        }
+
+        public void SetCurveFactor(float start, float end)
+        {
+            m_CurveFactorStart = start;
+            m_CurveFactorEnd = end;
+        }
+
+        public void SetSegmentCount(int segments)
+        {
+            m_SegmentCount = segments;
+        }
     }
+
 }
