@@ -1,5 +1,7 @@
+using BNG;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class ControllerTooltipActivator : MonoBehaviour
 {
@@ -9,50 +11,53 @@ public class ControllerTooltipActivator : MonoBehaviour
     private ControllerTooltipManager _controllerTooltipManager;
 
     [Header("Left controller buttons")]
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions OculusLeft;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions ThumbstickLeft;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions X;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions Y;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions TriggerFrontLeft;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions TriggerGripLeft;
+    [SerializeField] private ButtonActions OculusLeft;
+    [SerializeField] private ButtonActions ThumbstickLeft;
+    [SerializeField] private ButtonActions X;
+    [SerializeField] private ButtonActions Y;
+    [SerializeField] private ButtonActions TriggerFrontLeft;
+    [SerializeField] private ButtonActions TriggerGripLeft;
 
-    [Header("Left controller buttons")]
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions OculusRight;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions ThumbstickRight;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions A;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions B;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions TriggerFrontRight;
-    [SerializeField] private ControllerTooltipManager.ButtonFunctions TriggerGripRight;
+    [Header("Right controller buttons")]
+    [SerializeField] private ButtonActions OculusRight;
+    [SerializeField] private ButtonActions ThumbstickRight;
+    [SerializeField] private ButtonActions A;
+    [SerializeField] private ButtonActions B;
+    [SerializeField] private ButtonActions TriggerFrontRight;
+    [SerializeField] private ButtonActions TriggerGripRight;
 
-    private List<ControllerTooltipManager.ButtonMapping> _buttonMappings;
+    private List<ButtonActionMapping> _buttonMappingsLeft, _buttonMappingsRight;
 
     // Start is called before the first frame update
     void Start()
     {
         _controllerTooltipManager = GameObject.Find("ControllerToolTipManager").GetComponent<ControllerTooltipManager>();
+
+        // create a trigger collider that is TriggerSizeFactor times larger than the object itself
         BoxCollider collider = gameObject.AddComponent(typeof(BoxCollider)) as BoxCollider;
         collider.isTrigger = true;
         collider.size = transform.parent.GetComponent<MeshFilter>().mesh.bounds.size * TriggerSizeFactor;
         collider.center = transform.parent.GetComponent<MeshFilter>().mesh.bounds.center;
 
-        // setting up list of buttons and their individual function to send to ControllerTooltipManager.cs
-        _buttonMappings = new List<ControllerTooltipManager.ButtonMapping>
+        // create a list of mappings between buttons and actions
+        _buttonMappingsLeft = new List<ButtonActionMapping>
         {
-            new(ControllerTooltipManager.ControllerButtons.OculusLeft, OculusLeft),
-            new(ControllerTooltipManager.ControllerButtons.ThumbstickLeft, ThumbstickLeft),
-            new(ControllerTooltipManager.ControllerButtons.X, X),
-            new(ControllerTooltipManager.ControllerButtons.Y, Y),
-            new(ControllerTooltipManager.ControllerButtons.TriggerFrontLeft, TriggerFrontLeft),
-            new(ControllerTooltipManager.ControllerButtons.TriggerGripLeft, TriggerGripLeft),
-            new(ControllerTooltipManager.ControllerButtons.OculusRight, OculusRight),
-            new(ControllerTooltipManager.ControllerButtons.ThumbstickRight, ThumbstickRight),
-            new(ControllerTooltipManager.ControllerButtons.A, A),
-            new(ControllerTooltipManager.ControllerButtons.B, B),
-            new(ControllerTooltipManager.ControllerButtons.TriggerFrontRight, TriggerFrontRight),
-            new(ControllerTooltipManager.ControllerButtons.TriggerGripRight, TriggerGripRight)
+            new(ControllerButtons.OculusLeft, OculusLeft),
+            new(ControllerButtons.ThumbstickLeft, ThumbstickLeft),
+            new(ControllerButtons.X, X),
+            new(ControllerButtons.Y, Y),
+            new(ControllerButtons.TriggerFrontLeft, TriggerFrontLeft),
+            new(ControllerButtons.TriggerGripLeft, TriggerGripLeft),
         };
-
-
+        _buttonMappingsRight = new List<ButtonActionMapping>
+        {
+            new(ControllerButtons.OculusRight, OculusRight),
+            new(ControllerButtons.ThumbstickRight, ThumbstickRight),
+            new(ControllerButtons.A, A),
+            new(ControllerButtons.B, B),
+            new(ControllerButtons.TriggerFrontRight, TriggerFrontRight),
+            new(ControllerButtons.TriggerGripRight, TriggerGripRight)
+        };
     }
 
 
@@ -62,14 +67,10 @@ public class ControllerTooltipActivator : MonoBehaviour
         if (other.name.Equals("Grabber"))
         {
             if (other.transform.parent.name.Equals("LeftController"))
-                Debug.Log("Left hand entered");
+                _controllerTooltipManager.SetOculusHandModel(_buttonMappingsLeft, ControllerHand.Left);
             else if (other.transform.parent.name.Equals("RightController"))
-                Debug.Log("Right hand entered");
-
-            if (!_controllerTooltipManager.OculusModelsActive())
-                _controllerTooltipManager.SetOculusHandModels(_buttonMappings);
+                _controllerTooltipManager.SetOculusHandModel(_buttonMappingsRight, ControllerHand.Right);
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -77,13 +78,9 @@ public class ControllerTooltipActivator : MonoBehaviour
         if (other.name.Equals("Grabber"))
         {
             if (other.transform.parent.name.Equals("LeftController"))
-                Debug.Log("Left hand exited");
+                _controllerTooltipManager.SetDefaultHandModel(ControllerHand.Left);
             else if (other.transform.parent.name.Equals("RightController"))
-                Debug.Log("Right hand exited");
-        
-            if (_controllerTooltipManager.OculusModelsActive())
-                _controllerTooltipManager.SetDefaultHandModels();
+                _controllerTooltipManager.SetDefaultHandModel(ControllerHand.Right);
         }
-
     }
 }
