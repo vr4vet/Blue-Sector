@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -31,3 +32,11 @@ public enum ButtonActions
 /// <param name="Button"></param>
 /// <param name="Action"></param>
 public record ButtonActionMapping(ControllerButtons Button, ButtonActions Action);
+
+/// <summary>
+/// Record used to keep track of currently intersecting objects containing ControllerTooltipActivator script
+/// and its related button tooltips.
+/// </summary>
+/// <param name="Object"></param>
+/// <param name="Tooltips"></param>
+public record InterractableObject(Transform Object, List<HandControllerToolTip> Tooltips);

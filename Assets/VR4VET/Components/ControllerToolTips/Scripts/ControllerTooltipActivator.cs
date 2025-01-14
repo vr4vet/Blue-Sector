@@ -26,7 +26,8 @@ public class ControllerTooltipActivator : MonoBehaviour
     [SerializeField] private ButtonActions TriggerFrontRight;
     [SerializeField] private ButtonActions TriggerGripRight;
 
-    private List<ButtonActionMapping> _buttonMappingsLeft, _buttonMappingsRight;
+    // lists of button mappings for both Oculus hand controllers
+    [HideInInspector] public List<ButtonActionMapping> _buttonMappingsLeft, _buttonMappingsRight;
 
     // Start is called before the first frame update
     void Start()
@@ -60,16 +61,14 @@ public class ControllerTooltipActivator : MonoBehaviour
         };
     }
 
-
-    private int _handsCnt = 0;
     private void OnTriggerEnter(Collider other)
     {
         if (other.name.Equals("Grabber"))
         {
-            if (other.transform.parent.name.Equals("LeftController"))
-                _controllerTooltipManager.SetOculusHandModel(_buttonMappingsLeft, ControllerHand.Left);
-            else if (other.transform.parent.name.Equals("RightController"))
-                _controllerTooltipManager.SetOculusHandModel(_buttonMappingsRight, ControllerHand.Right);
+            if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
+                _controllerTooltipManager.OnHandEntered(transform, _buttonMappingsLeft, ControllerHand.Left);
+            else if (other.GetComponent<Grabber>().HandSide == ControllerHand.Right)
+                _controllerTooltipManager.OnHandEntered(transform, _buttonMappingsRight, ControllerHand.Right);
         }
     }
 
@@ -77,10 +76,10 @@ public class ControllerTooltipActivator : MonoBehaviour
     {
         if (other.name.Equals("Grabber"))
         {
-            if (other.transform.parent.name.Equals("LeftController"))
-                _controllerTooltipManager.SetDefaultHandModel(ControllerHand.Left);
-            else if (other.transform.parent.name.Equals("RightController"))
-                _controllerTooltipManager.SetDefaultHandModel(ControllerHand.Right);
+            if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
+                _controllerTooltipManager.OnHandExited(transform, _buttonMappingsLeft, ControllerHand.Left);
+            else if (other.GetComponent<Grabber>().HandSide == ControllerHand.Right)
+                _controllerTooltipManager.OnHandExited(transform, _buttonMappingsRight, ControllerHand.Right);
         }
     }
 }
