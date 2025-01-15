@@ -135,55 +135,59 @@ public class DialogueBoxController : MonoBehaviour
         dialogueTextRect.sizeDelta = new Vector2(150, 60);
         
         int dialogueSection = 0;
-        for (int i = element; i < dialogueTree.sections[section].dialogue.Length; i++)
+        if (element != -1)
         {
-            if (_pointingController != null && dialogueTree.sections[section].point)
-            {
-                _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
-            }
+          for (int i = element; i < dialogueTree.sections[section].dialogue.Length; i++)
+          {
+              if (_pointingController != null && dialogueTree.sections[section].point)
+              {
+                  _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
+              }
 
-            _animator.SetBool(_isPointingHash, false);
-            // Start talking animation
-            _animator.SetBool(_isTalkingHash, true);
-            StartCoroutine(revertToIdleAnimation());
-            _dialogueText.text = dialogueTree.sections[section].dialogue[i];
-            _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
-            TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
-            // Invoke the dialogue changed event
-            m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, i);
-            _skipLineButton.SetActive(true);
+              _animator.SetBool(_isPointingHash, false);
+              // Start talking animation
+              _animator.SetBool(_isTalkingHash, true);
+              StartCoroutine(revertToIdleAnimation());
+              _dialogueText.text = dialogueTree.sections[section].dialogue[i];
+              _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
+              TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+              // Invoke the dialogue changed event
+              m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, i);
+              _skipLineButton.SetActive(true);
 
 
-            // Check if the current section should have disabled the skip line button
-            if (dialogueTree.sections[section].disabkeSkipLineButton)
-            {
-                _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
-            }
-            // Check if the current dialogue section should have the NPC pointing
-            if (dialogueTree.sections[section].point)
-            {
-                if (_pointingController != null)
-                {
-                    _pointingController.GetComponent<PointingController>().ChangeDirection(section, talkingNpc: this.gameObject);
-                    _animator.SetBool(_isTalkingHash, false);
-                    _animator.SetBool(_isPointingHash, true);
-                }
-                else
-                {
-                    Debug.Log("PointingController not found in the scene");
-                }
+              // Check if the current section should have disabled the skip line button
+              if (dialogueTree.sections[section].disabkeSkipLineButton)
+              {
+                  _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
+              }
+              // Check if the current dialogue section should have the NPC pointing
+              if (dialogueTree.sections[section].point)
+              {
+                  if (_pointingController != null)
+                  {
+                      _pointingController.GetComponent<PointingController>().ChangeDirection(section, talkingNpc: this.gameObject);
+                      _animator.SetBool(_isTalkingHash, false);
+                      _animator.SetBool(_isPointingHash, true);
+                  }
+                  else
+                  {
+                      Debug.Log("PointingController not found in the scene");
+                  }
 
-            }
+              }
 
-            while (!_skipLineTriggered)
-            {
+              while (!_skipLineTriggered)
+              {
 
-                _exitButton.SetActive(true);
-                yield return null;
-            }
-            _skipLineTriggered = false;
-            dialogueSection = section;
+                  _exitButton.SetActive(true);
+                  yield return null;
+              }
+              _skipLineTriggered = false;
+              dialogueSection = section;
+          }   
         }
+        
 
         if (!dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue.Equals(string.Empty))
         {
