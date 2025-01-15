@@ -5,6 +5,7 @@ using UnityEngine;
 public class HandControllerToolTip : MonoBehaviour
 {
     private bool _moving = false;
+    private bool _closed = false;
     private Vector3 _target;
     public ControllerHand HandSide;
     public Vector3 OpenPosition;
@@ -22,6 +23,7 @@ public class HandControllerToolTip : MonoBehaviour
     {
         if (_moving)
         {
+            // move tooltip
             if (Vector3.Distance(transform.localPosition, _target) < (_target != Vector3.zero ? 0.0005f : 0.025f))
             {
                 _moving = false;
@@ -33,7 +35,7 @@ public class HandControllerToolTip : MonoBehaviour
     }
 
     /// <summary>
-    /// Make tooltip move towards target and tell ControllerTooltipManager when done.
+    /// Make tooltip move towards target and tell ControllerTooltipManager when it's done.
     /// Used to move tooltip back and forth when opening and closing.
     /// </summary>
     /// <param name="target"></param>
@@ -43,11 +45,16 @@ public class HandControllerToolTip : MonoBehaviour
         _target = target;
         _moving = true;
 
+        if (target != Vector3.zero)
+            _closed = false;
+
         while (!(Vector3.Distance(transform.localPosition, _target) < (_target != Vector3.zero ? 0.0005f : 0.025f)))
             yield return null;
 
         if (target == Vector3.zero)
         {
+            Debug.Log("Closed");
+            _closed = true;
             GetComponent<Canvas>().enabled = false;
             GetComponent<LineRenderer>().enabled = false;
             _controllerTooltipManager.OnTooltipClosed(HandSide);
@@ -63,8 +70,11 @@ public class HandControllerToolTip : MonoBehaviour
     /// </summary>
     public void Close()
     {
-        StopAllCoroutines();
-        StartCoroutine(InterpolateTowards(Vector3.zero));
+        if (!_closed)
+        {
+            StopAllCoroutines();
+            StartCoroutine(InterpolateTowards(Vector3.zero));
+        }
     }
 
     /// <summary>
@@ -72,10 +82,9 @@ public class HandControllerToolTip : MonoBehaviour
     /// </summary>
     public void Open()
     {
-        Debug.Log("Open called");
-        StopAllCoroutines();
-        GetComponent<Canvas>().enabled = true;
-        GetComponent<LineRenderer>().enabled = true;
-        StartCoroutine(InterpolateTowards(OpenPosition));
+            StopAllCoroutines();
+            GetComponent<Canvas>().enabled = true;
+            GetComponent<LineRenderer>().enabled = true;
+            StartCoroutine(InterpolateTowards(OpenPosition));            
     }
 }

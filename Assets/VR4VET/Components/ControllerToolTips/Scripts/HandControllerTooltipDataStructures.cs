@@ -35,8 +35,8 @@ public record ButtonActionMapping(ControllerButtons Button, ButtonActions Action
 
 /// <summary>
 /// Record used to keep track of currently intersecting objects containing ControllerTooltipActivator script
-/// and its related button tooltips.
+/// and its related button mapping.
 /// </summary>
 /// <param name="Object"></param>
-/// <param name="Tooltips"></param>
-public record InterractableObject(Transform Object, List<HandControllerToolTip> Tooltips);
+/// <param name="ButtonMappings"></param>
+public record InterractableObject(Transform Object, List<ButtonActionMapping> ButtonMappings);

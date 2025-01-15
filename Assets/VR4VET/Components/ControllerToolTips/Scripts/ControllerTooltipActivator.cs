@@ -27,7 +27,7 @@ public class ControllerTooltipActivator : MonoBehaviour
     [SerializeField] private ButtonActions TriggerGripRight;
 
     // lists of button mappings for both Oculus hand controllers
-    [HideInInspector] public List<ButtonActionMapping> _buttonMappingsLeft, _buttonMappingsRight;
+    private List<ButtonActionMapping> _buttonMappingsLeft, _buttonMappingsRight;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +40,7 @@ public class ControllerTooltipActivator : MonoBehaviour
         collider.size = transform.parent.GetComponent<MeshFilter>().mesh.bounds.size * TriggerSizeFactor;
         collider.center = transform.parent.GetComponent<MeshFilter>().mesh.bounds.center;
 
-        // create a list of mappings between buttons and actions
+        // create a list of mappings between buttons and actions. those with action 'None' are removed
         _buttonMappingsLeft = new List<ButtonActionMapping>
         {
             new(ControllerButtons.OculusLeft, OculusLeft),
@@ -50,6 +50,7 @@ public class ControllerTooltipActivator : MonoBehaviour
             new(ControllerButtons.TriggerFrontLeft, TriggerFrontLeft),
             new(ControllerButtons.TriggerGripLeft, TriggerGripLeft),
         };
+
         _buttonMappingsRight = new List<ButtonActionMapping>
         {
             new(ControllerButtons.OculusRight, OculusRight),
@@ -65,10 +66,11 @@ public class ControllerTooltipActivator : MonoBehaviour
     {
         if (other.name.Equals("Grabber"))
         {
+            // send the necessary information about this object to ControllerTooltipManager
             if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
-                _controllerTooltipManager.OnHandEntered(transform, _buttonMappingsLeft, ControllerHand.Left);
+                _controllerTooltipManager.OnHandEntered(new InterractableObject(transform, _buttonMappingsLeft), ControllerHand.Left);
             else if (other.GetComponent<Grabber>().HandSide == ControllerHand.Right)
-                _controllerTooltipManager.OnHandEntered(transform, _buttonMappingsRight, ControllerHand.Right);
+                _controllerTooltipManager.OnHandEntered(new InterractableObject(transform, _buttonMappingsRight), ControllerHand.Right);
         }
     }
 
@@ -76,10 +78,11 @@ public class ControllerTooltipActivator : MonoBehaviour
     {
         if (other.name.Equals("Grabber"))
         {
+            // send the necessary information about this object to ControllerTooltipManager
             if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
-                _controllerTooltipManager.OnHandExited(transform, _buttonMappingsLeft, ControllerHand.Left);
+                _controllerTooltipManager.OnHandExited(new InterractableObject(transform, _buttonMappingsLeft), ControllerHand.Left);
             else if (other.GetComponent<Grabber>().HandSide == ControllerHand.Right)
-                _controllerTooltipManager.OnHandExited(transform, _buttonMappingsRight, ControllerHand.Right);
+                _controllerTooltipManager.OnHandExited(new InterractableObject(transform, _buttonMappingsRight), ControllerHand.Right);
         }
     }
 }
