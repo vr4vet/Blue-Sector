@@ -1,7 +1,6 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using Unity.VRTemplate;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -34,13 +33,18 @@ public class ControllerTooltipManager : MonoBehaviour
     [SerializeField] private Vector3 TriggerFrontRight = new(-.08f, -.01f, .02f);
     [SerializeField] private Vector3 TriggerGripRight = new(-.08f, .03f, -.02f);
 
+    // prevent tooltips from being opened/closed before ready
+    private int _tooltipsReady = 0;
+
     // the player rig
     private GameObject _player;
 
     // keep track of hand controller models and their button models
     private ControllerButtonsTransforms _controllerButtonsLeft = new(), _controllerButtonsRight = new();
     private GameObject _controllerModelLeft, _controllerModelRight;
+    private GameObject _handModelLeft, _handModelRight;
     private List<InterractableObject> _interractableObjectsLeft = new(), _interractableObjectsRight = new();
+    private InterractableObject _closestObjectLeft = null, _closestObjectRight = null; // store closest objet after finding it for comparing with the one found in next iteration
 
     // Start is called before the first frame update
     void Start()
@@ -54,9 +58,11 @@ public class ControllerTooltipManager : MonoBehaviour
     /// and decides which one is closest. It then activates that object's relevant tooltips.
     /// Runs several times a second.
     /// </summary>
+    /// <param name="controllerHand"></param>
     private IEnumerator FindClosestObject(ControllerHand controllerHand)
     {
-        if (_controllerModelLeft == null ||  _controllerModelRight == null) 
+        // don't try to manipulate/change anything before everything is ready
+        if (_controllerModelLeft == null ||  _controllerModelRight == null || _tooltipsReady < 12) 
             yield return null;
 
         if (controllerHand == ControllerHand.None)
@@ -68,10 +74,10 @@ public class ControllerTooltipManager : MonoBehaviour
         // figure out which hand
         List<InterractableObject> interractableObjects = controllerHand == ControllerHand.Left ? _interractableObjectsLeft : _interractableObjectsRight;
         GameObject controllerModel = controllerHand == ControllerHand.Left ? _controllerModelLeft : _controllerModelRight;
-
+        
+        InterractableObject closestObject = controllerHand == ControllerHand.Left ? _closestObjectLeft : _closestObjectRight; // store closest objet after finding it for comparing with the one found in next iteration
         while (true)
         {
-            InterractableObject closestObject = null;
             if (interractableObjects.Count >= 1) // only run this if there are objects in hand's vicinity
             {
                 InterractableObject closestTmpObject = null;
@@ -92,16 +98,18 @@ public class ControllerTooltipManager : MonoBehaviour
                 }
             }
             else // close all tooltips if there are no objects in the hand's vicinity
+            {
+                closestObject = null; // resetting closest object because no object is closest
                 CloseAllTooltips(controllerHand);
+            }
 
-            yield return new WaitForSecondsRealtime(.25f); // wait for 1/4th of a second before assessing which is closest again
+            yield return new WaitForSecondsRealtime(.25f); // wait for 1/4th of a second before assessing again
         }
     }
 
     /// <summary>
     /// Is called from an ControllerTooltipActivator when a hand enters its trigger.
     /// The object is added to the provided hand's list of objects in its vicinity.
-    /// The relevant tooltips are closed.
     /// </summary>
     /// <param name="interractableObject"></param>
     /// <param name="controllerHand"></param>
@@ -119,8 +127,6 @@ public class ControllerTooltipManager : MonoBehaviour
 
         if (!interractableObjects.Contains(interractableObject))
             interractableObjects.Add(interractableObject);
-
-        SetQuestControllerModels(controllerHand);
     }
 
 
@@ -167,23 +173,23 @@ public class ControllerTooltipManager : MonoBehaviour
             ?
             mapping.Button switch
             {
-                ControllerButtons.OculusLeft => _controllerButtonsLeft.oculus,
-                ControllerButtons.ThumbstickLeft => _controllerButtonsLeft.thumbstick,
-                ControllerButtons.X => _controllerButtonsLeft.primary,
-                ControllerButtons.Y => _controllerButtonsLeft.secondary,
-                ControllerButtons.TriggerFrontLeft => _controllerButtonsLeft.trigger_front,
-                ControllerButtons.TriggerGripLeft => _controllerButtonsLeft.trigger_grip,
+                ControllerButtons.OculusLeft => _controllerButtonsLeft.Oculus,
+                ControllerButtons.ThumbstickLeft => _controllerButtonsLeft.Thumbstick,
+                ControllerButtons.X => _controllerButtonsLeft.Primary,
+                ControllerButtons.Y => _controllerButtonsLeft.Secondary,
+                ControllerButtons.TriggerFrontLeft => _controllerButtonsLeft.TriggerFront,
+                ControllerButtons.TriggerGripLeft => _controllerButtonsLeft.TriggerGrip,
                 _ => null
             }
             :
             mapping.Button switch
             {
-                ControllerButtons.OculusRight => _controllerButtonsRight.oculus,
-                ControllerButtons.ThumbstickRight => _controllerButtonsRight.thumbstick,
-                ControllerButtons.A => _controllerButtonsRight.primary,
-                ControllerButtons.B => _controllerButtonsRight.secondary,
-                ControllerButtons.TriggerFrontRight => _controllerButtonsRight.trigger_front,
-                ControllerButtons.TriggerGripRight => _controllerButtonsRight.trigger_grip,
+                ControllerButtons.OculusRight => _controllerButtonsRight.Oculus,
+                ControllerButtons.ThumbstickRight => _controllerButtonsRight.Thumbstick,
+                ControllerButtons.A => _controllerButtonsRight.Primary,
+                ControllerButtons.B => _controllerButtonsRight.Secondary,
+                ControllerButtons.TriggerFrontRight => _controllerButtonsRight.TriggerFront,
+                ControllerButtons.TriggerGripRight => _controllerButtonsRight.TriggerGrip,
                 _ => null
             };
 
@@ -195,7 +201,7 @@ public class ControllerTooltipManager : MonoBehaviour
                 else
                 {
                     toolTip.Open();
-                    toolTip.GetComponentInChildren<TMP_Text>().text = mapping.Action.ToString();
+                    toolTip.SetLabel(mapping.Action.ToString());
                 }
             }
             else // something wrong happened as button could not be mapped
@@ -218,12 +224,12 @@ public class ControllerTooltipManager : MonoBehaviour
 
         // kinda gross, but it is what it is...at least it doesn't run frequently.
         ControllerButtonsTransforms buttons = controllerHand == ControllerHand.Left ? _controllerButtonsLeft : _controllerButtonsRight;
-        buttons.oculus.GetComponentInChildren<HandControllerToolTip>().Close();
-        buttons.primary.GetComponentInChildren<HandControllerToolTip>().Close();
-        buttons.secondary.GetComponentInChildren<HandControllerToolTip>().Close();
-        buttons.thumbstick.GetComponentInChildren<HandControllerToolTip>().Close();
-        buttons.trigger_front.GetComponentInChildren<HandControllerToolTip>().Close();
-        buttons.trigger_grip.GetComponentInChildren<HandControllerToolTip>().Close();
+        buttons.Oculus.GetComponentInChildren<HandControllerToolTip>().Close();
+        buttons.Primary.GetComponentInChildren<HandControllerToolTip>().Close();
+        buttons.Secondary.GetComponentInChildren<HandControllerToolTip>().Close();
+        buttons.Thumbstick.GetComponentInChildren<HandControllerToolTip>().Close();
+        buttons.TriggerFront.GetComponentInChildren<HandControllerToolTip>().Close();
+        buttons.TriggerGrip.GetComponentInChildren<HandControllerToolTip>().Close();
     }
 
     /// <summary>
@@ -233,12 +239,12 @@ public class ControllerTooltipManager : MonoBehaviour
     {
         if (controllerHand == ControllerHand.Left)
         {
-            GameManager.Instance.LeftHandGameObj.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+            _handModelLeft.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
             _controllerModelLeft.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
         }
         else if (controllerHand == ControllerHand.Right)
         {
-            GameManager.Instance.RightHandGameObj.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+            _handModelRight.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
             _controllerModelRight.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
         }
         else
@@ -248,16 +254,17 @@ public class ControllerTooltipManager : MonoBehaviour
     /// <summary>
     /// Deactivates Quest hand controller
     /// </summary>
+    /// <param name="controllerHand"></param>
     public void SetDefaultHandModel(ControllerHand controllerHand)
     {
         if (controllerHand == ControllerHand.Left)
         {
-            GameManager.Instance.LeftHandGameObj.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+            _handModelLeft.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
             _controllerModelLeft.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
         }
         else if (controllerHand == ControllerHand.Right)
         {
-            GameManager.Instance.RightHandGameObj.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+            _handModelRight.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
             _controllerModelRight.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
         }
         else
@@ -270,6 +277,8 @@ public class ControllerTooltipManager : MonoBehaviour
     private void OnHandModelsReady()
     {
         _player = GameManager.Instance.GetPlayerRig();
+        _handModelLeft = GameManager.Instance.LeftHandGameObj;
+        _handModelRight = GameManager.Instance.RightHandGameObj;
 
         // checking if two and only two Quest controller models are provided (one for each hand)
         if (OculusControllerModels.Count != 2)
@@ -337,27 +346,27 @@ public class ControllerTooltipManager : MonoBehaviour
             switch (button.name)
             {
                 case "b_button_oculus":
-                    _controllerButtonsLeft.oculus = button;
+                    _controllerButtonsLeft.Oculus = button;
                     CreateToolTip(button, button.localPosition + OculusLeft, ControllerHand.Left);
                     break;
                 case "b_button_x":
-                    _controllerButtonsLeft.primary = button;
+                    _controllerButtonsLeft.Primary = button;
                     CreateToolTip(button, button.localPosition + X, ControllerHand.Left);
                     break;
                 case "b_button_y":
-                    _controllerButtonsLeft.secondary = button;
+                    _controllerButtonsLeft.Secondary = button;
                     CreateToolTip(button, button.localPosition + Y, ControllerHand.Left);
                     break;
                 case "b_thumbstick":
-                    _controllerButtonsLeft.thumbstick = button;
+                    _controllerButtonsLeft.Thumbstick = button;
                     CreateToolTip(button, button.localPosition + ThumbstickLeft, ControllerHand.Left);
                     break;
                 case "b_trigger_front":
-                    _controllerButtonsLeft.trigger_front = button;
+                    _controllerButtonsLeft.TriggerFront = button;
                     CreateToolTip(button, button.localPosition + TriggerFrontLeft, ControllerHand.Left);
                     break;
                 case "b_trigger_grip":
-                    _controllerButtonsLeft.trigger_grip = button;
+                    _controllerButtonsLeft.TriggerGrip = button;
                     CreateToolTip(button, button.localPosition + TriggerGripLeft, ControllerHand.Left);
                     break;
                 default:
@@ -372,27 +381,27 @@ public class ControllerTooltipManager : MonoBehaviour
             switch (button.name)
             {
                 case "b_button_oculus":
-                    _controllerButtonsRight.oculus = button;
+                    _controllerButtonsRight.Oculus = button;
                     CreateToolTip(button, button.localPosition + OculusRight, ControllerHand.Right);
                     break;
                 case "b_button_a":
-                    _controllerButtonsRight.primary = button;
+                    _controllerButtonsRight.Primary = button;
                     CreateToolTip(button, button.localPosition + A, ControllerHand.Right);
                     break;
                 case "b_button_b":
-                    _controllerButtonsRight.secondary = button;
+                    _controllerButtonsRight.Secondary = button;
                     CreateToolTip(button, button.localPosition + B, ControllerHand.Right);
                     break;
                 case "b_thumbstick":
-                    _controllerButtonsRight.thumbstick = button;
+                    _controllerButtonsRight.Thumbstick = button;
                     CreateToolTip(button, button.localPosition + ThumbstickRight, ControllerHand.Right);
                     break;
                 case "b_trigger_front":
-                    _controllerButtonsRight.trigger_front = button;
+                    _controllerButtonsRight.TriggerFront = button;
                     CreateToolTip(button, button.localPosition + TriggerFrontRight, ControllerHand.Right);
                     break;
                 case "b_trigger_grip":
-                    _controllerButtonsRight.trigger_grip = button;
+                    _controllerButtonsRight.TriggerGrip = button;
                     CreateToolTip(button, button.localPosition + TriggerGripRight, ControllerHand.Right);
                     break;
                 default:
@@ -405,7 +414,6 @@ public class ControllerTooltipManager : MonoBehaviour
         // makes sure that the closes object's button mappings are shown when intersecting with multiple object
         StartCoroutine(FindClosestObject(ControllerHand.Left));
         StartCoroutine(FindClosestObject(ControllerHand.Right));
-        
     }
 
     /// <summary>
@@ -413,6 +421,7 @@ public class ControllerTooltipManager : MonoBehaviour
     /// </summary>
     /// <param name="button"></param>
     /// <param name="toolTipPos"></param>
+    /// <param name="controllerSide"></param>
     private void CreateToolTip(Transform button, Vector3 toolTipPos, ControllerHand controllerSide)
     {        
         // create a tooltip and make it child of the button model
@@ -458,8 +467,9 @@ public class ControllerTooltipManager : MonoBehaviour
         curve.SetPoints(button, CalculateTooltipAnchor(toolTip.transform));
         curve.SetCurveFactor(.1f, .1f);
         curve.SetSegmentCount(8);
+        curve.SetUpdateTrackingType(BezierCurve.UpdateType.UpdateAndBeforeRender); // ensuring line doesn't lag behind when controller is moving
         toolTip.SetActive(true); // fields are set, so it's good to go
-        toolTip.GetComponent<HandControllerToolTip>().Close();
+        toolTip.GetComponent<HandControllerToolTip>().CloseImmediately(); // prevent tooltip from being visible the first few frames
     }
 
     // decides which edge of tooltip the drawn line/curve should attach to
@@ -468,12 +478,22 @@ public class ControllerTooltipManager : MonoBehaviour
         float distX = tooltip.localPosition.x;
         float distY = tooltip.localPosition.y;
 
+        var tooltipScript = tooltip.GetComponent<HandControllerToolTip>();
+
         // select left or right edge if x-axis distance from button is larger than than y-axis distance, otherwise select bottom or top edge
         float maxDist = Mathf.Max(Mathf.Abs(distX), Mathf.Abs(distY));
         if (maxDist == Mathf.Abs(distX))
-            return distX >= 0 ? tooltip.Find("LeftAnchor") : tooltip.Find("RightAnchor"); // return left edge if positioned to the right, right otherwise
+            return distX >= 0 ? tooltipScript.AnchorLeft() : tooltipScript.AnchorRight(); // return left edge if positioned to the right, right otherwise
         else
-            return distY >= 0 ? tooltip.Find("BottomAnchor") : tooltip.Find("TopAnchor"); // return bottom edge if positioned above, top otherwise
+            return distY >= 0 ? tooltipScript.AnchorBottom() : tooltipScript.AnchorTop(); // return bottom edge if positioned above, top otherwise
+    }
+
+    public void OnTooltipStartOpening(ControllerHand controllerHand)
+    {
+        if (controllerHand == ControllerHand.None)
+            Debug.LogError("Tooltip must have HandSide set to either left or right, but was " + controllerHand.ToString() + "!");
+
+        SetQuestControllerModels(controllerHand);
     }
 
     /// <summary>
@@ -501,4 +521,10 @@ public class ControllerTooltipManager : MonoBehaviour
         if (controllerHand == ControllerHand.Right && _interractableObjectsRight.Count == 0)
             SetDefaultHandModel(ControllerHand.Right);
     }
+
+    /// <summary>
+    /// This is called by each tooltip when it is ready, 
+    /// which allows manager to wait until all tooltips are ready before activating or deactivating tooltips.
+    /// </summary>
+    public void OnTooltipReady() => _tooltipsReady++;
 }

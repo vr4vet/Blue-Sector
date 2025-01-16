@@ -1,5 +1,6 @@
 using BNG;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer.Internal;
 using UnityEngine;
 
 
@@ -7,6 +8,8 @@ public class ControllerTooltipActivator : MonoBehaviour
 {
     [Tooltip("The trigger area will be this many times larger than the bounds of the object")]
     [SerializeField] private float TriggerSizeFactor = 1.5f;
+    [Tooltip("Place an object containing a collider component here to use that to trigger tooltips instead of an automatically generated one. Will not be scaled using TriggerSizeFactor")]
+    [SerializeField] private Collider CustomColliderTrigger;
 
     private ControllerTooltipManager _controllerTooltipManager;
 
@@ -29,18 +32,47 @@ public class ControllerTooltipActivator : MonoBehaviour
     // lists of button mappings for both Oculus hand controllers
     private List<ButtonActionMapping> _buttonMappingsLeft, _buttonMappingsRight;
 
+    private System.Type _colliderType;
+
     // Start is called before the first frame update
     void Start()
     {
         _controllerTooltipManager = GameObject.Find("ControllerToolTipManager").GetComponent<ControllerTooltipManager>();
 
-        // create a trigger collider that is TriggerSizeFactor times larger than the object itself
-        BoxCollider collider = gameObject.AddComponent(typeof(BoxCollider)) as BoxCollider;
-        collider.isTrigger = true;
-        collider.size = transform.parent.GetComponent<MeshFilter>().mesh.bounds.size * TriggerSizeFactor;
-        collider.center = transform.parent.GetComponent<MeshFilter>().mesh.bounds.center;
+        // A duplicate collider is created.
+        // If a custom collider is provided, that will be duplicated.
+        // Otherwise, the paren't collider is duplicated and scaled by TriggerSizeFactor
+        Collider parentCollider = transform.parent.GetComponent<Collider>();
+        _colliderType = CustomColliderTrigger != null ? CustomColliderTrigger.GetType() : parentCollider.GetType(); // get the collider type, either from the provided custom collider or the parent's collider
 
-        // create a list of mappings between buttons and actions. those with action 'None' are removed
+        if (_colliderType == typeof(MeshCollider))
+        {
+            Debug.LogError("Object with name '" + parentCollider.transform.name + "' has mesh collider! This will not work! Please attach a custom box, sphere, or capsule collider, perhaps directly onto this ControllerTooltipActivator!");
+            return;
+        }
+        else 
+        {
+            var tooltipTriggerCollider = gameObject.AddComponent(_colliderType); // create a duplicate attached to this activator object
+            var properties = _colliderType.GetDeclaredProperties(); // get properties of the collider type
+            foreach (var property in properties)
+            {
+                if (CustomColliderTrigger == null)
+                {
+                    if (property.Name.Equals("center"))
+                        property.SetValue(tooltipTriggerCollider, (Vector3)property.GetValue(parentCollider) / TriggerSizeFactor); // adjust center of collider to compensate for TriggerSizeFactor. casting is neccesary, but we know for sure that is is a collider, so it should be safe
+                    else
+                        property.SetValue(tooltipTriggerCollider, property.GetValue(parentCollider)); // otherwise duplicate properties from the collider we are copying
+                }
+                else
+                    property.SetValue(tooltipTriggerCollider, property.GetValue(CustomColliderTrigger)); // duplicate properties from the collider we are copying
+            }
+
+            ((Collider)tooltipTriggerCollider).isTrigger = true; // make trigger trigger. casting is neccesary, but we know for sure that is is a collider, so it should be safe
+            transform.localScale *= CustomColliderTrigger == null ? TriggerSizeFactor : 1; // scale object (in practice the collider) by TriggerSizeFactor
+        }
+
+
+        // create a list of mappings between buttons and actions
         _buttonMappingsLeft = new List<ButtonActionMapping>
         {
             new(ControllerButtons.OculusLeft, OculusLeft),

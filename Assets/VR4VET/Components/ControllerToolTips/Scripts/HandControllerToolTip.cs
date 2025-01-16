@@ -1,5 +1,6 @@
 using BNG;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class HandControllerToolTip : MonoBehaviour
@@ -7,15 +8,22 @@ public class HandControllerToolTip : MonoBehaviour
     private bool _moving = false;
     private bool _closed = false;
     private Vector3 _target;
-    public ControllerHand HandSide;
-    public Vector3 OpenPosition;
+    private TMP_Text _label;
+
+    [HideInInspector] public ControllerHand HandSide;
+    [HideInInspector] public Vector3 OpenPosition;
 
     private ControllerTooltipManager _controllerTooltipManager;
+    [SerializeField] private Transform _anchorLeft, _anchorBottom, _anchorRight, _anchorTop;
 
     // Start is called before the first frame update
     private void Start()
     {
         _controllerTooltipManager = GameObject.Find("ControllerToolTipManager").GetComponent<ControllerTooltipManager>();
+        _label = GetComponentInChildren<TMP_Text>();
+
+        // inform manager that tooltip is ready 
+        _controllerTooltipManager.OnTooltipReady();
     }
 
     // Update is called once per frame
@@ -46,23 +54,23 @@ public class HandControllerToolTip : MonoBehaviour
         _moving = true;
 
         if (target != Vector3.zero)
+        {
             _closed = false;
+            _controllerTooltipManager.OnTooltipStartOpening(HandSide);
+        }
 
         while (!(Vector3.Distance(transform.localPosition, _target) < (_target != Vector3.zero ? 0.0005f : 0.025f)))
             yield return null;
 
         if (target == Vector3.zero)
         {
-            Debug.Log("Closed");
             _closed = true;
             GetComponent<Canvas>().enabled = false;
             GetComponent<LineRenderer>().enabled = false;
             _controllerTooltipManager.OnTooltipClosed(HandSide);
         }
         else
-        {
             _controllerTooltipManager.OnTooltipOpened(HandSide);
-        }
     }
 
     /// <summary>
@@ -78,13 +86,56 @@ public class HandControllerToolTip : MonoBehaviour
     }
 
     /// <summary>
+    /// Public method giving ControllerTooltipManager the ability to close tooltips immediately without interpolating position first
+    /// </summary>
+    public void CloseImmediately()
+    {
+        StopAllCoroutines();
+        _closed = true;
+        transform.localPosition = Vector3.zero;
+        GetComponent<Canvas>().enabled = false;
+        GetComponent<LineRenderer>().enabled = false;
+    }
+
+    /// <summary>
     /// Public method giving ControllerTooltipManager the ability to open tooltips
     /// </summary>
     public void Open()
     {
-            StopAllCoroutines();
-            GetComponent<Canvas>().enabled = true;
-            GetComponent<LineRenderer>().enabled = true;
-            StartCoroutine(InterpolateTowards(OpenPosition));            
+        StopAllCoroutines();
+        GetComponent<Canvas>().enabled = true;
+        GetComponent<LineRenderer>().enabled = true;
+        StartCoroutine(InterpolateTowards(OpenPosition));            
     }
+
+    /// <summary>
+    /// Public method giving ControllerTooltipManager the ability to set the label's text content
+    /// </summary>
+    /// <param name="label"></param>
+    public void SetLabel(string label) => _label.text = label;
+
+    /// <summary>
+    /// Returns the left tooltip anchor
+    /// </summary>
+    /// <returns></returns>
+    public Transform AnchorLeft() => _anchorLeft;
+
+    /// <summary>
+    /// Returns the bottom tooltip anchor
+    /// </summary>
+    /// <returns></returns>
+    public Transform AnchorBottom() => _anchorBottom;
+
+    /// <summary>
+    /// Returns the right tooltip anchor
+    /// </summary>
+    /// <returns></returns>
+    public Transform AnchorRight() => _anchorRight;
+
+    /// <summary>
+    /// Returns the top tooltip anchor
+    /// </summary>
+    /// <returns></returns>
+    /// 
+    public Transform AnchorTop() => _anchorTop;
 }

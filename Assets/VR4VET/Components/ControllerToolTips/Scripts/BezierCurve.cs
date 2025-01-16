@@ -211,10 +211,9 @@ namespace Unity.VRTemplate
             m_CurveFactorEnd = end;
         }
 
-        public void SetSegmentCount(int segments)
-        {
-            m_SegmentCount = segments;
-        }
+        public void SetSegmentCount(int segments) => m_SegmentCount = segments;
+
+        public void SetUpdateTrackingType(UpdateType updateType) => m_UpdateTrackingType = updateType;
     }
 
 }

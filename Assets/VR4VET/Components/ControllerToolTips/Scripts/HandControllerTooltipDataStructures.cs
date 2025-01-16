@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Struct used for storing button objects in order to make tooltips point to its assigned button.
+/// Class used for storing button objects in order to make tooltips point to its assigned button.
 /// </summary>
-public struct ControllerButtonsTransforms
+public class ControllerButtonsTransforms
 {
-    public Transform oculus, thumbstick, primary, secondary, trigger_front, trigger_grip;
+    public Transform Oculus, Thumbstick, Primary, Secondary, TriggerFront, TriggerGrip;
 }
 
 /// <summary>
