@@ -35,6 +35,9 @@ public class ControllerTooltipActivator : MonoBehaviour
     // collider that will be sent to ControllerTooltipManager to determine distance from hand to object
     private Collider _colliderForDistanceComparison;
 
+    // decides if activator should respond when player enters its trigger
+    private bool _active = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -106,7 +109,7 @@ public class ControllerTooltipActivator : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name.Equals("Grabber"))
+        if (_active && other.name.Equals("Grabber"))
         {
             // send the necessary information about this object to ControllerTooltipManager
             if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
@@ -118,7 +121,7 @@ public class ControllerTooltipActivator : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.name.Equals("Grabber"))
+        if (_active && other.name.Equals("Grabber"))
         {
             // send the necessary information about this object to ControllerTooltipManager
             if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
@@ -127,4 +130,14 @@ public class ControllerTooltipActivator : MonoBehaviour
                 _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsRight), ControllerHand.Right);
         }
     }
+
+    /// <summary>
+    /// Activate the activator
+    /// </summary>
+    public void Activate() => _active = true;
+
+    /// <summary>
+    /// Deactivate the activator
+    /// </summary>
+    public void Deactivate() => _active = false;
 }
