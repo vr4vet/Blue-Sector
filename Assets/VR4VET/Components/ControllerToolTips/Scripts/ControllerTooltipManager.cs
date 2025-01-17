@@ -119,6 +119,62 @@ public class ControllerTooltipManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Tells whether one of the provided hand's buttons is mapped
+    /// </summary>
+    /// <param name="buttonMappings"></param>
+    /// <param name="controllerHand"></param>
+    /// <returns></returns>
+    public bool IsControllerMapped(List<ButtonActionMapping> buttonMappings, ControllerHand controllerHand)
+    {
+        if (controllerHand == ControllerHand.None)
+        {
+            Debug.LogError("The provided controller hand must be either ControllerHand.Left or ControllerHand.Right!");
+            return false;
+        }
+
+        foreach (ButtonActionMapping buttonMapping in buttonMappings)
+        {
+            if (controllerHand == ControllerHand.Left)
+            {
+                switch (buttonMapping.Button)
+                {
+                    case ControllerButtons.ThumbstickLeft:
+                        return true;
+                    case ControllerButtons.A:
+                        return true;
+                    case ControllerButtons.B:
+                        return true;
+                    case ControllerButtons.TriggerFrontLeft:
+                        return true;
+                    case ControllerButtons.TriggerGripLeft:
+                        return true;
+                    case ControllerButtons.OculusLeft:
+                        return true;
+                }
+            }
+            else
+            {
+                switch (buttonMapping.Button)
+                {
+                    case ControllerButtons.ThumbstickRight:
+                        return true;
+                    case ControllerButtons.X:
+                        return true;
+                    case ControllerButtons.Y:
+                        return true;
+                    case ControllerButtons.TriggerFrontRight:
+                        return true;
+                    case ControllerButtons.TriggerGripRight:
+                        return true;
+                    case ControllerButtons.OculusRight:
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
     /// Checks if one of the tooltipped buttons (buttons that have some action mapped by a nearby ControllerTooltipActivator) is currently held down. 
     /// This is used to hide tooltips and Quest hand controller models when the player presses one of the related buttons.
     /// Note: the oculus system buttons (the recessed buttons used to navigate the operating system or device) will not trigger this behaviour!
@@ -162,7 +218,6 @@ public class ControllerTooltipManager : MonoBehaviour
                         return InputBridge.Instance.RightGripDown;
                     default:
                         return false;
-
                 }
             }
         }

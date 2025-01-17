@@ -23,7 +23,7 @@ public enum ControllerButtons
 /// </summary>
 public enum ButtonActions
 {
-    None, Grab, Click, Start, Open, Teleport, Move, Turn, Pause, Select
+    None, Grab, Click, Start, Open, Teleport, Move, Turn, Pause, Select, Press
 }
 
 /// <summary>

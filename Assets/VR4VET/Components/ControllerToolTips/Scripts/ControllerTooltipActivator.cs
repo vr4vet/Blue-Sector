@@ -10,7 +10,13 @@ public class ControllerTooltipActivator : MonoBehaviour
     [SerializeField] private float TriggerSizeFactor = 1.5f;
     [Tooltip("Place an object containing a collider component here to use that to trigger tooltips instead of an automatically generated one. Will not be scaled using TriggerSizeFactor")]
     [SerializeField] private Collider CustomColliderTrigger;
-
+    [Tooltip("The initial state of the activator")]
+    [SerializeField] private TooltipState InitialState = TooltipState.Active;
+    private enum TooltipState
+    {
+        Active, Inactive
+    }
+    
     private ControllerTooltipManager _controllerTooltipManager;
 
     [Header("Left controller buttons")]
@@ -41,11 +47,42 @@ public class ControllerTooltipActivator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (InitialState == TooltipState.Inactive)
+            _active = false;
+
         _controllerTooltipManager = GameObject.Find("ControllerToolTipManager").GetComponent<ControllerTooltipManager>();
+
+        // create a list of mappings between buttons and actions
+        _buttonMappingsLeft = new List<ButtonActionMapping>
+        {
+            new(ControllerButtons.OculusLeft, OculusLeft),
+            new(ControllerButtons.ThumbstickLeft, ThumbstickLeft),
+            new(ControllerButtons.X, X),
+            new(ControllerButtons.Y, Y),
+            new(ControllerButtons.TriggerFrontLeft, TriggerFrontLeft),
+            new(ControllerButtons.TriggerGripLeft, TriggerGripLeft),
+        };
+
+        _buttonMappingsRight = new List<ButtonActionMapping>
+        {
+            new(ControllerButtons.OculusRight, OculusRight),
+            new(ControllerButtons.ThumbstickRight, ThumbstickRight),
+            new(ControllerButtons.A, A),
+            new(ControllerButtons.B, B),
+            new(ControllerButtons.TriggerFrontRight, TriggerFrontRight),
+            new(ControllerButtons.TriggerGripRight, TriggerGripRight)
+        };
 
         // A duplicate collider is created.
         // If a custom collider is provided, that will be duplicated.
         // Otherwise, the paren't collider is duplicated and scaled by TriggerSizeFactor
+
+        if (CustomColliderTrigger != null && CustomColliderTrigger.transform == transform)
+        {
+            _colliderForDistanceComparison = CustomColliderTrigger;
+            return;
+        }
+
         Collider parentCollider = transform.parent.GetComponent<Collider>();
         var _colliderType = CustomColliderTrigger != null ? CustomColliderTrigger.GetType() : parentCollider.GetType(); // get the collider type, either from the provided custom collider or the parent's collider
 
@@ -83,28 +120,6 @@ public class ControllerTooltipActivator : MonoBehaviour
             ((Collider)tooltipTriggerCollider).isTrigger = true; // make trigger trigger. casting is neccesary, but we know for sure that is is a collider, so it should be safe
             transform.localScale *= CustomColliderTrigger == null ? TriggerSizeFactor : 1; // scale object (in practice the collider) by TriggerSizeFactor
         }
-
-
-        // create a list of mappings between buttons and actions
-        _buttonMappingsLeft = new List<ButtonActionMapping>
-        {
-            new(ControllerButtons.OculusLeft, OculusLeft),
-            new(ControllerButtons.ThumbstickLeft, ThumbstickLeft),
-            new(ControllerButtons.X, X),
-            new(ControllerButtons.Y, Y),
-            new(ControllerButtons.TriggerFrontLeft, TriggerFrontLeft),
-            new(ControllerButtons.TriggerGripLeft, TriggerGripLeft),
-        };
-
-        _buttonMappingsRight = new List<ButtonActionMapping>
-        {
-            new(ControllerButtons.OculusRight, OculusRight),
-            new(ControllerButtons.ThumbstickRight, ThumbstickRight),
-            new(ControllerButtons.A, A),
-            new(ControllerButtons.B, B),
-            new(ControllerButtons.TriggerFrontRight, TriggerFrontRight),
-            new(ControllerButtons.TriggerGripRight, TriggerGripRight)
-        };
     }
 
     private void OnTriggerEnter(Collider other)
@@ -139,5 +154,12 @@ public class ControllerTooltipActivator : MonoBehaviour
     /// <summary>
     /// Deactivate the activator
     /// </summary>
-    public void Deactivate() => _active = false;
+    public void Deactivate()
+    {
+        _active = false;
+        if (_controllerTooltipManager.IsControllerMapped(_buttonMappingsLeft, ControllerHand.Left))
+            _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsLeft), ControllerHand.Left);
+        if (_controllerTooltipManager.IsControllerMapped(_buttonMappingsRight, ControllerHand.Right))
+            _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsRight), ControllerHand.Right);
+    }
 }
