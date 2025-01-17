@@ -36,7 +36,8 @@ public record ButtonActionMapping(ControllerButtons Button, ButtonActions Action
 /// <summary>
 /// Record used to keep track of currently intersecting objects containing ControllerTooltipActivator script
 /// and its related button mapping.
+/// The collider will be used for distance comparison in ControllerTooltipManager when multiple objects overlap.
 /// </summary>
-/// <param name="Object"></param>
+/// <param name="BoundingCollider"></param>
 /// <param name="ButtonMappings"></param>
-public record InterractableObject(Transform Object, List<ButtonActionMapping> ButtonMappings);
+public record InterractableObject(Collider BoundingCollider, List<ButtonActionMapping> ButtonMappings);

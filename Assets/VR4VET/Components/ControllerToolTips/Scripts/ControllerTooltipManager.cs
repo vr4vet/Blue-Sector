@@ -80,11 +80,12 @@ public class ControllerTooltipManager : MonoBehaviour
         {
             if (interractableObjects.Count >= 1) // only run this if there are objects in hand's vicinity
             {
+                Vector3 handPosition = controllerModel.transform.position;
                 InterractableObject closestTmpObject = null;
                 float shortestDistance = Mathf.Infinity;
                 foreach (InterractableObject intObject in interractableObjects)
                 {
-                    float dist = Vector3.Distance(controllerModel.transform.position, intObject.Object.position);
+                    float dist = Vector3.Distance(handPosition, intObject.BoundingCollider.ClosestPoint(handPosition)); // calculate distance between hand and collider bounds
                     if (dist < shortestDistance)
                     {
                         closestTmpObject = intObject;

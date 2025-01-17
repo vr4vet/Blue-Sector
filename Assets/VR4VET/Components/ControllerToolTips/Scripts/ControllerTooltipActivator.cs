@@ -32,7 +32,8 @@ public class ControllerTooltipActivator : MonoBehaviour
     // lists of button mappings for both Oculus hand controllers
     private List<ButtonActionMapping> _buttonMappingsLeft, _buttonMappingsRight;
 
-    private System.Type _colliderType;
+    // collider that will be sent to ControllerTooltipManager to determine distance from hand to object
+    private Collider _colliderForDistanceComparison;
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +44,7 @@ public class ControllerTooltipActivator : MonoBehaviour
         // If a custom collider is provided, that will be duplicated.
         // Otherwise, the paren't collider is duplicated and scaled by TriggerSizeFactor
         Collider parentCollider = transform.parent.GetComponent<Collider>();
-        _colliderType = CustomColliderTrigger != null ? CustomColliderTrigger.GetType() : parentCollider.GetType(); // get the collider type, either from the provided custom collider or the parent's collider
+        var _colliderType = CustomColliderTrigger != null ? CustomColliderTrigger.GetType() : parentCollider.GetType(); // get the collider type, either from the provided custom collider or the parent's collider
 
         if (_colliderType == typeof(MeshCollider))
         {
@@ -52,19 +53,28 @@ public class ControllerTooltipActivator : MonoBehaviour
         }
         else 
         {
-            var tooltipTriggerCollider = gameObject.AddComponent(_colliderType); // create a duplicate attached to this activator object
+            var tooltipTriggerCollider = (Collider)gameObject.AddComponent(_colliderType); // create a duplicate attached to this activator object
             var properties = _colliderType.GetDeclaredProperties(); // get properties of the collider type
+                        
             foreach (var property in properties)
             {
                 if (CustomColliderTrigger == null)
                 {
+                    if (_colliderForDistanceComparison == null)
+                        _colliderForDistanceComparison = parentCollider; // parent collider (presumably tight around object) will be used for distance evaluation. necessary because the trigger collider is too large
+
                     if (property.Name.Equals("center"))
                         property.SetValue(tooltipTriggerCollider, (Vector3)property.GetValue(parentCollider) / TriggerSizeFactor); // adjust center of collider to compensate for TriggerSizeFactor. casting is neccesary, but we know for sure that is is a collider, so it should be safe
                     else
                         property.SetValue(tooltipTriggerCollider, property.GetValue(parentCollider)); // otherwise duplicate properties from the collider we are copying
                 }
                 else
+                {
+                    if (_colliderForDistanceComparison == null)
+                        _colliderForDistanceComparison = CustomColliderTrigger; // custom collider will be used for distance evaluation. is fine because the custom collider has no concept of "being larger than the object itself"
+
                     property.SetValue(tooltipTriggerCollider, property.GetValue(CustomColliderTrigger)); // duplicate properties from the collider we are copying
+                }
             }
 
             ((Collider)tooltipTriggerCollider).isTrigger = true; // make trigger trigger. casting is neccesary, but we know for sure that is is a collider, so it should be safe
@@ -100,9 +110,9 @@ public class ControllerTooltipActivator : MonoBehaviour
         {
             // send the necessary information about this object to ControllerTooltipManager
             if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
-                _controllerTooltipManager.OnHandEntered(new InterractableObject(transform, _buttonMappingsLeft), ControllerHand.Left);
+                _controllerTooltipManager.OnHandEntered(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsLeft), ControllerHand.Left);
             else if (other.GetComponent<Grabber>().HandSide == ControllerHand.Right)
-                _controllerTooltipManager.OnHandEntered(new InterractableObject(transform, _buttonMappingsRight), ControllerHand.Right);
+                _controllerTooltipManager.OnHandEntered(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsRight), ControllerHand.Right);
         }
     }
 
@@ -112,9 +122,9 @@ public class ControllerTooltipActivator : MonoBehaviour
         {
             // send the necessary information about this object to ControllerTooltipManager
             if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
-                _controllerTooltipManager.OnHandExited(new InterractableObject(transform, _buttonMappingsLeft), ControllerHand.Left);
+                _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsLeft), ControllerHand.Left);
             else if (other.GetComponent<Grabber>().HandSide == ControllerHand.Right)
-                _controllerTooltipManager.OnHandExited(new InterractableObject(transform, _buttonMappingsRight), ControllerHand.Right);
+                _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsRight), ControllerHand.Right);
         }
     }
 }
