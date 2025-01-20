@@ -14,6 +14,8 @@ public class ControllerTooltipManager : MonoBehaviour
     [SerializeField] private GameObject ToolTipPrefab;
     [Tooltip("3D models of the Oculus hand controllers")]
     [SerializeField] private List<GameObject> OculusControllerModels;
+    [Tooltip("Place main menu/pause menu here to allow the player to toggle this accessibility feature on or off")]
+    [SerializeField] private NewMenuManger MainMenu;
 
     // variables for configuring each tooltip's position relative to its button on the left controller using the inspector
     [Header("Left controller button tooltip offsets")]
@@ -46,11 +48,17 @@ public class ControllerTooltipManager : MonoBehaviour
     private List<InterractableObject> _interractableObjectsLeft = new(), _interractableObjectsRight = new();
     private InterractableObject _closestObjectLeft = null, _closestObjectRight = null; // store closest objet after finding it for comparing with the one found in next iteration
 
+    // controls whether close objects will be scanned, controller models enabled/disabled etc., and is set in main menu/pause menu.
+    private bool _accessibilityEnabled = false;
+
     // Start is called before the first frame update
     void Start()
     {
         // wait until the GameManager instance is set up correctly before accessing the player and controller models
         GameManager.Instance.PlayerHandModelsLoaded.AddListener(OnHandModelsReady);
+
+        if (MainMenu != null)
+            MainMenu.m_ControllerTooltipsToggled.AddListener(OnPauseMenuToggle);
     }
 
     /// <summary>
@@ -78,43 +86,46 @@ public class ControllerTooltipManager : MonoBehaviour
         InterractableObject closestObject = null; // store closest objet after finding it for comparing with the one found in next iteration
         while (true)
         {
-            if (interractableObjects.Count >= 1) // only run this if there are objects in hand's vicinity
+            if (_accessibilityEnabled)
             {
-                
-                if (TooltippedButtonsDown(controllerHand)) // close all tooltips and hide hand when player presses one of the labelled buttons
-                    CloseAllTooltips(controllerHand);
-                else if (closestObject != null) // otherwise show tooltips (unless no closest object is set yet, indicating first iteration)
-                    SetUpTooltips(closestObject, controllerHand);
-
-                Vector3 handPosition = controllerModel.transform.position;
-                InterractableObject closestTmpObject = null;
-                float shortestDistance = Mathf.Infinity;
-                foreach (InterractableObject intObject in interractableObjects)
+                if (interractableObjects.Count >= 1) // only run this if there are objects in hand's vicinity
                 {
-                    float dist = Vector3.Distance(handPosition, intObject.BoundingCollider.ClosestPoint(handPosition)); // calculate distance between hand and collider bounds
-                    if (dist < shortestDistance)
+
+                    if (TooltippedButtonsDown(controllerHand)) // close all tooltips and hide hand when player presses one of the labelled buttons
+                        CloseAllTooltips(controllerHand);
+                    else if (closestObject != null) // otherwise show tooltips (unless no closest object is set yet, indicating first iteration)
+                        SetUpTooltips(closestObject, controllerHand);
+
+                    Vector3 handPosition = controllerModel.transform.position;
+                    InterractableObject closestTmpObject = null;
+                    float shortestDistance = Mathf.Infinity;
+                    foreach (InterractableObject intObject in interractableObjects)
                     {
-                        closestTmpObject = intObject;
-                        shortestDistance = dist;
+                        float dist = Vector3.Distance(handPosition, intObject.BoundingCollider.ClosestPoint(handPosition)); // calculate distance between hand and collider bounds
+                        if (dist < shortestDistance)
+                        {
+                            closestTmpObject = intObject;
+                            shortestDistance = dist;
+                        }
+                    }
+                    if (closestTmpObject != closestObject) // store new closest object
+                    {
+                        closestObject = closestTmpObject;
+
+                        if (controllerHand == ControllerHand.Left)
+                            _closestObjectLeft = closestObject;
+                        else
+                            _closestObjectRight = closestObject;
                     }
                 }
-                if (closestTmpObject != closestObject) // store new closest object
+                else // close all tooltips if there are no objects in the hand's vicinity
                 {
-                    closestObject = closestTmpObject;
-
-                    if (controllerHand == ControllerHand.Left)
-                        _closestObjectLeft = closestObject;
-                    else
-                        _closestObjectRight = closestObject;
+                    closestObject = null; // resetting closest object because no object is closest
+                    CloseAllTooltips(controllerHand);
                 }
             }
-            else // close all tooltips if there are no objects in the hand's vicinity
-            {
-                closestObject = null; // resetting closest object because no object is closest
-                CloseAllTooltips(controllerHand);
-            }
 
-            yield return new WaitForSecondsRealtime(.25f); // wait for 1/4th of a second before assessing again
+            yield return new WaitForSecondsRealtime(.1f); // check 10 times a second
         }
     }
 
@@ -350,6 +361,28 @@ public class ControllerTooltipManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Closes all the provided hand's tooltips immediately
+    /// </summary>
+    /// <param name="controllerHand"></param>
+    private void CloseAllTooltipsImmediately(ControllerHand controllerHand)
+    {
+        if (controllerHand == ControllerHand.None)
+        {
+            Debug.LogError("The provided controller hand must be either ControllerHand.Left or ControllerHand.Right, but was ControllerHand.None!");
+            return;
+        }
+
+        // kinda gross, but it is what it is...at least it doesn't run frequently.
+        ControllerButtonsTransforms buttons = controllerHand == ControllerHand.Left ? _controllerButtonsLeft : _controllerButtonsRight;
+        buttons.Oculus.GetComponentInChildren<HandControllerToolTip>().CloseImmediately();
+        buttons.Primary.GetComponentInChildren<HandControllerToolTip>().CloseImmediately();
+        buttons.Secondary.GetComponentInChildren<HandControllerToolTip>().CloseImmediately();
+        buttons.Thumbstick.GetComponentInChildren<HandControllerToolTip>().CloseImmediately();
+        buttons.TriggerFront.GetComponentInChildren<HandControllerToolTip>().CloseImmediately();
+        buttons.TriggerGrip.GetComponentInChildren<HandControllerToolTip>().CloseImmediately();
+    }
+
+    /// <summary>
     /// Activates Quest hand controller models
     /// </summary>
     private void SetQuestControllerModels(ControllerHand controllerHand)
@@ -526,11 +559,6 @@ public class ControllerTooltipManager : MonoBehaviour
                     break;
             }
         }
-
-        // start coroutines to make both hands check for their closest ControllerTooltipActivator object several times a second
-        // makes sure that the closes object's button mappings are shown when intersecting with multiple object
-        StartCoroutine(FindClosestObject(ControllerHand.Left));
-        StartCoroutine(FindClosestObject(ControllerHand.Right));
     }
 
     /// <summary>
@@ -644,4 +672,31 @@ public class ControllerTooltipManager : MonoBehaviour
     /// which allows manager to wait until all tooltips are ready before activating or deactivating tooltips.
     /// </summary>
     public void OnTooltipReady() => _tooltipsReady++;
+
+    /// <summary>
+    /// Is triggered when this accessibility feature is toggled in pause menu. Controls whether tooltips appear or not.
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void OnPauseMenuToggle(bool isOn)
+    {
+        _accessibilityEnabled = isOn;
+
+        // don't do things unless everything is set up and ready
+        if (_tooltipsReady < 12)
+            return;
+
+        if (!isOn)
+        {
+            StopAllCoroutines();
+            CloseAllTooltipsImmediately(ControllerHand.Left);
+            CloseAllTooltipsImmediately(ControllerHand.Right);
+            SetDefaultHandModel(ControllerHand.Left);
+            SetDefaultHandModel(ControllerHand.Right);
+        }
+        else
+        {
+            StartCoroutine(FindClosestObject(ControllerHand.Left));
+            StartCoroutine(FindClosestObject(ControllerHand.Right));
+        }  
+    }
 }
