@@ -23,6 +23,10 @@ public class ScaleButtons : MonoBehaviour
 
     private void OnTriggerEnter(Collider collisionObject)
     {
+        if (collisionObject.name == "CollisionTriggerHandler")
+        {
+            return;
+        }
         switch (buttonType)
         {
             case ButtonType.On:
@@ -30,13 +34,12 @@ public class ScaleButtons : MonoBehaviour
                 scale.displayText.SetText("000.0");
                 scale.audio.Play();
                 scale.scaleOn = true;
-
-                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0]) {
-                    
-                    dialogueBoxController.SkipLine();
-                    Debug.Log(dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[1]);
-
-                    
+                if (dialogueBoxController.dialogueTreeRestart != null)
+                {
+                    if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
+                    {
+                        dialogueBoxController.SkipLine();
+                    }
                 }
 
                 break;
@@ -44,18 +47,22 @@ public class ScaleButtons : MonoBehaviour
                 StopAllCoroutines();
                 scale.displayText.SetText("");
                 scale.audio.Play();
-                scale.scaleOn = true;
+                scale.scaleOn = false;
                 break;
             case ButtonType.Reset:
-                StopAllCoroutines();
-                scale.totalWeight = 0;
-                scale.displayText.SetText("000.0");
-                scale.audio.Play();
+                if (scale.scaleOn)
+                {
+                    StopAllCoroutines();
+                    scale.totalWeight = 0;
+                    scale.displayText.SetText("000.0");
+                    scale.audio.Play();
 
-                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[2]) {
-                    dialogueBoxController.SkipLine();
+                    if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2]) {
+                        dialogueBoxController.SkipLine();
                     
+                    } 
                 }
+                
 
                 break;
         }

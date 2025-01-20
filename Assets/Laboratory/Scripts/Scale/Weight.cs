@@ -50,19 +50,19 @@ public class Weight : MonoBehaviour
         return _objectWeight;
     }
 
-     private void OnTriggerEnter(Collider collision) 
+    private void OnTriggerEnter(Collider collision)
     {
-        
+
         if (collision.GetType() == typeof(CapsuleCollider) && collision.GetComponent<Weight>())
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[3]) 
+            if ( dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3])
             {
                 dialogueBoxController.SkipLine();
             }
 
-            
-           
-            
+
+
+
 
             float lengt = collision.GetComponent<Weight>().fish.transform.localScale.x;
             float fishLength = (float)(4.58 * Math.Exp(2.33 * lengt) + 10.31);

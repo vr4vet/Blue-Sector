@@ -23,7 +23,7 @@ public class FeedbackManager : MonoBehaviour
         if (gameObject.GetComponent<MaintenanceManager>() != null)
         {
             manager = this.gameObject.GetComponent<MaintenanceManager>();
-            manager.SubtaskChanged.AddListener(feedbackOnTaskComplete);
+            manager.SubtaskChanged.AddListener(FeedbackOnTaskComplete);
         }
         else
         { 
@@ -91,7 +91,7 @@ public class FeedbackManager : MonoBehaviour
     }
 
 
-    public void addFeedback(string subtaskName)
+    public void AddFeedback(string subtaskName)
     {
         if (subtaskName == "Dødfisk håndtering")
         {
@@ -105,7 +105,7 @@ public class FeedbackManager : MonoBehaviour
             return;
         }
         watch.addInstructions(feedback[subtaskName][0]);
-        manager.effectiveBadgeEnabled(true);
+        manager.EffectiveBadgeEnabled(true);
         StartCoroutine(moreFeedback(subtaskName));
         if (subtaskName == "Håndforing")
         {
@@ -127,17 +127,17 @@ public class FeedbackManager : MonoBehaviour
         else if (subtaskName == "Reparer tau på merd" && !manager.GetStep("Runde På Ring", subtaskName).IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
-            manager.effectiveBadgeEnabled(false);
+            manager.EffectiveBadgeEnabled(false);
         }
         else if (subtaskName == "Legg til tau på merd" && !manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
-            manager.effectiveBadgeEnabled(false);
+            manager.EffectiveBadgeEnabled(false);
         }
         else if (subtaskName == "Legg til splinter på kjetting" && !manager.GetStep("Runde På Ring", "Reparer tau på merd").IsCompeleted() && !manager.GetStep("Runde På Ring", "Legg til tau på merd").IsCompeleted())
         {
             watch.addInstructions(feedback[subtaskName][1]);
-            manager.effectiveBadgeEnabled(false);
+            manager.EffectiveBadgeEnabled(false);
         }
         // if (subtaskName != "Håndforing" && subtaskName != "Hent Utstyr")
         // {
@@ -152,11 +152,11 @@ public class FeedbackManager : MonoBehaviour
         watch.addInstructions(feedback[subtaskName][4]);
     }
 
-    public void feedbackOnTaskComplete(Task.Subtask subtask)
+    public void FeedbackOnTaskComplete(Task.Subtask subtask)
     {
-        if (subtask.Compleated() && (subtask.SubtaskName == "Hent Utstyr" || subtask.SubtaskName == "Håndforing"))
+        if (subtask.Compleated() && (subtask.SubtaskName == "Get Equipment" || subtask.SubtaskName == "Hand Feeding"))
         {
-            watch.addInstructions(feedback[subtask.SubtaskName][2]);
+            //watch.addInstructions(feedback[subtask.SubtaskName][2]);
         }
     }
 

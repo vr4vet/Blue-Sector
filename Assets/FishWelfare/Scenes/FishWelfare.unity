@@ -3065,15 +3065,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1968169428}
     m_Modifications:
+    - target: {fileID: 1816515325261925563, guid: c3af6d8d665c29b4683a9544a4efc095,
+        type: 3}
+      propertyPath: sceneName
+      value: ReceptionOutdoor
+      objectReference: {fileID: 0}
+    - target: {fileID: 1816515325261925563, guid: c3af6d8d665c29b4683a9544a4efc095,
+        type: 3}
+      propertyPath: meansOfTransportation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
@@ -3084,12 +3094,12 @@ PrefabInstance:
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 401159075}
+      objectReference: {fileID: 0}
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 401159074}
+      objectReference: {fileID: 0}
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -3098,7 +3108,7 @@ PrefabInstance:
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Play
+      value: LoadScene
       objectReference: {fileID: 0}
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
@@ -3108,7 +3118,7 @@ PrefabInstance:
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.AudioSource, UnityEngine
+      value: BNG.SceneLoader, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
@@ -3118,7 +3128,7 @@ PrefabInstance:
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: 
+      value: FishFeeding
       objectReference: {fileID: 0}
     - target: {fileID: 2667665649058245418, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
@@ -3154,12 +3164,12 @@ PrefabInstance:
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 401159075}
+      objectReference: {fileID: 0}
     - target: {fileID: 9205844495485363410, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 401159074}
+      objectReference: {fileID: 0}
     - target: {fileID: 9205844495485363410, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
       propertyPath: OnPlayerEnter.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -3304,16 +3314,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205844495485363437, guid: c3af6d8d665c29b4683a9544a4efc095,
-        type: 3}
-      propertyPath: UseSceenFader
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205844495485363437, guid: c3af6d8d665c29b4683a9544a4efc095,
-        type: 3}
-      propertyPath: ScreenFadeTime
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9205844495485363439, guid: c3af6d8d665c29b4683a9544a4efc095,
         type: 3}
@@ -9111,6 +9111,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 1586072134533559802, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
+        type: 3}
+      propertyPath: ToggleHandsInput
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1592195714553145956, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: m_Layer
@@ -10739,7 +10744,7 @@ PrefabInstance:
     - target: {fileID: 3492994722929524557, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: MinElevation
-      value: -12
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 3493552579508059226, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
@@ -11389,7 +11394,7 @@ PrefabInstance:
     - target: {fileID: 4124970552446277237, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: ExcludeTransformNames.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4124970552446277237, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
@@ -11399,7 +11404,7 @@ PrefabInstance:
     - target: {fileID: 4124970552446277237, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: ExcludeTransformNames.Array.data[1]
-      value: Bone
+      value: growler
       objectReference: {fileID: 0}
     - target: {fileID: 4124970552446277237, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
@@ -14929,7 +14934,7 @@ PrefabInstance:
     - target: {fileID: 7438470712292323659, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: ExcludeTransformNames.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7438470712292323659, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
@@ -14939,7 +14944,7 @@ PrefabInstance:
     - target: {fileID: 7438470712292323659, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}
       propertyPath: ExcludeTransformNames.Array.data[1]
-      value: Bone
+      value: growler
       objectReference: {fileID: 0}
     - target: {fileID: 7438470712292323659, guid: 0f2bcfe3b2900db469a02abdad5e5fc7,
         type: 3}

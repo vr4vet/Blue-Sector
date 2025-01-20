@@ -214,7 +214,7 @@ public class ResultLogger : MonoBehaviour
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
         
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[4]) 
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4] && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue") 
         {
             dialogueBoxController.SkipLine();
         }
@@ -229,7 +229,7 @@ public class ResultLogger : MonoBehaviour
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
 
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[1]) 
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue") 
         {
             dialogueBoxController.SkipLine();
         }
@@ -241,11 +241,6 @@ public class ResultLogger : MonoBehaviour
         UsingDecimals = false;
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
-
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[1]) 
-        {
-            dialogueBoxController.SkipLine();
-        }
     }
 
 

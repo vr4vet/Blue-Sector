@@ -12,35 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
   m_Name: QADialogue
   m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
   sections:
   - dialogue:
     - Hello, and welcome to the quality assurance station. Your task here is to correctly
       sort fish by quality categories using the sorting machine.
-    - The fish on the conveyour belt comes from a cooling tank where the fish bleeds
+    - The fish on the conveyor belt comes from a cooling tank where the fish bleeds
       out. Please step on the platform next to me to use the sorting machine.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Are you ready to learn how to use the sorting machine?
       answers:
       - answerLabel: Wait could you repeat that?
         nextElement: 0
+        endAfterAnswer: 0
       - answerLabel: Yes
         nextElement: 1
+        endAfterAnswer: 0
   - dialogue:
-    - So the sorting machine is made up of a button panel with 6 buttons on the front
+    - The sorting machine is made up of a button panel with 6 buttons on the front
       and a button on the side. Apart from the button panel there are four slots
       where the fish can be placed.
     - Which slot you place the fish in does not matter. You can use whatever slot
-      is available  regardless of the quality of the fish. It's the buttons that
-      are used to sort the fish.
+      is available regardless of the quality of the fish. It's the buttons that are
+      used to sort the fish.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Are you ready to learn how to use the buttons?
       answers:
       - answerLabel: Could you repeat that?
         nextElement: 1
+        endAfterAnswer: 0
       - answerLabel: Yes
         nextElement: 2
+        endAfterAnswer: 0
   - dialogue:
     - There are a total of 7 buttons on the machine. The red button on the side starts
       and stops the conveyors. The conveyors are currently stopped so you need to
@@ -49,13 +61,18 @@ MonoBehaviour:
       designed to be used by two people and so each person has 3 buttons each. Therefore
       you only need to worry about the tree buttons closest to you.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Are you ready to learn more?
       answers:
       - answerLabel: Could you repeat that?
         nextElement: 2
+        endAfterAnswer: 0
       - answerLabel: Yes
         nextElement: 3
+        endAfterAnswer: 0
   - dialogue:
     - 'The three buttons are used to electronically assign a tier to the fish that
       gets placed in the slots. As I said it does not matter which slot you put the
@@ -68,15 +85,21 @@ MonoBehaviour:
       to sort a fish that does not belong in the active tier you simply press a different
       button to change the active tier.
     endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Have you understood how the machine works?
       answers:
       - answerLabel: No, could you explain the buttons again?
         nextElement: 2
+        endAfterAnswer: 0
       - answerLabel: Could you explain how the machine works again?
-        nextElement: 1
+        nextElement: 5
+        endAfterAnswer: 0
       - answerLabel: Yes!
         nextElement: 4
+        endAfterAnswer: 0
   - dialogue:
     - Bad fish should not be placed in the sorting machine. They should instead be
       thrown into the square hole and will travel on the small belt.
@@ -85,8 +108,48 @@ MonoBehaviour:
       or poor quality. My friend Geralt will help you when you feel finished here.
       He is waiting over by the gutting machine.
     endAfterDialogue: 1
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
     branchPoint:
       question: Good luck!
       answers:
       - answerLabel: Could you repeat that?
         nextElement: 0
+        endAfterAnswer: 0
+  - dialogue:
+    - The sorting machine is made up of a button panel with 6 buttons on the front
+      and a button on the side. Apart from the button panel there are four slots
+      where the fish can be placed.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Which slot you place the fish in does not matter. You can use whatever
+        slot is available regardless of the quality of the fish. It's the buttons
+        that are used to sort the fish.
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 5
+        endAfterAnswer: 0
+      - answerLabel: Got it!
+        nextElement: 6
+        endAfterAnswer: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Have you understood how the machine works?
+      answers:
+      - answerLabel: No, could you explain the buttons again?
+        nextElement: 2
+        endAfterAnswer: 0
+      - answerLabel: Could you explain how the machine works again?
+        nextElement: 5
+        endAfterAnswer: 0
+      - answerLabel: Yes!
+        nextElement: 4
+        endAfterAnswer: 0

@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: DissectionDialogue
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - ' Next you will dissect the fish. Place the fish on the dissection board to
+      the right of the length measuring board. The fish has been humanely culled.'
+    - The first step is to check for any external damage to the fish. Check for scale
+      loss, blood spots, lesions, fin damage, and gill condition to make sure there
+      are no health issues.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Are you ready to start?
+      answers:
+      - answerLabel: Yes
+        nextElement: 1
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 0
+        endAfterAnswer: 0
+  - dialogue:
+    - The next step is inspecting the internal areas of the fish. Cut open the fish
+      according to the instructions.
+    - "Look for any internal bleeding, blood spots, discoloration to the fish\u2019s
+      organs or any other damage. "
+    - ' Remember to press the lower button on the weight to reset it and make sure
+      it is set zero. '
+    - Remember to be careful when handling the fish to avoid causing any damage.
+    endAfterDialogue: 0
+    disabkeSkipLineButton: 0
+    point: 0
+    objectToLookAt: {fileID: 0}
+    branchPoint:
+      question: Are you ready to continue
+      answers:
+      - answerLabel: Yes
+        nextElement: 0
+        endAfterAnswer: 0
+      - answerLabel: No
+        nextElement: 1
+        endAfterAnswer: 0

@@ -25,19 +25,10 @@ public class Ruler : MonoBehaviour
     {
         if (collision.GetType() == typeof(CapsuleCollider) && collision.GetComponent<Weight>())
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[0]) 
+            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0]) 
             {
                 dialogueBoxController.SkipLine();
                 
-            }
-           
-            
-
-            float lengt = collision.GetComponent<Weight>().fish.transform.localScale.x;
-            float fishLength = (float)(4.58 * Math.Exp(2.33 * lengt) + 10.31);
-            if (!fishLengths.ContainsKey(collision.GetComponent<Weight>().fish))
-            {
-                fishLengths.Add(collision.GetComponent<Weight>().fish, fishLength);
             }
         }
     }

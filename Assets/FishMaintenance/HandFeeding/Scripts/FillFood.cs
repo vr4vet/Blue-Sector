@@ -52,18 +52,9 @@ public class FillFood : MonoBehaviour
             rb.AddForce(velocity, ForceMode.VelocityChange);
             spawnNumber++;
         }
-        Task.Step step = subtask.GetStep("Kast mat til fisken");
+        Task.Step step = subtask.GetStep("Throw food to the fish");
         manager.CompleteStep(step);
 
 
     }
-
-
-    void Update()
-    {
-
-
-
-    }
-
 }
