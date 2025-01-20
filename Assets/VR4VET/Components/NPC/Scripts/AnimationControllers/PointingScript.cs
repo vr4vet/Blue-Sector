@@ -6,24 +6,12 @@ public class PointingScript : MonoBehaviour
 {
     private GameObject _objectToLookAt;
     private Quaternion _initialRotation;
-    private Transform _npcModel;
     private bool _initialRotationSet = false;
     
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    // This method is used to change the rotation of the NPC to look at a specific object
     public void ChangeDirection(int section, GameObject talkingNpc)
     {
+        // The intial rotation of the NPC is stored before changing it, so that it can be reset. 
         if (!_initialRotationSet)
         {
             _initialRotation = transform.rotation;
@@ -55,13 +43,11 @@ public class PointingScript : MonoBehaviour
         }
 
     }
+    
     // Reset the direction of the NPC
     public void ResetDirection(GameObject talkingNpc)
     {
-        // The NPC is reset to it's initial rotation. The initial rotation always updated in case the NPC has moved 
-       /* Vector3 rotation = _initialRotation.eulerAngles;
-        rotation.y = transform.rotation.eulerAngles.y;
-        _initialRotation = Quaternion.Euler(rotation); */
+        // The NPC is reset to its initial rotation if the initial rotation has been set
        if (_initialRotationSet)
        {
            transform.rotation = _initialRotation;

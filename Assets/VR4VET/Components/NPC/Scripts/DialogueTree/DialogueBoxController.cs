@@ -142,11 +142,7 @@ public class DialogueBoxController : MonoBehaviour
         {
           for (int i = element; i < dialogueTree.sections[section].dialogue.Length; i++)
           {
-              if (_pointingScript != null && dialogueTree.sections[section].point)
-              {
-                  _pointingScript.ResetDirection(talkingNpc: this.gameObject);
-              }
-
+              _pointingScript.ResetDirection(talkingNpc: this.gameObject);
               _animator.SetBool(_isPointingHash, false);
               // Start talking animation
               _animator.SetBool(_isTalkingHash, true);
