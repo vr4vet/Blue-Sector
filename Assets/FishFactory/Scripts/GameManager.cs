@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
@@ -201,6 +202,14 @@ public class GameManager : MonoBehaviour
         set { nextScenePlayerRotation = value; }
     }
 
+    // ----------------- Private Variables ------------------
+
+    // The player rig. Usefull for access from any other script.
+    private GameObject _player;
+
+    // ----------------- Unity Events --------------------
+    public UnityEvent PlayerHandModelsLoaded;
+
     // ----------------- Unity Functions -----------------
 
     private bool isFactoryScene = false;
@@ -224,6 +233,16 @@ public class GameManager : MonoBehaviour
         _steelGlove = Resources.Load<Material>("Materials/SteelGlove");
 
         IsTaskOn = false;
+    
+    
+    }
+
+    private void Start()
+    {
+        if (PlayerHandModelsLoaded == null)
+            PlayerHandModelsLoaded = new UnityEvent();
+
+        _player = GameObject.Find("XR Rig Advanced VR4VET");
     }
 
     void Update()
@@ -243,6 +262,9 @@ public class GameManager : MonoBehaviour
                 .transform.GetChild(0)
                 .gameObject;
             SetPlayerGloves();
+
+            if (_leftHandGameObj != null && _rightHandGameObj != null && _audioManager != null)
+                PlayerHandModelsLoaded.Invoke();
         }
     }
 
@@ -341,5 +363,14 @@ public class GameManager : MonoBehaviour
     {
         _blueGlove = Resources.Load<Material>("Materials/BlueGlove");
         _steelGlove = Resources.Load<Material>("Materials/SteelGlove");
+    }
+
+    /// <summary>
+    /// Returns the player rig object
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetPlayerRig()
+    {
+        return _player;
     }
 }
