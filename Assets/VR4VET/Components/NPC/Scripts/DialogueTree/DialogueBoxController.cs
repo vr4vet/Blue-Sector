@@ -65,6 +65,7 @@ public class DialogueBoxController : MonoBehaviour
         {
             m_DialogueChanged = new DialogueChanged();
         }
+        
         _pointingController = GameObject.Find("PointingController");
         dialogueEnded = false;
         // Assign the event camera
@@ -135,6 +136,8 @@ public class DialogueBoxController : MonoBehaviour
         dialogueTextRect.sizeDelta = new Vector2(150, 60);
         
         int dialogueSection = 0;
+        
+        // -1 means that the dialogue was a branchpoint and the script will skip to loading the branchpoint, instead of the standard dialogue when returning to the section
         if (element != -1)
         {
           for (int i = element; i < dialogueTree.sections[section].dialogue.Length; i++)
@@ -161,6 +164,7 @@ public class DialogueBoxController : MonoBehaviour
               {
                   _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
               }
+              
               // Check if the current dialogue section should have the NPC pointing
               if (dialogueTree.sections[section].point)
               {
@@ -188,7 +192,6 @@ public class DialogueBoxController : MonoBehaviour
           }   
         }
         
-
         if (!dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue.Equals(string.Empty))
         {
             GetComponent<WalkingNpc>().WalkPath(dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue);
