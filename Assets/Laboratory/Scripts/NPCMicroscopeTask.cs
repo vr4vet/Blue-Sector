@@ -34,9 +34,6 @@ public class NPCMicroscopeTask : MonoBehaviour
     private float startTime = 0;
     private void Update()
     {
-        /*if (dialogueBoxController.dialogueTreeRestart.name != "Introduction" || (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue"))
-            return;*/
-
         if (dialogueBoxController.dialogueTreeRestart == null)
             return;
 
@@ -89,7 +86,7 @@ public class NPCMicroscopeTask : MonoBehaviour
                 // checking if player has placed slide onto microscope
                 if (slide == null)
                 {
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue");
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue", 0);
                     return;
                 }
 
@@ -102,7 +99,7 @@ public class NPCMicroscopeTask : MonoBehaviour
                 }
                 
                 if (correct)
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 5, "MicroscopeDialogue");
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 5, "MicroscopeDialogue", 0);
                 else
                 {
                     // dynamically adding dialogue with correct answers. this could be a risky operation!
@@ -111,7 +108,7 @@ public class NPCMicroscopeTask : MonoBehaviour
                         $"{slide.GetTotalAmountOfPseudoNitzschia()} Pseudo-nitzschia diatom, " +
                         $"and {slide.GetTotalAmountOfSkeletonema()} Skeletonema diatom.";
 
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 6, "MicroscopeDialogue");    
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 6, "MicroscopeDialogue", 0);    
                 }
             }
             return;
@@ -130,7 +127,7 @@ public class NPCMicroscopeTask : MonoBehaviour
                 // checking if player has placed slide onto microscope
                 if (slide == null)
                 {
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue");
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue", 0);
                     return;
                 }
 
@@ -138,12 +135,12 @@ public class NPCMicroscopeTask : MonoBehaviour
                 if (HighLightPlankton)
                 {
                     EnablePlanktonHighlights.Invoke();
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 11, "MicroscopeDialogue");
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 11, "MicroscopeDialogue", 0);
                 }     
                 else
                 {
                     DisablePlanktonHighlights.Invoke();
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 12, "MicroscopeDialogue");
+                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 12, "MicroscopeDialogue", 0);
                 }   
             }
         }

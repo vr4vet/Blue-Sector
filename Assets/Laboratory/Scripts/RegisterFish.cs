@@ -11,22 +11,22 @@ public class RegisterFish : MonoBehaviour
     public float conditionRight;
     public GameObject fishObject;
     public Weight weight;
-    private DialogueBoxController dialogueBoxController;
+    private DialogueBoxController _dialogueBoxController;
     public NpcTriggerDialogue NpcTriggerDialogue;
 
     private void Start()
     {
-        dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+        _dialogueBoxController = FindObjectOfType<DialogueBoxController>();
     }
     private void OnTriggerEnter(Collider collisionObject)
     {
         if (collisionObject.GetComponent<Weight>() && collisionObject.gameObject.tag == "Bone")
         {
-            if (dialogueBoxController.dialogueTreeRestart != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+            if (_dialogueBoxController.dialogueTreeRestart != null && _dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
             {
-                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[1])
+                if (_dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[1])
                 {
-                    dialogueBoxController.SkipLine();
+                    _dialogueBoxController.SkipLine();
                 }
             }
             weight = collisionObject.GetComponent<Weight>();
@@ -52,21 +52,18 @@ public class RegisterFish : MonoBehaviour
         }
         else if (collisionObject.gameObject.name == "basket_plastic")
         {
-            NpcTriggerDialogue.FindDialogueSection();
             collisionObject.transform.position = ObjectPositions.Instance._basketPosition;
             collisionObject.transform.rotation = ObjectPositions.Instance._basketRotation;
             NpcTriggerDialogue.Error5();
         }
         else if (collisionObject.gameObject.name == "counter_handheld")
         {
-            NpcTriggerDialogue.FindDialogueSection();
             collisionObject.transform.position = ObjectPositions.Instance._handheldCounterPosition;
             collisionObject.transform.rotation = ObjectPositions.Instance._handheldCounterRotation;
             NpcTriggerDialogue.Error5();
         }
         else if (collisionObject.gameObject.name == "MicroscopeSlideModel")
         {
-            NpcTriggerDialogue.FindDialogueSection();
             collisionObject.transform.position = ObjectPositions.Instance._microscopeSlidePosition;
             collisionObject.transform.rotation = ObjectPositions.Instance._microscopeSlideRotation;
             NpcTriggerDialogue.Error5();
