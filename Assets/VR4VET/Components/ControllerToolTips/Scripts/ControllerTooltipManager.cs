@@ -203,9 +203,9 @@ public class ControllerTooltipManager : MonoBehaviour
                     case ControllerButtons.B:
                         return InputBridge.Instance.BButtonDown;
                     case ControllerButtons.TriggerFrontLeft:
-                        return InputBridge.Instance.LeftTriggerDown;
+                        return InputBridge.Instance.LeftTrigger > 0; // may need to be tweaked
                     case ControllerButtons.TriggerGripLeft:
-                        return InputBridge.Instance.LeftGripDown;
+                        return InputBridge.Instance.LeftGrip > 0; // may need to be tweaked
                     case ControllerButtons.ThumbstickRight:
                         return InputBridge.Instance.RightThumbstickAxis.magnitude > 0; // may need to be tweaked
                     case ControllerButtons.X:
@@ -213,9 +213,9 @@ public class ControllerTooltipManager : MonoBehaviour
                     case ControllerButtons.Y:
                         return InputBridge.Instance.YButtonDown;
                     case ControllerButtons.TriggerFrontRight:
-                        return InputBridge.Instance.RightTriggerDown;
+                        return InputBridge.Instance.RightTrigger > 0; // may need to be tweaked
                     case ControllerButtons.TriggerGripRight:
-                        return InputBridge.Instance.RightGripDown;
+                        return InputBridge.Instance.RightGrip > 0; // may need to be tweaked
                     default:
                         return false;
                 }

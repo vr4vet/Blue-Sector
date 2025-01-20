@@ -80,6 +80,7 @@ public class ControllerTooltipActivator : MonoBehaviour
         if (CustomColliderTrigger != null && CustomColliderTrigger.transform == transform)
         {
             _colliderForDistanceComparison = CustomColliderTrigger;
+            _colliderForDistanceComparison.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast"); // make it possible to teleport inside collider
             return;
         }
 
@@ -118,6 +119,7 @@ public class ControllerTooltipActivator : MonoBehaviour
             }
 
             ((Collider)tooltipTriggerCollider).isTrigger = true; // make trigger trigger. casting is neccesary, but we know for sure that is is a collider, so it should be safe
+            tooltipTriggerCollider.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast"); // make it possible to teleport inside collider
             transform.localScale *= CustomColliderTrigger == null ? TriggerSizeFactor : 1; // scale object (in practice the collider) by TriggerSizeFactor
         }
     }
