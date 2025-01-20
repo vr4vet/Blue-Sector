@@ -92,6 +92,7 @@ public class HandControllerToolTip : MonoBehaviour
     {
         StopAllCoroutines();
         _closed = true;
+        _target = Vector3.zero;
         transform.localPosition = Vector3.zero;
         GetComponent<Canvas>().enabled = false;
         GetComponent<LineRenderer>().enabled = false;
