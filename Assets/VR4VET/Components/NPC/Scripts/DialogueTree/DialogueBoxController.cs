@@ -41,7 +41,7 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector]public DialogueTree dialogueTreeRestart;
     public bool dialogueEnded;
     public int timesEnded = 0;
-    private GameObject _pointingController;
+    private PointingScript _pointingScript;
    
     public DialogueChanged m_DialogueChanged;
 
@@ -65,8 +65,8 @@ public class DialogueBoxController : MonoBehaviour
         {
             m_DialogueChanged = new DialogueChanged();
         }
-        
-        _pointingController = GameObject.Find("PointingController");
+
+        _pointingScript = GetComponent<PointingScript>();
         dialogueEnded = false;
         // Assign the event camera
         if (_dialogueCanvas != null)
@@ -131,7 +131,7 @@ public class DialogueBoxController : MonoBehaviour
     {
         // Make the "Speak" restart tree the current tree
         dialogueTreeRestart = dialogueTree;
-        // Reset the dialogue box dimensions from "Speak" button dimensions
+        // Reset the dialogue box dimensions from "Speak" button dimensionsww
         backgroundRect.sizeDelta = new Vector2(160, 100);
         dialogueTextRect.sizeDelta = new Vector2(150, 60);
         
@@ -142,9 +142,9 @@ public class DialogueBoxController : MonoBehaviour
         {
           for (int i = element; i < dialogueTree.sections[section].dialogue.Length; i++)
           {
-              if (_pointingController != null && dialogueTree.sections[section].point)
+              if (_pointingScript != null && dialogueTree.sections[section].point)
               {
-                  _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
+                  _pointingScript.ResetDirection(talkingNpc: this.gameObject);
               }
 
               _animator.SetBool(_isPointingHash, false);
@@ -168,9 +168,9 @@ public class DialogueBoxController : MonoBehaviour
               // Check if the current dialogue section should have the NPC pointing
               if (dialogueTree.sections[section].point)
               {
-                  if (_pointingController != null)
+                  if (_pointingScript != null)
                   {
-                      _pointingController.GetComponent<PointingController>().ChangeDirection(section, talkingNpc: this.gameObject);
+                      _pointingScript.ChangeDirection(section, talkingNpc: this.gameObject);
                       _animator.SetBool(_isTalkingHash, false);
                       _animator.SetBool(_isPointingHash, true);
                   }
@@ -279,9 +279,9 @@ public class DialogueBoxController : MonoBehaviour
         // Reveals the selectable answers and sets their text values
         buttonSpawner.spawnAnswerButtons(branchPoint.answers);
         _animator.SetBool(_isPointingHash, false);
-        if (_pointingController != null )
+        if (_pointingScript != null )
         {
-            _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
+            _pointingScript.ResetDirection(talkingNpc: this.gameObject);
         }
     }
 
@@ -316,9 +316,9 @@ public class DialogueBoxController : MonoBehaviour
         // stop talk-animation
         _animator.SetBool(_isTalkingHash, false);
         _animator.SetBool(_isPointingHash, false);
-        if (_pointingController != null)
+        if (_pointingScript != null)
         {
-            _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
+            _pointingScript.ResetDirection(talkingNpc: this.gameObject);
         }
         dialogueIsActive = false;
         ResetBox();
