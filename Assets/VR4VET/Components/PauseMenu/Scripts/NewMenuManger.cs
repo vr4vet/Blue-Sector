@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.XR;
+using UnityEngine.Events;
 
 public class NewMenuManger : MonoBehaviour
 {
@@ -29,6 +29,7 @@ public class NewMenuManger : MonoBehaviour
     [SerializeField] private GameObject _languagesCanvas;
     [SerializeField] private GameObject _remapCanvas;
     [SerializeField] private GameObject _audioCanvas;
+    [SerializeField] private GameObject _accessibilityCanvas;
     // public GameObject stateSaverComponent;
 
     private GameObject _savedStates;
@@ -39,6 +40,11 @@ public class NewMenuManger : MonoBehaviour
     private List<GameObject> allMenus = new();
     [SerializeField]
     private float canvasesDistance;
+
+    // used to tell controller tooltips activators if they should activate tooltips or not
+    [HideInInspector] public UnityEvent<bool> m_ControllerTooltipsToggled;
+    private Toggle _controllerTooltipsToggle;
+
     /// <summary>
     /// This Script manages all aspects of the Pause Menu:
     /// Toggle, or Hold to Pause
@@ -53,7 +59,7 @@ public class NewMenuManger : MonoBehaviour
         c.a = 1f;
         _wallsMaterial.color = c;
 
-        allMenus.AddRange(new List<GameObject>() { _menuCanvas, _settingsCanvas, _aboutCanvas, _languagesCanvas, _remapCanvas, _audioCanvas });
+        allMenus.AddRange(new List<GameObject>() { _menuCanvas, _settingsCanvas, _aboutCanvas, _languagesCanvas, _remapCanvas, _audioCanvas, _accessibilityCanvas });
         AdjustCanvasDistances();
 
         foreach (var item in allMenus)
@@ -63,6 +69,12 @@ public class NewMenuManger : MonoBehaviour
 
         if(_menuOpen)
             _menuCanvas.SetActive(true);
+
+        if (m_ControllerTooltipsToggled == null)
+            m_ControllerTooltipsToggled = new();
+
+        _controllerTooltipsToggle = transform.Find("Accessibility Canvas").GetComponentInChildren<Toggle>();
+        m_ControllerTooltipsToggled.Invoke(_controllerTooltipsToggle.isOn);
     }
 
     private void ToggleMenu()
@@ -210,4 +222,9 @@ public class NewMenuManger : MonoBehaviour
             canvasFollow.AdjustDistance(canvasesDistance);
         }
     }
+
+    /// <summary>
+    /// Tell controller tooltip activators whether they should be enabled or not
+    /// </summary>
+    public void OnControllerTooltipToggled() => m_ControllerTooltipsToggled.Invoke(_controllerTooltipsToggle.isOn);
 }
