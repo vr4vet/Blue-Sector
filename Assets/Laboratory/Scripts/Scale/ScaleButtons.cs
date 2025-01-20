@@ -47,18 +47,22 @@ public class ScaleButtons : MonoBehaviour
                 StopAllCoroutines();
                 scale.displayText.SetText("");
                 scale.audio.Play();
-                scale.scaleOn = true;
+                scale.scaleOn = false;
                 break;
             case ButtonType.Reset:
-                StopAllCoroutines();
-                scale.totalWeight = 0;
-                scale.displayText.SetText("000.0");
-                scale.audio.Play();
+                if (scale.scaleOn)
+                {
+                    StopAllCoroutines();
+                    scale.totalWeight = 0;
+                    scale.displayText.SetText("000.0");
+                    scale.audio.Play();
 
-                if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2]) {
-                    dialogueBoxController.SkipLine();
+                    if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2]) {
+                        dialogueBoxController.SkipLine();
                     
+                    } 
                 }
+                
 
                 break;
         }
