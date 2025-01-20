@@ -39,12 +39,10 @@ public class Scale : MonoBehaviour
     {
         if (!scaleOn)
         {
-            npcTriggerDialogue.FindDialogueSection();
             if (collisionObject.gameObject.name is "basket_plastic" or "counter_handheld" or "MicroscopeSlideModel" || collisionObject.gameObject.tag == "Bone")
             {
                 if (collisionObject.gameObject.name == "basket_plastic")
                 {
-                    
                     collisionObject.transform.position = ObjectPositions.Instance._basketPosition;
                     collisionObject.transform.rotation = ObjectPositions.Instance._basketRotation;
                     npcTriggerDialogue.Error1();
@@ -92,9 +90,6 @@ public class Scale : MonoBehaviour
         }
         else if (collisionObject.gameObject.name != "basket_plastic" && scaleOn)
         {
-            
-            npcTriggerDialogue.FindDialogueSection();
-
             if (collisionObject.gameObject.name is "counter_handheld" or "MicroscopeSlideModel")
             {
                 if (collisionObject.gameObject.name == "counter_handheld")
@@ -118,8 +113,6 @@ public class Scale : MonoBehaviour
                     npcTriggerDialogue.Error3();
                 }
             }
-          
-                
         }
     }
    
