@@ -142,7 +142,7 @@ public class DialogueBoxController : MonoBehaviour
         {
           for (int i = element; i < dialogueTree.sections[section].dialogue.Length; i++)
           {
-              _pointingScript.ResetDirection();
+              _pointingScript.ResetDirection(_animator.transform);
               _animator.SetBool(_isPointingHash, false);
               // Start talking animation
               _animator.SetBool(_isTalkingHash, true);
@@ -164,7 +164,7 @@ public class DialogueBoxController : MonoBehaviour
               // Check if the current dialogue section should have the NPC pointing
               if (!dialogueTree.sections[section].pointAt.Equals(string.Empty))
               {
-                  bool directionChanged = _pointingScript.ChangeDirection(dialogueTree.sections[section].pointAt);
+                  bool directionChanged = _pointingScript.ChangeDirection(dialogueTree.sections[section].pointAt, _animator.transform);
                   // Make sure the NPC is looking at the object before the pointing animation is started
                   if (directionChanged)
                   {
@@ -272,7 +272,7 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isPointingHash, false);
         if (_pointingScript != null )
         {
-            _pointingScript.ResetDirection();
+            _pointingScript.ResetDirection(_animator.transform);
         }
     }
 
@@ -309,7 +309,7 @@ public class DialogueBoxController : MonoBehaviour
         _animator.SetBool(_isPointingHash, false);
         if (_pointingScript != null)
         {
-            _pointingScript.ResetDirection();
+            _pointingScript.ResetDirection(_animator.transform);
         }
         dialogueIsActive = false;
         ResetBox();
