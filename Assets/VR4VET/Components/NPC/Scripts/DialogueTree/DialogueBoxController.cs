@@ -162,24 +162,19 @@ public class DialogueBoxController : MonoBehaviour
               }
               
               // Check if the current dialogue section should have the NPC pointing
-              if (dialogueTree.sections[section].point)
+              if (!dialogueTree.sections[section].pointAt.Equals(string.Empty))
               {
-                  if (_pointingScript != null)
+                  bool directionChanged = _pointingScript.ChangeDirection(section, talkingNpc: this.gameObject);
+                  // Make sure the NPC is looking at the object before the pointing animation is started
+                  if (directionChanged)
                   {
-                      _pointingScript.ChangeDirection(section, talkingNpc: this.gameObject);
                       _animator.SetBool(_isTalkingHash, false);
                       _animator.SetBool(_isPointingHash, true);
                   }
-                  else
-                  {
-                      Debug.Log("PointingController not found in the scene");
-                  }
-
               }
 
               while (!_skipLineTriggered)
               {
-
                   _exitButton.SetActive(true);
                   yield return null;
               }
