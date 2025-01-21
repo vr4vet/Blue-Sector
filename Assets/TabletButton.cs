@@ -1,3 +1,4 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +15,9 @@ public class TabletButton : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Finger"))
+        if (other.GetComponent<RemoteGrabber>() == null && other.GetComponent<UITrigger>() == null && LayerMask.LayerToName(other.gameObject.layer).Equals("Hand"))
         {
+            Debug.Log(other.name);
             button.onClick.Invoke();
         }
     }
