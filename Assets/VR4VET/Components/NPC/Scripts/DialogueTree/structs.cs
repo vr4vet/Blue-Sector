@@ -8,8 +8,7 @@ public struct DialogueSection
     public bool endAfterDialogue;
     public string walkOrTurnTowardsAfterDialogue;
     public bool disabkeSkipLineButton;
-    public bool point;
-    public GameObject objectToLookAt;
+    public string pointAt;
     public BranchPoint branchPoint;
 }
 

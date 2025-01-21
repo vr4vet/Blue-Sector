@@ -22,9 +22,9 @@ MonoBehaviour:
       and there's less than 50 plankton of each type. A typical slide can have 1000
       squares and a much higher plankton count.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Do you want to learn how to use the microscope or go straight to
         the task?
@@ -32,9 +32,11 @@ MonoBehaviour:
       - answerLabel: Learn how to use the microscope
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Start with the tasks
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - First place the water sample under the scope, this is the blue rectangle to
       the right of the microscope.
@@ -46,36 +48,38 @@ MonoBehaviour:
       hand and press the button on your index finger to count.
     - To reset the counter to zero press the top button on the counter.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 1
-    objectToLookAt: {fileID: 2897439329450102196, guid: 51c09a19815062d4b8086734b17c33af,
-      type: 3}
+    pointAt: MicroscopeComplete
     branchPoint:
       question: Do you want me to go over it again or continue?
       answers:
       - answerLabel: Explain again
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Choose another task
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Continue
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Intro
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: 
       answers: []
   - dialogue: []
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: There are three kinds of plankton in the sample. Write your answers
         on the note sheet to the left of the microscope. Tell me when you are finished
@@ -84,26 +88,29 @@ MonoBehaviour:
       - answerLabel: Check answers
         nextElement: 4
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: How does the microscope work?
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: I need assistance
         nextElement: 9
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Let me see. I'm double-checking your answers.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: 
       answers: []
   - dialogue: []
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: That's correct! Great job! Do you want to try again, or move on to
         another task?
@@ -111,44 +118,50 @@ MonoBehaviour:
       - answerLabel: Try again
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Try another task
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue: []
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: That wasn't quite correct. Do you want to try again?
       answers:
       - answerLabel: Yes
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No, tell me the correct answer
         nextElement: 7
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - I counted 13 Chaetoceros diatom, 48 Pseudo-nitzschia diatom, and 38 Skeletonema
       diatom.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Do you want to hear that again?
       answers:
       - answerLabel: Yes
         nextElement: 7
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue: []
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: You need to start analysing the water sample first. Place the water
         sample under the scope of the microscope.
@@ -156,17 +169,20 @@ MonoBehaviour:
       - answerLabel: Okay
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Explain the task
         nextElement: 0
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Try something else
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue: []
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: I can highlight all of the plankton in the water sample. Each individual
         will be surrounded by ring, with each genus having a different colour. Do
@@ -175,23 +191,25 @@ MonoBehaviour:
       - answerLabel: Yes
         nextElement: 10
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No, remove the highlights
         nextElement: 10
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Okay, give me a few seconds!
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: 
       answers: []
   - dialogue: []
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: I have now highlighted the plankton. Tell me when you are ready to
         move on with the task.
@@ -199,11 +217,12 @@ MonoBehaviour:
       - answerLabel: I'm ready
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue: []
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: I have now removed the highlighting of the plankton. Tell me when
         you are ready to move on with the task.
@@ -211,3 +230,4 @@ MonoBehaviour:
       - answerLabel: I'm ready
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
