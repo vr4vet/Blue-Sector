@@ -14,8 +14,6 @@ public class Respawner : MonoBehaviour
     [SerializeField] private float _killPlane;
     [Tooltip("Set to true if object should respawn at its initial position. Otherwise, set to false")]
     [SerializeField] private bool _useStartPositionAsSpawnPosition = false;
-    [Tooltip("Set to false if setting respawn position in code. Set to true if setting in inspector by placing a gameobject ine the SpawnObject field")]
-    [SerializeField] private bool _useSpawnObject = true;
     [Tooltip("The gameobject will respawn at this gameobject's position if Use Spawn Object is set to true (Respawn Position will be set to this value)")]
     [SerializeField] private GameObject _spawnObject;
     [Tooltip("Where the gameobject will respawn. Can either be set in code, or in the inspector (for example using a gameobject)")]
@@ -29,7 +27,12 @@ public class Respawner : MonoBehaviour
     void Start()
     {
         _startTime = Time.time;
-        if (_useSpawnObject)
+        if (_useStartPositionAsSpawnPosition)
+        {
+            _respawnPosition = transform.position;
+            _respawnRotation = transform.rotation;
+        }
+        else if (_spawnObject != null)
         {
             _respawnPosition = _spawnObject.transform.position;
             _respawnRotation = _spawnObject.transform.rotation;
@@ -63,8 +66,7 @@ public class Respawner : MonoBehaviour
         if (Time.time - _startTime < 5f)    // preventing mysterious respawn at start of game
             return;
 
-        transform.position = _respawnPosition;
-        transform.rotation = _respawnRotation;
+        transform.SetPositionAndRotation(_respawnPosition, _respawnRotation);
 
         if (GetComponentsInChildren<Rigidbody>().Length > 1)    // object is a fish
         {
@@ -80,6 +82,6 @@ public class Respawner : MonoBehaviour
             gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         }
 
-        Debug.Log(gameObject.tag.ToString() + " just respawned");
+        Debug.Log(gameObject.name + " just respawned");
     }
 }

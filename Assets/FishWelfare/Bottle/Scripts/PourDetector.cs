@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class PourDetector : MonoBehaviour
 {
-    public int pourThreshold = 20;
+    public int pourThreshold = 0;
     public Transform origin = null;
     public GameObject streamPrefab = null;
     private bool isPouring = false;
     private Stream currentStream = null;
 
     private void Update() {
-        bool pourCheck = CalculatePourAngle() > pourThreshold;
+        bool pourCheck = CalculatePourAngle() < pourThreshold;
         if(isPouring != pourCheck) {
             isPouring = pourCheck;
             if(isPouring) {
@@ -22,13 +22,13 @@ public class PourDetector : MonoBehaviour
     }
 
     private void StartPour() {
-        Debug.Log("start");
+        //Debug.Log("start");
         currentStream = CreateStream();
         currentStream.Begin();
     }
 
     private void EndPour() {
-        Debug.Log("End");
+        //Debug.Log("End");
         currentStream.End();
         currentStream = null;
     }
