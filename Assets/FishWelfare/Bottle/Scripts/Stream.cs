@@ -85,7 +85,7 @@ public class Stream : MonoBehaviour
             bool isHitting = HasReachedPosition(1, targetPosition);
             splashParticle.gameObject.SetActive(isHitting);
             if(target != null) {
-                target.sedativeConsentration += 0.00005f;
+                target.sedativeConsentration += 0.00003f;
             }
             yield return null;
         }

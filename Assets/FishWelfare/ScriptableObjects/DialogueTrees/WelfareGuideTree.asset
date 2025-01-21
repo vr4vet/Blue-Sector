@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: WelfareGuideTree
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - 'In this simulation, you are going to count lice and check for gill disease
+      in four salmon. '
+    - Before you can check you will have to anesthisize them, and afterwards you
+      will have to put them in the wake up tank.
+    - Remember to be careful when handling the fish.
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Are you ready for the instructions?
+      answers:
+      - answerLabel: Yes
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No, please repeat
+        nextElement: 0
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - It's important not to grab the fish before they are anesthesized.
+    - 'You should administer no more than 30 ml anesthetic for every 100 liters of
+      water. '
+    - 'If the fish are exposed to too much anesthetic or are anaesthetised for too
+      long, they could get hurt. '
+    - The fish should not be anaesthetised for more than 5 minutes!
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: FishTankStart
+    branchPoint:
+      question: Should we continue to the next step?
+      answers:
+      - answerLabel: Yes
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No, please repeat this step
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - 'To check the fish, grab them and place them on the table in between tanks. '
+    - To check for gill disease, look for white spots or discoloration on the gills
+      of the fish. Then rate the disease from 1 to 5, with a higher score meaning
+      more discoloration.
+    - To check for lice, look for brown spots on the skin of the fish. Count the
+      amount of lice and log it.
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Should we continue to the last step?
+      answers:
+      - answerLabel: Yes
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No, please repeat this step
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - Place the fish in the green tank when you have logged the gill disease and
+      lice count. In this tank the fish will wake up.
+    - Make sure to place all the fish in this tank before they have been anesthesized
+      for more than 5 minutes.
+    - See your scores for each fish on the yellow screen when you place them in the
+      tank.
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Do you need to repeat any of the steps?
+      answers:
+      - answerLabel: Yes, anesthesizing the fish
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Yes, the fish checking
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Yes, the last step
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - Good luck, feel free to talk to me again to repeat the instructions.
+    endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: 
+      answers:
+      - answerLabel: Yes, anesthesizing the fish
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 

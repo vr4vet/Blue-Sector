@@ -241,8 +241,6 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerHandModelsLoaded == null)
             PlayerHandModelsLoaded = new UnityEvent();
-
-        _player = GameObject.Find("XR Rig Advanced VR4VET");
     }
 
     void Update()
@@ -250,8 +248,9 @@ public class GameManager : MonoBehaviour
         // If the game objects are not set, find them in the current scene.
         //TODO: The objects are not searchable at the at the loading of the scene, so this is a workaround
         // This is a limitation of the current implementation of the game, and should be fixed at a later stage
-        if (_leftHandGameObj == null || _rightHandGameObj == null || _audioManager == null)
+        if (_leftHandGameObj == null || _rightHandGameObj == null || _audioManager == null || _player == null)
         {
+            _player = GameObject.Find("XR Rig Advanced VR4VET");
             _audioManager = GameObject.Find("AudioManager");
             _rightHandGameObj = GameObject
                 .Find("Green Gloves Right")
@@ -263,7 +262,7 @@ public class GameManager : MonoBehaviour
                 .gameObject;
             SetPlayerGloves();
 
-            if (_leftHandGameObj != null && _rightHandGameObj != null && _audioManager != null)
+            if (_leftHandGameObj != null && _rightHandGameObj != null && _audioManager != null && _player != null)
                 PlayerHandModelsLoaded.Invoke();
         }
     }
