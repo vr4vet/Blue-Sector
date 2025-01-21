@@ -53,10 +53,10 @@ public class InspectionTaskManager : MonoBehaviour
     public void SetSelectedFish(Fish fish){
         if(selectedFish != fish) {
             selectedFish = fish;
-            ratingInterfaceController.SyncButtons(null);
+            ratingInterfaceController.SyncButtons(null, fish.GetGillDamageGuessed());
             liceInterfaceController.SetLice(selectedFish.markedLice);
         }
-        //Debug.Log("Gilldamage: " + selectedFish.GetGillDamage());
+        Debug.Log("Gilldamage: " + selectedFish.GetGillDamage());
     }
 
     public void SetGuess (int guess) {
@@ -66,7 +66,7 @@ public class InspectionTaskManager : MonoBehaviour
         else {
             selectedFish.SetgillDamageGuessed(guess);
         }
-        //Debug.Log("Guess: " + selectedFish.GetGillDamageGuessed());
+        Debug.Log("Guess: " + selectedFish.GetGillDamageGuessed());
     }
 
     public void SetLiceCount() {
@@ -95,5 +95,14 @@ public class InspectionTaskManager : MonoBehaviour
                 break;
             }
         }
-    }  
+    }
+
+    public void ClearSelectedFish() {
+        // For setting "selectedFish" to null if none is out of any tanks
+        selectedFish = null;
+    }
+
+    public Fish GetSelectedFish() {
+        return selectedFish;
+    }
 }

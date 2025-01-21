@@ -8,6 +8,7 @@ public class ButtonController : MonoBehaviour
     private bool selected = false;
     private RatingInterfaceController ratingInterfaceController;
     Color unselectedColor = new Color(0f, 0.1377f, 0.6037f);
+    public int buttonNmbr;
 
     void Start()
     {
@@ -16,7 +17,7 @@ public class ButtonController : MonoBehaviour
 
     public void ToggleColor() {
         if(ratingInterfaceController != null) {
-            ratingInterfaceController.SyncButtons(this);
+            ratingInterfaceController.SyncButtons(this, null);
             if(selected) {
                 gameObject.GetComponent<Image>().color = unselectedColor;
             }

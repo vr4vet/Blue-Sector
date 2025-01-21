@@ -37,10 +37,19 @@ public class RatingInterfaceController : MonoBehaviour
         gameObject.SetActive(active);
     }
 
-    public void SyncButtons(ButtonController clicked) {
+    public bool GetActive() {
+        return active;
+    }
+
+    public void SyncButtons(ButtonController clicked, int? gillGuess) {
         foreach(ButtonController button in buttons) {
             if(button != clicked) {
                 button.SetColor(false);
+            } 
+            if (gillGuess == button.buttonNmbr) {
+                // This is called if a previously guessed fish is returned to tank
+                // Then the same fish is grabbed again, light up the correct guess button
+                button.SetColor(true);
             }
         }
     }
