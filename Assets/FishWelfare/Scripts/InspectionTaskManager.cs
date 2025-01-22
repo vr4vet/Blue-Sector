@@ -67,11 +67,25 @@ public class InspectionTaskManager : MonoBehaviour
             selectedFish.SetgillDamageGuessed(guess);
         }
         Debug.Log("Guess: " + selectedFish.GetGillDamageGuessed());
+
+        // invoke event to complete inspection step
+        if (!selectedFish.HasBeenInspected)
+        {
+            selectedFish.HasBeenInspected = true;
+            selectedFish.m_OnInspected.Invoke();
+        }
     }
 
     public void SetLiceCount() {
         selectedFish.markedLice = (int)liceInterfaceController.liceSlider.value;
         liceInterfaceController.CountLice();
+
+        // invoke event to complete inspection step
+        if (!selectedFish.HasBeenInspected)
+        {
+            selectedFish.HasBeenInspected = true;
+            selectedFish.m_OnInspected.Invoke();
+        }
     }
 
     public List<Fish> GetInspectedFish() {

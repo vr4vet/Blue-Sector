@@ -85,6 +85,12 @@ public class Fish : MonoBehaviour
     public UnityEvent m_OnBroughtToTable;
     [HideInInspector] public bool BringFishStepCompleted = false;
 
+    public UnityEvent m_OnInspected;
+    [HideInInspector] public bool HasBeenInspected = false;
+
+    public UnityEvent m_OnPlacedInRecoveryTank;
+    [HideInInspector] public bool PlacedInRecoveryTank = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -93,6 +99,9 @@ public class Fish : MonoBehaviour
 
         if (m_OnBroughtToTable == null)
             m_OnBroughtToTable = new();
+
+        if (m_OnInspected == null)
+            m_OnInspected = new();
 
         InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 3.0f), 1.0f);
         inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
