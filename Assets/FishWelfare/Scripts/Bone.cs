@@ -105,6 +105,13 @@ public class Bone : MonoBehaviour, IPointerClickHandler
                 {
                     parent.tank.inspectionTaskManager.ProgressInspection(parent);
                     parent.tank.tutorialEntry.SetCompleted();
+
+                    // complete step for placing fish in recovery tank
+                    if (!parent.PlacedInRecoveryTank)
+                    {
+                        parent.PlacedInRecoveryTank = true;
+                        parent.m_OnPlacedInRecoveryTank.Invoke();
+                    }
                 }
 
             }
