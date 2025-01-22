@@ -621,8 +621,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.6693767, y: 0.07905233, z: 1}
-  m_Center: {x: 0, y: 0.08864683, z: 0}
+  m_Size: {x: 1.6693767, y: 0.40664256, z: 1}
+  m_Center: {x: 0, y: 0.25244194, z: 0}
 --- !u!1001 &85441214
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4487,6 +4487,17 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8846557901297510159, guid: ec2da074d6520b2458f58e6c014dec5b,
+        type: 3}
+      propertyPath: taskHolder
+      value: 
+      objectReference: {fileID: 1371245737}
+    - target: {fileID: 8846557901297510159, guid: ec2da074d6520b2458f58e6c014dec5b,
+        type: 3}
+      propertyPath: FirstSubTask
+      value: 
+      objectReference: {fileID: 11400000, guid: 5c73094c47437634d84939ef196c608e,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2da074d6520b2458f58e6c014dec5b, type: 3}
 --- !u!114 &668409510 stripped
@@ -7247,6 +7258,18 @@ Transform:
   m_Father: {fileID: 689160451}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -29.926, y: -36.725, z: -27.72}
+--- !u!114 &1371245737 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2281686386275440643, guid: fa1492a389a7b4c4082875a471f440a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 331189246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae5105792e7c4042871fe5abafd7420, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1396774135
 GameObject:
   m_ObjectHideFlags: 0
@@ -18489,6 +18512,47 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 433200686693804433, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 433200686693804433, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 433200686693804433, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 668409511}
+    - target: {fileID: 433200686693804433, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 433200686693804433, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CompleteStep
+      objectReference: {fileID: 0}
+    - target: {fileID: 433200686693804433, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: WatchManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 433200686693804433, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 11400000, guid: a03ff9641d19534488b469acf71cdc33,
+        type: 2}
+    - target: {fileID: 433200686693804433, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Task.Step, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 528746685730102088, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -18969,6 +19033,47 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 83.90356
       objectReference: {fileID: 0}
+    - target: {fileID: 2284411636013773818, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2284411636013773818, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2284411636013773818, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 668409511}
+    - target: {fileID: 2284411636013773818, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2284411636013773818, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CompleteStep
+      objectReference: {fileID: 0}
+    - target: {fileID: 2284411636013773818, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: WatchManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2284411636013773818, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 11400000, guid: a03ff9641d19534488b469acf71cdc33,
+        type: 2}
+    - target: {fileID: 2284411636013773818, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Task.Step, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 2309709499838919525, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -19311,8 +19416,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
       propertyPath: m_OnFishCalmedDown.m_PersistentCalls.m_Calls.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
@@ -19321,13 +19436,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 668409511}
+    - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
       propertyPath: m_OnFishCalmedDown.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 668409511}
     - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
       propertyPath: m_OnFishCalmedDown.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CompleteStep
       objectReference: {fileID: 0}
     - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
@@ -19336,15 +19466,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: WatchManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
       propertyPath: m_OnFishCalmedDown.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: WatchManager, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 11400000, guid: a03ff9641d19534488b469acf71cdc33,
+        type: 2}
     - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
       propertyPath: m_OnFishCalmedDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 11400000, guid: 9258e9379d06fb74bb7e47bb344e7b56,
         type: 2}
+    - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Task.Step, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5192310262332252684, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}
       propertyPath: m_OnFishCalmedDown.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -20462,6 +20608,47 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648606337181712706, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648606337181712706, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648606337181712706, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 668409511}
+    - target: {fileID: 8648606337181712706, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648606337181712706, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CompleteStep
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648606337181712706, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: WatchManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648606337181712706, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 11400000, guid: a03ff9641d19534488b469acf71cdc33,
+        type: 2}
+    - target: {fileID: 8648606337181712706, guid: d9fb08c4573fa1c4e854058e411f3e8a,
+        type: 3}
+      propertyPath: m_OnBroughtToTable.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Task.Step, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8776857421204244359, guid: d9fb08c4573fa1c4e854058e411f3e8a,
         type: 3}

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class Bone : MonoBehaviour, IPointerClickHandler
@@ -117,9 +118,17 @@ public class Bone : MonoBehaviour, IPointerClickHandler
             if (inspectionNPCBehavior.dialogueStarted == false) {
                 // Can only be called once
                 inspectionNPCBehavior.dialogueStarted = true;
+
                 inspectionNPCBehavior.StartInspectionDialogue();
                 Debug.Log("Start dialogue");
-            }   
+            }
+            
+            // Complete step for bringing salmon to the table
+            if (!parent.BringFishStepCompleted)
+            {
+                parent.BringFishStepCompleted = true;
+                parent.m_OnBroughtToTable.Invoke();
+            }
         }
         else if (!parent.tank.isGoal && other.CompareTag("Hand"))
         {

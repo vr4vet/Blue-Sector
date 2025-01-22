@@ -82,11 +82,17 @@ public class Fish : MonoBehaviour
     public UnityEvent m_OnFishCalmedDown; // event to set waiting step of subtask to completed when fish has calmed down
     private bool _waitingStepCompleted = false;
 
+    public UnityEvent m_OnBroughtToTable;
+    [HideInInspector] public bool BringFishStepCompleted = false;
+
     // Start is called before the first frame update
     void Start()
     {
         if (m_OnFishCalmedDown == null)
             m_OnFishCalmedDown = new();
+
+        if (m_OnBroughtToTable == null)
+            m_OnBroughtToTable = new();
 
         InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 3.0f), 1.0f);
         inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
@@ -252,6 +258,12 @@ public class Fish : MonoBehaviour
         animator.speed = unsediatedLevel >= 0 ? unsediatedLevel : 0;
         movementSpeed = originalMovementSpeed * unsediatedLevel;
         rotationSpeed = (originalRotationSpeed * unsediatedLevel) / 1.5f;
+
+        if (!_waitingStepCompleted && movementSpeed <= 0) // invoke event to tell tablet to complete waiting step
+        {
+            _waitingStepCompleted = true;
+            m_OnFishCalmedDown.Invoke();
+        }
     }
 
     private void followchild()
@@ -271,13 +283,7 @@ public class Fish : MonoBehaviour
         {
             health -= 1;
             sedationTimer = .1f;
-        }
-
-        if (!_waitingStepCompleted && sedationTimer <= 0) // invoke event to tell tablet to complete waiting step
-        {
-            _waitingStepCompleted = true;
-            m_OnFishCalmedDown.Invoke();
-        }    
+        } 
     }
 
     public void SetMoveTarget()
