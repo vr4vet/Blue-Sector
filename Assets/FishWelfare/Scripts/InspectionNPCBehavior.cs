@@ -1,10 +1,6 @@
-using BNG;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class InspectionNPCBehavior : MonoBehaviour 
 {
@@ -18,8 +14,14 @@ public class InspectionNPCBehavior : MonoBehaviour
     private DialogueBoxController _dialogueBoxController;
     public bool dialogueStarted = false;
 
+    // event to finish "Talk to Jacob" step and unlock "Observant" skill
+    public UnityEvent m_OnJacobDialogueEnd;
+
     // Start is called before the first frame update
     void Start() {
+
+        if (m_OnJacobDialogueEnd == null)
+            m_OnJacobDialogueEnd = new();
 
         _npcSpawner = GetComponent<NPCSpawner>();
 
@@ -69,10 +71,16 @@ public class InspectionNPCBehavior : MonoBehaviour
     }
 
     public void OnFinishDialogue(String name) {
-        if (name != _npc.name) { return; }
-        ToggleActiveRatingCanvas();  
+        if (name == _npc.name) // welfare guide Christian
+            ToggleActiveRatingCanvas(); 
+        else // welfare guide Jacob
+            m_OnJacobDialogueEnd.Invoke();
     }
 
+    private void OnDestroy()
+    {
+        DialogueBoxController.OnDialogueEnded -= OnFinishDialogue;
+    }
 
 
 }
