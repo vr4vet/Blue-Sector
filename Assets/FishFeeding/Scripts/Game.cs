@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Game : MonoBehaviour
 {
@@ -44,6 +45,9 @@ public class Game : MonoBehaviour
     public bool IsTutorialCompleted { get; set; }
     public bool CanStartGame => InActivatedArea && IsTutorialCompleted;
 
+    public UnityEvent m_OnGameStart;
+    public UnityEvent m_OnGameEnd;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -69,6 +73,12 @@ public class Game : MonoBehaviour
         modesClass.OnFinishedLoading += InitializeMode;
 
         ButtonSpawner.OnAnswer += SetLevel;
+
+        if (m_OnGameStart == null)
+            m_OnGameStart = new UnityEvent();
+
+        if (m_OnGameEnd == null)
+            m_OnGameEnd = new UnityEvent();
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
@@ -91,6 +101,7 @@ public class Game : MonoBehaviour
 
         if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && CanStartGame)
         {
+            m_OnGameStart.Invoke();
             startGame = true;
 
             foreach (GameObject merd in merds)
@@ -121,6 +132,9 @@ public class Game : MonoBehaviour
         {
             yield return null;
         }
+
+        m_OnGameEnd.Invoke();
+
         scoring.StopScoring();
         startGame = false;
         foreach (GameObject merd in merds)
@@ -128,7 +142,7 @@ public class Game : MonoBehaviour
             FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
             merdScript.SetIdle();
         }
-        scoreTablet.GiveFinalTabletScore();
+        //scoreTablet.GiveFinalTabletScore();
         endScoreText.text = scoring.Score.ToString();
     }
 

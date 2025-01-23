@@ -29,15 +29,22 @@ public class WatchManager : MonoBehaviour
     {
         task = taskHolder.taskList[0];
 
-        // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
-        foreach (Task.Subtask sub in task.Subtasks)
+        // Set up tasks, subtasks, and steps. Reset subtask and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
+        foreach (Task.Task task in taskHolder.taskList)
         {
-            foreach (Task.Step step in sub.StepList)
+            foreach (Task.Subtask sub in task.Subtasks)
             {
-                step.Reset();
-                step.CurrentStep = false;
+                sub.ParentTask = task;
+                foreach (Task.Step step in sub.StepList)
+                {
+                    step.Reset();
+                    step.CurrentStep = false;
+                    step.ParentSubtask = sub;
+                    step.setStepNumber(sub.StepList.IndexOf(step) + 1);
+                }
             }
         }
+
         foreach (Task.Skill skill in taskHolder.skillList)
         {
             skill.Lock();
