@@ -9,11 +9,12 @@ public class WatchManager : MonoBehaviour
 {
     public static WatchManager Instance;
     [SerializeField] public Task.TaskHolder taskHolder;
+    [SerializeField] private UpdatedTabletTaskListLoader taskListLoader;
     [SerializeField] private AudioClip success;
     [SerializeField] public Subtask FirstSubTask;
     [SerializeField] public FeedbackManager feedbackManager;
     [SerializeField] private GameObject[] arrows;
-    
+
     private Task.Task task;
     private int teleportationAnchorCount;
     [HideInInspector] public int stepCount;
@@ -159,4 +160,12 @@ public class WatchManager : MonoBehaviour
         return teleportationAnchorCount;
     }
 
+    public void UpdateCurrentTask(Task.Task task)
+    {
+        Task = task;
+        taskListLoader.activeTask = task;
+        taskListLoader.LoadTaskPage();
+        taskListLoader.SubtaskPageLoader(task);
+        taskListLoader.StepPageLoader(task.Subtasks[0]);
+    }
 }

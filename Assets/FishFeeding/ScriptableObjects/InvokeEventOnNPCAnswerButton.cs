@@ -9,6 +9,9 @@ public class InvokeEventOnNPCAnswerButton : MonoBehaviour
 
     public UnityEvent m_OnValidAnswerClicked;
     public UnityEvent m_OnAdvancedClicked;
+    public UnityEvent m_OnConditionFactorClicked;
+    public UnityEvent m_OnPlanktonSampleClicked;
+    public UnityEvent m_OnDissectingFishClicked;
     void Start()
     {
         if (m_OnValidAnswerClicked == null)
@@ -16,6 +19,15 @@ public class InvokeEventOnNPCAnswerButton : MonoBehaviour
 
         if (m_OnAdvancedClicked == null)
             m_OnAdvancedClicked = new UnityEvent();
+
+        if (m_OnConditionFactorClicked == null)
+            m_OnConditionFactorClicked = new UnityEvent();
+
+        if (m_OnPlanktonSampleClicked == null)
+            m_OnPlanktonSampleClicked = new UnityEvent();
+
+        if (m_OnDissectingFishClicked == null)
+            m_OnDissectingFishClicked = new UnityEvent();
 
         ButtonSpawner.OnAnswer += ButtonSpawner_OnAnswer;
     }
@@ -35,6 +47,12 @@ public class InvokeEventOnNPCAnswerButton : MonoBehaviour
             
             if (answer.Equals("Advanced"))
                 m_OnAdvancedClicked.Invoke();
+            if (answer.Equals("Calculating condition factor"))
+                m_OnConditionFactorClicked.Invoke();
+            if (answer.Equals("Analyzing plankton samples"))
+                m_OnPlanktonSampleClicked.Invoke();
+            if (answer.Equals("Dissecting the fish (Still in development)"))
+                m_OnDissectingFishClicked.Invoke();
         }
     }
 

@@ -11,6 +11,8 @@ public class NPCMicroscopeTask : MonoBehaviour
 
     public UnityEvent EnablePlanktonHighlights;
     public UnityEvent DisablePlanktonHighlights;
+    public UnityEvent OnPlanktonCountAssess;
+    public UnityEvent OnPlanktonCountCorrect;
     private bool HighLightPlankton = false;
     private bool ResetAfterTryingAgain = false;
 
@@ -77,7 +79,10 @@ public class NPCMicroscopeTask : MonoBehaviour
         if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
         {
             if (startTime == 0)
+            {
                 startTime = Time.time;
+                OnPlanktonCountAssess.Invoke();
+            }
 
             if (Time.time - startTime >= 8) // npc 'thinks' for 8 seconds
             {
@@ -99,7 +104,10 @@ public class NPCMicroscopeTask : MonoBehaviour
                 }
                 
                 if (correct)
+                {
+                    OnPlanktonCountCorrect.Invoke();
                     dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 5, "MicroscopeDialogue", 0);
+                }
                 else
                 {
                     // dynamically adding dialogue with correct answers. this could be a risky operation!
