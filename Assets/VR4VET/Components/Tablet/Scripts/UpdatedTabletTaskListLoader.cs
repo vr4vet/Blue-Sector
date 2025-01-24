@@ -201,8 +201,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             {
                 checkmark.SetActive(true);
                 completedButton.SetActive(true);
-                button = item.transform.Find("btn_TaskComplete").GetComponent<Button>();
-            };
+            }
 
             button.onClick.AddListener(() => SubtaskPageLoader(activeTask));
         }
@@ -243,8 +242,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             {
                 checkmark.SetActive(true);
                 completedButton.SetActive(true);
-                button = item.transform.Find("btn_SubTaskComplete").GetComponent<Button>();
-            };
+            }
             button.onClick.AddListener(() => StepPageLoader(sub));
         }
     }
@@ -252,10 +250,10 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
     public void StepPageLoader(Task.Subtask subtask)
     {
         if (_subtaskPageOpen != null) _subtaskPageOpen.Invoke();
-        SubtaskPageLoader(activeTask);
         TaskPageCanvas.SetActive(false);
         subtaskPageCanvas.SetActive(true);
         activeSubtask = subtask;
+        SubtaskPageLoader(activeTask);
 
         _subtaskNameTab.GetComponent<TMP_Text>().text = subtask.SubtaskName;
         UpdateProgressBar(activeTask);
@@ -277,10 +275,9 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
 
             if (step.IsCompeleted())
             {
-
                 GameObject checkCircle = item.transform.Find("Checkcircle").gameObject;
                 checkCircle.SetActive(true);
-            };
+            }
             TMP_Text caption = item.transform.Find("txt_Desc").GetComponent<TMP_Text>();
             caption.text = step.StepName;
 
