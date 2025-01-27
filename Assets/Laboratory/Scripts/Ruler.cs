@@ -1,22 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Ruler : MonoBehaviour
 {
     private DialogueBoxController dialogueBoxController;
-
-
-    
-    private Dictionary<GameObject,float> fishLengths = new Dictionary<GameObject, float>();
-
-    
-
+    public UnityEvent m_OnFishPlaced;
 
     private void Start()
     {
-        
+        m_OnFishPlaced ??= new UnityEvent();
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
         
     }
@@ -28,7 +20,7 @@ public class Ruler : MonoBehaviour
             if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0]) 
             {
                 dialogueBoxController.SkipLine();
-                
+                m_OnFishPlaced.Invoke();
             }
         }
     }

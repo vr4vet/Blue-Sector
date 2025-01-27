@@ -11324,6 +11324,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scale: {fileID: 1459569314}
   buttonType: 1
+  m_OnScaleReady:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &233476632
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -21212,6 +21215,22 @@ MonoBehaviour:
   fishObject: {fileID: 0}
   weight: {fileID: 0}
   NpcTriggerDialogue: {fileID: 1562000963}
+  m_OnFishPlacedOnPlate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 542094673}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 56625062afd8f2a4a808c856e3c5d593,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &390161760
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22484,6 +22503,22 @@ MonoBehaviour:
   minWeight: 258
   maxWeight: 632
   _objectWeight: 0
+  m_OnWeighingFish:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 542094673}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 6cd456ac590c0454ba43aca2de7f75f8,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &420381537
 GameObject:
   m_ObjectHideFlags: 0
@@ -32976,6 +33011,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scale: {fileID: 1459569314}
   buttonType: 0
+  m_OnScaleReady:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &621560432
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -51535,6 +51573,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 777565521727132446, guid: 4de89651534ce3941875d0cb4be6c2ab,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 777565521727132447, guid: 4de89651534ce3941875d0cb4be6c2ab,
         type: 3}
       propertyPath: maxWeight
@@ -56404,6 +56447,47 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 932599226}
+    - target: {fileID: 3568422117269141518, guid: fdf804fec619cd341a8d2228f0c6c22f,
+        type: 3}
+      propertyPath: m_OnCalculationFactorCalculated.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3568422117269141518, guid: fdf804fec619cd341a8d2228f0c6c22f,
+        type: 3}
+      propertyPath: m_OnCalculationFactorCalculated.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3568422117269141518, guid: fdf804fec619cd341a8d2228f0c6c22f,
+        type: 3}
+      propertyPath: m_OnCalculationFactorCalculated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 542094673}
+    - target: {fileID: 3568422117269141518, guid: fdf804fec619cd341a8d2228f0c6c22f,
+        type: 3}
+      propertyPath: m_OnCalculationFactorCalculated.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3568422117269141518, guid: fdf804fec619cd341a8d2228f0c6c22f,
+        type: 3}
+      propertyPath: m_OnCalculationFactorCalculated.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CompleteStep
+      objectReference: {fileID: 0}
+    - target: {fileID: 3568422117269141518, guid: fdf804fec619cd341a8d2228f0c6c22f,
+        type: 3}
+      propertyPath: m_OnCalculationFactorCalculated.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: WatchManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3568422117269141518, guid: fdf804fec619cd341a8d2228f0c6c22f,
+        type: 3}
+      propertyPath: m_OnCalculationFactorCalculated.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 11400000, guid: eadff7ddf2f686b45be5c93d936b679f,
+        type: 2}
+    - target: {fileID: 3568422117269141518, guid: fdf804fec619cd341a8d2228f0c6c22f,
+        type: 3}
+      propertyPath: m_OnCalculationFactorCalculated.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Task.Step, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 3582887318954653056, guid: fdf804fec619cd341a8d2228f0c6c22f,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -75370,6 +75454,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02643445fb78bb441876515b3ccff303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_OnFishPlaced:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 542094673}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 31e970255fe47a3448997d8812d41b16,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &1433403128
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76859,7 +76959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72618c7d676764c4a8c5b6e53be0053d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audio: {fileID: 1459569315}
+  Audio: {fileID: 1459569315}
   totalWeight: 0
   displayText: {fileID: 388497169}
   tray: {fileID: 420361693}
@@ -109592,6 +109692,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scale: {fileID: 1459569314}
   buttonType: 2
+  m_OnScaleReady:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 542094673}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: db0741a18c3cbc84f9d0a9d0780627a1,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &2119876742
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -111405,8 +111521,56 @@ MonoBehaviour:
   conditionFactor: {fileID: 291303339}
   correctlyLoggedFish: {fileID: 1462130811}
   activeFishText: {fileID: 2081928351}
-  audio: {fileID: 1061536963770761770}
+  Audio: {fileID: 1061536963770761770}
   audio2: {fileID: 390161763}
+  m_OnWeightRegistered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 542094673}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 40e2cb21c42a55a4b8c52a6db2054fc8,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnLengthRegistered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 542094673}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 2381d93ddd1789543972916ae78d6ade,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnConditionFactorRegistered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 542094673}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: f2cd5ac79cf0f1a47ab6e7f98fdaa556,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &1061536963770761770
 AudioSource:
   m_ObjectHideFlags: 0

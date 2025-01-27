@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,26 +6,19 @@ using UnityEngine.Events;
 public class ResultLogger : MonoBehaviour
 {
     // ----------------- Editor Variables -----------------
-    [SerializeField]
     public RegisterFish plate;
-    [SerializeField]
     public NpcTriggerDialogue npcTriggerDialogue;
-    [SerializeField]
     public Scale scale;
-    [SerializeField]
     public TMP_Text weight;
-    [SerializeField]
     public TMP_Text length;
-    [SerializeField]
     public TMP_Text conditionFactor;
-    [SerializeField]
     public TMP_Text correctlyLoggedFish;
-    [SerializeField]
     public TMP_Text activeFishText;
-    [SerializeField]
-    public AudioSource audio;
-    [SerializeField]
+    public AudioSource Audio;
     public AudioSource audio2;
+    public UnityEvent m_OnWeightRegistered;
+    public UnityEvent m_OnLengthRegistered;
+    public UnityEvent m_OnConditionFactorRegistered;
 
     // ----------------- Private Variables -----------------
     private bool UsingDecimals;
@@ -54,9 +45,19 @@ public class ResultLogger : MonoBehaviour
 
     private DialogueBoxController dialogueBoxController;
 
+    private Attributes _currentAttribute; // used to keep track of which attribute the player is currently registering
+
+    private enum Attributes
+    {
+        Weight, Length, ConditionFactor
+    }
+
 
     void Start()
     {
+        m_OnLengthRegistered ??= new UnityEvent();
+        m_OnLengthRegistered ??= new UnityEvent();
+
         currentText = weight;
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
 
@@ -96,6 +97,30 @@ public class ResultLogger : MonoBehaviour
 
     public void OnPressedOk()
     {
+        if (_currentAttribute != Attributes.ConditionFactor)
+        {
+            // skip dialogue ahead when player registers weight or length
+            if (_currentAttribute == Attributes.Weight)
+            {
+                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4] && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+                {
+                    dialogueBoxController.SkipLine();
+                    m_OnWeightRegistered.Invoke();
+                }
+            }
+            else if (_currentAttribute == Attributes.Length)
+            {
+                if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+                {
+                    dialogueBoxController.SkipLine();
+                    m_OnLengthRegistered.Invoke();
+                }
+            }
+
+            return;
+        }
+
+
         weightAnswer = float.Parse(weight.text);
         lengthAnswer = float.Parse(length.text);
         conditionAnswer = float.Parse(conditionFactor.text);
@@ -106,40 +131,41 @@ public class ResultLogger : MonoBehaviour
         && scale.tubWasUsed == true)
         {
             wasLoggedCorectly = true;
-            npcTriggerDialogue.response1();
-            audio.Play();
+            npcTriggerDialogue.Response1();
+            Audio.Play();
+            m_OnConditionFactorRegistered.Invoke();
         }
         else if (weightAnswer == plate.fishWeight 
         && lengthAnswer == plate.fishLength 
         && (float)System.Math.Round(conditionAnswer, 2) == plate.conditionRight)
         {
-            npcTriggerDialogue.response2();
+            npcTriggerDialogue.Response2();
             audio2.Play();
         }
         else if (weightAnswer == plate.fishWeight 
         && lengthAnswer == plate.fishLength 
         && (float)System.Math.Round(conditionAnswer, 2) != plate.conditionRight)
         {
-            npcTriggerDialogue.response3();
+            npcTriggerDialogue.Response3();
             audio2.Play();
         }
         else if (weightAnswer == plate.fishWeight 
         && lengthAnswer != plate.fishLength )
         {
-            npcTriggerDialogue.response4();
+            npcTriggerDialogue.Response4();
             audio2.Play();
         }
         else if (weightAnswer != plate.fishWeight 
         && lengthAnswer == plate.fishLength )
         {
-            npcTriggerDialogue.response5();
+            npcTriggerDialogue.Response5();
             audio2.Play();
         }
         else if (weightAnswer != plate.fishWeight 
         && lengthAnswer != plate.fishLength 
         && System.Math.Round(conditionAnswer, 2) != plate.conditionRight)
         {
-            npcTriggerDialogue.response6();
+            npcTriggerDialogue.Response6();
             audio2.Play();
         }
         logAnswer(activeFish.fishObject, weightAnswer, lengthAnswer, conditionAnswer, wasLoggedCorectly);
@@ -209,34 +235,28 @@ public class ResultLogger : MonoBehaviour
     // ----------------- Unity event methods -----------------
     public void SwitchToWeight()
     {
+        _currentAttribute = Attributes.Weight;
+
         currentText = weight;
         UsingDecimals = false;
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
-        
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4] && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue") 
-        {
-            dialogueBoxController.SkipLine();
-        }
-        
-
     }
 
     public void SwitchToLength()
     {
+        _currentAttribute= Attributes.Length;
+
         currentText = length;
         UsingDecimals = false;
         currentValue = 0;
         currentText.SetText(currentValue.ToString());
-
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[1] && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue") 
-        {
-            dialogueBoxController.SkipLine();
-        }
     }
 
     public void SwitchToCondition()
     {
+        _currentAttribute = Attributes.ConditionFactor;
+
         currentText = conditionFactor;
         UsingDecimals = false;
         currentValue = 0;

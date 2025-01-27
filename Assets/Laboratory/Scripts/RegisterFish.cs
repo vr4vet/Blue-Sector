@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RegisterFish : MonoBehaviour
 {
@@ -13,20 +12,24 @@ public class RegisterFish : MonoBehaviour
     public Weight weight;
     private DialogueBoxController _dialogueBoxController;
     public NpcTriggerDialogue NpcTriggerDialogue;
+    public UnityEvent m_OnFishPlacedOnPlate;
 
     private void Start()
     {
+        m_OnFishPlacedOnPlate ??= new UnityEvent();
         _dialogueBoxController = FindObjectOfType<DialogueBoxController>();
     }
     private void OnTriggerEnter(Collider collisionObject)
     {
-        if (collisionObject.GetComponent<Weight>() && collisionObject.gameObject.tag == "Bone")
+        if (collisionObject.GetComponent<Weight>() && collisionObject.gameObject.CompareTag("Bone"))
         {
             if (_dialogueBoxController.dialogueTreeRestart != null && _dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
             {
                 if (_dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[1])
                 {
                     _dialogueBoxController.SkipLine();
+                    m_OnFishPlacedOnPlate.Invoke();
+
                 }
             }
             weight = collisionObject.GetComponent<Weight>();
