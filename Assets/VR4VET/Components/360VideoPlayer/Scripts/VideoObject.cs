@@ -30,6 +30,7 @@ public class VideoObject : MonoBehaviour
     //private XRGrabInteractable XRGI; 
     private Grabbable BNGG;
     private VideoObject[] Headsets;
+    private DialogueBoxController _dialogueBoxController;
 
     /// <summary>
     /// Unity start method
@@ -44,6 +45,7 @@ public class VideoObject : MonoBehaviour
       //  XRGI = GetComponent<XRGrabInteractable>();
         BNGG = GetComponent<Grabbable>();
         Headsets = FindObjectsOfType<VideoObject>();
+        _dialogueBoxController = FindObjectOfType<DialogueBoxController>();
     }
 
     /// <summary>
@@ -89,6 +91,10 @@ public class VideoObject : MonoBehaviour
         {
             headset.gameObject.SetActive(true);
             headset.hintText.gameObject.SetActive(true);
+        }
+        if (_dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[0].dialogue[0])
+        {
+           _dialogueBoxController.SkipLine();
         }
 
         //Video controll

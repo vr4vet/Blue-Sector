@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: BleedingStationDialogue
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - Hello. My name is Bernard and welcome to the Bleeding Station!
+    - Your task here is to manually process the fish which have not gone through
+      the automatic bleeding machine.
+    - "This is done by cutting the gills of stunned fish.\r"
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Do you want to go trough the instructions?
+      answers:
+      - answerLabel: Repeat?
+        nextElement: 0
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
+        nextElement: 4
+        endAfterAnswer: 1
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Yes
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - Firstly, you need to have completed a fish welfare course before you can start
+      working.
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Have you completed this course?
+      answers:
+      - answerLabel: No
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Yes
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - Great! You should know that conscious fish must not be left out of water for
+      longer than 15 seconds or left in the stunning machine.
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Let's continue.
+      answers:
+      - answerLabel: Continue
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - If you have not completed the fish welfare course you need to work under supervision
+      for up to a year.
+    - Conscious fish must not be left out of water for longer than 15 seconds or
+      left in the stunning machine.
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: It is important to not cause unnecessary distress for the fish!
+      answers:
+      - answerLabel: Understood!
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - "You will find a knife in your right pocket. When the knife is not in use it
+      should be placed in your pocket.\r"
+    - "Always cut away from you and never towards anyone. All knives will be collected
+      at the end of the day.\r"
+    - "The knife can chip. If that occurs you need to stop the conveyor and discard
+      any fish that have visible metal fragments in them.\r"
+    - "When the fish have been discarded, you need to switch out the broken knife
+      with a new one on the table behind me, before you can continue.\r"
+    - Do so by placing the chipped knife in the basket, and a new knife should appear
+      beside it.
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: BackupFishKnife
+    branchPoint:
+      question: Follow me to learn more
+      answers:
+      - answerLabel: Repeat?
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ok
+        nextElement: 5
+        endAfterAnswer: 1
+        walkOrTurnTowardsAfterAnswer: BleedingPath
