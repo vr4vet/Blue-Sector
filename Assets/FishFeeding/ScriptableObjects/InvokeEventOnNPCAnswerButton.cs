@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -49,7 +48,7 @@ public class InvokeEventOnNPCAnswerButton : MonoBehaviour
                 m_OnAdvancedClicked.Invoke();
             if (answer.Equals("Calculating condition factor"))
                 m_OnConditionFactorClicked.Invoke();
-            if (answer.Equals("Analyzing plankton samples"))
+            if (answer.Equals("Analysing plankton samples"))
                 m_OnPlanktonSampleClicked.Invoke();
             if (answer.Equals("Dissecting the fish (Still in development)"))
                 m_OnDissectingFishClicked.Invoke();

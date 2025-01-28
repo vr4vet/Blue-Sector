@@ -19,6 +19,7 @@ public class ResultLogger : MonoBehaviour
     public UnityEvent m_OnWeightRegistered;
     public UnityEvent m_OnLengthRegistered;
     public UnityEvent m_OnConditionFactorRegistered;
+    public UnityEvent m_OnConditionFactorCorrectFirstTry;
 
     // ----------------- Private Variables -----------------
     private bool UsingDecimals;
@@ -29,6 +30,7 @@ public class ResultLogger : MonoBehaviour
     private float lengthAnswer;
     private float conditionAnswer;
     private bool wasLoggedCorectly = false;
+    private int tries = 0;
 
     // Struct to store logged fish
     private struct LoggedAnswers {
@@ -57,6 +59,8 @@ public class ResultLogger : MonoBehaviour
     {
         m_OnLengthRegistered ??= new UnityEvent();
         m_OnLengthRegistered ??= new UnityEvent();
+        m_OnConditionFactorRegistered ??= new UnityEvent();
+        m_OnConditionFactorCorrectFirstTry ??= new UnityEvent();
 
         currentText = weight;
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
@@ -120,6 +124,7 @@ public class ResultLogger : MonoBehaviour
             return;
         }
 
+        tries++;
 
         weightAnswer = float.Parse(weight.text);
         lengthAnswer = float.Parse(length.text);
@@ -134,6 +139,8 @@ public class ResultLogger : MonoBehaviour
             npcTriggerDialogue.Response1();
             Audio.Play();
             m_OnConditionFactorRegistered.Invoke();
+            if (tries < 2)
+                m_OnConditionFactorCorrectFirstTry.Invoke();
         }
         else if (weightAnswer == plate.fishWeight 
         && lengthAnswer == plate.fishLength 
@@ -264,7 +271,7 @@ public class ResultLogger : MonoBehaviour
     }
 
 
-    public void setActiveFish(int fishNumber)
+    public void SetActiveFish(int fishNumber)
     {
         if (loggedAnswers.Count >= fishNumber)
         {

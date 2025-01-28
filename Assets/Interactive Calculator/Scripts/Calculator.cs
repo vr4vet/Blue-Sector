@@ -27,11 +27,11 @@ namespace InteractiveCalculator
 
         private DialogueBoxController dialogueBoxController;
 
-        public UnityEvent m_OnCalculationFactorCalculated;
+        public UnityEvent m_OnConditionFactorCalculated;
 
         void Start()
         {
-            m_OnCalculationFactorCalculated ??= new UnityEvent();
+            m_OnConditionFactorCalculated ??= new UnityEvent();
             dialogueBoxController = FindObjectOfType<DialogueBoxController>();
             OnPressedClearAll();
         }
@@ -200,7 +200,7 @@ namespace InteractiveCalculator
                     if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[0] && currentOperator == "*" && (int)Input == 100)
                     {
                         dialogueBoxController.SkipLine();
-                        m_OnCalculationFactorCalculated.Invoke();
+                        m_OnConditionFactorCalculated.Invoke();
                     }
                 }
 

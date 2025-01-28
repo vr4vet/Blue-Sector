@@ -35,8 +35,8 @@ public class RegisterFish : MonoBehaviour
             weight = collisionObject.GetComponent<Weight>();
             fishObject = weight.fish;
 
-            resultLogger.activeFishText.SetText("Fish "+ resultLogger.getFishNumber(fishObject).ToString());
-            resultLogger.setActiveFish(resultLogger.getFishNumber(fishObject));
+            //resultLogger.activeFishText.SetText("Fish "+ resultLogger.getFishNumber(fishObject).ToString());
+            resultLogger.SetActiveFish(resultLogger.getFishNumber(fishObject));
             
             // Get weight
             fishWeight = weight.ObjectWeight;
