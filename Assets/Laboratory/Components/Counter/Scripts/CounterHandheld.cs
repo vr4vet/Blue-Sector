@@ -26,7 +26,7 @@ public class CounterHandheld : MonoBehaviour
     {
         if (dialogueBoxController != null)
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
+            if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4])
             {
                 dialogueBoxController.SkipLine();
                 m_OnIncrement.Invoke();
@@ -40,7 +40,7 @@ public class CounterHandheld : MonoBehaviour
     {
         if (dialogueBoxController != null)
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[5] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue") 
+            if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[5]) 
             {
                 dialogueBoxController.SkipLine();
                 m_OnReset.Invoke();
