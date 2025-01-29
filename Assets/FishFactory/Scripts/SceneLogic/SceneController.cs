@@ -112,7 +112,7 @@ public class SceneController : MonoBehaviour
             case "FishMaintenanceToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     5.6f,
-                    0.67f,
+                    0.88f,
                     80f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
@@ -120,7 +120,7 @@ public class SceneController : MonoBehaviour
             case "FishWelfareToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     5.6f,
-                    0.67f,
+                    0.88f,
                     80f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
@@ -144,7 +144,7 @@ public class SceneController : MonoBehaviour
             case "FishFeedingToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     5.6f,
-                    0.67f,
+                    0.88f,
                     80f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);
@@ -200,7 +200,7 @@ public class SceneController : MonoBehaviour
             case "HSERoomToReceptionOutdoor":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
                     5.6f,
-                    0.67f,
+                    0.88f,
                     80f
                 );
                 GameManager.Instance.NextScenePlayerRotation = new Vector3(0f, 0f, 0f);

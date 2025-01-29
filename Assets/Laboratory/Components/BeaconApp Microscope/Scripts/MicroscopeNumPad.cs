@@ -54,6 +54,7 @@ public class MicroscopeNumPad : MonoBehaviour
         StopIndicatorCycle();
         RemoveIndicator();
         RemoveEmptySpaces();
+        currentInputField.onEndEdit.Invoke("");
         currentInputField = null; 
     }
 

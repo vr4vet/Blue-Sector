@@ -1,3 +1,4 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,10 +15,8 @@ public class TabletButton : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Finger"))
-        {
+        // xr rig index finger tip capsule colliders
+        if (other.name.Equals("hands_coll:b_r_index3") || other.name.Equals("hands_coll:b_r_index3 (1)")/*other.GetComponent<RemoteGrabber>() == null && other.GetComponent<UITrigger>() == null && LayerMask.LayerToName(other.gameObject.layer).Equals("Hand")*/)
             button.onClick.Invoke();
-        }
     }
-
 }

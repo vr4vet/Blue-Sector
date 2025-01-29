@@ -22,11 +22,11 @@ public class MaintenanceManager : MonoBehaviour
 
     public Task.Task MaintenanceTask { get => Task; }
 
-    public UnityEvent<Task.Skill?> BadgeChanged { get; } = new();
-    public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
-    public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
+    public UnityEvent<Task.Skill> BadgeChanged { get; } = new();
+    public UnityEvent<Task.Skill> SkillCompleted { get; } = new();
+    public UnityEvent<Task.Subtask> SubtaskChanged { get; } = new();
     public UnityEvent<Task.Task> TaskCompleted { get; } = new();
-    public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
+    public UnityEvent<Task.Subtask> CurrentSubtask { get; } = new();
     // Start is called before the first frame update
 /*    private void Awake()
     {

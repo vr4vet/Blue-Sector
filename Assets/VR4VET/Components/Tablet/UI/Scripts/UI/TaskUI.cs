@@ -33,7 +33,8 @@ public class TaskUI : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Finger")
+        // player index finger tips
+        if (other.name.Equals("hands_coll:b_r_index3") || other.name.Equals("hands_coll:b_r_index3 (1)")/*other.gameObject.tag == "Finger"*/)
         {           
             UpdatedTabletTaskListLoader tl = FindObjectOfType<UpdatedTabletTaskListLoader>();
             WatchManager manager = FindObjectOfType<WatchManager>();

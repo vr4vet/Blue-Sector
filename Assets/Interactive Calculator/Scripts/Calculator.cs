@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlTypes;
 using System.Globalization;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace InteractiveCalculator
@@ -26,8 +27,11 @@ namespace InteractiveCalculator
 
         private DialogueBoxController dialogueBoxController;
 
+        public UnityEvent m_OnConditionFactorCalculated;
+
         void Start()
         {
+            m_OnConditionFactorCalculated ??= new UnityEvent();
             dialogueBoxController = FindObjectOfType<DialogueBoxController>();
             OnPressedClearAll();
         }
@@ -193,9 +197,10 @@ namespace InteractiveCalculator
 
                 if (dialogueBoxController.dialogueTreeRestart != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
                 {
-                    if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[0])
+                    if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[0] && currentOperator == "*" && (int)Input == 100)
                     {
                         dialogueBoxController.SkipLine();
+                        m_OnConditionFactorCalculated.Invoke();
                     }
                 }
 
