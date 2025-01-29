@@ -16,6 +16,8 @@ public class ControllerTooltipManager : MonoBehaviour
     [SerializeField] private List<GameObject> OculusControllerModels;
     [Tooltip("Place main menu/pause menu here to allow the player to toggle this accessibility feature on or off")]
     [SerializeField] private NewMenuManger MainMenu;
+    [Tooltip("Set this to true if left hand should show tooltip for left hand stick teleportation when not intersecting with objects")]
+    [SerializeField] private bool AlwaysShowTeleport = true;
 
     // variables for configuring each tooltip's position relative to its button on the left controller using the inspector
     [Header("Left controller button tooltip offsets")]
@@ -51,6 +53,20 @@ public class ControllerTooltipManager : MonoBehaviour
     // controls whether close objects will be scanned, controller models enabled/disabled etc., and is set in main menu/pause menu.
     private bool _accessibilityEnabled = false;
 
+    private Collider _leftHandDefaultCollider = new();
+
+    private List<ButtonActionMapping> _defaultButtonMappingsLeft = new()
+    {
+        new (ControllerButtons.OculusLeft, ButtonActions.None),
+        new (ControllerButtons.ThumbstickLeft, ButtonActions.Teleport),
+        new (ControllerButtons.X, ButtonActions.None),
+        new (ControllerButtons.Y, ButtonActions.None),
+        new (ControllerButtons.TriggerFrontLeft, ButtonActions.None),
+        new (ControllerButtons.TriggerGripLeft, ButtonActions.None),
+    };
+
+    private InterractableObject _leftHandDefault;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +75,8 @@ public class ControllerTooltipManager : MonoBehaviour
 
         if (MainMenu != null)
             MainMenu.m_ControllerTooltipsToggled.AddListener(OnPauseMenuToggle);
+
+        _leftHandDefault = new InterractableObject(new Collider(), _defaultButtonMappingsLeft);
     }
 
     /// <summary>
@@ -121,7 +139,11 @@ public class ControllerTooltipManager : MonoBehaviour
                 else // close all tooltips if there are no objects in the hand's vicinity
                 {
                     closestObject = null; // resetting closest object because no object is closest
-                    CloseAllTooltips(controllerHand);
+
+                    if (controllerHand == ControllerHand.Left && AlwaysShowTeleport && InputBridge.Instance.LeftThumbstickAxis.magnitude <= 0)
+                        SetUpTooltips(_leftHandDefault, controllerHand);
+                    else
+                        CloseAllTooltips(controllerHand);
                 }
             }
 
@@ -661,7 +683,7 @@ public class ControllerTooltipManager : MonoBehaviour
     {
         if (controllerHand == ControllerHand.None)
             Debug.LogError("Tooltip must have HandSide set to either left or right, but was " + controllerHand.ToString() + "!");
-        if (controllerHand == ControllerHand.Left && (_interractableObjectsLeft.Count == 0 || TooltippedButtonsDown(controllerHand)))
+        if (controllerHand == ControllerHand.Left && ((_interractableObjectsLeft.Count == 0 && !AlwaysShowTeleport) || (TooltippedButtonsDown(controllerHand) || InputBridge.Instance.LeftThumbstickAxis.magnitude > 0)))
             SetDefaultHandModel(ControllerHand.Left);
         if (controllerHand == ControllerHand.Right && (_interractableObjectsRight.Count == 0 || TooltippedButtonsDown(controllerHand)))
             SetDefaultHandModel(ControllerHand.Right);
