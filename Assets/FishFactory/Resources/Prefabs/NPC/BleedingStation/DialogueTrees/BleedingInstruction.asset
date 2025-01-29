@@ -44,7 +44,7 @@ MonoBehaviour:
     disabkeSkipLineButton: 0
     pointAt: StunMachine_N
     branchPoint:
-      question: Understood
+      question: Understood?
       answers:
       - answerLabel: Yes
         nextElement: 2
@@ -73,15 +73,38 @@ MonoBehaviour:
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
   - dialogue:
-    - To start the task stand between the red button and the stun machine
     - To cut the fish you have to stab the gills of the fish
-    - 'Start the conveyour belt by pressing the red button you can also stop the
-      belt by pressing the button again. '
-    - Talk to me if you have any questions.
+    - To start the task stand between the red button and the stun machine
     endAfterDialogue: 0
     walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Are you ready to start?
+      answers:
+      - answerLabel: Yes
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Can you repeat?
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - 'Start the conveyour belt by pressing the red button you can also stop the
+      belt by pressing the button again. '
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 1
     pointAt: StopButton_N
     branchPoint:
-      question: 
-      answers: []
+      question: Talk to me if you have any questions
+      answers:
+      - answerLabel: Stunning fish
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Handling bad fish
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
