@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class StopConveyorButton : MonoBehaviour
 {
+    private GameObject _bleedingGuide;
     private DialogueBoxController _dialogueBoxController;
     
     void Start()
     {
-        _dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+        _bleedingGuide = GameObject.Find("Bleeding station guide Bernard");
+        _dialogueBoxController = _bleedingGuide.GetComponent<DialogueBoxController>();
     }
     /// <summary>
     /// Toggles the main task on and off
@@ -16,10 +18,10 @@ public class StopConveyorButton : MonoBehaviour
     public void ToggleTaskOn()
     {
         GameManager.Instance.ToggleTaskOn();
-        /*if (_dialogueBoxController.dialogueTreeRestart.name == "BleedingInstruction" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[2])
+        if (_dialogueBoxController.dialogueTreeRestart.name == "BleedingInstruction" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[2])
         {
             _dialogueBoxController.SkipLine();
-        }*/
+        }
     }
 
     /// <summary>
