@@ -103,10 +103,13 @@ public class HandControllerToolTip : MonoBehaviour
     /// </summary>
     public void Open()
     {
-        StopAllCoroutines();
-        GetComponent<Canvas>().enabled = true;
-        GetComponent<LineRenderer>().enabled = true;
-        StartCoroutine(InterpolateTowards(OpenPosition));            
+        if (_closed)
+        {
+            StopAllCoroutines();
+            GetComponent<Canvas>().enabled = true;
+            GetComponent<LineRenderer>().enabled = true;
+            StartCoroutine(InterpolateTowards(OpenPosition));                        
+        }
     }
 
     /// <summary>

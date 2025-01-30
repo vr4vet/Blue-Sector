@@ -124,30 +124,6 @@ public class ControllerTooltipActivator : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_active && other.name.Equals("Grabber"))
-        {
-            // send the necessary information about this object to ControllerTooltipManager
-            if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
-                _controllerTooltipManager.OnHandEntered(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsLeft), ControllerHand.Left);
-            else if (other.GetComponent<Grabber>().HandSide == ControllerHand.Right)
-                _controllerTooltipManager.OnHandEntered(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsRight), ControllerHand.Right);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (_active && other.name.Equals("Grabber"))
-        {
-            // send the necessary information about this object to ControllerTooltipManager
-            if (other.GetComponent<Grabber>().HandSide == ControllerHand.Left)
-                _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsLeft), ControllerHand.Left);
-            else if (other.GetComponent<Grabber>().HandSide == ControllerHand.Right)
-                _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsRight), ControllerHand.Right);
-        }
-    }
-
     /// <summary>
     /// Activate the activator
     /// </summary>
@@ -156,12 +132,9 @@ public class ControllerTooltipActivator : MonoBehaviour
     /// <summary>
     /// Deactivate the activator
     /// </summary>
-    public void Deactivate()
-    {
-        _active = false;
-        if (_controllerTooltipManager.IsControllerMapped(_buttonMappingsLeft, ControllerHand.Left))
-            _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsLeft), ControllerHand.Left);
-        if (_controllerTooltipManager.IsControllerMapped(_buttonMappingsRight, ControllerHand.Right))
-            _controllerTooltipManager.OnHandExited(new InterractableObject(_colliderForDistanceComparison, _buttonMappingsRight), ControllerHand.Right);
-    }
+    public void Deactivate() => _active = false;
+
+    public List<ButtonActionMapping> GetButtonMappingsLeft() => _buttonMappingsLeft;
+
+    public List<ButtonActionMapping> GetButtonMappingsRight() => _buttonMappingsRight;
 }
