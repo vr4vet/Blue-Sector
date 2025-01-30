@@ -1,7 +1,6 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.VRTemplate;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -44,7 +43,6 @@ public class ControllerTooltipManager : MonoBehaviour
 
     // the player rig
     private GameObject _player;
-    private SnapZone _holsterLeft, _holsterRight;
 
     // keep track of hand controller models and their button models
     private ControllerButtonsTransforms _controllerButtonsLeft = new(), _controllerButtonsRight = new();
@@ -97,7 +95,7 @@ public class ControllerTooltipManager : MonoBehaviour
         {
             if (_accessibilityEnabled)
             {
-                Collider[] surroundingColliders = new Collider[5];
+                Collider[] surroundingColliders = new Collider[8];
                 Physics.OverlapSphereNonAlloc(controllerModel.transform.position, .1f, surroundingColliders);
 
                 List<ControllerTooltipActivator> activators = new();
@@ -106,9 +104,6 @@ public class ControllerTooltipManager : MonoBehaviour
                     if (surroundingCollider && surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>())
                         activators.Add(surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>());
                 }
-
-                foreach (ControllerTooltipActivator activator in activators)
-                    Debug.Log(activator.name);
 
                 if (activators.Count > 0)
                 {
@@ -138,7 +133,13 @@ public class ControllerTooltipManager : MonoBehaviour
                     if (controllerHand != ControllerHand.Left)
                         CloseAllTooltips(controllerHand);
                     else
-                        SetUpTooltips(_defaultButtonMappingsLeft, controllerHand);
+                    {
+                        if (InputBridge.Instance.LeftThumbstickAxis.magnitude > 0)
+                            CloseAllTooltips(controllerHand);
+                        else
+                            SetUpTooltips(_defaultButtonMappingsLeft, controllerHand);
+                    } 
+
                 }
             }
             else
@@ -343,23 +344,6 @@ public class ControllerTooltipManager : MonoBehaviour
         _player = GameManager.Instance.GetPlayerRig();
         _handModelLeft = GameManager.Instance.LeftHandGameObj;
         _handModelRight = GameManager.Instance.RightHandGameObj;
-
-        foreach (SnapZone snapZone in _player.GetComponentsInChildren<SnapZone>())
-        {
-            if (snapZone.name == "HolsterLeft")
-            {
-                _holsterLeft = snapZone;
-                _holsterLeft.OnSnapEvent.AddListener(OnHolsterAttachEvent);
-                _holsterLeft.OnDetachEvent.AddListener(OnHolsterDeattachEvent);
-            }
-            else if (snapZone.name == "HolsterRight")
-            {
-                _holsterRight = snapZone;
-                _holsterRight.OnSnapEvent.AddListener(OnHolsterAttachEvent);
-                _holsterRight.OnDetachEvent.AddListener(OnHolsterDeattachEvent);
-            }
-        }
-        //Debug.Log((_player.GetComponentsInChildren<SnapZone>()).Length);
 
         // checking if two and only two Quest controller models are provided (one for each hand)
         if (OculusControllerModels.Count != 2)
@@ -642,17 +626,5 @@ public class ControllerTooltipManager : MonoBehaviour
             StartCoroutine(FindClosestObject(ControllerHand.Left));
             StartCoroutine(FindClosestObject(ControllerHand.Right));
         }  
-    }
-
-    private void OnHolsterAttachEvent(Grabbable grabbale)
-    {
-        Debug.Log(grabbale.name);
-        grabbale.GetComponentInChildren<ControllerTooltipActivator>().Deactivate();
-    }
-
-    private void OnHolsterDeattachEvent(Grabbable grabbale)
-    {
-        Debug.Log(grabbale.name);
-        grabbale.GetComponentInChildren<ControllerTooltipActivator>().Activate();
     }
 }
