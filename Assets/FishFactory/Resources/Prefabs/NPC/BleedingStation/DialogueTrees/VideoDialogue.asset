@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: VideoDialogue
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - Grab the headset to watch a video of people working in the fish factory. Come
+      back to me when you are ready to continue
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: VideoObject
+    branchPoint:
+      question: Are you ready to continue?
+      answers:
+      - answerLabel: Yes
+        nextElement: 0
+        endAfterAnswer: 1
+        walkOrTurnTowardsAfterAnswer: BleedingPath2

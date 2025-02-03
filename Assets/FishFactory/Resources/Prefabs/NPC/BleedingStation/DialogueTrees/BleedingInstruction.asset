@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: BleedingInstruction
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - The fish on the conveyor belt are stunned and feel no pain. If a fish shows
+      any signs of consciousness, it needs to be stunned before it is cut.
+    - You can recognize conscious fish by their movement. Conscious fish will periodically
+      flop on the conveyor belt.
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Did you understand everything?
+      answers:
+      - answerLabel: Yes
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Repeat?
+        nextElement: 0
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - "You will find a stun machine to the left of your station. Insert conscious
+      fish into the machine with their head first, this will stun the fish. Afterwards,
+      the stunned fish is ready to be cut.\r"
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: StunMachine_N
+    branchPoint:
+      question: Understood?
+      answers:
+      - answerLabel: Yes
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - "Sometimes fish that are not fit for human consumption can come down the conveyor
+      belt. Such inedible fish should be thrown in the basket next to the stun machine.\r"
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: FishDiscardBox (1)
+    branchPoint:
+      question: Did you understand everything?
+      answers:
+      - answerLabel: Yes
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Repeat
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - To cut the fish you have to stab the gills of the fish
+    - To start the task stand between the red button and the stun machine
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Are you ready to start?
+      answers:
+      - answerLabel: Yes
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Can you repeat?
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - 'Start the conveyour belt by pressing the red button you can also stop the
+      belt by pressing the button again. '
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 1
+    pointAt: StopButton_N
+    branchPoint:
+      question: Talk to me if you have any questions
+      answers:
+      - answerLabel: Stunning fish
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Handling bad fish
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 

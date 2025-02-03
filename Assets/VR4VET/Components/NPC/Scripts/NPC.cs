@@ -12,6 +12,7 @@ public class NPC : ScriptableObject
     public Vector3 SpawnPosition;
     public Vector3 SpawnRotation;
     public bool ShouldFollow;
+    public bool WithoutDialogue;
     public DialogueTree[] DialogueTreesSO;
     public TextAsset[] DialogueTreeJSON;
     public RuntimeAnimatorController runtimeAnimatorController;

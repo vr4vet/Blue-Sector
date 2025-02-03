@@ -21,65 +21,72 @@ MonoBehaviour:
       the automatic bleeding machine.
     - "This is done by cutting the gills of stunned fish.\r"
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
-      question: Are you ready to learn more?
+      question: Do you want to go through the instructions?
       answers:
       - answerLabel: Repeat?
         nextElement: 0
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No
-        nextElement: 5
-        endAfterAnswer: 0
+        nextElement: 4
+        endAfterAnswer: 1
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Yes
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Firstly, you need to have completed a fish welfare course before you can start
       working.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Have you completed this course?
       answers:
       - answerLabel: No
         nextElement: 3
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Yes
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Great! You should know that conscious fish must not be left out of water for
       longer than 15 seconds or left in the stunning machine.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Let's continue.
       answers:
       - answerLabel: Continue
         nextElement: 4
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - If you have not completed the fish welfare course you need to work under supervision
       for up to a year.
     - Conscious fish must not be left out of water for longer than 15 seconds or
       left in the stunning machine.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: It is important to not cause unnecessary distress for the fish!
       answers:
       - answerLabel: Understood!
         nextElement: 4
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - "You will find a knife in your right pocket. When the knife is not in use it
       should be placed in your pocket.\r"
@@ -92,57 +99,17 @@ MonoBehaviour:
     - Do so by placing the chipped knife in the basket, and a new knife should appear
       beside it.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: BackupFishKnife
     branchPoint:
-      question: Did you understand everything?
+      question: Follow me to learn more
       answers:
       - answerLabel: Repeat?
         nextElement: 4
         endAfterAnswer: 0
-      - answerLabel: Understood
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ok
         nextElement: 5
-        endAfterAnswer: 0
-  - dialogue:
-    - The fish on the conveyor belt are stunned and feel no pain. If a fish shows
-      any signs of consciousness, it needs to be stunned before it is cut.
-    - You can recognize conscious fish by their movement. Conscious fish will periodically
-      flop on the conveyor belt.
-    - "You will find a machine to the left of your station. Insert conscious fish
-      into the machine with their head first, this will stun the fish. Afterwards,
-      the stunned fish is ready to be cut.\r"
-    - "Sometimes fish that are not fit for human consumption can come down the conveyor
-      belt. Such inedible fish should be thrown in the basket next to the stun machine.\r"
-    endAfterDialogue: 0
-    disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
-    branchPoint:
-      question: Is that clear?
-      answers:
-      - answerLabel: Repeat?
-        nextElement: 5
-        endAfterAnswer: 0
-      - answerLabel: Yes!
-        nextElement: 6
-        endAfterAnswer: 0
-  - dialogue:
-    - "Make sure you only cut the gills. The knife should not go too deep.\r"
-    - All fish must be cut before they move to the next station!
-    endAfterDialogue: 0
-    disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
-    branchPoint:
-      question: Is there anything else you wish to know?
-      answers:
-      - answerLabel: Repeat?
-        nextElement: 6
-        endAfterAnswer: 0
-      - answerLabel: Explain tasks
-        nextElement: 4
-        endAfterAnswer: 0
-      - answerLabel: Finish
-        nextElement: 0
         endAfterAnswer: 1
+        walkOrTurnTowardsAfterAnswer: BleedingPath
