@@ -39,6 +39,7 @@ public class ControllerTooltipManager : MonoBehaviour
 
     // prevent tooltips from being opened/closed before ready
     private int _tooltipsReady = 0;
+    private int _tooltipsActiveLeft = 0, _tooltipsActiveRight = 0;
 
     // the player rig
     private GameObject _player;
@@ -47,13 +48,9 @@ public class ControllerTooltipManager : MonoBehaviour
     private ControllerButtonsTransforms _controllerButtonsLeft = new(), _controllerButtonsRight = new();
     private GameObject _controllerModelLeft, _controllerModelRight;
     private GameObject _handModelLeft, _handModelRight;
-    private List<InterractableObject> _interractableObjectsLeft = new(), _interractableObjectsRight = new();
-    private InterractableObject _closestObjectLeft = null, _closestObjectRight = null; // store closest objet after finding it for comparing with the one found in next iteration
 
     // controls whether close objects will be scanned, controller models enabled/disabled etc., and is set in main menu/pause menu.
-    private bool _accessibilityEnabled = false;
-
-    private Collider _leftHandDefaultCollider = new();
+    private bool _accessibilityEnabled = true;
 
     private List<ButtonActionMapping> _defaultButtonMappingsLeft = new()
     {
@@ -65,8 +62,6 @@ public class ControllerTooltipManager : MonoBehaviour
         new (ControllerButtons.TriggerGripLeft, ButtonActions.None),
     };
 
-    private InterractableObject _leftHandDefault;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -75,8 +70,6 @@ public class ControllerTooltipManager : MonoBehaviour
 
         if (MainMenu != null)
             MainMenu.m_ControllerTooltipsToggled.AddListener(OnPauseMenuToggle);
-
-        _leftHandDefault = new InterractableObject(new Collider(), _defaultButtonMappingsLeft);
     }
 
     /// <summary>
@@ -97,114 +90,63 @@ public class ControllerTooltipManager : MonoBehaviour
             yield return null;
         }
 
-        // figure out which hand
-        List<InterractableObject> interractableObjects = controllerHand == ControllerHand.Left ? _interractableObjectsLeft : _interractableObjectsRight;
-        GameObject controllerModel = controllerHand == ControllerHand.Left ? _controllerModelLeft : _controllerModelRight;
-        
-        InterractableObject closestObject = null; // store closest objet after finding it for comparing with the one found in next iteration
+        GameObject controllerModel = controllerHand == ControllerHand.Left ? _controllerModelLeft : _controllerModelRight; // figure out which hand
         while (true)
         {
             if (_accessibilityEnabled)
             {
-                if (interractableObjects.Count >= 1) // only run this if there are objects in hand's vicinity
+                Collider[] surroundingColliders = new Collider[8];
+                Physics.OverlapSphereNonAlloc(controllerModel.transform.position, .1f, surroundingColliders);
+
+                List<ControllerTooltipActivator> activators = new();
+                foreach (Collider surroundingCollider in surroundingColliders)
                 {
+                    if (surroundingCollider && surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>())
+                        activators.Add(surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>());
+                }
 
-                    if (TooltippedButtonsDown(controllerHand)) // close all tooltips and hide hand when player presses one of the labelled buttons
-                        CloseAllTooltips(controllerHand);
-                    else if (closestObject != null) // otherwise show tooltips (unless no closest object is set yet, indicating first iteration)
-                        SetUpTooltips(closestObject, controllerHand);
-
-                    Vector3 handPosition = controllerModel.transform.position;
-                    InterractableObject closestTmpObject = null;
+                if (activators.Count > 0)
+                {
                     float shortestDistance = Mathf.Infinity;
-                    foreach (InterractableObject intObject in interractableObjects)
+                    ControllerTooltipActivator closestActivator = activators[0];
+                    foreach (ControllerTooltipActivator activator in activators)
                     {
-                        float dist = Vector3.Distance(handPosition, intObject.BoundingCollider.ClosestPoint(handPosition)); // calculate distance between hand and collider bounds
-                        if (dist < shortestDistance)
+                        if (Vector3.Distance(controllerModel.transform.position, activator.transform.position) < shortestDistance)
                         {
-                            closestTmpObject = intObject;
-                            shortestDistance = dist;
+                            shortestDistance = Vector3.Distance(controllerModel.transform.position, activator.transform.position);
+                            closestActivator = activator;
                         }
                     }
-                    if (closestTmpObject != closestObject) // store new closest object
-                    {
-                        closestObject = closestTmpObject;
 
+                    if (TooltippedButtonsDown(closestActivator, controllerHand))
+                        CloseAllTooltips(controllerHand);
+                    else
+                    {
                         if (controllerHand == ControllerHand.Left)
-                            _closestObjectLeft = closestObject;
+                            SetUpTooltips(closestActivator.GetButtonMappingsLeft(), ControllerHand.Left);
                         else
-                            _closestObjectRight = closestObject;
+                            SetUpTooltips(closestActivator.GetButtonMappingsRight(), ControllerHand.Right);
                     }
                 }
-                else // close all tooltips if there are no objects in the hand's vicinity
+                else
                 {
-                    closestObject = null; // resetting closest object because no object is closest
-
-                    if (controllerHand == ControllerHand.Left && AlwaysShowTeleport && InputBridge.Instance.LeftThumbstickAxis.magnitude <= 0)
-                        SetUpTooltips(_leftHandDefault, controllerHand);
-                    else
+                    if (controllerHand != ControllerHand.Left)
                         CloseAllTooltips(controllerHand);
-                }
-            }
+                    else
+                    {
+                        if (InputBridge.Instance.LeftThumbstickAxis.magnitude > 0)
+                            CloseAllTooltips(controllerHand);
+                        else
+                            SetUpTooltips(_defaultButtonMappingsLeft, controllerHand);
+                    } 
 
-            yield return new WaitForSecondsRealtime(.1f); // check 10 times a second
-        }
-    }
-
-    /// <summary>
-    /// Tells whether one of the provided hand's buttons is mapped
-    /// </summary>
-    /// <param name="buttonMappings"></param>
-    /// <param name="controllerHand"></param>
-    /// <returns></returns>
-    public bool IsControllerMapped(List<ButtonActionMapping> buttonMappings, ControllerHand controllerHand)
-    {
-        if (controllerHand == ControllerHand.None)
-        {
-            Debug.LogError("The provided controller hand must be either ControllerHand.Left or ControllerHand.Right!");
-            return false;
-        }
-
-        foreach (ButtonActionMapping buttonMapping in buttonMappings)
-        {
-            if (controllerHand == ControllerHand.Left)
-            {
-                switch (buttonMapping.Button)
-                {
-                    case ControllerButtons.ThumbstickLeft:
-                        return true;
-                    case ControllerButtons.A:
-                        return true;
-                    case ControllerButtons.B:
-                        return true;
-                    case ControllerButtons.TriggerFrontLeft:
-                        return true;
-                    case ControllerButtons.TriggerGripLeft:
-                        return true;
-                    case ControllerButtons.OculusLeft:
-                        return true;
                 }
             }
             else
-            {
-                switch (buttonMapping.Button)
-                {
-                    case ControllerButtons.ThumbstickRight:
-                        return true;
-                    case ControllerButtons.X:
-                        return true;
-                    case ControllerButtons.Y:
-                        return true;
-                    case ControllerButtons.TriggerFrontRight:
-                        return true;
-                    case ControllerButtons.TriggerGripRight:
-                        return true;
-                    case ControllerButtons.OculusRight:
-                        return true;
-                }
-            }
+                CloseAllTooltips(controllerHand);
+
+            yield return new WaitForSecondsRealtime(.1f); // check 10 times a second
         }
-        return false;
     }
 
     /// <summary>
@@ -214,16 +156,12 @@ public class ControllerTooltipManager : MonoBehaviour
     /// </summary>
     /// <param name="controllerHand"></param>
     /// <returns></returns>
-    private bool TooltippedButtonsDown(ControllerHand controllerHand)
+    private bool TooltippedButtonsDown(ControllerTooltipActivator activator, ControllerHand controllerHand)
     {
         if (controllerHand == ControllerHand.None)
             return false;
 
-        InterractableObject interractableObject = controllerHand == ControllerHand.Left ? _closestObjectLeft : _closestObjectRight;
-        if (interractableObject == null)
-            return false;
-
-        foreach (ButtonActionMapping mapping in controllerHand == ControllerHand.Left ? _closestObjectLeft.ButtonMappings : _closestObjectRight.ButtonMappings)
+        foreach (ButtonActionMapping mapping in controllerHand == ControllerHand.Left ? activator.GetButtonMappingsLeft() : activator.GetButtonMappingsRight())
         {
             if (mapping.Action != ButtonActions.None)
             {
@@ -258,57 +196,12 @@ public class ControllerTooltipManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Is called from an ControllerTooltipActivator when a hand enters its trigger.
-    /// The object is added to the provided hand's list of objects in its vicinity.
-    /// </summary>
-    /// <param name="interractableObject"></param>
-    /// <param name="controllerHand"></param>
-    public void OnHandEntered(InterractableObject interractableObject, ControllerHand controllerHand)
-    {
-        if (controllerHand == ControllerHand.None)
-        {
-            Debug.LogError("The provided controller hand must be either ControllerHand.Left or ControllerHand.Right!");
-            return;
-        }
-
-        List<InterractableObject> interractableObjects = controllerHand == ControllerHand.Left
-                                                       ? _interractableObjectsLeft
-                                                       : _interractableObjectsRight;
-
-        if (!interractableObjects.Contains(interractableObject))
-            interractableObjects.Add(interractableObject);
-    }
-
-
-    /// <summary>
-    /// Is called from an ControllerTooltipActivator when a hand exits its trigger.
-    /// The object is removed from the provided hand's list of objects in its vicinity.
-    /// </summary>
-    /// <param name="interractableObject"></param>
-    /// <param name="controllerHand"></param>
-    public void OnHandExited(InterractableObject interractableObject, ControllerHand controllerHand)
-    {
-        if (controllerHand == ControllerHand.None)
-        {
-            Debug.LogError("The provided controller hand must be either ControllerHand.Left or ControllerHand.Right!");
-            return;
-        }
-
-        // find object in left or right hand list, remove it from list and close the related tooltips
-        List<InterractableObject> interractableObjects = controllerHand == ControllerHand.Left 
-                                                       ? _interractableObjectsLeft 
-                                                       : _interractableObjectsRight;
-
-        interractableObjects.Remove(interractableObject);
-    }
-
-    /// <summary>
     /// Takes a list of mappings between Quest controller buttons and their actions.
     /// Activates tooltips that hover above each button showing their actions for an object.
     /// </summary>
     /// <param name="interractableObject"></param>
     /// <param name="controllerHand"></param>
-    private void SetUpTooltips(InterractableObject interractableObject, ControllerHand controllerHand)
+    private void SetUpTooltips(List<ButtonActionMapping> buttonActionMappings, ControllerHand controllerHand)
     {
         if (controllerHand == ControllerHand.None)
         {
@@ -316,7 +209,7 @@ public class ControllerTooltipManager : MonoBehaviour
             return;
         }
 
-        foreach (ButtonActionMapping mapping in interractableObject.ButtonMappings)
+        foreach (ButtonActionMapping mapping in buttonActionMappings)
         {
             // find the correct button model before configuring its tooltip
             Transform button = controllerHand == ControllerHand.Left
@@ -581,6 +474,9 @@ public class ControllerTooltipManager : MonoBehaviour
                     break;
             }
         }
+
+        StartCoroutine(FindClosestObject(ControllerHand.Left));
+        StartCoroutine(FindClosestObject(ControllerHand.Right));
     }
 
     /// <summary>
@@ -660,6 +556,11 @@ public class ControllerTooltipManager : MonoBehaviour
         if (controllerHand == ControllerHand.None)
             Debug.LogError("Tooltip must have HandSide set to either left or right, but was " + controllerHand.ToString() + "!");
 
+        if (controllerHand == ControllerHand.Left)
+            _tooltipsActiveLeft++;
+        if (controllerHand == ControllerHand.Right)
+            _tooltipsActiveRight++;
+
         SetQuestControllerModels(controllerHand);
     }
 
@@ -673,7 +574,6 @@ public class ControllerTooltipManager : MonoBehaviour
             Debug.LogError("Tooltip must have HandSide set to either left or right, but was " + controllerHand.ToString() + "!");
     }
 
-
     /// <summary>
     /// This is called when a tooltip has moved "back into" the controller, signalling that it may be time to hide the Quest controller
     /// and show the player's hand again (if the player's hand is not intersecting with any ControllerTooltipActivators).
@@ -683,9 +583,15 @@ public class ControllerTooltipManager : MonoBehaviour
     {
         if (controllerHand == ControllerHand.None)
             Debug.LogError("Tooltip must have HandSide set to either left or right, but was " + controllerHand.ToString() + "!");
-        if (controllerHand == ControllerHand.Left && ((_interractableObjectsLeft.Count == 0 && !AlwaysShowTeleport) || (TooltippedButtonsDown(controllerHand) || InputBridge.Instance.LeftThumbstickAxis.magnitude > 0)))
+
+        if (controllerHand == ControllerHand.Left)
+            _tooltipsActiveLeft = (_tooltipsActiveLeft - 1 >= 0) ? _tooltipsActiveLeft - 1 : 0;
+        if (controllerHand == ControllerHand.Right)
+            _tooltipsActiveRight = (_tooltipsActiveRight - 1 >= 0) ? _tooltipsActiveRight - 1 : 0;
+
+        if (_tooltipsActiveLeft <= 0)
             SetDefaultHandModel(ControllerHand.Left);
-        if (controllerHand == ControllerHand.Right && (_interractableObjectsRight.Count == 0 || TooltippedButtonsDown(controllerHand)))
+        if (_tooltipsActiveRight <= 0)
             SetDefaultHandModel(ControllerHand.Right);
     }
 
