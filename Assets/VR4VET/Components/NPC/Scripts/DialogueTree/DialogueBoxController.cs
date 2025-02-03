@@ -162,7 +162,8 @@ public class DialogueBoxController : MonoBehaviour
               }
               
               // Check if the current dialogue section should have the NPC pointing
-              if (!dialogueTree.sections[section].pointAt.Equals(string.Empty))
+              string pointAt = dialogueTree.sections[section].pointAt;
+              if (pointAt != null && !pointAt.Equals(string.Empty))
               {
                   bool directionChanged = _pointingScript.ChangeDirection(dialogueTree.sections[section].pointAt, _animator.transform);
                   // Make sure the NPC is looking at the object before the pointing animation is started
@@ -182,8 +183,9 @@ public class DialogueBoxController : MonoBehaviour
               dialogueSection = section;
           }   
         }
-        
-        if (!dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue.Equals(string.Empty))
+
+        string walkTurnDestination = dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue;
+        if (walkTurnDestination != null && !walkTurnDestination.Equals(string.Empty))
         {
             GetComponent<WalkingNpc>().WalkPath(dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue);
         }
@@ -211,7 +213,8 @@ public class DialogueBoxController : MonoBehaviour
         _exitButton.SetActive(false);
         _skipLineButton.SetActive(false);
 
-        if (!dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer.Equals(string.Empty))
+        walkTurnDestination = dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer;
+        if (walkTurnDestination != null && !walkTurnDestination.Equals(string.Empty))
         {
             GetComponent<WalkingNpc>().WalkPath(dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer);
         }

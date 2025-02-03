@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
 using UnityEngine.UIElements;
+using UnityEngine.Events;
 //using System.Diagnostics;
 
 public class Fish : MonoBehaviour
@@ -78,9 +79,30 @@ public class Fish : MonoBehaviour
     private List<Vector3> transitionToAnimationBonesPosition = new List<Vector3> ();
     private List<Quaternion> transitionToAnimationBonesRotation = new List<Quaternion>();
 
+    public UnityEvent m_OnFishCalmedDown; // event to set waiting step of subtask to completed when fish has calmed down
+    private bool _waitingStepCompleted = false;
+
+    public UnityEvent m_OnBroughtToTable;
+    [HideInInspector] public bool BringFishStepCompleted = false;
+
+    public UnityEvent m_OnInspected;
+    [HideInInspector] public bool HasBeenInspected = false;
+
+    public UnityEvent m_OnPlacedInRecoveryTank;
+    [HideInInspector] public bool PlacedInRecoveryTank = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (m_OnFishCalmedDown == null)
+            m_OnFishCalmedDown = new();
+
+        if (m_OnBroughtToTable == null)
+            m_OnBroughtToTable = new();
+
+        if (m_OnInspected == null)
+            m_OnInspected = new();
+
         InvokeRepeating(nameof(PeriodicUpdates), Random.Range(0.0f, 3.0f), 1.0f);
         inspectionTaskManager = GameObject.FindObjectOfType<InspectionTaskManager>();
         targetPosition = transform.position;
@@ -245,6 +267,12 @@ public class Fish : MonoBehaviour
         animator.speed = unsediatedLevel >= 0 ? unsediatedLevel : 0;
         movementSpeed = originalMovementSpeed * unsediatedLevel;
         rotationSpeed = (originalRotationSpeed * unsediatedLevel) / 1.5f;
+
+        if (!_waitingStepCompleted && movementSpeed <= 0) // invoke event to tell tablet to complete waiting step
+        {
+            _waitingStepCompleted = true;
+            m_OnFishCalmedDown.Invoke();
+        }
     }
 
     private void followchild()
@@ -264,7 +292,7 @@ public class Fish : MonoBehaviour
         {
             health -= 1;
             sedationTimer = .1f;
-        }
+        } 
     }
 
     public void SetMoveTarget()

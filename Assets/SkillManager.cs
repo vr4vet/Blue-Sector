@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
@@ -9,21 +6,6 @@ public class SkillManager : MonoBehaviour
     private MaintenanceManager manager;
     private WatchManager watchManager;
 
-    private List<int> completedSteps = new List<int>();
-
-    // private void Awake()
-    // {
-    //     if (Instance == null)
-    //     {
-    //         Instance = this;
-    //         DontDestroyOnLoad(gameObject);
-    //     }
-    //     else
-    //     {
-    //         Destroy(gameObject);
-    //     }
-    // }
-
     void Start()
     {
         if (gameObject.GetComponent<MaintenanceManager>() != null)
@@ -31,11 +13,11 @@ public class SkillManager : MonoBehaviour
             manager = this.gameObject.GetComponent<MaintenanceManager>();
             manager.BadgeChanged.AddListener(CompleteSkill);
         }
-/*        else if (gameObject.GetComponent<WatchManager>() != null)
+        else if (gameObject.GetComponent<WatchManager>() != null)
         {
             watchManager = this.gameObject.GetComponent<WatchManager>();
             watchManager.BadgeChanged.AddListener(CompleteSkill);
-        }*/
+        }
 
 
     }

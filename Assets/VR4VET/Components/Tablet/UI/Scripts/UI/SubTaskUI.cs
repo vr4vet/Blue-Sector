@@ -24,7 +24,8 @@ public class SubTaskUI : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Finger")
+        // xr rig index finger tip capsule colliders
+        if (other.name.Equals("hands_coll:b_r_index3") || other.name.Equals("hands_coll:b_r_index3 (1)")/*other.gameObject.tag == "Finger"*/)
         {
             btn.onClick.Invoke();
         }
