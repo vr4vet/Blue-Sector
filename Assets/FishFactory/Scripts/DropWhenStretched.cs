@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using BNG;
+using System.Linq;
 
 public class DropWhenStretched : MonoBehaviour
 {
@@ -8,40 +10,49 @@ public class DropWhenStretched : MonoBehaviour
     [SerializeField] private GameObject Armature;
     private GameObject FishHead;
     private GameObject GrabbedJoint;
-    private float distance = Mathf.Infinity;
-    private List<float> distances = new List<float>();
-    private DropTheFish drop;
+    private List<float> distances = new();
     private int GrabCount = 0;
     private int FishCollides = 0;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        drop = GameObject.Find("DropObject").GetComponent<DropTheFish>();
-    }
+    private Grabber playerGrabberLeft, playerGrabberRight;
 
     private float WaitBeforeDrop = 0;
     // Update is called once per frame
+
+    private void Awake()
+    {
+        DistanceLength();
+    }
+
+    private float _greatestVelocity = 0;
     void Update()
     {
-        if (GrabCount == 0 || FishCollides > 0 && GrabCount < 2)
+        // getting the player hand grabbers. they are not immediately accessible, so they are fetched here
+        if (playerGrabberLeft == null || playerGrabberRight == null)
         {
+            List<Grabber> grabbers = GameManager.Instance.GetPlayerRig().GetComponentsInChildren<Grabber>().ToList();
+            playerGrabberLeft = grabbers.Find(x => x.transform.parent.name == "LeftController");
+            playerGrabberRight = grabbers.Find(x => x.transform.parent.name == "RightController");
             return;
         }
 
-        if (DistancesBetweenJoints() && Time.time - WaitBeforeDrop >= 0.5f)
+        // return when fish is not grabbed, or if held with one hand while touching the sorting machine's sticky surface. prevents unneccesary calculations and unwanted anti-stretch corrections
+        if (GrabCount == 0 || FishCollides > 0 && GrabCount < 2)
+            return;
+
+        // make anti-stretch corrections if fish is currently stretched and enough time has passed since last correction. waiting prevents wild and rapid corrections
+        if (DistancesBetweenJoints() && Time.time - WaitBeforeDrop >= 1f)
         {
             WaitBeforeDrop = Time.time;
-            if (GrabCount == 2)
+            if (GrabCount == 2) // select random hand and make it drop its held fish joint
             {
                 if (Random.value >= 0.5)
-                    drop.StretchDropLeft.Invoke();
+                    playerGrabberLeft.TryRelease();
                 else
-                    drop.StretchDropRight.Invoke();
+                    playerGrabberRight.TryRelease();
                 return;
             }
                 
-            if (GrabCount == 1)
+            if (GrabCount == 1) // find which joint the player is holding and move all joints towards it. prevents fish from latching into objects and becoming stretched when player moves held joint
             {
                 foreach (WhichJointGrabbed Joint in GetComponentsInChildren<WhichJointGrabbed>())
                 {
@@ -55,19 +66,17 @@ public class DropWhenStretched : MonoBehaviour
                 foreach (WhichJointGrabbed Joint in GetComponentsInChildren<WhichJointGrabbed>())
                 {
                     if (!Joint.Grabbed)
-                    {
                         Joint.transform.position = GrabbedJoint.transform.position;
-                    }
                 }
             }
-
         }      
     }
+
+    /// <summary>
+    /// Calculates distance from head to all joints, which is used for checking if the fish being stretched
+    /// </summary>
     public void DistanceLength()
     {
-        if (distance == Mathf.Infinity)
-            distance = Vector3.Distance(Head.position, TailEnd.position);
-
         if (distances.Count == 0)
         {
             foreach (WhichJointGrabbed Joint in GetComponentsInChildren<WhichJointGrabbed>())
@@ -75,22 +84,29 @@ public class DropWhenStretched : MonoBehaviour
                 if (Joint.gameObject.name == "Head")
                     FishHead = Joint.gameObject;
                 
-                else if(Head != null)
+                else if (Head != null)
                     distances.Add(Vector3.Distance(FishHead.transform.position, Joint.transform.position));
             }
         }
     }
 
-    public void IncrementGrabCount()
-    {
-        GrabCount++;
-    }
+    /// <summary>
+    /// Called by fish joints' OnGrab event
+    /// </summary>
+    public void IncrementGrabCount() => GrabCount++;
 
-    public void DecrementGrabCount()
-    {
-        GrabCount--;
-    }
 
+    /// <summary>
+    /// Called by fish joints' OnGrab event
+    /// </summary>
+    public void DecrementGrabCount() => GrabCount--;
+
+
+    /// <summary>
+    /// Calculates distance between head and all other joints.
+    /// Returns true if distance is greater by a certain threshold, otherwise returns false.
+    /// </summary>
+    /// <returns></returns>
     private bool DistancesBetweenJoints()
     {
         if (distances.Count < 8)
@@ -104,22 +120,21 @@ public class DropWhenStretched : MonoBehaviour
                 float DistanceRetrieval = Vector3.Distance(Armature.transform.GetChild(0).transform.position, Joint.transform.position);
 
                 if (DistanceRetrieval >= distances[i - 1] + 0.15f)
-                {
                     return true;
-                }
             }
             i++;
         }
         return false;
     }
 
-    public void JointCollisionIncrease()
-    {
-        FishCollides++;
-    }
-    
-    public void JointCollisionDecrease()
-    {
-        FishCollides--;
-    }
+    /// <summary>
+    /// Tell that a joint collides with some object that should disable certain corrections, like the sticky surface of the sorting maching.
+    /// </summary>
+    public void JointCollisionIncrease() => FishCollides++;
+
+
+    /// <summary>
+    /// Tell that a joint no longer collides with some object that should disable certain corrections, like the sticky surface of the sorting maching.
+    /// </summary>
+    public void JointCollisionDecrease() => FishCollides--;
 }
