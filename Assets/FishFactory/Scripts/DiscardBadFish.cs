@@ -46,7 +46,7 @@ public class DiscardBadFish : MonoBehaviour
             {
                 DestroyOldestFish();
             }
-        }
+        }  
     }
 
     /// <summary>
@@ -62,6 +62,7 @@ public class DiscardBadFish : MonoBehaviour
         )
         {
             OnDiscard.Invoke();
+            //Debug.Log(_discardedFish.Count.ToString());
             if (_discardedFish.Count == 10)
             {
                 OnDiscardAfterCount.Invoke();
