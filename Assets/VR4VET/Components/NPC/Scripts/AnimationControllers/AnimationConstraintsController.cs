@@ -60,7 +60,7 @@ public class AnimationConstraintsController : MonoBehaviour
                             {
                                 
                                 
-                                var newSource = new WeightedTransform(pointRef.transform, 0.0f);
+                                var newSource = new WeightedTransform(pointRef.transform, 1.0f);
                                 sourceObject.Add(newSource);
                                 con.data.sourceObjects = sourceObject;
                                 
@@ -73,6 +73,7 @@ public class AnimationConstraintsController : MonoBehaviour
                                     con.data.constrainedZAxis = true;
                                     
                                     con.data.limits = new Vector2(-120f, 120f);
+                                    con.weight = 0.0f;
                                     rightArmCon = con;
                                     
                                     
@@ -86,6 +87,7 @@ public class AnimationConstraintsController : MonoBehaviour
                                     con.data.constrainedZAxis = true;
                                     
                                     con.data.limits = new Vector2(120f, 120f);
+                                    con.weight = 0.0f;
                                     rightForeArmCon = con;
                                     
                                 }
