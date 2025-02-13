@@ -8,8 +8,12 @@ public class AnimationConstraintsController : MonoBehaviour
     [HideInInspector] private int isTalkingHash;
     [HideInInspector] private RigBuilder rigBuilder; // Use RigBuilder instead of Rig
     private GameObject targetRef;
+    private GameObject pointRef;
     private MultiAimConstraint headCon;
     private MultiAimConstraint spineCon;
+    private MultiAimConstraint rightArmCon;
+    private MultiAimConstraint rightForeArmCon;
+    
 
     /// <summary>
     /// Check that every compontent need exists
@@ -39,6 +43,9 @@ public class AnimationConstraintsController : MonoBehaviour
                 {               
                     GameObject playerRef = NPCToPlayerReferenceManager.Instance.PlayerTarget;                                      
                     targetRef = playerRef.transform.Find("TrackingSpace").transform.Find("CenterEyeAnchor").gameObject;
+                    pointRef = GameObject.Find("cardboard_box_3 (2)");
+                    
+                    
                     if (targetRef != null)
                     {
                         // Adds contraints at runtime
@@ -48,31 +55,67 @@ public class AnimationConstraintsController : MonoBehaviour
                         }
                         foreach (MultiAimConstraint con in constraints)
                         {
-                            // Set the player camera as the source object (what the NPC will look at)
                             var sourceObject = con.data.sourceObjects;
-                            var newSource = new WeightedTransform(targetRef.transform, 1.0f);
-                            sourceObject.Add(newSource);
-                            con.data.sourceObjects = sourceObject;
-
-                            // Manage settings for the constrained object(s)
-                            con.data.aimAxis = MultiAimConstraintData.Axis.Z;
-                            con.data.upAxis = MultiAimConstraintData.Axis.Z;
-                            con.data.constrainedXAxis = true;
-                            con.data.constrainedYAxis = true;
-                            con.data.constrainedZAxis = true;
-                            if (con.gameObject.name == "AimObjectHead") {
-                                //con.data.constrainedXAxis = true;
-                                // The max ranges for how far to the side the NPC will look
-                                con.data.limits = new Vector2(-70f, 70f);
-                                headCon = con;
-                            } else if (con.gameObject.name == "AimObjectSpine") {
-                                // Spine should move less than head and not bend backwards (x-axis)
-                                con.data.limits = new Vector2(-40f, 40f);
-                                spineCon = con;
+                            if (con.name == "AimObjectRightArm" || con.name == "AimObjectRightForeArm")
+                            {
+                                
+                                
+                                var newSource = new WeightedTransform(pointRef.transform, 0.0f);
+                                sourceObject.Add(newSource);
+                                con.data.sourceObjects = sourceObject;
+                                
+                                if (con.name == "AimObjectRightArm") {
+                                    
+                                    con.data.aimAxis = MultiAimConstraintData.Axis.Y;
+                                    con.data.upAxis = MultiAimConstraintData.Axis.Y;
+                                    con.data.constrainedXAxis = true;
+                                    con.data.constrainedYAxis = false;
+                                    con.data.constrainedZAxis = true;
+                                    
+                                    con.data.limits = new Vector2(-120f, 120f);
+                                    rightArmCon = con;
+                                    
+                                    
+                                    
+                                } else if (con.name == "AimObjectRightForeArm") {
+                                    // Manage settings for the constrained object(s)
+                                    con.data.aimAxis = MultiAimConstraintData.Axis.Y;
+                                    con.data.upAxis = MultiAimConstraintData.Axis.Y;
+                                    con.data.constrainedXAxis = true;
+                                    con.data.constrainedYAxis = false;
+                                    con.data.constrainedZAxis = true;
+                                    
+                                    con.data.limits = new Vector2(120f, 120f);
+                                    rightForeArmCon = con;
+                                    
+                                }
+                            } 
+                            else
+                            {
+                                // Manage settings for the constrained object(s)
+                                con.data.aimAxis = MultiAimConstraintData.Axis.Z;
+                                con.data.upAxis = MultiAimConstraintData.Axis.Z;
+                                con.data.constrainedXAxis = true;
+                                con.data.constrainedYAxis = true;
+                                con.data.constrainedZAxis = true;
+                                // Set the player camera as the source object (what the NPC will look at)
+                                var newSource = new WeightedTransform(targetRef.transform, 1.0f);
+                                sourceObject.Add(newSource);
+                                con.data.sourceObjects = sourceObject;  
+                                
+                                
+                                if (con.gameObject.name == "AimObjectHead") {
+                                    //con.data.constrainedXAxis = true;
+                                    // The max ranges for how far to the side the NPC will look
+                                    con.data.limits = new Vector2(-70f, 70f);
+                                    headCon = con;
+                                } else if (con.gameObject.name == "AimObjectSpine") {
+                                    // Spine should move less than head and not bend backwards (x-axis)
+                                    con.data.limits = new Vector2(-40f, 40f);
+                                    spineCon = con;
+                                }
                             }
-                                
-                                
-
+                            
                         }
                         rigBuilder.Build();
                         }
@@ -105,6 +148,13 @@ public class AnimationConstraintsController : MonoBehaviour
     void Update()
     {
         if (animator != null) {
+            
+            Vector3 direction = pointRef.transform.position - transform.position;
+            direction.Normalize();
+            Vector3 forward1 = transform.forward;
+
+            //rightArmCon.weight = 0.5f;
+            
             bool isTalking = animator.GetBool(isTalkingHash);
             // Add the code to control the multi-aim constraint here
             if (isTalking)
@@ -135,6 +185,24 @@ public class AnimationConstraintsController : MonoBehaviour
             }
         } else {
             animator = GetComponentInChildren<Animator>();
+        }
+    }
+    
+    
+    void OnDrawGizmos()
+    {
+        if (pointRef != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(pointRef.transform.position, 0.1f);
+            Gizmos.DrawLine(transform.position, pointRef.transform.position);
+        }
+
+        if (targetRef != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(targetRef.transform.position, 0.1f);
+            Gizmos.DrawLine(transform.position, targetRef.transform.position);
         }
     }
 }

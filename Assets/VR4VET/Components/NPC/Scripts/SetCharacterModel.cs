@@ -114,23 +114,35 @@ public class SetCharacterModel : MonoBehaviour
             // Add last object to containt multi-aim constraints
             GameObject aimObjectHead = new GameObject("AimObjectHead");
             GameObject aimObjectSpine = new GameObject("AimObjectSpine");
+            GameObject aimObjectRightArm = new GameObject("AimObjectRightArm");
+            GameObject aimObjectRightForeArm = new GameObject("AimObjectRightForeArm");
             aimObjectHead.transform.parent = rigObject.transform;
             aimObjectSpine.transform.parent = rigObject.transform;
+            aimObjectRightArm.transform.parent = rigObject.transform;
+            aimObjectRightForeArm.transform.parent = rigObject.transform;
 
             // Add multi-aim constraints components
             MultiAimConstraint constraintsHead = aimObjectHead.AddComponent<MultiAimConstraint>();
             MultiAimConstraint constraintsSpine = aimObjectSpine.AddComponent<MultiAimConstraint>();
+            MultiAimConstraint constraintsRightArm = aimObjectRightArm.AddComponent<MultiAimConstraint>();
+            MultiAimConstraint constraintsRightForeArm = aimObjectRightForeArm.AddComponent<MultiAimConstraint>();
             // Find the NPC head
             Component[] bodyParts = _bonesAndSkin.GetComponentsInChildren<Component>(true);
             GameObject NPCHead = null;
             GameObject NPCSpine = null;
+            GameObject NPCRightArm = null;
+            GameObject NPCRightForeArm = null;
             foreach (Component comp in bodyParts) {
                 // Return component if name contains "Head"
                 if (comp.gameObject.name.Contains(":Head") && NPCHead == null) { NPCHead = comp.gameObject; }
                 // Return component if name contains "Spine"
                 if (comp.gameObject.name.Contains(":Spine2") && NPCSpine == null) {NPCSpine = comp.gameObject; }
+                // Return component if name contains "RightArm"
+                if (comp.gameObject.name.Contains(":RightArm") && NPCRightArm == null) {NPCRightArm = comp.gameObject; }
+                // Return component if name contains "RightForeArm"
+                if (comp.gameObject.name.Contains(":RightForeArm") && NPCRightForeArm == null) {NPCRightForeArm = comp.gameObject; }
                 // Stop checking body parts if both are found
-                if (NPCHead != null && NPCSpine != null) { break; }
+                if (NPCHead != null && NPCSpine != null && NPCRightArm != null && NPCRightForeArm != null) { break; }
             }
             if (NPCHead == null) {
                 Debug.LogError("Could not find NPC head");
@@ -143,6 +155,19 @@ public class SetCharacterModel : MonoBehaviour
             } else {
                 // Set constrained object to NPC spine
                 constraintsSpine.data.constrainedObject = NPCSpine.transform;
+            }
+            if (NPCRightArm == null) {
+                Debug.LogError("Could not find NPC right arm");
+            } else {
+                // Set constrained object to NPC right arm
+                constraintsRightArm.data.constrainedObject = NPCRightArm.transform;
+            }
+            
+            if (NPCRightForeArm == null) {
+                Debug.LogError("Could not find NPC right forearm");
+            } else {
+                // Set constrained object to NPC right forearm
+                constraintsRightForeArm.data.constrainedObject = NPCRightForeArm.transform;
             }
 
             // If there is already a animation constraints controller (f.ex from previous model) remove it
