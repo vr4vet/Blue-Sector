@@ -6,9 +6,8 @@ using System.Linq;
 public class DropWhenStretched : MonoBehaviour
 {
     [SerializeField] private Transform Head;
-    [SerializeField] private Transform TailEnd;
     [SerializeField] private GameObject Armature;
-    private GameObject FishHead;
+    [SerializeField] private float StretchLimit = .15f;
     private GameObject GrabbedJoint;
     private List<float> distances = new();
     private int GrabCount = 0;
@@ -20,18 +19,27 @@ public class DropWhenStretched : MonoBehaviour
 
     private void Awake()
     {
-        DistanceLength();
+        if (Head == null)
+            Debug.LogError("Head field is null! This field should be set to the armature's head joint!");
+
+        if (Armature == null)
+            Debug.LogError("Armature field is null! Field should be set to fish object's armature!");
+
+        InitialJointDistances();
     }
 
-    private float _greatestVelocity = 0;
     void Update()
     {
         // getting the player hand grabbers. they are not immediately accessible, so they are fetched here
         if (playerGrabberLeft == null || playerGrabberRight == null)
         {
-            List<Grabber> grabbers = GameManager.Instance.GetPlayerRig().GetComponentsInChildren<Grabber>().ToList();
-            playerGrabberLeft = grabbers.Find(x => x.transform.parent.name == "LeftController");
-            playerGrabberRight = grabbers.Find(x => x.transform.parent.name == "RightController");
+            GameObject playerRig = GameManager.Instance.GetPlayerRig();
+            if (playerRig != null)
+            {
+                List<Grabber> grabbers = playerRig.GetComponentsInChildren<Grabber>().ToList();
+                playerGrabberLeft = grabbers.Find(x => x.transform.parent.name == "LeftController");
+                playerGrabberRight = grabbers.Find(x => x.transform.parent.name == "RightController");
+            }
             return;
         }
 
@@ -40,7 +48,7 @@ public class DropWhenStretched : MonoBehaviour
             return;
 
         // make anti-stretch corrections if fish is currently stretched and enough time has passed since last correction. waiting prevents wild and rapid corrections
-        if (DistancesBetweenJoints() && Time.time - WaitBeforeDrop >= 1f)
+        if (JointDistancesTooGreat() && Time.time - WaitBeforeDrop >= 1f)
         {
             WaitBeforeDrop = Time.time;
             if (GrabCount == 2) // select random hand and make it drop its held fish joint
@@ -73,19 +81,18 @@ public class DropWhenStretched : MonoBehaviour
     }
 
     /// <summary>
-    /// Calculates distance from head to all joints, which is used for checking if the fish being stretched
+    /// Calculates initial distance from head to all joints, which is used for checking if the fish being stretched.
+    /// The values are placed in the distances list, and values are considered the natural/intended distance from head to each joint.
+    /// In other words, a "bone" in the fish's spine should not surpass this length by much, otherwise the fish will stretch.
     /// </summary>
-    public void DistanceLength()
+    public void InitialJointDistances()
     {
         if (distances.Count == 0)
         {
             foreach (WhichJointGrabbed Joint in GetComponentsInChildren<WhichJointGrabbed>())
             {
-                if (Joint.gameObject.name == "Head")
-                    FishHead = Joint.gameObject;
-                
-                else if (Head != null)
-                    distances.Add(Vector3.Distance(FishHead.transform.position, Joint.transform.position));
+                if (Joint.gameObject.name != "Head")
+                    distances.Add(Vector3.Distance(Head.transform.position, Joint.transform.position));
             }
         }
     }
@@ -104,10 +111,10 @@ public class DropWhenStretched : MonoBehaviour
 
     /// <summary>
     /// Calculates distance between head and all other joints.
-    /// Returns true if distance is greater by a certain threshold, otherwise returns false.
+    /// Returns true if distance is greater than what was calculated in InitialJointDistances() by a certain threshold, otherwise returns false.
     /// </summary>
     /// <returns></returns>
-    private bool DistancesBetweenJoints()
+    private bool JointDistancesTooGreat()
     {
         if (distances.Count < 8)
             return false;
@@ -117,9 +124,9 @@ public class DropWhenStretched : MonoBehaviour
         {
             if (i != 0)
             {
-                float DistanceRetrieval = Vector3.Distance(Armature.transform.GetChild(0).transform.position, Joint.transform.position);
+                float distance = Vector3.Distance(Armature.transform.GetChild(0).transform.position, Joint.transform.position);
 
-                if (DistanceRetrieval >= distances[i - 1] + 0.15f)
+                if (distance >= distances[i - 1] + StretchLimit)
                     return true;
             }
             i++;
