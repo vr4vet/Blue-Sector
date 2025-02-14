@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
+  m_Name: CutFishWrong
+  m_EditorClassIdentifier: 
+  shouldTriggerOnProximity: 1
+  speakButtonOnExit: 1
+  sections:
+  - dialogue:
+    - You need to stun the fish before you cut their gills.
+    endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 1
+    pointAt: stunDevice
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue:
+    - You're supposed to throw away the bad fish.
+    endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 1
+    pointAt: FishDiscardBox (1)
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue:
+    - Remember to cut the gills of the fish.
+    endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 1
+    pointAt: 
+    branchPoint:
+      question: 
+      answers: []
