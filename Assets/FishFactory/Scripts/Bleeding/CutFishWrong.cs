@@ -70,12 +70,6 @@ public class CutFishWrong : MonoBehaviour
         _currentDialogue = dialogueTree;
         _currentSection = section;
         _currentIndex = index;
-
-        if (dialogueTree == "CutFishWrong" && !_dialogueBoxController.dialogueIsActive) 
-        {
-            Debug.Log("grrrr");
-            //ReturnToBleedingInstruction();
-        }
     }
 
     private DialogueTree GetDialogueTreeFromName(string name)

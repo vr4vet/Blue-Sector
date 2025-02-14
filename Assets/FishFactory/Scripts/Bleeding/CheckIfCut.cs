@@ -20,10 +20,8 @@ public class CheckIfCut : MonoBehaviour
         if (other.transform.parent.gameObject && other.name == "Head")
         {
             GameObject fish = other.transform.parent.transform.parent.gameObject;
-            Debug.Log(fish.tag + " is the tag of " + other.name + "'s parent object");
             if (fish.tag == "Fish")
             {
-                Debug.Log("hehe");
                 Tier fishTier = fish.GetComponent<FactoryFishState>().fishTier;
                 bool Stunned = fish.GetComponent<FactoryFishState>().Stunned;
                 bool correctlyBled = fish.GetComponent<FactoryFishState>().correctlyBled;
