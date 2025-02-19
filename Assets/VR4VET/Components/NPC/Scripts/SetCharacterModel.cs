@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Meta.WitAi.TTS.Integrations;
 using Meta.WitAi.TTS.Utilities;
 using UnityEngine;
@@ -28,6 +30,7 @@ public class SetCharacterModel : MonoBehaviour
     [HideInInspector] private bool _hasNewDialogueOptions;
     [HideInInspector] private float _velocityY;
     [HideInInspector] private float _velocityX;
+    private List<GameObject> _fingers;
 
     void Awake()
     {
@@ -76,7 +79,7 @@ public class SetCharacterModel : MonoBehaviour
         _bonesAndSkin.transform.SetParent(_parentObject.transform);
         Vector3 bonesAndSkinLocation = new Vector3(_spawnLocation.x, _spawnLocation.y, _spawnLocation.z);
         _bonesAndSkin.transform.localPosition = bonesAndSkinLocation;
-        _bonesAndSkin.transform.rotation = Quaternion.Euler(new Vector3(_parentObject.transform.eulerAngles.x, _parentObject.transform.eulerAngles.y, _parentObject.transform.eulerAngles.z));
+        _bonesAndSkin.transform.rotation = Quaternion.Euler(new Vector3(_parentObject.transform.eulerAngles.x, _parentObject.transform.eulerAngles.y, _parentObject.transform.eulerAngles.z)); 
 
         // get or create a new animator and transfer over the old animation paramet values to this new one
         _animator = _bonesAndSkin.GetComponent<Animator>();
@@ -116,22 +119,46 @@ public class SetCharacterModel : MonoBehaviour
             GameObject aimObjectSpine = new GameObject("AimObjectSpine");
             GameObject aimObjectRightArm = new GameObject("AimObjectRightArm");
             GameObject aimObjectRightForeArm = new GameObject("AimObjectRightForeArm");
+            GameObject rIndex = new GameObject("RightIndex");
+            GameObject rMiddle = new GameObject("RightMiddle");
+            GameObject rRing = new GameObject("RightRing");
+            GameObject rPinky = new GameObject("RightPinky");
+            GameObject rThumb = new GameObject("RightThumb");
+            
             aimObjectHead.transform.parent = rigObject.transform;
             aimObjectSpine.transform.parent = rigObject.transform;
             aimObjectRightArm.transform.parent = rigObject.transform;
             aimObjectRightForeArm.transform.parent = rigObject.transform;
+            rIndex.transform.parent = rigObject.transform;
+            rMiddle.transform.parent = rigObject.transform;
+            rRing.transform.parent = rigObject.transform;
+            rPinky.transform.parent = rigObject.transform;
+            rThumb.transform.parent = rigObject.transform;
 
             // Add multi-aim constraints components
             MultiAimConstraint constraintsHead = aimObjectHead.AddComponent<MultiAimConstraint>();
             MultiAimConstraint constraintsSpine = aimObjectSpine.AddComponent<MultiAimConstraint>();
             MultiAimConstraint constraintsRightArm = aimObjectRightArm.AddComponent<MultiAimConstraint>();
             MultiAimConstraint constraintsRightForeArm = aimObjectRightForeArm.AddComponent<MultiAimConstraint>();
+            ChainIKConstraint constraintsRIndex = rIndex.AddComponent<ChainIKConstraint>();
+            ChainIKConstraint constraintsRMiddle = rMiddle.AddComponent<ChainIKConstraint>();
+            ChainIKConstraint constraintsRRing = rRing.AddComponent<ChainIKConstraint>();
+            ChainIKConstraint constraintsRPinky = rPinky.AddComponent<ChainIKConstraint>();
+            ChainIKConstraint constraintsRThumb = rThumb.AddComponent<ChainIKConstraint>();
+            
             // Find the NPC head
             Component[] bodyParts = _bonesAndSkin.GetComponentsInChildren<Component>(true);
             GameObject NPCHead = null;
             GameObject NPCSpine = null;
             GameObject NPCRightArm = null;
             GameObject NPCRightForeArm = null;
+            GameObject NPCRightIndexFinger = null;
+            GameObject NPCRightMiddleFinger = null;
+            GameObject NPCRightRingFinger = null;
+            GameObject NPCRightPinkyFinger = null;
+            GameObject NPCRightThumbFinger = null;
+            // Create list of fingers
+            _fingers = new List<GameObject>();
             foreach (Component comp in bodyParts) {
                 // Return component if name contains "Head"
                 if (comp.gameObject.name.Contains(":Head") && NPCHead == null) { NPCHead = comp.gameObject; }
@@ -141,8 +168,28 @@ public class SetCharacterModel : MonoBehaviour
                 if (comp.gameObject.name.Contains(":RightArm") && NPCRightArm == null) {NPCRightArm = comp.gameObject; }
                 // Return component if name contains "RightForeArm"
                 if (comp.gameObject.name.Contains(":RightForeArm") && NPCRightForeArm == null) {NPCRightForeArm = comp.gameObject; }
+                
+                if (comp.gameObject.name.Contains(":RightHandThumb1")) { NPCRightThumbFinger = comp.gameObject; }
+                if (comp.gameObject.name.Contains(":RightHandIndex1")) { NPCRightIndexFinger = comp.gameObject; }
+                if (comp.gameObject.name.Contains(":RightHandMiddle1")) { NPCRightMiddleFinger = comp.gameObject; }
+                if (comp.gameObject.name.Contains(":RightHandRing1")) { NPCRightRingFinger = comp.gameObject; }
+                if (comp.gameObject.name.Contains(":RightHandPinky1")) { NPCRightPinkyFinger = comp.gameObject; }
+                
+
+               /* if (Regex.IsMatch(comp.gameObject.name, @"\bmixamorig11:RightHand(?:Thumb|Pinky|Index|Middle|Ring)1\b"))
+                {
+                    GameObject fingerConstraintObject = new GameObject(comp.gameObject.name + "Constraint");
+                    
+                    MultiRotationConstraint fingerConstraint = fingerConstraintObject.AddComponent<MultiRotationConstraint>();
+                    fingerConstraint.data.constrainedObject = comp.gameObject.transform;
+                    
+                    _fingers.Add(fingerConstraintObject);
+                    
+                    Debug.Log(comp.gameObject.name);
+                } */
+                
                 // Stop checking body parts if both are found
-                if (NPCHead != null && NPCSpine != null && NPCRightArm != null && NPCRightForeArm != null) { break; }
+                if (NPCHead != null && NPCSpine != null && NPCRightArm != null && NPCRightForeArm != null && NPCRightIndexFinger != null && NPCRightMiddleFinger && NPCRightPinkyFinger != null && NPCRightRingFinger != null && NPCRightThumbFinger) { break; }
             }
             if (NPCHead == null) {
                 Debug.LogError("Could not find NPC head");
@@ -169,6 +216,53 @@ public class SetCharacterModel : MonoBehaviour
                 // Set constrained object to NPC right forearm
                 constraintsRightForeArm.data.constrainedObject = NPCRightForeArm.transform;
             }
+            
+            if (NPCRightIndexFinger == null) {
+                Debug.LogError("Could not find index finger");
+            }
+            else
+            {
+                constraintsRIndex.data.root = NPCRightIndexFinger.transform;
+                constraintsRIndex.data.tip = GetFingerTip(NPCRightIndexFinger.transform);
+            }
+            
+            if (NPCRightMiddleFinger == null) {
+                Debug.LogError("Could not find middle finger");
+            }
+            else
+            {
+                constraintsRMiddle.data.root = NPCRightMiddleFinger.transform;
+                constraintsRMiddle.data.tip = GetFingerTip(NPCRightMiddleFinger.transform);
+            }
+            
+            if (NPCRightRingFinger == null) {
+                Debug.LogError("Could not find ring finger");
+            }
+            else
+            {
+                constraintsRRing.data.root = NPCRightRingFinger.transform;
+                constraintsRRing.data.tip = GetFingerTip(NPCRightRingFinger.transform);
+            }
+            
+            if (NPCRightPinkyFinger == null) {
+                Debug.LogError("Could not find pinky finger");
+            }
+            else
+            {
+                constraintsRPinky.data.root = NPCRightPinkyFinger.transform;
+                constraintsRPinky.data.tip = GetFingerTip(NPCRightPinkyFinger.transform);
+            }
+            
+            if (NPCRightThumbFinger == null) {
+                Debug.LogError("Could not find thumb finger");
+            }
+            else
+            {
+                constraintsRThumb.data.root = NPCRightThumbFinger.transform;
+                constraintsRThumb.data.tip = GetFingerTip(NPCRightThumbFinger.transform);
+            }
+            
+            
 
             // If there is already a animation constraints controller (f.ex from previous model) remove it
             if (_bonesAndSkin.GetComponent<AnimationConstraintsController>() != null) {
@@ -180,6 +274,17 @@ public class SetCharacterModel : MonoBehaviour
             _bonesAndSkin.AddComponent<AnimationConstraintsController>();
             
             Debug.Log("Rigbuilder instantiated and configurated for NPC");
+            
+           /*GameObject missingChild = GameObject.Find("mixamorig11:RightHandIndex1Constraint");
+            if (missingChild != null) {
+                
+                Debug.Log("Found missing child:" + missingChild.name);
+                missingChild.transform.parent = rightFingers.transform;
+                
+            } else {
+                
+                Debug.Log("Could not find missing child");
+            } */
 
         } else {
             Debug.Log("RigBuilder already instantiated on NPC");
@@ -229,6 +334,14 @@ public class SetCharacterModel : MonoBehaviour
         } else {
             Debug.LogError("You are not settubg the animation values");
         }
+    }
+
+    public Transform GetFingerTip(Transform parent)
+    {
+        Transform child = parent.GetChild(0);
+        Transform grandChild = child.GetChild(0);
+
+        return grandChild.GetChild(0);
     }
 
 }
