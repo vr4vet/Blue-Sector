@@ -95,21 +95,30 @@ public class ControllerTooltipManager : MonoBehaviour
         {
             if (_accessibilityEnabled)
             {
+                bool deactivated = false;
+
                 Collider[] surroundingColliders = new Collider[8];
                 Physics.OverlapSphereNonAlloc(controllerModel.transform.position, .1f, surroundingColliders);
 
                 List<ControllerTooltipActivator> activators = new();
                 foreach (Collider surroundingCollider in surroundingColliders)
                 {
-                    if (surroundingCollider && surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>())
+                    if (surroundingCollider && surroundingCollider.CompareTag("ControllerTooltipDeactivator")) // hand intersects with a deactivator, prepare to deactivate all tooltips
+                    {
+                        activators.Clear();
+                        deactivated = true;
+                        break;
+                    }
+
+                    if (surroundingCollider && surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>()) // add all activators to list
                         activators.Add(surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>());
                 }
 
-                if (activators.Count > 0)
+                if (activators.Count > 0) // there are activators in player hand's vicinity
                 {
                     float shortestDistance = Mathf.Infinity;
                     ControllerTooltipActivator closestActivator = activators[0];
-                    foreach (ControllerTooltipActivator activator in activators)
+                    foreach (ControllerTooltipActivator activator in activators) // find closest activator
                     {
                         if (Vector3.Distance(controllerModel.transform.position, activator.transform.position) < shortestDistance)
                         {
@@ -118,7 +127,7 @@ public class ControllerTooltipManager : MonoBehaviour
                         }
                     }
 
-                    if (TooltippedButtonsDown(closestActivator, controllerHand))
+                    if (TooltippedButtonsDown(closestActivator, controllerHand)) // close tooltips if player is pressing the correct buttons
                         CloseAllTooltips(controllerHand);
                     else
                     {
@@ -130,7 +139,7 @@ public class ControllerTooltipManager : MonoBehaviour
                 }
                 else
                 {
-                    if (controllerHand != ControllerHand.Left)
+                    if (deactivated || controllerHand != ControllerHand.Left)
                         CloseAllTooltips(controllerHand);
                     else
                     {
