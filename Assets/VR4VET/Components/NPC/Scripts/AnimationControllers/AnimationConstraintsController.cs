@@ -53,6 +53,12 @@ public class AnimationConstraintsController : MonoBehaviour
                         if (constraints.Count() == 0) {
                             Debug.LogError("Could not find any multi aim constraints in the rig (AimObjectHead or AimObjectSpine)");
                         }
+                        
+                        ChainIKConstraint[] chainIKConstraints = rig.GetComponentsInChildren<ChainIKConstraint>();
+                        if (chainIKConstraints.Count() == 0) {
+                            Debug.LogError("Could not find any chain IK constraints in the rig (Finger objects)");
+                        }
+                        
                         foreach (MultiAimConstraint con in constraints)
                         {
                             var sourceObject = con.data.sourceObjects;
@@ -119,8 +125,19 @@ public class AnimationConstraintsController : MonoBehaviour
                             }
                             
                         }
-                        rigBuilder.Build();
+
+                        foreach (ChainIKConstraint con in chainIKConstraints)
+                        {
+                            if (con.data.root.parent.childCount < 6)
+                            {
+                                new GameObject("FingerRetract").transform.SetParent(con.data.root.parent, false);
+                            }
+
+                            GameObject fingerRetract = GameObject.Find("FingerRetract");
+                            con.data.target = fingerRetract.transform;
                         }
+                        rigBuilder.Build();
+                    }
                     else
                     {
                         Debug.LogError("Cannot find XR Rig Advanced/PlayerController/CameraRig/TrackingSpace/CenterEyeAnchor in the scene");
