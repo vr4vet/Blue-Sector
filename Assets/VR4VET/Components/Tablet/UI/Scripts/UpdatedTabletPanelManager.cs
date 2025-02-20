@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,12 +71,14 @@ public class UpdatedTabletPanelManager : MonoBehaviour
 
 
         allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu });
+        watchManager = WatchManager.Instance;
 
         foreach (var item in allMenus)
         {
             item.SetActive(false);
         }
         SelectSubtask();
+
 
         if (FindObjectsOfType<MaintenanceManager>().Length > 0)
         {
@@ -87,7 +88,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         }
         else 
         {
-            watchManager = GameObject.FindObjectsOfType<WatchManager>()[0];
             watchManager.CurrentSubtask.AddListener(OnCurrentSubtaskChanged);
             watchManager.SkillCompleted.AddListener(OnSkillCompleted);
         }
@@ -101,11 +101,13 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     private void OnCurrentSubtaskChanged(Task.Subtask subtask)
     {
         SwitchMenuTo(SubtaskAboutMenu);
+        watchManager.UIChanged.Invoke();
     }
 
     private void OnSkillCompleted(Task.Skill skill)
     {
         SwitchMenuTo(SkillListMenu);
+        watchManager.UIChanged.Invoke();
     }
 
     public void OnClickOpenTasks()
@@ -118,16 +120,18 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         if (!taskPageOpen)
         {
             TaskListMenu.SetActive(true);
-            TaskBackground.color = Color.blue;
+            //TaskBackground.color = Color.blue;
             taskPageOpen = true;
             TaskList.LoadTaskPage();
+            watchManager.UIChanged.Invoke();
             return;
         }
         else if (taskPageOpen)
         {
             TaskListMenu.SetActive(false);
-            TaskBackground.color = Color.white;
+            //TaskBackground.color = Color.white;
             taskPageOpen = false;
+            watchManager.UIChanged.Invoke();
             return; 
         }
     }
@@ -137,20 +141,23 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         if (taskPageOpen)
         {
             OnClickOpenTasks();
+            watchManager.UIChanged.Invoke();
         }
         if (!subtaskPageOpen)
         {
             TaskAboutMenu.SetActive(true);
-            SubtaskBackground.color = Color.blue;
+            //SubtaskBackground.color = Color.blue;
             subtaskPageOpen = true;
             TaskList.SubtaskPageLoader(TaskList.activeTask);
+            watchManager.UIChanged.Invoke();
             return;
         }
         else if (subtaskPageOpen)
         {
             TaskAboutMenu.SetActive(false);
-            SubtaskBackground.color = Color.white;
+            //SubtaskBackground.color = Color.white;
             subtaskPageOpen = false;
+            watchManager.UIChanged.Invoke();
             return; 
         }
     }
@@ -158,10 +165,12 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     public void OnClickBackToAboutTask()
     {
         SwitchMenuTo(TaskAboutMenu);
+        watchManager.UIChanged.Invoke();
     }
     public void OnClickBackToSkillMenu()
     {
         SwitchMenuTo(SkillListMenu);
+        watchManager.UIChanged.Invoke();
     }
 
     void SwitchMenuTo(GameObject b)
@@ -176,6 +185,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     public void OnClickMenuTask()
     {
         SwitchMenuTo(TaskListMenu);
+        watchManager.UIChanged.Invoke();
     }
     public void OnClickMenuSkills()
     {
@@ -188,6 +198,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             OnClickOpenSubtask();
         }
         SwitchMenuTo(SkillListMenu);
+        watchManager.UIChanged.Invoke();
     }
 
     public void SetAlertMenu()
@@ -218,5 +229,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     public void SelectSubtask()
     {
         SwitchMenuTo(SubtaskAboutMenu);
+        watchManager.UIChanged.Invoke();
     }
 }
