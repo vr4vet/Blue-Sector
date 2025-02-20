@@ -336,7 +336,7 @@ public class SetCharacterModel : MonoBehaviour
         }
     }
 
-    public Transform GetFingerTip(Transform parent)
+    private Transform GetFingerTip(Transform parent)
     {
         Transform child = parent.GetChild(0);
         Transform grandChild = child.GetChild(0);

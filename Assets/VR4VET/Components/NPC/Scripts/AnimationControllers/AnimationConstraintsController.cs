@@ -128,12 +128,36 @@ public class AnimationConstraintsController : MonoBehaviour
 
                         foreach (ChainIKConstraint con in chainIKConstraints)
                         {
-                            if (con.data.root.parent.childCount < 6)
+                            GameObject fingerRetract = null;
+                            if (con.data.root.parent.childCount < 9)
                             {
-                                new GameObject("FingerRetract").transform.SetParent(con.data.root.parent, false);
-                            }
+                                if (con.data.root.name.Contains("Ring1"))
+                                {
+                                    fingerRetract = new GameObject("RingFingerRetract");
+                                    fingerRetract.transform.SetParent(con.data.root.parent, false);
+                                    fingerRetract.transform.localPosition = new Vector3((float)0.0183000006,(float)-0.00300000003,(float)-0.000600000028);
+                                }
+                                
+                                else if (con.data.root.name.Contains("Pinky1"))
+                                {
+                                    fingerRetract = new GameObject("PinkyFingerRetract");
+                                    fingerRetract.transform.SetParent(con.data.root.parent, false);
+                                    fingerRetract.transform.localPosition = new Vector3((float)0.0379999988, (float)9.99999975e-05, (float)-0.00079999998);
 
-                            GameObject fingerRetract = GameObject.Find("FingerRetract");
+                                }
+
+                                else
+                                {
+                                    fingerRetract = GameObject.Find("GenericFingerRetract");
+                                    if (fingerRetract == null)
+                                    {
+                                        fingerRetract = new GameObject("GenericFingerRetract");
+                                        fingerRetract.transform.SetParent(con.data.root.parent, false);
+                                    }
+                                }
+                                
+                            }
+                            
                             con.data.target = fingerRetract.transform;
                         }
                         rigBuilder.Build();
