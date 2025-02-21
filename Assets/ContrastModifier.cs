@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,10 +18,12 @@ public class ContrastModifier : MonoBehaviour
     private Color _contrastBrandPurple;
     private Color _contrastWhite;
 
-    private bool _highContrastMode = false;
+    private bool _highContrastMode;
+
+    private NewMenuManger MainMenu;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _contrastDarkBlue = _defaultDarkBlue * .5f;
         _contrastDarkBlue.a = 0xFF;
@@ -47,18 +45,18 @@ public class ContrastModifier : MonoBehaviour
         _contrastWhite = _fullyWhite * .5f;
         _contrastWhite.a = 0xFF;
 
+        MainMenu = FindObjectOfType<NewMenuManger>();
+
+        // this is a crutch. probably only works for the tablet because it's a child of the main menu.
+        if (MainMenu != null)
+            MainMenu.m_HighContrastModeToggled.AddListener(ToggleContrast);
+    }
+
+    private void Start()
+    {
         WatchManager.Instance.UIChanged.AddListener(OnUIChanged);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-            ToggleContrast(true);
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-            ToggleContrast(false);
-    }
 
     public void ToggleContrast(bool contrast)
     {
@@ -111,9 +109,5 @@ public class ContrastModifier : MonoBehaviour
         }
     }
 
-    private void OnUIChanged()
-    {
-        Debug.Log("ContrastModifier noticed");
-        ToggleContrast(_highContrastMode);
-    }
+    private void OnUIChanged() => ToggleContrast(_highContrastMode);
 }

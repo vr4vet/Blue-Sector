@@ -81,7 +81,7 @@ public class TextToSpeechButton : MonoBehaviour
             string fetchedTextContent = FetchTextContent();
             string[] splitTextContent = GenerateSplitTextContent(fetchedTextContent);
             StartCoroutine(_speaker.SpeakQueuedAsync(splitTextContent));
-            StartCoroutine(AnimateSpeaker(0));
+            StartCoroutine(nameof(AnimateSpeaker));
         }
     }
 
@@ -181,31 +181,31 @@ public class TextToSpeechButton : MonoBehaviour
 
     /// <summary>
     /// This method swaps the speaker button icon every half second to animate sound waves while the text-to-speech is talking.
-    /// Unfortunately has to be called repeatedly as a coroutine (in this case recursivley) in order to function when Time.timeScale is 0.
-    /// An example where Time.timeScale is set to 0 is when the main menu pauses the game.
     /// </summary>
     private int step = 0;
-    private IEnumerator AnimateSpeaker(float waitTime)
+    private IEnumerator AnimateSpeaker()
     {
-        yield return new WaitForSecondsRealtime(waitTime);
-
-        if (_speaker.IsActive)
+        while (true)
         {
-            StartCoroutine(AnimateSpeaker(.5f));
+            if (_speaker.IsActive)
+            {
+                if (step == 0)
+                    TargetSpeakerImage.sprite = _speakerImageSilent;
+                else if (step == 1)
+                    TargetSpeakerImage.sprite = _speakerImageMedium;
+                else if (step == 2)
+                    TargetSpeakerImage.sprite = _speakerImageFull;
 
-            if (step == 0)
-                TargetSpeakerImage.sprite = _speakerImageSilent;
-            else if (step == 1)
-                TargetSpeakerImage.sprite = _speakerImageMedium;
-            else if (step == 2)
-                TargetSpeakerImage.sprite = _speakerImageFull;
+                step = (step + 1) % 3;
+            }
+            else
+            {
+                step = 0;
+                TargetSpeakerImage.sprite = _defaultSpeakerImage;
+                StopCoroutine(nameof(AnimateSpeaker));
+            }
 
-            step = (step + 1) % 3;
-        }
-        else
-        {
-            step = 0;
-            TargetSpeakerImage.sprite = _defaultSpeakerImage;
+            yield return new WaitForSecondsRealtime(.5f);
         }
     }
 }
