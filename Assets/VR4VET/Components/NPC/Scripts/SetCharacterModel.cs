@@ -336,6 +336,7 @@ public class SetCharacterModel : MonoBehaviour
         }
     }
 
+    // This method gets the fingertip of the finger to be used as the tip of the chainIK constraint
     private Transform GetFingerTip(Transform parent)
     {
         Transform child = parent.GetChild(0);

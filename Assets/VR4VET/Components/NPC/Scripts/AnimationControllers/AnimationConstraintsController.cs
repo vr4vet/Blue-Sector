@@ -58,6 +58,7 @@ public class AnimationConstraintsController : MonoBehaviour
                             Debug.LogError("Could not find any multi aim constraints in the rig (AimObjectHead or AimObjectSpine)");
                         }
                         
+                        // Get the chain IK constraints for the fingers
                         ChainIKConstraint[] chainIKConstraints = rig.GetComponentsInChildren<ChainIKConstraint>();
                         if (chainIKConstraints.Count() == 0) {
                             Debug.LogError("Could not find any chain IK constraints in the rig (Finger objects)");
@@ -66,6 +67,8 @@ public class AnimationConstraintsController : MonoBehaviour
                         foreach (MultiAimConstraint con in constraints)
                         {
                             var sourceObject = con.data.sourceObjects;
+                            
+                            // Set the constraints for the right arm and right forearm
                             if (con.name == "AimObjectRightArm" || con.name == "AimObjectRightForeArm")
                             {
                                 if (con.name == "AimObjectRightArm") {
@@ -83,7 +86,6 @@ public class AnimationConstraintsController : MonoBehaviour
                                     
                                     
                                 } else if (con.name == "AimObjectRightForeArm") {
-                                    // Manage settings for the constrained object(s)
                                     con.data.aimAxis = MultiAimConstraintData.Axis.Y;
                                     con.data.upAxis = MultiAimConstraintData.Axis.Y;
                                     con.data.constrainedXAxis = true;
@@ -124,15 +126,20 @@ public class AnimationConstraintsController : MonoBehaviour
                             
                         }
 
+                        // Set the constraints for the fingers
                         foreach (ChainIKConstraint con in chainIKConstraints)
                         {
                             GameObject fingerRetract = null;
+                            // The constraints will use an empty child of the hand which they will target to be able to retract the fingers. Each finger will have its own empty object to target, so they don't interfere with each other.
                             if (con.data.root.parent.childCount < 9)
                             {
                                 if (con.data.root.name.Contains("Ring1"))
                                 {
+                                    // Create an empty object for the ring finger to target
                                     fingerRetract = new GameObject("RingFingerRetract");
+                                    // Set the hand as the parent so the location is relative to the hand
                                     fingerRetract.transform.SetParent(con.data.root.parent, false);
+                                    // Set the position of the empty object to match the position of the finger
                                     fingerRetract.transform.localPosition = new Vector3((float)0.0183000006,(float)-0.00300000003,(float)-0.000600000028);
                                 }
                                 
@@ -143,7 +150,8 @@ public class AnimationConstraintsController : MonoBehaviour
                                     fingerRetract.transform.localPosition = new Vector3((float)0.0379999988, (float)9.99999975e-05, (float)-0.00079999998);
 
                                 }
-
+                                
+                                // The other fingers use the same target as they are either not retracted or can use the target without interfering with others
                                 else
                                 {
                                     fingerRetract = GameObject.Find("GenericFingerRetract");
@@ -191,16 +199,17 @@ public class AnimationConstraintsController : MonoBehaviour
     {
         if (animator != null) {
             
+            // Uses the isTalking parameter of the animator to determine if the NPC should look at the player. This was originally used for the old pointing animation but works fine for this purpose too.
             bool isPointing = animator.GetBool("isPointing");
 
             if (isPointing)
             {
-                Debug.Log("Is pointing");
-                
+                // Check if the object to point at has changed as constantly updating the constraints takes a heavy toll on performance
                 Transform currentPointingObject = _pointingScript.GetObjectToPointAt().transform;
 
                 if (_previousPointingObject != currentPointingObject)
                 {
+                    // Make sure there is only one source object for the right arm constraint
                     if (rightArmCon.data.sourceObjects.Count > 0)
                     {
                         var resetSourceObjects = rightArmCon.data.sourceObjects;
@@ -213,13 +222,18 @@ public class AnimationConstraintsController : MonoBehaviour
                     var newSource = new WeightedTransform(currentPointingObject, 1.0f);
                     sourceObjects.Add(newSource);
                     rightArmCon.data.sourceObjects = sourceObjects; 
-                    rigBuilder.Build();
-                
+                    
+                    // Rebuild the rig to apply the changes
+                    rigBuilder.Build(); 
+                    
+                    // Update the previous pointing object to the current one
                     _previousPointingObject = currentPointingObject;
                 }
                 
+                // Enable the right arm constraint
                 if (rightArmCon.weight < 1.0f) rightArmCon.weight += 0.01f;
                 
+                // Enable the right forearm constraint at specific weights for each finger
                 foreach (ChainIKConstraint finger in fingerConstraints)
                 {
                     if (!finger.name.Contains("Index"))
@@ -247,6 +261,7 @@ public class AnimationConstraintsController : MonoBehaviour
             }
             else
             {
+                // disables the constaints when the NPC is not pointing
                 if (rightArmCon.weight > 0.0f) rightArmCon.weight -= 0.01f;
                 
                 foreach (ChainIKConstraint finger in fingerConstraints)
