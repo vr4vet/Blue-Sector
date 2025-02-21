@@ -50,4 +50,9 @@ public class PointingScript : MonoBehaviour
        }
 
     } 
+    
+    public GameObject GetObjectToPointAt()
+    {
+        return _objectToLookAt;
+    }
 }

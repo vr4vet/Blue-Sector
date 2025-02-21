@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -8,11 +9,14 @@ public class AnimationConstraintsController : MonoBehaviour
     [HideInInspector] private int isTalkingHash;
     [HideInInspector] private RigBuilder rigBuilder; // Use RigBuilder instead of Rig
     private GameObject targetRef;
-    private GameObject pointRef;
     private MultiAimConstraint headCon;
     private MultiAimConstraint spineCon;
     private MultiAimConstraint rightArmCon;
     private MultiAimConstraint rightForeArmCon;
+    private List<ChainIKConstraint> fingerConstraints = new List<ChainIKConstraint>();
+    private PointingScript _pointingScript;
+    private Transform _previousPointingObject;
+    private DialogueBoxController _dialogueBoxController;
     
 
     /// <summary>
@@ -21,6 +25,7 @@ public class AnimationConstraintsController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        _pointingScript = GetComponentInParent<PointingScript>();
         animator = GetComponent<Animator>();
         rigBuilder = GetComponent<RigBuilder>();
 
@@ -43,7 +48,6 @@ public class AnimationConstraintsController : MonoBehaviour
                 {               
                     GameObject playerRef = NPCToPlayerReferenceManager.Instance.PlayerTarget;                                      
                     targetRef = playerRef.transform.Find("TrackingSpace").transform.Find("CenterEyeAnchor").gameObject;
-                    pointRef = GameObject.Find("cardboard_box_3 (2)");
                     
                     
                     if (targetRef != null)
@@ -64,12 +68,6 @@ public class AnimationConstraintsController : MonoBehaviour
                             var sourceObject = con.data.sourceObjects;
                             if (con.name == "AimObjectRightArm" || con.name == "AimObjectRightForeArm")
                             {
-                                
-                                
-                                var newSource = new WeightedTransform(pointRef.transform, 1.0f);
-                                sourceObject.Add(newSource);
-                                con.data.sourceObjects = sourceObject;
-                                
                                 if (con.name == "AimObjectRightArm") {
                                     
                                     con.data.aimAxis = MultiAimConstraintData.Axis.Y;
@@ -159,6 +157,7 @@ public class AnimationConstraintsController : MonoBehaviour
                             }
                             
                             con.data.target = fingerRetract.transform;
+                            fingerConstraints.Add(con);
                         }
                         rigBuilder.Build();
                     }
@@ -192,11 +191,41 @@ public class AnimationConstraintsController : MonoBehaviour
     {
         if (animator != null) {
             
-            Vector3 direction = pointRef.transform.position - transform.position;
-            direction.Normalize();
-            Vector3 forward1 = transform.forward;
+            bool isPointing = animator.GetBool("isPointing");
 
-            //rightArmCon.weight = 0.5f;
+            if (isPointing)
+            {
+                Debug.Log("Is pointing");
+                
+                Transform currentPointingObject = _pointingScript.GetObjectToPointAt().transform;
+
+                if (_previousPointingObject != currentPointingObject)
+                {
+                    if (rightArmCon.data.sourceObjects.Count > 0)
+                    {
+                        var resetSourceObjects = rightArmCon.data.sourceObjects;
+                        resetSourceObjects.Clear();
+                        rightArmCon.data.sourceObjects = resetSourceObjects;
+                    }
+                
+                    var sourceObjects = rightArmCon.data.sourceObjects;
+                
+                    var newSource = new WeightedTransform(currentPointingObject, 1.0f);
+                    sourceObjects.Add(newSource);
+                    rightArmCon.data.sourceObjects = sourceObjects; 
+                    rigBuilder.Build();
+                
+                    _previousPointingObject = currentPointingObject;
+                }
+                
+                if (rightArmCon.weight < 1.0f) rightArmCon.weight += 0.004f;
+                
+                /*foreach (ChainIKConstraint finger in fingerConstraints)
+                {
+                    finger.weight = 1.0f;
+                }*/
+
+            }
             
             bool isTalking = animator.GetBool(isTalkingHash);
             // Add the code to control the multi-aim constraint here
@@ -228,24 +257,6 @@ public class AnimationConstraintsController : MonoBehaviour
             }
         } else {
             animator = GetComponentInChildren<Animator>();
-        }
-    }
-    
-    
-    void OnDrawGizmos()
-    {
-        if (pointRef != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(pointRef.transform.position, 0.1f);
-            Gizmos.DrawLine(transform.position, pointRef.transform.position);
-        }
-
-        if (targetRef != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(targetRef.transform.position, 0.1f);
-            Gizmos.DrawLine(transform.position, targetRef.transform.position);
         }
     }
 }
