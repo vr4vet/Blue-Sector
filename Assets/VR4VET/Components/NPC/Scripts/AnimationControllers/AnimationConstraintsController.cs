@@ -218,13 +218,44 @@ public class AnimationConstraintsController : MonoBehaviour
                     _previousPointingObject = currentPointingObject;
                 }
                 
-                if (rightArmCon.weight < 1.0f) rightArmCon.weight += 0.004f;
+                if (rightArmCon.weight < 1.0f) rightArmCon.weight += 0.01f;
                 
-                /*foreach (ChainIKConstraint finger in fingerConstraints)
+                foreach (ChainIKConstraint finger in fingerConstraints)
                 {
-                    finger.weight = 1.0f;
-                }*/
+                    if (!finger.name.Contains("Index"))
+                    {
+                        if (finger.name.Contains("Middle"))
+                        {
+                            finger.data.chainRotationWeight = 0.693f;
+                        }
+                        else if (finger.name.Contains("Ring"))
+                        {
+                            finger.data.chainRotationWeight = 0.72f;
+                        }
+                        else if (finger.name.Contains("Pinky"))
+                        {
+                            finger.data.chainRotationWeight = 0.633f;
+                        }
+                        else if (finger.name.Contains("Thumb"))
+                        {
+                            finger.data.chainRotationWeight = 0.299f;
+                        }
+                    }
+                    
+                }
 
+            }
+            else
+            {
+                if (rightArmCon.weight > 0.0f) rightArmCon.weight -= 0.01f;
+                
+                foreach (ChainIKConstraint finger in fingerConstraints)
+                {
+                    if (!finger.name.Contains("Index"))
+                    {
+                        finger.data.chainRotationWeight = 0.0f;
+                    }
+                }
             }
             
             bool isTalking = animator.GetBool(isTalkingHash);
