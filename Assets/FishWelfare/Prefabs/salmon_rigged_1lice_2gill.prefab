@@ -529,6 +529,7 @@ GameObject:
   - component: {fileID: 752814164}
   - component: {fileID: 752814165}
   - component: {fileID: 1119661658}
+  - component: {fileID: 674346738259270151}
   m_Layer: 13
   m_Name: Neck
   m_TagString: Bone
@@ -736,9 +737,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 674346738259270151}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -748,9 +749,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -775,9 +776,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 674346738259270151}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -787,9 +788,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -916,6 +917,20 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &674346738259270151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273438476667798305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}
 --- !u!1 &1777015713573393535
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,6 +946,7 @@ GameObject:
   - component: {fileID: 108685240}
   - component: {fileID: 117183120}
   - component: {fileID: 1171745047}
+  - component: {fileID: 3108103156841675890}
   m_Layer: 13
   m_Name: Back_5
   m_TagString: Bone
@@ -1119,9 +1135,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 3108103156841675890}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1131,9 +1147,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1158,10 +1174,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 6
+      - m_Target: {fileID: 3108103156841675890}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1170,9 +1186,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1318,6 +1334,20 @@ MonoBehaviour:
     m_Bits: 0
   storedPosition: {x: 0, y: 0, z: 0}
   storedRotation: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3108103156841675890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777015713573393535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}
 --- !u!1 &2168024215688232703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1426,6 +1456,7 @@ GameObject:
   - component: {fileID: 18663942}
   - component: {fileID: 744659602}
   - component: {fileID: 744659603}
+  - component: {fileID: 3979619736691713123}
   m_Layer: 13
   m_Name: Back_1
   m_TagString: Bone
@@ -1702,9 +1733,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 3979619736691713123}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1714,9 +1745,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1741,9 +1772,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 3979619736691713123}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1753,9 +1784,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1813,6 +1844,20 @@ MonoBehaviour:
   onSnapZoneExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3979619736691713123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2322968982182209632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}
 --- !u!1 &3814371106168548784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1953,6 +1998,7 @@ GameObject:
   - component: {fileID: 1043450806}
   - component: {fileID: 2001593012}
   - component: {fileID: 2001593013}
+  - component: {fileID: 9131761976948986550}
   m_Layer: 13
   m_Name: Head
   m_TagString: Bone
@@ -2160,9 +2206,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 9131761976948986550}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2172,9 +2218,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2199,9 +2245,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 9131761976948986550}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2211,9 +2257,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2340,6 +2386,20 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &9131761976948986550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4648646452388991490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}
 --- !u!1 &6048210018162169073
 GameObject:
   m_ObjectHideFlags: 0
@@ -2355,6 +2415,7 @@ GameObject:
   - component: {fileID: 5996645361607201537}
   - component: {fileID: 5996645361607201539}
   - component: {fileID: 5996645361607201540}
+  - component: {fileID: 2107256314702391542}
   m_Layer: 13
   m_Name: Back_2
   m_TagString: Bone
@@ -2631,9 +2692,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 2107256314702391542}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2643,9 +2704,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2670,9 +2731,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 2107256314702391542}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2682,9 +2743,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2742,6 +2803,20 @@ MonoBehaviour:
   onSnapZoneExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2107256314702391542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6048210018162169073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}
 --- !u!1 &6623024931096006545
 GameObject:
   m_ObjectHideFlags: 0
@@ -2850,6 +2925,7 @@ GameObject:
   - component: {fileID: 1355815933}
   - component: {fileID: 1355815934}
   - component: {fileID: 1355815935}
+  - component: {fileID: 7915287345755942082}
   m_Layer: 13
   m_Name: Tail_end
   m_TagString: Bone
@@ -3124,9 +3200,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 7915287345755942082}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3136,9 +3212,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3163,10 +3239,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 6
+      - m_Target: {fileID: 7915287345755942082}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3175,9 +3251,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3235,6 +3311,20 @@ MonoBehaviour:
   onSnapZoneExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7915287345755942082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6748978213728608801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}
 --- !u!1 &6915616972181788328
 GameObject:
   m_ObjectHideFlags: 0
@@ -3249,6 +3339,7 @@ GameObject:
   - component: {fileID: 919132148199949408}
   - component: {fileID: 919132148199949410}
   - component: {fileID: 919132148199949411}
+  - component: {fileID: 1191779298730865936}
   m_Layer: 6
   m_Name: salmon_rigged_1lice_2gill
   m_TagString: Fish
@@ -3422,7 +3513,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _killPlane: -3
   _useStartPositionAsSpawnPosition: 0
-  _useSpawnObject: 0
   _spawnObject: {fileID: 0}
   _respawnPosition: {x: 0, y: 0, z: 0}
   _respawnRotation: {x: 0, y: 0, z: 0, w: 0}
@@ -3466,6 +3556,35 @@ MonoBehaviour:
   startTank: {fileID: 0}
   endTank: {fileID: 0}
   sedationTimer: 3
+  m_OnFishCalmedDown:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnBroughtToTable:
+    m_PersistentCalls:
+      m_Calls: []
+  BringFishStepCompleted: 0
+  m_OnInspected:
+    m_PersistentCalls:
+      m_Calls: []
+  HasBeenInspected: 0
+  m_OnPlacedInRecoveryTank:
+    m_PersistentCalls:
+      m_Calls: []
+  PlacedInRecoveryTank: 0
+--- !u!114 &1191779298730865936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6915616972181788328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ee0474ab07aa154b9bf194a948b701f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Head: {fileID: 7589862318644897614}
+  Armature: {fileID: 3814371106168548784}
 --- !u!1 &7132867527503714408
 GameObject:
   m_ObjectHideFlags: 0
@@ -3481,6 +3600,7 @@ GameObject:
   - component: {fileID: 1253310518}
   - component: {fileID: 1253310519}
   - component: {fileID: 1253310520}
+  - component: {fileID: 9017802498784965522}
   m_Layer: 13
   m_Name: Back_4
   m_TagString: Bone
@@ -3688,9 +3808,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 9017802498784965522}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3700,9 +3820,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3727,10 +3847,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 6
+      - m_Target: {fileID: 9017802498784965522}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3739,9 +3859,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3868,6 +3988,20 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &9017802498784965522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7132867527503714408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}
 --- !u!1 &7531260673488108337
 GameObject:
   m_ObjectHideFlags: 0
@@ -3883,6 +4017,7 @@ GameObject:
   - component: {fileID: 569489947}
   - component: {fileID: 1705924679}
   - component: {fileID: 1705924680}
+  - component: {fileID: 8957301237697908306}
   m_Layer: 13
   m_Name: Back_3
   m_TagString: Bone
@@ -4159,9 +4294,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 8957301237697908306}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4171,9 +4306,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4198,10 +4333,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 6
+      - m_Target: {fileID: 8957301237697908306}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4210,9 +4345,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4270,6 +4405,20 @@ MonoBehaviour:
   onSnapZoneExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8957301237697908306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7531260673488108337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}
 --- !u!1 &7852440317991942239
 GameObject:
   m_ObjectHideFlags: 0
@@ -4285,6 +4434,7 @@ GameObject:
   - component: {fileID: 415868202}
   - component: {fileID: 682472283}
   - component: {fileID: 682472284}
+  - component: {fileID: 6699244201120034485}
   m_Layer: 13
   m_Name: Tail
   m_TagString: Bone
@@ -4561,9 +4711,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 6699244201120034485}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: SetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4573,9 +4723,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4600,10 +4750,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Bone, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 6
+      - m_Target: {fileID: 6699244201120034485}
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4612,9 +4762,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RatingInterfaceController, Assembly-CSharp
-        m_MethodName: SeteActive
+      - m_Target: {fileID: 1191779298730865936}
+        m_TargetAssemblyTypeName: DropWhenStretched, Assembly-CSharp
+        m_MethodName: DecrementGrabCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4672,3 +4822,17 @@ MonoBehaviour:
   onSnapZoneExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6699244201120034485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7852440317991942239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6005cf213e1f0a42b4de7e0146275ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed: 0
+  DropWhenStretchedScript: {fileID: 1191779298730865936}

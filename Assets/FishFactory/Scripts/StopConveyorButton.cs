@@ -10,7 +10,8 @@ public class StopConveyorButton : MonoBehaviour
     void Start()
     {
         _bleedingGuide = GameObject.Find("Bleeding station guide Bernard");
-        _dialogueBoxController = _bleedingGuide.GetComponent<DialogueBoxController>();
+        if (_bleedingGuide != null)
+            _dialogueBoxController = _bleedingGuide.GetComponent<DialogueBoxController>();
     }
     /// <summary>
     /// Toggles the main task on and off
@@ -18,7 +19,7 @@ public class StopConveyorButton : MonoBehaviour
     public void ToggleTaskOn()
     {
         GameManager.Instance.ToggleTaskOn();
-        if (_dialogueBoxController.dialogueTreeRestart.name == "BleedingInstruction" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
+        if (_dialogueBoxController != null && _dialogueBoxController.dialogueTreeRestart.name == "BleedingInstruction" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
         {
             _dialogueBoxController.SkipLine();
         }

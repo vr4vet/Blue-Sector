@@ -2,27 +2,22 @@ using UnityEngine;
 
 public class WhichJointGrabbed : MonoBehaviour
 {
-    public bool Grabbed = false;
-    [SerializeField] private DropWhenStretched WhenStretched;
-    public void SetGrabbedJoint()
-    {
-        Grabbed = true;
-    }
+    [HideInInspector] public bool Grabbed = false;
+    [SerializeField] private DropWhenStretched DropWhenStretchedScript;
 
-    public void RemoveGrabbedJoint()
-    {
-        Grabbed = false;
-    }
+    public void SetGrabbedJoint() => Grabbed = true;
+
+    public void UnsetGrabbedJoint() => Grabbed = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("SortingSquare"))
-            WhenStretched.JointCollisionIncrease();
+            DropWhenStretchedScript.JointCollisionIncrease();
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("SortingSquare"))
-            WhenStretched.JointCollisionDecrease();
+            DropWhenStretchedScript.JointCollisionDecrease();
     }
 }

@@ -1,53 +1,66 @@
 using UnityEngine;
 using System.Collections.Generic;
+using BNG;
+using System.Linq;
 
 public class DropWhenStretched : MonoBehaviour
 {
     [SerializeField] private Transform Head;
-    [SerializeField] private Transform TailEnd;
-    [SerializeField] private GameObject Armature;
-    private GameObject FishHead;
-    private GameObject GrabbedJoint;
-    private float distance = Mathf.Infinity;
-    private List<float> distances = new List<float>();
-    private DropTheFish drop;
-    private int GrabCount = 0;
-    private int FishCollides = 0;
+    [SerializeField] private float StretchLimit = .15f;
+    private GameObject _grabbedJoint;
+    private List<float> _distances = new();
+    private int _grabCount = 0;
+    private int _fishCollides = 0;
+    private Grabber _playerGrabberLeft, _playerGrabberRight;
+    private float _waitTime = 0;
 
-    // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
-        drop = GameObject.Find("DropObject").GetComponent<DropTheFish>();
+        if (Head == null)
+            Debug.LogError("Head field is null! This field should be set to the armature's head joint!");
+
+        InitialJointDistances();
     }
 
-    private float WaitBeforeDrop = 0;
     // Update is called once per frame
     void Update()
     {
-        if (GrabCount == 0 || FishCollides > 0 && GrabCount < 2)
+        // getting the player hand grabbers. they are not immediately accessible, so they are fetched here
+        if (_playerGrabberLeft == null || _playerGrabberRight == null)
         {
+            GameObject playerRig = GameManager.Instance.GetPlayerRig();
+            if (playerRig != null)
+            {
+                List<Grabber> grabbers = playerRig.GetComponentsInChildren<Grabber>().ToList();
+                _playerGrabberLeft = grabbers.Find(x => x.transform.parent.name == "LeftController");
+                _playerGrabberRight = grabbers.Find(x => x.transform.parent.name == "RightController");
+            }
             return;
         }
 
-        if (DistancesBetweenJoints() && Time.time - WaitBeforeDrop >= 0.5f)
+        // return when fish is not grabbed, or if held with one hand while touching the sorting machine's sticky surface. prevents unneccesary calculations and unwanted anti-stretch corrections
+        if (_grabCount == 0 || _fishCollides > 0 && _grabCount < 2)
+            return;
+
+        // make anti-stretch corrections if fish is currently stretched and enough time has passed since last correction. waiting prevents wild and rapid corrections
+        if (JointDistancesTooGreat() && Time.time - _waitTime >= 2f)
         {
-            WaitBeforeDrop = Time.time;
-            if (GrabCount == 2)
+            _waitTime = Time.time;
+            if (_grabCount == 2) // select random hand and make it drop its held fish joint
             {
                 if (Random.value >= 0.5)
-                    drop.StretchDropLeft.Invoke();
+                    _playerGrabberLeft.TryRelease();
                 else
-                    drop.StretchDropRight.Invoke();
-                return;
+                    _playerGrabberRight.TryRelease();
             }
-                
-            if (GrabCount == 1)
+            else if (_grabCount == 1) // find which joint the player is holding and move all joints towards it. prevents fish from latching into objects and becoming stretched when player moves held joint
             {
                 foreach (WhichJointGrabbed Joint in GetComponentsInChildren<WhichJointGrabbed>())
                 {
                     if (Joint.Grabbed)
                     {
-                        GrabbedJoint = Joint.gameObject;
+                        _grabbedJoint = Joint.gameObject;
                         break;
                     }
                 }
@@ -55,45 +68,49 @@ public class DropWhenStretched : MonoBehaviour
                 foreach (WhichJointGrabbed Joint in GetComponentsInChildren<WhichJointGrabbed>())
                 {
                     if (!Joint.Grabbed)
-                    {
-                        Joint.transform.position = GrabbedJoint.transform.position;
-                    }
+                        Joint.GetComponent<Rigidbody>().position = _grabbedJoint.transform.position;
                 }
             }
-
         }      
     }
-    public void DistanceLength()
-    {
-        if (distance == Mathf.Infinity)
-            distance = Vector3.Distance(Head.position, TailEnd.position);
 
-        if (distances.Count == 0)
+    /// <summary>
+    /// Calculates initial distance from head to all joints, which is used for checking if the fish being stretched.
+    /// The values are placed in the distances list, and values are considered the natural/intended distance from head to each joint.
+    /// In other words, a "bone" in the fish's spine should not surpass this length by much, otherwise the fish will stretch.
+    /// </summary>
+    public void InitialJointDistances()
+    {
+        if (_distances.Count == 0)
         {
             foreach (WhichJointGrabbed Joint in GetComponentsInChildren<WhichJointGrabbed>())
             {
-                if (Joint.gameObject.name == "Head")
-                    FishHead = Joint.gameObject;
-                
-                else if(Head != null)
-                    distances.Add(Vector3.Distance(FishHead.transform.position, Joint.transform.position));
+                if (Joint.gameObject.name != "Head")
+                    _distances.Add(Vector3.Distance(Head.transform.position, Joint.transform.position));
             }
         }
     }
 
-    public void IncrementGrabCount()
-    {
-        GrabCount++;
-    }
+    /// <summary>
+    /// Called by fish joints' OnGrab event
+    /// </summary>
+    public void IncrementGrabCount() => _grabCount++;
 
-    public void DecrementGrabCount()
-    {
-        GrabCount--;
-    }
 
-    private bool DistancesBetweenJoints()
+    /// <summary>
+    /// Called by fish joints' OnGrab event
+    /// </summary>
+    public void DecrementGrabCount() => _grabCount--;
+
+
+    /// <summary>
+    /// Calculates distance between head and all other joints.
+    /// Returns true if distance is greater than what was calculated in InitialJointDistances() by a certain threshold, otherwise returns false.
+    /// </summary>
+    /// <returns></returns>
+    private bool JointDistancesTooGreat()
     {
-        if (distances.Count < 8)
+        if (_distances.Count < 8)
             return false;
 
         int i = 0;
@@ -101,25 +118,24 @@ public class DropWhenStretched : MonoBehaviour
         {
             if (i != 0)
             {
-                float DistanceRetrieval = Vector3.Distance(Armature.transform.GetChild(0).transform.position, Joint.transform.position);
+                float distance = Vector3.Distance(Head.transform.position, Joint.transform.position);
 
-                if (DistanceRetrieval >= distances[i - 1] + 0.15f)
-                {
+                if (distance >= _distances[i - 1] + StretchLimit)
                     return true;
-                }
             }
             i++;
         }
         return false;
     }
 
-    public void JointCollisionIncrease()
-    {
-        FishCollides++;
-    }
-    
-    public void JointCollisionDecrease()
-    {
-        FishCollides--;
-    }
+    /// <summary>
+    /// Tell that a joint collides with some object that should disable certain corrections, like the sticky surface of the sorting maching.
+    /// </summary>
+    public void JointCollisionIncrease() => _fishCollides++;
+
+
+    /// <summary>
+    /// Tell that a joint no longer collides with some object that should disable certain corrections, like the sticky surface of the sorting maching.
+    /// </summary>
+    public void JointCollisionDecrease() => _fishCollides--;
 }

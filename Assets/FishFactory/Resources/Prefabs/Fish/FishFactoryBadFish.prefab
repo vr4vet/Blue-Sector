@@ -711,18 +711,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
@@ -773,8 +761,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 573360791615036323}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -926,7 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &8150832947165559640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1149,18 +1137,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
@@ -1211,8 +1187,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 7968289819078434106}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1364,7 +1340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &6164764925110720205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1858,7 +1834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &744659603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1874,18 +1850,6 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
@@ -1938,8 +1902,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 4497055232872492743}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2358,18 +2322,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
@@ -2420,8 +2372,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 654137428531625845}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2573,7 +2525,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &1259064525630186350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2861,7 +2813,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &5996645361607201540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2877,18 +2829,6 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
@@ -2941,8 +2881,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 5376487772531937559}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3390,7 +3330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &1355815935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3406,18 +3346,6 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
@@ -3470,8 +3398,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 8776349924537100303}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3970,18 +3898,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
         m_Mode: 1
         m_Arguments:
@@ -4032,8 +3948,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 8542688777618602497}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4185,7 +4101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &2330949871227042094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4473,7 +4389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &1705924680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4489,18 +4405,6 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
@@ -4553,8 +4457,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 6310436565701880764}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4911,7 +4815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grabbed: 0
-  WhenStretched: {fileID: 650007789173940065}
+  DropWhenStretchedScript: {fileID: 650007789173940065}
 --- !u!114 &682472284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4927,18 +4831,6 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 650007789173940065}
-        m_TargetAssemblyTypeName: DropWhenStretched, Scripts
-        m_MethodName: DistanceLength
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 650007789173940065}
         m_TargetAssemblyTypeName: DropWhenStretched, Scripts
         m_MethodName: IncrementGrabCount
@@ -4991,8 +4883,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 9101642283823060629}
-        m_TargetAssemblyTypeName: WhichJointGrabbed, Scripts
-        m_MethodName: RemoveGrabbedJoint
+        m_TargetAssemblyTypeName: WhichJointGrabbed, Assembly-CSharp
+        m_MethodName: UnsetGrabbedJoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
