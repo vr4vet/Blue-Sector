@@ -70,6 +70,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         _tasks = th.taskList;
         _skills = th.skillList;
         activeTask = _tasks[0];
+        watchManager = WatchManager.Instance;
         if (FindObjectsOfType<MaintenanceManager>().Length > 0)
         {
             manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
@@ -78,7 +79,6 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         }
         else
         {
-            watchManager = GameObject.FindObjectsOfType<WatchManager>()[0];
             watchManager.CurrentSubtask.AddListener(HandleCurrentSubtask);
             watchManager.SkillCompleted.AddListener(HandleSkillUnlocked);
         }
@@ -195,7 +195,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
             if (task == activeTask)
             {
-                button.GetComponent<Image>().color = Color.blue;
+                button.GetComponent<Image>().color = new Color32(0x1C, 0x45, 0x6E, 0xFF);//Color.blue;
             }
             if (task.Compleated())
             {
@@ -236,7 +236,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
             if (sub == activeSubtask)
             {
-                button.GetComponent<Image>().color = Color.blue;
+                button.GetComponent<Image>().color = new Color32(0x1C, 0x45, 0x6E, 0xFF);//Color.blue;
             }
             if (sub.Compleated())
             {
@@ -245,6 +245,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             }
             button.onClick.AddListener(() => StepPageLoader(sub));
         }
+        watchManager.UIChanged.Invoke();
     }
 
     public void StepPageLoader(Task.Subtask subtask)
@@ -287,6 +288,6 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             TMP_Text number = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
             number.text = step.getStepNumber() + "";
         }
-
+        watchManager.UIChanged.Invoke();
     }
 }

@@ -10,6 +10,7 @@ public class WatchManager : MonoBehaviour
     public static WatchManager Instance;
     [SerializeField] public Task.TaskHolder taskHolder;
     [SerializeField] private UpdatedTabletTaskListLoader taskListLoader;
+    [SerializeField] public UpdatedTabletPanelManager panelManager;
     [SerializeField] private AudioClip success;
     [SerializeField] public Subtask FirstSubTask;
     [SerializeField] public FeedbackManager feedbackManager;
@@ -25,6 +26,16 @@ public class WatchManager : MonoBehaviour
     public UnityEvent<Task.Subtask> SubtaskChanged { get; } = new();
     public UnityEvent<Task.Task> TaskCompleted { get; } = new();
     public UnityEvent<Task.Subtask> CurrentSubtask { get; } = new();
+    public UnityEvent UIChanged = new();
+
+    private void Awake()
+    {
+        // Sets the instance of the WatchManager to this object if it does not already exist
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+            Destroy(gameObject);
+    }
 
     void Start()
     {
