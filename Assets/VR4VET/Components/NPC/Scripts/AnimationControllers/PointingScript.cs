@@ -50,4 +50,10 @@ public class PointingScript : MonoBehaviour
        }
 
     } 
+    
+    // Used to get the object that the NPC is currently looking at for other scripts
+    public GameObject GetObjectToPointAt()
+    {
+        return _objectToLookAt;
+    }
 }
