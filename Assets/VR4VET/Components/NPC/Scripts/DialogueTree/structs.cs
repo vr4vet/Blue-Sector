@@ -6,9 +6,9 @@ public struct DialogueSection
     [TextArea]
     public string[] dialogue;
     public bool endAfterDialogue;
+    public string walkOrTurnTowardsAfterDialogue;
     public bool disabkeSkipLineButton;
-    public bool point;
-    public GameObject objectToLookAt;
+    public string pointAt;
     public BranchPoint branchPoint;
 }
 
@@ -26,4 +26,5 @@ public struct Answer
     public string answerLabel;
     public int nextElement;
     public bool endAfterAnswer;
+    public string walkOrTurnTowardsAfterAnswer;
 }

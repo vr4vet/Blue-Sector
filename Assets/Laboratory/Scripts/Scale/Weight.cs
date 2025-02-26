@@ -1,13 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 public class Weight : MonoBehaviour
 {
     // ----------------- Editor Variables -----------------
-    [SerializeField]
     public GameObject fish;
     [Header("Weight settings")]
     public bool RandomWeight;
@@ -35,8 +34,12 @@ public class Weight : MonoBehaviour
         set { _objectWeight = value; }
     }
 
+    public UnityEvent m_OnWeighingFish; // event to complete step on tablet/task structure
+
     void Start()
     {
+        m_OnWeighingFish ??= new UnityEvent();
+
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
         if (RandomWeight)
         {
@@ -53,11 +56,12 @@ public class Weight : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
 
-        if (collision.GetType() == typeof(CapsuleCollider) && collision.GetComponent<Weight>())
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Bone") && collision.GetComponent<Weight>())
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3] && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" )
+            if ( dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3])
             {
                 dialogueBoxController.SkipLine();
+                m_OnWeighingFish.Invoke();
             }
 
 

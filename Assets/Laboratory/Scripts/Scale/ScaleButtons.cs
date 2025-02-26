@@ -1,25 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ScaleButtons : MonoBehaviour
 {
     private DialogueBoxController dialogueBoxController;
     public Scale scale;
+    public ButtonType buttonType;
+    public UnityEvent m_OnScaleReady; // event used to complete step on tablet/task structure
+
     public enum ButtonType
     {
         On,
         Off,
         Reset,
     }
+    
 
     private void Start()
     {
+        m_OnScaleReady ??= new UnityEvent();
+
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
     }
 
-    [SerializeField]
-    public ButtonType buttonType;
 
     private void OnTriggerEnter(Collider collisionObject)
     {
@@ -32,7 +35,7 @@ public class ScaleButtons : MonoBehaviour
             case ButtonType.On:
                 StopAllCoroutines();
                 scale.displayText.SetText("000.0");
-                scale.audio.Play();
+                scale.Audio.Play();
                 scale.scaleOn = true;
                 if (dialogueBoxController.dialogueTreeRestart != null)
                 {
@@ -46,19 +49,24 @@ public class ScaleButtons : MonoBehaviour
             case ButtonType.Off:
                 StopAllCoroutines();
                 scale.displayText.SetText("");
-                scale.audio.Play();
-                scale.scaleOn = true;
+                scale.Audio.Play();
+                scale.scaleOn = false;
                 break;
             case ButtonType.Reset:
-                StopAllCoroutines();
-                scale.totalWeight = 0;
-                scale.displayText.SetText("000.0");
-                scale.audio.Play();
+                if (scale.scaleOn)
+                {
+                    StopAllCoroutines();
+                    scale.totalWeight = 0;
+                    scale.displayText.SetText("000.0");
+                    scale.Audio.Play();
 
-                if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2]) {
-                    dialogueBoxController.SkipLine();
-                    
+                    if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2]) 
+                    {
+                        dialogueBoxController.SkipLine();
+                        m_OnScaleReady.Invoke();
+                    } 
                 }
+                
 
                 break;
         }

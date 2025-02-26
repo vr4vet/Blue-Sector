@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
 
 public class MicroscopeOverlayTrigger : MonoBehaviour
@@ -6,10 +7,13 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
     private MicroscopeScreenSpaceOverlay MicroscopeOverlay;
     private PostProcessVolume VignetteVolume;
     private PostProcessVolume DarkenVolume;
+    public UnityEvent m_OnEyepiecesUsed;
 
     // Start is called before the first frame update
     void Start()
     {
+        m_OnEyepiecesUsed ??= new UnityEvent();
+
         MicroscopeOverlay = GetComponentInChildren<MicroscopeScreenSpaceOverlay>();
         VignetteVolume = transform.Find("Vignette").GetComponent<PostProcessVolume>();
         DarkenVolume = transform.Find("Darken").GetComponent<PostProcessVolume>();
@@ -23,6 +27,8 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
             MicroscopeOverlay.EnableOverlay();
             VignetteVolume.isGlobal = true;
             DarkenVolume.isGlobal = true;
+
+            m_OnEyepiecesUsed.Invoke();
         }        
     }
 

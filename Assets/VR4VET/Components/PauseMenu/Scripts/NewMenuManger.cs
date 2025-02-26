@@ -9,10 +9,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.XR;
+using UnityEngine.Events;
+using System.Linq;
 
 public class NewMenuManger : MonoBehaviour
 {
+    public static NewMenuManger Instance;
+
     [SerializeField] public Material PauseSkyboxMat;
     [SerializeField] public Material SkyboxMat;
     [SerializeField] private LayerMask _menuLayers;  //layers mask to put on top when the game is paused
@@ -29,6 +32,7 @@ public class NewMenuManger : MonoBehaviour
     [SerializeField] private GameObject _languagesCanvas;
     [SerializeField] private GameObject _remapCanvas;
     [SerializeField] private GameObject _audioCanvas;
+    [SerializeField] private GameObject _accessibilityCanvas;
     // public GameObject stateSaverComponent;
 
     private GameObject _savedStates;
@@ -39,6 +43,14 @@ public class NewMenuManger : MonoBehaviour
     private List<GameObject> allMenus = new();
     [SerializeField]
     private float canvasesDistance;
+
+    // used to tell controller tooltips activators if they should activate tooltips or not
+    [HideInInspector] public UnityEvent<bool> m_ControllerTooltipsToggled;
+    private Toggle _controllerTooltipsToggle;
+
+    [HideInInspector] public UnityEvent<bool> m_HighContrastModeToggled;
+    private Toggle _highContrastModeToggle;
+
     /// <summary>
     /// This Script manages all aspects of the Pause Menu:
     /// Toggle, or Hold to Pause
@@ -53,16 +65,36 @@ public class NewMenuManger : MonoBehaviour
         c.a = 1f;
         _wallsMaterial.color = c;
 
-        allMenus.AddRange(new List<GameObject>() { _menuCanvas, _settingsCanvas, _aboutCanvas, _languagesCanvas, _remapCanvas, _audioCanvas });
+        allMenus.AddRange(new List<GameObject>() { _menuCanvas, _settingsCanvas, _aboutCanvas, _languagesCanvas, _remapCanvas, _audioCanvas, _accessibilityCanvas });
         AdjustCanvasDistances();
 
         foreach (var item in allMenus)
-        {
             item.SetActive(false);
-        }
 
         if(_menuOpen)
             _menuCanvas.SetActive(true);
+
+        // initializing Unity Events (creating new if null)
+        m_ControllerTooltipsToggled ??= new();
+        m_HighContrastModeToggled ??= new();
+
+        List<Toggle> accessibilityToggles = transform.Find("Accessibility Canvas").GetComponentsInChildren<Toggle>().ToList();
+        _controllerTooltipsToggle = accessibilityToggles.Find(x => x.transform.parent.name == "ControllerTooltips");
+        _highContrastModeToggle = accessibilityToggles.Find(x => x.transform.parent.name == "HighContrastMode");
+
+        LoadPlayerSettings();
+    }
+
+    /// <summary>
+    /// Loads the player's chosen settings to ensure persistance between scenes
+    /// </summary>
+    private void LoadPlayerSettings()
+    {
+        _controllerTooltipsToggle.isOn = PlayerPrefs.GetInt("controllerTooltips", 1) == 1;
+        m_ControllerTooltipsToggled.Invoke(_controllerTooltipsToggle.isOn);
+
+        _highContrastModeToggle.isOn = PlayerPrefs.GetInt("highContrastMode", 0) == 1;
+        m_HighContrastModeToggled.Invoke(_highContrastModeToggle.isOn);
     }
 
     private void ToggleMenu()
@@ -209,5 +241,20 @@ public class NewMenuManger : MonoBehaviour
         {
             canvasFollow.AdjustDistance(canvasesDistance);
         }
+    }
+
+    /// <summary>
+    /// Tell controller tooltip activators whether they should be enabled or not
+    /// </summary>
+    public void OnControllerTooltipToggled()
+    {
+        m_ControllerTooltipsToggled.Invoke(_controllerTooltipsToggle.isOn);
+        PlayerPrefs.SetInt("controllerTooltips", _controllerTooltipsToggle.isOn ? 1 : 0);
+    }
+
+    public void OnHighContrastModeToggled()
+    {
+        m_HighContrastModeToggled.Invoke(_highContrastModeToggle.isOn);
+        PlayerPrefs.SetInt("highContrastMode", _highContrastModeToggle.isOn ? 1 : 0);
     }
 }

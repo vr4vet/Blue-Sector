@@ -1,16 +1,22 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CounterHandheld : MonoBehaviour
 {
     [SerializeField] private List<GameObject> NumberedWheels = new List<GameObject>();
     private int Count = 0; 
     private DialogueBoxController dialogueBoxController;
+    public UnityEvent m_OnIncrement;
+    public UnityEvent m_OnReset;
 
     // Start is called before the first frame update
     void Start()
     {
+        m_OnIncrement ??= new UnityEvent();
+        m_OnReset ??= new UnityEvent();
+
         dialogueBoxController = FindObjectOfType<DialogueBoxController>();
         Count = UnityEngine.Random.Range(0, 9999);  // start with random value so the player is required to reset the counter
         SetNumberedWheels();
@@ -20,9 +26,10 @@ public class CounterHandheld : MonoBehaviour
     {
         if (dialogueBoxController != null)
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
+            if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4])
             {
                 dialogueBoxController.SkipLine();
+                m_OnIncrement.Invoke();
             }
         }
         Count = (Count + 1) % 10000;
@@ -33,9 +40,10 @@ public class CounterHandheld : MonoBehaviour
     {
         if (dialogueBoxController != null)
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[5] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue") 
+            if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[5]) 
             {
                 dialogueBoxController.SkipLine();
+                m_OnReset.Invoke();
             }
         }
         Count = 0;

@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using Meta.Voice.Audio;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace InteractiveCalculator
 {
     public class CalculatorButton : MonoBehaviour
     {
-        [SerializeField]
         public AudioSource player;
         public UnityEvent OnClick;
         [SerializeField]
@@ -17,7 +14,7 @@ namespace InteractiveCalculator
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Finger")
+            if (other.gameObject.CompareTag("Finger"))
             {
                 if (player != null)
                 {

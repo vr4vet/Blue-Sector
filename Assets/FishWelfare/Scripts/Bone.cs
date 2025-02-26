@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class Bone : MonoBehaviour, IPointerClickHandler
@@ -18,6 +19,7 @@ public class Bone : MonoBehaviour, IPointerClickHandler
     public LayerMask layer;
     public Vector3 storedPosition;
     public Quaternion storedRotation;
+    private InspectionNPCBehavior inspectionNPCBehavior;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +35,8 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         // Prevent fish from colliding with player to prevent fish from taking damage when teleporting and other issues
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Bone"));
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Bone"), LayerMask.NameToLayer("Bone"));
+        // Get the behavior script for the inspection NPC
+        inspectionNPCBehavior = GameObject.Find("NPCSpawner").GetComponent<InspectionNPCBehavior>();
     }
 
     public void OnPointerClick(PointerEventData eventData) {
@@ -77,6 +81,10 @@ public class Bone : MonoBehaviour, IPointerClickHandler
             //Debug.Log(other.gameObject.name);
             parent.checkForDamage(false, other.relativeVelocity.magnitude);
         }
+        else if (other.transform.gameObject.CompareTag("Desk")) {
+            // Check if a fish has been placed on the table
+            Debug.Log("Start dialogue");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -97,6 +105,13 @@ public class Bone : MonoBehaviour, IPointerClickHandler
                 {
                     parent.tank.inspectionTaskManager.ProgressInspection(parent);
                     parent.tank.tutorialEntry.SetCompleted();
+
+                    // complete step for placing fish in recovery tank
+                    if (!parent.PlacedInRecoveryTank)
+                    {
+                        parent.PlacedInRecoveryTank = true;
+                        parent.m_OnPlacedInRecoveryTank.Invoke();
+                    }
                 }
 
             }
@@ -105,11 +120,26 @@ public class Bone : MonoBehaviour, IPointerClickHandler
         {
             // set respawn position to table top
             parent.GetComponent<Respawner>().SetRespawnPosition(Vector3.Scale(other.bounds.center, new Vector3(1, 1.3f, 1)));
+
+            // Active the rating dialogue when a fish is placed on the table
+            if (inspectionNPCBehavior.dialogueStarted == false) {
+                // Can only be called once
+                inspectionNPCBehavior.dialogueStarted = true;
+
+                inspectionNPCBehavior.StartInspectionDialogue();
+                Debug.Log("Start dialogue");
+            }
+            
+            // Complete step for bringing salmon to the table
+            if (!parent.BringFishStepCompleted)
+            {
+                parent.BringFishStepCompleted = true;
+                parent.m_OnBroughtToTable.Invoke();
+            }
         }
         else if (!parent.tank.isGoal && other.CompareTag("Hand"))
         {
             parent.tank.tutorialEntry.SetCompleted();
-            //Debug.Log("Hi");
         }
 
     }

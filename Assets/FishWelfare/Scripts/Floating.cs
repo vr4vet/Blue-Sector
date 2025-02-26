@@ -10,13 +10,13 @@ public class Floating : MonoBehaviour
     public float AirAngularDrag = 0.05f;
     public float floatingPower = 15f;
     public float waterHeight = 0f;
-    Rigidbody rigidbody;
+    private Rigidbody _rigidbody;
     bool underWater;
 
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -26,7 +26,7 @@ public class Floating : MonoBehaviour
         //is object under water?
         if(differnece < 0) {
             //push object up more and more depending on how deep it is
-            rigidbody.AddForceAtPosition (Vector3.up * floatingPower * Mathf.Abs(differnece), transform.position, ForceMode.Force);
+            _rigidbody.AddForceAtPosition (Vector3.up * floatingPower * Mathf.Abs(differnece), transform.position, ForceMode.Force);
             if(!underWater){
                 underWater = true;
                 SwitchState(true);
@@ -40,12 +40,12 @@ public class Floating : MonoBehaviour
 
     void SwitchState (bool isUnderWater) {
         if(isUnderWater) {
-            rigidbody.drag = underWaterDrag;
-            rigidbody.angularDrag = underWaterAngularDrag;
+            _rigidbody.drag = underWaterDrag;
+            _rigidbody.angularDrag = underWaterAngularDrag;
         }
         else{
-            rigidbody.drag = airDrag;
-            rigidbody.angularDrag = AirAngularDrag;
+            _rigidbody.drag = airDrag;
+            _rigidbody.angularDrag = AirAngularDrag;
         }
     }
 }

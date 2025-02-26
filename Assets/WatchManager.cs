@@ -9,35 +9,54 @@ public class WatchManager : MonoBehaviour
 {
     public static WatchManager Instance;
     [SerializeField] public Task.TaskHolder taskHolder;
+    [SerializeField] private UpdatedTabletTaskListLoader taskListLoader;
+    [SerializeField] public UpdatedTabletPanelManager panelManager;
     [SerializeField] private AudioClip success;
     [SerializeField] public Subtask FirstSubTask;
     [SerializeField] public FeedbackManager feedbackManager;
     [SerializeField] private GameObject[] arrows;
-    
+
     private Task.Task task;
     private int teleportationAnchorCount;
     [HideInInspector] public int stepCount;
 
     public Task.Task Task { get => task; set => task = value; }
-    public UnityEvent<Task.Skill?> BadgeChanged { get; } = new();
-    public UnityEvent<Task.Skill?> SkillCompleted { get; } = new();
-    public UnityEvent<Task.Subtask?> SubtaskChanged { get; } = new();
+    public UnityEvent<Task.Skill> BadgeChanged { get; } = new();
+    public UnityEvent<Task.Skill> SkillCompleted { get; } = new();
+    public UnityEvent<Task.Subtask> SubtaskChanged { get; } = new();
     public UnityEvent<Task.Task> TaskCompleted { get; } = new();
-    public UnityEvent<Task.Subtask?> CurrentSubtask { get; } = new();
+    public UnityEvent<Task.Subtask> CurrentSubtask { get; } = new();
+    public UnityEvent UIChanged = new();
+
+    private void Awake()
+    {
+        // Sets the instance of the WatchManager to this object if it does not already exist
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+            Destroy(gameObject);
+    }
 
     void Start()
     {
         task = taskHolder.taskList[0];
 
-        // Reset subtsk and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
-        foreach (Task.Subtask sub in task.Subtasks)
+        // Set up tasks, subtasks, and steps. Reset subtask and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
+        foreach (Task.Task task in taskHolder.taskList)
         {
-            foreach (Task.Step step in sub.StepList)
+            foreach (Task.Subtask sub in task.Subtasks)
             {
-                step.Reset();
-                step.CurrentStep = false;
+                sub.ParentTask = task;
+                foreach (Task.Step step in sub.StepList)
+                {
+                    step.Reset();
+                    step.CurrentStep = false;
+                    step.ParentSubtask = sub;
+                    step.setStepNumber(sub.StepList.IndexOf(step) + 1);
+                }
             }
         }
+
         foreach (Task.Skill skill in taskHolder.skillList)
         {
             skill.Lock();
@@ -152,4 +171,12 @@ public class WatchManager : MonoBehaviour
         return teleportationAnchorCount;
     }
 
+    public void UpdateCurrentTask(Task.Task task)
+    {
+        Task = task;
+        taskListLoader.activeTask = task;
+        taskListLoader.LoadTaskPage();
+        taskListLoader.SubtaskPageLoader(task);
+        taskListLoader.StepPageLoader(task.Subtasks[0]);
+    }
 }

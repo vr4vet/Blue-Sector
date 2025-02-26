@@ -1,13 +1,10 @@
 using BNG;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using Unity.XR.CoreUtils;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Game : MonoBehaviour
 {
@@ -47,9 +44,9 @@ public class Game : MonoBehaviour
     public bool InActivatedArea { get; set; }
     public bool IsTutorialCompleted { get; set; }
     public bool CanStartGame => InActivatedArea && IsTutorialCompleted;
-    
-    private GameObject _supervisorSuzie;
-    private DialogueBoxController _suzieDialogueBox;
+
+    public UnityEvent m_OnGameStart;
+    public UnityEvent m_OnGameEnd;
 
     // Start is called before the first frame update
     private void Start()
@@ -74,9 +71,14 @@ public class Game : MonoBehaviour
         tutorials = new(FindObjectsOfType<MonoBehaviour>().OfType<Tutorial>().ToList());
         modesClass.OnModeChanged += ModesClass_OnModeChanged;
         modesClass.OnFinishedLoading += InitializeMode;
-        
-        _supervisorSuzie = GameObject.Find("Supervisor Suzie");
-        _suzieDialogueBox = _supervisorSuzie.GetComponent<DialogueBoxController>();
+
+        ButtonSpawner.OnAnswer += SetLevel;
+
+        if (m_OnGameStart == null)
+            m_OnGameStart = new UnityEvent();
+
+        if (m_OnGameEnd == null)
+            m_OnGameEnd = new UnityEvent();
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
@@ -99,6 +101,7 @@ public class Game : MonoBehaviour
 
         if ((Input.GetKeyDown(KeyCode.G) || InputBridge.Instance.AButtonUp) && !startGame && CanStartGame)
         {
+            m_OnGameStart.Invoke();
             startGame = true;
 
             foreach (GameObject merd in merds)
@@ -111,18 +114,14 @@ public class Game : MonoBehaviour
             scoring.StartScoring();
             StartCoroutine(Timer());
         }
+    }
 
-        if (_suzieDialogueBox._dialogueText.text == "Basic")
-        {
+    private void SetLevel(string level)
+    {
+        if (level.Equals("Basic"))
             modesClass.ChangeTo(0);
-            _suzieDialogueBox.SkipLine();
-        }
-        
-        if (_suzieDialogueBox._dialogueText.text == "Advanced")
-        {
+        else if (level.Equals("Advanced"))
             modesClass.ChangeTo(1);
-            _suzieDialogueBox.SkipLine();   
-        }
     }
 
     /* Starts a timer and gives the score after a certain amount of time. */
@@ -133,6 +132,9 @@ public class Game : MonoBehaviour
         {
             yield return null;
         }
+
+        m_OnGameEnd.Invoke();
+
         scoring.StopScoring();
         startGame = false;
         foreach (GameObject merd in merds)
@@ -140,7 +142,7 @@ public class Game : MonoBehaviour
             FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
             merdScript.SetIdle();
         }
-        scoreTablet.GiveFinalTabletScore();
+        //scoreTablet.GiveFinalTabletScore();
         endScoreText.text = scoring.Score.ToString();
     }
 
@@ -242,5 +244,10 @@ public class Game : MonoBehaviour
                 IsTutorialCompleted = false;
             }
         });
+    }
+
+    private void OnDestroy()
+    {
+        ButtonSpawner.OnAnswer -= SetLevel;
     }
 }

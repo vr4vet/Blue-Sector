@@ -70,6 +70,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         _tasks = th.taskList;
         _skills = th.skillList;
         activeTask = _tasks[0];
+        watchManager = WatchManager.Instance;
         if (FindObjectsOfType<MaintenanceManager>().Length > 0)
         {
             manager = GameObject.FindObjectsOfType<MaintenanceManager>()[0];
@@ -78,7 +79,6 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         }
         else
         {
-            watchManager = GameObject.FindObjectsOfType<WatchManager>()[0];
             watchManager.CurrentSubtask.AddListener(HandleCurrentSubtask);
             watchManager.SkillCompleted.AddListener(HandleSkillUnlocked);
         }
@@ -195,14 +195,13 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
             if (task == activeTask)
             {
-                button.GetComponent<Image>().color = Color.blue;
+                button.GetComponent<Image>().color = new Color32(0x1C, 0x45, 0x6E, 0xFF);//Color.blue;
             }
             if (task.Compleated())
             {
                 checkmark.SetActive(true);
                 completedButton.SetActive(true);
-                button = item.transform.Find("btn_TaskComplete").GetComponent<Button>();
-            };
+            }
 
             button.onClick.AddListener(() => SubtaskPageLoader(activeTask));
         }
@@ -237,25 +236,25 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
             if (sub == activeSubtask)
             {
-                button.GetComponent<Image>().color = Color.blue;
+                button.GetComponent<Image>().color = new Color32(0x1C, 0x45, 0x6E, 0xFF);//Color.blue;
             }
             if (sub.Compleated())
             {
                 checkmark.SetActive(true);
                 completedButton.SetActive(true);
-                button = item.transform.Find("btn_SubTaskComplete").GetComponent<Button>();
-            };
+            }
             button.onClick.AddListener(() => StepPageLoader(sub));
         }
+        watchManager.UIChanged.Invoke();
     }
 
     public void StepPageLoader(Task.Subtask subtask)
     {
         if (_subtaskPageOpen != null) _subtaskPageOpen.Invoke();
-        SubtaskPageLoader(activeTask);
         TaskPageCanvas.SetActive(false);
         subtaskPageCanvas.SetActive(true);
         activeSubtask = subtask;
+        SubtaskPageLoader(activeTask);
 
         _subtaskNameTab.GetComponent<TMP_Text>().text = subtask.SubtaskName;
         UpdateProgressBar(activeTask);
@@ -277,10 +276,9 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
 
             if (step.IsCompeleted())
             {
-
                 GameObject checkCircle = item.transform.Find("Checkcircle").gameObject;
                 checkCircle.SetActive(true);
-            };
+            }
             TMP_Text caption = item.transform.Find("txt_Desc").GetComponent<TMP_Text>();
             caption.text = step.StepName;
 
@@ -290,6 +288,6 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             TMP_Text number = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
             number.text = step.getStepNumber() + "";
         }
-
+        watchManager.UIChanged.Invoke();
     }
 }

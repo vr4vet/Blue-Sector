@@ -1,10 +1,10 @@
 using BNG;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class NPCMicroscopeTask : MonoBehaviour
 {
-    private string playerAnswer;
     private DialogueBoxController dialogueBoxController;
     private MicroscopeSlideWithGrid slide;
     [SerializeField] private MicroscopeInfoSubmitUI planktonNotepad;
@@ -12,13 +12,22 @@ public class NPCMicroscopeTask : MonoBehaviour
 
     public UnityEvent EnablePlanktonHighlights;
     public UnityEvent DisablePlanktonHighlights;
+    public UnityEvent OnPlanktonCountAssess;
+    public UnityEvent OnPlanktonCountCorrect;
+    public UnityEvent OnPlanktonCountCorrectFirstTry;
     private bool HighLightPlankton = false;
-    private bool ResetAfterTryingAgain = false;
+    private int tries = 0;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        EnablePlanktonHighlights ??= new UnityEvent();
+        DisablePlanktonHighlights ??= new UnityEvent();
+        OnPlanktonCountAssess ??= new UnityEvent();
+        OnPlanktonCountCorrect ??= new UnityEvent();
+        OnPlanktonCountCorrectFirstTry ??= new UnityEvent();
+
         if (planktonNotepad == null)
             Debug.LogError("Plankton notepad is not set. Microscope task will not work!");
 
@@ -28,122 +37,110 @@ public class NPCMicroscopeTask : MonoBehaviour
 
         objectPositions = ObjectPositions.Instance;
 
+        dialogueBoxController.m_DialogueChanged.AddListener(OnDialogueChanged);
         ButtonSpawner.OnAnswer += ButtonSpawner_OnAnswer;
     }
 
-    private bool haveBeenReset = false;
-    private float startTime = 0;
-    private void Update()
+    private bool _correctAnswer = false;
+    private void OnDialogueChanged(string npcName, string dialogueTree, int section, int index)
     {
-        /*if (dialogueBoxController.dialogueTreeRestart.name != "Introduction" || (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue"))
-            return;*/
 
-        // checking if NPC is currently letting the player select task. if so, reset the microscope task. 
+        // checking if NPC is currently letting the player select task, or if the player wants to try again. if so, reset the microscope task. 
         if ((dialogueBoxController.dialogueTreeRestart.name == "Introduction" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[0])
             ||
-            (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0]))
+            (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
+            || 
+            (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue") && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].branchPoint.question && _correctAnswer)
         {
-            // prevent uneccessary resources spent on constantly resetting objects (the operations included are expensive)
-            if (haveBeenReset)
-                return;
-
             // resetting water sample, counter, note sheet, and informational posters
             ResetWaterSample();
             ResetHandheldCounter();
             ResetPosters();
             ResetPlanktonNoteSheet();
-
-            haveBeenReset = true;
-        }
-        else
-            haveBeenReset = false;
-
-        // reset microscope task if the player chose to try again after failing or succeeding in counting plankton
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].branchPoint.question && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            if (ResetAfterTryingAgain)
-            {
-                // resetting water sample, counter, note sheet, and informational posters
-                ResetWaterSample();
-                ResetHandheldCounter();
-                ResetPosters();
-                ResetPlanktonNoteSheet();
-
-                ResetAfterTryingAgain = false;
-            }
-            return;
+            _correctAnswer = false;
         }
 
         // checking if NPC is currently verifying plankton count. jump to the appropriate dialogue section depending on if correct or incorrect.
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0] && dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue")
-        {
-            if (startTime == 0)
-                startTime = Time.time;
-
-            if (Time.time - startTime >= 8) // npc 'thinks' for 8 seconds
-            {
-                startTime = 0;
-
-                // checking if player has placed slide onto microscope
-                if (slide == null)
-                {
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue");
-                    return;
-                }
-
-                // checking all three plankton count answers
-                bool correct = true;
-                for (int i = 0; i < 3; i++)
-                {
-                    if (!planktonNotepad.VerifyAnswer(i))
-                        correct = false;
-                }
-                
-                if (correct)
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 5, "MicroscopeDialogue");
-                else
-                {
-                    // dynamically adding dialogue with correct answers. this could be a risky operation!
-                    dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[0] =
-                        $"I counted {slide.GetTotalAmountOfChaetoceros()} Chaetoceros diatom, " +
-                        $"{slide.GetTotalAmountOfPseudoNitzschia()} Pseudo-nitzschia diatom, " +
-                        $"and {slide.GetTotalAmountOfSkeletonema()} Skeletonema diatom.";
-
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 6, "MicroscopeDialogue");    
-                }
-            }
-            return;
-        }
+        if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
+            StartCoroutine(nameof(NPCVerifyAnswer));
 
         // checking if NPC is attempting to highlight plankton
         if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[10].dialogue[0])
+            StartCoroutine(nameof(NPCHighlightPlankton));
+    }
+
+    /// <summary>
+    /// Coroutine that makes NPC wait a little before verifying the player's answers
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator NPCVerifyAnswer()
+    {
+        tries++;
+
+        OnPlanktonCountAssess.Invoke(); // complete step in tablet
+
+        yield return new WaitForSeconds(8); // NPC 'thinks' for 8 seconds
+
+        // checking if player has placed slide onto microscope
+        if (slide == null)
         {
-            if (startTime == 0)
-                startTime = Time.time;
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue", 0);
+            yield break;
+        }
 
-            if (Time.time - startTime >= 5) // npc 'thinks' for 8 seconds
-            {
-                startTime = 0;
+        // checking all three plankton count answers
+        bool correct = true;
+        for (int i = 0; i < 3; i++)
+        {
+            if (!planktonNotepad.VerifyAnswer(i))
+                correct = false;
+        }
+        _correctAnswer = correct; // prevent resetting task-related objects in OnDialogueChanged if the player answered incorrectly and wants to try again
 
-                // checking if player has placed slide onto microscope
-                if (slide == null)
-                {
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue");
-                    return;
-                }
+        if (correct)
+        {
+            OnPlanktonCountCorrect.Invoke(); // complete step in tablet
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 5, "MicroscopeDialogue", 0);
+            if (tries < 2)
+                OnPlanktonCountCorrectFirstTry.Invoke();
+        }
+        else
+        {
+            // dynamically adding dialogue with correct answers. this could be a risky operation!
+            dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[0] =
+                $"I counted {slide.GetTotalAmountOfChaetoceros()} Chaetoceros diatom, " +
+                $"{slide.GetTotalAmountOfPseudoNitzschia()} Pseudo-nitzschia diatom, " +
+                $"and {slide.GetTotalAmountOfSkeletonema()} Skeletonema diatom.";
 
-                // highlighting plankton
-                if (HighLightPlankton)
-                {
-                    EnablePlanktonHighlights.Invoke();
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 11, "MicroscopeDialogue");
-                }     
-                else
-                {
-                    DisablePlanktonHighlights.Invoke();
-                    dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 12, "MicroscopeDialogue");
-                }   
-            }
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 6, "MicroscopeDialogue", 0);
+        }
+    }
+
+    /// <summary>
+    /// Coroutine that makes the NPC wait a bit before highlighting Plankton
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator NPCHighlightPlankton()
+    {
+        yield return new WaitForSeconds(5); // NPC 'thinks' for 5 seconds
+
+        // checking if player has placed slide onto microscope
+        if (slide == null)
+        {
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue", 0);
+            yield break;
+        }
+
+        // highlighting plankton
+        if (HighLightPlankton)
+        {
+            EnablePlanktonHighlights.Invoke();
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 11, "MicroscopeDialogue", 0);
+        }
+        else
+        {
+            DisablePlanktonHighlights.Invoke();
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 12, "MicroscopeDialogue", 0);
         }
     }
 
@@ -205,19 +202,14 @@ public class NPCMicroscopeTask : MonoBehaviour
             else
                 HighLightPlankton = false;
         }
-
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].branchPoint.question 
-            || 
-            dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[6].branchPoint.question)
-        {
-            if (answer == "Try again" || answer == "Yes")
-                ResetAfterTryingAgain = true;
-        }
     }
 
-    public void SetCurrentSlideWithGrid(MicroscopeSlideWithGrid slide)
-        { this.slide = slide; }
+    public void SetCurrentSlideWithGrid(MicroscopeSlideWithGrid slide) => this.slide = slide;
 
-    public void RemoveCurrentSlide()
-        { this.slide = null; }
+    public void RemoveCurrentSlide() => this.slide = null;
+
+    private void OnDestroy()
+    {
+        ButtonSpawner.OnAnswer -= ButtonSpawner_OnAnswer;
+    }
 }

@@ -31,6 +31,11 @@ public class NPCSpawner : MonoBehaviour
         // set talking topics aka. dialogueTrees
         SetConversation(newNPC, npcSO.DialogueTreesSO, npcSO.DialogueTreeJSON);
         spawnedNpc = newNPC;
+        
+        if (npcSO.WithoutDialogue)
+        {
+            newNPC.GetComponentInChildren<BoxCollider>().enabled = false;
+        }
         // return the NPC
         return newNPC;
     }

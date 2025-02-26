@@ -1,16 +1,16 @@
 using System;
 using System.Collections;
-using System.Net.Mime;
-using BNG;
 using TMPro;
 using UnityEngine;
 // Import of the TTS namespace
 using Meta.WitAi.TTS.Utilities;
-using Unity.VisualScripting;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
-using Button = UnityEngine.UIElements.Button;
-using Image = UnityEngine.UIElements.Image;
+using UnityEngine.Events;
+
+// This event will be called when the dialogue changes
+[System.Serializable]
+public class DialogueChanged : UnityEvent<string, string, int, int>
+{
+}
 
 public class DialogueBoxController : MonoBehaviour
 {
@@ -41,7 +41,9 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector]public DialogueTree dialogueTreeRestart;
     public bool dialogueEnded;
     public int timesEnded = 0;
-    private GameObject _pointingController;
+    private PointingScript _pointingScript;
+   
+    public DialogueChanged m_DialogueChanged;
 
     private void Awake() 
     {
@@ -59,7 +61,12 @@ public class DialogueBoxController : MonoBehaviour
 
     private void Start()
     {
-        _pointingController = GameObject.Find("PointingController");
+        if(m_DialogueChanged == null)
+        {
+            m_DialogueChanged = new DialogueChanged();
+        }
+
+        _pointingScript = GetComponent<PointingScript>();
         dialogueEnded = false;
         // Assign the event camera
         if (_dialogueCanvas != null)
@@ -104,7 +111,7 @@ public class DialogueBoxController : MonoBehaviour
     }
 
 
-    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name) 
+    public void StartDialogue(DialogueTree dialogueTree, int startSection, string name, int element) 
     {
         dialogueIsActive = true;
         // stop I-have-something-to-tell-you-animation and start talking
@@ -115,64 +122,72 @@ public class DialogueBoxController : MonoBehaviour
         _dialogueBox.SetActive(true);
         OnDialogueStarted?.Invoke(name);
         _activatedCount = 0;
-        StartCoroutine(RunDialogue(dialogueTree, startSection));
+        StartCoroutine(RunDialogue(dialogueTree, startSection, element));
         _exitButton.SetActive(true);
 
     }
 
-    IEnumerator RunDialogue(DialogueTree dialogueTree, int section)
+    IEnumerator RunDialogue(DialogueTree dialogueTree, int section, int element)
     {
         // Make the "Speak" restart tree the current tree
         dialogueTreeRestart = dialogueTree;
-        // Reset the dialogue box dimensions from "Speak" button dimensions
-        backgroundRect.sizeDelta = new Vector2(160,100);
-        dialogueTextRect.sizeDelta = new Vector2(150,60);
+        // Reset the dialogue box dimensions from "Speak" button dimensionsww
+        backgroundRect.sizeDelta = new Vector2(160, 100);
+        dialogueTextRect.sizeDelta = new Vector2(150, 60);
+        
+        int dialogueSection = 0;
+        
+        // -1 means that the dialogue was a branchpoint and the script will skip to loading the branchpoint, instead of the standard dialogue when returning to the section
+        if (element != -1)
+        {
+          for (int i = element; i < dialogueTree.sections[section].dialogue.Length; i++)
+          {
+              _pointingScript.ResetDirection(_animator.transform);
+              _animator.SetBool(_isPointingHash, false);
+              // Start talking animation
+              _animator.SetBool(_isTalkingHash, true);
+              StartCoroutine(revertToIdleAnimation());
+              _dialogueText.text = dialogueTree.sections[section].dialogue[i];
+              _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
+              TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+              // Invoke the dialogue changed event
+              m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, i);
+              _skipLineButton.SetActive(true);
 
-        for (int i = 0; i < dialogueTree.sections[section].dialogue.Length; i++) 
-        {   
-            if (_pointingController != null && dialogueTree.sections[section].point)
-            {
-                _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
-            }
-            
-            _animator.SetBool(_isPointingHash, false);
-            // Start talking animation
-            _animator.SetBool(_isTalkingHash, true);
-            StartCoroutine(revertToIdleAnimation());
-            _dialogueText.text = dialogueTree.sections[section].dialogue[i];
-            _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = true;
-            TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
-            _skipLineButton.SetActive(true);
-            
-            
-            // Check if the current section should have disabled the skip line button
-            if (dialogueTree.sections[section].disabkeSkipLineButton)
-            {
-                _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
-            }
-            // Check if the current dialogue section should have the NPC pointing
-            if (dialogueTree.sections[section].point)
-            {
-                if (_pointingController != null)
-                {
-                    _pointingController.GetComponent<PointingController>().ChangeDirection(section, talkingNpc: this.gameObject);
-                    _animator.SetBool(_isTalkingHash, false);
-                    _animator.SetBool(_isPointingHash, true);
-                }
-                else
-                {
-                    Debug.Log("PointingController not found in the scene");
-                }
-               
-            }
-            
-            while (!_skipLineTriggered)
-            {
-                
-                _exitButton.SetActive(true);
-                yield return null;
-            }
-            _skipLineTriggered = false;
+
+              // Check if the current section should have disabled the skip line button
+              if (dialogueTree.sections[section].disabkeSkipLineButton)
+              {
+                  _skipLineButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
+              }
+              
+              // Check if the current dialogue section should have the NPC pointing
+              string pointAt = dialogueTree.sections[section].pointAt;
+              if (pointAt != null && !pointAt.Equals(string.Empty))
+              {
+                  bool directionChanged = _pointingScript.ChangeDirection(dialogueTree.sections[section].pointAt, _animator.transform);
+                  // Make sure the NPC is looking at the object before the pointing animation is started
+                  if (directionChanged)
+                  {
+                      _animator.SetBool(_isTalkingHash, false);
+                      _animator.SetBool(_isPointingHash, true);
+                  }
+              }
+
+              while (!_skipLineTriggered)
+              {
+                  _exitButton.SetActive(true);
+                  yield return null;
+              }
+              _skipLineTriggered = false;
+              dialogueSection = section;
+          }   
+        }
+
+        string walkTurnDestination = dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue;
+        if (walkTurnDestination != null && !walkTurnDestination.Equals(string.Empty))
+        {
+            GetComponent<WalkingNpc>().WalkPath(dialogueTree.sections[section].walkOrTurnTowardsAfterDialogue);
         }
         
         if (dialogueTree.sections[section].endAfterDialogue)
@@ -185,6 +200,8 @@ public class DialogueBoxController : MonoBehaviour
         }
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
         TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+        // Invoke the dialogue changed event
+        m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, dialogueSection, -1);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
         while (_answerTriggered == false)
         {
@@ -195,6 +212,13 @@ public class DialogueBoxController : MonoBehaviour
         _answerTriggered = false;
         _exitButton.SetActive(false);
         _skipLineButton.SetActive(false);
+
+        walkTurnDestination = dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer;
+        if (walkTurnDestination != null && !walkTurnDestination.Equals(string.Empty))
+        {
+            GetComponent<WalkingNpc>().WalkPath(dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer);
+        }
+
         if (dialogueTree.sections[section].branchPoint.answers[_answerIndex].endAfterAnswer) {
             // Exit conversation if the answer is set to exit after answer
             dialogueEnded = true;
@@ -203,7 +227,7 @@ public class DialogueBoxController : MonoBehaviour
             ExitConversation();
         } else {
             // Continue to section of the dialogue the answer points to
-            StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement));
+            StartCoroutine(RunDialogue(dialogueTree, dialogueTree.sections[section].branchPoint.answers[_answerIndex].nextElement, 0));
         }
     }
 
@@ -249,9 +273,9 @@ public class DialogueBoxController : MonoBehaviour
         // Reveals the selectable answers and sets their text values
         buttonSpawner.spawnAnswerButtons(branchPoint.answers);
         _animator.SetBool(_isPointingHash, false);
-        if (_pointingController != null )
+        if (_pointingScript != null )
         {
-            _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
+            _pointingScript.ResetDirection(_animator.transform);
         }
     }
 
@@ -286,9 +310,9 @@ public class DialogueBoxController : MonoBehaviour
         // stop talk-animation
         _animator.SetBool(_isTalkingHash, false);
         _animator.SetBool(_isPointingHash, false);
-        if (_pointingController != null)
+        if (_pointingScript != null)
         {
-            _pointingController.GetComponent<PointingController>().ResetDirection(talkingNpc: this.gameObject);
+            _pointingScript.ResetDirection(_animator.transform);
         }
         dialogueIsActive = false;
         ResetBox();

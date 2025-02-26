@@ -43,17 +43,7 @@ namespace Task
         public int Points { get => _points; set => _points = value; }
         public List<Skill> RelatedSkills { get => _relatedSkills; set => _relatedSkills = value; }
 
-        private void Awake()
-        {
-            foreach (Step step in StepList)
-            {
-                step.ParentSubtask = this;
-                step.setStepNumber(StepList.IndexOf(step) + 1);
-
-            }
-        }
-        
-        
+               
         
         //it returns the completed status, if the autocomplete box is selected it will return true when all its steps are completed
         public bool Compleated()

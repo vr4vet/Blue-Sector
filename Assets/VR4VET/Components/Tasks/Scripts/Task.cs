@@ -33,13 +33,6 @@ namespace Task
         public string TaskName { get => _taskName; set => _taskName = value; }
         public string Feedback { get => _feedback; set => _feedback = value; }
 
-        private void Awake()
-        {
-            foreach (Subtask sub in _subtasks)
-            {
-                sub.ParentTask = this;
-            }
-        }
         
         public void Compleated(bool value)
         {

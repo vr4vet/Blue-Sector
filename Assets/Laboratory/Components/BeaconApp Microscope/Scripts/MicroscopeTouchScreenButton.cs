@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MicroscopeTouchScreenButton : MonoBehaviour
 {
     private bool IsTouched = false;
     [SerializeField] private Input input;
+    private Button _button;
+    private bool _screenControlsStepCompleted = false;
     private enum Input
     {
         Up, Down, Left, Right, Magnify, Minimize, Faster, Slower, InfoSubmit
@@ -13,6 +16,7 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
     private void Start()
     {
         MicroscopeMonitor = transform.root.GetComponentInChildren<MicroscopeMonitor>();
+        _button = GetComponent<Button>();
     }
 
     private void FixedUpdate()
@@ -43,10 +47,10 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // check if player finger tip
-        if (other.name == "tip_collider_i")
+        if (other.name.Equals("hands_coll:b_r_index3") || other.name.Equals("hands_coll:b_r_index3 (1)")/*other.name == "tip_collider_i"*/)
         {
-            //MicroscopeMonitor.SetScrollSpeedConstant(0.001f); // default speed of 0.01 is too quick for a simple button press
-            //MicroscopeMonitor.SetScrollSpeed();
+
+            CompleteScreenControlsStep();
 
             IsTouched = true;
                 
@@ -61,14 +65,25 @@ public class MicroscopeTouchScreenButton : MonoBehaviour
                         MicroscopeMonitor.Minimize();
                     break;
                 case Input.Faster:
+                    CompleteScreenControlsStep();
                     MicroscopeMonitor.IncreaseScrollSpeed();
                     break;
                 case Input.Slower:
+                    CompleteScreenControlsStep();
                     MicroscopeMonitor.DecreaseScrollSpeed();
                     break;
                 default:
                     break;
             }
+        }
+    }
+
+    private void CompleteScreenControlsStep()
+    {
+        if (!_screenControlsStepCompleted)
+        {
+            _button.onClick.Invoke();
+            _screenControlsStepCompleted = true;
         }
     }
 

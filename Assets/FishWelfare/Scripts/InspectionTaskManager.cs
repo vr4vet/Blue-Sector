@@ -4,27 +4,31 @@ using UnityEngine;
 using Tablet;
 using BNG;
 using Task;
+using UnityEngine.Events;
 
 public class InspectionTaskManager : MonoBehaviour
 {
     private int inspectedFishCount = 0;
     private int inspectionTarget;
-    private string activityInspect = "Inspect the fish";
-    private string skill1 = "Observant";
-    private TaskHolder taskHolder;
     private Fish selectedFish;
-    private List<Fish> inspectedFish = new List<Fish>();
+    private List<Fish> inspectedFish = new();
     private ScreenController screenController;
     [SerializeField]
-    private List<Fish> fishList = new List<Fish>();
+    private List<Fish> fishList = new();
     public RatingInterfaceController ratingInterfaceController;
 
     public LiceInterfaceController liceInterfaceController;
 
+    // event to trigger "Wakey wakey" skill when all fish are placed in the wake up tank
+    public UnityEvent m_OnAllFishWakeupTank;
+    private bool _allFishInWakeupTank = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        taskHolder = GameObject.FindObjectOfType<TaskHolder>();
+        if (m_OnAllFishWakeupTank == null)
+            m_OnAllFishWakeupTank = new();
+
         screenController = GameObject.FindObjectOfType<ScreenController>();
         inspectionTarget = fishList.Count;
         selectedFish = fishList[0];
@@ -34,13 +38,18 @@ public class InspectionTaskManager : MonoBehaviour
     {
         if(AddFish(fish)){
             inspectedFishCount++;
-            if(inspectedFishCount == inspectionTarget){
-                /*taskHolder.AddPoints(activityInspect, skill1, 10);*/
+            if(inspectedFishCount == inspectionTarget)
                 screenController.DrawScreen(fish);
-            } else {
+            else
                 screenController.DrawScreen(fish);
-            }
-        }   
+        }
+        
+        // invoke event to unlock "Wakey wakey" skill badge
+        if (!_allFishInWakeupTank && inspectedFishCount >= inspectionTarget)
+        {
+            _allFishInWakeupTank = true;
+            m_OnAllFishWakeupTank.Invoke();
+        }
     }
 
     public void RegressInspection(Fish fish) 
@@ -53,10 +62,10 @@ public class InspectionTaskManager : MonoBehaviour
     public void SetSelectedFish(Fish fish){
         if(selectedFish != fish) {
             selectedFish = fish;
-            ratingInterfaceController.SyncButtons(null);
+            ratingInterfaceController.SyncButtons(null, fish.GetGillDamageGuessed());
             liceInterfaceController.SetLice(selectedFish.markedLice);
         }
-        //Debug.Log("Gilldamage: " + selectedFish.GetGillDamage());
+        Debug.Log("Gilldamage: " + selectedFish.GetGillDamage());
     }
 
     public void SetGuess (int guess) {
@@ -66,12 +75,26 @@ public class InspectionTaskManager : MonoBehaviour
         else {
             selectedFish.SetgillDamageGuessed(guess);
         }
-        //Debug.Log("Guess: " + selectedFish.GetGillDamageGuessed());
+        Debug.Log("Guess: " + selectedFish.GetGillDamageGuessed());
+
+        // invoke event to complete inspection step
+        if (!selectedFish.HasBeenInspected)
+        {
+            selectedFish.HasBeenInspected = true;
+            selectedFish.m_OnInspected.Invoke();
+        }
     }
 
     public void SetLiceCount() {
         selectedFish.markedLice = (int)liceInterfaceController.liceSlider.value;
         liceInterfaceController.CountLice();
+
+        // invoke event to complete inspection step
+        if (!selectedFish.HasBeenInspected)
+        {
+            selectedFish.HasBeenInspected = true;
+            selectedFish.m_OnInspected.Invoke();
+        }
     }
 
     public List<Fish> GetInspectedFish() {
@@ -95,5 +118,14 @@ public class InspectionTaskManager : MonoBehaviour
                 break;
             }
         }
-    }  
+    }
+
+    public void ClearSelectedFish() {
+        // For setting "selectedFish" to null if none is out of any tanks
+        selectedFish = null;
+    }
+
+    public Fish GetSelectedFish() {
+        return selectedFish;
+    }
 }

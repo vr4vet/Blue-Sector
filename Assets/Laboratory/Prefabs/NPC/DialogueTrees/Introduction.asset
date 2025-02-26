@@ -21,9 +21,9 @@ MonoBehaviour:
     - This will be done through multiple steps.  You can measure the fish, dissect
       it and analyze algae from a water sample.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Do you want to learn more about the work that is done here or start
         with the tasks?
@@ -31,9 +31,11 @@ MonoBehaviour:
       - answerLabel: Start with the tasks
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Learn more
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - The fish laboratory is important for gathering information on the health of
       the fish. This information is used to better regulate the feeding and treatment
@@ -47,51 +49,56 @@ MonoBehaviour:
       samples with the microscope, as some plankton found in the water can be harmful
       to the fish.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Are you ready to move on to the instructions?
       answers:
       - answerLabel: Yes
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Can you repeat?
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Now you will choose which task to begin with
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Which task do you want to begin with?
       answers:
       - answerLabel: Calculating condition factor
         nextElement: 3
         endAfterAnswer: 0
-      - answerLabel: Analyzing plankton samples
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Analysing plankton samples
         nextElement: 4
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Dissecting the fish (Still in development)
         nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Follow me to the measuring equipment
     endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: ConditionFactorPath
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: 
       answers: []
   - dialogue:
     - Follow me to the microscope
     endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: MicroscopePath
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: 
       answers: []
