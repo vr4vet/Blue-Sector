@@ -16,12 +16,8 @@ public class TextToSpeechButton : MonoBehaviour
     [SerializeField] private GameObject TTSSpeaker;
     private TTSSpeaker _speaker;
 
-    [Tooltip("The speaker image that is placed somewhere on this object.")]
-    [SerializeField] private Image TargetSpeakerImage;
-    private Sprite _defaultSpeakerImage;
-    private Sprite _speakerImageFull;
-    private Sprite _speakerImageMedium;
-    private Sprite _speakerImageSilent;
+    [Tooltip("Place children speaker icons here in increasing order (speaker without sound waves at index 0)")]
+    [SerializeField] private List<Image> SpeakerIcons;
 
     [Tooltip("The class of the objects' text content. Some canvases use  UnityEngine.UI.Text, while others use TMPro.TMP_Text (TextMeshPro)")]
     [SerializeField] private textType TextType = textType.Text;
@@ -51,14 +47,8 @@ public class TextToSpeechButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // fetching the text-to-speech object, and making SetDefaultSpeakerIcon() listen to the event that fires when voice over is finished
+        // fetching the text-to-speech object
         _speaker = TTSSpeaker.GetComponentInChildren<TTSSpeaker>();
-        _defaultSpeakerImage = TargetSpeakerImage.sprite;
-
-        // loading the different speaker sprites from resources for animating later
-        _speakerImageFull = Resources.Load<Sprite>("Sprites/Button (4)");
-        _speakerImageMedium = Resources.Load<Sprite>("Sprites/Button (5)");
-        _speakerImageSilent = Resources.Load<Sprite>("Sprites/Button (6)");
     }
 
     /// <summary>
@@ -74,14 +64,14 @@ public class TextToSpeechButton : MonoBehaviour
         buttonPressTime = Time.realtimeSinceStartup;
 
         // stop tts if currently running, otherwise manipulate text content before sending to tts service
-        if (_speaker.IsSpeaking)
+        if (_speaker.IsActive)
             _speaker.Stop();
         else
         {
             string fetchedTextContent = FetchTextContent();
             string[] splitTextContent = GenerateSplitTextContent(fetchedTextContent);
             StartCoroutine(_speaker.SpeakQueuedAsync(splitTextContent));
-            StartCoroutine(AnimateSpeaker(0));
+            StartCoroutine(nameof(AnimateSpeaker));
         }
     }
 
@@ -181,31 +171,36 @@ public class TextToSpeechButton : MonoBehaviour
 
     /// <summary>
     /// This method swaps the speaker button icon every half second to animate sound waves while the text-to-speech is talking.
-    /// Unfortunately has to be called repeatedly as a coroutine (in this case recursivley) in order to function when Time.timeScale is 0.
-    /// An example where Time.timeScale is set to 0 is when the main menu pauses the game.
     /// </summary>
     private int step = 0;
-    private IEnumerator AnimateSpeaker(float waitTime)
+    private IEnumerator AnimateSpeaker()
     {
-        yield return new WaitForSecondsRealtime(waitTime);
-
-        if (_speaker.IsActive)
+        while (true)
         {
-            StartCoroutine(AnimateSpeaker(.5f));
+            if (_speaker.IsActive)
+            {
+                SetCurrentSpeakerIcon(step);
+                step = (step + 1) % 3;
+            }
+            else
+            {
+                step = 0;
+                SetCurrentSpeakerIcon(SpeakerIcons.Count - 1); // reset to standard speaker icon with two sound waves ("full" icon)
+                StopCoroutine(nameof(AnimateSpeaker));
+            }
 
-            if (step == 0)
-                TargetSpeakerImage.sprite = _speakerImageSilent;
-            else if (step == 1)
-                TargetSpeakerImage.sprite = _speakerImageMedium;
-            else if (step == 2)
-                TargetSpeakerImage.sprite = _speakerImageFull;
-
-            step = (step + 1) % 3;
+            yield return new WaitForSecondsRealtime(.5f);
         }
-        else
+    }
+
+    private void SetCurrentSpeakerIcon(int step)
+    {
+        for (int i = 0; i < SpeakerIcons.Count; i++)
         {
-            step = 0;
-            TargetSpeakerImage.sprite = _defaultSpeakerImage;
+            if (i == step)
+                SpeakerIcons[i].enabled = true;
+            else
+                SpeakerIcons[i].enabled = false;
         }
     }
 }
