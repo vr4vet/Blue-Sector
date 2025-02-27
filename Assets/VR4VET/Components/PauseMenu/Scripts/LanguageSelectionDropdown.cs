@@ -17,6 +17,9 @@ public class LanguageSelectionDropdown : MonoBehaviour
     TMP_Dropdown m_Dropdown;
     AsyncOperationHandle m_InitializeOperation;
 
+    private int _oldNorwegianIndex, _newNorwegianIndex, _oldEnglishIndex, _newEnglishIndex;
+
+
     void Start() {
         // First we setup the dropdown component.
         m_Dropdown = GetComponent<TMP_Dropdown>();
@@ -44,6 +47,7 @@ public class LanguageSelectionDropdown : MonoBehaviour
         var locales = LocalizationSettings.AvailableLocales.Locales;
         for (int i = 0; i < locales.Count; ++i) {
             var locale = locales[i];
+
             if (LocalizationSettings.SelectedLocale == locale)
                 selectedOption = i;
 
@@ -60,9 +64,19 @@ public class LanguageSelectionDropdown : MonoBehaviour
             m_Dropdown.interactable = true;
         }
 
+        // Removing unsupported languages while keeping track of their old index to make language selection work despite there being fewer elements in options list than there are locales
+        _oldEnglishIndex = options.IndexOf("English");
+        _oldNorwegianIndex = options.IndexOf("norsk");
+
+        options = options.FindAll(x => x.Equals("English") || x.Equals("norsk"));
+
+        _newEnglishIndex = options.IndexOf("English");
+        _newNorwegianIndex = options.IndexOf("norsk");
+
+        // Set up drop down menu
         m_Dropdown.ClearOptions();
         m_Dropdown.AddOptions(options);
-        m_Dropdown.SetValueWithoutNotify(selectedOption);
+        m_Dropdown.SetValueWithoutNotify(ConvertToPauseMenuIndex(selectedOption));
 
         LocalizationSettings.SelectedLocaleChanged += LocalizationSettings_SelectedLocaleChanged;
     }
@@ -71,7 +85,7 @@ public class LanguageSelectionDropdown : MonoBehaviour
         // Unsubscribe from SelectedLocaleChanged so we don't get an unnecessary callback from the change we are about to make.
         LocalizationSettings.SelectedLocaleChanged -= LocalizationSettings_SelectedLocaleChanged;
 
-        var locale = LocalizationSettings.AvailableLocales.Locales[index];
+        var locale = LocalizationSettings.AvailableLocales.Locales[ConvertToLocaleIndex(index)];
         LocalizationSettings.SelectedLocale = locale;
 
         // Resubscribe to SelectedLocaleChanged so that we can stay in sync with changes that may be made by other scripts.
@@ -80,7 +94,31 @@ public class LanguageSelectionDropdown : MonoBehaviour
 
     void LocalizationSettings_SelectedLocaleChanged(Locale locale) {
         // We need to update the dropdown selection to match.
-        var selectedIndex = LocalizationSettings.AvailableLocales.Locales.IndexOf(locale);
+        var selectedIndex = ConvertToLocaleIndex(LocalizationSettings.AvailableLocales.Locales.IndexOf(locale));
         m_Dropdown.SetValueWithoutNotify(selectedIndex);
+    }
+
+    /// <summary>
+    /// Converting from pause menu language settings index to locale index
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    int ConvertToLocaleIndex(int index)
+    {
+        if (index == _newEnglishIndex) { return _oldEnglishIndex; }
+        if (index == _newNorwegianIndex) { return _oldNorwegianIndex; }
+        return _oldEnglishIndex;
+    }
+
+    /// <summary>
+    /// Converting from locale index to pause menu language settings index
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    int ConvertToPauseMenuIndex(int index)
+    {
+        if (index == _oldEnglishIndex) { return _newEnglishIndex; }
+        if (index == _oldNorwegianIndex) { return _newNorwegianIndex; }
+        return _newEnglishIndex;
     }
 }
