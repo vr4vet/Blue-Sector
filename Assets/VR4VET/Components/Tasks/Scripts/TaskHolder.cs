@@ -4,6 +4,8 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
 
 namespace Task
 {
@@ -22,6 +24,12 @@ namespace Task
         [SerializeField] public List<Skill> skillList = new List<Skill>();
 
         [SerializeField] public List<Task> taskList = new List<Task>();
+
+        [Header("Localization string tables")]
+        public LocalizedStringTable LocalizedStringTableTasks;
+        public LocalizedStringTable LocalizedStringTableSubtasks;
+        public LocalizedStringTable LocalizedStringTableSteps;
+        public LocalizedStringTable LocalizedStringTableSkills;
 
         //making the task holder a singleton
         private void Awake()

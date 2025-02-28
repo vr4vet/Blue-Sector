@@ -1,9 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Localization.Tables;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
+using UnityEngine.Localization;
 
 public class UpdatedTabletTaskListLoader : MonoBehaviour
 {
@@ -88,6 +90,8 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
 
         LoadSkillsPage();
         StepPageLoader(_tasks[0].Subtasks[0]);
+
+        LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChanged;
     }
     public void UpdateProgressBar(Task.Task task)
     {
@@ -146,7 +150,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
 
             // Set title to be name of this skill
             TMP_Text skillName = skillBadgesContent.transform.Find("Txt_SkillName").GetComponent<TMP_Text>();
-            skillName.text = skill.Name;
+            skillName.text = LocalizeName(skill);
 
             // Find Badge Image and replace with the Icon for this skill
             GameObject badgeItem = skillBadgesContent.transform.Find("BadgeItem").gameObject;
@@ -189,7 +193,8 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             TaskUI taskUI = item.transform.GetComponentInChildren<TaskUI>();
             taskUI.InitializeInterface(task);
             TMP_Text caption = item.transform.Find("txt_TaskNr").GetComponent<TMP_Text>();
-            caption.text = task.TaskName;
+            caption.text = LocalizeName(task);
+
             Button button = item.transform.Find("btn_Task").GetComponent<Button>();
             GameObject completedButton = item.transform.Find("btn_TaskComplete").gameObject;
             GameObject checkmark = item.transform.Find("img_Checkmark").gameObject;
@@ -229,7 +234,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
 
             TMP_Text caption = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
             // GameObject points = item.transform.Find("PointText").gameObject; points for later
-            caption.text = sub.SubtaskName;
+            caption.text = LocalizeName(sub);
 
             Button button = item.transform.Find("btn_SubTask").GetComponent<Button>();
             GameObject completedButton = item.transform.Find("btn_SubTaskComplete").gameObject;
@@ -256,7 +261,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         activeSubtask = subtask;
         SubtaskPageLoader(activeTask);
 
-        _subtaskNameTab.GetComponent<TMP_Text>().text = subtask.SubtaskName;
+        _subtaskNameTab.GetComponent<TMP_Text>().text = LocalizeName(subtask);
         UpdateProgressBar(activeTask);
 
         //cleaning list before loading the new subtasks
@@ -280,7 +285,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
                 checkCircle.SetActive(true);
             }
             TMP_Text caption = item.transform.Find("txt_Desc").GetComponent<TMP_Text>();
-            caption.text = step.StepName;
+            caption.text = LocalizeName(step);
 
             TMP_Text reps = item.transform.Find("txt_repetitionNr").GetComponent<TMP_Text>();
             if (step.RepetionNumber > 1) reps.text = step.RepetionsCompleated + "/" + step.RepetionNumber;
@@ -289,5 +294,53 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             number.text = step.getStepNumber() + "";
         }
         watchManager.UIChanged.Invoke();
+    }
+
+    /// <summary>
+    /// Checks if the provided object is a Task, Subtask, Step, or Skill,
+    /// and returns the correct localized(translated) version from the correct string table.
+    /// The name is used as the key when looking up the localized value.
+    /// </summary>
+    /// <param name="o"></param>
+    /// <returns></returns>
+    private string LocalizeName(object o)
+    {
+        StringTable stringTable = null;
+        string name = "";
+        if (o is Task.Task task)
+        {
+            stringTable = watchManager.taskHolder.LocalizedStringTableTasks.GetTable();
+            name = task.TaskName;
+        }
+        else if (o is Task.Subtask subtask)
+        {
+            stringTable = watchManager.taskHolder.LocalizedStringTableSubtasks.GetTable();
+            name = subtask.SubtaskName;
+        }
+        else if (o is Task.Step step)
+        {
+            stringTable = watchManager.taskHolder.LocalizedStringTableSteps.GetTable();
+            name = step.StepName;
+        }
+        else if (o is Task.Skill skill)
+        {
+            stringTable = watchManager.taskHolder.LocalizedStringTableSkills.GetTable();
+            name = skill.Name;
+        }
+        else
+            Debug.LogError("Provided object is not of type Task, Subtask, Step, or Skill!");
+
+        return (name != "" && stringTable && stringTable[name].LocalizedValue != "") ? stringTable[name].LocalizedValue : name;
+    }
+
+    private void OnSelectedLocaleChanged(Locale locale)
+    {
+        StepPageLoader(activeSubtask);
+        LoadSkillsPage();
+    }
+
+    private void OnDestroy()
+    {
+        LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChanged;
     }
 }
