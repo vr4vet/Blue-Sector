@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
@@ -10,15 +11,18 @@ public class CutFishWrong : MonoBehaviour
     private DialogueBoxController _dialogueBoxController;
     private ConversationController _conversationController;
     [SerializeField] private DialogueTree _errorTree;
+    private bool _returnInvoked = false;
 
     private string _currentDialogue = "", _oldDialogue = "";
     private int _oldSection, _oldIndex, _currentSection, _currentIndex = 0;
 
     private void Update()
     {
-        if (_currentDialogue == "CutFishWrong" && !_dialogueBoxController.dialogueIsActive)
+        if (_currentDialogue == "CutFishWrong" && !_returnInvoked)
         {
-            ReturnToBleedingInstruction();
+            _returnInvoked = true;
+            Invoke(nameof(ReturnToBleedingInstruction), 5.0f);
+            
         }
     }
 
@@ -52,20 +56,25 @@ public class CutFishWrong : MonoBehaviour
         {
             _dialogueBoxController.StartDialogue(_errorTree, 2, "Bleeding station guide Bernard", 0);
         }
-    }
+    } 
 
     private void ReturnToBleedingInstruction()
     {
-        _dialogueBoxController.StartDialogue(GetDialogueTreeFromName("BleedingInstruction"), 4, "Bleeding station guide Bernard", 0);
-        _dialogueBoxController.SkipLine();
+        _dialogueBoxController.StartDialogue(GetDialogueTreeFromName("BleedingInstruction"), 4, "Bleeding station guide Bernard", -1);
+        _returnInvoked = false;
     }
 
     private void OnDialogueChanged(string npcName, string dialogueTree, int section, int index)
     {
         // The variables for the old dialogue are set before the new dialogue is set, making it represent the previous duologue.
-        _oldDialogue = _currentDialogue;
-        _oldSection = _currentSection;
-        _oldIndex = _currentIndex;
+        if (dialogueTree != "CutFishWrong" || _currentDialogue != "CutFishWrong")
+        {
+           _oldDialogue = _currentDialogue;
+           _oldSection = _currentSection;
+           _oldIndex = _currentIndex;
+           _returnInvoked = false;
+        }
+        
         // The variables store information about the current dialogue.
         _currentDialogue = dialogueTree;
         _currentSection = section;
@@ -85,13 +94,5 @@ public class CutFishWrong : MonoBehaviour
         if (returnTree != null)
             return returnTree;
         return null;
-    }
-
-    private void OnDialogueEnded()
-    {
-        if (_currentDialogue == "CutFishWrong" && _dialogueBoxController.dialogueEnded)
-        {
-            ReturnToBleedingInstruction();
-        }
     }
 }
