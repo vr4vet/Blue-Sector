@@ -309,28 +309,36 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         string name = "";
         if (o is Task.Task task)
         {
-            stringTable = watchManager.taskHolder.LocalizedStringTableTasks.GetTable();
+            if (!watchManager.taskHolder.LocalizedStringTableTasks.IsEmpty)
+                stringTable = watchManager.taskHolder.LocalizedStringTableTasks.GetTable();
+
             name = task.TaskName;
         }
         else if (o is Task.Subtask subtask)
         {
-            stringTable = watchManager.taskHolder.LocalizedStringTableSubtasks.GetTable();
+            if (!watchManager.taskHolder.LocalizedStringTableSubtasks.IsEmpty)
+                stringTable = watchManager.taskHolder.LocalizedStringTableSubtasks.GetTable();
+
             name = subtask.SubtaskName;
         }
         else if (o is Task.Step step)
         {
-            stringTable = watchManager.taskHolder.LocalizedStringTableSteps.GetTable();
+            if (!watchManager.taskHolder.LocalizedStringTableSteps.IsEmpty)
+                stringTable = watchManager.taskHolder.LocalizedStringTableSteps.GetTable();
+
             name = step.StepName;
         }
         else if (o is Task.Skill skill)
         {
-            stringTable = watchManager.taskHolder.LocalizedStringTableSkills.GetTable();
+            if (!watchManager.taskHolder.LocalizedStringTableSkills.IsEmpty)
+                stringTable = watchManager.taskHolder.LocalizedStringTableSkills.GetTable();
+
             name = skill.Name;
         }
         else
             Debug.LogError("Provided object is not of type Task, Subtask, Step, or Skill!");
 
-        return (name != "" && stringTable && stringTable[name].LocalizedValue != "") ? stringTable[name].LocalizedValue : name;
+        return (stringTable && stringTable[name].LocalizedValue != null) ? stringTable[name].LocalizedValue : name;
     }
 
     private void OnSelectedLocaleChanged(Locale locale)
