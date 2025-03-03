@@ -25,7 +25,7 @@ public class FactoryFishState : MonoBehaviour
     public GuttingState guttingState;
     public bool ContainsMetal = false;
     public bool Stunned;
-    public bool correctlyBled;
+    public bool correctlyBled;    
 
     // ------------ Editor Variables ------------
 
@@ -35,7 +35,7 @@ public class FactoryFishState : MonoBehaviour
     // ------------------ Private Variables ------------------
 
     public Material metalMat;
-
+    private GameObject _errorController;
     // ------------ Unity Functions ------------
 
     void Awake()
@@ -55,14 +55,21 @@ public class FactoryFishState : MonoBehaviour
         {
             StartCoroutine(AliveFish());
         }
-    }
+        
 
-    // ------------ Public Functions ------------
+        _errorController = GameObject.Find("ErrorController");
 
-    /// <summary>
-    /// When the player cuts the gills of the fish.
-    /// </summary>
-    public void CutFishGills()
+
+       
+
+}
+
+// ------------ Public Functions ------------
+
+/// <summary>
+/// When the player cuts the gills of the fish.
+/// </summary>
+public void CutFishGills()
     {
         Renderer fishMaterial = gameObject.transform.GetChild(0).GetComponent<Renderer>();
         
@@ -71,6 +78,7 @@ public class FactoryFishState : MonoBehaviour
             if (!GameManager.Instance)
                 return;
             GameManager.Instance.PlaySound("incorrect");
+            _errorController.GetComponent<CutFishWrong>().CutBadFish();
             return;
         }
         if (!Stunned && !correctlyBled)
@@ -80,6 +88,7 @@ public class FactoryFishState : MonoBehaviour
             if (!GameManager.Instance)
                 return;
             GameManager.Instance.PlaySound("incorrect");
+            _errorController.GetComponent<CutFishWrong>().CutNotStunnedFish();
             return;
         }
         if (Stunned && !correctlyBled)
