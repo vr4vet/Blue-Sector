@@ -338,6 +338,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         else
             Debug.LogError("Provided object is not of type Task, Subtask, Step, or Skill!");
 
+        // return localized string if found, otherwise default to the name attribute of the task, skill, step, or skill
         return (stringTable && stringTable[name].LocalizedValue != null) ? stringTable[name].LocalizedValue : name;
     }
 
