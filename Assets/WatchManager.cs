@@ -39,11 +39,13 @@ public class WatchManager : MonoBehaviour
             Destroy(gameObject);
             
         actionManager = ActionManager.Instance;
+        Debug.Log("WatchManager initialized.");
     }
 
     void Start()
     {
         task = taskHolder.taskList[0];
+        Debug.Log("WatchManager started.");
 
         // Set up tasks, subtasks, and steps. Reset subtask and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Task task in taskHolder.taskList)

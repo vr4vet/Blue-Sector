@@ -5,26 +5,24 @@ using Task;
 public class ActionManager : MonoBehaviour
 {
     public static ActionManager Instance;
-    private List<Task> taskList;
+    private List<Task.Task> taskList;
 
     private void Awake()
     {
         // Ensure only one instance of ActionManager exists
         if (Instance == null)
-        {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
+
+        else if (Instance != this)
             Destroy(gameObject);
-        }
+
+        Debug.Log("ActionManager initialized.");
 
         // Initialize the task list
-        taskList = new List<Task>();
+        taskList = new List<Task.Task>();
     }
 
-    public void LogTaskHierarchy(List<Task> tasks)
+    public void LogTaskHierarchy(List<Task.Task> tasks)
     {
         taskList = tasks;
         Debug.Log("Task hierarchy logged.");
