@@ -43,7 +43,7 @@ public class CutFishWrong : MonoBehaviour
 
     public void CutBadFish() 
     {
-        if (_currentDialogue == "BleedingInstruction" || _currentDialogue == "CutFishWrong")// && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
+        if (_currentDialogue == "BleedingInstruction" || _currentDialogue == "CutFishWrong")
         {
             _dialogueBoxController.StartDialogue(_errorTree, 1, "Bleeding station guide Bernard", 0); 
         }
@@ -52,11 +52,19 @@ public class CutFishWrong : MonoBehaviour
     public void ForgotToCutFish()
     {
         Debug.Log(_currentDialogue);
-        if (_currentDialogue == "BleedingInstruction" || _currentDialogue == "CutFishWrong")// && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
+        if (_currentDialogue == "BleedingInstruction" || _currentDialogue == "CutFishWrong")
         {
             _dialogueBoxController.StartDialogue(_errorTree, 2, "Bleeding station guide Bernard", 0);
         }
     } 
+    
+    public void MetalInFish()
+    {
+        if (_currentDialogue == "BleedingInstruction" || _currentDialogue == "CutFishWrong")
+        {
+            _dialogueBoxController.StartDialogue(_errorTree, 3, "Bleeding station guide Bernard", 0);
+        }
+    }
 
     private void ReturnToBleedingInstruction()
     {

@@ -25,6 +25,7 @@ public class CheckIfCut : MonoBehaviour
                 Tier fishTier = fish.GetComponent<FactoryFishState>().fishTier;
                 bool Stunned = fish.GetComponent<FactoryFishState>().Stunned;
                 bool correctlyBled = fish.GetComponent<FactoryFishState>().correctlyBled;
+                bool containsMetal = fish.GetComponent<FactoryFishState>().ContainsMetal;
 
                 if (fishTier == Tier.BadQuality)
                 {
@@ -39,6 +40,11 @@ public class CheckIfCut : MonoBehaviour
                 if (Stunned && !correctlyBled)
                 {
                     _errorController.GetComponent<CutFishWrong>().ForgotToCutFish();
+                    return;
+                }
+                if (containsMetal)
+                {
+                    _errorController.GetComponent<CutFishWrong>().MetalInFish();
                     return;
                 }
             }
