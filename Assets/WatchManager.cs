@@ -4,10 +4,12 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using Task;
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class WatchManager : MonoBehaviour
 {
     public static WatchManager Instance;
+    private ActionManager actionManager;
     [SerializeField] public Task.TaskHolder taskHolder;
     [SerializeField] private UpdatedTabletTaskListLoader taskListLoader;
     [SerializeField] public UpdatedTabletPanelManager panelManager;
@@ -62,6 +64,7 @@ public class WatchManager : MonoBehaviour
             skill.Lock();
         }
         UpdateCurrentSubtask(FirstSubTask);
+        actionManager.LogTaskHierarchy(taskHolder.taskList);
     }
 
     public void invokeBadge(Task.Skill badge)
@@ -73,6 +76,7 @@ public class WatchManager : MonoBehaviour
     {
 
         subtask.SetCompleated(true);
+        actionManager.LogSubtaskCompletion(subtask.SubtaskName, subtask.Description);
     }
 
     public void CompleteStep(Task.Step step)
@@ -100,6 +104,8 @@ public class WatchManager : MonoBehaviour
                 step.CurrentStep = false;
                 UpdateCurrentSubtask(sub);
             }
+
+            actionManager.LogStepCompletion(step.StepName, step.RepetionNumber);
         }
         
         if (sub.Compleated())
@@ -109,6 +115,7 @@ public class WatchManager : MonoBehaviour
             if (task.Compleated())
             {
                 TaskCompleted.Invoke(task);
+                actionManager.LogTaskCompletion(task.TaskName, task.Description);
             }
 
             Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
