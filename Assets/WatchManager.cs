@@ -37,6 +37,8 @@ public class WatchManager : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(gameObject);
+            
+        actionManager = ActionManager.Instance;
     }
 
     void Start()
