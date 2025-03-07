@@ -209,29 +209,18 @@ public class AnimationConstraintsController : MonoBehaviour
 
                 if (_previousPointingObject != currentPointingObject)
                 {
-                    // Make sure there is only one source object for the right arm constraint
-                    if (rightArmCon.data.sourceObjects.Count > 0)
-                    {
-                        var resetSourceObjects = rightArmCon.data.sourceObjects;
-                        resetSourceObjects.Clear();
-                        rightArmCon.data.sourceObjects = resetSourceObjects;
-                    }
-                
-                    var sourceObjects = rightArmCon.data.sourceObjects;
-                
-                    var newSource = new WeightedTransform(currentPointingObject, 1.0f);
-                    sourceObjects.Add(newSource);
-                    rightArmCon.data.sourceObjects = sourceObjects; 
-                    
-                    // Rebuild the rig to apply the changes
-                    rigBuilder.Build(); 
-                    
+                    ChangeTarget(rightArmCon, currentPointingObject);
+                    ChangeTarget(headCon, currentPointingObject);
+                    ChangeTarget(spineCon, currentPointingObject);
                     // Update the previous pointing object to the current one
                     _previousPointingObject = currentPointingObject;
+                    
                 }
                 
                 // Enable the right arm constraint
                 if (rightArmCon.weight < 1.0f) rightArmCon.weight += 0.01f;
+                if (headCon.weight < 0.4f) headCon.weight += 0.001f;
+                if (spineCon.weight < 0.3f) spineCon.weight += 0.001f;
                 
                 // Enable the right forearm constraint at specific weights for each finger
                 foreach (ChainIKConstraint finger in fingerConstraints)
@@ -277,6 +266,11 @@ public class AnimationConstraintsController : MonoBehaviour
             // Add the code to control the multi-aim constraint here
             if (isTalking)
             {
+                if (headCon.data.sourceObjects[0].transform.name != targetRef.transform.name)
+                {
+                    ChangeTarget(headCon, targetRef.transform);
+                    ChangeTarget(spineCon, targetRef.transform);
+                }
                 // Get the direction between player and NPC
                 Vector3 playerDirection = targetRef.transform.position - transform.position;
                 playerDirection.Normalize();
@@ -297,12 +291,33 @@ public class AnimationConstraintsController : MonoBehaviour
             }
             else
             {
-                // Disable the multi-aim constraint when character is not talking
-                headCon.weight -= 0.002f;
-                spineCon.weight -= 0.002f;
+                if (!isPointing)
+                {
+                    // Disable the multi-aim constraint when character is not talking
+                    headCon.weight -= 0.002f;
+                    spineCon.weight -= 0.002f; 
+                }
             }
         } else {
             animator = GetComponentInChildren<Animator>();
         }
     }
+
+    private void ChangeTarget(MultiAimConstraint con, Transform target)
+    {
+        if (con.data.sourceObjects.Count > 0)
+        {
+            var resetSourceObjects = con.data.sourceObjects;
+            resetSourceObjects.Clear();
+            con.data.sourceObjects = resetSourceObjects;
+        }
+        
+        var sourceObjects = con.data.sourceObjects;
+        var newSource = new WeightedTransform(target, 1.0f);
+        sourceObjects.Add(newSource);
+        con.data.sourceObjects = sourceObjects;
+
+        rigBuilder.Build();
+    }
+
 }
