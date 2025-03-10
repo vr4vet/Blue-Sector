@@ -19,8 +19,8 @@ public class VolumeSlider : MonoBehaviour
         //adding change volume functions to the sliders
         if (_sliderMaster != null)
         {
-            _sliderMaster.value = SoundManager.Instance.GetMasterVolume();
-            _sliderMaster.onValueChanged.AddListener(val => SoundManager.Instance.ChangeMasterVolume(val));
+            _sliderMaster.value = AudioListener.volume;//SoundManager.Instance.GetMasterVolume();
+            _sliderMaster.onValueChanged.AddListener(val => AudioListener.volume = val/*SoundManager.Instance.ChangeMasterVolume(val)*/);
         }
         if (_sliderMusic != null)
         {
