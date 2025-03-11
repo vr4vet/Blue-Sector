@@ -68,7 +68,6 @@ public class SoundManager : MonoBehaviour
     {
         if (_voiceSoures.Count > 0)
         {
-            Debug.Log("Voice adjusted");
             foreach (AudioSource source in _voiceSoures)
                 source.volume = value;
         }
