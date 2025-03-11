@@ -1,9 +1,12 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VRTemplate;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
 
 
 public class ControllerTooltipManager : MonoBehaviour
@@ -16,6 +19,8 @@ public class ControllerTooltipManager : MonoBehaviour
     [SerializeField] private List<GameObject> OculusControllerModels;
     [Tooltip("Place main menu/pause menu here to allow the player to toggle this accessibility feature on or off")]
     [SerializeField] private NewMenuManger MainMenu;
+    [Tooltip("Select the Controller Tooltips Localization Table")]
+    [SerializeField] private LocalizedStringTable LocalizedTooltipsStringTable;
     [Tooltip("Set this to true if left hand should show tooltip for left hand stick teleportation when not intersecting with objects")]
     [SerializeField] private bool AlwaysShowTeleport = true;
 
@@ -36,6 +41,7 @@ public class ControllerTooltipManager : MonoBehaviour
     [SerializeField] private Vector3 ThumbstickRight = new(-.03f, .1f, .05f);
     [SerializeField] private Vector3 TriggerFrontRight = new(-.08f, -.01f, .02f);
     [SerializeField] private Vector3 TriggerGripRight = new(-.08f, .03f, -.02f);
+
 
     // prevent tooltips from being opened/closed before ready
     private int _tooltipsReady = 0;
@@ -70,6 +76,9 @@ public class ControllerTooltipManager : MonoBehaviour
 
         if (MainMenu != null)
             MainMenu.m_ControllerTooltipsToggled.AddListener(OnPauseMenuToggle);
+
+        if (LocalizedTooltipsStringTable.IsEmpty)
+            Debug.LogWarning("Localized string table not set. Localization of controller tooltips will not work!");
     }
 
     /// <summary>
@@ -174,31 +183,20 @@ public class ControllerTooltipManager : MonoBehaviour
         {
             if (mapping.Action != ButtonActions.None)
             {
-                switch (mapping.Button)
+                return mapping.Button switch
                 {
-                    case ControllerButtons.ThumbstickLeft:
-                        return InputBridge.Instance.LeftThumbstickAxis.magnitude > 0; // may need to be tweaked
-                    case ControllerButtons.A:
-                        return InputBridge.Instance.AButtonDown;
-                    case ControllerButtons.B:
-                        return InputBridge.Instance.BButtonDown;
-                    case ControllerButtons.TriggerFrontLeft:
-                        return InputBridge.Instance.LeftTrigger > 0; // may need to be tweaked
-                    case ControllerButtons.TriggerGripLeft:
-                        return InputBridge.Instance.LeftGrip > 0; // may need to be tweaked
-                    case ControllerButtons.ThumbstickRight:
-                        return InputBridge.Instance.RightThumbstickAxis.magnitude > 0; // may need to be tweaked
-                    case ControllerButtons.X:
-                        return InputBridge.Instance.XButtonDown;
-                    case ControllerButtons.Y:
-                        return InputBridge.Instance.YButtonDown;
-                    case ControllerButtons.TriggerFrontRight:
-                        return InputBridge.Instance.RightTrigger > 0; // may need to be tweaked
-                    case ControllerButtons.TriggerGripRight:
-                        return InputBridge.Instance.RightGrip > 0; // may need to be tweaked
-                    default:
-                        return false;
-                }
+                    ControllerButtons.ThumbstickLeft => InputBridge.Instance.LeftThumbstickAxis.magnitude > 0,// may need to be tweaked
+                    ControllerButtons.A => InputBridge.Instance.AButtonDown,
+                    ControllerButtons.B => InputBridge.Instance.BButtonDown,
+                    ControllerButtons.TriggerFrontLeft => InputBridge.Instance.LeftTrigger > 0,// may need to be tweaked
+                    ControllerButtons.TriggerGripLeft => InputBridge.Instance.LeftGrip > 0,// may need to be tweaked
+                    ControllerButtons.ThumbstickRight => InputBridge.Instance.RightThumbstickAxis.magnitude > 0,// may need to be tweaked
+                    ControllerButtons.X => InputBridge.Instance.XButtonDown,
+                    ControllerButtons.Y => InputBridge.Instance.YButtonDown,
+                    ControllerButtons.TriggerFrontRight => InputBridge.Instance.RightTrigger > 0,// may need to be tweaked
+                    ControllerButtons.TriggerGripRight => InputBridge.Instance.RightGrip > 0,// may need to be tweaked
+                    _ => false,
+                };
             }
         }
         return false;
@@ -253,7 +251,10 @@ public class ControllerTooltipManager : MonoBehaviour
                 else
                 {
                     toolTip.Open();
-                    toolTip.SetLabel(mapping.Action.ToString());
+
+                    // get localized string value (translation) if string table is provided, otherwise use default (english) label
+                    StringTable stringTable = !LocalizedTooltipsStringTable.IsEmpty ? LocalizedTooltipsStringTable.GetTable() : null;
+                    toolTip.SetLabel(stringTable ? stringTable[mapping.Action.ToString()].LocalizedValue : mapping.Action.ToString());
                 }
             }
             else // something wrong happened as button could not be mapped
