@@ -78,7 +78,6 @@ public void LogSubtaskCompletion(string subtaskName, string description)
 {
     Debug.Log($"Subtask completed: {subtaskName} - {description}");
     
-    // Find and update the subtask in the task list
     foreach (var task in taskList)
     {
         foreach (var subtask in task.Subtasks)
@@ -87,25 +86,24 @@ public void LogSubtaskCompletion(string subtaskName, string description)
             {
                 subtask.IsCompleted = true;
                 subtask.Description = description;
-                Debug.Log($"Updated subtask completion status for {subtaskName}");
-                
-                // Serialize the updated task list
-                string allTasksJson = SerializeTaskListToJson();
-                Debug.Log($"Serialized task list after subtask completion: {allTasksJson}");
+
+                // Send progress for the PARENT TASK
+                var progressData = ConvertTaskToProgressData(task);
+                progressData.status = "start"; // Task is still in progress
+                StartCoroutine(SendProgressData(progressData));
                 
                 return;
             }
         }
     }
     
-    Debug.LogWarning($"Could not find subtask {subtaskName} in task list");
+    Debug.LogWarning($"Could not find subtask {subtaskName}");
 }
 
 public void LogStepCompletion(string stepName, int repetitionNumber)
 {
     Debug.Log($"Step completed: {stepName} - Repetition: {repetitionNumber}");
     
-    // Find and update the step in the task list
     foreach (var task in taskList)
     {
         foreach (var subtask in task.Subtasks)
@@ -116,27 +114,11 @@ public void LogStepCompletion(string stepName, int repetitionNumber)
                 {
                     step.IsCompleted = true;
                     step.RepetitionNumber = repetitionNumber;
-                    Debug.Log($"Updated step completion status for {stepName}");
-                    
-                    // Check if all steps in this subtask are completed
-                    bool allStepsCompleted = true;
-                    foreach (var s in subtask.StepList)
-                    {
-                        if (!s.IsCompleted)
-                        {
-                            allStepsCompleted = false;
-                            break;
-                        }
-                    }
-                    
-                    if (allStepsCompleted)
-                    {
-                        Debug.Log($"All steps in subtask {subtask.SubtaskName} completed");
-                    }
-                    
-                    // Serialize the updated task list
-                    string allTasksJson = SerializeTaskListToJson();
-                    Debug.Log($"Serialized task list after step completion: {allTasksJson}");
+
+                    // Send progress for the PARENT TASK
+                    var progressData = ConvertTaskToProgressData(task);
+                    progressData.status = "start"; // Task is still in progress
+                    StartCoroutine(SendProgressData(progressData));
                     
                     return;
                 }
@@ -144,31 +126,47 @@ public void LogStepCompletion(string stepName, int repetitionNumber)
         }
     }
     
-    Debug.LogWarning($"Could not find step {stepName} in task list");
+    Debug.LogWarning($"Could not find step {stepName}");
 }
 
 public void LogTaskCompletion(string taskName, string description)
 {
     Debug.Log($"Task completed: {taskName} - {description}");
     
-    // Find and update the task in the task list
     foreach (var task in taskList)
     {
         if (task.TaskName == taskName)
         {
             task.IsCompleted = true;
             task.Description = description;
-            Debug.Log($"Updated task completion status for {taskName}");
-            
-            // Serialize the updated task list
-            string allTasksJson = SerializeTaskListToJson();
-            Debug.Log($"Serialized task list after task completion: {allTasksJson}");
+
+            // Send final completion status
+            var progressData = ConvertTaskToProgressData(task);
+            progressData.status = "complete"; // Explicit completion
+            StartCoroutine(SendProgressData(progressData));
             
             return;
         }
     }
     
-    Debug.LogWarning($"Could not find task {taskName} in task list");
+    Debug.LogWarning($"Could not find task {taskName}");
+}
+public void LogTaskStart(string taskName)
+{
+    foreach (var task in taskList)
+    {
+        if (task.TaskName == taskName)
+        {
+            // Send initial "start" status
+            var progressData = ConvertTaskToProgressData(task);
+            progressData.status = "start";
+            StartCoroutine(SendProgressData(progressData));
+            
+            return;
+        }
+    }
+    
+    Debug.LogWarning($"Could not find task {taskName}");
 }
 
     // New method to convert a Task to ProgressDataDTO
@@ -233,5 +231,28 @@ public void LogTaskCompletion(string taskName, string description)
         };
 
         return JsonUtility.ToJson(collection);
+    }
+    private IEnumerator SendProgressData(ProgressDataDTO progressData)
+    {
+        string json = JsonUtility.ToJson(progressData);
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/api/progress", "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Failed to send progress: {request.error}");
+            }
+            else
+            {
+                Debug.Log($"Server response: {request.downloadHandler.text}");
+            }
+        }
     }
 }
