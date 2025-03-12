@@ -11,10 +11,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Linq;
+using BNG;
+using UnityEngine.EventSystems;
 
 public class NewMenuManger : MonoBehaviour
 {
-    public static NewMenuManger Instance;
+    //public static NewMenuManger Instance;
 
     [SerializeField] public Material PauseSkyboxMat;
     [SerializeField] public Material SkyboxMat;
@@ -44,12 +46,18 @@ public class NewMenuManger : MonoBehaviour
     [SerializeField]
     private float canvasesDistance;
 
+    // event useful for scripts that need to react when the pause menu (this) is opened/closed
+    [HideInInspector] public UnityEvent<bool> m_MenuToggled;
+
     // used to tell controller tooltips activators if they should activate tooltips or not
     [HideInInspector] public UnityEvent<bool> m_ControllerTooltipsToggled;
     private Toggle _controllerTooltipsToggle;
 
     [HideInInspector] public UnityEvent<bool> m_HighContrastModeToggled;
     private Toggle _highContrastModeToggle;
+
+    // used to make hand pointer lasers work normally again after menu is closed
+    private LayerMask _oldEventMask, _newEventMask, _oldCullingMask;
 
     /// <summary>
     /// This Script manages all aspects of the Pause Menu:
@@ -83,6 +91,9 @@ public class NewMenuManger : MonoBehaviour
         _highContrastModeToggle = accessibilityToggles.Find(x => x.transform.parent.name == "HighContrastMode");
 
         LoadPlayerSettings();
+
+        _newEventMask = (1 << LayerMask.NameToLayer("Menu"));
+        _oldCullingMask = _cam.cullingMask;
     }
 
     /// <summary>
@@ -109,6 +120,7 @@ public class NewMenuManger : MonoBehaviour
 
     private void PauseGame()
     {
+
         Color c = _wallsMaterial.color;
         c.a = 0.8f;
         _wallsMaterial.color = c;
@@ -116,6 +128,12 @@ public class NewMenuManger : MonoBehaviour
         RenderSettings.skybox = PauseSkyboxMat;
         _cam.cullingMask = _menuLayers; //show only the chosen menu layers
         _menuCanvas.SetActive(true);
+
+        // making menu reachable with hand lasers even when obstructed by objects
+        PhysicsRaycaster cameraCaster = FindObjectsOfType<PhysicsRaycaster>().ToList().Find(caster => caster.name.Equals("CameraCaster"));
+        _oldEventMask = cameraCaster.eventMask;
+        cameraCaster.eventMask = _newEventMask;
+        m_MenuToggled.Invoke(true);
     }
 
     public void ResumeGame()
@@ -126,11 +144,16 @@ public class NewMenuManger : MonoBehaviour
         _wallsMaterial.color = c;
         Time.timeScale = 1;
         RenderSettings.skybox = SkyboxMat;
-        _cam.cullingMask = -1; // -1 = "Everything"
+        _cam.cullingMask = _oldCullingMask; // show all objects that were shown before menu was opened
         foreach (var item in allMenus)
         {
             item.SetActive(false);
         }
+
+        // resetting caster event mask to its normal settings
+        PhysicsRaycaster cameraCaster = FindObjectsOfType<PhysicsRaycaster>().ToList().Find(caster => caster.name.Equals("CameraCaster"));
+        cameraCaster.eventMask = _oldEventMask;
+        m_MenuToggled.Invoke(false);
     }
 
     public void Restart()
