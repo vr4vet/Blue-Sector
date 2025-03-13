@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 3767096308813053691}
   - component: {fileID: 6644399561791845063}
   - component: {fileID: 3133748046385925914}
+  - component: {fileID: 7916158469187712501}
   m_Layer: 0
   m_Name: MonitorScore
   m_TagString: Untagged
@@ -308,6 +309,12 @@ MonoBehaviour:
   scoreTablet: {fileID: 0}
   tutorials: []
   modesClass: {fileID: 0}
+  m_OnGameStart:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnGameEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3133748046385925914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,7 +327,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29141613f50b38d4da2dc11824020503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 0}
+  _controller: {fileID: 0}
+  _arrow: {fileID: 0}
+  _gameScript: {fileID: 0}
+  canvas: {fileID: 0}
+--- !u!114 &7916158469187712501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509832706639622045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f5d153ad7d5d384e8c8c574efb91b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphicRaycasters:
+  - {fileID: 1509832706438263198}
 --- !u!1 &2170526550834038283
 GameObject:
   m_ObjectHideFlags: 0
