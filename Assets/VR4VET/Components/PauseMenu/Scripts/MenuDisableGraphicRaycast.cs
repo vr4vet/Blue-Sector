@@ -11,7 +11,7 @@ public class MenuDisableGraphicRaycast : MonoBehaviour
     /// <summary>
     /// This script disables canvases' graphics raycasters to prevent them from obstructing the main menu.
     /// Canvases that are between the player's hand laser pointers and the main menu can prevent the laser pointers from reaching the main menu canvases.
-    /// This script can be placed on such obstructing canvases to fix this problem.
+    /// This script can be placed on objects containing such offending canvases to fix the problem.
     /// </summary>
 
     // Start is called before the first frame update
