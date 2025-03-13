@@ -1,12 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MenuDisableGraphicRaycast : MonoBehaviour
 {
     private NewMenuManger _newMenuManger;
-    [SerializeField] private List<GraphicRaycaster> graphicRaycasters = new();
+    private List<GraphicRaycaster> _graphicRaycasters = new();
+
+    /// <summary>
+    /// This script disables canvases' graphics raycasters to prevent them from obstructing the main menu.
+    /// Canvases that are between the player's hand laser pointers and the main menu can prevent the laser pointers from reaching the main menu canvases.
+    /// This script can be placed on such obstructing canvases to fix this problem.
+    /// </summary>
 
     // Start is called before the first frame update
     void Start()
@@ -14,6 +20,9 @@ public class MenuDisableGraphicRaycast : MonoBehaviour
         _newMenuManger = FindObjectOfType<NewMenuManger>();
         if (_newMenuManger)
             _newMenuManger.m_MenuToggled.AddListener(OnMainMenuToggled);
+
+        // getting all graphic raycaster components that are enabled (disabled components not included, otherwise OnMainMenuToggled will enable them when menu is closed)
+        _graphicRaycasters = GetComponentsInChildren<GraphicRaycaster>(true).ToList().FindAll(raycaster => raycaster.enabled);
     }
 
 
@@ -24,7 +33,7 @@ public class MenuDisableGraphicRaycast : MonoBehaviour
     /// <param name="open"></param>
     private void OnMainMenuToggled(bool open)
     {
-        foreach (GraphicRaycaster raycaster in graphicRaycasters)
+        foreach (GraphicRaycaster raycaster in _graphicRaycasters)
             raycaster.enabled = !open;
     }
 }

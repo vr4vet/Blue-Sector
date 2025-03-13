@@ -92,6 +92,7 @@ public class NewMenuManger : MonoBehaviour
 
         LoadPlayerSettings();
 
+        // used to make laser UI pointers react to layer Menu only (meaning this)
         _newEventMask = (1 << LayerMask.NameToLayer("Menu"));
         _oldCullingMask = _cam.cullingMask;
     }
