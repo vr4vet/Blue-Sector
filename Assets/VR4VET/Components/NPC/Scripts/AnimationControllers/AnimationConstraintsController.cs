@@ -147,7 +147,7 @@ public class AnimationConstraintsController : MonoBehaviour
                                 {
                                     fingerRetract = new GameObject("PinkyFingerRetract");
                                     fingerRetract.transform.SetParent(con.data.root.parent, false);
-                                    fingerRetract.transform.localPosition = new Vector3((float)0.0379999988, (float)9.99999975e-05, (float)-0.00079999998);
+                                    fingerRetract.transform.localPosition = new Vector3((float)0.0236000009,(float)0.000500000024,(float)-0.00100000005);
 
                                 }
                                 
