@@ -11,7 +11,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Linq;
-using BNG;
 using UnityEngine.EventSystems;
 
 public class NewMenuManger : MonoBehaviour
@@ -49,12 +48,17 @@ public class NewMenuManger : MonoBehaviour
     // event useful for scripts that need to react when the pause menu (this) is opened/closed
     [HideInInspector] public UnityEvent<bool> m_MenuToggled;
 
-    // used to tell controller tooltips activators if they should activate tooltips or not
+    // used to activate accessibility features
     [HideInInspector] public UnityEvent<bool> m_ControllerTooltipsToggled;
     private Toggle _controllerTooltipsToggle;
 
     [HideInInspector] public UnityEvent<bool> m_HighContrastModeToggled;
     private Toggle _highContrastModeToggle;
+
+    [HideInInspector] public UnityEvent<bool> m_LargerTextSizeToggled;
+    private Toggle _largerTextSizeToggle;
+
+    // used to communicate that the application is exiting
 
     // used to make hand pointer lasers work normally again after menu is closed
     private LayerMask _oldEventMask, _newEventMask, _oldCullingMask;
@@ -89,6 +93,7 @@ public class NewMenuManger : MonoBehaviour
         List<Toggle> accessibilityToggles = transform.Find("Accessibility Canvas").GetComponentsInChildren<Toggle>().ToList();
         _controllerTooltipsToggle = accessibilityToggles.Find(x => x.transform.parent.name == "ControllerTooltips");
         _highContrastModeToggle = accessibilityToggles.Find(x => x.transform.parent.name == "HighContrastMode");
+        _largerTextSizeToggle = accessibilityToggles.Find(x => x.transform.parent.name == "LargerTextSize");
 
         LoadPlayerSettings();
 
@@ -107,6 +112,9 @@ public class NewMenuManger : MonoBehaviour
 
         _highContrastModeToggle.isOn = PlayerPrefs.GetInt("highContrastMode", 0) == 1;
         m_HighContrastModeToggled.Invoke(_highContrastModeToggle.isOn);
+
+        _largerTextSizeToggle.isOn = PlayerPrefs.GetInt("largerTextSize", 0) == 1;
+        m_LargerTextSizeToggled.Invoke(_largerTextSizeToggle.isOn);
     }
 
     private void ToggleMenu()
@@ -280,5 +288,11 @@ public class NewMenuManger : MonoBehaviour
     {
         m_HighContrastModeToggled.Invoke(_highContrastModeToggle.isOn);
         PlayerPrefs.SetInt("highContrastMode", _highContrastModeToggle.isOn ? 1 : 0);
+    }
+
+    public void OnLargerTextSizeToggled()
+    {
+        m_LargerTextSizeToggled.Invoke(_largerTextSizeToggle.isOn);
+        PlayerPrefs.SetInt("largerTextSize", _largerTextSizeToggle.isOn ? 1 : 0);
     }
 }
