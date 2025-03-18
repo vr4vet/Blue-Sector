@@ -58,8 +58,6 @@ public class NewMenuManger : MonoBehaviour
     [HideInInspector] public UnityEvent<bool> m_LargerTextSizeToggled;
     private Toggle _largerTextSizeToggle;
 
-    // used to communicate that the application is exiting
-
     // used to make hand pointer lasers work normally again after menu is closed
     private LayerMask _oldEventMask, _newEventMask, _oldCullingMask;
 

@@ -49,10 +49,11 @@ public class LargerUnityUIObjectsSettings
     public float Scale;
     public float Width;
     public float Height;
+    public Vector3 Position;
 
     // hidden variables keeping track of old attribute values
     [HideInInspector] public float OldFontSize, OldWidth, OldHeight;
-    [HideInInspector] public Vector3 OldScale;
+    [HideInInspector] public Vector3 OldScale, OldPosition;
 }
 
 public class MenuLargerTextModeApplier : MonoBehaviour
@@ -91,6 +92,7 @@ public class MenuLargerTextModeApplier : MonoBehaviour
             objectSettings.OldScale = objectTransform.transform.localScale;
             objectSettings.OldWidth = objectTransform.rect.width;
             objectSettings.OldHeight = objectTransform.rect.height;
+            objectSettings.OldPosition = objectTransform.localPosition;
         }
 
         // adding listener to Main Menu, so script applies adjustments when Main Menu checkmark is toggled by player or loaded
@@ -150,8 +152,8 @@ public class MenuLargerTextModeApplier : MonoBehaviour
             // adjusting scale, width, height
             obj.transform.localScale = enabled ? settings.OldScale * settings.Scale : settings.OldScale;
             objectTransform.rect.Set(
-                objectTransform.rect.x,
-                objectTransform.rect.y,
+                enabled ? settings.OldPosition.x + settings.Position.x : settings.OldPosition.x,
+                enabled ? settings.OldPosition.y + settings.Position.y : settings.OldPosition.y,
                 enabled && settings.Width > 0 ? settings.Width : settings.OldWidth,
                 enabled && settings.Height > 0 ? settings.Height : settings.OldHeight);
         }
