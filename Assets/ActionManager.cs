@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+
 using Task;
 using System;
 using System.Text;
+using System.Collections;
 
 [Serializable]
 public class StepProgressDTO
@@ -25,7 +28,8 @@ public class SubtaskProgressDTO
 public class ProgressDataDTO
 {
     public string taskName;
-    public string status; // "start" or "complete"
+    public string description;
+    public string status; // "started" or "complete"
     public string userId = null; // Setting default to null
     public List<SubtaskProgressDTO> subtaskProgress;
 }
@@ -65,31 +69,27 @@ public class ActionManager : MonoBehaviour
             Debug.Log($"Task: {task.TaskName}");
             foreach (var subtask in task.Subtasks)
             {
-                Debug.Log($"  Subtask: {subtask.SubtaskName}");
+                Debug.Log($"Subtask: {subtask.SubtaskName}");
                 foreach (var step in subtask.StepList)
                 {
-                    Debug.Log($"    Step: {step.StepName}");
+                    Debug.Log($"Step: {step.StepName}");
                 }
             }
         }
     }
 
-public void LogSubtaskCompletion(string subtaskName, string description)
+public void LogSubtaskCompletion(Task.Subtask subtask)
 {
-    Debug.Log($"Subtask completed: {subtaskName} - {description}");
+    Debug.Log($"Subtask completed: {subtask.SubtaskName} - {subtask.Description}");
     
     foreach (var task in taskList)
     {
-        foreach (var subtask in task.Subtasks)
+        foreach (var subtask_ in task.Subtasks)
         {
-            if (subtask.SubtaskName == subtaskName)
+            if (subtask_ == subtask)
             {
-                subtask.IsCompleted = true;
-                subtask.Description = description;
-
                 // Send progress for the PARENT TASK
                 var progressData = ConvertTaskToProgressData(task);
-                progressData.status = "start"; // Task is still in progress
                 StartCoroutine(SendProgressData(progressData));
                 
                 return;
@@ -97,27 +97,23 @@ public void LogSubtaskCompletion(string subtaskName, string description)
         }
     }
     
-    Debug.LogWarning($"Could not find subtask {subtaskName}");
+    Debug.LogWarning($"Could not find subtask {subtask.SubtaskName}");
 }
 
-public void LogStepCompletion(string stepName, int repetitionNumber)
+public void LogStepCompletion(Task.Step step)
 {
-    Debug.Log($"Step completed: {stepName} - Repetition: {repetitionNumber}");
+    Debug.Log($"Step completed: {step.StepName}");
     
     foreach (var task in taskList)
     {
         foreach (var subtask in task.Subtasks)
         {
-            foreach (var step in subtask.StepList)
+            foreach (var step_ in subtask.StepList)
             {
-                if (step.StepName == stepName)
+                if (step_ == step)
                 {
-                    step.IsCompleted = true;
-                    step.RepetitionNumber = repetitionNumber;
-
                     // Send progress for the PARENT TASK
                     var progressData = ConvertTaskToProgressData(task);
-                    progressData.status = "start"; // Task is still in progress
                     StartCoroutine(SendProgressData(progressData));
                     
                     return;
@@ -126,40 +122,27 @@ public void LogStepCompletion(string stepName, int repetitionNumber)
         }
     }
     
-    Debug.LogWarning($"Could not find step {stepName}");
+    Debug.LogWarning($"Could not find step {step.StepName}");
 }
 
-public void LogTaskCompletion(string taskName, string description)
+public void LogTaskCompletion(Task.Task task)
 {
-    Debug.Log($"Task completed: {taskName} - {description}");
-    
-    foreach (var task in taskList)
-    {
-        if (task.TaskName == taskName)
-        {
-            task.IsCompleted = true;
-            task.Description = description;
+    Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
-            // Send final completion status
-            var progressData = ConvertTaskToProgressData(task);
-            progressData.status = "complete"; // Explicit completion
-            StartCoroutine(SendProgressData(progressData));
-            
-            return;
-        }
-    }
-    
-    Debug.LogWarning($"Could not find task {taskName}");
+        var progressData = ConvertTaskToProgressData(task);
+        StartCoroutine(SendProgressData(progressData));
+
+        Debug.LogWarning($"Could not find task {task.TaskName}");
 }
+
 public void LogTaskStart(string taskName)
 {
     foreach (var task in taskList)
     {
         if (task.TaskName == taskName)
         {
-            // Send initial "start" status
+            // Send initial "started" status
             var progressData = ConvertTaskToProgressData(task);
-            progressData.status = "start";
             StartCoroutine(SendProgressData(progressData));
             
             return;
@@ -175,7 +158,8 @@ public void LogTaskStart(string taskName)
         ProgressDataDTO progressData = new ProgressDataDTO
         {
             taskName = task.TaskName,
-            status = task.IsCompleted ? "complete" : "start",
+            description = task.Description,
+            status = task.Compleated() ? "complete" : "started",
             // userId is now null by default
             subtaskProgress = new List<SubtaskProgressDTO>()
         };
@@ -186,7 +170,7 @@ public void LogTaskStart(string taskName)
             {
                 subtaskName = subtask.SubtaskName,
                 description = subtask.Description,
-                completed = subtask.IsCompleted,
+                completed = subtask.Compleated(),
                 stepProgress = new List<StepProgressDTO>()
             };
 
@@ -195,8 +179,7 @@ public void LogTaskStart(string taskName)
                 StepProgressDTO stepDTO = new StepProgressDTO
                 {
                     stepName = step.StepName,
-                    repetitionNumber = step.RepetitionNumber,
-                    completed = step.IsCompleted
+                    completed = step.IsCompeleted()
                 };
                 subtaskDTO.stepProgress.Add(stepDTO);
             }
@@ -237,7 +220,7 @@ public void LogTaskStart(string taskName)
         string json = JsonUtility.ToJson(progressData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
-        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/api/progress", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress", "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(jsonBytes);
             request.downloadHandler = new DownloadHandlerBuffer();

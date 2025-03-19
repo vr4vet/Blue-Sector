@@ -80,7 +80,7 @@ public class WatchManager : MonoBehaviour
     {
 
         subtask.SetCompleated(true);
-        actionManager.LogSubtaskCompletion(subtask.SubtaskName, subtask.Description);
+        actionManager.LogSubtaskCompletion(subtask);
     }
 
     public void CompleteStep(Task.Step step)
@@ -109,7 +109,7 @@ public class WatchManager : MonoBehaviour
                 UpdateCurrentSubtask(sub);
             }
 
-            actionManager.LogStepCompletion(step.StepName, step.RepetionNumber);
+            actionManager.LogStepCompletion(step);
         }
         
         if (sub.Compleated())
@@ -119,7 +119,7 @@ public class WatchManager : MonoBehaviour
             if (task.Compleated())
             {
                 TaskCompleted.Invoke(task);
-                actionManager.LogTaskCompletion(task.TaskName, task.Description);
+                actionManager.LogTaskCompletion(task);
             }
 
             Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
