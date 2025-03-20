@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,7 @@ public class ContrastModifier : MonoBehaviour
     private Color _contrastTranslucentBackground;
 
     private bool _highContrastMode;
+    private bool _settingLoaded = false;
 
     private NewMenuManger MainMenu;
 
@@ -70,6 +72,8 @@ public class ContrastModifier : MonoBehaviour
 
     public void ToggleContrast(bool contrast)
     {
+        _settingLoaded = true;
+        Debug.Log("Toggled with value " + contrast);
         _highContrastMode = contrast;
         if (_highContrastMode)
         {
@@ -131,5 +135,9 @@ public class ContrastModifier : MonoBehaviour
         }
     }
 
-    private void OnUIChanged() => ToggleContrast(_highContrastMode);
+    private void OnUIChanged()
+    { 
+        if (_settingLoaded)
+            ToggleContrast(_highContrastMode); 
+    } 
 }
