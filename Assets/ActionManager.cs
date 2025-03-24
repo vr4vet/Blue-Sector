@@ -63,9 +63,13 @@ public class ActionManager : MonoBehaviour
     public void LogTaskHierarchy(List<Task.Task> tasks)
     {
         taskList = tasks;
+        List<ProgressDataDTO> progressHierarchy = new List<ProgressDataDTO>();
         Debug.Log("Task hierarchy logged.");
         foreach (var task in tasks)
         {
+            ProgressDataDTO progressData = ConvertTaskToProgressData(task);
+            progressHierarchy.Add(progressData);
+
             Debug.Log($"Task: {task.TaskName}");
             foreach (var subtask in task.Subtasks)
             {
@@ -76,81 +80,65 @@ public class ActionManager : MonoBehaviour
                 }
             }
         }
+        StartCoroutine(SendTaskHierarchy(progressHierarchy));
     }
 
-public void LogSubtaskCompletion(Task.Subtask subtask)
-{
-    Debug.Log($"Subtask completed: {subtask.SubtaskName} - {subtask.Description}");
-    
-    foreach (var task in taskList)
+    public void LogSubtaskCompletion(Task.Subtask subtask)
     {
-        foreach (var subtask_ in task.Subtasks)
-        {
-            if (subtask_ == subtask)
-            {
-                // Send progress for the PARENT TASK
-                var progressData = ConvertTaskToProgressData(task);
-                StartCoroutine(SendProgressData(progressData));
-                
-                return;
-            }
-        }
-    }
+        Debug.Log($"Subtask completed: {subtask.SubtaskName} - {subtask.Description}");
     
-    Debug.LogWarning($"Could not find subtask {subtask.SubtaskName}");
-}
-
-public void LogStepCompletion(Task.Step step)
-{
-    Debug.Log($"Step completed: {step.StepName}");
-    
-    foreach (var task in taskList)
-    {
-        foreach (var subtask in task.Subtasks)
+        foreach (var task in taskList)
         {
-            foreach (var step_ in subtask.StepList)
+            foreach (var subtask_ in task.Subtasks)
             {
-                if (step_ == step)
+                if (subtask_ == subtask)
                 {
                     // Send progress for the PARENT TASK
                     var progressData = ConvertTaskToProgressData(task);
                     StartCoroutine(SendProgressData(progressData));
-                    
+                
                     return;
                 }
             }
         }
-    }
     
-    Debug.LogWarning($"Could not find step {step.StepName}");
-}
+        Debug.LogWarning($"Could not find subtask {subtask.SubtaskName}");
+    }
 
-public void LogTaskCompletion(Task.Task task)
-{
-    Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
-
-        var progressData = ConvertTaskToProgressData(task);
-        StartCoroutine(SendProgressData(progressData));
-
-        Debug.LogWarning($"Could not find task {task.TaskName}");
-}
-
-public void LogTaskStart(string taskName)
-{
-    foreach (var task in taskList)
+    public void LogStepCompletion(Task.Step step)
     {
-        if (task.TaskName == taskName)
+        Debug.Log($"Step completed: {step.StepName}");
+    
+        foreach (var task in taskList)
         {
-            // Send initial "started" status
+            foreach (var subtask in task.Subtasks)
+            {
+                foreach (var step_ in subtask.StepList)
+                {
+                    if (step_ == step)
+                    {
+                        // Send progress for the PARENT TASK
+                        var progressData = ConvertTaskToProgressData(task);
+                        StartCoroutine(SendProgressData(progressData));
+                    
+                        return;
+                    }
+                }
+            }
+        }
+    
+        Debug.LogWarning($"Could not find step {step.StepName}");
+    }
+
+    public void LogTaskCompletion(Task.Task task)
+    {
+        Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
+
             var progressData = ConvertTaskToProgressData(task);
             StartCoroutine(SendProgressData(progressData));
-            
-            return;
-        }
+
+            Debug.LogWarning($"Could not find task {task.TaskName}");
     }
-    
-    Debug.LogWarning($"Could not find task {taskName}");
-}
 
     // New method to convert a Task to ProgressDataDTO
     private ProgressDataDTO ConvertTaskToProgressData(Task.Task task)
@@ -190,37 +178,35 @@ public void LogTaskStart(string taskName)
         return progressData;
     }
 
-    // New method to serialize taskList to JSON
-    public string SerializeTaskListToJson()
+    private IEnumerator SendTaskHierarchy(List<ProgressDataDTO> progressHierarchy)
     {
-        if (taskList == null || taskList.Count == 0)
+        string jsonArray = JsonUtility.ToJson(new ProgressDataCollection { items = progressHierarchy });
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonArray);
+
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress/initializeTasks", "POST"))
         {
-            Debug.LogWarning("Task list is empty, nothing to serialize");
-            return "[]";
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Failed to send task hierarchy: {request.error}");
+            }
+            else
+            {
+                Debug.Log($"Server response: {request.downloadHandler.text}");
+            }
         }
-
-        List<ProgressDataDTO> progressDataList = new List<ProgressDataDTO>();
-        
-        foreach (var task in taskList)
-        {
-            ProgressDataDTO progressData = ConvertTaskToProgressData(task);
-            progressDataList.Add(progressData);
-        }
-
-        // We need a wrapper class since JsonUtility can't serialize lists directly
-        ProgressDataCollection collection = new ProgressDataCollection
-        {
-            items = progressDataList
-        };
-
-        return JsonUtility.ToJson(collection);
     }
     private IEnumerator SendProgressData(ProgressDataDTO progressData)
     {
         string json = JsonUtility.ToJson(progressData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
-        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress/updateTask", "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(jsonBytes);
             request.downloadHandler = new DownloadHandlerBuffer();

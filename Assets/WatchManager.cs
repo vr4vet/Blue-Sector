@@ -80,7 +80,6 @@ public class WatchManager : MonoBehaviour
     {
 
         subtask.SetCompleated(true);
-        actionManager.LogSubtaskCompletion(subtask);
     }
 
     public void CompleteStep(Task.Step step)
@@ -119,7 +118,6 @@ public class WatchManager : MonoBehaviour
             if (task.Compleated())
             {
                 TaskCompleted.Invoke(task);
-                actionManager.LogTaskCompletion(task);
             }
 
             Task.Subtask nextSubtask = task.Subtasks.FirstOrDefault(element => (!element.Compleated()));
