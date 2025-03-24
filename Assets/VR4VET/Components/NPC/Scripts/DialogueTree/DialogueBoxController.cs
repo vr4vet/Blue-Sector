@@ -151,7 +151,10 @@ public class DialogueBoxController : MonoBehaviour
                 _animator.SetBool(_isTalkingHash, true);
                 StartCoroutine(revertToIdleAnimation());
                 _dialogueText.text = dialogueTree.sections[section].dialogue[i];
+
+                _skipLineButtonComponent.interactable = false;
                 _skipLineButtonComponent.interactable = true;
+
                 _skipLineButton.transform.GetChild(0).GetComponent<Image>().color = _skipLineButtonComponent.colors.normalColor; // give arrow icon child same colour
                 TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
                 // Invoke the dialogue changed event
@@ -214,7 +217,9 @@ public class DialogueBoxController : MonoBehaviour
             _skipLineButtonComponent.interactable = false;
             yield return null;
         }
+
         _skipLineButtonComponent.interactable = true;
+
         _skipLineButton.transform.GetChild(0).GetComponent<Image>().color = _skipLineButtonComponent.colors.normalColor; // give arrow icon child same colour
         _answerTriggered = false;
         _exitButton.SetActive(false);
