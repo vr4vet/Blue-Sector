@@ -34,11 +34,8 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private int _isTalkingHash;
     [HideInInspector] private int _hasNewDialogueOptionsHash;
     [HideInInspector] private int _isPointingHash;
-    [HideInInspector] private RectTransform backgroundRect;
-    [HideInInspector] private RectTransform dialogueTextRect;
     [HideInInspector] public ButtonSpawner buttonSpawner;
     private Vector2 _oldDialogueCanvasSizeDelta;
-    private string currentDialogue;
     [HideInInspector] public bool dialogueIsActive;
     private int _activatedCount = 0;
     [HideInInspector]public DialogueTree dialogueTreeRestart;
@@ -152,6 +149,7 @@ public class DialogueBoxController : MonoBehaviour
                 StartCoroutine(revertToIdleAnimation());
                 _dialogueText.text = dialogueTree.sections[section].dialogue[i];
 
+                // button sometimes won't highlight without setting to false first
                 _skipLineButtonComponent.interactable = false;
                 _skipLineButtonComponent.interactable = true;
 

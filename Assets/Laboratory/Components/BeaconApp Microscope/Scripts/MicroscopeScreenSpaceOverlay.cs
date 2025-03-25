@@ -1,17 +1,18 @@
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 {
-    private float StartTime;
     private bool CameraSet = false; // used to end the wait in FixedUpdate after setting camera
     private bool OverlayEnabled = false;
-    private BNG.BNGPlayerController PlayerController;
     private Camera PlayerCamera;
     private Image Image;
     private GameObject Grid;
     private Collider HeadCollider;
     MicroscopeOverlayTrigger trigger;
+    private PostProcessLayer _postProcessLayer;
+    private Canvas _canvas;
 
     [SerializeField] private MicroscopeMonitor MicroscopeMonitor;
 
@@ -24,12 +25,14 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //GetComponent<Canvas>().enabled = true;
-        StartTime = Time.time;
-        PlayerController = FindObjectOfType<BNG.BNGPlayerController>();
-        PlayerCamera = PlayerController.transform.Find("CameraRig/TrackingSpace/CenterEyeAnchor").transform.GetComponent<Camera>();
+        PlayerCamera = Camera.main;
+        _postProcessLayer = PlayerCamera.GetComponent<PostProcessLayer>();
+
+        _postProcessLayer.enabled = false; // disable post process layer used for vignette effect when not looking into microscope eye pieces to maintain 72 fps
+
         Image = GetComponent<Canvas>().transform.GetComponentInChildren<Image>();
         trigger = transform.parent.GetComponent<MicroscopeOverlayTrigger>();
+        _canvas = GetComponent<Canvas>();
 
         // disable the microscope overlay so the player can see their environment
         PlayerCamera.cullingMask = LayerMask.GetMask(
@@ -42,7 +45,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         // checking if system is Quest 2, Quest 3, or Quest Pro
         if (SystemInfo.deviceModel == "Oculus Quest")
         {
-            AndroidJavaClass build = new AndroidJavaClass("android.os.Build");
+            AndroidJavaClass build = new("android.os.Build");
             string device = build.GetStatic<string>("DEVICE");
             if (device.Contains("hollywood"))
                 Device = QuestDevice.Quest2;
@@ -53,19 +56,18 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        // need to wait a bit before setting fetching the CenterEyeAnchor camera
-        if (Time.time - StartTime > 1 && !CameraSet)
-        {
-            GetComponent<Canvas>().worldCamera = PlayerCamera;
-            CameraSet = true;
-        }
-        //Debug.Log(PlayerController.name);
-    }
-
     private void Update()
     {
+        // canvas' world camera won't be set immidiately for some reason
+        if (!CameraSet)
+        {
+            if (_canvas.worldCamera != PlayerCamera)
+                _canvas.worldCamera = PlayerCamera;
+            else
+                CameraSet = true;
+        }
+
+        // determine how crooked the player is looking into the microscope's eye pieces and dim and intensify vignette effect accordingly
         if (OverlayEnabled)
         {
             // Calculating roll. Code heavily based on https://github.com/fredsa/unity-1st-person-racing/blob/master/Assets/Standard%20Assets/Vehicles/Aircraft/Scripts/AeroplaneController.cs
@@ -98,8 +100,9 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     {
         GetComponent<Canvas>().enabled = true;
         OverlayEnabled = true;
+        _postProcessLayer.enabled = true;
 
-        // need this to correct image on Quest 3 and Quest Pro (positioned too high)
+        // need this to correct water sample seen through microscope's eye pieces while playing on Quest 2, Quest 3 and Quest Pro (positioned too high, but by different amounts)
         float OffsetY = 0f;
         if (Device == QuestDevice.Quest2)
             OffsetY = -1f;
@@ -108,7 +111,7 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
         else if (Device == QuestDevice.QuestPro)
             OffsetY = -5f;
 
-
+        // set up the water sample with all the complexity that entails only if a water sample is placed onto the microscope (meaning that it is currently being displayed on its monitor)
         if (MicroscopeMonitor.IsDisplayingGrid())
         {
             Image.enabled = false;
@@ -165,6 +168,8 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
     public void DisableOverlay()
     {
+        _postProcessLayer.enabled = false;
+
         if (Grid  != null)
             GameObject.Destroy(Grid);
 

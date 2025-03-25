@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
 public class ButtonSpawner : MonoBehaviour
@@ -11,10 +10,7 @@ public class ButtonSpawner : MonoBehaviour
     [SerializeField] private GameObject _answerButtonContainer;
     [SerializeField] private GameObject _dialogueCanvas;
     [SerializeField] private GameObject _speakButton;
-    private Rect _dialogueCanvasRect;
     [SerializeField] private GameObject _buttonPrefab;
-    // max 4 buttons
-    [HideInInspector] private GameObject[] _buttonsSpawned = new GameObject[4];
     [HideInInspector] private DialogueBoxController _dialogueBoxController;
     [HideInInspector] public static event Action<string> OnAnswer;
 
@@ -22,14 +18,12 @@ public class ButtonSpawner : MonoBehaviour
     private List<UnityAction> _answerButtonActions = new();
     private UnityAction _speakButtonAction = null;
 
-    void Start() {
+    void Start() 
+    {
         _dialogueBoxController = GetComponent<DialogueBoxController>();
-        if (_dialogueBoxController == null ) {
-            Debug.LogError("The NPC missing the DialogueBoxController script");
-        }
         
-        _dialogueCanvasRect = _dialogueCanvas.GetComponent<RectTransform>().rect;
-
+        if (_dialogueBoxController == null )
+            Debug.LogError("The NPC missing the DialogueBoxController script");
 
         foreach (Button child in _answerButtonContainer.GetComponentsInChildren<Button>())
         {
@@ -38,7 +32,11 @@ public class ButtonSpawner : MonoBehaviour
         }
     } 
     
-    void AddAnswerQuestionNumberListener() {
+    /// <summary>
+    /// Add listeners to answer buttons
+    /// </summary>
+    void AddAnswerQuestionNumberListener() 
+    {
         foreach (GameObject answerButton in _answerButtons)
         {
             // storing Unity Action in list before adding listener so it can later be removed
@@ -53,7 +51,13 @@ public class ButtonSpawner : MonoBehaviour
         }
     }
 
-    public void spawnAnswerButtons(Answer[] answers) {
+    /// <summary>
+    /// Enabling an answer button for each provided answer from dialogue tree. 
+    /// More than 4 buttons will result in bad looking formatting/layout, so an error is triggered instead.
+    /// </summary>
+    /// <param name="answers"></param>
+    public void spawnAnswerButtons(Answer[] answers) 
+    {
         if (answers.Length > 4)
         {
             Debug.LogError("There is not room for more than 4 answer buttons in the dialogue canvas, but there are " + answers.Length + " answers in the dialogue tree '" + _dialogueBoxController.dialogueTreeRestart.name + "'!");
@@ -64,6 +68,8 @@ public class ButtonSpawner : MonoBehaviour
         {
             _answerButtons[i].SetActive(true);
             GameObject button = _answerButtons[i];
+
+            // button sometimes won't highlight without setting to false first
             button.GetComponent<Button>().interactable = false;
             button.GetComponent<Button>().interactable = true;
 
@@ -76,9 +82,10 @@ public class ButtonSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Destroy the button gameobject and remove the button reference in the array
+    /// Deactivate button objects and remove listeners
     /// </summary>
-    public void removeAllButtons() {
+    public void removeAllButtons() 
+    {
         foreach(GameObject button in _answerButtons)
         {
             if (_answerButtons.IndexOf(button) <= _answerButtonActions.Count - 1)
@@ -98,7 +105,8 @@ public class ButtonSpawner : MonoBehaviour
     }
 
     // Add new "Speak" button to start conversation again
-    public void spawnSpeakButton(DialogueTree dialogueTree) {
+    public void spawnSpeakButton(DialogueTree dialogueTree) 
+    {
         removeAllButtons();
         _speakButton.GetComponentInChildren<TextMeshProUGUI>().text = "Speak";
 

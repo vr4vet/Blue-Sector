@@ -1,4 +1,4 @@
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +10,8 @@ public class ContrastModifier : MonoBehaviour
     private Color _defaultBackground = new Color32(0xF2, 0xF7, 0xFF, 0xFF);
     private Color _defaultPositive = new Color32(0x1C, 0xA3, 0x8C, 0xFF);
     private Color _defaultBrandPurple = new Color32(0x8A, 0x99, 0xFA, 0xFF);
-    private Color _defaultRed = new Color32(0xE5, 0x14, 0x45, 0xFF); //E51445
-    private Color _defaultTranslucentBackground = new Color32(0xDF, 0xE9, 0xF7, 50); // DFE9F7
+    private Color _defaultRed = new Color32(0xE5, 0x14, 0x45, 0xFF);
+    private Color _defaultTranslucentBackground = new Color32(0xDF, 0xE9, 0xF7, 50);
     private Color _contrastDarkBlue;
     private Color _contrastLightBlue;
     private Color _contrastMiddleBlue;
@@ -24,6 +24,8 @@ public class ContrastModifier : MonoBehaviour
 
     private bool _highContrastMode;
     private bool _settingLoaded = false;
+
+    [SerializeField] private List<GameObject> ExcludeObjects;
 
     private NewMenuManger MainMenu;
 
@@ -79,6 +81,9 @@ public class ContrastModifier : MonoBehaviour
         {
             foreach (Image image in transform.GetComponentsInChildren<Image>(true))
             {
+                if (ExcludeObjects.Contains(image.gameObject))
+                    continue;
+
                 if (image.color == _defaultDarkBlue)
                     image.color = _contrastDarkBlue;
 
@@ -108,6 +113,9 @@ public class ContrastModifier : MonoBehaviour
         {
             foreach (Image image in transform.GetComponentsInChildren<Image>(true))
             {
+                if (ExcludeObjects.Contains(image.gameObject))
+                    continue;
+
                 if (image.color == _contrastDarkBlue)
                     image.color = _defaultDarkBlue;
 

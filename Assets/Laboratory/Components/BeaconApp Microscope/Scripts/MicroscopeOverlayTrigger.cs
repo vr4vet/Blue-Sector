@@ -17,6 +17,7 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
         MicroscopeOverlay = GetComponentInChildren<MicroscopeScreenSpaceOverlay>();
         VignetteVolume = transform.Find("Vignette").GetComponent<PostProcessVolume>();
         DarkenVolume = transform.Find("Darken").GetComponent<PostProcessVolume>();
+        MicroscopeOverlay.DisableOverlay();
     }
 
     private void OnTriggerEnter(Collider other)
