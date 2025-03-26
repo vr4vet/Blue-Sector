@@ -11,7 +11,7 @@ public class FloatingUIElement : MonoBehaviour
     [SerializeField] private Vector3 closedPosition, openPosition;
     [SerializeField] private float closedScale, openScale;
     [SerializeField] private StartState startState;
-    [SerializeField] float closeAutomaticallyAfterSeconds;
+    [SerializeField] private float closeAutomaticallyAfterSeconds;
     [SerializeField] private Canvas canvasToHideWhenClosed;
     private enum StartState
     {
