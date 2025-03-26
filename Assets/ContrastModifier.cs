@@ -75,7 +75,7 @@ public class ContrastModifier : MonoBehaviour
     public void ToggleContrast(bool contrast)
     {
         _settingLoaded = true;
-        Debug.Log("Toggled with value " + contrast);
+        //Debug.Log("Toggled with value " + contrast);
         _highContrastMode = contrast;
         if (_highContrastMode)
         {
