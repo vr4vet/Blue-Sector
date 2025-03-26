@@ -4,10 +4,12 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using Task;
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class WatchManager : MonoBehaviour
 {
     public static WatchManager Instance;
+    private ActionManager actionManager;
     [SerializeField] public Task.TaskHolder taskHolder;
     [SerializeField] private UpdatedTabletTaskListLoader taskListLoader;
     [SerializeField] public UpdatedTabletPanelManager panelManager;
@@ -35,11 +37,15 @@ public class WatchManager : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(gameObject);
+            
+        actionManager = ActionManager.Instance;
+        Debug.Log("WatchManager initialized.");
     }
 
     void Start()
     {
         task = taskHolder.taskList[0];
+        Debug.Log("WatchManager started.");
 
         // Set up tasks, subtasks, and steps. Reset subtask and step progress on each play, and skill and badge progress. Also set step number to one on feedback loop task.
         foreach (Task.Task task in taskHolder.taskList)
@@ -62,6 +68,7 @@ public class WatchManager : MonoBehaviour
             skill.Lock();
         }
         UpdateCurrentSubtask(FirstSubTask);
+        actionManager.LogTaskHierarchy(taskHolder.taskList);
     }
 
     public void invokeBadge(Task.Skill badge)
@@ -100,6 +107,8 @@ public class WatchManager : MonoBehaviour
                 step.CurrentStep = false;
                 UpdateCurrentSubtask(sub);
             }
+
+            actionManager.LogStepCompletion(step);
         }
         
         if (sub.Compleated())
