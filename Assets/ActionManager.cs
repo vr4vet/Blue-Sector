@@ -68,6 +68,7 @@ public class ActionManager : MonoBehaviour
         foreach (var task in tasks)
         {
             ProgressDataDTO progressData = ConvertTaskToProgressData(task);
+            progressData.status = "pending";
             progressHierarchy.Add(progressData);
 
             Debug.Log($"Task: {task.TaskName}");
@@ -180,8 +181,10 @@ public class ActionManager : MonoBehaviour
 
     private IEnumerator SendTaskHierarchy(List<ProgressDataDTO> progressHierarchy)
     {
-        string jsonArray = JsonUtility.ToJson(new ProgressDataCollection { items = progressHierarchy });
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonArray);
+        ProgressDataCollection collection = new ProgressDataCollection { items = progressHierarchy };
+
+        string json = JsonUtility.ToJson(collection);
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
         using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress/initializeTasks", "POST"))
         {
@@ -201,6 +204,8 @@ public class ActionManager : MonoBehaviour
             }
         }
     }
+
+
     private IEnumerator SendProgressData(ProgressDataDTO progressData)
     {
         string json = JsonUtility.ToJson(progressData);
