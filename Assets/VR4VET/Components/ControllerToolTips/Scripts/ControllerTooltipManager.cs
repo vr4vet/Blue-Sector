@@ -1,6 +1,7 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VRTemplate;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -20,8 +21,6 @@ public class ControllerTooltipManager : MonoBehaviour
     [SerializeField] private NewMenuManger MainMenu;
     [Tooltip("Select the Controller Tooltips Localization Table")]
     [SerializeField] private LocalizedStringTable LocalizedTooltipsStringTable;
-    [Tooltip("Set this to true if left hand should show tooltip for left hand stick teleportation when not intersecting with objects")]
-    [SerializeField] private bool AlwaysShowTeleport = true;
 
     // variables for configuring each tooltip's position relative to its button on the left controller using the inspector
     [Header("Left controller button tooltip offsets")]
@@ -53,9 +52,13 @@ public class ControllerTooltipManager : MonoBehaviour
     private ControllerButtonsTransforms _controllerButtonsLeft = new(), _controllerButtonsRight = new();
     private GameObject _controllerModelLeft, _controllerModelRight;
     private GameObject _handModelLeft, _handModelRight;
+    private Grabber _grabberLeft, _grabberRight;
+
+    // pre-allocated array for storing surrounding colliders
+    private Collider[] _surroundingColliders = new Collider[10]; 
 
     // controls whether close objects will be scanned, controller models enabled/disabled etc., and is set in main menu/pause menu.
-    private bool _accessibilityEnabled = true;
+    private bool _accessibilityEnabled = true, _alwaysLabelTeleport = true;
 
     private List<ButtonActionMapping> _defaultButtonMappingsLeft = new()
     {
@@ -74,7 +77,10 @@ public class ControllerTooltipManager : MonoBehaviour
         GameManager.Instance.PlayerHandModelsLoaded.AddListener(OnHandModelsReady);
 
         if (MainMenu != null)
-            MainMenu.m_ControllerTooltipsToggled.AddListener(OnPauseMenuToggle);
+        {
+            MainMenu.m_ControllerTooltipsToggled.AddListener(OnPauseMenuToggledTooltips);
+            MainMenu.m_AlwaysLabelTeleportToggled.AddListener(OnPauseMenuToggledLabelTeleport);
+        }
 
         if (LocalizedTooltipsStringTable.IsEmpty)
             Debug.LogWarning("Localized string table not set. Localization of controller tooltips will not work!");
@@ -98,28 +104,28 @@ public class ControllerTooltipManager : MonoBehaviour
             yield return null;
         }
 
-        GameObject controllerModel = controllerHand == ControllerHand.Left ? _controllerModelLeft : _controllerModelRight; // figure out which hand
+        Grabber grabber = controllerHand == ControllerHand.Left ? _grabberLeft : _grabberRight; // figure out which hand
         while (true)
         {
             if (_accessibilityEnabled)
             {
                 bool deactivated = false;
+                int numOverlaps = Physics.OverlapSphereNonAlloc(grabber.transform.position, .05f, _surroundingColliders); // finding surrounding colliders, and storing the amount to not iterate to "invalid" indicies
 
-                Collider[] surroundingColliders = new Collider[8];
-                Physics.OverlapSphereNonAlloc(controllerModel.transform.position, .1f, surroundingColliders);
-
-                List<ControllerTooltipActivator> activators = new();
-                foreach (Collider surroundingCollider in surroundingColliders)
+                List<ControllerTooltipActivator> activators = new(); 
+                for (int i = 0; i < numOverlaps; i++)
                 {
-                    if (surroundingCollider && surroundingCollider.CompareTag("ControllerTooltipDeactivator")) // hand intersects with a deactivator, prepare to deactivate all tooltips
+                    // hand has entered a deactivator and should not display any tooltips
+                    if (_surroundingColliders[i].CompareTag("ControllerTooltipDeactivator")) 
                     {
-                        activators.Clear();
                         deactivated = true;
                         break;
                     }
 
-                    if (surroundingCollider && surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>()) // add all activators to list
-                        activators.Add(surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>());
+                    // find controller tooltip activators among colliders
+                    ControllerTooltipActivator activator;
+                    if (activator = _surroundingColliders[i].GetComponentInChildren<ControllerTooltipActivator>())
+                        activators.Add(activator);
                 }
 
                 if (activators.Count > 0) // there are activators in player hand's vicinity
@@ -128,9 +134,10 @@ public class ControllerTooltipManager : MonoBehaviour
                     ControllerTooltipActivator closestActivator = activators[0];
                     foreach (ControllerTooltipActivator activator in activators) // find closest activator
                     {
-                        if (Vector3.Distance(controllerModel.transform.position, activator.transform.position) < shortestDistance)
+                        float distance = Vector3.Distance(grabber.transform.position, activator.transform.position);
+                        if (distance < shortestDistance)
                         {
-                            shortestDistance = Vector3.Distance(controllerModel.transform.position, activator.transform.position);
+                            shortestDistance = distance;
                             closestActivator = activator;
                         }
                     }
@@ -147,16 +154,16 @@ public class ControllerTooltipManager : MonoBehaviour
                 }
                 else
                 {
-                    if (deactivated || controllerHand != ControllerHand.Left)
-                        CloseAllTooltips(controllerHand);
-                    else
+                    // the left hand is special, since it has the option of always labelling the teleport stick
+                    if (controllerHand == ControllerHand.Left)
                     {
-                        if (InputBridge.Instance.LeftThumbstickAxis.magnitude > 0)
-                            CloseAllTooltips(controllerHand);
-                        else
+                        if (!deactivated && _alwaysLabelTeleport && (InputBridge.Instance.LeftThumbstickAxis.magnitude <= .5f))
                             SetUpTooltips(_defaultButtonMappingsLeft, controllerHand);
-                    } 
-
+                        else
+                            CloseAllTooltips(controllerHand);
+                    }
+                    else if (controllerHand == ControllerHand.Right)
+                        CloseAllTooltips(controllerHand);
                 }
             }
             else
@@ -353,6 +360,11 @@ public class ControllerTooltipManager : MonoBehaviour
         _player = GameManager.Instance.GetPlayerRig();
         _handModelLeft = GameManager.Instance.LeftHandGameObj;
         _handModelRight = GameManager.Instance.RightHandGameObj;
+
+        // the hand grabbers are used to set the Physics Sphere's location in the function FindClosestObject (in other words, the center point from which interactible objects are detected)
+        List<Grabber> grabbers = _player.GetComponentsInChildren<Grabber>().ToList();
+        _grabberLeft = grabbers.Find(x => x.transform.parent.name == "LeftController");
+        _grabberRight = grabbers.Find(x => x.transform.parent.name == "RightController");
 
         // checking if two and only two Quest controller models are provided (one for each hand)
         if (OculusControllerModels.Count != 2)
@@ -614,7 +626,7 @@ public class ControllerTooltipManager : MonoBehaviour
     /// Is triggered when this accessibility feature is toggled in pause menu. Controls whether tooltips appear or not.
     /// </summary>
     /// <param name="isOn"></param>
-    public void OnPauseMenuToggle(bool isOn)
+    public void OnPauseMenuToggledTooltips(bool isOn)
     {
         _accessibilityEnabled = isOn;
 
@@ -635,5 +647,10 @@ public class ControllerTooltipManager : MonoBehaviour
             StartCoroutine(FindClosestObject(ControllerHand.Left));
             StartCoroutine(FindClosestObject(ControllerHand.Right));
         }  
+    }
+
+    public void OnPauseMenuToggledLabelTeleport(bool isOn)
+    {
+        _alwaysLabelTeleport = isOn;
     }
 }
