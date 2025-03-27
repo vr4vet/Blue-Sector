@@ -49,6 +49,9 @@ public class NpcTriggerDialogue : MonoBehaviour
         _fishPosition = fish.transform.position;
         _fishRotation = fish.transform.rotation;
         _dialogueBoxController.m_DialogueChanged.AddListener(OnDialogueChanged);
+
+        // Enable collision to make sure the player can pick up the fish after visiting a scenario which disabled it
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Bone"), false);
     } 
    
     private void OnTriggerEnter(Collider other)
