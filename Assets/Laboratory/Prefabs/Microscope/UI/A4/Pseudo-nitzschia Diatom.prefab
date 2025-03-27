@@ -751,6 +751,7 @@ GameObject:
   - component: {fileID: 220666886201546328}
   - component: {fileID: 596840352028947875}
   - component: {fileID: 4569753781421180639}
+  - component: {fileID: 8192542681241583672}
   m_Layer: 9
   m_Name: Pseudo-nitzschia Diatom
   m_TagString: Untagged
@@ -890,6 +891,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f5d153ad7d5d384e8c8c574efb91b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8192542681241583672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807661012287408205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 173510b635fd8e14f9c139e33d621964, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExcludeObjects:
+  - {fileID: 7674940087569880141}
 --- !u!1 &3641842458971653017
 GameObject:
   m_ObjectHideFlags: 0
@@ -2056,7 +2071,7 @@ GameObject:
   - component: {fileID: 7905402903220464904}
   - component: {fileID: 6869009899032690608}
   - component: {fileID: 4766849412727535980}
-  - component: {fileID: 7032106452670666132}
+  - component: {fileID: 6459591974780173132}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -2107,7 +2122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 0.7176471}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2140,9 +2155,9 @@ MonoBehaviour:
   closedScale: 1.6
   openScale: 3.42
   startState: 0
-  hideWhenClosed: 0
+  closeAutomaticallyAfterSeconds: 10
   canvasToHideWhenClosed: {fileID: 0}
---- !u!114 &7032106452670666132
+--- !u!114 &6459591974780173132
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2151,26 +2166,53 @@ MonoBehaviour:
   m_GameObject: {fileID: 7774752137779317354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 4
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 4766849412727535980}
-          m_TargetAssemblyTypeName: FloatingUIElement, Assembly-CSharp
-          m_MethodName: ToggleOnOff
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.47058824, g: 0.47058824, b: 0.47058824, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 5105628090847162998}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4766849412727535980}
+        m_TargetAssemblyTypeName: FloatingUIElement, Assembly-CSharp
+        m_MethodName: ToggleOnOff
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8169863602198394440
 GameObject:
   m_ObjectHideFlags: 0
