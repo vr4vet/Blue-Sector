@@ -681,11 +681,11 @@ GameObject:
   - component: {fileID: 10405828}
   - component: {fileID: 10405827}
   - component: {fileID: 10405826}
-  - component: {fileID: 10405825}
   - component: {fileID: 10405824}
   - component: {fileID: 10405829}
   - component: {fileID: 10405830}
   - component: {fileID: 10405831}
+  - component: {fileID: 10405832}
   m_Layer: 0
   m_Name: TeleportationAnchor break
   m_TagString: TeleportationAnchor
@@ -705,38 +705,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c29c8eec51897c4eab1eba4609671f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cylinder: {fileID: 714911749}
-  cylinderGlow: {fileID: 1200851854}
-  hitGlow: {fileID: 2100000, guid: d5f266a2202173a4a8e3a3a8cb07aca0, type: 2}
-  hitCylinder: {fileID: 2100000, guid: eb931d9a91341b84794a78f5e6378092, type: 2}
   playerTeleport: {fileID: 1012358363}
   destination: {fileID: 1161314269}
   teleportOnHand: 1
   PlayerTeleported:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &10405825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 10405823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a596a9247dab54b428bb199fb9df2707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentArrow: {fileID: 0}
-  cageArrows: {fileID: 0}
-  GuidingHandSplint: {fileID: 0}
-  GuidingHandRope: {fileID: 0}
-  GuidingHandBucket: {fileID: 0}
-  maintenanceManager: {fileID: 1489536245}
-  anchorArrow: {fileID: 0}
-  cylinder: {fileID: 714911749}
-  subtask: {fileID: 11400000, guid: 577f2dc4cfd54084690e637d605b0fa7, type: 2}
-  stepName: Talk to Laila
 --- !u!114 &10405826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766,9 +740,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: IncrementTeleportationAnchorCount
+      - m_Target: {fileID: 500925196}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: incrementTeleportationAnchorCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -847,13 +821,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57eb2c38833bca54e969698d9019aed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mm: {fileID: 1489536247}
   dialogueTree: {fileID: 11400000, guid: 022a82fdecd041e4dba991b8a0575791, type: 2}
   skillBadge: {fileID: 11400000, guid: 1932f24e7713b1a4eae2b47534bca9a9, type: 2}
   deadFishPumpVideo: {fileID: 812681630}
   deadFishCountVideo: {fileID: 318205535}
   breakAnchor: {fileID: 10405823}
   deadFishBreakAnchor: {fileID: 1436856679}
+--- !u!114 &10405832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10405823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901f54b461e70aa44861b8c90ce2ab0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Steps:
+  - {fileID: 11400000, guid: fbe655096fa475d409ff320fa26585a1, type: 2}
+  RequiresCageArrows: 0
+  RequiresEquipmentArrow: 0
+  RequiresBackToBoatArrow: 1
 --- !u!1 &10709688
 GameObject:
   m_ObjectHideFlags: 0
@@ -1822,7 +1812,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 126
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &29396167
 Transform:
   m_ObjectHideFlags: 0
@@ -2920,17 +2910,17 @@ GameObject:
   - component: {fileID: 52030646}
   - component: {fileID: 52030653}
   - component: {fileID: 52030652}
-  - component: {fileID: 52030650}
   - component: {fileID: 52030649}
   - component: {fileID: 52030648}
   - component: {fileID: 52030654}
+  - component: {fileID: 52030655}
   m_Layer: 0
   m_Name: TeleportationAnchor missingRope
   m_TagString: TeleportationAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &52030646
 Transform:
   m_ObjectHideFlags: 0
@@ -2948,7 +2938,7 @@ Transform:
   - {fileID: 189329876}
   - {fileID: 663006177}
   m_Father: {fileID: 2137830489}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -4.792, z: 0}
 --- !u!114 &52030648
 MonoBehaviour:
@@ -2962,10 +2952,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c29c8eec51897c4eab1eba4609671f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cylinder: {fileID: 29396166}
-  cylinderGlow: {fileID: 575411127}
-  hitGlow: {fileID: 2100000, guid: d5f266a2202173a4a8e3a3a8cb07aca0, type: 2}
-  hitCylinder: {fileID: 2100000, guid: eb931d9a91341b84794a78f5e6378092, type: 2}
   playerTeleport: {fileID: 1012358363}
   destination: {fileID: 189329876}
   teleportOnHand: 1
@@ -3010,28 +2996,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemRight: {fileID: 2106315916}
   itemLeft: {fileID: 0}
---- !u!114 &52030650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 52030645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a596a9247dab54b428bb199fb9df2707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentArrow: {fileID: 0}
-  cageArrows: {fileID: 0}
-  GuidingHandSplint: {fileID: 0}
-  GuidingHandRope: {fileID: 0}
-  GuidingHandBucket: {fileID: 0}
-  maintenanceManager: {fileID: 1489536245}
-  anchorArrow: {fileID: 0}
-  cylinder: {fileID: 29396166}
-  subtask: {fileID: 11400000, guid: a8c4e2dcc52d555468ac0ade2848a14c, type: 2}
-  stepName: Add rope to cage
 --- !u!114 &52030652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3085,18 +3049,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: IncrementTeleportationAnchorCount
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!65 &52030653
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3125,8 +3077,24 @@ MonoBehaviour:
   maintenanceManager: {fileID: 1489536245}
   grabber: {fileID: 1345975994}
   grabbableObject: {fileID: 2106315916}
-  equipmentStep: Get rope
-  step: Add rope to cage
+  equipmentStep: {fileID: 11400000, guid: 6c89fc407ff3a6d49b9133317fffbd7f, type: 2}
+--- !u!114 &52030655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52030645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901f54b461e70aa44861b8c90ce2ab0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Steps:
+  - {fileID: 11400000, guid: 8c8919f4b00c6774c9e3f196d6b088e4, type: 2}
+  RequiresCageArrows: 1
+  RequiresEquipmentArrow: 0
+  RequiresBackToBoatArrow: 0
 --- !u!1 &53318674
 GameObject:
   m_ObjectHideFlags: 0
@@ -3691,8 +3659,7 @@ MonoBehaviour:
   fixedItem: {fileID: 1521976685}
   handheldItem: {fileID: 109886414}
   grabberRight: {fileID: 1345975994}
-  manager: {fileID: 1489536247}
-  step: Add splinter pin to chain
+  step: {fileID: 11400000, guid: a8adbd44cc0f21945b3d172da559fcca, type: 2}
 --- !u!65 &64337161
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7465,7 +7432,7 @@ PrefabInstance:
         type: 3}
       propertyPath: videoIsTask
       value: 
-      objectReference: {fileID: 1646872154}
+      objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: hideVideoPlayer
@@ -7474,7 +7441,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: videoIsTaskBool
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -7554,7 +7521,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879985, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879985, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -7711,7 +7678,8 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 907931764449879999, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1, type: 3}
 --- !u!1 &146868813
 GameObject:
@@ -15158,17 +15126,17 @@ GameObject:
   - component: {fileID: 316135166}
   - component: {fileID: 316135173}
   - component: {fileID: 316135172}
-  - component: {fileID: 316135170}
   - component: {fileID: 316135169}
   - component: {fileID: 316135168}
   - component: {fileID: 316135174}
+  - component: {fileID: 316135175}
   m_Layer: 0
   m_Name: TeleportationAnchor badRope
   m_TagString: TeleportationAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &316135166
 Transform:
   m_ObjectHideFlags: 0
@@ -15186,7 +15154,7 @@ Transform:
   - {fileID: 1462913004}
   - {fileID: 680714379}
   m_Father: {fileID: 2137830489}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -305.121, z: 0}
 --- !u!114 &316135168
 MonoBehaviour:
@@ -15200,10 +15168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c29c8eec51897c4eab1eba4609671f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cylinder: {fileID: 763295080}
-  cylinderGlow: {fileID: 2097870474}
-  hitGlow: {fileID: 2100000, guid: d5f266a2202173a4a8e3a3a8cb07aca0, type: 2}
-  hitCylinder: {fileID: 2100000, guid: eb931d9a91341b84794a78f5e6378092, type: 2}
   playerTeleport: {fileID: 1012358363}
   destination: {fileID: 1462913004}
   teleportOnHand: 1
@@ -15248,28 +15212,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemRight: {fileID: 1268998395}
   itemLeft: {fileID: 0}
---- !u!114 &316135170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 316135165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a596a9247dab54b428bb199fb9df2707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentArrow: {fileID: 0}
-  cageArrows: {fileID: 0}
-  GuidingHandSplint: {fileID: 0}
-  GuidingHandRope: {fileID: 0}
-  GuidingHandBucket: {fileID: 0}
-  maintenanceManager: {fileID: 1489536245}
-  anchorArrow: {fileID: 0}
-  cylinder: {fileID: 763295080}
-  subtask: {fileID: 11400000, guid: a8c4e2dcc52d555468ac0ade2848a14c, type: 2}
-  stepName: Repair rope on cage
 --- !u!65 &316135172
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15336,18 +15278,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: IncrementTeleportationAnchorCount
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!114 &316135174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15363,8 +15293,24 @@ MonoBehaviour:
   maintenanceManager: {fileID: 1489536245}
   grabber: {fileID: 1345975994}
   grabbableObject: {fileID: 1268998395}
-  equipmentStep: Get rope
-  step: Repair rope on cage
+  equipmentStep: {fileID: 11400000, guid: 6c89fc407ff3a6d49b9133317fffbd7f, type: 2}
+--- !u!114 &316135175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316135165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901f54b461e70aa44861b8c90ce2ab0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Steps:
+  - {fileID: 11400000, guid: 10b5766b02d325c47a8bc880971823a2, type: 2}
+  RequiresCageArrows: 1
+  RequiresEquipmentArrow: 0
+  RequiresBackToBoatArrow: 0
 --- !u!1 &316346472
 GameObject:
   m_ObjectHideFlags: 0
@@ -17955,9 +17901,8 @@ GameObject:
   - component: {fileID: 374839968}
   - component: {fileID: 374839973}
   - component: {fileID: 374839972}
-  - component: {fileID: 374839970}
   - component: {fileID: 374839969}
-  - component: {fileID: 374839974}
+  - component: {fileID: 374839975}
   m_Layer: 0
   m_Name: TeleportationAnchor equipment
   m_TagString: TeleportationAnchor
@@ -17984,7 +17929,7 @@ Transform:
   - {fileID: 1809855095}
   - {fileID: 671109477}
   m_Father: {fileID: 2137830489}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &374839969
 MonoBehaviour:
@@ -17998,50 +17943,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c29c8eec51897c4eab1eba4609671f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cylinder: {fileID: 100638499}
-  cylinderGlow: {fileID: 891351801}
-  hitGlow: {fileID: 2100000, guid: d5f266a2202173a4a8e3a3a8cb07aca0, type: 2}
-  hitCylinder: {fileID: 2100000, guid: eb931d9a91341b84794a78f5e6378092, type: 2}
   playerTeleport: {fileID: 1012358363}
   destination: {fileID: 830753909}
   teleportOnHand: 0
   PlayerTeleported:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 374839974}
-        m_TargetAssemblyTypeName: AddGuidingHands, Assembly-CSharp
-        m_MethodName: IntoAnchor
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &374839970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374839967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a596a9247dab54b428bb199fb9df2707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentArrow: {fileID: 194209570}
-  cageArrows: {fileID: 111445220}
-  GuidingHandSplint: {fileID: 721102301}
-  GuidingHandRope: {fileID: 1809855096}
-  GuidingHandBucket: {fileID: 671109478}
-  maintenanceManager: {fileID: 1489536245}
-  anchorArrow: {fileID: 0}
-  cylinder: {fileID: 100638499}
-  subtask: {fileID: 11400000, guid: 19172763c2cb69141b5d7fea68ca49f4, type: 2}
-  stepName: Get bucket and spade
+      m_Calls: []
 --- !u!114 &374839972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18071,30 +17978,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 374839974}
-        m_TargetAssemblyTypeName: AddGuidingHands, Assembly-CSharp
-        m_MethodName: IntoAnchor
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: IncrementTeleportationAnchorCount
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!65 &374839973
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18108,7 +17991,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8619584, y: 0.83583015, z: 0.8971461}
   m_Center: {x: -0.014441569, y: 0.086916715, z: 0.05678308}
---- !u!114 &374839974
+--- !u!114 &374839975
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18117,13 +18000,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 374839967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1196745be9a910c49b4d83fb627062a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 901f54b461e70aa44861b8c90ce2ab0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mm: {fileID: 1489536247}
-  guidingHandSplint: {fileID: 721102301}
-  guidingHandRope: {fileID: 1809855096}
-  guidingHandBucket: {fileID: 671109478}
+  Steps:
+  - {fileID: 11400000, guid: b6eddb7d5d220264d9d94947fab9a0eb, type: 2}
+  - {fileID: 11400000, guid: 6c89fc407ff3a6d49b9133317fffbd7f, type: 2}
+  - {fileID: 11400000, guid: aa57e56719bc7b241a08e1c6496d97bb, type: 2}
+  RequiresCageArrows: 0
+  RequiresEquipmentArrow: 1
+  RequiresBackToBoatArrow: 0
 --- !u!1 &375657249
 GameObject:
   m_ObjectHideFlags: 0
@@ -23606,6 +23492,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cdea428d48e2bb488d33d5f75c39bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &500925196 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8846557901297510159, guid: ec2da074d6520b2458f58e6c014dec5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1879585854}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29db5976fba96784798bb5cf09d177fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &501948230
 GameObject:
   m_ObjectHideFlags: 0
@@ -25689,7 +25587,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 126
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &551142697
 Transform:
   m_ObjectHideFlags: 0
@@ -32727,6 +32625,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4868814297715011539}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &686426969 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7501284972158154157, guid: b4571350969f6884aabb29ab8ef6fb57,
+    type: 3}
+  m_PrefabInstance: {fileID: 4868814297715011539}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &686843610
 GameObject:
   m_ObjectHideFlags: 0
@@ -34839,17 +34743,17 @@ PrefabInstance:
     - target: {fileID: 585613497604486272, guid: 79777ae0bfe4829409a6a8db9a83b871,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2913
+      value: 0.1174
       objectReference: {fileID: 0}
     - target: {fileID: 585613497604486272, guid: 79777ae0bfe4829409a6a8db9a83b871,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.54310006
+      value: 0.5923
       objectReference: {fileID: 0}
     - target: {fileID: 585613497604486272, guid: 79777ae0bfe4829409a6a8db9a83b871,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.3399
+      value: 0.3582
       objectReference: {fileID: 0}
     - target: {fileID: 585613497604486272, guid: 79777ae0bfe4829409a6a8db9a83b871,
         type: 3}
@@ -36045,8 +35949,7 @@ MonoBehaviour:
   fixedItem: {fileID: 196498332}
   handheldItem: {fileID: 2106315916}
   grabberRight: {fileID: 1345975994}
-  manager: {fileID: 1489536247}
-  step: Add rope to cage
+  step: {fileID: 11400000, guid: 8c8919f4b00c6774c9e3f196d6b088e4, type: 2}
 --- !u!114 &743577359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36845,7 +36748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 126
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &763295081
 Transform:
   m_ObjectHideFlags: 0
@@ -44033,8 +43936,7 @@ MonoBehaviour:
   fixedItem: {fileID: 649080439}
   handheldItem: {fileID: 1268998395}
   grabberRight: {fileID: 1345975994}
-  manager: {fileID: 1489536247}
-  step: Repair rope on cage
+  step: {fileID: 11400000, guid: 10b5766b02d325c47a8bc880971823a2, type: 2}
 --- !u!114 &906165677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45248,9 +45150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c17677c6b6f5fb40b0c2427aab105bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 1489536247}
-  step: Get bucket and spade
   guidingHand: {fileID: 671109478}
+  step: {fileID: 11400000, guid: b6eddb7d5d220264d9d94947fab9a0eb, type: 2}
 --- !u!114 &932595489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47380,7 +47281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 126
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &981547990
 Transform:
   m_ObjectHideFlags: 0
@@ -48263,6 +48164,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 24982429065947566, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 24982429065947566, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 24982429065947566, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 24982429065947566, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 184430879811092846, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -48308,25 +48229,45 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
+    - target: {fileID: 617744360683376995, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
+    - target: {fileID: 617744360683376995, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
+    - target: {fileID: 617744360683376995, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
+    - target: {fileID: 617744360683376995, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 75.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -17.5
       objectReference: {fileID: 0}
     - target: {fileID: 646092130593344025, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -48431,22 +48372,22 @@ PrefabInstance:
     - target: {fileID: 646092131552328433, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 646092131552328433, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 646092131552328433, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 69.4
       objectReference: {fileID: 0}
     - target: {fileID: 646092131552328433, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -17.5
       objectReference: {fileID: 0}
     - target: {fileID: 646092131574781501, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -48491,22 +48432,22 @@ PrefabInstance:
     - target: {fileID: 646092132109846135, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 646092132109846135, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 646092132109846135, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 73.55
       objectReference: {fileID: 0}
     - target: {fileID: 646092132109846135, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -17.5
       objectReference: {fileID: 0}
     - target: {fileID: 704264033538043867, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -48531,22 +48472,22 @@ PrefabInstance:
     - target: {fileID: 1104997758399786754, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1104997758399786754, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1104997758399786754, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 34.15
       objectReference: {fileID: 0}
     - target: {fileID: 1104997758399786754, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -17.5
       objectReference: {fileID: 0}
     - target: {fileID: 1362919669926270899, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -48570,6 +48511,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1370966117576410262, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370966117576410262, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -48598,6 +48544,81 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1648771482025507871, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648771482025507871, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648771482025507871, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648771482025507871, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648771482025507871, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2028798707719612320, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2028798707719612320, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2028798707719612320, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2028798707719612320, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2028798707719612320, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263651124080325555, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263651124080325555, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263651124080325555, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263651124080325555, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263651124080325555, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2446061527338701380, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -48626,6 +48647,11 @@ PrefabInstance:
     - target: {fileID: 2600632587335513136, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2600632587335513136, guid: 04ece6a94084081468c6e6891c807871,
+        type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2600632587335513136, guid: 04ece6a94084081468c6e6891c807871,
@@ -48661,42 +48687,42 @@ PrefabInstance:
     - target: {fileID: 3403291273372931831, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3403291273372931831, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3403291273372931831, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 44.7
       objectReference: {fileID: 0}
     - target: {fileID: 3403291273372931831, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -17.5
       objectReference: {fileID: 0}
     - target: {fileID: 3482202683152220665, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3482202683152220665, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3482202683152220665, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 33.649998
       objectReference: {fileID: 0}
     - target: {fileID: 3482202683152220665, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -17.5
       objectReference: {fileID: 0}
     - target: {fileID: 3711358385918375471, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -56206,17 +56232,17 @@ GameObject:
   - component: {fileID: 1127718175}
   - component: {fileID: 1127718182}
   - component: {fileID: 1127718181}
-  - component: {fileID: 1127718179}
   - component: {fileID: 1127718178}
   - component: {fileID: 1127718177}
   - component: {fileID: 1127718183}
+  - component: {fileID: 1127718184}
   m_Layer: 0
   m_Name: TeleportationAnchor splint
   m_TagString: TeleportationAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1127718175
 Transform:
   m_ObjectHideFlags: 0
@@ -56234,7 +56260,7 @@ Transform:
   - {fileID: 570200154}
   - {fileID: 646010993}
   m_Father: {fileID: 2137830489}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 20.434, z: 0}
 --- !u!114 &1127718177
 MonoBehaviour:
@@ -56248,10 +56274,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c29c8eec51897c4eab1eba4609671f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cylinder: {fileID: 981547989}
-  cylinderGlow: {fileID: 570200153}
-  hitGlow: {fileID: 2100000, guid: d5f266a2202173a4a8e3a3a8cb07aca0, type: 2}
-  hitCylinder: {fileID: 2100000, guid: eb931d9a91341b84794a78f5e6378092, type: 2}
   playerTeleport: {fileID: 1012358363}
   destination: {fileID: 646010993}
   teleportOnHand: 1
@@ -56296,28 +56318,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemRight: {fileID: 109886414}
   itemLeft: {fileID: 0}
---- !u!114 &1127718179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1127718174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a596a9247dab54b428bb199fb9df2707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentArrow: {fileID: 0}
-  cageArrows: {fileID: 0}
-  GuidingHandSplint: {fileID: 0}
-  GuidingHandRope: {fileID: 0}
-  GuidingHandBucket: {fileID: 0}
-  maintenanceManager: {fileID: 1489536245}
-  anchorArrow: {fileID: 0}
-  cylinder: {fileID: 981547989}
-  subtask: {fileID: 11400000, guid: a8c4e2dcc52d555468ac0ade2848a14c, type: 2}
-  stepName: Add splinter pin to chain
 --- !u!65 &1127718181
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -56384,18 +56384,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: IncrementTeleportationAnchorCount
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!114 &1127718183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56411,8 +56399,24 @@ MonoBehaviour:
   maintenanceManager: {fileID: 1489536245}
   grabber: {fileID: 1345975994}
   grabbableObject: {fileID: 109886414}
-  equipmentStep: Get splinter pin
-  step: Add splinter pin to chain
+  equipmentStep: {fileID: 11400000, guid: aa57e56719bc7b241a08e1c6496d97bb, type: 2}
+--- !u!114 &1127718184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127718174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901f54b461e70aa44861b8c90ce2ab0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Steps:
+  - {fileID: 11400000, guid: a8adbd44cc0f21945b3d172da559fcca, type: 2}
+  RequiresCageArrows: 1
+  RequiresEquipmentArrow: 0
+  RequiresBackToBoatArrow: 0
 --- !u!1 &1128045917
 GameObject:
   m_ObjectHideFlags: 0
@@ -71515,11 +71519,11 @@ GameObject:
   - component: {fileID: 1436856680}
   - component: {fileID: 1436856686}
   - component: {fileID: 1436856685}
-  - component: {fileID: 1436856684}
   - component: {fileID: 1436856683}
   - component: {fileID: 1436856682}
   - component: {fileID: 1436856681}
   - component: {fileID: 1436856687}
+  - component: {fileID: 1436856688}
   m_Layer: 0
   m_Name: TeleportationAnchor deadfish
   m_TagString: TeleportationAnchor
@@ -71597,10 +71601,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c29c8eec51897c4eab1eba4609671f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cylinder: {fileID: 1118871166}
-  cylinderGlow: {fileID: 1367710234}
-  hitGlow: {fileID: 2100000, guid: d5f266a2202173a4a8e3a3a8cb07aca0, type: 2}
-  hitCylinder: {fileID: 2100000, guid: eb931d9a91341b84794a78f5e6378092, type: 2}
   playerTeleport: {fileID: 1012358363}
   destination: {fileID: 1680003217}
   teleportOnHand: 1
@@ -71631,28 +71631,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
---- !u!114 &1436856684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1436856679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a596a9247dab54b428bb199fb9df2707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentArrow: {fileID: 0}
-  cageArrows: {fileID: 0}
-  GuidingHandSplint: {fileID: 0}
-  GuidingHandRope: {fileID: 0}
-  GuidingHandBucket: {fileID: 0}
-  maintenanceManager: {fileID: 1489536245}
-  anchorArrow: {fileID: 0}
-  cylinder: {fileID: 1118871166}
-  subtask: {fileID: 11400000, guid: 18af548c09e4e7843adb82864aa5c94b, type: 2}
-  stepName: Push the dead fish into the tub
 --- !u!114 &1436856685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71706,9 +71684,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: IncrementTeleportationAnchorCount
+      - m_Target: {fileID: 500925196}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: incrementTeleportationAnchorCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -71759,6 +71737,25 @@ MonoBehaviour:
   mm: {fileID: 1489536247}
   dialogueTree: {fileID: 11400000, guid: e4b326c65881be646960b68a5940cc68, type: 2}
   videoStep: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da, type: 2}
+--- !u!114 &1436856688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436856679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901f54b461e70aa44861b8c90ce2ab0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Steps:
+  - {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da, type: 2}
+  - {fileID: 11400000, guid: 00886a2c94b89604a96e9d917d54bc41, type: 2}
+  - {fileID: 11400000, guid: e0189dafa58d995449c1b889c53f82fe, type: 2}
+  RequiresCageArrows: 0
+  RequiresEquipmentArrow: 0
+  RequiresBackToBoatArrow: 0
 --- !u!1 &1437785298
 GameObject:
   m_ObjectHideFlags: 0
@@ -72017,6 +72014,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1443617211}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1444028354
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1444028355}
+  m_Layer: 0
+  m_Name: RespawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1444028355
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444028354}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.668, y: 0.985, z: -2.846}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 686426969}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1444599090
 GameObject:
   m_ObjectHideFlags: 0
@@ -74364,7 +74392,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1489536246
 Transform:
   m_ObjectHideFlags: 0
@@ -74977,17 +75005,17 @@ GameObject:
   - component: {fileID: 1501168892}
   - component: {fileID: 1501168898}
   - component: {fileID: 1501168897}
-  - component: {fileID: 1501168896}
   - component: {fileID: 1501168895}
   - component: {fileID: 1501168894}
   - component: {fileID: 1501168893}
+  - component: {fileID: 1501168899}
   m_Layer: 0
   m_Name: TeleportationAnchor handFeeding
   m_TagString: TeleportationAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1501168892
 Transform:
   m_ObjectHideFlags: 0
@@ -75007,7 +75035,7 @@ Transform:
   - {fileID: 106536480}
   - {fileID: 2500983193647677056}
   m_Father: {fileID: 2137830489}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1501168893
 MonoBehaviour:
@@ -75021,10 +75049,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c29c8eec51897c4eab1eba4609671f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cylinder: {fileID: 551142696}
-  cylinderGlow: {fileID: 1408914729}
-  hitGlow: {fileID: 2100000, guid: d5f266a2202173a4a8e3a3a8cb07aca0, type: 2}
-  hitCylinder: {fileID: 2100000, guid: eb931d9a91341b84794a78f5e6378092, type: 2}
   playerTeleport: {fileID: 1012358363}
   destination: {fileID: 106536480}
   teleportOnHand: 1
@@ -75067,13 +75091,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6caa9a3659b6043ad70f8c01720b3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maintenanceManager: {fileID: 1489536245}
   bucket: {fileID: 5075967337199718691}
   shovel: {fileID: 4653583282711583424}
   videoObject: {fileID: 1646872138}
   grabberLeft: {fileID: 1850708259}
   grabberRight: {fileID: 1345975994}
   subtask: {fileID: 11400000, guid: b07be59bfff9c5d4084d8abeee6452cf, type: 2}
+  feedingStep: {fileID: 11400000, guid: c269b6e49c30e414cafcd888c9e0c004, type: 2}
+  requiredEquipmentStep: {fileID: 11400000, guid: b6eddb7d5d220264d9d94947fab9a0eb,
+    type: 2}
+  watchVideoStep: {fileID: 11400000, guid: 37d210b9754a78946a043656240dd3d8, type: 2}
 --- !u!114 &1501168895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75088,28 +75115,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemRight: {fileID: 4653583282711583424}
   itemLeft: {fileID: 0}
---- !u!114 &1501168896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1501168891}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a596a9247dab54b428bb199fb9df2707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentArrow: {fileID: 0}
-  cageArrows: {fileID: 0}
-  GuidingHandSplint: {fileID: 0}
-  GuidingHandRope: {fileID: 0}
-  GuidingHandBucket: {fileID: 0}
-  maintenanceManager: {fileID: 1489536245}
-  anchorArrow: {fileID: 0}
-  cylinder: {fileID: 551142696}
-  subtask: {fileID: 11400000, guid: b07be59bfff9c5d4084d8abeee6452cf, type: 2}
-  stepName: Throw food to the fish
 --- !u!114 &1501168897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75163,18 +75168,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: IncrementTeleportationAnchorCount
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!65 &1501168898
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -75188,6 +75181,24 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.3595858, y: 3.044056, z: 2.5}
   m_Center: {x: -0.2518322, y: 1.2668915, z: 0.19571543}
+--- !u!114 &1501168899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501168891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901f54b461e70aa44861b8c90ce2ab0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Steps:
+  - {fileID: 11400000, guid: c269b6e49c30e414cafcd888c9e0c004, type: 2}
+  - {fileID: 11400000, guid: 37d210b9754a78946a043656240dd3d8, type: 2}
+  RequiresCageArrows: 1
+  RequiresEquipmentArrow: 0
+  RequiresBackToBoatArrow: 0
 --- !u!1 &1502436771
 GameObject:
   m_ObjectHideFlags: 0
@@ -82003,7 +82014,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 142806131}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1646872154
+--- !u!114 &1646872159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82012,16 +82023,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 1646872138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74d8c08baa8a925468f07803f13998cb, type: 3}
+  m_Script: {fileID: 11500000, guid: ad179a9e83dba5142adaaf7737678e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectsActivatingAfterVideo: []
-  step: {fileID: 0}
-  EventOnVideoPlay:
+  onGrab:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls: []
+  onBecomesClosestGrabbable:
+    m_PersistentCalls:
+      m_Calls: []
+  onNoLongerClosestGrabbable:
+    m_PersistentCalls:
+      m_Calls: []
+  onBecomesClosestRemoteGrabbable:
+    m_PersistentCalls:
+      m_Calls: []
+  onNoLongerClosestRemoteGrabbable:
+    m_PersistentCalls:
+      m_Calls: []
+  onGrip:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
+      - m_Target: {fileID: 500925196}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
         m_MethodName: CompleteStep
         m_Mode: 2
         m_Arguments:
@@ -82033,7 +82060,37 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  EventOnStepCompleted:
+  onTrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  onTriggerDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onTriggerUp:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton1:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton1Down:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton1Up:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton2:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton2Down:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton2Up:
+    m_PersistentCalls:
+      m_Calls: []
+  onSnapZoneEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onSnapZoneExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1647582305
@@ -97596,9 +97653,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c17677c6b6f5fb40b0c2427aab105bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 1489536247}
-  step: Get rope
   guidingHand: {fileID: 1809855096}
+  step: {fileID: 11400000, guid: 6c89fc407ff3a6d49b9133317fffbd7f, type: 2}
 --- !u!1 &1987270524
 GameObject:
   m_ObjectHideFlags: 0
@@ -104111,9 +104167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c17677c6b6f5fb40b0c2427aab105bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 1489536247}
-  step: Get splinter pin
   guidingHand: {fileID: 721102301}
+  step: {fileID: 11400000, guid: aa57e56719bc7b241a08e1c6496d97bb, type: 2}
 --- !u!114 &2126198746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104459,6 +104514,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2137830489}
+  - component: {fileID: 2137830490}
   m_Layer: 0
   m_Name: TaskAnchors
   m_TagString: Untagged
@@ -104478,16 +104534,39 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 374839968}
   - {fileID: 316135166}
   - {fileID: 52030646}
   - {fileID: 1127718175}
   - {fileID: 1501168892}
-  - {fileID: 374839968}
   - {fileID: 10405828}
   - {fileID: 1436856680}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2137830490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137830488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee12bf0d34fa2554c8b70b6f221b5399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskAnchors:
+  - {fileID: 374839975}
+  - {fileID: 316135175}
+  - {fileID: 52030655}
+  - {fileID: 1127718184}
+  - {fileID: 1501168899}
+  - {fileID: 10405832}
+  - {fileID: 1436856688}
+  equipmentArrow: {fileID: 194209570}
+  cageArrows: {fileID: 111445220}
+  backToBoatArrow: {fileID: 620810823}
 --- !u!1 &2139219429
 GameObject:
   m_ObjectHideFlags: 0
@@ -105063,6 +105142,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6537182573562712491, guid: a24a538ab9fed4b48a1c5fed45201f7a,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6537182573562712491, guid: a24a538ab9fed4b48a1c5fed45201f7a,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -105378,6 +105462,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 'FoodBucket '
+      objectReference: {fileID: 0}
+    - target: {fileID: 8845031413898990399, guid: b3ec29c746edc994182874ee83cdae6f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8845031413898990399, guid: b3ec29c746edc994182874ee83cdae6f,
         type: 3}

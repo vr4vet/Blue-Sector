@@ -5,6 +5,7 @@ using UnityEngine;
 public class FishForce : MonoBehaviour
 {
     [SerializeField] private FishSpawner fishSpawner;
+    [SerializeField] private GameObject respawnPoint;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +19,15 @@ public class FishForce : MonoBehaviour
         //gameObject.GetComponent<Outline>().enabled = true;
     }
 
-    public void OnTriggerExit(Collider other)
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("LargerBoat"))
+        {
+            transform.position = respawnPoint.transform.position;
+        }
+    }
+
+/*    public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("DeadfixRespawnBox"))
         {
@@ -26,5 +35,5 @@ public class FishForce : MonoBehaviour
             fishSpawner.RespawnDeadfish();
             Destroy(gameObject);
         }
-    }
+    }*/
 }

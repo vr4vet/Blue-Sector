@@ -4,7 +4,6 @@ public class BreakTask : MonoBehaviour
 {
     [HideInInspector] private NPCSpawner _npcSpawner;
     [HideInInspector] private GameObject _npc;
-    [SerializeField] private MaintenanceManager mm;
     [SerializeField] private DialogueTree dialogueTree;
 
     [SerializeField] private Task.Skill skillBadge;
@@ -14,6 +13,8 @@ public class BreakTask : MonoBehaviour
 
     [SerializeField] private GameObject deadFishBreakAnchor;
 
+    private WatchManager watchManager;
+    private SkillManager skillManager;
     private DialogueBoxController dialogueController;
     private ConversationController conversationController;
 
@@ -26,6 +27,8 @@ public class BreakTask : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        watchManager = WatchManager.Instance;
+        skillManager = watchManager.GetComponent<SkillManager>();
         _npcSpawner = FindObjectOfType<NPCSpawner>();
         if (_npcSpawner == null)
         {
@@ -35,6 +38,8 @@ public class BreakTask : MonoBehaviour
         _npc = _npcSpawner._npcInstances[0];
         dialogueController = _npc.GetComponent<DialogueBoxController>();
         conversationController = _npc.GetComponentInChildren<ConversationController>();
+
+        dialogueController.m_DialogueChanged.AddListener(OnDialogueChanged);
     }
 
     private void Update()
@@ -43,9 +48,9 @@ public class BreakTask : MonoBehaviour
         {
             if (breakDialoguePlayed && !breakTaskDone) // when the break dialogue has finished
             {
-                Task.Step breakStep = mm.GetStep("Taking a break", "Talk to Laila");
+                Task.Step breakStep = watchManager.GetStep("Taking a break", "Talk to Laila");
                 breakStep.SetCompleated(true);
-                mm.UpdateCurrentSubtask(mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish"));
+                watchManager.UpdateCurrentSubtask(watchManager.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish"));
 
                 // moving on to dead fish intro dialogue
                 if (conversationController.GetDialogueTree().name == "PauseBoss")
@@ -64,7 +69,7 @@ public class BreakTask : MonoBehaviour
                     return;
 
                 //Debug.Log(conversationController.GetDialogueTree().name);
-                if (mm.GetStep("Handling of dead fish", "Watch video").RepetionsCompleated >= 1 && conversationController.GetDialogueTree().name == "DeadfishSetup") // activeSelf set to false when video is finished
+                if (watchManager.GetStep("Handling of dead fish", "Watch video").RepetionsCompleated >= 1 && conversationController.GetDialogueTree().name == "DeadfishSetup") // activeSelf set to false when video is finished
                 {
                     // moving on to dead fish counting dialogue
                     conversationController.NextDialogueTree();
@@ -73,22 +78,33 @@ public class BreakTask : MonoBehaviour
                     deadFishCountVideo.SetActive(true);
                     deadFishBreakAnchor.SetActive(true);
 
-                    mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish").GetStep("Get info from Laila").SetCompleated(true);
-                    mm.PlayAudio(mm.success);
-                    mm.InvokeBadge(skillBadge);
+                    watchManager.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish").GetStep("Get info from Laila").SetCompleated(true);
+                    //watchManager.PlayAudio(watchManager.success);
+                    //watchManager.InvokeBadge(skillBadge);
+                    skillManager.CompleteSkill(skillBadge);
                 }
             }
         }
+    }
+
+    private void OnDialogueChanged(string NPCname, string dialogueTreeName, int section, int index)
+    {
+        if (dialogueTreeName != "PauseBoss")
+            return;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!breakDialoguePlayed && other.CompareTag("Player"))
         {
-            // moving on to break dialogue
-            conversationController.NextDialogueTree();
-            conversationController.DialogueTrigger();
+            dialogueController.StartDialogue(dialogueTree, 0, "Boss", 0);
+            breakAnchor.SetActive(false);
             breakDialoguePlayed = true;
         }
+    }
+
+    private void OnDestroy()
+    {
+        dialogueController.m_DialogueChanged.RemoveListener(OnDialogueChanged);
     }
 }
