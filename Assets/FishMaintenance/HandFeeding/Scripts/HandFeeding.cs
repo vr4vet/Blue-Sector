@@ -37,15 +37,6 @@ public class HandFeeding : MonoBehaviour
         SetEquipmentActive();
     }
 
-    public void OnTriggerExit(Collider other)
-    {
-/*        if (other.CompareTag("Player"))
-        {
-            bucket.SetActive(false);
-            videoObject.SetActive(false);
-        }*/
-    }
-
     public void SetEquipmentActive()
     {
         bucket.SetActive(true);
@@ -56,6 +47,11 @@ public class HandFeeding : MonoBehaviour
         BNG.Grabbable shovelGrabbable = shovel.GetComponent<BNG.Grabbable>();
         // grabberLeft.GrabGrabbable(bucketGrabbable);
         grabberRight.GrabGrabbable(shovelGrabbable);
+    }
+
+    private void OnDisable()
+    {
+        videoObject.GetComponent<VideoObject>().HideVideoPlayer();
     }
 
 }

@@ -740,18 +740,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 500925196}
-        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
-        m_MethodName: incrementTeleportationAnchorCount
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!65 &10405827
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -822,11 +810,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000, guid: 022a82fdecd041e4dba991b8a0575791, type: 2}
+  deadFishDialogue: {fileID: 11400000, guid: e4b326c65881be646960b68a5940cc68, type: 2}
+  deadFishTaskDialogue: {fileID: 11400000, guid: 9bfe1b7354269aa4a9e6050cd5610419,
+    type: 2}
+  talkToLailaStep: {fileID: 11400000, guid: fbe655096fa475d409ff320fa26585a1, type: 2}
   skillBadge: {fileID: 11400000, guid: 1932f24e7713b1a4eae2b47534bca9a9, type: 2}
   deadFishPumpVideo: {fileID: 812681630}
   deadFishCountVideo: {fileID: 318205535}
   breakAnchor: {fileID: 10405823}
-  deadFishBreakAnchor: {fileID: 1436856679}
 --- !u!114 &10405832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -841,9 +832,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Steps:
   - {fileID: 11400000, guid: fbe655096fa475d409ff320fa26585a1, type: 2}
+  - {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da, type: 2}
   RequiresCageArrows: 0
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 1
+  RequiresPlayerExitToContinue: 0
 --- !u!1 &10709688
 GameObject:
   m_ObjectHideFlags: 0
@@ -3095,6 +3088,7 @@ MonoBehaviour:
   RequiresCageArrows: 1
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
+  RequiresPlayerExitToContinue: 0
 --- !u!1 &53318674
 GameObject:
   m_ObjectHideFlags: 0
@@ -11938,7 +11932,7 @@ PrefabInstance:
     - target: {fileID: 8751655888749084020, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
         type: 3}
       propertyPath: specialEventOnVideoEnd.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8751655888749084020, guid: 2ed7b7c5d7faa5b409bb115ae36faeef,
         type: 3}
@@ -15311,6 +15305,7 @@ MonoBehaviour:
   RequiresCageArrows: 1
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
+  RequiresPlayerExitToContinue: 0
 --- !u!1 &316346472
 GameObject:
   m_ObjectHideFlags: 0
@@ -15431,7 +15426,7 @@ PrefabInstance:
         type: 3}
       propertyPath: videoIsTask
       value: 
-      objectReference: {fileID: 318205540}
+      objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: deadfishAnchor
@@ -15450,7 +15445,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: videoIsTaskBool
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -15586,65 +15581,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 318205533}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &318205540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 318205535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74d8c08baa8a925468f07803f13998cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectsActivatingAfterVideo:
-  - {fileID: 1436856679}
-  step: {fileID: 0}
-  EventOnVideoPlay:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: CompleteStep
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: PlayAudio
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: 9613dcbb58e447747a03e9b0e4ce7562,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 812681642}
-        m_TargetAssemblyTypeName: VideoObject, Assembly-CSharp
-        m_MethodName: HideVideoPlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  EventOnStepCompleted:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &318205545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15728,10 +15664,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onGrab:
     m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 812681642}
-        m_TargetAssemblyTypeName: VideoObject, Assembly-CSharp
-        m_MethodName: HideVideoPlayer
+      - m_Target: {fileID: 500925196}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: invokeBadge
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: b2174b7512c137243bc37151505dfb43,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Skill, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Observant
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 500925196}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 10405831}
+        m_TargetAssemblyTypeName: BreakTask, Assembly-CSharp
+        m_MethodName: OnDeadFishCountVideoWatched
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15739,21 +15704,6 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: InvokeBadgeString
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Observant
           m_BoolArgument: 0
         m_CallState: 2
   onBecomesClosestGrabbable:
@@ -18010,6 +17960,7 @@ MonoBehaviour:
   RequiresCageArrows: 0
   RequiresEquipmentArrow: 1
   RequiresBackToBoatArrow: 0
+  RequiresPlayerExitToContinue: 0
 --- !u!1 &375657249
 GameObject:
   m_ObjectHideFlags: 0
@@ -39352,7 +39303,7 @@ PrefabInstance:
         type: 3}
       propertyPath: videoIsTask
       value: 
-      objectReference: {fileID: 812681636}
+      objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: deadfishDialog
@@ -39366,7 +39317,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: videoIsTaskBool
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -39381,7 +39332,7 @@ PrefabInstance:
     - target: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
       propertyPath: triggerSpecialEventOnVideoEnd
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 907931764449879985, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
         type: 3}
@@ -39523,52 +39474,6 @@ MonoBehaviour:
   - {fileID: 686426965}
   - {fileID: 686426964}
   foldedLoader: {fileID: 5507740889324603874}
---- !u!114 &812681636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 812681630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74d8c08baa8a925468f07803f13998cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectsActivatingAfterVideo: []
-  step: {fileID: 0}
-  EventOnVideoPlay:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: CompleteStep
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1489536247}
-        m_TargetAssemblyTypeName: MaintenanceManager, Assembly-CSharp
-        m_MethodName: PlayAudio
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: 9613dcbb58e447747a03e9b0e4ce7562,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  EventOnStepCompleted:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &812681641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39638,18 +39543,97 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
---- !u!114 &812681642 stripped
+--- !u!114 &812681643
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 907931764449879984, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1,
-    type: 3}
-  m_PrefabInstance: {fileID: 812681628}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 812681630}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 617e52c29d780a6439dbb86976e93ff0, type: 3}
+  m_Script: {fileID: 11500000, guid: ad179a9e83dba5142adaaf7737678e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onGrab:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 500925196}
+        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
+        m_MethodName: CompleteStep
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 10405831}
+        m_TargetAssemblyTypeName: BreakTask, Assembly-CSharp
+        m_MethodName: OnPumpVideoWatched
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onBecomesClosestGrabbable:
+    m_PersistentCalls:
+      m_Calls: []
+  onNoLongerClosestGrabbable:
+    m_PersistentCalls:
+      m_Calls: []
+  onBecomesClosestRemoteGrabbable:
+    m_PersistentCalls:
+      m_Calls: []
+  onNoLongerClosestRemoteGrabbable:
+    m_PersistentCalls:
+      m_Calls: []
+  onGrip:
+    m_PersistentCalls:
+      m_Calls: []
+  onTrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  onTriggerDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onTriggerUp:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton1:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton1Down:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton1Up:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton2:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton2Down:
+    m_PersistentCalls:
+      m_Calls: []
+  onButton2Up:
+    m_PersistentCalls:
+      m_Calls: []
+  onSnapZoneEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onSnapZoneExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &812827001
 GameObject:
   m_ObjectHideFlags: 0
@@ -48252,22 +48236,22 @@ PrefabInstance:
     - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 75.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092130126286341, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -17.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092130593344025, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -48372,22 +48356,22 @@ PrefabInstance:
     - target: {fileID: 646092131552328433, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092131552328433, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092131552328433, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 69.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092131552328433, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -17.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092131574781501, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -48432,22 +48416,22 @@ PrefabInstance:
     - target: {fileID: 646092132109846135, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092132109846135, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092132109846135, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 73.55
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 646092132109846135, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -17.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 704264033538043867, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -48472,22 +48456,22 @@ PrefabInstance:
     - target: {fileID: 1104997758399786754, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1104997758399786754, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1104997758399786754, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 34.15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1104997758399786754, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -17.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1362919669926270899, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -48687,42 +48671,42 @@ PrefabInstance:
     - target: {fileID: 3403291273372931831, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3403291273372931831, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3403291273372931831, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 44.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3403291273372931831, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -17.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3482202683152220665, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3482202683152220665, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3482202683152220665, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 33.649998
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3482202683152220665, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -17.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3711358385918375471, guid: 04ece6a94084081468c6e6891c807871,
         type: 3}
@@ -56417,6 +56401,7 @@ MonoBehaviour:
   RequiresCageArrows: 1
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
+  RequiresPlayerExitToContinue: 0
 --- !u!1 &1128045917
 GameObject:
   m_ObjectHideFlags: 0
@@ -71756,6 +71741,7 @@ MonoBehaviour:
   RequiresCageArrows: 0
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
+  RequiresPlayerExitToContinue: 0
 --- !u!1 &1437785298
 GameObject:
   m_ObjectHideFlags: 0
@@ -75199,6 +75185,7 @@ MonoBehaviour:
   RequiresCageArrows: 1
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
+  RequiresPlayerExitToContinue: 1
 --- !u!1 &1502436771
 GameObject:
   m_ObjectHideFlags: 0
@@ -104567,6 +104554,8 @@ MonoBehaviour:
   equipmentArrow: {fileID: 194209570}
   cageArrows: {fileID: 111445220}
   backToBoatArrow: {fileID: 620810823}
+  efficientSkill: {fileID: 11400000, guid: 73fd345c513a17649a7fd872a3f4b78c, type: 2}
+  problemSolverSkill: {fileID: 11400000, guid: e9a24f5981f177a48b139d12b5650e68, type: 2}
 --- !u!1 &2139219429
 GameObject:
   m_ObjectHideFlags: 0
