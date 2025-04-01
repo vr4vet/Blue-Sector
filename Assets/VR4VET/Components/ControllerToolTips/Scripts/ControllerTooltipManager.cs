@@ -157,7 +157,7 @@ public class ControllerTooltipManager : MonoBehaviour
                     // the left hand is special, since it has the option of always labelling the teleport stick
                     if (controllerHand == ControllerHand.Left)
                     {
-                        if (!deactivated && _alwaysLabelTeleport && (InputBridge.Instance.LeftThumbstickAxis.magnitude <= .5f))
+                        if (!deactivated && _alwaysLabelTeleport && (InputBridge.Instance.LeftThumbstickAxis.magnitude <= .5f) && !(_grabberRight.HeldGrabbable && _grabberRight.HeldGrabbable.CompareTag("Tablet")))
                             SetUpTooltips(_defaultButtonMappingsLeft, controllerHand);
                         else
                             CloseAllTooltips(controllerHand);
