@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-
-public class TaskAnchorComplete : UnityEvent<TaskAnchor>
-{
-}
-
 public class TaskAnchor : MonoBehaviour
 {
     public List<Task.Step> Steps = new();
@@ -20,6 +15,8 @@ public class TaskAnchor : MonoBehaviour
     private TaskAnchorHandler _anchorHandler;
     private bool _playerExited = false;
     private bool _waitingForExit = false;
+
+    public UnityEvent m_OnTaskAnchorComplete; 
 
     private void Start()
     {
@@ -48,6 +45,8 @@ public class TaskAnchor : MonoBehaviour
                 _anchorHandler.ActivateNextTaskAnchor();
             else
                 StartCoroutine(nameof(WaitBeforeActivatingNextTaskAnchor));
+
+            m_OnTaskAnchorComplete.Invoke();
         }
     }
 

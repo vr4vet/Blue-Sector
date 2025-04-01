@@ -814,6 +814,9 @@ MonoBehaviour:
   deadFishTaskDialogue: {fileID: 11400000, guid: 9bfe1b7354269aa4a9e6050cd5610419,
     type: 2}
   talkToLailaStep: {fileID: 11400000, guid: fbe655096fa475d409ff320fa26585a1, type: 2}
+  getInfoFromLailaStep: {fileID: 11400000, guid: 00886a2c94b89604a96e9d917d54bc41,
+    type: 2}
+  watchVideoStep: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da, type: 2}
   skillBadge: {fileID: 11400000, guid: 1932f24e7713b1a4eae2b47534bca9a9, type: 2}
   deadFishPumpVideo: {fileID: 812681630}
   deadFishCountVideo: {fileID: 318205535}
@@ -833,10 +836,14 @@ MonoBehaviour:
   Steps:
   - {fileID: 11400000, guid: fbe655096fa475d409ff320fa26585a1, type: 2}
   - {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da, type: 2}
+  - {fileID: 11400000, guid: 00886a2c94b89604a96e9d917d54bc41, type: 2}
   RequiresCageArrows: 0
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 1
   RequiresPlayerExitToContinue: 0
+  m_OnTaskAnchorComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &10709688
 GameObject:
   m_ObjectHideFlags: 0
@@ -3089,6 +3096,9 @@ MonoBehaviour:
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
   RequiresPlayerExitToContinue: 0
+  m_OnTaskAnchorComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &53318674
 GameObject:
   m_ObjectHideFlags: 0
@@ -15306,6 +15316,9 @@ MonoBehaviour:
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
   RequiresPlayerExitToContinue: 0
+  m_OnTaskAnchorComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &316346472
 GameObject:
   m_ObjectHideFlags: 0
@@ -15668,32 +15681,6 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 500925196}
-        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
-        m_MethodName: invokeBadge
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: b2174b7512c137243bc37151505dfb43,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: Task.Skill, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Observant
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 500925196}
-        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
-        m_MethodName: CompleteStep
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 10405831}
         m_TargetAssemblyTypeName: BreakTask, Assembly-CSharp
         m_MethodName: OnDeadFishCountVideoWatched
@@ -17961,6 +17948,9 @@ MonoBehaviour:
   RequiresEquipmentArrow: 1
   RequiresBackToBoatArrow: 0
   RequiresPlayerExitToContinue: 0
+  m_OnTaskAnchorComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &375657249
 GameObject:
   m_ObjectHideFlags: 0
@@ -39444,7 +39434,8 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 907931764449879999, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cd83d7ec3c8f7d449b1cb93495a9c1b1, type: 3}
 --- !u!4 &812681629 stripped
 Transform:
@@ -39561,19 +39552,6 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 500925196}
-        m_TargetAssemblyTypeName: WatchManager, Assembly-CSharp
-        m_MethodName: CompleteStep
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: Task.Step, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 10405831}
         m_TargetAssemblyTypeName: BreakTask, Assembly-CSharp
         m_MethodName: OnPumpVideoWatched
@@ -56402,6 +56380,9 @@ MonoBehaviour:
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
   RequiresPlayerExitToContinue: 0
+  m_OnTaskAnchorComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1128045917
 GameObject:
   m_ObjectHideFlags: 0
@@ -71507,7 +71488,6 @@ GameObject:
   - component: {fileID: 1436856683}
   - component: {fileID: 1436856682}
   - component: {fileID: 1436856681}
-  - component: {fileID: 1436856687}
   - component: {fileID: 1436856688}
   m_Layer: 0
   m_Name: TeleportationAnchor deadfish
@@ -71574,6 +71554,8 @@ MonoBehaviour:
   water: {fileID: 686426966}
   grabberRight: {fileID: 1345975994}
   subtask: {fileID: 11400000, guid: 18af548c09e4e7843adb82864aa5c94b, type: 2}
+  allTasksCompletedDialogue: {fileID: 11400000, guid: ccae266d965d9e6409c0ef61c52f35e1,
+    type: 2}
 --- !u!114 &1436856683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71706,22 +71688,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2288221, y: 0.5500869, z: 1.2198322}
   m_Center: {x: 0.16857171, y: 0.119579285, z: 0.2938012}
---- !u!114 &1436856687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1436856679}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97e088f3bef37e74b9a99073d9ddd31b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  videoObject: {fileID: 318205535}
-  mm: {fileID: 1489536247}
-  dialogueTree: {fileID: 11400000, guid: e4b326c65881be646960b68a5940cc68, type: 2}
-  videoStep: {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da, type: 2}
 --- !u!114 &1436856688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71735,13 +71701,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Steps:
-  - {fileID: 11400000, guid: 3d1dcb55ab7d65747acd49e0347397da, type: 2}
-  - {fileID: 11400000, guid: 00886a2c94b89604a96e9d917d54bc41, type: 2}
   - {fileID: 11400000, guid: e0189dafa58d995449c1b889c53f82fe, type: 2}
   RequiresCageArrows: 0
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
   RequiresPlayerExitToContinue: 0
+  m_OnTaskAnchorComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1436856682}
+        m_TargetAssemblyTypeName: DeadfishTank, Assembly-CSharp
+        m_MethodName: OnDeadFishTaskComplete
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1437785298
 GameObject:
   m_ObjectHideFlags: 0
@@ -75186,6 +75165,9 @@ MonoBehaviour:
   RequiresEquipmentArrow: 0
   RequiresBackToBoatArrow: 0
   RequiresPlayerExitToContinue: 1
+  m_OnTaskAnchorComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1502436771
 GameObject:
   m_ObjectHideFlags: 0
@@ -105571,6 +105553,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 356129707678507475, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 1444028354}
     - target: {fileID: 356129707678507478, guid: b4571350969f6884aabb29ab8ef6fb57,
         type: 3}
       propertyPath: m_IsActive
@@ -105581,6 +105568,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 356129707785300377, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 1444028354}
     - target: {fileID: 356129707823178168, guid: b4571350969f6884aabb29ab8ef6fb57,
         type: 3}
       propertyPath: m_IsActive
@@ -105626,6 +105618,21 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 356129708372925051, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 1444028354}
+    - target: {fileID: 356129708475970680, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 1444028354}
+    - target: {fileID: 356129708511289393, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 1444028354}
     - target: {fileID: 356129708511289400, guid: b4571350969f6884aabb29ab8ef6fb57,
         type: 3}
       propertyPath: m_IsActive
@@ -105636,11 +105643,61 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 356129709505035264, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 356129709505035265, guid: b4571350969f6884aabb29ab8ef6fb57,
         type: 3}
       propertyPath: mm
       value: 
       objectReference: {fileID: 1489536247}
+    - target: {fileID: 356129709505035265, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: watchManager
+      value: 
+      objectReference: {fileID: 500925196}
+    - target: {fileID: 356129709505035327, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.4185821
+      objectReference: {fileID: 0}
+    - target: {fileID: 356129709505035327, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.20614955
+      objectReference: {fileID: 0}
+    - target: {fileID: 356129709505035327, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.7637881
+      objectReference: {fileID: 0}
+    - target: {fileID: 356129709505035327, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 356129709505035327, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 4.426049
+      objectReference: {fileID: 0}
+    - target: {fileID: 356129709505035327, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 356129709505035327, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -2.0820656
+      objectReference: {fileID: 0}
+    - target: {fileID: 356129709505035327, guid: b4571350969f6884aabb29ab8ef6fb57,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 412978226468099246, guid: b4571350969f6884aabb29ab8ef6fb57,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -106343,6 +106400,7 @@ PrefabInstance:
     - {fileID: 356129707785300371, guid: b4571350969f6884aabb29ab8ef6fb57, type: 3}
     - {fileID: 356129708475970674, guid: b4571350969f6884aabb29ab8ef6fb57, type: 3}
     - {fileID: 356129707678507476, guid: b4571350969f6884aabb29ab8ef6fb57, type: 3}
+    - {fileID: 356129709505035264, guid: b4571350969f6884aabb29ab8ef6fb57, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b4571350969f6884aabb29ab8ef6fb57, type: 3}
 --- !u!1 &5075967337199718691 stripped
 GameObject:

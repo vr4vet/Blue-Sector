@@ -1,3 +1,5 @@
+using BNG;
+using System.Collections;
 using UnityEngine;
 
 public class BreakTask : MonoBehaviour
@@ -9,6 +11,8 @@ public class BreakTask : MonoBehaviour
     [SerializeField] private DialogueTree deadFishTaskDialogue;
 
     [SerializeField] private Task.Step talkToLailaStep;
+    [SerializeField] private Task.Step getInfoFromLailaStep;
+    [SerializeField] private Task.Step watchVideoStep;
     [SerializeField] private Task.Skill skillBadge;
     [SerializeField] private GameObject deadFishPumpVideo;
     [SerializeField] private GameObject deadFishCountVideo;
@@ -58,25 +62,37 @@ public class BreakTask : MonoBehaviour
         if (!breakDialoguePlayed && other.CompareTag("Player"))
         {
             dialogueController.StartDialogue(dialogueTree, 0, "Boss", 0);
+            WatchManager.Instance.CompleteStep(talkToLailaStep);
             breakDialoguePlayed = true;
         }
     }
 
     public void OnPumpVideoWatched()
     {
-        deadFishPumpVideo.GetComponent<VideoObject>().HideVideoPlayer();
-        deadFishPumpVideo.SetActive(false);
 
+        StartCoroutine(DisableVideoObject(deadFishPumpVideo.GetComponent<VideoObject>()));
+        WatchManager.Instance.CompleteStep(watchVideoStep);
+
+        deadFishPumpVideo.GetComponent<DeadfishTask>().EnableEquipment();
         dialogueController.StartDialogue(deadFishTaskDialogue, 0, "Boss", 0);
-        WatchManager.Instance.CompleteStep(talkToLailaStep);
+        WatchManager.Instance.CompleteStep(getInfoFromLailaStep);
         deadFishCountVideo.SetActive(true);
     }
 
     public void OnDeadFishCountVideoWatched()
     {
-        deadFishCountVideo.GetComponent<VideoObject>().HideVideoPlayer();
-        deadFishCountVideo.SetActive(false);
+        StartCoroutine(DisableVideoObject(deadFishCountVideo.GetComponent<VideoObject>()));
+        WatchManager.Instance.CompleteStep(watchVideoStep);
     }
+
+    private IEnumerator DisableVideoObject(VideoObject videoObject)
+    {
+        while (videoObject.GetComponent<Grabbable>().BeingHeld)
+            yield return null;
+
+        videoObject.HideVideoPlayer();
+    }
+
 
     private void OnDestroy()
     {

@@ -11,13 +11,11 @@ public class DeadfishTank : MonoBehaviour
     [SerializeField] private GameObject water;
     [SerializeField] private BNG.Grabber grabberRight;
     [SerializeField] private Task.Subtask subtask;
+    [SerializeField] private DialogueTree allTasksCompletedDialogue;
     private DropItem dropItem;
-    private FeedbackManager feedbackManager;
-    private MaintenanceManager manager;
-    
+
     private GameObject _npc;
     private DialogueBoxController dialogueController;
-    private ConversationController conversationController;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +23,6 @@ public class DeadfishTank : MonoBehaviour
         dropItem = gameObject.GetComponent<DropItem>();
         _npc = FindObjectOfType<NPCSpawner>()._npcInstances[0];
         dialogueController = _npc.GetComponent<DialogueBoxController>();
-        conversationController = _npc.GetComponentInChildren<ConversationController>();
     }
 
     // Update is called once per frame
@@ -34,21 +31,10 @@ public class DeadfishTank : MonoBehaviour
         if (subtask.GetStep("Push the dead fish into the tub").IsCompeleted())
         {
             dropItem.DropAll();
-
-            // moving on to congratulations conversation
-            if (conversationController.GetDialogueTree().name == "DeadfishExplanation")
-            {
-                conversationController.NextDialogueTree();
-                conversationController.DialogueTrigger();
-            }
         }
     }
-
     void OnEnable()
     {
-        manager = maintenanceManager.GetComponent<MaintenanceManager>();
-        feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
-
         hoett.SetActive(true);
         fish.SetActive(true);
         water.SetActive(true);
@@ -57,17 +43,16 @@ public class DeadfishTank : MonoBehaviour
         BNG.Grabbable hoettGrabbable = hoett.GetComponent<BNG.Grabbable>();
         grabberRight.GrabGrabbable(hoettGrabbable);
 
-        if (manager.GetTeleportationAnchorCount() > 10)
+        foreach (GameObject deadfish in additionalFish)
         {
-            //feedbackManager.AddFeedback("Dødfisk håndtering");
-        }
-        else
-        {
-            foreach (GameObject deadfish in additionalFish)
-            {
-                deadfish.SetActive(true);
-                subtask.GetStep("Push the dead fish into the tub").RepetionNumber = 4;
-            }
+            deadfish.SetActive(true);
+            //subtask.GetStep("Push the dead fish into the tub").RepetionNumber = 4;
         }
     }
+
+    public void OnDeadFishTaskComplete()
+    {
+        dialogueController.StartDialogue(allTasksCompletedDialogue, 0, "Boss", 0);
+    }
+    
 }
