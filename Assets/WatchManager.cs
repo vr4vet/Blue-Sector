@@ -14,10 +14,8 @@ public class WatchManager : MonoBehaviour
     [SerializeField] private AudioClip success;
     [SerializeField] public Subtask FirstSubTask;
     [SerializeField] public FeedbackManager feedbackManager;
-    [SerializeField] private GameObject[] arrows;
 
     private Task.Task task;
-    private int teleportationAnchorCount;
     [HideInInspector] public int stepCount;
 
     public Task.Task Task { get => task; set => task = value; }
@@ -26,7 +24,11 @@ public class WatchManager : MonoBehaviour
     public UnityEvent<Task.Subtask> SubtaskChanged { get; } = new();
     public UnityEvent<Task.Task> TaskCompleted { get; } = new();
     public UnityEvent<Task.Subtask> CurrentSubtask { get; } = new();
+    public UnityEvent<Task.Step> StepCompleted { get; } = new();
+
     public UnityEvent UIChanged = new();
+
+    private Task.Subtask _activeSubtask = null;
 
     private void Awake()
     {
@@ -83,6 +85,7 @@ public class WatchManager : MonoBehaviour
         }
         Subtask sub = step.ParentSubtask;
         step.CompleateRep();
+        StepCompleted.Invoke(step);
         UpdateCurrentSubtask(sub);
         if (step.IsCompeleted())
         {
@@ -127,6 +130,7 @@ public class WatchManager : MonoBehaviour
     public void UpdateCurrentSubtask(Task.Subtask subtask)
     {
         CurrentSubtask.Invoke(subtask);
+        _activeSubtask = subtask;
     }
 
 
@@ -161,16 +165,6 @@ public class WatchManager : MonoBehaviour
         newAudioSource.PlayOneShot(audio);
     }
 
-    public void incrementTeleportationAnchorCount()
-    {
-        teleportationAnchorCount += 1;
-    }
-
-    public int getTeleportationAnchorCount()
-    {
-        return teleportationAnchorCount;
-    }
-
     public void UpdateCurrentTask(Task.Task task)
     {
         Task = task;
@@ -178,5 +172,10 @@ public class WatchManager : MonoBehaviour
         taskListLoader.LoadTaskPage();
         taskListLoader.SubtaskPageLoader(task);
         taskListLoader.StepPageLoader(task.Subtasks[0]);
+    }
+
+    public Task.Subtask GetCurrentSubtask()
+    {
+        return _activeSubtask;
     }
 }
