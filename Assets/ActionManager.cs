@@ -30,7 +30,6 @@ public class ProgressDataDTO
     public string taskName;
     public string description;
     public string status; // "started" or "complete"
-    public string userId = null; // Setting default to null
     public List<SubtaskProgressDTO> subtaskProgress;
 }
 
@@ -40,9 +39,22 @@ public class ProgressDataCollection
     public List<ProgressDataDTO> items;
 }
 
+[Serializable]
+public class UploadDataDTO
+{
+    public string user_name;
+    public string user_mode;    // the "mode" defined in the user profiling
+    public List<string> user_actions;   // this doesn't do anything yet
+    public List<ProgressDataDTO> progress;     // list of json strings representing task progress
+    public string question;     // question that user is asking
+    public int NPC;     // ID of NPC that user is interacting with
+}
+
 public class ActionManager : MonoBehaviour
 {
     public static ActionManager Instance;
+
+    private UploadDataDTO uploadData;
     private List<Task.Task> taskList;
 
     private void Awake()
@@ -55,6 +67,12 @@ public class ActionManager : MonoBehaviour
             Destroy(gameObject);
 
         Debug.Log("ActionManager initialized.");
+
+        uploadData = new UploadDataDTO { user_name = "Ben",
+                                         user_mode = "numberOneBrainrotter",
+                                         user_actions = new List<string> { "vibeCoded", "askedChat", "lookmaxed" },
+                                         question = "HELP ME! I AM TRAPPED INSIDE THIS ACURSED VR WORLD! I'M GOING CRAZY",
+                                         NPC = 0 };
 
         // Initialize the task list
         taskList = new List<Task.Task>();
@@ -81,29 +99,7 @@ public class ActionManager : MonoBehaviour
                 }
             }
         }
-        StartCoroutine(SendTaskHierarchy(progressHierarchy));
-    }
-
-    public void LogSubtaskCompletion(Task.Subtask subtask)
-    {
-        Debug.Log($"Subtask completed: {subtask.SubtaskName} - {subtask.Description}");
-    
-        foreach (var task in taskList)
-        {
-            foreach (var subtask_ in task.Subtasks)
-            {
-                if (subtask_ == subtask)
-                {
-                    // Send progress for the PARENT TASK
-                    var progressData = ConvertTaskToProgressData(task);
-                    StartCoroutine(SendProgressData(progressData));
-                
-                    return;
-                }
-            }
-        }
-    
-        Debug.LogWarning($"Could not find subtask {subtask.SubtaskName}");
+        uploadData.progress = progressHierarchy;
     }
 
     public void LogStepCompletion(Task.Step step)
@@ -120,8 +116,8 @@ public class ActionManager : MonoBehaviour
                     {
                         // Send progress for the PARENT TASK
                         var progressData = ConvertTaskToProgressData(task);
-                        StartCoroutine(SendProgressData(progressData));
-                    
+                        UpdateProgressData(progressData);
+
                         return;
                     }
                 }
@@ -135,10 +131,9 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
-            var progressData = ConvertTaskToProgressData(task);
-            StartCoroutine(SendProgressData(progressData));
+        StartCoroutine(SendUploadData(uploadData));
 
-            Debug.LogWarning($"Could not find task {task.TaskName}");
+        Debug.LogWarning($"Could not find task {task.TaskName}");
     }
 
     // New method to convert a Task to ProgressDataDTO
@@ -179,14 +174,13 @@ public class ActionManager : MonoBehaviour
         return progressData;
     }
 
-    private IEnumerator SendTaskHierarchy(List<ProgressDataDTO> progressHierarchy)
+    private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
-        ProgressDataCollection collection = new ProgressDataCollection { items = progressHierarchy };
 
-        string json = JsonUtility.ToJson(collection);
+        string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
-        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress/initializeTasks", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/ask", "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(jsonBytes);
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -196,7 +190,7 @@ public class ActionManager : MonoBehaviour
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"Failed to send task hierarchy: {request.error}");
+                Debug.LogError($"Failed to upload data to chatservice: {request.error}");
             }
             else
             {
@@ -205,27 +199,14 @@ public class ActionManager : MonoBehaviour
         }
     }
 
-
-    private IEnumerator SendProgressData(ProgressDataDTO progressData)
+    private void UpdateProgressData(ProgressDataDTO progressData)
     {
-        string json = JsonUtility.ToJson(progressData);
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
-
-        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress/updateTask", "POST"))
+        for (int i = 0; i < uploadData.progress.Count; i++)
         {
-            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            yield return request.SendWebRequest();
-
-            if (request.result != UnityWebRequest.Result.Success)
+            if (uploadData.progress[i].taskName == progressData.taskName)
             {
-                Debug.LogError($"Failed to send progress: {request.error}");
-            }
-            else
-            {
-                Debug.Log($"Server response: {request.downloadHandler.text}");
+                uploadData.progress[i] = progressData;
+                return;
             }
         }
     }
