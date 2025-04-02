@@ -13,7 +13,6 @@ public class DeadfishCollide : MonoBehaviour
         if (other.CompareTag("Deadfish"))
         {
             watchManager.CompleteStep(subtask.GetStep("Push the dead fish into the tub"));
-            //other.GetComponent<Outline>().enabled = false;
             PlayAudio();
         }
     }

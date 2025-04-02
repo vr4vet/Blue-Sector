@@ -1,6 +1,7 @@
 using BNG;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BreakTask : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class BreakTask : MonoBehaviour
     [SerializeField] private Task.Step talkToLailaStep;
     [SerializeField] private Task.Step getInfoFromLailaStep;
     [SerializeField] private Task.Step watchVideoStep;
-    [SerializeField] private Task.Skill skillBadge;
+    [SerializeField] private Task.Skill communicationSkill;
+    [SerializeField] private Task.Skill observantSkill;
     [SerializeField] private GameObject deadFishPumpVideo;
     [SerializeField] private GameObject deadFishCountVideo;
     [SerializeField] private GameObject breakAnchor;
@@ -53,7 +55,7 @@ public class BreakTask : MonoBehaviour
                 answersAsked++;
 
             if (answersAsked >= 3) // invoke skill when 3 questions have beeen asked
-                WatchManager.Instance.invokeBadge(skillBadge);
+                WatchManager.Instance.invokeBadge(communicationSkill);
         }
     }
 
@@ -82,6 +84,7 @@ public class BreakTask : MonoBehaviour
     public void OnDeadFishCountVideoWatched()
     {
         StartCoroutine(DisableVideoObject(deadFishCountVideo.GetComponent<VideoObject>()));
+        WatchManager.Instance.invokeBadge(observantSkill);
         WatchManager.Instance.CompleteStep(watchVideoStep);
     }
 

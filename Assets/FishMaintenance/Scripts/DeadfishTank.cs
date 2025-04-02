@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class DeadfishTank : MonoBehaviour
 {
-    [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private GameObject hoett;
     [SerializeField] private GameObject fish;
     [SerializeField] private GameObject[] additionalFish;
@@ -25,14 +24,6 @@ public class DeadfishTank : MonoBehaviour
         dialogueController = _npc.GetComponent<DialogueBoxController>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (subtask.GetStep("Push the dead fish into the tub").IsCompeleted())
-        {
-            dropItem.DropAll();
-        }
-    }
     void OnEnable()
     {
         hoett.SetActive(true);
@@ -46,12 +37,12 @@ public class DeadfishTank : MonoBehaviour
         foreach (GameObject deadfish in additionalFish)
         {
             deadfish.SetActive(true);
-            //subtask.GetStep("Push the dead fish into the tub").RepetionNumber = 4;
         }
     }
 
     public void OnDeadFishTaskComplete()
     {
+        dropItem.DropAll();
         dialogueController.StartDialogue(allTasksCompletedDialogue, 0, "Boss", 0);
     }
     
