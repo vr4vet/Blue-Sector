@@ -176,11 +176,10 @@ public class ActionManager : MonoBehaviour
 
     private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
-
         string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
-        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/ask", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/ask", "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(jsonBytes);
             request.downloadHandler = new DownloadHandlerBuffer();
