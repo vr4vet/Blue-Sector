@@ -13,19 +13,8 @@ using System.Collections;
 [Serializable]
 public class StepProgressDTO
 {
-    /// <summary>
-    /// The name of the step.
-    /// </summary>
     public string stepName;
-
-    /// <summary>
-    /// The repetition number of the step.
-    /// </summary>
     public int repetitionNumber;
-
-    /// <summary>
-    /// Indicates whether the step is completed.
-    /// </summary>
     public bool completed;
 }
 
@@ -35,24 +24,9 @@ public class StepProgressDTO
 [Serializable]
 public class SubtaskProgressDTO
 {
-    /// <summary>
-    /// The name of the subtask.
-    /// </summary>
     public string subtaskName;
-
-    /// <summary>
-    /// The description of the subtask.
-/// </summary>
     public string description;
-
-    /// <summary>
-    /// Indicates whether the subtask is completed.
-    /// </summary>
     public bool completed;
-
-    /// <summary>
-    /// A list of progress data for the steps in the subtask.
-    /// </summary>
     public List<StepProgressDTO> stepProgress;
 }
 
@@ -62,24 +36,9 @@ public class SubtaskProgressDTO
 [Serializable]
 public class ProgressDataDTO
 {
-    /// <summary>
-    /// The name of the task.
-    /// </summary>
     public string taskName;
-
-    /// <summary>
-    /// The description of the task.
-    /// </summary>
     public string description;
-
-    /// <summary>
-    /// The status of the task, either "started" or "complete".
-    /// </summary>
     public string status;
-
-    /// <summary>
-    /// A list of progress data for the subtasks in the task.
-    /// </summary>
     public List<SubtaskProgressDTO> subtaskProgress;
 }
 
@@ -89,9 +48,6 @@ public class ProgressDataDTO
 [Serializable]
 public class ProgressDataCollection
 {
-    /// <summary>
-    /// A list of progress data for tasks.
-    /// </summary>
     public List<ProgressDataDTO> items;
 }
 
@@ -101,20 +57,13 @@ public class ProgressDataCollection
 [Serializable]
 public class UploadDataDTO
 {
-    /// <summary>
-    /// The name of the user.
-    /// </summary>
     public string user_name;
 
     /// <summary>
     /// The mode defined in the user profiling.
     /// </summary>
     public string user_mode;
-
-    /// <summary>
-    /// A list of user actions (currently unused).
-    /// </summary>
-    public List<string> user_actions;
+    public List<string> user_actions;   // currently not used
 
     /// <summary>
     /// A list of progress data for tasks.
@@ -137,9 +86,6 @@ public class UploadDataDTO
 /// </summary>
 public class ActionManager : MonoBehaviour
 {
-    /// <summary>
-    /// Singleton instance of the ActionManager.
-    /// </summary>
     public static ActionManager Instance;
 
     private UploadDataDTO uploadData;
@@ -217,6 +163,8 @@ public class ActionManager : MonoBehaviour
                     {
                         var progressData = ConvertTaskToProgressData(task);
                         UpdateProgressData(progressData);
+
+                        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after step completion
                         return;
                     }
                 }
