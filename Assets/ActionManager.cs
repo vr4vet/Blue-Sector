@@ -7,59 +7,174 @@ using System;
 using System.Text;
 using System.Collections;
 
+/// <summary>
+/// Represents the progress of a single step in a subtask.
+/// </summary>
 [Serializable]
 public class StepProgressDTO
 {
+    /// <summary>
+    /// The name of the step.
+    /// </summary>
     public string stepName;
+
+    /// <summary>
+    /// The repetition number of the step.
+    /// </summary>
     public int repetitionNumber;
+
+    /// <summary>
+    /// Indicates whether the step is completed.
+    /// </summary>
     public bool completed;
 }
 
+/// <summary>
+/// Represents the progress of a subtask, including its steps.
+/// </summary>
 [Serializable]
 public class SubtaskProgressDTO
 {
+    /// <summary>
+    /// The name of the subtask.
+    /// </summary>
     public string subtaskName;
+
+    /// <summary>
+    /// The description of the subtask.
+/// </summary>
     public string description;
+
+    /// <summary>
+    /// Indicates whether the subtask is completed.
+    /// </summary>
     public bool completed;
+
+    /// <summary>
+    /// A list of progress data for the steps in the subtask.
+    /// </summary>
     public List<StepProgressDTO> stepProgress;
 }
 
+/// <summary>
+/// Represents the progress of a task, including its subtasks.
+/// </summary>
 [Serializable]
 public class ProgressDataDTO
 {
+    /// <summary>
+    /// The name of the task.
+    /// </summary>
     public string taskName;
+
+    /// <summary>
+    /// The description of the task.
+    /// </summary>
     public string description;
-    public string status; // "started" or "complete"
-    public string userId = null; // Setting default to null
+
+    /// <summary>
+    /// The status of the task, either "started" or "complete".
+    /// </summary>
+    public string status;
+
+    /// <summary>
+    /// A list of progress data for the subtasks in the task.
+    /// </summary>
     public List<SubtaskProgressDTO> subtaskProgress;
 }
 
+/// <summary>
+/// A collection of progress data for multiple tasks.
+/// </summary>
 [Serializable]
 public class ProgressDataCollection
 {
+    /// <summary>
+    /// A list of progress data for tasks.
+    /// </summary>
     public List<ProgressDataDTO> items;
 }
 
+/// <summary>
+/// Data structure for uploading user progress and interactions.
+/// </summary>
+[Serializable]
+public class UploadDataDTO
+{
+    /// <summary>
+    /// The name of the user.
+    /// </summary>
+    public string user_name;
+
+    /// <summary>
+    /// The mode defined in the user profiling.
+    /// </summary>
+    public string user_mode;
+
+    /// <summary>
+    /// A list of user actions (currently unused).
+    /// </summary>
+    public List<string> user_actions;
+
+    /// <summary>
+    /// A list of progress data for tasks.
+    /// </summary>
+    public List<ProgressDataDTO> progress;
+
+    /// <summary>
+    /// The question that the user is asking.
+    /// </summary>
+    public string question;
+
+    /// <summary>
+    /// The ID of the NPC that the user is interacting with.
+    /// </summary>
+    public int NPC;
+}
+
+/// <summary>
+/// Manages user actions, task progress, and uploads data to the server.
+/// </summary>
 public class ActionManager : MonoBehaviour
 {
+    /// <summary>
+    /// Singleton instance of the ActionManager.
+    /// </summary>
     public static ActionManager Instance;
+
+    private UploadDataDTO uploadData;
     private List<Task.Task> taskList;
 
+    /// <summary>
+    /// Creates a singleton object of the ActionManager.
+    /// Adds mock userdata.
+    /// </summary>
     private void Awake()
     {
-        // Ensure only one instance of ActionManager exists
         if (Instance == null)
             Instance = this;
-
         else if (Instance != this)
             Destroy(gameObject);
 
         Debug.Log("ActionManager initialized.");
 
-        // Initialize the task list
+        uploadData = new UploadDataDTO
+        {
+            user_name = "Ben",
+            user_mode = "numberOneBrainrotter",
+            user_actions = new List<string> { "vibeCoded", "askedChat", "lookmaxed" },
+            question = "HELP ME! I AM TRAPPED INSIDE THIS ACURSED VR WORLD! I'M GOING CRAZY",
+            NPC = 0
+        };
+
         taskList = new List<Task.Task>();
     }
 
+    /// <summary>
+    /// Logs the hierarchy of tasks and their subtasks/steps.
+    /// Updates the upload data with the current task progress.
+    /// </summary>
+    /// <param name="tasks">The list of tasks to log.</param>
     public void LogTaskHierarchy(List<Task.Task> tasks)
     {
         taskList = tasks;
@@ -81,35 +196,17 @@ public class ActionManager : MonoBehaviour
                 }
             }
         }
-        StartCoroutine(SendTaskHierarchy(progressHierarchy));
+        uploadData.progress = progressHierarchy;
     }
 
-    public void LogSubtaskCompletion(Task.Subtask subtask)
-    {
-        Debug.Log($"Subtask completed: {subtask.SubtaskName} - {subtask.Description}");
-    
-        foreach (var task in taskList)
-        {
-            foreach (var subtask_ in task.Subtasks)
-            {
-                if (subtask_ == subtask)
-                {
-                    // Send progress for the PARENT TASK
-                    var progressData = ConvertTaskToProgressData(task);
-                    StartCoroutine(SendProgressData(progressData));
-                
-                    return;
-                }
-            }
-        }
-    
-        Debug.LogWarning($"Could not find subtask {subtask.SubtaskName}");
-    }
-
+    /// <summary>
+    /// Logs the completion of a specific step and updates the progress data.
+    /// </summary>
+    /// <param name="step">The step that was completed.</param>
     public void LogStepCompletion(Task.Step step)
     {
         Debug.Log($"Step completed: {step.StepName}");
-    
+
         foreach (var task in taskList)
         {
             foreach (var subtask in task.Subtasks)
@@ -118,30 +215,35 @@ public class ActionManager : MonoBehaviour
                 {
                     if (step_ == step)
                     {
-                        // Send progress for the PARENT TASK
                         var progressData = ConvertTaskToProgressData(task);
-                        StartCoroutine(SendProgressData(progressData));
-                    
+                        UpdateProgressData(progressData);
                         return;
                     }
                 }
             }
         }
-    
+
         Debug.LogWarning($"Could not find step {step.StepName}");
     }
 
+    /// <summary>
+    /// Logs the completion of a task and sends the upload data to the server.
+    /// </summary>
+    /// <param name="task">The task that was completed.</param>
     public void LogTaskCompletion(Task.Task task)
     {
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
-            var progressData = ConvertTaskToProgressData(task);
-            StartCoroutine(SendProgressData(progressData));
+        StartCoroutine(SendUploadData(uploadData));
 
-            Debug.LogWarning($"Could not find task {task.TaskName}");
+        Debug.LogWarning($"Could not find task {task.TaskName}");
     }
 
-    // New method to convert a Task to ProgressDataDTO
+    /// <summary>
+    /// Converts a Task object into a ProgressDataDTO object.
+    /// </summary>
+    /// <param name="task">The task to convert.</param>
+    /// <returns>A ProgressDataDTO representing the task's progress.</returns>
     private ProgressDataDTO ConvertTaskToProgressData(Task.Task task)
     {
         ProgressDataDTO progressData = new ProgressDataDTO
@@ -149,7 +251,6 @@ public class ActionManager : MonoBehaviour
             taskName = task.TaskName,
             description = task.Description,
             status = task.Compleated() ? "complete" : "started",
-            // userId is now null by default
             subtaskProgress = new List<SubtaskProgressDTO>()
         };
 
@@ -179,14 +280,17 @@ public class ActionManager : MonoBehaviour
         return progressData;
     }
 
-    private IEnumerator SendTaskHierarchy(List<ProgressDataDTO> progressHierarchy)
+    /// <summary>
+    /// Sends the upload data to the server as a JSON payload.
+    /// </summary>
+    /// <param name="uploadData">The data to upload.</param>
+    /// <returns>An IEnumerator for the coroutine.</returns>
+    private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
-        ProgressDataCollection collection = new ProgressDataCollection { items = progressHierarchy };
-
-        string json = JsonUtility.ToJson(collection);
+        string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
-        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress/initializeTasks", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/ask", "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(jsonBytes);
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -196,7 +300,7 @@ public class ActionManager : MonoBehaviour
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"Failed to send task hierarchy: {request.error}");
+                Debug.LogError($"Failed to upload data to chatservice: {request.error}");
             }
             else
             {
@@ -205,27 +309,18 @@ public class ActionManager : MonoBehaviour
         }
     }
 
-
-    private IEnumerator SendProgressData(ProgressDataDTO progressData)
+    /// <summary>
+    /// Updates the progress data for a specific task in the upload data.
+    /// </summary>
+    /// <param name="progressData">The updated progress data.</param>
+    private void UpdateProgressData(ProgressDataDTO progressData)
     {
-        string json = JsonUtility.ToJson(progressData);
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
-
-        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8080/api/progress/updateTask", "POST"))
+        for (int i = 0; i < uploadData.progress.Count; i++)
         {
-            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            yield return request.SendWebRequest();
-
-            if (request.result != UnityWebRequest.Result.Success)
+            if (uploadData.progress[i].taskName == progressData.taskName)
             {
-                Debug.LogError($"Failed to send progress: {request.error}");
-            }
-            else
-            {
-                Debug.Log($"Server response: {request.downloadHandler.text}");
+                uploadData.progress[i] = progressData;
+                return;
             }
         }
     }
