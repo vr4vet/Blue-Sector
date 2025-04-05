@@ -80,7 +80,13 @@ public class UploadDataDTO
     /// The ID of the NPC that the user is interacting with.
     /// </summary>
     public int NPC;
+
+    /// <summary>
+    /// Information about user idle time, if applicable.
+    /// </summary>
+    public IdleDataDTO idleData;
 }
+
 
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
@@ -91,6 +97,9 @@ public class ActionManager : MonoBehaviour
 
     private UploadDataDTO uploadData;
     private List<Task.Task> taskList;
+
+    // Reference to the idle timer
+    private IdleTimer idleTimer;
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -112,10 +121,21 @@ public class ActionManager : MonoBehaviour
             user_actions = new List<string>(),
             progress = new List<ProgressDataDTO>(),
             question = "What actions have I made? And how far along am I in my tasks?",
-            NPC = 0
+            NPC = 0,
+            idleData = null
         };
 
         taskList = new List<Task.Task>();
+
+        // Find or add the IdleTimer component
+        idleTimer = GetComponent<IdleTimer>();
+        if (idleTimer == null)
+        {
+            idleTimer = gameObject.AddComponent<IdleTimer>();
+        }
+
+        // Subscribe to idle events
+        idleTimer.OnIdleThresholdReached += HandleIdleThresholdReached;
     }
 
     /// <summary>
@@ -132,6 +152,12 @@ public class ActionManager : MonoBehaviour
     private void OnDisable()
     {
         UnregisterGrabListeners();
+
+        // Unsubscribe from idle events to prevent memory leaks
+        if (idleTimer != null)
+        {
+            idleTimer.OnIdleThresholdReached -= HandleIdleThresholdReached;
+        }
     }
 
     /// <summary>
@@ -170,6 +196,12 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object grabbed: {grabbable.name}");
 
         uploadData.user_actions.Add("grabbed: " + grabbable.name);
+
+        // Reset idle timer when user interacts with objects
+        if (idleTimer != null)
+        {
+            idleTimer.ResetIdleTimer();
+        }
     }
 
     /// <summary>
@@ -186,6 +218,31 @@ public class ActionManager : MonoBehaviour
 
         // Add to the user actions list with position information
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+
+        // Reset idle timer when user interacts with objects
+        if (idleTimer != null)
+        {
+            idleTimer.ResetIdleTimer();
+        }
+    }
+
+    /// <summary>
+    /// Handles the idle threshold exceeded event from IdleTimer
+    /// </summary>
+    /// <param name="idleData">Data about the idle state</param>
+    private void HandleIdleThresholdReached(IdleDataDTO idleData)
+    {
+        // Update the question to reflect the idle state
+        uploadData.question = $"I've been working on '{idleData.currentTaskName}' for a while and might need some help. I'm stuck on the step '{idleData.lastActiveStep}'.";
+
+        // Set the idle data
+        uploadData.idleData = idleData;
+
+        // Send the report
+        StartCoroutine(SendUploadData(uploadData));
+
+        // Clear idle data after sending
+        uploadData.idleData = null;
     }
 
     /// <summary>
@@ -236,6 +293,13 @@ public class ActionManager : MonoBehaviour
                         var progressData = ConvertTaskToProgressData(task);
                         UpdateProgressData(progressData);
 
+                        // Update idle tracking with current task and step
+                        if (idleTimer != null)
+                        {
+                            idleTimer.ResetIdleTimer();
+                            idleTimer.StartIdleTracking(task, step);
+                        }
+
                         return;
                     }
                 }
@@ -252,6 +316,12 @@ public class ActionManager : MonoBehaviour
     public void LogTaskCompletion(Task.Task task)
     {
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
+
+        // Stop idle tracking when task is completed
+        if (idleTimer != null)
+        {
+            idleTimer.StopIdleTracking();
+        }
 
         /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after task completion
 
