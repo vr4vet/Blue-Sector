@@ -68,7 +68,11 @@ public class WatchManager : MonoBehaviour
             skill.Lock();
         }
         UpdateCurrentSubtask(FirstSubTask);
-        actionManager.LogTaskHierarchy(taskHolder.taskList);
+
+        if (actionManager != null)
+        {
+            actionManager.LogTaskHierarchy(taskHolder.taskList);
+        }
     }
 
     public void invokeBadge(Task.Skill badge)
@@ -108,7 +112,10 @@ public class WatchManager : MonoBehaviour
                 UpdateCurrentSubtask(sub);
             }
 
-            actionManager.LogStepCompletion(step);
+            if (actionManager != null)
+            {
+                actionManager.LogStepCompletion(step);
+            }
         }
         
         if (sub.Compleated())
