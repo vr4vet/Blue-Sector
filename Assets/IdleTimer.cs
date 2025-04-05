@@ -56,10 +56,10 @@ public class IdleTimer : MonoBehaviour
     private Task.Step currentActiveStep = null;
 
     // Default threshold (in seconds) for when to send an idle alert
-    [SerializeField] private float idleThresholdInSeconds = 300f; // 5 minutes by default
+    [SerializeField] private float idleThresholdInSeconds = 10f; // 5 minutes by default
 
     // How often to check if the user is still idle (in seconds)
-    [SerializeField] private float idleCheckIntervalInSeconds = 60f; // 1 minute by default
+    [SerializeField] private float idleCheckIntervalInSeconds = 20f; // 1 minute by default
 
     private float nextIdleCheckTime = 0f;
 
