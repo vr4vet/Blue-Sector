@@ -6,6 +6,7 @@ using Task;
 using System;
 using System.Text;
 using System.Collections;
+using BNG;
 
 /// <summary>
 /// Represents the progress of a single step in a subtask.
@@ -107,13 +108,84 @@ public class ActionManager : MonoBehaviour
         uploadData = new UploadDataDTO
         {
             user_name = "Ben",
-            user_mode = "numberOneBrainrotter",
-            user_actions = new List<string> { "vibeCoded", "askedChat", "lookmaxed" },
-            question = "HELP ME! I AM TRAPPED INSIDE THIS ACURSED VR WORLD! I'M GOING CRAZY",
+            user_mode = "student",
+            user_actions = new List<string>(),
+            progress = new List<ProgressDataDTO>(),
+            question = "What actions have I made? And how far along am I in my tasks?",
             NPC = 0
         };
 
         taskList = new List<Task.Task>();
+    }
+
+    /// <summary>
+    /// Register grab event listeners when the component is enabled
+    /// </summary>
+    private void OnEnable()
+    {
+        RegisterGrabListeners();
+    }
+
+    /// <summary>
+    /// Unregister grab event listeners when the component is disabled
+    /// </summary>
+    private void OnDisable()
+    {
+        UnregisterGrabListeners();
+    }
+
+    /// <summary>
+    /// Find all Grabbers in the scene and register for their events
+    /// </summary>
+    private void RegisterGrabListeners()
+    {
+        Grabber[] grabbers = FindObjectsOfType<Grabber>();
+        foreach (Grabber grabber in grabbers)
+        {
+            grabber.onAfterGrabEvent.AddListener(OnGrabEvent);
+            grabber.onReleaseEvent.AddListener(OnReleaseEvent);
+        }
+    }
+
+    /// <summary>
+    /// Unregister from all grabber events
+    /// </summary>
+    private void UnregisterGrabListeners()
+    {
+        Grabber[] grabbers = FindObjectsOfType<Grabber>();
+        foreach (Grabber grabber in grabbers)
+        {
+            grabber.onAfterGrabEvent.RemoveListener(OnGrabEvent);
+            grabber.onReleaseEvent.RemoveListener(OnReleaseEvent);
+        }
+    }
+
+    /// <summary>
+    /// Called when an object is grabbed by the player.
+    /// Logs the object name that was grabbed.
+    /// </summary>
+    /// <param name="grabbable">The object that was grabbed</param>
+    public void OnGrabEvent(Grabbable grabbable)
+    {
+        Debug.Log($"Object grabbed: {grabbable.name}");
+
+        uploadData.user_actions.Add("grabbed: " + grabbable.name);
+    }
+
+    /// <summary>
+    /// Called when an object is released by the player.
+    /// Logs the object name and position where it was dropped.
+    /// </summary>
+    /// <param name="grabbable">The object that was released</param>
+    public void OnReleaseEvent(Grabbable grabbable)
+    {
+        // Get the position where the object was dropped
+        Vector3 dropPosition = grabbable.transform.position;
+
+        Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
+
+        // Add to the user actions list with position information
+        uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
     }
 
     /// <summary>
@@ -164,7 +236,6 @@ public class ActionManager : MonoBehaviour
                         var progressData = ConvertTaskToProgressData(task);
                         UpdateProgressData(progressData);
 
-                        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after step completion
                         return;
                     }
                 }
@@ -182,7 +253,7 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
-        StartCoroutine(SendUploadData(uploadData));
+        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after task completion
 
         Debug.LogWarning($"Could not find task {task.TaskName}");
     }
