@@ -323,7 +323,7 @@ public class ActionManager : MonoBehaviour
             idleTimer.StopIdleTracking();
         }
 
-        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after task completion
+        StartCoroutine(SendUploadData(uploadData)); // Uncomment this line to send data immediately after task completion
 
         Debug.LogWarning($"Could not find task {task.TaskName}");
     }

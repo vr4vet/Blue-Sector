@@ -14,11 +14,14 @@ namespace Task
     public class Step : ScriptableObject
     {
         [SerializeField] private string _stepName;
-        [SerializeField] [Range(1, 20)] private int _repetionNumber = 1;
+        [SerializeField][Range(1, 20)] private int _repetionNumber = 1;
         private int stepNumber;
-        
+
         [Tooltip(">0 : count down, <0 : no timer, 0 : count up")]
         [SerializeField] private int _timer = -1;
+
+        [Tooltip("Time in seconds before triggering idle notifications (0 = disabled)")]
+        [SerializeField] private int _idleTimeoutSeconds = 120; // Default to 2 minutes
 
         private bool _compleated = false;
         private bool _currentStep = false;
@@ -34,6 +37,8 @@ namespace Task
         public TimeSpan Counter { get => _counter; set => _counter = value; }
         public bool CurrentStep { get => _currentStep; set => _currentStep = value; }
 
+        // Property for idle timeout
+        public int IdleTimeoutSeconds { get => _idleTimeoutSeconds; set => _idleTimeoutSeconds = value; }
 
         public void CompleateRep()
         {
@@ -52,6 +57,7 @@ namespace Task
         {
             return stepNumber;
         }
+
         public void setStepNumber(int stepNumber)
         {
             this.stepNumber = stepNumber;
@@ -91,7 +97,6 @@ namespace Task
         {
             _compleated = false;
             _repetionsCompleated = 0;
-
         }
 
         //overload to compleate reps
@@ -105,18 +110,26 @@ namespace Task
             Tablet.TaskListLoader1 taskLoader = GameObject.FindObjectsOfType<Tablet.TaskListLoader1>()[0];
             taskLoader.updateCheckMarks();
         }
-        /// Set the name of this aktivitet (Legacy)
 
+        /// Set the name of this aktivitet (Legacy)
         public void SetAktivitetName(string value)
         {
             _stepName = value;
         }
 
-        
-        public void StartTimer(){
+        public void StartTimer()
+        {
             Tablet.TaskListLoader1 taskLoader = GameObject.FindObjectsOfType<Tablet.TaskListLoader1>()[0];
             taskLoader.startTimer(Timer, this);
         }
-        
+
+        /// <summary>
+        /// Gets the idle timeout for this step in seconds
+        /// </summary>
+        /// <returns>The idle timeout in seconds</returns>
+        public float GetIdleTimeoutSeconds()
+        {
+            return _idleTimeoutSeconds;
+        }
     }
 }

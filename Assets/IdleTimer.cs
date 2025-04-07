@@ -1,3 +1,7 @@
+/* Developer: Erik Le Blanc
+ * Ask your questions on github: https://github.com/erikleblanc
+ */
+
 using System;
 using UnityEngine;
 using Task;
@@ -55,11 +59,14 @@ public class IdleTimer : MonoBehaviour
     private Task.Task currentActiveTask = null;
     private Task.Step currentActiveStep = null;
 
-    // Default threshold (in seconds) for when to send an idle alert
-    [SerializeField] private float idleThresholdInSeconds = 10f; // 5 minutes by default
+    // Default threshold (in seconds) if no step-specific timeout is provided
+    [SerializeField] private float defaultIdleThresholdInSeconds = 120f; // Default 2 minutes
 
     // How often to check if the user is still idle (in seconds)
-    [SerializeField] private float idleCheckIntervalInSeconds = 20f; // 1 minute by default
+    [SerializeField] private float idleCheckIntervalInSeconds = 20f;
+
+    // Current idle threshold for the active step
+    private float idleThresholdInSeconds;
 
     private float nextIdleCheckTime = 0f;
 
@@ -68,7 +75,7 @@ public class IdleTimer : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (isTrackingIdleTime && currentActiveTask != null)
+        if (isTrackingIdleTime && currentActiveTask != null && currentActiveStep != null)
         {
             // Increment idle timer
             idleTimer += Time.deltaTime;
@@ -103,12 +110,28 @@ public class IdleTimer : MonoBehaviour
     {
         currentActiveTask = task;
         currentActiveStep = step;
+
+        // Get the idle threshold from the step
+        float stepTimeout = step.GetIdleTimeoutSeconds();
+
+        // If timeout is 0, don't track idle time for this step
+        if (stepTimeout <= 0)
+        {
+            isTrackingIdleTime = false;
+            idleTimer = 0f;
+            Debug.Log($"Idle tracking disabled for task: {task.TaskName}, step: {step.StepName}");
+            return;
+        }
+
+        // Otherwise, start tracking with the specified timeout
         isTrackingIdleTime = true;
         idleTimer = 0f;
+        idleThresholdInSeconds = stepTimeout;
         nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
 
-        Debug.Log($"Started idle tracking for task: {task.TaskName}, step: {step.StepName}");
+        Debug.Log($"Started idle tracking for task: {task.TaskName}, step: {step.StepName}, timeout: {idleThresholdInSeconds}s");
     }
+
 
     /// <summary>
     /// Stops tracking idle time.
@@ -140,10 +163,11 @@ public class IdleTimer : MonoBehaviour
     /// </summary>
     private void SendIdleReport()
     {
-        if (currentActiveTask == null)
+        if (currentActiveTask == null || currentActiveStep == null)
             return;
 
-        Debug.Log($"User has been idle for {idleTimer} seconds on task: {currentActiveTask.TaskName}");
+        Debug.Log($"User has been idle for {idleTimer} seconds on task: {currentActiveTask.TaskName}, step: {currentActiveStep.StepName}");
+        Debug.Log($"Idle threshold reached with timeout of {idleThresholdInSeconds} seconds");
 
         // Create idle data
         IdleDataDTO idleData = new IdleDataDTO
@@ -151,9 +175,9 @@ public class IdleTimer : MonoBehaviour
             currentTaskName = currentActiveTask.TaskName,
             idleTimeSeconds = idleTimer,
             idleThresholdSeconds = idleThresholdInSeconds,
-            lastActiveStep = currentActiveStep != null ? currentActiveStep.StepName : "Unknown",
+            lastActiveStep = currentActiveStep.StepName,
             taskStartTime = DateTime.Now.AddSeconds(-idleTimer).ToString("yyyy-MM-dd HH:mm:ss"),
-            contextMessage = $"User might need assistance with task '{currentActiveTask.TaskName}'. They have been idle for {Math.Round(idleTimer / 60, 1)} minutes."
+            contextMessage = $"User might need assistance with task '{currentActiveTask.TaskName}', step '{currentActiveStep.StepName}'. They have been idle for {Math.Round(idleTimer / 60, 1)} minutes."
         };
 
         // Fire the event
