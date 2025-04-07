@@ -1,339 +1,498 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ConversationController : MonoBehaviour
 {
-    [SerializeField] private DialogueTree _toBeOverwrittenByJSON; // Josn override need an example of an dialogue tree, to turn something from JSON to DialogueTree
-    [SerializeField] private List<TextAsset> _dialogueTreesJSONFormat; // list of JSON, will be added to the list below
-    [SerializeField] private List<DialogueTree> _dialogueTreesSOFormat; // lsit of ScriptableObjects, JSON will be turned into SO, and added here. Yhis is the list we work with
-    [HideInInspector] private DialogueTree _dialogueTree; // The active dialogue
-    [HideInInspector] private DialogueTree _oldDialogueTree; // The previous dialogue, for checking if we are on same dialogue
-    [HideInInspector] private int _currentElement = 0; // The element number of the active dialogue
-    [HideInInspector] private Animator _animator;
+    // --- Existing References & Config ---
+    [SerializeField] private DialogueTree _toBeOverwrittenByJSON;
+    [SerializeField] private List<TextAsset> _dialogueTreesJSONFormat = new List<TextAsset>();
+    [SerializeField] private List<DialogueTree> _dialogueTreesSOFormat = new List<DialogueTree>();
+    [HideInInspector] private DialogueTree _dialogueTree;
+    [HideInInspector] private DialogueTree _oldDialogueTree;
+    [HideInInspector] private int _currentElement = 0; // Tracks current DialogueTree in the list
+
+    // --- Component References ---
+    [HideInInspector] private Animator _animator; // Found on parent's child model
+    [HideInInspector] private DialogueBoxController _dialogueBoxController; // Found on parent
+    [HideInInspector] public AIConversationController _AIConversationController; // Found on parent (Set by NPCSpawner)
+
+    // --- Input System ---
+    [Header("Input Settings")]
+    [Tooltip("Assign in Inspector to VoiceRecord action")]
+    [SerializeField] private InputActionReference voiceRecordAction;
+
+    // --- State ---
+    [HideInInspector] public bool playerInsideTrigger = false;
+    [HideInInspector] public bool isRecording = false; // Track active recording state
+
+    // --- Animation Hashes ---
     [HideInInspector] private int _hasNewDialogueOptionsHash;
-    [HideInInspector] private DialogueBoxController _dialogueBoxController;
 
-    // Start is called before the first frame update
-    void Start()
-    {   
-
-        _dialogueBoxController = GetComponentInParent<DialogueBoxController>();
-        if (_dialogueBoxController == null) {
-            Debug.LogError("The NPC is missing the DialogueBoxCOntroller script");
+    void OnEnable()
+    {
+        if (voiceRecordAction != null && voiceRecordAction.action != null)
+        {
+            voiceRecordAction.action.Enable();
+            voiceRecordAction.action.started += OnVoiceRecordPerformed;  // Use started for immediate response
+            voiceRecordAction.action.canceled += OnVoiceRecordCanceled;
         }
-        // Join the json-version and the dialogueTree-version into one list;
-        // The dialogueTree-version will be first
+    }
+
+    void OnDisable()
+    {
+        if (voiceRecordAction != null && voiceRecordAction.action != null)
+        {
+            voiceRecordAction.action.Disable();
+            voiceRecordAction.action.started -= OnVoiceRecordPerformed;  // Match with started
+            voiceRecordAction.action.canceled -= OnVoiceRecordCanceled;
+        }
+
+        // Ensure we stop recording if component is disabled while recording
+        if (isRecording)
+        {
+            HandleRecordButton(false);
+        }
+    }
+
+    // Called when the button is pressed down
+    private void OnVoiceRecordPerformed(InputAction.CallbackContext context)
+    {
+        // Only handle input if this NPC is the one the player is interacting with
+        if (playerInsideTrigger && CanStartRecording())
+        {
+            Debug.Log($"VoiceRecord button pressed down on {transform.parent?.name}");
+            HandleRecordButton(true);
+        }
+    }
+
+    // Called when the button is released
+    private void OnVoiceRecordCanceled(InputAction.CallbackContext context)
+    {
+        // Check if we're the active recorder to avoid stopping recordings that weren't started by us
+        if (isRecording)
+        {
+            Debug.Log($"VoiceRecord button released on {transform.parent?.name}");
+            HandleRecordButton(false);
+        }
+    }
+
+    void Start()
+    {
+        // Get reference to parent's DialogueBoxController
+        _dialogueBoxController = GetComponentInParent<DialogueBoxController>();
+        if (_dialogueBoxController == null)
+        {
+            Debug.LogError("ConversationController: Parent DialogueBoxController script not found!", this);
+        }
+
+        // AIConversationController reference is set by NPCSpawner if it's an AI NPC
+
+        // Animator reference setup
+        updateAnimator(); // Find animator initially
+        if (_animator != null)
+        {
+            _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
+        }
+
+        // Dialogue Tree setup
         JoinWithScriptableObjectList(_dialogueTreesJSONFormat);
-        if (_dialogueTreesSOFormat.Count > 0) {
+        if (_dialogueTreesSOFormat.Count > 0)
+        {
             _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
         }
-        updateAnimator();
+        else
+        {
+            Debug.LogWarning($"ConversationController on {transform.parent?.name}: No dialogue trees assigned.", this);
+        }
     }
 
     public void updateAnimator()
     {
-        GameObject parent = this.transform.parent.gameObject;
-        _animator = parent.GetComponentInChildren<Animator>();
-        if (_animator == null)
+        // Animator is expected on a child of the parent (e.g., the model GameObject)
+        Transform parentTransform = this.transform.parent;
+        if (parentTransform != null)
         {
-            Debug.LogError("THe NPC is missing the Animator");
-            return;
-        }
-    }
-
-    public void updateAnimator(Animator animator) {
-        this._animator = animator;
-    }
-
-    public bool isDialogueActive() 
-    {
-        return _dialogueBoxController.dialogueIsActive;
-    }
-    
-    public int GetActivatedCount()
-    {
-        return _dialogueBoxController.GetActivatedCount();
-    }
-    /// <summary>
-    /// Start the dialogue when the Player is close enough
-    /// </summary>
-    /// <param name="other"></param>
-    void OnTriggerEnter(Collider other)
-    {   
-        if (other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider) && _dialogueTree.shouldTriggerOnProximity && !_dialogueBoxController.dialogueIsActive && _oldDialogueTree != _dialogueTree) 
-        {
-            // string json = JsonUtility.ToJson(dialogueTree);
-            // Debug.Log(json);
-            //_dialogueBoxController.startSpeakCanvas(_dialogueTree);
-            _oldDialogueTree = _dialogueTree;
-            if (_dialogueTree != null) {
-                _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC", 0);
-            } else {
-                // Commented out because not all NPC's should have a dialogue tree, therefor not an error
-
-                //Debug.LogError("The dialogueTree of the NPC is null");
+            _animator = parentTransform.GetComponentInChildren<Animator>();
+            if (_animator == null)
+            {
+                Debug.LogError($"ConversationController on {parentTransform.name}: Animator not found in parent's children.", this);
             }
-        }
-    }
-
-    /// <summary>
-    /// Method to trigger dialogue
-    /// Should be connected to event of your choosing
-    /// Only triggers if there is a new dialogue tree
-    /// </summary>
-    public void DialogueTrigger() {
-        if (_oldDialogueTree != _dialogueTree) {
-            // Change the old tree to be the current tree, to ensure no repeats
-            _oldDialogueTree = _dialogueTree;
-            if (_dialogueTree != null) {
-                _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC", 0);
-            } else {
-                Debug.LogError("The dialogueTree of the NPC is null");
-            }
-        }
-    }
-
-    /// <summary>
-    ///  Method to tigger dialogue
-    ///  Should be connected to event of your choosing
-    ///  Triggers no matter if the same tree has been triggered before
-    /// </summary>
-    public void DialogueTriggerAbsolute() {
-        if (_dialogueTree != null) {
-            _dialogueBoxController.StartDialogue(_dialogueTree, 0, "NPC", 0);
-        } else {
-            Debug.LogError("The dialogueTree of the NPC is null");
-        }
-    }
-
-    /// <summary>
-    /// Method to trigger a comment
-    /// Comments are dialogue without a dialogue box
-    /// Comment content is the current dialogue tree
-    /// Use different sections for different comments
-    /// Triggered on call with no prerequesites
-    /// </summary>
-    public void CommentTrigger(int section = 0) {
-        if (_dialogueTree != null) {
-            _dialogueBoxController.StartComment(_dialogueTree,  section, "NPC");
-        } else {
-            Debug.LogError("The dialogueTree of the NPC is null (COMMENT)");
-        }
-    }
-
-
-    /// <summary>
-    /// Join the json-version and the dialogueTree-version into one list.
-    /// The dialogueTree-version will be first.
-    /// </summary>
-    /// <param name="dialogueTreesJSONFormat"></param>
-    private void JoinWithScriptableObjectList(List<TextAsset> dialogueTreesJSONFormat)
-    {
-        foreach (var dialogueJSON in dialogueTreesJSONFormat)
-        {
-            DialogueTree temp = Instantiate(_toBeOverwrittenByJSON);
-            JsonUtility.FromJsonOverwrite(dialogueJSON.text, temp);
-            _dialogueTreesSOFormat.Add(temp);
-        }
-    }
-
-    /// <summary>
-    /// Converts a list of text assest into a list of dialogue trees
-    /// </summary>
-    /// <param name="dialogueTreesJSONFormat"></param>
-    /// <returns>a list of dialogue trees</returns>
-    private List<DialogueTree> ConvertFromJSONListToDialogueTreeList(List<TextAsset> dialogueTreesJSONFormat)
-    {
-        List<DialogueTree> dialogueTrees = new List<DialogueTree>();
-        foreach (var dialogueJSON in dialogueTreesJSONFormat)
-        {
-            DialogueTree temp = Instantiate(_toBeOverwrittenByJSON);
-            JsonUtility.FromJsonOverwrite(dialogueJSON.text, temp);
-            dialogueTrees.Add(temp);
-        }
-        return dialogueTrees;
-    }
-
-    /// <summary>
-    /// Replace the list of dialogueTrees with a new one.
-    /// The NPC will singal through animation that they have a new dialogue. 
-    /// </summary>
-    /// <param name="dialogueTrees"></param>
-    public void SetDialogueTreeList(List<DialogueTree> dialogueTrees) {
-        _dialogueBoxController?.ExitConversation();
-        this._dialogueTreesSOFormat = dialogueTrees;
-        _currentElement = 0;
-        if (_dialogueTreesSOFormat.Count > 0) {
-            _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
-        }
-        if (_animator)
-        {
-            _animator.SetBool(_hasNewDialogueOptionsHash, true);
-        }
-    }
-
-    /// <summary>
-    /// Replace the list of dialogueTrees with a new one.
-    /// The NPC will singal through animation that they have a new dialogue. 
-    /// </summary>
-    /// <param name="dialogueTree"></param>
-    public void SetDialogueTreeList(DialogueTree dialogueTree) {
-        SetDialogueTreeList(new List<DialogueTree>
-        {
-            dialogueTree
-        });
-    }
-
-    /// <summary>
-    /// Insert a new dialogue tree as the next item in the list.
-    /// End the old conversation and change to the new one.
-    /// The NPC will singal through animation that they have a new dialogue.
-    /// </summary>
-    /// <param name="dialogueTree"></param>
-    public void InsertDialogueTreeAndChange(DialogueTree dialogueTree) {
-        if (!_dialogueTreesSOFormat.Contains(dialogueTree)) {
-            _dialogueBoxController.ExitConversation();
-            _currentElement++;
-            _dialogueTreesSOFormat.Insert(_currentElement, dialogueTree);
-            this._dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
-            _animator.SetBool(_hasNewDialogueOptionsHash, true);
-        } 
-    }
-
-    public void SetDialogueTreeList(List<TextAsset> dialogueTrees) {
-        SetDialogueTreeList(ConvertFromJSONListToDialogueTreeList(dialogueTrees));
-    }
-
-    public void SetDialogueTreeList(TextAsset dialogueTree) {
-        SetDialogueTreeList(new List<TextAsset>
-        {
-            dialogueTree
-        });
-    }
-
-    public void InsertDialogueTreeAndChange(TextAsset dialogueTree) {
-        DialogueTree temp = Instantiate(_toBeOverwrittenByJSON);
-        JsonUtility.FromJsonOverwrite(dialogueTree.text, temp);
-        InsertDialogueTreeAndChange(temp);
-    }
-
-    public void SetDialogueTreeList(DialogueTree[] dialogueTreesSO, TextAsset[] dialogueTreesJSON) {
-        SetDialogueTreeList(new List<DialogueTree>(dialogueTreesSO));
-        JoinWithScriptableObjectList(new List<TextAsset>(dialogueTreesJSON));
-        if (_dialogueTreesSOFormat.Count > 0) {
-            _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
-        }
-    }
-
-    /// <summary>
-    /// Go to the next dialogueTree.
-    /// The NPC will signal through animation that the dialogue changed. 
-    /// </summary>
-    public void NextDialogueTree() {
-        _currentElement++;
-        if (_currentElement >= _dialogueTreesSOFormat.Count())
-        {
-            _currentElement--;
-            Debug.Log("You have already read the last dialogue tree");
-        } else {
-            //_dialogueBoxController.ExitConversation();
-            _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
-            // Change the speak canvas to the new dialogue tree
-            _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
-            if (_animator == null) 
-            { 
-                GameObject parent = this.transform.parent.gameObject; 
-                _animator = parent.GetComponentInChildren<Animator>(); 
-            }
-            _animator.SetBool(_hasNewDialogueOptionsHash, true);
-        }
-    }
-
-    // Start a specific dialogue tree from the dialogue tree list
-    public void StartDialogueTree(string dialogueTreeName)
-    {
-        // Find the dialogue tree based on the given name
-        _dialogueTree = _dialogueTreesSOFormat.Find(x => x.name == dialogueTreeName);
-        if (_dialogueTree != null)
-        {
-            _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
-            if (_animator == null) 
-            { 
-                GameObject parent = this.transform.parent.gameObject; 
-                _animator = parent.GetComponentInChildren<Animator>(); 
-            }
-            _animator.SetBool(_hasNewDialogueOptionsHash, true);
         }
         else
         {
-            Debug.LogError("The dialogueTree of the NPC is null");
+            Debug.LogError("ConversationController: Cannot find parent transform!", this);
         }
     }
 
-    /// <summary>
-    /// Go to the prior dialogueTree.
-    /// The NPC will signal through animation that the dialogue changed. 
-    /// </summary>
-    public void PreviousDialogueTree() {
-        _currentElement--;
-        if (_currentElement < 0)
+    // Called by SetCharacterModel when animator changes
+    public void updateAnimator(Animator animator)
+    {
+        this._animator = animator;
+        if (this._animator != null)
         {
-            _currentElement=0;
-            Debug.Log("You have already read the first dialogue tree");
-        } else {
-            //_dialogueBoxController.ExitConversation();
-            _dialogueTree = _dialogueTreesSOFormat.ElementAt(_currentElement);
-            // Change the speak canvas to the new dialogue tree
-            _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
+            _hasNewDialogueOptionsHash = Animator.StringToHash("hasNewDialogueOptions");
+        }
+        else
+        {
+            Debug.LogWarning("ConversationController: updateAnimator called with null Animator.", this);
+        }
+    }
+
+    public bool isDialogueActive()
+    {
+        return _dialogueBoxController != null && _dialogueBoxController.dialogueIsActive;
+    }
+
+    // Method for external systems (like VR Input) to check if interaction is possible
+    public bool CanStartRecording()
+    {
+        return playerInsideTrigger &&
+               _dialogueBoxController != null &&
+               _dialogueBoxController.isTalkable && // Check talkable state from DialogueBoxController
+               !_dialogueBoxController.dialogueEnded;
+    }
+
+    // --- Public method for VR Input System to call ---
+    public void HandleRecordButton(bool pressed)
+    {
+        if (_AIConversationController == null)
+        {
+            Debug.Log("HandleRecordButton called, but this is not an AI NPC.");
+            return; // Ignore if not an AI NPC
+        }
+
+        if (pressed) // Button Press Down
+        {
+            if (CanStartRecording() && !isRecording) // Only start if not already recording
+            {
+                Debug.Log($"ConversationController ({transform.parent.name}): Record button pressed & valid state. Starting recording.");
+                _AIConversationController.TriggerRecording(true);
+                isRecording = true;
+            }
+            else
+            {
+                Debug.Log($"ConversationController ({transform.parent.name}): Record button pressed but cannot start recording (Inside: {playerInsideTrigger}, Talkable: {_dialogueBoxController?.isTalkable}, Ended: {_dialogueBoxController?.dialogueEnded}).");
+            }
+        }
+        else // Button Release
+        {
+            if (isRecording && _AIConversationController.GetTranscribe() != null)
+            {
+                Debug.Log($"ConversationController ({transform.parent.name}): Record button released. Stopping recording.");
+                _AIConversationController.TriggerRecording(false);
+                isRecording = false;
+            }
+        }
+    }
+
+    // --- Trigger Events for Proximity ---
+
+    void OnTriggerEnter(Collider other)
+    {
+        // Check if the collider belongs to the player (using the singleton reference)
+        if (NPCToPlayerReferenceManager.Instance != null && other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider))
+        {
+            playerInsideTrigger = true;
+            Debug.Log($"ConversationController ({transform.parent.name}): Player entered trigger range.");
+
+            // Show the dialogue UI canvas (DialogueBoxController handles actual content visibility)
+            if (_dialogueBoxController != null) _dialogueBoxController.ShowDialogueBox();
+
+            // Start dialogue automatically ONLY if proximity trigger is enabled, not already active, and it's a new tree
+            if (_dialogueTree != null && _dialogueTree.shouldTriggerOnProximity && !isDialogueActive() && _oldDialogueTree != _dialogueTree)
+            {
+                Debug.Log($"ConversationController ({transform.parent.name}): Proximity trigger starting dialogue tree '{_dialogueTree.name}'.");
+                _oldDialogueTree = _dialogueTree; // Mark as seen
+                if (_dialogueBoxController != null)
+                {
+                    // Start dialogue using the parent's name
+                    _dialogueBoxController.StartDialogue(_dialogueTree, 0, transform.parent.name);
+                }
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (NPCToPlayerReferenceManager.Instance != null && other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider))
+        {
+            playerInsideTrigger = false;
+            Debug.Log($"ConversationController ({transform.parent.name}): Player exited trigger range.");
+
+            // Hide the dialogue canvas if dialogue is not active
+            if (_dialogueBoxController != null) _dialogueBoxController.HideDialogueBox();
+
+            // If the player leaves while recording, stop recording
+            if (isRecording)
+            {
+                HandleRecordButton(false); // Trigger stop
+            }
+        }
+    }
+
+    // --- Dialogue Tree Management Methods ---
+
+    public int GetActivatedCount()
+    {
+        return _dialogueBoxController != null ? _dialogueBoxController.GetActivatedCount() : 0;
+    }
+
+    public void DialogueTrigger()
+    {
+        if (_dialogueTree != null && _oldDialogueTree != _dialogueTree)
+        {
+            _oldDialogueTree = _dialogueTree;
+            if (_dialogueBoxController != null)
+            {
+                _dialogueBoxController.StartDialogue(_dialogueTree, 0, transform.parent.name);
+            }
+            else { Debug.LogError("DialogueBoxController is null in DialogueTrigger.", this); }
+        }
+        else
+        {
+            if (_dialogueTree == null) Debug.LogError("Cannot trigger dialogue, _dialogueTree is null.", this);
+            // else Debug.Log("DialogueTrigger called, but tree hasn't changed or is null.");
+        }
+    }
+
+    public void DialogueTriggerAbsolute()
+    {
+        if (_dialogueTree != null)
+        {
+            if (_dialogueBoxController != null)
+            {
+                _dialogueBoxController.StartDialogue(_dialogueTree, 0, transform.parent.name);
+            }
+            else { Debug.LogError("DialogueBoxController is null in DialogueTriggerAbsolute.", this); }
+        }
+        else
+        {
+            Debug.LogError("Cannot trigger dialogue, _dialogueTree is null.", this);
+        }
+    }
+
+    public void CommentTrigger(int section = 0)
+    {
+        if (_dialogueTree != null)
+        {
+            if (_dialogueBoxController != null)
+            {
+                // Comments likely don't need AI? Use standard StartComment if it exists
+                // _dialogueBoxController.StartComment(_dialogueTree, section, transform.parent.name);
+                Debug.LogWarning("CommentTrigger called, but StartComment needs verification/implementation in the merged DialogueBoxController.", this);
+            }
+            else { Debug.LogError("DialogueBoxController is null in CommentTrigger.", this); }
+        }
+        else
+        {
+            Debug.LogError("Cannot trigger comment, _dialogueTree is null.", this);
+        }
+    }
+
+    private void JoinWithScriptableObjectList(List<TextAsset> jsonList)
+    {
+        if (jsonList == null) return;
+        foreach (var dialogueJSON in jsonList)
+        {
+            if (dialogueJSON != null && _toBeOverwrittenByJSON != null)
+            {
+                try
+                {
+                    DialogueTree temp = Instantiate(_toBeOverwrittenByJSON);
+                    JsonUtility.FromJsonOverwrite(dialogueJSON.text, temp);
+                    temp.name = dialogueJSON.name; // Give it a name based on the TextAsset
+                    _dialogueTreesSOFormat.Add(temp);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to load DialogueTree from JSON '{dialogueJSON.name}'. Error: {e.Message}", this);
+                }
+            }
+        }
+    }
+
+    private List<DialogueTree> ConvertFromJSONListToDialogueTreeList(List<TextAsset> jsonList)
+    {
+        List<DialogueTree> treeList = new List<DialogueTree>();
+        if (jsonList == null) return treeList;
+
+        foreach (var dialogueJSON in jsonList)
+        {
+            if (dialogueJSON != null && _toBeOverwrittenByJSON != null)
+            {
+                try
+                {
+                    DialogueTree temp = Instantiate(_toBeOverwrittenByJSON);
+                    JsonUtility.FromJsonOverwrite(dialogueJSON.text, temp);
+                    temp.name = dialogueJSON.name;
+                    treeList.Add(temp);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to convert DialogueTree from JSON '{dialogueJSON.name}'. Error: {e.Message}", this);
+                }
+            }
+        }
+        return treeList;
+    }
+
+    public void SetDialogueTreeList(List<DialogueTree> dialogueTrees)
+    {
+        if (_dialogueBoxController != null) _dialogueBoxController.ExitConversation(); // End current conversation safely
+        this._dialogueTreesSOFormat = dialogueTrees ?? new List<DialogueTree>(); // Ensure list is not null
+        _currentElement = 0;
+        _dialogueTree = _dialogueTreesSOFormat.Count > 0 ? _dialogueTreesSOFormat[0] : null;
+        _oldDialogueTree = null; // Reset seen tree
+        SignalNewDialogue();
+    }
+
+    public void SetDialogueTreeList(DialogueTree dialogueTree)
+    {
+        SetDialogueTreeList(new List<DialogueTree> { dialogueTree });
+    }
+
+    public void SetDialogueTreeList(List<TextAsset> dialogueTreesJSON)
+    {
+        List<DialogueTree> convertedTrees = ConvertFromJSONListToDialogueTreeList(dialogueTreesJSON);
+        SetDialogueTreeList(convertedTrees);
+    }
+
+    public void SetDialogueTreeList(TextAsset dialogueTreeJSON)
+    {
+        SetDialogueTreeList(new List<TextAsset> { dialogueTreeJSON });
+    }
+
+    // Combined setter used by NPCSpawner
+    public void SetDialogueTreeList(DialogueTree[] dialogueTreesSO, TextAsset[] dialogueTreesJSON)
+    {
+        if (_dialogueBoxController != null) _dialogueBoxController.ExitConversation();
+        _dialogueTreesSOFormat = new List<DialogueTree>(dialogueTreesSO ?? Array.Empty<DialogueTree>());
+        JoinWithScriptableObjectList(new List<TextAsset>(dialogueTreesJSON ?? Array.Empty<TextAsset>()));
+        _currentElement = 0;
+        _dialogueTree = _dialogueTreesSOFormat.Count > 0 ? _dialogueTreesSOFormat[0] : null;
+        _oldDialogueTree = null; // Reset seen tree
+        SignalNewDialogue();
+    }
+
+    public void InsertDialogueTreeAndChange(DialogueTree dialogueTree)
+    {
+        if (dialogueTree != null && !_dialogueTreesSOFormat.Contains(dialogueTree))
+        {
+            if (_dialogueBoxController != null) _dialogueBoxController.ExitConversation();
+            _currentElement++; // Insert after current
+            _dialogueTreesSOFormat.Insert(Mathf.Clamp(_currentElement, 0, _dialogueTreesSOFormat.Count), dialogueTree);
+            this._dialogueTree = dialogueTree; // Switch to the new tree
+            _oldDialogueTree = null; // Allow immediate trigger if needed
+            SignalNewDialogue();
+        }
+    }
+
+    public void InsertDialogueTreeAndChange(TextAsset dialogueTreeJSON)
+    {
+        if (dialogueTreeJSON != null && _toBeOverwrittenByJSON != null)
+        {
+            try
+            {
+                DialogueTree temp = Instantiate(_toBeOverwrittenByJSON);
+                JsonUtility.FromJsonOverwrite(dialogueTreeJSON.text, temp);
+                temp.name = dialogueTreeJSON.name;
+                InsertDialogueTreeAndChange(temp);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to insert DialogueTree from JSON '{dialogueTreeJSON.name}'. Error: {e.Message}", this);
+            }
+        }
+    }
+
+    public void NextDialogueTree()
+    {
+        if (_currentElement + 1 < _dialogueTreesSOFormat.Count)
+        {
+            _currentElement++;
+            _dialogueTree = _dialogueTreesSOFormat[_currentElement];
+            _oldDialogueTree = null; // Allow immediate trigger if needed
+            SignalNewDialogue();
+            if (_dialogueBoxController != null) _dialogueBoxController.StartSpeakCanvas(_dialogueTree); // Show speak button for new tree
+        }
+        else
+        {
+            Debug.Log("Already at the last dialogue tree.");
+        }
+    }
+
+    public void PreviousDialogueTree()
+    {
+        if (_currentElement - 1 >= 0)
+        {
+            _currentElement--;
+            _dialogueTree = _dialogueTreesSOFormat[_currentElement];
+            _oldDialogueTree = null; // Allow immediate trigger if needed
+            SignalNewDialogue();
+            if (_dialogueBoxController != null) _dialogueBoxController.StartSpeakCanvas(_dialogueTree);
+        }
+        else
+        {
+            Debug.Log("Already at the first dialogue tree.");
+        }
+    }
+
+    // Start a specific dialogue tree by name
+    public void StartDialogueTree(string dialogueTreeName)
+    {
+        DialogueTree foundTree = _dialogueTreesSOFormat.Find(tree => tree != null && tree.name == dialogueTreeName);
+        if (foundTree != null)
+        {
+            int foundIndex = _dialogueTreesSOFormat.IndexOf(foundTree);
+            if (foundIndex >= 0)
+            {
+                _currentElement = foundIndex;
+                _dialogueTree = foundTree;
+                _oldDialogueTree = null; // Allow immediate trigger if needed
+                SignalNewDialogue();
+                if (_dialogueBoxController != null) _dialogueBoxController.StartSpeakCanvas(_dialogueTree); // Show speak button
+                Debug.Log($"Switched to dialogue tree: {dialogueTreeName}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"DialogueTree named '{dialogueTreeName}' not found in the list for {transform.parent?.name}.", this);
+        }
+    }
+
+    public DialogueTree GetDialogueTree()
+    {
+        return _dialogueTree;
+    }
+
+    public List<DialogueTree> GetDialogueTrees()
+    {
+        return _dialogueTreesSOFormat;
+    }
+
+    private void SignalNewDialogue()
+    {
+        if (_animator != null)
+        {
             _animator.SetBool(_hasNewDialogueOptionsHash, true);
         }
     }
 
-    public DialogueTree GetDialogueTree() {
-        return _dialogueTree;
+#if UNITY_EDITOR
+    // Editor-only test function
+    public void TestVoiceRecordingConnection()
+    {
+        Debug.Log("Testing voice recording connection:");
+        Debug.Log($"- Input Action Reference: {(voiceRecordAction != null ? "Assigned" : "Missing")}");
+        Debug.Log($"- AI Controller: {(_AIConversationController != null ? "Connected" : "Missing")}");
+        Debug.Log($"- DialogueBox Controller: {(_dialogueBoxController != null ? "Connected" : "Missing")}");
+        Debug.Log($"- Transcribe Component: {(_AIConversationController != null && _AIConversationController.GetTranscribe() != null ? "Available" : "Missing")}");
+        Debug.Log($"- Player Inside Trigger: {playerInsideTrigger}");
+        Debug.Log($"- Talkable State: {(_dialogueBoxController != null ? _dialogueBoxController.isTalkable.ToString() : "N/A")}");
+        Debug.Log($"- Dialogue Ended: {(_dialogueBoxController != null ? _dialogueBoxController.dialogueEnded.ToString() : "N/A")}");
     }
-    
-    public DialogueTree GetOldDialogueTree() {
-        return _oldDialogueTree;
-    }
-    
-    public List<DialogueTree> GetDialogueTrees() {
-        return _dialogueTreesSOFormat;
-    }
-
-
-    // Easy way to test the functionality
-    // public List<TextAsset> dialogueTreesJSONFormatTest;
-    // public List<DialogueTree> dialogueTreesSOTest;
-    // public TextAsset textAssetTest;
-    // public DialogueTree dialogueTreeTest;
-
-
-    // void Update() {
-    //     if(Input.GetKeyDown(KeyCode.Alpha1)) {
-    //         Debug.Log(KeyCode.Alpha1 + "is pressed. Go back");
-    //         previousDialogueTree();
-    //     }
-    //     if(Input.GetKeyDown(KeyCode.Alpha2)) {
-    //         Debug.Log(KeyCode.Alpha2 + "is pressed. Go forward");
-    //         NextDialogueTree();
-    //     }
-    //     if(Input.GetKeyDown(KeyCode.Alpha4)) {
-    //         Debug.Log(KeyCode.Alpha4 + "is pressed: changing the tree. JSON");
-    //         SetDialogueTreeList(dialogueTreesJSONFormatTest);
-    //     }
-    //     if(Input.GetKeyDown(KeyCode.Alpha5)) {
-    //         Debug.Log(KeyCode.Alpha5 + "is pressed: changing the tree. ScritableObject");
-    //         SetDialogueTreeList(dialogueTreesSOTest);
-    //     }
-    //     if(Input.GetKeyDown(KeyCode.Alpha7)) {
-    //         Debug.Log(KeyCode.Alpha7 + "is pressed: Inserting into the tree. JSON");
-    //         insertDialogueTreeAndChange(textAssetTest);
-    //     }
-    //     if(Input.GetKeyDown(KeyCode.Alpha8)) {
-    //         Debug.Log(KeyCode.Alpha8 + "is pressed: Inserting into the tree. ScritableObject");
-    //         insertDialogueTreeAndChange(dialogueTreeTest);
-    //     }
-    // }
+#endif
 }

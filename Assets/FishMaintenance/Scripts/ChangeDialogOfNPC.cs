@@ -9,7 +9,7 @@ public class ChangeDialogOfNPC : MonoBehaviour
     public NPCSpawner spawner;
     public void changeDialogue()
     {
-        GameObject colleague = spawner.getNpc();
+        GameObject colleague = spawner.GetNpcInstance(newNpc.NameOfNPC);
         colleague.SetActive(false);
         spawner.SpawnNPC(newNpc);
     }

@@ -22,18 +22,22 @@ MonoBehaviour:
       loss, blood spots, lesions, fin damage, and gill condition to make sure there
       are no health issues.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Are you ready to start?
       answers:
       - answerLabel: Yes
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No
         nextElement: 0
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 0000
+    dialogueEnd: 0
   - dialogue:
     - The next step is inspecting the internal areas of the fish. Cut open the fish
       according to the instructions.
@@ -43,15 +47,19 @@ MonoBehaviour:
       it is set zero. '
     - Remember to be careful when handling the fish to avoid causing any damage.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
       question: Are you ready to continue
       answers:
       - answerLabel: Yes
         nextElement: 0
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 00000000
+    dialogueEnd: 0
