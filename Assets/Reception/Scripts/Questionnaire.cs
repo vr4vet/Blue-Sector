@@ -27,6 +27,12 @@ public class Questionnaire : MonoBehaviour
         ButtonSpawner.OnAnswer += Questionnaire_OnAnswer;
     }
 
+    /// <summary>
+    /// This method is called when the user answers a question in NPC Receptionist Rachel's dialogue tree.
+    /// </summary>
+    /// <param name="answer"> The value of the button that the user presses</param>
+    /// <param name="question"> The question connected to the answer </param>
+    /// <param name="name"> The name of the NPC whose dialogue button was clicked </param>
     private void Questionnaire_OnAnswer(string answer, string question, string name) {
         // Only listen to when the buttons belonging to Receptionist Rachel's dialogue tree are pressed
         if (name==_receptionistNpc.name)
@@ -44,6 +50,7 @@ public class Questionnaire : MonoBehaviour
                 // Listen to the end of the questionnaire
                 if (question == "Are you satisfied with your answers?" && answer == "Yes")
                 {
+
                     Debug.Log("Sending answers to ActionManager");
                 }
             }
@@ -51,6 +58,9 @@ public class Questionnaire : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Stop listening for questionnaire answers when the user is no longer in Reception scene.
+    /// </summary>
     void OnDestroy()
     {
         ButtonSpawner.OnAnswer -= Questionnaire_OnAnswer;
