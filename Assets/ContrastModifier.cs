@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,16 +10,22 @@ public class ContrastModifier : MonoBehaviour
     private Color _defaultBackground = new Color32(0xF2, 0xF7, 0xFF, 0xFF);
     private Color _defaultPositive = new Color32(0x1C, 0xA3, 0x8C, 0xFF);
     private Color _defaultBrandPurple = new Color32(0x8A, 0x99, 0xFA, 0xFF);
-    private Color _fullyWhite = Color.white;
+    private Color _defaultRed = new Color32(0xE5, 0x14, 0x45, 0xFF);
+    private Color _defaultTranslucentBackground = new Color32(0xDF, 0xE9, 0xF7, 50);
     private Color _contrastDarkBlue;
     private Color _contrastLightBlue;
     private Color _contrastMiddleBlue;
     private Color _contrastBackground;
     private Color _contrastPositive;
     private Color _contrastBrandPurple;
+    private Color _contrastRed;
     private Color _contrastWhite;
+    private Color _contrastTranslucentBackground;
 
     private bool _highContrastMode;
+    private bool _settingLoaded = false;
+
+    [SerializeField] private List<GameObject> ExcludeObjects;
 
     private NewMenuManger MainMenu;
 
@@ -42,8 +49,14 @@ public class ContrastModifier : MonoBehaviour
         _contrastBrandPurple = _defaultBrandPurple * .5f;
         _contrastBrandPurple.a = 0xFF;
 
-        _contrastWhite = _fullyWhite * .5f;
+        _contrastRed = _defaultRed * .5f;
+        _contrastRed.a = 0xFF;
+
+        _contrastWhite = Color.white * .5f;
         _contrastWhite.a = 0xFF;
+
+        _contrastTranslucentBackground = Color.white * .99f;
+        _contrastTranslucentBackground.a = 0xFF;
 
         MainMenu = FindObjectOfType<NewMenuManger>();
 
@@ -54,17 +67,23 @@ public class ContrastModifier : MonoBehaviour
 
     private void Start()
     {
-        WatchManager.Instance.UIChanged.AddListener(OnUIChanged);
+        if (WatchManager.Instance)
+            WatchManager.Instance.UIChanged.AddListener(OnUIChanged);
     }
 
 
     public void ToggleContrast(bool contrast)
     {
+        _settingLoaded = true;
+        //Debug.Log("Toggled with value " + contrast);
         _highContrastMode = contrast;
         if (_highContrastMode)
         {
             foreach (Image image in transform.GetComponentsInChildren<Image>(true))
             {
+                if (ExcludeObjects.Contains(image.gameObject))
+                    continue;
+
                 if (image.color == _defaultDarkBlue)
                     image.color = _contrastDarkBlue;
 
@@ -82,12 +101,21 @@ public class ContrastModifier : MonoBehaviour
 
                 if (image.color == _defaultBrandPurple)
                     image.color = _contrastBrandPurple;
+
+                if (image.color == _defaultRed)
+                    image.color = _contrastRed;
+
+                if (image.color == _defaultTranslucentBackground)
+                    image.color = _contrastTranslucentBackground;
             }
         }
         else
         {
             foreach (Image image in transform.GetComponentsInChildren<Image>(true))
             {
+                if (ExcludeObjects.Contains(image.gameObject))
+                    continue;
+
                 if (image.color == _contrastDarkBlue)
                     image.color = _defaultDarkBlue;
 
@@ -105,9 +133,19 @@ public class ContrastModifier : MonoBehaviour
 
                 if (image.color == _contrastBrandPurple)
                     image.color = _defaultBrandPurple;
+
+                if (image.color == _contrastRed)
+                    image.color = _defaultRed;
+
+                if (image.color == _contrastTranslucentBackground)
+                    image.color = _defaultTranslucentBackground;
             }
         }
     }
 
-    private void OnUIChanged() => ToggleContrast(_highContrastMode);
+    private void OnUIChanged()
+    { 
+        if (_settingLoaded)
+            ToggleContrast(_highContrastMode); 
+    } 
 }

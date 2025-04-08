@@ -15,21 +15,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     [SerializeReference] GameObject SkillListMenu;
     [SerializeReference] GameObject NotificationAlertMenu;
 
-    [SerializeReference] Image SubtaskBackground;
-    [SerializeReference] Image TaskBackground;
-
-    [Header("Language selection")]
-    [SerializeField] public Language activeLanguage;
-    [SerializeReference] private TMP_Text skillsMenuTextSkillPage;
-    [SerializeReference] private TMP_Text taskMenuTextSkillPage;
-    [SerializeReference] private TMP_Text skillsMenuTextTaskPage;
-    [SerializeReference] private TMP_Text taskMenuTextTaskPage;
-    [SerializeReference] private TMP_Text skilsHeaderText;
-    [SerializeReference] private TMP_Text taskButtonText;
-    [SerializeReference] private TMP_Text taskPageHeader;
-    [SerializeReference] private TMP_Text subtaskPageHeader;
-
-
     private AddInstructionsToWatch watch;
     private MaintenanceManager manager;
     private WatchManager watchManager;
@@ -38,38 +23,8 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     private bool taskPageOpen = false; 
     private bool subtaskPageOpen = false;
 
-    public enum Language
-    {
-        English,
-        Norwegian,
-    }
-
     void Start()
     {
-        if (activeLanguage == Language.English)
-        {
-            skillsMenuTextSkillPage.SetText("Skills");
-            taskMenuTextSkillPage.SetText("Tasks");
-            skillsMenuTextTaskPage.SetText("Skills");
-            taskMenuTextTaskPage.SetText("Tasks");
-            skilsHeaderText.SetText("My Skills");
-            taskButtonText.SetText("Tasks");
-            taskPageHeader.SetText("All tasks");
-            subtaskPageHeader.SetText("All subtasks");
-        }
-        else if (activeLanguage == Language.Norwegian)
-        {
-            skillsMenuTextSkillPage.SetText("Ferdigheter");
-            taskMenuTextSkillPage.SetText("Oppgaver");
-            skillsMenuTextTaskPage.SetText("Ferdigheter");
-            taskMenuTextTaskPage.SetText("Oppgaver");
-            skilsHeaderText.SetText("Mine ferdigheter");
-            taskButtonText.SetText("Opg.");
-            taskPageHeader.SetText("Alle oppgaver");
-            subtaskPageHeader.SetText("Alle deloppgaver");
-        }
-
-
         allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu });
         watchManager = WatchManager.Instance;
 
@@ -120,7 +75,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         if (!taskPageOpen)
         {
             TaskListMenu.SetActive(true);
-            //TaskBackground.color = Color.blue;
             taskPageOpen = true;
             TaskList.LoadTaskPage();
             watchManager.UIChanged.Invoke();
@@ -129,7 +83,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         else if (taskPageOpen)
         {
             TaskListMenu.SetActive(false);
-            //TaskBackground.color = Color.white;
             taskPageOpen = false;
             watchManager.UIChanged.Invoke();
             return; 
@@ -146,7 +99,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         if (!subtaskPageOpen)
         {
             TaskAboutMenu.SetActive(true);
-            //SubtaskBackground.color = Color.blue;
             subtaskPageOpen = true;
             TaskList.SubtaskPageLoader(TaskList.activeTask);
             watchManager.UIChanged.Invoke();
@@ -155,7 +107,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         else if (subtaskPageOpen)
         {
             TaskAboutMenu.SetActive(false);
-            //SubtaskBackground.color = Color.white;
             subtaskPageOpen = false;
             watchManager.UIChanged.Invoke();
             return; 
