@@ -31,7 +31,7 @@ public class InvokeEventOnNPCAnswerButton : MonoBehaviour
         ButtonSpawner.OnAnswer += ButtonSpawner_OnAnswer;
     }
 
-    private void ButtonSpawner_OnAnswer(string answer)
+    private void ButtonSpawner_OnAnswer(string answer, string questin, string name)
     {
         bool validAnswerFound = false;
         foreach (string validAnswer in ValidButtonAnswers)

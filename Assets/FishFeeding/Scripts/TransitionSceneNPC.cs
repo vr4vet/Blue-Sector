@@ -10,7 +10,7 @@ public class TransitionSceneNPC : MonoBehaviour
         ButtonSpawner.OnAnswer += ButtonSpawner_OnAnswer;
     }
 
-    private void ButtonSpawner_OnAnswer(string answer)
+    private void ButtonSpawner_OnAnswer(string answer, string questin, string name)
     {
         bool validDestination = true;
         if (answer == "Welfare station")

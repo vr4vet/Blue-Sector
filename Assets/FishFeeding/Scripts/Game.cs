@@ -115,7 +115,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    private void SetLevel(string level)
+    private void SetLevel(string level, string questin, string name)
     {
         if (level.Equals("Basic"))
             modesClass.ChangeTo(0);
