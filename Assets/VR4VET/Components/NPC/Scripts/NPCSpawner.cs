@@ -19,8 +19,6 @@ public class NPCSpawner : MonoBehaviour
     public GameObject SpawnNPC(NPC npcSO) {
         // Instantiate the NPC prefab at the defined location
         GameObject newNPC = Instantiate(npcSO.NpcPrefab, npcSO.SpawnPosition, Quaternion.identity);
-        var metadata = newNPC.AddComponent<NPCMetadata>();
-        metadata.npcData = npcSO;
         // Rotate the NPC 
         newNPC.transform.rotation = Quaternion.Euler(npcSO.SpawnRotation);  
         // Attach the Text-To-Speech componenets

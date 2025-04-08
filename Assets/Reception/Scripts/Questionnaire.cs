@@ -5,70 +5,55 @@ using UnityEngine;
 
 public class Questionnaire : MonoBehaviour
 {
-    [SerializeField] private DialogueTree questionnaireDialogueTree;
-    [SerializeField] private DialogueTree welcomeReceptionDialogueTree;
-    private List<string> answers = new();
+    private Dictionary<string, string> _answers = new();
     private NPCSpawner _npcSpawner;
     private GameObject _receptionistNpc;
-    private NPCMetadata metadata;
-    private DialogueTree[] receptionistDialogueTrees;
-    private DialogueBoxController _dialogueBoxController;
-    private ConversationController _conversationController;
 
-
+    /// <summary>
+    /// Receptionist Rachel will ask the user questions about themselves.
+    /// The information will be sent to ActionManager, and the LLM in Chat-Service will make use of it.
+    /// </summary>
     void Start()
     {
-        if (ReceptionistQuestionnaireState.questionnaireEnded) {
-            Debug.Log($"skipping questionnaire: {ReceptionistQuestionnaireState.questionnaireEnded}");
-            Destroy(this);
-            return;
-        }
-
         _npcSpawner = GetComponent<NPCSpawner>();
         if (_npcSpawner == null)
         {
             Debug.LogError("No NPCSpawner found");
             return;
         }
-
-        _receptionistNpc = _npcSpawner._npcInstances[0];
-        metadata = _receptionistNpc.GetComponent<NPCMetadata>();
         
-        _dialogueBoxController = GetComponent<DialogueBoxController>();
-        _conversationController = GetComponentInChildren<ConversationController>();
+        // Find NPC "Receptionist Rachel"
+        _receptionistNpc = _npcSpawner._npcInstances[0];
         ButtonSpawner.OnAnswer += Questionnaire_OnAnswer;
-        DialogueBoxController.OnDialogueEnded += DestroyQuestionnaire;
-   
-        Debug.Log("Collecting answers from the questionnaire.");
-        Debug.Log(_receptionistNpc.name);
     }
 
     private void Questionnaire_OnAnswer(string answer, string question, string name) {
-        if (name=="Receptionist Rachel")
+        // Only listen to when the buttons belonging to Receptionist Rachel's dialogue tree are pressed
+        if (name==_receptionistNpc.name)
         {
-            if (question == "Would you like to answer the questionnaire?" && answer == "No") 
+            if (_answers.ContainsKey(question))
             {
-                Debug.Log("Hei");
+                _answers[question] = answer;
+                Debug.Log($"Answer to question {question} changed: {answer}");
             }
-                
-            answers.Add(answer);
-            Debug.Log($"{answer}, {question}, {name}");
+            else
+            {
+                _answers.Add(question, answer);
+                Debug.Log($"{answer}, {question}, {name}");
+
+                // Listen to the end of the questionnaire
+                if (question == "Are you satisfied with your answers?" && answer == "Yes")
+                {
+                    Debug.Log("Sending answers to ActionManager");
+                }
+            }
+                 
         }
     }
 
-    void DestroyQuestionnaire(string name) {
-
-        ReceptionistQuestionnaireState.questionnaireEnded = true;
-        NextDialogueTree();
+    void OnDestroy()
+    {
         ButtonSpawner.OnAnswer -= Questionnaire_OnAnswer;
-        Debug.Log($"Questionnaire ended: {name}, returning to regular reception dialogue. state: {ReceptionistQuestionnaireState.questionnaireEnded}");
-        Destroy(this);
     }
 
-    private void NextDialogueTree() {
-        Debug.Log(welcomeReceptionDialogueTree);
-        Debug.Log(metadata.npcData.NameOfNPC);
-        _dialogueBoxController.StartDialogue(welcomeReceptionDialogueTree, 0, metadata.npcData.NameOfNPC, 0);
-    }
-    
 }

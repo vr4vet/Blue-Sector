@@ -38,10 +38,22 @@ MonoBehaviour:
       question: Would you like to answer the questionnaire?
       answers:
       - answerLabel: Yes
-        nextElement: 1
+        nextElement: 2
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No
+        nextElement: 1
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Understood. Good luck with your tasks!
+      answers:
+      - answerLabel: Could you repeat that?
         nextElement: 0
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
@@ -53,15 +65,55 @@ MonoBehaviour:
     branchPoint:
       question: How experienced are you with VR?
       answers:
-      - answerLabel: No experience
-        nextElement: 2
-        endAfterAnswer: 0
-        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: A little experienced
-        nextElement: 2
+        nextElement: 3
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Well experienced
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Don't want to answer
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Are you in work or school?
+      answers:
+      - answerLabel: Yes
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Go back
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Don't want to answer
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 1
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Are you satisfied with your answers?
+      answers:
+      - answerLabel: Yes
+        nextElement: 5
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
         nextElement: 2
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 

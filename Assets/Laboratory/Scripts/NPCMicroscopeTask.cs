@@ -191,7 +191,7 @@ public class NPCMicroscopeTask : MonoBehaviour
     /// Storing the player's answer when asked if they want to have plankton highlighted.
     /// </summary>
     /// <param name="answer"></param>
-    private void ButtonSpawner_OnAnswer(string answer, string questin, string name)
+    private void ButtonSpawner_OnAnswer(string answer, string question, string name)
     {
         if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
             return;
