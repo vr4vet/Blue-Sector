@@ -12,7 +12,7 @@ public class ButtonSpawner : MonoBehaviour
     [SerializeField] private GameObject _speakButton;
     [SerializeField] private GameObject _buttonPrefab;
     [HideInInspector] private DialogueBoxController _dialogueBoxController;
-    [HideInInspector] public static event Action<string> OnAnswer;
+    [HideInInspector] public static event Action<string, string, string> OnAnswer;
 
     private List<GameObject> _answerButtons = new();
     private List<UnityAction> _answerButtonActions = new();
@@ -42,7 +42,7 @@ public class ButtonSpawner : MonoBehaviour
             // storing Unity Action in list before adding listener so it can later be removed
             UnityAction action = new(() =>
             {
-                OnAnswer?.Invoke(answerButton.GetComponentInChildren<TextMeshProUGUI>().text);
+                OnAnswer?.Invoke(answerButton.GetComponentInChildren<TextMeshProUGUI>().text, _dialogueBoxController._dialogueText.text, transform.name);
                 _dialogueBoxController.AnswerQuestion(_answerButtons.IndexOf(answerButton));
             });
             _answerButtonActions.Add(action);

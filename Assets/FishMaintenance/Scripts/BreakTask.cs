@@ -42,7 +42,7 @@ public class BreakTask : MonoBehaviour
     }
 
 
-    private void ButtonSpawner_OnAnswer(string answer)
+    private void ButtonSpawner_OnAnswer(string answer, string question, string npcName)
     {
         if (dialogueController.dialogueTreeRestart == dialogueTree)
         {
