@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Text; // For UTF8Encoding
-
 // Note: Uses Message, OpenAIRequest, OpenAIResponse from OpenAIResponseSerializer.cs
 
 public class AIRequest : MonoBehaviour
@@ -74,7 +73,7 @@ public class AIRequest : MonoBehaviour
 
         // Prepare messages for the request
         _messagesToSend = new List<Message>(_aiConversationController.messages);
-        Message userMessage = new Message { role = "user", content = query };
+        Message userMessage = new() { role = "user", content = query };
         _messagesToSend.Add(userMessage);
 
         // Start the API call
@@ -92,7 +91,7 @@ public class AIRequest : MonoBehaviour
 
         Debug.Log($"AIRequest: Sending request to OpenAI. Query: '{query}'");
 
-        OpenAIRequest requestPayload = new OpenAIRequest
+        OpenAIRequest requestPayload = new()
         {
             model = "gpt-3.5-turbo",
             messages = _messagesToSend,
@@ -101,7 +100,7 @@ public class AIRequest : MonoBehaviour
 
         string jsonData = JsonUtility.ToJson(requestPayload);
 
-        using (UnityWebRequest request = new UnityWebRequest(OpenAI_API_URL, "POST"))
+        using (UnityWebRequest request = new(OpenAI_API_URL, "POST"))
         {
             byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -135,12 +134,12 @@ public class AIRequest : MonoBehaviour
                         string rawResponseText = response.choices[0].message.content;
                         string sanitizedResponseText = SanitizeResponse(rawResponseText);
 
-                        Message assistantMessage = new Message { role = "assistant", content = sanitizedResponseText };
+                        Message assistantMessage = new() { role = "assistant", content = sanitizedResponseText };
                         _aiConversationController.AddMessage(assistantMessage);
 
                         Debug.Log($"AI Response: {sanitizedResponseText}");
 
-                        // Add Fix 4 & Fix 5: Trigger TTS and UI Update
+                        // Trigger TTS and UI Update
                         HandleSuccessfulResponse(sanitizedResponseText);
                     }
                 }
@@ -151,7 +150,7 @@ public class AIRequest : MonoBehaviour
                 }
             }
         }
-        Destroy(this);
+        yield return null;
     }
 
     string SanitizeResponse(string text)
@@ -189,7 +188,7 @@ public class AIRequest : MonoBehaviour
         yield return StartCoroutine(ttsCoroutine);
 
         Debug.Log($"AIRequest: Displaying response: '{responseText}'");
-        StartCoroutine(_dialogueBoxController.DisplayResponse(responseText));
+        yield return StartCoroutine(_dialogueBoxController.DisplayResponse(responseText));
     }
 
     void HandleErrorOrFallback(string error, long responseCode = -1)
@@ -206,13 +205,12 @@ public class AIRequest : MonoBehaviour
 
     string GetGenericErrorMessage(string langCode)
     {
-        switch (langCode)
+        return langCode switch
         {
-            case "no": return " Beklager, noe gikk galt. Vennligst prøv igjen.";
-            case "de": return " Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie es erneut.";
-            case "nl": return " Sorry, er is iets misgegaan. Probeer het opnieuw.";
-            case "en":
-            default: return " I'm sorry, something went wrong. Please try again.";
-        }
+            "no" => " Beklager, noe gikk galt. Vennligst prøv igjen.",
+            "de" => " Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie es erneut.",
+            "nl" => " Sorry, er is iets misgegaan. Probeer het opnieuw.",
+            _ => " I'm sorry, something went wrong. Please try again.",
+        };
     }
 }
