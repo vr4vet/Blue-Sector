@@ -127,7 +127,7 @@ namespace Task
         /// Gets the idle timeout for this step in seconds
         /// </summary>
         /// <returns>The idle timeout in seconds</returns>
-        public float GetIdleTimeoutSeconds()
+        public int GetIdleTimeoutSeconds()
         {
             return _idleTimeoutSeconds;
         }
