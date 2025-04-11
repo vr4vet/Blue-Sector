@@ -1,26 +1,29 @@
+using BNG;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BreakTask : MonoBehaviour
 {
     [HideInInspector] private NPCSpawner _npcSpawner;
     [HideInInspector] private GameObject _npc;
-    [SerializeField] private MaintenanceManager mm;
     [SerializeField] private DialogueTree dialogueTree;
+    [SerializeField] private DialogueTree deadFishDialogue;
+    [SerializeField] private DialogueTree deadFishTaskDialogue;
 
-    [SerializeField] private Task.Skill skillBadge;
+    [SerializeField] private Task.Step talkToLailaStep;
+    [SerializeField] private Task.Step getInfoFromLailaStep;
+    [SerializeField] private Task.Step watchVideoStep;
+    [SerializeField] private Task.Skill communicationSkill;
+    [SerializeField] private Task.Skill observantSkill;
     [SerializeField] private GameObject deadFishPumpVideo;
     [SerializeField] private GameObject deadFishCountVideo;
     [SerializeField] private GameObject breakAnchor;
 
-    [SerializeField] private GameObject deadFishBreakAnchor;
-
     private DialogueBoxController dialogueController;
-    private ConversationController conversationController;
-
     private bool breakDialoguePlayed = false;
-    private bool breakTaskDone = false;
-    private bool deadIntroDialoguePlayed = false;
 
+    private int answersAsked = 0;
 
 
     // Start is called before the first frame update
@@ -34,50 +37,25 @@ public class BreakTask : MonoBehaviour
         }
         _npc = _npcSpawner._npcInstances[0];
         dialogueController = _npc.GetComponent<DialogueBoxController>();
-        conversationController = _npc.GetComponentInChildren<ConversationController>();
+
+        ButtonSpawner.OnAnswer += ButtonSpawner_OnAnswer;
     }
 
-    private void Update()
+
+    private void ButtonSpawner_OnAnswer(string answer, string question, string npcName)
     {
-        if (!conversationController.isDialogueActive())
+        if (dialogueController.dialogueTreeRestart == dialogueTree)
         {
-            if (breakDialoguePlayed && !breakTaskDone) // when the break dialogue has finished
+            if (answer == "I'm ready!") // move on to dead fish set up dialogue if player answered "I'm ready!"
             {
-                Task.Step breakStep = mm.GetStep("Taking a break", "Talk to Laila");
-                breakStep.SetCompleated(true);
-                mm.UpdateCurrentSubtask(mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish"));
-
-                // moving on to dead fish intro dialogue
-                if (conversationController.GetDialogueTree().name == "PauseBoss")
-                {
-                    conversationController.NextDialogueTree();
-                    conversationController.DialogueTrigger();
-                    deadIntroDialoguePlayed = true;
-                    deadFishPumpVideo.SetActive(true);
-                }
-                breakTaskDone = true;
+                dialogueController.StartDialogue(deadFishDialogue, 0, "Boss", 0);
+                deadFishPumpVideo.SetActive(true);
             }
+            else if (answer != "No") // all answers that are not "I'm ready!" or "No" are (at time of writing) questions, thus increase counter
+                answersAsked++;
 
-            if (deadIntroDialoguePlayed && breakTaskDone) // when the dead fish dialogue has finished
-            {
-                if (conversationController.GetDialogueTree().name != "DeadfishSetup")
-                    return;
-
-                //Debug.Log(conversationController.GetDialogueTree().name);
-                if (mm.GetStep("Handling of dead fish", "Watch video").RepetionsCompleated >= 1 && conversationController.GetDialogueTree().name == "DeadfishSetup") // activeSelf set to false when video is finished
-                {
-                    // moving on to dead fish counting dialogue
-                    conversationController.NextDialogueTree();
-                    conversationController.DialogueTrigger();
-                    deadFishPumpVideo.GetComponent<VideoObject>().HideVideoPlayer();
-                    deadFishCountVideo.SetActive(true);
-                    deadFishBreakAnchor.SetActive(true);
-
-                    mm.taskHolder.GetTask("Maintenance").GetSubtask("Handling of dead fish").GetStep("Get info from Laila").SetCompleated(true);
-                    mm.PlayAudio(mm.success);
-                    mm.InvokeBadge(skillBadge);
-                }
-            }
+            if (answersAsked >= 3) // invoke skill when 3 questions have beeen asked
+                WatchManager.Instance.invokeBadge(communicationSkill);
         }
     }
 
@@ -85,10 +63,42 @@ public class BreakTask : MonoBehaviour
     {
         if (!breakDialoguePlayed && other.CompareTag("Player"))
         {
-            // moving on to break dialogue
-            conversationController.NextDialogueTree();
-            conversationController.DialogueTrigger();
+            dialogueController.StartDialogue(dialogueTree, 0, "Boss", 0);
+            WatchManager.Instance.CompleteStep(talkToLailaStep);
             breakDialoguePlayed = true;
         }
+    }
+
+    public void OnPumpVideoWatched()
+    {
+
+        StartCoroutine(DisableVideoObject(deadFishPumpVideo.GetComponent<VideoObject>()));
+        WatchManager.Instance.CompleteStep(watchVideoStep);
+
+        deadFishPumpVideo.GetComponent<DeadfishTask>().EnableEquipment();
+        dialogueController.StartDialogue(deadFishTaskDialogue, 0, "Boss", 0);
+        WatchManager.Instance.CompleteStep(getInfoFromLailaStep);
+        deadFishCountVideo.SetActive(true);
+    }
+
+    public void OnDeadFishCountVideoWatched()
+    {
+        StartCoroutine(DisableVideoObject(deadFishCountVideo.GetComponent<VideoObject>()));
+        WatchManager.Instance.invokeBadge(observantSkill);
+        WatchManager.Instance.CompleteStep(watchVideoStep);
+    }
+
+    private IEnumerator DisableVideoObject(VideoObject videoObject)
+    {
+        while (videoObject.GetComponent<Grabbable>().BeingHeld)
+            yield return null;
+
+        videoObject.HideVideoPlayer();
+    }
+
+
+    private void OnDestroy()
+    {
+        ButtonSpawner.OnAnswer -= ButtonSpawner_OnAnswer;
     }
 }

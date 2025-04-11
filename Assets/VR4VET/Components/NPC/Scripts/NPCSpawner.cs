@@ -12,6 +12,7 @@ public class NPCSpawner : MonoBehaviour
         foreach (var npcSO in _nPCs)
         {
             _npcInstances.Add(SpawnNPC(npcSO));
+
         }
     }
 

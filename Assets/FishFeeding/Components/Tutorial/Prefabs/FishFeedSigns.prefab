@@ -51,7 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2562e26c2dd1047a7bc51ff9ba13b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerController: {fileID: 0}
   turnOnAudio: 1
 --- !u!1001 &429843509839484923
 PrefabInstance:
@@ -149,6 +148,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ArrowRightSignControlRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 8883079988341754439, guid: 33ff4557195919d4c89d50d19de2f2a3,
+        type: 3}
+      propertyPath: LargerTextComponentSettings.Array.data[0].FontSize
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33ff4557195919d4c89d50d19de2f2a3, type: 3}
@@ -1168,6 +1172,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 1705565029812666379
+      type: {class: ObjectVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables,
+        asm: Unity.Localization}
+      data:
+        m_Value: {fileID: 6075354748919664694}
     - rid: 1728755566007025698
       type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects,
         asm: Unity.Localization}
@@ -1188,8 +1197,11 @@ MonoBehaviour:
             m_KeyId: 36635237882322944
             m_Key: 
           m_FallbackState: 0
-          m_WaitForCompletion: 0
-          m_LocalVariables: []
+          m_WaitForCompletion: 1
+          m_LocalVariables:
+          - name: text
+            variable:
+              rid: 1705565029812666379
         m_PropertyPath: m_text
 --- !u!4 &3862348384640618458 stripped
 Transform:
@@ -1209,6 +1221,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6614687012451779439 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6790032613393658893, guid: b872e9d8c094a4646b03750739a0ff75,
+    type: 3}
+  m_PrefabInstance: {fileID: 429843511218632546}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4460197617713357804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6614687012451779439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ced152fad2fb9a24893900939325d5ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LargerTextComponentSettings:
+  - TextComponentType: 0
+    TMPTextComponent: {fileID: 6075354748919664694}
+    UnityEngineUITextComponent: {fileID: 0}
+    FontSize: 2
+    Scale: 0
+    Width: 0
+    Height: 0
+    OldFontSize: 0
+    OldWidth: 0
+    OldHeight: 0
+    OldScale: {x: 0, y: 0, z: 0}
+  LargerUnityUIObjectsSettings: []
 --- !u!1001 &1772605875958253572
 PrefabInstance:
   m_ObjectHideFlags: 0

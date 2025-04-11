@@ -147,6 +147,7 @@ public class VideoObject : MonoBehaviour
 
     public void HideVideoPlayer()
     {
+        StopVideo();
         hintText.text = null;
         gameObject.SetActive(false);
     }
