@@ -7,8 +7,13 @@ public class RundeRingStep : MonoBehaviour
     public GameObject fixedItem;
     public GameObject handheldItem;
     [SerializeField] private BNG.Grabber grabberRight;
-    [SerializeField] private MaintenanceManager manager;
-    [SerializeField] private string step;
+    [SerializeField] private Task.Step step;
+    private WatchManager _watchManager;
+
+    private void Start()
+    {
+        _watchManager = WatchManager.Instance;
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -18,8 +23,7 @@ public class RundeRingStep : MonoBehaviour
             gameObject.SetActive(false);
             handheldItem.GetComponent<BNG.Grabbable>().DropItem(grabberRight, true, true);
             handheldItem.SetActive(false);
-            Task.Step completedStep = manager.GetStep("Daily Round", step);
-            manager.CompleteStep(completedStep);
+            _watchManager.CompleteStep(step);
         }
     }
 }

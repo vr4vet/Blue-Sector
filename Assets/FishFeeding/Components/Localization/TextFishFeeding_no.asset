@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: no
   m_SharedData: {fileID: 11400000, guid: 08b9e841b649aa4459c6a46c14b5f071, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 1705565029812666378
   m_TableData:
   - m_Id: 1453735638388736
     m_Localized: Grunnleggende
@@ -62,9 +63,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 36635237882322944
-    m_Localized: Vanskelighetsgrad
+    m_Localized: Vanskelighets{text.fontSize:cond:>=2?-|}grad
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 1705565029812666378
   - m_Id: 36635343419400192
     m_Localized: Trapper
     m_Metadata:
@@ -146,4 +148,8 @@ MonoBehaviour:
       m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1705565029812666378
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e03c048e278200

@@ -7,22 +7,13 @@ public class DailyCheckStep : MonoBehaviour
     [SerializeField] private GameObject maintenanceManager;
     [SerializeField] private BNG.Grabber grabber;
     [SerializeField] private GameObject grabbableObject;
-    [SerializeField] private string equipmentStep;
-    [SerializeField] private string step;
-    private FeedbackManager feedbackManager;
-    private MaintenanceManager manager;
+    [SerializeField] private Task.Step equipmentStep;
 
     void OnEnable()
     {
-        feedbackManager = maintenanceManager.GetComponent<FeedbackManager>();
-        manager = maintenanceManager.GetComponent<MaintenanceManager>();
-        if (manager.GetStep("Get Equipment", equipmentStep).IsCompeleted())
+        if (equipmentStep.IsCompeleted())
         {
             SetEquipmentActive();
-        }
-        else
-        {
-            feedbackManager.equipmentFeedback(step);
         }
     }
 
