@@ -1,92 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-
 using Task;
 using System;
 using System.Text;
 using System.Collections;
 using BNG;
-
-/// <summary>
-/// Represents the progress of a single step in a subtask.
-/// </summary>
-[Serializable]
-public class StepProgressDTO
-{
-    public string stepName;
-    public int repetitionNumber;
-    public bool completed;
-}
-
-/// <summary>
-/// Represents the progress of a subtask, including its steps.
-/// </summary>
-[Serializable]
-public class SubtaskProgressDTO
-{
-    public string subtaskName;
-    public string description;
-    public bool completed;
-    public List<StepProgressDTO> stepProgress;
-}
-
-/// <summary>
-/// Represents the progress of a task, including its subtasks.
-/// </summary>
-[Serializable]
-public class ProgressDataDTO
-{
-    public string taskName;
-    public string description;
-    public string status;
-    public List<SubtaskProgressDTO> subtaskProgress;
-}
-
-/// <summary>
-/// A collection of progress data for multiple tasks.
-/// </summary>
-[Serializable]
-public class ProgressDataCollection
-{
-    public List<ProgressDataDTO> items;
-}
-
-/// <summary>
-/// Data structure for uploading user progress and interactions.
-/// </summary>
-[Serializable]
-public class UploadDataDTO
-{
-    public string user_name;
-
-    /// <summary>
-    /// The mode defined in the user profiling.
-    /// </summary>
-    public string user_mode;
-    public List<string> user_actions;   // currently not used
-
-    /// <summary>
-    /// A list of progress data for tasks.
-    /// </summary>
-    public List<ProgressDataDTO> progress;
-
-    /// <summary>
-    /// The question that the user is asking.
-    /// </summary>
-    public string question;
-
-    /// <summary>
-    /// The ID of the NPC that the user is interacting with.
-    /// </summary>
-    public int NPC;
-
-    /// <summary>
-    /// Information about user idle time, if applicable.
-    /// </summary>
-    public IdleDataDTO idleData;
-}
-
 
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
@@ -126,16 +45,6 @@ public class ActionManager : MonoBehaviour
         };
 
         taskList = new List<Task.Task>();
-
-        // Find or add the IdleTimer component
-        idleTimer = GetComponent<IdleTimer>();
-        if (idleTimer == null)
-        {
-            idleTimer = gameObject.AddComponent<IdleTimer>();
-        }
-
-        // Subscribe to idle events
-        idleTimer.OnIdleThresholdReached += HandleIdleThresholdReached;
     }
 
     /// <summary>
@@ -152,12 +61,6 @@ public class ActionManager : MonoBehaviour
     private void OnDisable()
     {
         UnregisterGrabListeners();
-
-        // Unsubscribe from idle events to prevent memory leaks
-        if (idleTimer != null)
-        {
-            idleTimer.OnIdleThresholdReached -= HandleIdleThresholdReached;
-        }
     }
 
     /// <summary>
@@ -198,10 +101,10 @@ public class ActionManager : MonoBehaviour
         uploadData.user_actions.Add("grabbed: " + grabbable.name);
 
         // Reset idle timer when user interacts with objects
-        if (idleTimer != null)
+        /*if (idleTimer != null)
         {
             idleTimer.ResetIdleTimer();
-        }
+        }*/
     }
 
     /// <summary>
@@ -220,29 +123,10 @@ public class ActionManager : MonoBehaviour
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
 
         // Reset idle timer when user interacts with objects
-        if (idleTimer != null)
+        /*if (idleTimer != null)
         {
             idleTimer.ResetIdleTimer();
-        }
-    }
-
-    /// <summary>
-    /// Handles the idle threshold exceeded event from IdleTimer
-    /// </summary>
-    /// <param name="idleData">Data about the idle state</param>
-    private void HandleIdleThresholdReached(IdleDataDTO idleData)
-    {
-        // Update the question to reflect the idle state
-        uploadData.question = $"I've been working on '{idleData.currentTaskName}' for a while and might need some help. I'm stuck on the step '{idleData.lastActiveStep}'.";
-
-        // Set the idle data
-        uploadData.idleData = idleData;
-
-        // Send the report
-        StartCoroutine(SendUploadData(uploadData));
-
-        // Clear idle data after sending
-        uploadData.idleData = null;
+        }*/
     }
 
     /// <summary>
@@ -294,11 +178,13 @@ public class ActionManager : MonoBehaviour
                         UpdateProgressData(progressData);
 
                         // Update idle tracking with current task and step
-                        if (idleTimer != null)
+                        /*if (idleTimer != null)
                         {
                             idleTimer.ResetIdleTimer();
                             idleTimer.StartIdleTracking(task, step);
-                        }
+                        }*/
+
+                        StartCoroutine(SendUploadData(uploadData)); // Uncomment this line to send data immediately after step completion
 
                         return;
                     }
@@ -318,12 +204,10 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
         // Stop idle tracking when task is completed
-        if (idleTimer != null)
+        /*if (idleTimer != null)
         {
             idleTimer.StopIdleTracking();
-        }
-
-        StartCoroutine(SendUploadData(uploadData)); // Uncomment this line to send data immediately after task completion
+        }*/
 
         Debug.LogWarning($"Could not find task {task.TaskName}");
     }

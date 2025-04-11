@@ -7,43 +7,6 @@ using UnityEngine;
 using Task;
 
 /// <summary>
-/// Data structure for tracking user idle time on tasks.
-/// </summary>
-[Serializable]
-public class IdleDataDTO
-{
-    /// <summary>
-    /// Name of the task where the user has been idle.
-    /// </summary>
-    public string currentTaskName;
-
-    /// <summary>
-    /// The amount of time the user has been idle in seconds.
-    /// </summary>
-    public float idleTimeSeconds;
-
-    /// <summary>
-    /// The threshold after which the system considers the user may need help.
-    /// </summary>
-    public float idleThresholdSeconds;
-
-    /// <summary>
-    /// Last active step the user was working on before becoming idle.
-    /// </summary>
-    public string lastActiveStep;
-
-    /// <summary>
-    /// Timestamp when the user started the task.
-    /// </summary>
-    public string taskStartTime;
-
-    /// <summary>
-    /// Optional message for the backend LLM providing context for the idle state.
-    /// </summary>
-    public string contextMessage;
-}
-
-/// <summary>
 /// Tracks user idle time and reports when the user has been idle for too long.
 /// </summary>
 public class IdleTimer : MonoBehaviour
@@ -156,6 +119,26 @@ public class IdleTimer : MonoBehaviour
             nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
             Debug.Log("Idle timer reset due to user activity");
         }
+    }
+
+
+    /// <summary>
+    /// Handles the idle threshold exceeded event from IdleTimer
+    /// </summary>
+    /// <param name="idleData">Data about the idle state</param>
+    private void HandleIdleThresholdReached(IdleDataDTO idleData)
+    {
+        // Update the question to reflect the idle state
+        /*uploadData.question = $"I've been working on '{idleData.currentTaskName}' for a while and might need some help. I'm stuck on the step '{idleData.lastActiveStep}'.";
+
+        // Set the idle data
+        uploadData.idleData = idleData;
+
+        // Send the report
+        StartCoroutine(SendUploadData(uploadData));
+
+        // Clear idle data after sending
+        uploadData.idleData = null;*/
     }
 
     /// <summary>
