@@ -40,11 +40,16 @@ public class ActionManager : MonoBehaviour
             user_actions = new List<string>(),
             progress = new List<ProgressDataDTO>(),
             question = "What actions have I made? And how far along am I in my tasks?",
-            NPC = 0,
-            idleData = null
+            NPC = 0
         };
 
         taskList = new List<Task.Task>();
+
+        idleTimer = GetComponent<IdleTimer>();
+        if (idleTimer == null)
+        {
+            Debug.LogWarning("IdleTimer component not found on ActionManager GameObject");
+        }
     }
 
     /// <summary>
@@ -100,11 +105,8 @@ public class ActionManager : MonoBehaviour
 
         uploadData.user_actions.Add("grabbed: " + grabbable.name);
 
-        // Reset idle timer when user interacts with objects
-        /*if (idleTimer != null)
-        {
-            idleTimer.ResetIdleTimer();
-        }*/
+        // Reset idle timer when user grabs an object
+        idleTimer?.ResetIdleTimer();
     }
 
     /// <summary>
@@ -122,11 +124,8 @@ public class ActionManager : MonoBehaviour
         // Add to the user actions list with position information
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
 
-        // Reset idle timer when user interacts with objects
-        /*if (idleTimer != null)
-        {
-            idleTimer.ResetIdleTimer();
-        }*/
+        // Reset idle timer when user drops an object
+        idleTimer?.ResetIdleTimer();
     }
 
     /// <summary>
@@ -177,14 +176,14 @@ public class ActionManager : MonoBehaviour
                         var progressData = ConvertTaskToProgressData(task);
                         UpdateProgressData(progressData);
 
-                        // Update idle tracking with current task and step
-                        /*if (idleTimer != null)
+                        // Update idle tracking with last progressed subtask
+                        if (idleTimer != null)
                         {
                             idleTimer.ResetIdleTimer();
-                            idleTimer.StartIdleTracking(task, step);
-                        }*/
+                            idleTimer.StartIdleTracking(subtask, step);
+                        }
 
-                        StartCoroutine(SendUploadData(uploadData)); // Uncomment this line to send data immediately after step completion
+                        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after step completion
 
                         return;
                     }
@@ -203,11 +202,8 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
-        // Stop idle tracking when task is completed
-        /*if (idleTimer != null)
-        {
-            idleTimer.StopIdleTracking();
-        }*/
+        // Stop idle tracking when a subtask is completed
+        idleTimer?.StopIdleTracking();
 
         Debug.LogWarning($"Could not find task {task.TaskName}");
     }
@@ -296,5 +292,25 @@ public class ActionManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    /// <summary>
+    /// Sends a prompt through IdleTimer when the user has been idle for too long.
+    /// </summary>
+    /// <param name="timeoutMessage"></param>
+    public void SendIdleTimeoutReport(string timeoutMessage)
+    {
+        SetQuestion(timeoutMessage);
+        StartCoroutine(SendUploadData(uploadData));
+    }
+
+    /// <summary>
+    /// Sets the question in the upload data.
+    /// </summary>
+    /// <param name="question"></param>
+    public void SetQuestion(string question)
+    {
+        uploadData.question = question;
+        Debug.Log($"Question set: {question}");
     }
 }

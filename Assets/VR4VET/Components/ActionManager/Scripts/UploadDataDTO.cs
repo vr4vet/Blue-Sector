@@ -13,7 +13,11 @@ public class UploadDataDTO
     /// The mode defined in the user profiling.
     /// </summary>
     public string user_mode;
-    public List<string> user_actions;   // currently not used
+
+    /// <summary>
+    /// List of user actions such as grabbed/dropped objects.
+    /// </summary>
+    public List<string> user_actions;
 
     /// <summary>
     /// A list of progress data for tasks.
@@ -29,9 +33,4 @@ public class UploadDataDTO
     /// The ID of the NPC that the user is interacting with.
     /// </summary>
     public int NPC;
-
-    /// <summary>
-    /// Information about user idle time, if applicable.
-    /// </summary>
-    public IdleDataDTO idleData;
 }

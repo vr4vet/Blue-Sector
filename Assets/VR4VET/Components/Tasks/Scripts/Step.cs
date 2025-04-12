@@ -20,9 +20,6 @@ namespace Task
         [Tooltip(">0 : count down, <0 : no timer, 0 : count up")]
         [SerializeField] private int _timer = -1;
 
-        [Tooltip("Time in seconds before triggering idle notifications (0 = disabled)")]
-        [SerializeField] private int _idleTimeoutSeconds = 120; // Default to 2 minutes
-
         private bool _compleated = false;
         private bool _currentStep = false;
         private int _repetionsCompleated = 0;
@@ -36,9 +33,6 @@ namespace Task
         public int Timer { get => _timer; set => _timer = value; }
         public TimeSpan Counter { get => _counter; set => _counter = value; }
         public bool CurrentStep { get => _currentStep; set => _currentStep = value; }
-
-        // Property for idle timeout
-        public int IdleTimeoutSeconds { get => _idleTimeoutSeconds; set => _idleTimeoutSeconds = value; }
 
         public void CompleateRep()
         {
@@ -121,15 +115,6 @@ namespace Task
         {
             Tablet.TaskListLoader1 taskLoader = GameObject.FindObjectsOfType<Tablet.TaskListLoader1>()[0];
             taskLoader.startTimer(Timer, this);
-        }
-
-        /// <summary>
-        /// Gets the idle timeout for this step in seconds
-        /// </summary>
-        /// <returns>The idle timeout in seconds</returns>
-        public int GetIdleTimeoutSeconds()
-        {
-            return _idleTimeoutSeconds;
         }
     }
 }
