@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using System.Collections;
 using BNG;
+using static ActionManager;
 
 /// <summary>
 /// Represents the progress of a single step in a subtask.
@@ -80,6 +81,10 @@ public class UploadDataDTO
     /// The ID of the NPC that the user is interacting with.
     /// </summary>
     public int NPC;
+    /// <summary>
+    /// The chat history of the user and the chatbot.
+    /// /summary>
+    public string chatHistory_str;
 }
 
 /// <summary>
@@ -91,6 +96,7 @@ public class ActionManager : MonoBehaviour
 
     private UploadDataDTO uploadData;
     private List<Task.Task> taskList;
+    public ChatHistory chatHistory;
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -111,11 +117,14 @@ public class ActionManager : MonoBehaviour
             user_mode = "student",
             user_actions = new List<string>(),
             progress = new List<ProgressDataDTO>(),
-            question = "What actions have I made? And how far along am I in my tasks?",
-            NPC = 0
+            question = "What was the previous question i asked, if there was any. How many times how i asked this question?",
+            NPC = 0,
+            chatHistory_str = ""
         };
 
         taskList = new List<Task.Task>();
+        chatHistory = new ChatHistory();
+
     }
 
     /// <summary>
@@ -186,6 +195,9 @@ public class ActionManager : MonoBehaviour
 
         // Add to the user actions list with position information
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        StartCoroutine(SendUploadData(uploadData)); // Send data to the server
+
+
     }
 
     /// <summary>
@@ -306,6 +318,8 @@ public class ActionManager : MonoBehaviour
     /// <returns>An IEnumerator for the coroutine.</returns>
     private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
+        uploadData.chatHistory = chatHistory.GetHistoryAsString();
+
         string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
@@ -323,7 +337,10 @@ public class ActionManager : MonoBehaviour
             }
             else
             {
+                string response = request.downloadHandler.text;
                 Debug.Log($"Server response: {request.downloadHandler.text}");
+                chatHistory.AddEntry(uploadData.question, response);
+
             }
         }
     }
@@ -343,4 +360,20 @@ public class ActionManager : MonoBehaviour
             }
         }
     }
+    public class ChatHistory
+    {
+        private List<string> history = new List<string>();
+
+        public void AddEntry(string question, string reply)
+        {
+            history.Add($"Question: {question}\nReply: {reply}");
+        }
+
+        public string GetHistoryAsString()
+        {
+            return string.Join("\n\n", history);
+        }
+    }
+
+
 }
