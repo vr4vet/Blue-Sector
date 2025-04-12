@@ -28,6 +28,8 @@ public class IdleTimer : MonoBehaviour
 
     private float nextIdleCheckTime = 0f;
 
+    private bool thresholdReached = false;
+
     /// <summary>
     /// Update is called once per frame and handles the idle timer tracking.
     /// </summary>
@@ -38,23 +40,20 @@ public class IdleTimer : MonoBehaviour
             // Increment idle timer
             idleTimer += Time.deltaTime;
 
-            // Check if it's time for the next idle check
-            if (Time.time >= nextIdleCheckTime)
+            // First time threshold is reached
+            if (!thresholdReached && idleTimer >= idleThresholdInSeconds)
             {
-                // Check if we have exceeded the idle threshold
-                if (idleTimer >= idleThresholdInSeconds)
-                {
-                    // Send idle report
-                    SendIdleReport();
-
-                    // Reset next check time (increase interval to prevent spamming)
-                    nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
-                }
-                else
-                {
-                    // Still under threshold, set next check time
-                    nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
-                }
+                // Send idle report immediately when threshold is first reached
+                SendIdleReport();
+                thresholdReached = true;
+                nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
+            }
+            // Subsequent interval checks after threshold was already reached
+            else if (thresholdReached && Time.time >= nextIdleCheckTime)
+            {
+                // Send additional idle reports at the specified intervals
+                SendIdleReport();
+                nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
             }
         }
     }
@@ -89,6 +88,7 @@ public class IdleTimer : MonoBehaviour
         // Otherwise, start tracking with the specified timeout
         isTrackingIdleTime = true;
         idleTimer = 0f;
+        thresholdReached = false;
         idleThresholdInSeconds = stepTimeout;
         nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
 
@@ -116,6 +116,7 @@ public class IdleTimer : MonoBehaviour
         if (isTrackingIdleTime)
         {
             idleTimer = 0f;
+            thresholdReached = false;
             nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
             Debug.Log("Idle timer reset due to user activity");
         }
