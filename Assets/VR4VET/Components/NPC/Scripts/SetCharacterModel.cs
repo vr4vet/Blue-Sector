@@ -79,7 +79,7 @@ public class SetCharacterModel : MonoBehaviour
         _bonesAndSkin.transform.SetParent(_parentObject.transform);
         Vector3 bonesAndSkinLocation = new Vector3(_spawnLocation.x, _spawnLocation.y, _spawnLocation.z);
         _bonesAndSkin.transform.localPosition = bonesAndSkinLocation;
-        _bonesAndSkin.transform.rotation = Quaternion.Euler(new Vector3(_parentObject.transform.eulerAngles.x, _parentObject.transform.eulerAngles.y, _parentObject.transform.eulerAngles.z)); 
+        _bonesAndSkin.transform.rotation = Quaternion.Euler(new Vector3(_parentObject.transform.eulerAngles.x, _parentObject.transform.eulerAngles.y, _parentObject.transform.eulerAngles.z));
 
         // get or create a new animator and transfer over the old animation paramet values to this new one
         _animator = _bonesAndSkin.GetComponent<Animator>();

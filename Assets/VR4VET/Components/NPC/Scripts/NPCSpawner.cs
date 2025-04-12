@@ -1,6 +1,7 @@
 using UnityEngine;
 using Meta.WitAi.TTS.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public class NPCSpawner : MonoBehaviour
@@ -11,8 +12,6 @@ public class NPCSpawner : MonoBehaviour
     [Header("Global AI Settings")]
     [TextArea(3, 10)]
     public string globalContextPrompt = "You are interacting with a user in a virtual reality training simulation."; // Added global context
-
-    // No direct reference to spawnedNpc needed here anymore? Keeping list _npcInstances
 
     private void Awake()
     {
@@ -35,6 +34,51 @@ public class NPCSpawner : MonoBehaviour
                 continue;
             }
             _npcInstances.Add(SpawnNPC(npcSO));
+        }
+
+        // Start the coroutine to fix animator references after all NPCs are spawned
+        StartCoroutine(FixAnimators());
+    }
+
+    // Integrated from DialogueAnimatorFixer.cs - but keeping it simple
+    private IEnumerator FixAnimators()
+    {
+        // Wait for NPCs to be spawned fully
+        yield return new WaitForSeconds(0.5f);
+
+        // Check if NPCs were spawned
+        if (_npcInstances == null || _npcInstances.Count == 0)
+        {
+            Debug.LogWarning("NPCSpawner: No NPCs were spawned to fix animators");
+            yield break;
+        }
+
+        // Loop through all spawned NPCs
+        foreach (var npc in _npcInstances)
+        {
+            if (npc == null) continue;
+
+            // Find the animator in the NPC's children
+            var animator = npc.GetComponentInChildren<Animator>();
+            if (animator == null)
+            {
+                Debug.LogWarning($"NPCSpawner: No Animator found in children of NPC {npc.name}");
+                continue;
+            }
+
+            // Get the DialogueBoxController
+            var dialogueBoxController = npc.GetComponent<DialogueBoxController>();
+            if (dialogueBoxController != null)
+            {
+                dialogueBoxController.updateAnimator(animator);
+            }
+
+            // Also update any ConversationController components
+            var conversationController = npc.GetComponentInChildren<ConversationController>();
+            if (conversationController != null)
+            {
+                conversationController.updateAnimator(animator);
+            }
         }
     }
 
@@ -106,7 +150,6 @@ public class NPCSpawner : MonoBehaviour
             {
                 dialogueBoxCtrl._AIConversationController = aiConvCtrl;
                 dialogueBoxCtrl._AIResponseToSpeech = aiResponse;
-                // Note: UI element references (mic icon, restart button) should ideally be assigned in the NPC_AI prefab variant.
             }
             else
             {
@@ -153,8 +196,8 @@ public class NPCSpawner : MonoBehaviour
                     // Use provided values or defaults
                     speakerAudio.spatialBlend = (spatialBlend >= 0 && spatialBlend <= 1) ? spatialBlend : 1; // Default to 3D audio
                     speakerAudio.minDistance = (minDistance > 0) ? minDistance : 5; // Default min distance
-                                                                                    // Add other audio source configurations if needed (volume, doppler, etc.)
-                                                                                    // speakerAudio.volume = 0.8f; // Example
+                    // Add other audio source configurations if needed (volume, doppler, etc.)
+                    // speakerAudio.volume = 0.8f; // Example
                 }
                 else
                 {
@@ -173,7 +216,7 @@ public class NPCSpawner : MonoBehaviour
         }
     }
 
-    // Method to set appearance and *standard* Wit voice (Unchanged from new repo version)
+    // Method to set appearance and *standard* Wit voice
     public void SetAppearanceAnimationAndVoice(GameObject npc, GameObject characterModelPrefab, Avatar characterAvatar, RuntimeAnimatorController runtimeAnimatorController, int voicePresetId) // voicePresetId is the standard Wit ID
     {
         SetCharacterModel setCharacterModel = npc.GetComponent<SetCharacterModel>();
@@ -188,7 +231,7 @@ public class NPCSpawner : MonoBehaviour
         }
     }
 
-    // Method to set standard following behaviour (Unchanged from new repo version)
+    // Method to set standard following behaviour
     public void SetFollowingBehavior(GameObject npc, bool shouldFollow)
     {
         FollowThePlayerController followController = npc.GetComponent<FollowThePlayerController>();
@@ -202,7 +245,7 @@ public class NPCSpawner : MonoBehaviour
         }
     }
 
-    // Method to set display name (Unchanged from new repo version)
+    // Method to set display name
     public void SetName(GameObject npc, String name)
     {
         DisplayName displayName = npc.GetComponent<DisplayName>();
@@ -216,7 +259,7 @@ public class NPCSpawner : MonoBehaviour
         }
     }
 
-    // Method to set dialogue trees (Unchanged from new repo version)
+    // Method to set dialogue trees
     public void SetConversation(GameObject npc, DialogueTree[] dialogueTreesSO, TextAsset[] dialogueTreesJSON)
     {
         ConversationController conversationController = npc.GetComponentInChildren<ConversationController>(); // Find in children
