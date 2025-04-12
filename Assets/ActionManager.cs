@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using System.Collections;
 using BNG;
+using System.Linq;
 
 /// <summary>
 /// Represents the progress of a single step in a subtask.
@@ -58,12 +59,11 @@ public class ProgressDataCollection
 [Serializable]
 public class UploadDataDTO
 {
-    public string user_name;
 
     /// <summary>
     /// The mode defined in the user profiling.
     /// </summary>
-    public string user_mode;
+    public Dictionary<string, string> userInfo;
     public List<string> user_actions;   // currently not used
 
     /// <summary>
@@ -107,9 +107,8 @@ public class ActionManager : MonoBehaviour
 
         uploadData = new UploadDataDTO
         {
-            user_name = "Ben",
-            user_mode = "student",
-            user_actions = new List<string>(),
+            userInfo = new Dictionary<String, String>(),
+            user_actions = new List<String>(),
             progress = new List<ProgressDataDTO>(),
             question = "What actions have I made? And how far along am I in my tasks?",
             NPC = 0
@@ -343,4 +342,16 @@ public class ActionManager : MonoBehaviour
             }
         }
     }
+
+    public void SetUserInfo(Dictionary<String, String> userInformation)
+    {
+        uploadData.userInfo = userInformation;
+        var asString = string.Join(Environment.NewLine, uploadData.userInfo.Select(kv => $"{kv.Key}: {kv.Value}"));
+        StartCoroutine(SendUploadData(uploadData));
+        Debug.Log($"User info set: {asString}");
+        
+    }
+
+
+
 }
