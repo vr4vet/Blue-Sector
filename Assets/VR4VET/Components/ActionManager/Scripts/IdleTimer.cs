@@ -135,7 +135,7 @@ public class IdleTimer : MonoBehaviour
         
         if (ActionManager.Instance != null)
         {
-            ActionManager.Instance.SendIdleTimeoutReport(timeoutPrompt); // Uncomment this line if you want to send timeout prompt on idletimeout
+            /*ActionManager.Instance.SendIdleTimeoutReport(timeoutPrompt);*/ // Uncomment this line if you want to send timeout prompt on idletimeout
         }
     }
 
