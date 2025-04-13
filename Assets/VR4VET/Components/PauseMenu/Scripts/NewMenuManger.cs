@@ -52,6 +52,9 @@ public class NewMenuManger : MonoBehaviour
     [HideInInspector] public UnityEvent<bool> m_ControllerTooltipsToggled;
     private Toggle _controllerTooltipsToggle;
 
+    [HideInInspector] public UnityEvent<bool> m_AlwaysLabelTeleportToggled;
+    private Toggle _alwaysLabelTeleportToggle;
+
     [HideInInspector] public UnityEvent<bool> m_HighContrastModeToggled;
     private Toggle _highContrastModeToggle;
 
@@ -89,7 +92,8 @@ public class NewMenuManger : MonoBehaviour
         m_HighContrastModeToggled ??= new();
 
         List<Toggle> accessibilityToggles = transform.Find("Accessibility Canvas").GetComponentsInChildren<Toggle>().ToList();
-        _controllerTooltipsToggle = accessibilityToggles.Find(x => x.transform.parent.name == "ControllerTooltips");
+        _controllerTooltipsToggle = accessibilityToggles.Find(x => x.transform.parent.name == "ControllerTooltipsMain");
+        _alwaysLabelTeleportToggle = accessibilityToggles.Find(x => x.transform.parent.name == "ControllerTooltipsAlwaysLabelTeleport");
         _highContrastModeToggle = accessibilityToggles.Find(x => x.transform.parent.name == "HighContrastMode");
         _largerTextSizeToggle = accessibilityToggles.Find(x => x.transform.parent.name == "LargerTextSize");
 
@@ -107,6 +111,9 @@ public class NewMenuManger : MonoBehaviour
     {
         _controllerTooltipsToggle.isOn = PlayerPrefs.GetInt("controllerTooltips", 1) == 1;
         m_ControllerTooltipsToggled.Invoke(_controllerTooltipsToggle.isOn);
+
+        _alwaysLabelTeleportToggle.isOn = PlayerPrefs.GetInt("alwaysLabelTeleport", 1) == 1;
+        m_AlwaysLabelTeleportToggled.Invoke(_alwaysLabelTeleportToggle.isOn);
 
         _highContrastModeToggle.isOn = PlayerPrefs.GetInt("highContrastMode", 0) == 1;
         m_HighContrastModeToggled.Invoke(_highContrastModeToggle.isOn);
@@ -274,12 +281,18 @@ public class NewMenuManger : MonoBehaviour
     }
 
     /// <summary>
-    /// Tell controller tooltip activators whether they should be enabled or not
+    /// Store and set accessibility settings
     /// </summary>
     public void OnControllerTooltipToggled()
     {
         m_ControllerTooltipsToggled.Invoke(_controllerTooltipsToggle.isOn);
         PlayerPrefs.SetInt("controllerTooltips", _controllerTooltipsToggle.isOn ? 1 : 0);
+    }
+
+    public void OnAlwaysLabelTeleportToggled()
+    {
+        m_AlwaysLabelTeleportToggled.Invoke(_alwaysLabelTeleportToggle.isOn);
+        PlayerPrefs.SetInt("alwaysLabelTeleport", _alwaysLabelTeleportToggle.isOn ? 1 : 0);
     }
 
     public void OnHighContrastModeToggled()
