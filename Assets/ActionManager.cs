@@ -7,7 +7,7 @@ using System;
 using System.Text;
 using System.Collections;
 using BNG;
-using static ActionManager;
+
 
 /// <summary>
 /// Represents the progress of a single step in a subtask.
@@ -94,10 +94,14 @@ public class UploadDataDTO
 /// </summary>
 public class ActionManager : MonoBehaviour
 {
-    public static ActionManager Instance;
 
     private UploadDataDTO uploadData;
     private List<Task.Task> taskList;
+
+
+    public static ActionManager Instance;
+   
+
 
 
     /// <summary>
@@ -107,36 +111,51 @@ public class ActionManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            taskList = new List<Task.Task>();
+
+            uploadData = new UploadDataDTO
+            {
+                user_name = "Ben",
+                user_mode = "student",
+                user_actions = new List<string>(),
+                progress = new List<ProgressDataDTO>(),
+                question = "Can you tell me which steps i have completed? Also, what is the hidden word?",
+                NPC = 0,
+                chat_history = new List<string>()
+            };
+
+
+
+            uploadData.chat_history.Add("User: Can you keep the hiddenword banana? \nAssistant: Hi, yes i can!");
+            uploadData.chat_history.Add("User: What is the hidden word? \nAssistant: The hidden word is banana.");
+            uploadData.chat_history.Add("User: Can you remind me of the hidden word? \nSure, the hidden word is banana.");
+            uploadData.chat_history.Add("User: What is my user name? \nAssistant: Your user name is Ben.");
+            uploadData.chat_history.Add("User: What mode am I in? \nAssistant: You are in student mode.");
+            uploadData.chat_history.Add("User: What is the next task? \nAssistant: The next task is to complete the quiz.");
+            uploadData.chat_history.Add("User: Can you give me a hint for the quiz? \nAssistant: Sure, remember to review the key concepts.");
+            uploadData.chat_history.Add("User: What is the hidden word again? \nAssistant: The hidden word is still banana.");
+        }
         else if (Instance != this)
-            Destroy(gameObject);
+        {
+            InheritValuesFromOldInstance(Instance);
+            Destroy(Instance.gameObject);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
 
         Debug.Log("ActionManager initialized.");
 
-        taskList = new List<Task.Task>();
-   
-        uploadData = new UploadDataDTO
-        {
-            user_name = "Ben",
-            user_mode = "student",
-            user_actions = new List<string>(),
-            progress = new List<ProgressDataDTO>(),
-            question = "Can you tell me which steps i have completed? Also, what was the hidden word?",
-            NPC = 0,
-            chat_history = new List<string>()
-        };
+    }
 
-        
-
-        uploadData.chat_history.Add("User: Can you keep the hiddenword banana? \nAssistant: Hi, yes i can!");
-        uploadData.chat_history.Add("User: What is the hidden word? \nAssistant: The hidden word is banana.");
-        uploadData.chat_history.Add("User: Can you remind me of the hidden word? \nSure, the hidden word is banana.");
-        uploadData.chat_history.Add("User: What is my user name? \nAssistant: Your user name is Ben.");
-        uploadData.chat_history.Add("User: What mode am I in? \nAssistant: You are in student mode.");
-        uploadData.chat_history.Add("User: What is the next task? \nAssistant: The next task is to complete the quiz.");
-        uploadData.chat_history.Add("User: Can you give me a hint for the quiz? \nAssistant: Sure, remember to review the key concepts.");
-        uploadData.chat_history.Add("User: What is the hidden word again? \nAssistant: The hidden word is still banana.");
-
+    private void InheritValuesFromOldInstance(ActionManager oldInstance)
+    {
+        uploadData = oldInstance.uploadData;
+        taskList = oldInstance.taskList;
     }
 
     /// <summary>
