@@ -84,7 +84,9 @@ public class UploadDataDTO
     /// <summary>
     /// The chat history of the user and the chatbot.
     /// /summary>
-    public string chatHistory_str;
+    public List<String> chat_history;
+
+  
 }
 
 /// <summary>
@@ -96,7 +98,7 @@ public class ActionManager : MonoBehaviour
 
     private UploadDataDTO uploadData;
     private List<Task.Task> taskList;
-    public ChatHistory chatHistory;
+
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -111,28 +113,29 @@ public class ActionManager : MonoBehaviour
 
         Debug.Log("ActionManager initialized.");
 
+        taskList = new List<Task.Task>();
+   
         uploadData = new UploadDataDTO
         {
             user_name = "Ben",
             user_mode = "student",
             user_actions = new List<string>(),
             progress = new List<ProgressDataDTO>(),
-            question = "Can you tell me which steps i have completed?",
+            question = "Can you tell me which steps i have completed? Also, what was the hidden word?",
             NPC = 0,
-            chatHistory_str = ""
+            chat_history = new List<string>()
         };
 
-        taskList = new List<Task.Task>();
-        chatHistory = new ChatHistory();
+        
 
-        chatHistory.AddEntry("Can you keep the hiddenword banana?", "Hi, yes i can!");
-        chatHistory.AddEntry("What is the hidden word?", "The hidden word is banana.");
-        chatHistory.AddEntry("Can you remind me of the hidden word?", "Sure, the hidden word is banana.");
-        chatHistory.AddEntry("What is my user name?", "Your user name is Ben.");
-        chatHistory.AddEntry("What mode am I in?", "You are in student mode.");
-        chatHistory.AddEntry("What is the next task?", "The next task is to complete the quiz.");
-        chatHistory.AddEntry("Can you give me a hint for the quiz?", "Sure, remember to review the key concepts.");
-        chatHistory.AddEntry("What is the hidden word again?", "The hidden word is still banana.");
+        uploadData.chat_history.Add("User: Can you keep the hiddenword banana? \nAssistant: Hi, yes i can!");
+        uploadData.chat_history.Add("User: What is the hidden word? \nAssistant: The hidden word is banana.");
+        uploadData.chat_history.Add("User: Can you remind me of the hidden word? \nSure, the hidden word is banana.");
+        uploadData.chat_history.Add("User: What is my user name? \nAssistant: Your user name is Ben.");
+        uploadData.chat_history.Add("User: What mode am I in? \nAssistant: You are in student mode.");
+        uploadData.chat_history.Add("User: What is the next task? \nAssistant: The next task is to complete the quiz.");
+        uploadData.chat_history.Add("User: Can you give me a hint for the quiz? \nAssistant: Sure, remember to review the key concepts.");
+        uploadData.chat_history.Add("User: What is the hidden word again? \nAssistant: The hidden word is still banana.");
 
     }
 
@@ -327,7 +330,6 @@ public class ActionManager : MonoBehaviour
     /// <returns>An IEnumerator for the coroutine.</returns>
     private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
-        uploadData.chatHistory_str = chatHistory.GetHistoryAsString();
 
         string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
@@ -348,7 +350,7 @@ public class ActionManager : MonoBehaviour
             {
                 string response = request.downloadHandler.text;
                 Debug.Log($"Server response: {request.downloadHandler.text}");
-                chatHistory.AddEntry(uploadData.question, response);
+                uploadData.chat_history.Add($"User: {uploadData.question}\nAssistant: {response}");
 
             }
         }
@@ -367,20 +369,6 @@ public class ActionManager : MonoBehaviour
                 uploadData.progress[i] = progressData;
                 return;
             }
-        }
-    }
-    public class ChatHistory
-    {
-        private List<string> history = new List<string>();
-
-        public void AddEntry(string question, string reply)
-        {
-            history.Add($"User: {question}\nAssistant: {reply}");
-        }
-
-        public string GetHistoryAsString()
-        {
-            return string.Join("\n", history);
         }
     }
 
