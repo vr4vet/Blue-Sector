@@ -117,13 +117,22 @@ public class ActionManager : MonoBehaviour
             user_mode = "student",
             user_actions = new List<string>(),
             progress = new List<ProgressDataDTO>(),
-            question = "What was the previous question i asked, if there was any. How many times how i asked this question?",
+            question = "Can you tell me which steps i have completed?",
             NPC = 0,
             chatHistory_str = ""
         };
 
         taskList = new List<Task.Task>();
         chatHistory = new ChatHistory();
+
+        chatHistory.AddEntry("Can you keep the hiddenword banana?", "Hi, yes i can!");
+        chatHistory.AddEntry("What is the hidden word?", "The hidden word is banana.");
+        chatHistory.AddEntry("Can you remind me of the hidden word?", "Sure, the hidden word is banana.");
+        chatHistory.AddEntry("What is my user name?", "Your user name is Ben.");
+        chatHistory.AddEntry("What mode am I in?", "You are in student mode.");
+        chatHistory.AddEntry("What is the next task?", "The next task is to complete the quiz.");
+        chatHistory.AddEntry("Can you give me a hint for the quiz?", "Sure, remember to review the key concepts.");
+        chatHistory.AddEntry("What is the hidden word again?", "The hidden word is still banana.");
 
     }
 
@@ -318,7 +327,7 @@ public class ActionManager : MonoBehaviour
     /// <returns>An IEnumerator for the coroutine.</returns>
     private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
-        uploadData.chatHistory = chatHistory.GetHistoryAsString();
+        uploadData.chatHistory_str = chatHistory.GetHistoryAsString();
 
         string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
@@ -366,12 +375,12 @@ public class ActionManager : MonoBehaviour
 
         public void AddEntry(string question, string reply)
         {
-            history.Add($"Question: {question}\nReply: {reply}");
+            history.Add($"User: {question}\nAssistant: {reply}");
         }
 
         public string GetHistoryAsString()
         {
-            return string.Join("\n\n", history);
+            return string.Join("\n", history);
         }
     }
 
