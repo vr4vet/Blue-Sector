@@ -16,7 +16,7 @@ namespace Task
         [SerializeField] private string _stepName;
         [SerializeField] [Range(1, 20)] private int _repetionNumber = 1;
         private int stepNumber;
-        
+
         [Tooltip(">0 : count down, <0 : no timer, 0 : count up")]
         [SerializeField] private int _timer = -1;
 
@@ -91,7 +91,6 @@ namespace Task
         {
             _compleated = false;
             _repetionsCompleated = 0;
-
         }
 
         //overload to compleate reps
@@ -113,10 +112,11 @@ namespace Task
         }
 
         
-        public void StartTimer(){
+        public void StartTimer()
+        {
             Tablet.TaskListLoader1 taskLoader = GameObject.FindObjectsOfType<Tablet.TaskListLoader1>()[0];
             taskLoader.startTimer(Timer, this);
         }
-        
+
     }
 }

@@ -1,108 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-
 using Task;
 using System;
 using System.Text;
 using System.Collections;
 using BNG;
 
-
-/// <summary>
-/// Represents the progress of a single step in a subtask.
-/// </summary>
-[Serializable]
-public class StepProgressDTO
-{
-    public string stepName;
-    public int repetitionNumber;
-    public bool completed;
-}
-
-/// <summary>
-/// Represents the progress of a subtask, including its steps.
-/// </summary>
-[Serializable]
-public class SubtaskProgressDTO
-{
-    public string subtaskName;
-    public string description;
-    public bool completed;
-    public List<StepProgressDTO> stepProgress;
-}
-
-/// <summary>
-/// Represents the progress of a task, including its subtasks.
-/// </summary>
-[Serializable]
-public class ProgressDataDTO
-{
-    public string taskName;
-    public string description;
-    public string status;
-    public List<SubtaskProgressDTO> subtaskProgress;
-}
-
-/// <summary>
-/// A collection of progress data for multiple tasks.
-/// </summary>
-[Serializable]
-public class ProgressDataCollection
-{
-    public List<ProgressDataDTO> items;
-}
-
-/// <summary>
-/// Data structure for uploading user progress and interactions.
-/// </summary>
-[Serializable]
-public class UploadDataDTO
-{
-    public string user_name;
-
-    /// <summary>
-    /// The mode defined in the user profiling.
-    /// </summary>
-    public string user_mode;
-    public List<string> user_actions;   // currently not used
-
-    /// <summary>
-    /// A list of progress data for tasks.
-    /// </summary>
-    public List<ProgressDataDTO> progress;
-
-    /// <summary>
-    /// The question that the user is asking.
-    /// </summary>
-    public string question;
-
-    /// <summary>
-    /// The ID of the NPC that the user is interacting with.
-    /// </summary>
-    public int NPC;
-    /// <summary>
-    /// The chat history of the user and the chatbot.
-    /// /summary>
-    public List<String> chat_history;
-
-  
-}
-
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
 /// </summary>
 public class ActionManager : MonoBehaviour
 {
+    public static ActionManager Instance;
 
     private UploadDataDTO uploadData;
     private List<Task.Task> taskList;
 
-
-    public static ActionManager Instance;
-   
-
-
+    // Reference to the idle timer
+    private IdleTimer idleTimer;
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -116,6 +32,11 @@ public class ActionManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             taskList = new List<Task.Task>();
+            idleTimer = GetComponent<IdleTimer>();
+            if (idleTimer == null)
+            {
+                Debug.LogWarning("IdleTimer component not found on ActionManager GameObject");
+            }
 
             uploadData = new UploadDataDTO
             {
@@ -210,6 +131,9 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object grabbed: {grabbable.name}");
 
         uploadData.user_actions.Add("grabbed: " + grabbable.name);
+
+        // Reset idle timer when user grabs an object
+        idleTimer?.ResetIdleTimer();
     }
 
     /// <summary>
@@ -229,6 +153,9 @@ public class ActionManager : MonoBehaviour
         StartCoroutine(SendUploadData(uploadData)); // Send data to the server
 
 
+
+        // Reset idle timer when user drops an object
+        idleTimer?.ResetIdleTimer();
     }
 
     /// <summary>
@@ -279,6 +206,15 @@ public class ActionManager : MonoBehaviour
                         var progressData = ConvertTaskToProgressData(task);
                         UpdateProgressData(progressData);
 
+                        // Update idle tracking with last progressed subtask
+                        if (idleTimer != null)
+                        {
+                            idleTimer.ResetIdleTimer();
+                            idleTimer.StartIdleTracking(subtask, step);
+                        }
+
+                        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after step completion
+
                         return;
                     }
                 }
@@ -296,7 +232,8 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
-        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after task completion
+        // Stop idle tracking when a subtask is completed
+        idleTimer?.StopIdleTracking();
 
         Debug.LogWarning($"Could not find task {task.TaskName}");
     }
@@ -349,7 +286,6 @@ public class ActionManager : MonoBehaviour
     /// <returns>An IEnumerator for the coroutine.</returns>
     private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
-
         string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
@@ -391,5 +327,23 @@ public class ActionManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sends a prompt through IdleTimer when the user has been idle for too long.
+    /// </summary>
+    /// <param name="timeoutMessage"></param>
+    public void SendIdleTimeoutReport(string timeoutMessage)
+    {
+        SetQuestion(timeoutMessage);
+        StartCoroutine(SendUploadData(uploadData));
+    }
 
+    /// <summary>
+    /// Sets the question in the upload data.
+    /// </summary>
+    /// <param name="question"></param>
+    public void SetQuestion(string question)
+    {
+        uploadData.question = question;
+        Debug.Log($"Question set: {question}");
+    }
 }
