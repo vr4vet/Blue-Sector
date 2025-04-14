@@ -27,12 +27,14 @@ MonoBehaviour:
     - For the laboratory-related duties, you'll find the laboratory next door to
       the reception, just to the left. Head over there and touch the handle of the
       door to get inside.
-    endAfterDialogue: 1
+    endAfterDialogue: 0
     walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
     pointAt: 
     branchPoint:
-      question: 
-      answers: []
-    interruptableElements: 000001
-    dialogueEnd: 1
+      question: Good luck!
+      answers:
+      - answerLabel: Could you repeat that?
+        nextElement: 0
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 

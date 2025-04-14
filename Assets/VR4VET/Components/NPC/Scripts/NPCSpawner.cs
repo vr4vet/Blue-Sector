@@ -34,6 +34,7 @@ public class NPCSpawner : MonoBehaviour
                 continue;
             }
             _npcInstances.Add(SpawnNPC(npcSO));
+
         }
 
         // Start the coroutine to fix animator references after all NPCs are spawned
