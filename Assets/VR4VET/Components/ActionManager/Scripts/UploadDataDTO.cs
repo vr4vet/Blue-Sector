@@ -33,4 +33,9 @@ public class UploadDataDTO
     /// The ID of the NPC that the user is interacting with.
     /// </summary>
     public int NPC;
+
+    /// <summary>
+    /// The chat history of the user and the chatbot.
+    /// /summary>
+    public List<String> chat_history;
 }
