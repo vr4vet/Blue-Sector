@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using System.Collections;
 using BNG;
+using UnityEngine.SceneManagement;
 
 
 /// <summary>
@@ -113,7 +114,6 @@ public class ActionManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
 
             taskList = new List<Task.Task>();
 
@@ -144,12 +144,25 @@ public class ActionManager : MonoBehaviour
             InheritValuesFromOldInstance(Instance);
             Destroy(Instance.gameObject);
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
 
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
+        DontDestroyOnLoad(gameObject);
         Debug.Log("ActionManager initialized.");
+    }
 
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UnregisterGrabListeners();
+        RegisterGrabListeners();
+
+        Debug.Log($"ActionManager: Registered grab listeners in scene '{scene.name}'");
     }
 
     private void InheritValuesFromOldInstance(ActionManager oldInstance)
