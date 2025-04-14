@@ -8,6 +8,7 @@ using System.Text;
 using System.Collections;
 using BNG;
 
+
 /// <summary>
 /// Represents the progress of a single step in a subtask.
 /// </summary>
@@ -80,6 +81,12 @@ public class UploadDataDTO
     /// The ID of the NPC that the user is interacting with.
     /// </summary>
     public int NPC;
+    /// <summary>
+    /// The chat history of the user and the chatbot.
+    /// /summary>
+    public List<String> chat_history;
+
+  
 }
 
 /// <summary>
@@ -87,10 +94,15 @@ public class UploadDataDTO
 /// </summary>
 public class ActionManager : MonoBehaviour
 {
-    public static ActionManager Instance;
 
     private UploadDataDTO uploadData;
     private List<Task.Task> taskList;
+
+
+    public static ActionManager Instance;
+   
+
+
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -99,23 +111,51 @@ public class ActionManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            taskList = new List<Task.Task>();
+
+            uploadData = new UploadDataDTO
+            {
+                user_name = "Ben",
+                user_mode = "student",
+                user_actions = new List<string>(),
+                progress = new List<ProgressDataDTO>(),
+                question = "Can you tell me which steps i have completed? Also, what is the hidden word?",
+                NPC = 0,
+                chat_history = new List<string>()
+            };
+
+
+
+            uploadData.chat_history.Add("User: Can you keep the hiddenword banana? \nAssistant: Hi, yes i can!");
+            uploadData.chat_history.Add("User: What is the hidden word? \nAssistant: The hidden word is banana.");
+            uploadData.chat_history.Add("User: Can you remind me of the hidden word? \nSure, the hidden word is banana.");
+            uploadData.chat_history.Add("User: What is my user name? \nAssistant: Your user name is Ben.");
+            uploadData.chat_history.Add("User: What mode am I in? \nAssistant: You are in student mode.");
+            uploadData.chat_history.Add("User: What is the next task? \nAssistant: The next task is to complete the quiz.");
+            uploadData.chat_history.Add("User: Can you give me a hint for the quiz? \nAssistant: Sure, remember to review the key concepts.");
+            uploadData.chat_history.Add("User: What is the hidden word again? \nAssistant: The hidden word is still banana.");
+        }
         else if (Instance != this)
-            Destroy(gameObject);
+        {
+            InheritValuesFromOldInstance(Instance);
+            Destroy(Instance.gameObject);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
 
         Debug.Log("ActionManager initialized.");
 
-        uploadData = new UploadDataDTO
-        {
-            user_name = "Ben",
-            user_mode = "student",
-            user_actions = new List<string>(),
-            progress = new List<ProgressDataDTO>(),
-            question = "What actions have I made? And how far along am I in my tasks?",
-            NPC = 0
-        };
+    }
 
-        taskList = new List<Task.Task>();
+    private void InheritValuesFromOldInstance(ActionManager oldInstance)
+    {
+        uploadData = oldInstance.uploadData;
+        taskList = oldInstance.taskList;
     }
 
     /// <summary>
@@ -186,6 +226,9 @@ public class ActionManager : MonoBehaviour
 
         // Add to the user actions list with position information
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        StartCoroutine(SendUploadData(uploadData)); // Send data to the server
+
+
     }
 
     /// <summary>
@@ -306,6 +349,7 @@ public class ActionManager : MonoBehaviour
     /// <returns>An IEnumerator for the coroutine.</returns>
     private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
+
         string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
@@ -323,7 +367,10 @@ public class ActionManager : MonoBehaviour
             }
             else
             {
+                string response = request.downloadHandler.text;
                 Debug.Log($"Server response: {request.downloadHandler.text}");
+                uploadData.chat_history.Add($"User: {uploadData.question}\nAssistant: {response}");
+
             }
         }
     }
@@ -343,4 +390,6 @@ public class ActionManager : MonoBehaviour
             }
         }
     }
+
+
 }
