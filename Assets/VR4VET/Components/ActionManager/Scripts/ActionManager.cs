@@ -6,6 +6,8 @@ using System;
 using System.Text;
 using System.Collections;
 using BNG;
+using UploadDTO;
+using ProgressDTO;
 
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
@@ -40,8 +42,6 @@ public class ActionManager : MonoBehaviour
 
             uploadData = new UploadDataDTO
             {
-                user_name = "Ben",
-                user_mode = "student",
                 user_actions = new List<string>(),
                 progress = new List<ProgressDataDTO>(),
                 question = "Can you tell me which steps i have completed? Also, what is the hidden word?",

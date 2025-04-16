@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using ProgressDTO.ProgressDataDTO;
+using ProgressDTO;
 
 namespace UploadDTO
 {
