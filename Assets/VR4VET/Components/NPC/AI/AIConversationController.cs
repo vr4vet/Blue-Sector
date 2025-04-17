@@ -11,6 +11,8 @@ using Whisper;
 
 public class AIConversationController : MonoBehaviour
 {
+    private ActionManager actionManager;
+
     // Dependencies (Assign in Inspector or find dynamically)
     [SerializeField] private Transcribe _Transcribe;
     [SerializeField] public SpriteRenderer microphoneIcon; // Assign the mic icon child object in Inspector
@@ -33,6 +35,10 @@ public class AIConversationController : MonoBehaviour
     private float currentScale;
     private bool isAnimating = false;
 
+    void Awake()
+    {
+        actionManager = ActionManager.Instance;
+    }
     void Start()
     {
         // Find required components dynamically if not assigned
@@ -172,6 +178,14 @@ public class AIConversationController : MonoBehaviour
         // if (messages.Count >= maxMessages) {
         //    messages.RemoveAt(1); // Remove oldest user/assistant message (keep system prompts at index 0)
         // }
+        if (actionManager != null)
+        {
+            actionManager.AddChatMessage(message); // Add message to global chatlog
+        }
+        else
+        {
+            Debug.LogWarning("AIConversationController: actionManager is null, message will only be added to local context", this);
+        }
         messages.Add(message);
         Debug.Log($"AIContext: Added '{message.role}' message. Total messages: {messages.Count}");
     }
@@ -207,5 +221,10 @@ public class AIConversationController : MonoBehaviour
             }
         }
         microphoneIcon.transform.localScale = new Vector3(currentScale, currentScale, 1);
+    }
+
+    public void PopulateGlobalMemory()
+    {
+        messages = actionManager.GetGlobalChatLogs();
     }
 }

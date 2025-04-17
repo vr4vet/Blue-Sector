@@ -3,6 +3,7 @@ using Meta.WitAi.TTS.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 public class NPCSpawner : MonoBehaviour
 {
@@ -295,6 +296,18 @@ public class NPCSpawner : MonoBehaviour
             if (!string.IsNullOrWhiteSpace(contextPrompt))
             {
                 aiConvCtrl.AddMessage(new Message { role = "system", content = contextPrompt });
+            }
+
+            // Add global chat memory to npc if field is enabled
+            foreach (var npcSO in _nPCs)
+            {
+                if (npcSO != null && npcSO.NameOfNPC == npc.name)
+                {
+                    Debug.Log($"NPCSpawner: Found NPC data for {npc.name}. Setting globalChatMemory to {npcSO.GlobalChatMemory}");
+                    if (npcSO.GlobalChatMemory)
+                        aiConvCtrl.PopulateGlobalMemory();
+                    break;
+                }
             }
         }
         else { Debug.LogWarning($"NPCSpawner: AIConversationController missing on AI NPC: {npc.name}. Cannot set AI behaviour."); }

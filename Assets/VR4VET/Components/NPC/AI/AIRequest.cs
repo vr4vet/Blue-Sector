@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Text; // For UTF8Encoding
+using ProgressDTO;
+using UploadDTO;
 // Note: Uses Message, OpenAIRequest, OpenAIResponse from OpenAIResponseSerializer.cs
 
 public class AIRequest : MonoBehaviour
@@ -20,7 +22,7 @@ public class AIRequest : MonoBehaviour
 
     // Internal State
     private string _apiKey;
-    private const string OpenAI_API_URL = "https://api.openai.com/v1/chat/completions";
+    private const string CHATBOT_API_URL = "http://localhost:8000/ask";
     private List<Message> _messagesToSend = new(); // Local copy for request
     private AudioSource _audioSource; // For fallback audio
 
@@ -91,24 +93,69 @@ public class AIRequest : MonoBehaviour
 
         Debug.Log($"AIRequest: Sending request to OpenAI. Query: '{query}'");
 
-        OpenAIRequest requestPayload = new()
+        /*OpenAIRequest requestPayload = new()
         {
             model = "gpt-3.5-turbo",
             messages = _messagesToSend,
             max_tokens = maxTokens > 0 ? maxTokens : 150
+        };*/
+
+        // Mock data for testing request to chatservice
+        UploadDataDTO requestPayload = new()
+        {
+            user_actions = new List<string>() { "Spoke to Raechel" },
+            progress = new List<ProgressDataDTO>()
+    {
+        new ProgressDataDTO
+        {
+            taskName = "Conversation with NPC",
+            description = "Learning about the facility through conversation",
+            status = "in_progress",
+            subtaskProgress = new List<SubtaskProgressDTO>()
+            {
+                new SubtaskProgressDTO
+                {
+                    subtaskName = "Introduction",
+                    description = "Initial greeting and conversation",
+                    completed = true,
+                    stepProgress = new List<StepProgressDTO>()
+                    {
+                        new StepProgressDTO { stepName = "Greeting", completed = true },
+                        new StepProgressDTO { stepName = "Ask about role", completed = true }
+                    }
+                },
+                new SubtaskProgressDTO
+                {
+                    subtaskName = "Current Topic",
+                    description = "Learning about facility operations",
+                    completed = false,
+                    stepProgress = new List<StepProgressDTO>()
+                    {
+                        new StepProgressDTO { stepName = "Ask question", completed = true },
+                        new StepProgressDTO { stepName = "Receive information", completed = false }
+                    }
+                }
+            }
+        }
+    },
+            NPC = 0,
+            chatLog = _messagesToSend
         };
 
         string jsonData = JsonUtility.ToJson(requestPayload);
+        Debug.Log($"AIRequest: Sending payload: {jsonData}");
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
-        using (UnityWebRequest request = new(OpenAI_API_URL, "POST"))
+        using (UnityWebRequest request = new UnityWebRequest(CHATBOT_API_URL, "POST"))
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
             request.SetRequestHeader("Authorization", $"Bearer {_apiKey}");
 
             yield return request.SendWebRequest();
+
+            Debug.Log($"AIRequest: Server response: {request.downloadHandler.text}");
 
             _aiConversationController.AddMessage(new Message { role = "user", content = query });
 
