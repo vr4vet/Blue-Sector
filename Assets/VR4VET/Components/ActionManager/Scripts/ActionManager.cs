@@ -171,7 +171,7 @@ public class ActionManager : MonoBehaviour
         foreach (var task in tasks)
         {
             ProgressDataDTO progressData = ConvertTaskToProgressData(task);
-            progressData.status = "pending";
+            progressData.status = "not started";
             progressHierarchy.Add(progressData);
 
             Debug.Log($"Task: {task.TaskName}");
@@ -352,5 +352,10 @@ public class ActionManager : MonoBehaviour
     public List<Message> GetGlobalChatLogs()
     {
         return globalChatLogs;
+    }
+
+    public UploadDataDTO GetUploadData()
+    {
+        return uploadData;
     }
 }

@@ -150,6 +150,7 @@ public class AIConversationController : MonoBehaviour
             AIRequest request = gameObject.AddComponent<AIRequest>(); // Add dynamically
             request.query = transcript + " Please answer concisely and in the language: " + _Transcribe.currentLanguage; // Add language constraint
             request.maxTokens = this.maxTokens;
+            request.requestPayload = actionManager.GetUploadData();
             // References will be fetched by AIRequest's Start/Awake
         }
     }

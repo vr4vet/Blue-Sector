@@ -14,6 +14,7 @@ public class AIRequest : MonoBehaviour
     // Configuration (Set by AIConversationController)
     public string query;
     public int maxTokens;
+    public UploadDataDTO requestPayload;
 
     // Dependencies (Fetched dynamically)
     private AIResponseToSpeech _aiResponseToSpeech;
@@ -91,7 +92,7 @@ public class AIRequest : MonoBehaviour
             yield break;
         }
 
-        Debug.Log($"AIRequest: Sending request to OpenAI. Query: '{query}'");
+        Debug.Log($"AIRequest: Sending request to Chatbot. Query: '{query}'");
 
         /*OpenAIRequest requestPayload = new()
         {
@@ -100,47 +101,7 @@ public class AIRequest : MonoBehaviour
             max_tokens = maxTokens > 0 ? maxTokens : 150
         };*/
 
-        // Mock data for testing request to chatservice
-        UploadDataDTO requestPayload = new()
-        {
-            user_actions = new List<string>() { "Spoke to Raechel" },
-            progress = new List<ProgressDataDTO>()
-    {
-        new ProgressDataDTO
-        {
-            taskName = "Conversation with NPC",
-            description = "Learning about the facility through conversation",
-            status = "in_progress",
-            subtaskProgress = new List<SubtaskProgressDTO>()
-            {
-                new SubtaskProgressDTO
-                {
-                    subtaskName = "Introduction",
-                    description = "Initial greeting and conversation",
-                    completed = true,
-                    stepProgress = new List<StepProgressDTO>()
-                    {
-                        new StepProgressDTO { stepName = "Greeting", completed = true },
-                        new StepProgressDTO { stepName = "Ask about role", completed = true }
-                    }
-                },
-                new SubtaskProgressDTO
-                {
-                    subtaskName = "Current Topic",
-                    description = "Learning about facility operations",
-                    completed = false,
-                    stepProgress = new List<StepProgressDTO>()
-                    {
-                        new StepProgressDTO { stepName = "Ask question", completed = true },
-                        new StepProgressDTO { stepName = "Receive information", completed = false }
-                    }
-                }
-            }
-        }
-    },
-            NPC = 0,
-            chatLog = _messagesToSend
-        };
+        requestPayload.chatLog = _messagesToSend;
 
         string jsonData = JsonUtility.ToJson(requestPayload);
         Debug.Log($"AIRequest: Sending payload: {jsonData}");
@@ -169,16 +130,18 @@ public class AIRequest : MonoBehaviour
                 Debug.Log("AIRequest Success: Received response from OpenAI.");
                 try
                 {
-                    OpenAIResponse response = JsonUtility.FromJson<OpenAIResponse>(request.downloadHandler.text);
+                    LLMResponse response = JsonUtility.FromJson<LLMResponse>(request.downloadHandler.text);
 
-                    if (response == null || response.choices == null || response.choices.Count == 0 || string.IsNullOrWhiteSpace(response.choices[0].message.content))
+                    Debug.Log($"LLMResponse JSON: {JsonUtility.ToJson(response, true)}");
+
+                    if (response == null || response.choices == null || response.choices.Count == 0 || string.IsNullOrWhiteSpace(response.response))
                     {
                         Debug.LogError("AIRequest Error: Invalid or empty response from OpenAI.");
                         HandleErrorOrFallback("Received an empty response from the AI.");
                     }
                     else
                     {
-                        string rawResponseText = response.choices[0].message.content;
+                        string rawResponseText = response.response;
                         string sanitizedResponseText = SanitizeResponse(rawResponseText);
 
                         Message assistantMessage = new() { role = "assistant", content = sanitizedResponseText };
