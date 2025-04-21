@@ -42,7 +42,7 @@ public class ActionManager : MonoBehaviour
                 Debug.LogWarning("IdleTimer component not found on ActionManager GameObject");
             }
 
-            _uploadData = new UploadDataDTO
+            uploadData = new UploadDataDTO
             {
                 user_information = new Dictionary<string, string>(),
                 user_actions = new List<string>(),
@@ -76,7 +76,7 @@ public class ActionManager : MonoBehaviour
 
     private void InheritValuesFromOldInstance(ActionManager oldInstance)
     {
-        _uploadData = oldInstance._uploadData;
+        uploadData = oldInstance.uploadData;
         taskList = oldInstance.taskList;
     }
 
@@ -131,7 +131,7 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Object grabbed: {grabbable.name}");
 
-        _uploadData.user_actions.Add("grabbed: " + grabbable.name);
+        uploadData.user_actions.Add("grabbed: " + grabbable.name);
 
         // Reset idle timer when user grabs an object
         idleTimer?.ResetIdleTimer();
@@ -150,8 +150,8 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
 
         // Add to the user actions list with position information
-        _uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
-        StartCoroutine(SendUploadData(_uploadData)); // Send data to the server
+        uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        StartCoroutine(SendUploadData(uploadData)); // Send data to the server
 
 
 
@@ -185,7 +185,7 @@ public class ActionManager : MonoBehaviour
                 }
             }
         }
-        _uploadData.progress = progressHierarchy;
+        uploadData.progress = progressHierarchy;
     }
 
     /// <summary>
@@ -214,7 +214,7 @@ public class ActionManager : MonoBehaviour
                             idleTimer.StartIdleTracking(subtask, step);
                         }
 
-                        /*StartCoroutine(SendUploadData(_uploadData));*/ // Uncomment this line to send data immediately after step completion
+                        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after step completion
 
                         return;
                     }
@@ -283,11 +283,11 @@ public class ActionManager : MonoBehaviour
     /// <summary>
     /// Sends the upload data to the server as a JSON payload.
     /// </summary>
-    /// <param name="_uploadData">The data to upload.</param>
+    /// <param name="uploadData">The data to upload.</param>
     /// <returns>An IEnumerator for the coroutine.</returns>
-    private IEnumerator SendUploadData(UploadDataDTO _uploadData)
+    private IEnumerator SendUploadData(UploadDataDTO uploadData)
     {
-        string json = JsonUtility.ToJson(_uploadData);
+        string json = JsonUtility.ToJson(uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
         using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/ask", "POST"))
@@ -316,11 +316,11 @@ public class ActionManager : MonoBehaviour
     /// <param name="progressData">The updated progress data.</param>
     private void UpdateProgressData(ProgressDataDTO progressData)
     {
-        for (int i = 0; i < _uploadData.progress.Count; i++)
+        for (int i = 0; i < uploadData.progress.Count; i++)
         {
-            if (_uploadData.progress[i].taskName == progressData.taskName)
+            if (uploadData.progress[i].taskName == progressData.taskName)
             {
-                _uploadData.progress[i] = progressData;
+                uploadData.progress[i] = progressData;
                 return;
             }
         }
@@ -328,7 +328,7 @@ public class ActionManager : MonoBehaviour
 
     public void SetUserInfo(Dictionary<string, string> userInfo)
     {
-        _uploadData.user_information = userInfo;
+        uploadData.user_information = userInfo;
     }
 
     /// <summary>
@@ -338,7 +338,7 @@ public class ActionManager : MonoBehaviour
     public void SendIdleTimeoutReport(string timeoutMessage)
     {
         SetQuestion(timeoutMessage);
-        StartCoroutine(SendUploadData(_uploadData));
+        StartCoroutine(SendUploadData(uploadData));
     }
 
     /// <summary>
