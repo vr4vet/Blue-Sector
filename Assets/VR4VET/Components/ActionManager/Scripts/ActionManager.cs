@@ -6,6 +6,7 @@ using System;
 using System.Text;
 using System.Collections;
 using BNG;
+using UploadDTO;
 
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
@@ -14,7 +15,7 @@ public class ActionManager : MonoBehaviour
 {
     public static ActionManager Instance;
 
-    private UploadDataDTO uploadData;
+    private UploadDataDTO _uploadData;
     private List<Task.Task> taskList;
 
     // Reference to the idle timer
@@ -38,10 +39,9 @@ public class ActionManager : MonoBehaviour
                 Debug.LogWarning("IdleTimer component not found on ActionManager GameObject");
             }
 
-            uploadData = new UploadDataDTO
+            _uploadData = new UploadDataDTO
             {
-                user_name = "Ben",
-                user_mode = "student",
+                user_information = new Dictionary<string, string>(),
                 user_actions = new List<string>(),
                 progress = new List<ProgressDataDTO>(),
                 question = "Can you tell me which steps i have completed? Also, what is the hidden word?",
@@ -51,14 +51,14 @@ public class ActionManager : MonoBehaviour
 
 
 
-            uploadData.chat_history.Add("User: Can you keep the hiddenword banana? \nAssistant: Hi, yes i can!");
-            uploadData.chat_history.Add("User: What is the hidden word? \nAssistant: The hidden word is banana.");
-            uploadData.chat_history.Add("User: Can you remind me of the hidden word? \nSure, the hidden word is banana.");
-            uploadData.chat_history.Add("User: What is my user name? \nAssistant: Your user name is Ben.");
-            uploadData.chat_history.Add("User: What mode am I in? \nAssistant: You are in student mode.");
-            uploadData.chat_history.Add("User: What is the next task? \nAssistant: The next task is to complete the quiz.");
-            uploadData.chat_history.Add("User: Can you give me a hint for the quiz? \nAssistant: Sure, remember to review the key concepts.");
-            uploadData.chat_history.Add("User: What is the hidden word again? \nAssistant: The hidden word is still banana.");
+            _uploadData.chat_history.Add("User: Can you keep the hiddenword banana? \nAssistant: Hi, yes i can!");
+            _uploadData.chat_history.Add("User: What is the hidden word? \nAssistant: The hidden word is banana.");
+            _uploadData.chat_history.Add("User: Can you remind me of the hidden word? \nSure, the hidden word is banana.");
+            _uploadData.chat_history.Add("User: What is my user name? \nAssistant: Your user name is Ben.");
+            _uploadData.chat_history.Add("User: What mode am I in? \nAssistant: You are in student mode.");
+            _uploadData.chat_history.Add("User: What is the next task? \nAssistant: The next task is to complete the quiz.");
+            _uploadData.chat_history.Add("User: Can you give me a hint for the quiz? \nAssistant: Sure, remember to review the key concepts.");
+            _uploadData.chat_history.Add("User: What is the hidden word again? \nAssistant: The hidden word is still banana.");
         }
         else if (Instance != this)
         {
@@ -75,7 +75,7 @@ public class ActionManager : MonoBehaviour
 
     private void InheritValuesFromOldInstance(ActionManager oldInstance)
     {
-        uploadData = oldInstance.uploadData;
+        _uploadData = oldInstance._uploadData;
         taskList = oldInstance.taskList;
     }
 
@@ -130,7 +130,7 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Object grabbed: {grabbable.name}");
 
-        uploadData.user_actions.Add("grabbed: " + grabbable.name);
+        _uploadData.user_actions.Add("grabbed: " + grabbable.name);
 
         // Reset idle timer when user grabs an object
         idleTimer?.ResetIdleTimer();
@@ -149,8 +149,8 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
 
         // Add to the user actions list with position information
-        uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
-        StartCoroutine(SendUploadData(uploadData)); // Send data to the server
+        _uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        StartCoroutine(SendUploadData(_uploadData)); // Send data to the server
 
 
 
@@ -184,7 +184,7 @@ public class ActionManager : MonoBehaviour
                 }
             }
         }
-        uploadData.progress = progressHierarchy;
+        _uploadData.progress = progressHierarchy;
     }
 
     /// <summary>
@@ -213,7 +213,7 @@ public class ActionManager : MonoBehaviour
                             idleTimer.StartIdleTracking(subtask, step);
                         }
 
-                        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after step completion
+                        /*StartCoroutine(SendUploadData(_uploadData));*/ // Uncomment this line to send data immediately after step completion
 
                         return;
                     }
@@ -282,11 +282,11 @@ public class ActionManager : MonoBehaviour
     /// <summary>
     /// Sends the upload data to the server as a JSON payload.
     /// </summary>
-    /// <param name="uploadData">The data to upload.</param>
+    /// <param name="_uploadData">The data to upload.</param>
     /// <returns>An IEnumerator for the coroutine.</returns>
-    private IEnumerator SendUploadData(UploadDataDTO uploadData)
+    private IEnumerator SendUploadData(UploadDataDTO _uploadData)
     {
-        string json = JsonUtility.ToJson(uploadData);
+        string json = JsonUtility.ToJson(_uploadData);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
         using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/ask", "POST"))
@@ -305,7 +305,7 @@ public class ActionManager : MonoBehaviour
             {
                 string response = request.downloadHandler.text;
                 Debug.Log($"Server response: {request.downloadHandler.text}");
-                uploadData.chat_history.Add($"User: {uploadData.question}\nAssistant: {response}");
+                _uploadData.chat_history.Add($"User: {_uploadData.question}\nAssistant: {response}");
 
             }
         }
@@ -317,14 +317,19 @@ public class ActionManager : MonoBehaviour
     /// <param name="progressData">The updated progress data.</param>
     private void UpdateProgressData(ProgressDataDTO progressData)
     {
-        for (int i = 0; i < uploadData.progress.Count; i++)
+        for (int i = 0; i < _uploadData.progress.Count; i++)
         {
-            if (uploadData.progress[i].taskName == progressData.taskName)
+            if (_uploadData.progress[i].taskName == progressData.taskName)
             {
-                uploadData.progress[i] = progressData;
+                _uploadData.progress[i] = progressData;
                 return;
             }
         }
+    }
+
+    public void SetUserInfo(Dictionary<string, string> userInfo)
+    {
+        _uploadData.user_information = userInfo;
     }
 
     /// <summary>
@@ -334,7 +339,7 @@ public class ActionManager : MonoBehaviour
     public void SendIdleTimeoutReport(string timeoutMessage)
     {
         SetQuestion(timeoutMessage);
-        StartCoroutine(SendUploadData(uploadData));
+        StartCoroutine(SendUploadData(_uploadData));
     }
 
     /// <summary>
@@ -343,7 +348,7 @@ public class ActionManager : MonoBehaviour
     /// <param name="question"></param>
     public void SetQuestion(string question)
     {
-        uploadData.question = question;
+        _uploadData.question = question;
         Debug.Log($"Question set: {question}");
     }
 }
