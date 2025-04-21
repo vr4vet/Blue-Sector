@@ -1,41 +1,44 @@
 using System;
 using System.Collections.Generic;
+using ProgressDTO.ProgressDataDTO;
 
-/// <summary>
-/// Data structure for uploading user progress and interactions.
-/// </summary>
-[Serializable]
-public class UploadDataDTO
+namespace UploadDTO
 {
-    public string user_name;
 
     /// <summary>
-    /// The mode defined in the user profiling.
+    /// Data structure for uploading user progress and interactions.
     /// </summary>
-    public string user_mode;
+    [Serializable]
+    public class UploadDataDTO
+    {
+        /// <summary>
+        /// Dictionary containing information about the user.
+        /// </summary>
+        public Dictionary<String, String> user_information;
 
-    /// <summary>
-    /// List of user actions such as grabbed/dropped objects.
-    /// </summary>
-    public List<string> user_actions;
+        /// <summary>
+        /// List of user actions such as grabbed/dropped objects.
+        /// </summary>
+        public List<string> user_actions;
 
-    /// <summary>
-    /// A list of progress data for tasks.
-    /// </summary>
-    public List<ProgressDataDTO> progress;
+        /// <summary>
+        /// A list of progress data for tasks.
+        /// </summary>
+        public List<ProgressDataDTO> progress;
 
-    /// <summary>
-    /// The question that the user is asking.
-    /// </summary>
-    public string question;
+        /// <summary>
+        /// The question that the user is asking.
+        /// </summary>
+        public string question;
 
-    /// <summary>
-    /// The ID of the NPC that the user is interacting with.
-    /// </summary>
-    public int NPC;
+        /// <summary>
+        /// The ID of the NPC that the user is interacting with.
+        /// </summary>
+        public int NPC;
 
-    /// <summary>
-    /// The chat history of the user and the chatbot.
-    /// /summary>
-    public List<String> chat_history;
+        /// <summary>
+        /// The chat history of the user and the chatbot.
+        /// /summary>
+        public List<String> chat_history;
+    }
 }
