@@ -164,7 +164,7 @@ namespace Whisper
             // check if model is already loaded or actively loading
             if (IsLoaded)
             {
-                LogUtils.Warning("Whisper model is already loaded and ready for use!");
+                LogUtils.Warning("Whisper model" +_whisper + "is already loaded and ready for use!");
                 return;
             }
 

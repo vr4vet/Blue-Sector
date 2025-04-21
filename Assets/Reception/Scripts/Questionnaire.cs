@@ -22,7 +22,7 @@ public class Questionnaire : MonoBehaviour
             Debug.LogError("No NPCSpawner found");
             return;
         }
-        
+
         // Find NPC "Receptionist Rachel"
         _receptionistNpc = _npcSpawner._npcInstances[0];
         _userInfo = new Dictionary<string, string>();
@@ -36,9 +36,10 @@ public class Questionnaire : MonoBehaviour
     /// <param name="answer"> The value of the button that the user presses</param>
     /// <param name="question"> The question connected to the answer </param>
     /// <param name="name"> The name of the NPC whose dialogue button was clicked </param>
-    private void Questionnaire_OnAnswer(string answer, string question, string name) {
+    private void Questionnaire_OnAnswer(string answer, string question, string name)
+    {
         // Only listen to when the buttons belonging to Receptionist Rachel's dialogue tree are pressed
-        if (name==_receptionistNpc.name)
+        if (name == _receptionistNpc.name)
         {
             if (_userInfo.ContainsKey(question))
             {
@@ -58,7 +59,7 @@ public class Questionnaire : MonoBehaviour
                 Debug.Log($"{answer}, {question}, {name}");
 
             }
-                 
+
         }
     }
 

@@ -217,7 +217,7 @@ public class AIRequest : MonoBehaviour
     {
         return langCode switch
         {
-            "no" => " Beklager, noe gikk galt. Vennligst prøv igjen.",
+            "no" => " Beklager, noe gikk galt. Vennligst prÃ¸v igjen.",
             "de" => " Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie es erneut.",
             "nl" => " Sorry, er is iets misgegaan. Probeer het opnieuw.",
             _ => " I'm sorry, something went wrong. Please try again.",
