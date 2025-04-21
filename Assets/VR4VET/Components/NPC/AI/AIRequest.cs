@@ -100,6 +100,8 @@ public class AIRequest : MonoBehaviour
 
         string jsonData = JsonUtility.ToJson(requestPayload);
 
+        Debug.Log($"AIRequest: Full request payload:\n{jsonData}");
+
         using (UnityWebRequest request = new(OpenAI_API_URL, "POST"))
         {
             byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
