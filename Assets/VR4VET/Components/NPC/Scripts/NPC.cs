@@ -28,6 +28,7 @@ public class NPC : ScriptableObject
     public float SpatialBlend;
     [Range(1, 100)]
     public float MinDistance;
+    public bool GlobalChatMemory;
 
     // --- New AI Fields ---
     [Header("AI Settings")]

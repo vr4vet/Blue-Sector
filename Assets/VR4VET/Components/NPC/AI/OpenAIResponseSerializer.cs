@@ -2,6 +2,8 @@
 // Note: Unchanged from the deprecated version.
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 
 // Field definitions for all of our serializable structures, for JSON requests and responses
 [Serializable]
@@ -49,6 +51,23 @@ public class OpenAIResponse
     public List<Choice> choices;
     public Usage usage;
     public string system_fingerprint;
+}
+
+[Serializable]
+public class  LLMResponse
+{
+    public string id;
+    public long created;
+    public string model;
+    public string provider;
+    public List<Choice> choices;
+    public Usage usage;
+    public string system_fingerprint;
+
+    public string response => choices?.FirstOrDefault()?.message.content;
+
+    public List<string> context_used;
+    public Dictionary<string, object> metadata;
 }
 
 [Serializable]

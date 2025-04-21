@@ -49,7 +49,7 @@ public class Questionnaire : MonoBehaviour
 
             else if (question == "Are you satisfied with your answers?" && answer == "Yes")
             {
-                _actionManager.SetUserInfo(_userInfo);
+                /*_actionManager.SetUserInfo(_userInfo);*/
                 Debug.Log("Sending answers to ActionManager");
             }
 

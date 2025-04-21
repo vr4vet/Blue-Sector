@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using ProgressDTO;
 
 namespace UploadDTO
 {
-
     /// <summary>
     /// Data structure for uploading user progress and interactions.
     /// </summary>
@@ -13,7 +13,7 @@ namespace UploadDTO
         /// <summary>
         /// Dictionary containing information about the user.
         /// </summary>
-        public Dictionary<String, String> user_information;
+        public Dictionary<string, string> user_information;
 
         /// <summary>
         /// List of user actions such as grabbed/dropped objects.
@@ -26,18 +26,13 @@ namespace UploadDTO
         public List<ProgressDataDTO> progress;
 
         /// <summary>
-        /// The question that the user is asking.
-        /// </summary>
-        public string question;
-
-        /// <summary>
         /// The ID of the NPC that the user is interacting with.
         /// </summary>
         public int NPC;
 
         /// <summary>
-        /// The chat history of the user and the chatbot.
+        /// The chat history between user and current NPC.
         /// /summary>
-        public List<String> chat_history;
+        public List<Message> chatLog;
     }
 }

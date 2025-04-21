@@ -7,6 +7,7 @@ using System.Text;
 using System.Collections;
 using BNG;
 using UploadDTO;
+using ProgressDTO;
 
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
@@ -15,7 +16,8 @@ public class ActionManager : MonoBehaviour
 {
     public static ActionManager Instance;
 
-    private UploadDataDTO _uploadData;
+    private UploadDataDTO uploadData;
+    private List<Message> globalChatLogs;
     private List<Task.Task> taskList;
 
     // Reference to the idle timer
@@ -32,6 +34,7 @@ public class ActionManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
+            globalChatLogs = new List<Message>();
             taskList = new List<Task.Task>();
             idleTimer = GetComponent<IdleTimer>();
             if (idleTimer == null)
@@ -44,21 +47,20 @@ public class ActionManager : MonoBehaviour
                 user_information = new Dictionary<string, string>(),
                 user_actions = new List<string>(),
                 progress = new List<ProgressDataDTO>(),
-                question = "Can you tell me which steps i have completed? Also, what is the hidden word?",
                 NPC = 0,
-                chat_history = new List<string>()
+                chatLog = new List<Message>()
             };
 
-
-
-            _uploadData.chat_history.Add("User: Can you keep the hiddenword banana? \nAssistant: Hi, yes i can!");
-            _uploadData.chat_history.Add("User: What is the hidden word? \nAssistant: The hidden word is banana.");
-            _uploadData.chat_history.Add("User: Can you remind me of the hidden word? \nSure, the hidden word is banana.");
-            _uploadData.chat_history.Add("User: What is my user name? \nAssistant: Your user name is Ben.");
-            _uploadData.chat_history.Add("User: What mode am I in? \nAssistant: You are in student mode.");
-            _uploadData.chat_history.Add("User: What is the next task? \nAssistant: The next task is to complete the quiz.");
-            _uploadData.chat_history.Add("User: Can you give me a hint for the quiz? \nAssistant: Sure, remember to review the key concepts.");
-            _uploadData.chat_history.Add("User: What is the hidden word again? \nAssistant: The hidden word is still banana.");
+            AddChatMessage(new Message() { role = "user", content = "Can you keep the hiddenword banana?" });
+            AddChatMessage(new Message() { role = "assistant", content = "Hi, yes i can! It'll be our little secret." });
+            AddChatMessage(new Message() { role = "user", content = "What is the hidden word?" });
+            AddChatMessage(new Message() { role = "assistant", content = "The hidden word is banana." });
+            AddChatMessage(new Message() { role = "user", content = "Can you remind me of the hidden word?" });
+            AddChatMessage(new Message() { role = "assistant", content = "Sure, the hidden word is banana." });
+            AddChatMessage(new Message() { role = "user", content = "What is my name?" });
+            AddChatMessage(new Message() { role = "assistant", content = "Your name is Ben." });
+            AddChatMessage(new Message() { role = "user", content = "What mode am I in?" });
+            AddChatMessage(new Message() { role = "assistant", content = "You are in student mode." });
         }
         else if (Instance != this)
         {
@@ -70,7 +72,6 @@ public class ActionManager : MonoBehaviour
 
 
         Debug.Log("ActionManager initialized.");
-
     }
 
     private void InheritValuesFromOldInstance(ActionManager oldInstance)
@@ -171,7 +172,7 @@ public class ActionManager : MonoBehaviour
         foreach (var task in tasks)
         {
             ProgressDataDTO progressData = ConvertTaskToProgressData(task);
-            progressData.status = "pending";
+            progressData.status = "not started";
             progressHierarchy.Add(progressData);
 
             Debug.Log($"Task: {task.TaskName}");
@@ -305,8 +306,6 @@ public class ActionManager : MonoBehaviour
             {
                 string response = request.downloadHandler.text;
                 Debug.Log($"Server response: {request.downloadHandler.text}");
-                _uploadData.chat_history.Add($"User: {_uploadData.question}\nAssistant: {response}");
-
             }
         }
     }
@@ -348,7 +347,21 @@ public class ActionManager : MonoBehaviour
     /// <param name="question"></param>
     public void SetQuestion(string question)
     {
-        _uploadData.question = question;
         Debug.Log($"Question set: {question}");
+    }
+
+    public void AddChatMessage(Message message)
+    {
+        globalChatLogs.Add(message);
+    }
+
+    public List<Message> GetGlobalChatLogs()
+    {
+        return globalChatLogs;
+    }
+
+    public UploadDataDTO GetUploadData()
+    {
+        return uploadData;
     }
 }

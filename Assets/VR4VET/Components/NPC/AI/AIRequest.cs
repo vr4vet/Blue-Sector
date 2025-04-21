@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Text; // For UTF8Encoding
+using ProgressDTO;
+using UploadDTO;
 // Note: Uses Message, OpenAIRequest, OpenAIResponse from OpenAIResponseSerializer.cs
 
 public class AIRequest : MonoBehaviour
@@ -12,6 +14,7 @@ public class AIRequest : MonoBehaviour
     // Configuration (Set by AIConversationController)
     public string query;
     public int maxTokens;
+    public UploadDataDTO requestPayload;
 
     // Dependencies (Fetched dynamically)
     private AIResponseToSpeech _aiResponseToSpeech;
@@ -20,7 +23,7 @@ public class AIRequest : MonoBehaviour
 
     // Internal State
     private string _apiKey;
-    private const string OpenAI_API_URL = "https://api.openai.com/v1/chat/completions";
+    private const string CHATBOT_API_URL = "http://localhost:8000/ask";
     private List<Message> _messagesToSend = new(); // Local copy for request
     private AudioSource _audioSource; // For fallback audio
 
@@ -89,28 +92,31 @@ public class AIRequest : MonoBehaviour
             yield break;
         }
 
-        Debug.Log($"AIRequest: Sending request to OpenAI. Query: '{query}'");
+        Debug.Log($"AIRequest: Sending request to Chatbot. Query: '{query}'");
 
-        OpenAIRequest requestPayload = new()
+        /*OpenAIRequest requestPayload = new()
         {
             model = "gpt-3.5-turbo",
             messages = _messagesToSend,
             max_tokens = maxTokens > 0 ? maxTokens : 150
-        };
+        };*/
+
+        requestPayload.chatLog = _messagesToSend;
 
         string jsonData = JsonUtility.ToJson(requestPayload);
+        Debug.Log($"AIRequest: Sending payload: {jsonData}");
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
-        Debug.Log($"AIRequest: Full request payload:\n{jsonData}");
-
-        using (UnityWebRequest request = new(OpenAI_API_URL, "POST"))
+        using (UnityWebRequest request = new UnityWebRequest(CHATBOT_API_URL, "POST"))
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
             request.SetRequestHeader("Authorization", $"Bearer {_apiKey}");
 
             yield return request.SendWebRequest();
+
+            Debug.Log($"AIRequest: Server response: {request.downloadHandler.text}");
 
             _aiConversationController.AddMessage(new Message { role = "user", content = query });
 
@@ -124,16 +130,18 @@ public class AIRequest : MonoBehaviour
                 Debug.Log("AIRequest Success: Received response from OpenAI.");
                 try
                 {
-                    OpenAIResponse response = JsonUtility.FromJson<OpenAIResponse>(request.downloadHandler.text);
+                    LLMResponse response = JsonUtility.FromJson<LLMResponse>(request.downloadHandler.text);
 
-                    if (response == null || response.choices == null || response.choices.Count == 0 || string.IsNullOrWhiteSpace(response.choices[0].message.content))
+                    Debug.Log($"LLMResponse JSON: {JsonUtility.ToJson(response, true)}");
+
+                    if (response == null || response.choices == null || response.choices.Count == 0 || string.IsNullOrWhiteSpace(response.response))
                     {
                         Debug.LogError("AIRequest Error: Invalid or empty response from OpenAI.");
                         HandleErrorOrFallback("Received an empty response from the AI.");
                     }
                     else
                     {
-                        string rawResponseText = response.choices[0].message.content;
+                        string rawResponseText = response.response;
                         string sanitizedResponseText = SanitizeResponse(rawResponseText);
 
                         Message assistantMessage = new() { role = "assistant", content = sanitizedResponseText };
@@ -209,7 +217,7 @@ public class AIRequest : MonoBehaviour
     {
         return langCode switch
         {
-            "no" => " Beklager, noe gikk galt. Vennligst prøv igjen.",
+            "no" => " Beklager, noe gikk galt. Vennligst prÃ¸v igjen.",
             "de" => " Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie es erneut.",
             "nl" => " Sorry, er is iets misgegaan. Probeer het opnieuw.",
             _ => " I'm sorry, something went wrong. Please try again.",
