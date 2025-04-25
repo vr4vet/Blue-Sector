@@ -151,7 +151,7 @@ public class ActionManager : MonoBehaviour
 
         // Add to the user actions list with position information
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
-        StartCoroutine(SendUploadData(uploadData)); // Send data to the server
+        /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
 
 
 
@@ -338,7 +338,7 @@ public class ActionManager : MonoBehaviour
     public void SendIdleTimeoutReport(string timeoutMessage)
     {
         SetQuestion(timeoutMessage);
-        StartCoroutine(SendUploadData(uploadData));
+        /*StartCoroutine(SendUploadData(uploadData));*/
     }
 
     /// <summary>
