@@ -379,20 +379,112 @@ public class ActionManager : MonoBehaviour
             }
             else
             {
-                string response = request.downloadHandler.text;
-                Debug.Log($"LLM response to idle prompt: {response}");
+                string jsonResponse = request.downloadHandler.text;
+                Debug.Log($"Raw LLM response to idle prompt: {jsonResponse}");
+                
+                // Parse the response to extract the actual message
+                string responseMessage = ExtractMessageFromResponse(jsonResponse);
+                Debug.Log($"Extracted message: {responseMessage}");
                 
                 // Add the assistant response to chat logs
                 Message assistantMessage = new Message
                 {
                     role = "assistant",
-                    content = response
+                    content = responseMessage
                 };
                 AddChatMessage(assistantMessage);
                 
                 // Find the nearest NPC and make it speak
-                MakeNearestNPCSpeak(response);
+                MakeNearestNPCSpeak(responseMessage);
             }
+        }
+    }
+    
+    /// <summary>
+    /// Extract the message content from the JSON response
+    /// </summary>
+    private string ExtractMessageFromResponse(string jsonResponse)
+    {
+        try
+        {
+            // Try to parse as a JSON object with a "response" field
+            if (jsonResponse.Contains("\"response\""))
+            {
+                // Simple parsing to extract the "response" field value
+                int startIndex = jsonResponse.IndexOf("\"response\"");
+                if (startIndex >= 0)
+                {
+                    startIndex = jsonResponse.IndexOf(":", startIndex) + 1;
+                    // Skip whitespace
+                    while (startIndex < jsonResponse.Length && char.IsWhiteSpace(jsonResponse[startIndex]))
+                    {
+                        startIndex++;
+                    }
+                    
+                    // Check if response is enclosed in quotes
+                    bool hasQuotes = startIndex < jsonResponse.Length && jsonResponse[startIndex] == '"';
+                    int endIndex;
+                    
+                    if (hasQuotes)
+                    {
+                        startIndex++; // Skip the opening quote
+                        endIndex = jsonResponse.IndexOf("\"", startIndex);
+                    }
+                    else
+                    {
+                        // Find the end of the value (comma or closing brace)
+                        endIndex = jsonResponse.IndexOfAny(new[] { ',', '}' }, startIndex);
+                    }
+                    
+                    if (endIndex > startIndex)
+                    {
+                        return jsonResponse.Substring(startIndex, endIndex - startIndex);
+                    }
+                }
+            }
+            
+            // Fallback: try to get a "content" field from "choices" array
+            if (jsonResponse.Contains("\"content\""))
+            {
+                int contentIndex = jsonResponse.IndexOf("\"content\"");
+                if (contentIndex >= 0)
+                {
+                    contentIndex = jsonResponse.IndexOf(":", contentIndex) + 1;
+                    // Skip whitespace
+                    while (contentIndex < jsonResponse.Length && char.IsWhiteSpace(jsonResponse[contentIndex]))
+                    {
+                        contentIndex++;
+                    }
+                    
+                    // Check if content is enclosed in quotes
+                    bool hasQuotes = contentIndex < jsonResponse.Length && jsonResponse[contentIndex] == '"';
+                    int endContentIndex;
+                    
+                    if (hasQuotes)
+                    {
+                        contentIndex++; // Skip the opening quote
+                        endContentIndex = jsonResponse.IndexOf("\"", contentIndex);
+                    }
+                    else
+                    {
+                        // Find the end of the value (comma or closing brace)
+                        endContentIndex = jsonResponse.IndexOfAny(new[] { ',', '}' }, contentIndex);
+                    }
+                    
+                    if (endContentIndex > contentIndex)
+                    {
+                        return jsonResponse.Substring(contentIndex, endContentIndex - contentIndex);
+                    }
+                }
+            }
+            
+            // If all parsing attempts fail, return the raw response
+            return jsonResponse;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error parsing LLM response: {e.Message}");
+            return jsonResponse; // Return the original response if parsing fails
         }
     }
     

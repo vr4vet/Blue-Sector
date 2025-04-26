@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,17 +17,37 @@ public class IdleNPCDialogueTrigger : MonoBehaviour
 
     [Tooltip("Name to use for the NPC that speaks idle dialogue")]
     public string defaultNpcName = "Assistant";
-
-    [Tooltip("Reference to the idle dialogue tree asset")]
-    public DialogueTree idleDialogueTree;
-
-    [Tooltip("Section index to use in the idle dialogue tree")]
-    public int idleDialogueSectionIndex = 0;
+    
+    [Tooltip("Set to true to ensure this component works even if PlayerIdleDetector exists")]
+    public bool overridePlayerIdleDetector = true;
+    
+    [Tooltip("Debug mode - logs extra information")]
+    public bool debugMode = true;
 
     private IdleTimer idleTimer;
+    private PlayerIdleDetector[] existingIdleDetectors;
+    private bool hasConflictingDetectors = false;
 
     private void Awake()
     {
+        // Check for potentially conflicting PlayerIdleDetector components
+        existingIdleDetectors = FindObjectsOfType<PlayerIdleDetector>();
+        hasConflictingDetectors = existingIdleDetectors != null && existingIdleDetectors.Length > 0;
+        
+        if (hasConflictingDetectors && debugMode)
+        {
+            Debug.Log($"[IdleNPCDialogueTrigger] Found {existingIdleDetectors.Length} PlayerIdleDetector components in the scene");
+            
+            if (overridePlayerIdleDetector)
+            {
+                Debug.Log("[IdleNPCDialogueTrigger] Will override PlayerIdleDetector(s) as configured");
+            }
+            else
+            {
+                Debug.Log("[IdleNPCDialogueTrigger] Will coexist with PlayerIdleDetector(s) - watch for potential conflicts");
+            }
+        }
+        
         // Get reference to the IdleTimer component
         idleTimer = GetComponent<IdleTimer>();
         
@@ -45,144 +66,71 @@ public class IdleNPCDialogueTrigger : MonoBehaviour
 
         // Subscribe to the idle event
         idleTimer.OnIdleThresholdReached.AddListener(HandleIdleThresholdReached);
+        
+        // If we're overriding the PlayerIdleDetector and it exists,
+        // disable its Update method using a lambda to cleanly deactivate it
+        if (overridePlayerIdleDetector && hasConflictingDetectors)
+        {
+            foreach (var detector in existingIdleDetectors)
+            {
+                if (detector != null && detector.enabled)
+                {
+                    if (debugMode)
+                    {
+                        Debug.Log($"[IdleNPCDialogueTrigger] Disabling PlayerIdleDetector on {detector.gameObject.name}");
+                    }
+                    
+                    // Disable it - this is the cleaner approach that doesn't modify the script
+                    detector.enabled = false;
+                }
+            }
+        }
     }
 
     private void HandleIdleThresholdReached(string idlePrompt)
     {
         // Debug the idle prompt
-        Debug.Log($"Idle dialogue prompt: {idlePrompt}");
-
-        // Find the closest NPC
-        GameObject nearestNPC = FindNearestNPC();
-
-        if (nearestNPC == null)
+        if (debugMode)
         {
-            Debug.LogWarning("No NPC found to speak idle dialogue");
-            return;
+            Debug.Log($"[IdleNPCDialogueTrigger] Idle dialogue prompt: {idlePrompt}");
         }
 
-        // Get NPC components
-        NpcTriggerDialogue npcTrigger = nearestNPC.GetComponent<NpcTriggerDialogue>();
-        if (npcTrigger != null)
+        // Use ActionManager to handle idle messages
+        if (ActionManager.Instance != null)
         {
-            Debug.Log($"Found NPC with NpcTriggerDialogue: {nearestNPC.name}");
-            MakeNPCSpeak(npcTrigger, idlePrompt);
+            // Let ActionManager handle finding the nearest NPC and making it speak
+            ActionManager.Instance.SendIdleTimeoutReport(idlePrompt);
+            
+            if (debugMode)
+            {
+                Debug.Log("[IdleNPCDialogueTrigger] Sent idle timeout report to ActionManager");
+            }
         }
         else
         {
-            // Try to find the components in children
-            npcTrigger = nearestNPC.GetComponentInChildren<NpcTriggerDialogue>();
-            if (npcTrigger != null)
-            {
-                Debug.Log($"Found NPC with NpcTriggerDialogue in children: {nearestNPC.name}");
-                MakeNPCSpeak(npcTrigger, idlePrompt);
-            }
-            else
-            {
-                Debug.LogWarning($"NPC {nearestNPC.name} doesn't have NpcTriggerDialogue component");
-            }
+            Debug.LogError("[IdleNPCDialogueTrigger] ActionManager instance is null, cannot send idle prompt");
         }
     }
-
-    private void MakeNPCSpeak(NpcTriggerDialogue npcTrigger, string idlePrompt)
+    
+    /// <summary>
+    /// Check for issues with IdleTimer setup
+    /// </summary>
+    private void OnEnable()
     {
-        // Get the dialogue box controller
-        DialogueBoxController dialogueBoxController = FindObjectOfType<DialogueBoxController>();
-        if (dialogueBoxController == null)
+        if (idleTimer != null)
         {
-            Debug.LogError("Could not find DialogueBoxController in the scene");
-            return;
-        }
-
-        // Get the conversation controller from the NPC
-        ConversationController conversationController = npcTrigger.GetComponentInChildren<ConversationController>();
-        if (conversationController == null)
-        {
-            Debug.LogError($"Could not find ConversationController on NPC {npcTrigger.name}");
-            return;
-        }
-
-        // Check if we have a valid idle dialogue tree assigned
-        if (idleDialogueTree != null)
-        {
-            // Use the assigned idle dialogue tree
-            dialogueBoxController.StartDialogue(idleDialogueTree, idleDialogueSectionIndex, npcTrigger.npcName, 0);
-            Debug.Log($"Started idle dialogue on NPC {npcTrigger.npcName} using assigned dialogue tree");
-        }
-        else
-        {
-            // If no idle dialogue tree is assigned, try to use the ActionManager to send the report
-            if (ActionManager.Instance != null)
+            // Check if there's a default value for the idle threshold
+            System.Reflection.FieldInfo fieldInfo = typeof(IdleTimer).GetField("defaultIdleThresholdInSeconds", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            
+            if (fieldInfo != null)
             {
-                Debug.Log($"Using ActionManager to handle idle dialogue for {npcTrigger.npcName}");
-                ActionManager.Instance.SendIdleTimeoutReport(idlePrompt);
-                
-                // For immediate visual feedback, we can also make the NPC speak directly
-                // using a simple dialogue message if possible
-                TryDirectDialogue(dialogueBoxController, npcTrigger.npcName, idlePrompt);
-            }
-            else
-            {
-                Debug.LogWarning("ActionManager instance is null, cannot send idle timeout report");
-                
-                // Try direct dialogue as fallback
-                TryDirectDialogue(dialogueBoxController, npcTrigger.npcName, idlePrompt);
+                float value = (float)fieldInfo.GetValue(idleTimer);
+                if (value <= 0)
+                {
+                    Debug.LogWarning("[IdleNPCDialogueTrigger] IdleTimer has a defaultIdleThresholdInSeconds value of 0 or less. This will prevent idle detection.");
+                }
             }
         }
-    }
-
-    // Helper method to try direct dialogue without a dialogue tree
-    private void TryDirectDialogue(DialogueBoxController dialogueBoxController, string npcName, string message)
-    {
-        // This is a fallback method that might work depending on how your DialogueBoxController is implemented
-        // You may need to adjust this based on your actual implementation
-        try
-        {
-            // Try to access the dialogue text directly if possible
-            var dialogueText = dialogueBoxController._dialogueText;
-            if (dialogueText != null)
-            {
-                dialogueText.text = message;
-                Debug.Log($"Set dialogue text directly for NPC {npcName}");
-            }
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Failed to set dialogue text directly: {e.Message}");
-        }
-    }
-
-    private GameObject FindNearestNPC()
-    {
-        // Find all NPCs in the scene with the specified tag
-        GameObject[] npcs = GameObject.FindGameObjectsWithTag(npcTag);
-        
-        if (npcs.Length == 0)
-        {
-            Debug.LogWarning($"No GameObjects with tag '{npcTag}' found in the scene");
-            return null;
-        }
-
-        // Find the closest NPC to the player
-        GameObject closestNPC = null;
-        float closestDistance = maxSearchDistance;
-        Vector3 playerPosition = Camera.main.transform.position; // Use main camera position as player position
-        
-        foreach (GameObject npc in npcs)
-        {
-            float distance = Vector3.Distance(playerPosition, npc.transform.position);
-            if (distance < closestDistance)
-            {
-                closestNPC = npc;
-                closestDistance = distance;
-            }
-        }
-        
-        if (closestNPC != null)
-        {
-            Debug.Log($"Found nearest NPC: {closestNPC.name} at distance {closestDistance}m");
-        }
-        
-        return closestNPC;
     }
 }
