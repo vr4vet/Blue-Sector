@@ -78,6 +78,7 @@ public class ActionManager : MonoBehaviour
     private void InheritValuesFromOldInstance(ActionManager oldInstance)
     {
         uploadData = oldInstance.uploadData;
+        globalChatLogs = oldInstance.globalChatLogs;
         taskList = oldInstance.taskList;
     }
 
