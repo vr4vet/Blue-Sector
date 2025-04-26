@@ -443,16 +443,8 @@ public class DialogueBoxController : MonoBehaviour
             // Add dialogue to AI context *before* speaking it
             AddDialogueToContext(text);
 
-            if (useWitAI)
-            {
-                Debug.Log("DialogueBoxController: Speaking line via WitAI TTS.");
-                StartCoroutine(_AIResponseToSpeech.WitAIDictate(text));
-            }
-            else
-            {
-                Debug.Log("DialogueBoxController: Speaking line via OpenAI TTS.");
-                StartCoroutine(_AIResponseToSpeech.OpenAIDictate(text));
-            }
+            Debug.Log("DialogueBoxController: Speaking line via WitAI TTS.");
+            StartCoroutine(_AIResponseToSpeech.WitAIDictate(text));
         }
         else if (TTSSpeaker != null) // If standard NPC (or AI fallback?)
         {
@@ -939,7 +931,6 @@ public class DialogueBoxController : MonoBehaviour
 
 
     // Public methods for NPCSpawner to set TTS mode
-    public void useOpenAiTTS() { useWitAI = false; Debug.Log("DialogueBoxController: Set to use OpenAI TTS.", this); }
     public void useWitTTS() { useWitAI = true; Debug.Log("DialogueBoxController: Set to use WitAI TTS.", this); }
 
     // Public methods for ConversationController to control UI visibility based on proximity
