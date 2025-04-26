@@ -8,6 +8,7 @@ using System.Collections;
 using BNG;
 using UploadDTO;
 using ProgressDTO;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
@@ -86,6 +87,7 @@ public class ActionManager : MonoBehaviour
     private void OnEnable()
     {
         RegisterGrabListeners();
+        RegisterSceneChangeListener();
     }
 
     /// <summary>
@@ -94,6 +96,23 @@ public class ActionManager : MonoBehaviour
     private void OnDisable()
     {
         UnregisterGrabListeners();
+        UnregisterSceneChangeListener();
+    }
+
+    private void RegisterSceneChangeListener()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void UnregisterSceneChangeListener()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log($"New scene logged {scene.name}");
+        uploadData.scene_name = scene.name;
     }
 
     /// <summary>
