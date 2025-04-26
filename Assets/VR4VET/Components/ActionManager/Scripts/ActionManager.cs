@@ -493,84 +493,164 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     private void MakeNearestNPCSpeak(string message)
     {
-        // Find dialogue box controller
-        DialogueBoxController dialogueBoxController = FindObjectOfType<DialogueBoxController>();
-        if (dialogueBoxController == null)
-        {
-            Debug.LogError("DialogueBoxController not found in scene");
-            return;
-        }
+        Debug.Log($"Making nearest NPC speak: {message}");
         
-        // Find the nearest NPC with NpcTriggerDialogue component
-        GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPC");
-        if (npcs.Length == 0)
+        // Find all AIConversationController components instead of using tags
+        AIConversationController[] aiControllers = FindObjectsOfType<AIConversationController>();
+        
+        if (aiControllers == null || aiControllers.Length == 0)
         {
-            Debug.LogWarning("No NPCs found in scene with 'NPC' tag");
+            Debug.LogWarning("No AIConversationController found in scene. Falling back to DialogueBoxController...");
+            
+            // Fallback to DialogueBoxController if no AIConversationController is found
+            DialogueBoxController dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+            if (dialogueBoxController != null)
+            {
+                // Create a method to speak through DialogueBoxController
+                StartCoroutine(SpeakThroughDialogueController(dialogueBoxController, message));
+                Debug.Log("Used DialogueBoxController fallback to display idle message");
+            }
+            else
+            {
+                Debug.LogError("No DialogueBoxController found either. Cannot display idle message.");
+            }
+            
             return;
         }
         
         // Find nearest NPC to camera/player
-        GameObject nearestNPC = null;
+        AIConversationController nearestController = null;
         float nearestDistance = float.MaxValue;
         Vector3 playerPosition = Camera.main.transform.position;
         
-        foreach (GameObject npc in npcs)
+        foreach (AIConversationController controller in aiControllers)
         {
-            float distance = Vector3.Distance(playerPosition, npc.transform.position);
-            if (distance < nearestDistance)
+            if (controller.gameObject.activeInHierarchy)
             {
-                nearestNPC = npc;
-                nearestDistance = distance;
-            }
-        }
-        
-        if (nearestNPC == null)
-        {
-            Debug.LogWarning("No valid NPC found");
-            return;
-        }
-        
-        // Get the NPC component
-        NpcTriggerDialogue npcTrigger = nearestNPC.GetComponent<NpcTriggerDialogue>();
-        if (npcTrigger == null)
-        {
-            npcTrigger = nearestNPC.GetComponentInChildren<NpcTriggerDialogue>();
-        }
-        
-        if (npcTrigger == null)
-        {
-            Debug.LogWarning($"NPC {nearestNPC.name} doesn't have NpcTriggerDialogue component");
-            return;
-        }
-        
-        Debug.Log($"Making NPC {nearestNPC.name} speak idle response: {message}");
-        
-        // Instead of directly accessing protected fields, use the public DisplayResponse method
-        try
-        {
-            // Use the public DisplayResponse method which is meant for displaying NPC responses
-            dialogueBoxController.StartCoroutine(dialogueBoxController.DisplayResponse(message));
-            
-            Debug.Log($"Started DisplayResponse coroutine for NPC {npcTrigger.npcName}");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error making NPC speak: {e.Message}");
-            
-            // Fallback: Try to use a default response method from the NpcTriggerDialogue
-            if (npcTrigger != null)
-            {
-                try
+                float distance = Vector3.Distance(playerPosition, controller.transform.position);
+                if (distance < nearestDistance)
                 {
-                    // Use Response1 as a fallback (this will use a predefined dialogue instead of the dynamic message)
-                    npcTrigger.Response1();
-                    Debug.Log($"Used fallback Response1() for NPC {npcTrigger.npcName}");
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"Failed to use fallback response: {ex.Message}");
+                    nearestController = controller;
+                    nearestDistance = distance;
                 }
             }
+        }
+        
+        if (nearestController != null)
+        {
+            Debug.Log($"Found nearest NPC with AIConversationController: {nearestController.gameObject.name} at distance {nearestDistance}m");
+            
+            // Get the DialogueBoxController that's on the same GameObject
+            DialogueBoxController dialogueBoxController = nearestController.GetComponent<DialogueBoxController>();
+            if (dialogueBoxController != null)
+            {
+                // Stop thinking animation if it's active
+                dialogueBoxController.stopThinking();
+                
+                // Method 1: Use SpeakLine private method through reflection
+                StartCoroutine(SpeakThroughDialogueController(dialogueBoxController, message));
+                
+                // Add the message to the NPC's conversation context
+                nearestController.AddMessage(new Message { role = "assistant", content = message });
+                
+                Debug.Log($"Successfully triggered idle speech through {nearestController.gameObject.name}");
+            }
+            else
+            {
+                Debug.LogError($"DialogueBoxController not found on {nearestController.gameObject.name}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No active AIConversationController found in scene");
+        }
+    }
+    
+    /// <summary>
+    /// Helper method to speak a message through a DialogueBoxController
+    /// Works by simulating what happens during normal NPC dialogue
+    /// </summary>
+    private IEnumerator SpeakThroughDialogueController(DialogueBoxController dialogueController, string message)
+    {
+        // First, ensure dialogueBox is active
+        if (dialogueController._dialogueText != null)
+        {
+            // Emulate how normal dialogue speaking works
+            
+            // 1. Set the text in the UI
+            dialogueController._dialogueText.text = message;
+            
+            // 2. Make the dialogue box visible
+            System.Reflection.FieldInfo dialogueBoxField = typeof(DialogueBoxController).GetField("_dialogueBox", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (dialogueBoxField != null)
+            {
+                GameObject dialogueBox = (GameObject)dialogueBoxField.GetValue(dialogueController);
+                if (dialogueBox != null) dialogueBox.SetActive(true);
+            }
+            
+            System.Reflection.FieldInfo dialogueCanvasField = typeof(DialogueBoxController).GetField("_dialogueCanvas", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (dialogueCanvasField != null)
+            {
+                GameObject dialogueCanvas = (GameObject)dialogueCanvasField.GetValue(dialogueController);
+                if (dialogueCanvas != null) dialogueCanvas.SetActive(true);
+            }
+            
+            // 3. Animation handling - set talking animation
+            Animator animator = dialogueController.GetComponentInChildren<Animator>();
+            if (animator != null)
+            {
+                animator.SetBool("isTalking", true);
+            }
+            
+            // 4. Use TTSSpeaker directly to speak the message
+            bool speechTriggered = false;
+            
+            // Try AI-specific speaking first
+            if (dialogueController._AIResponseToSpeech != null)
+            {
+                if (dialogueController.useWitAI)
+                {
+                    dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.WitAIDictate(message));
+                }
+                else
+                {
+                    dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.OpenAIDictate(message));
+                }
+                speechTriggered = true;
+                Debug.Log($"Speaking through AIResponseToSpeech with {(dialogueController.useWitAI ? "WitAI" : "OpenAI")} TTS");
+            }
+            // Fallback to standard TTSSpeaker
+            else if (dialogueController.TTSSpeaker != null)
+            {
+                var ttsSpeaker = dialogueController.TTSSpeaker.GetComponentInChildren<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
+                if (ttsSpeaker != null)
+                {
+                    ttsSpeaker.Speak(message);
+                    speechTriggered = true;
+                    Debug.Log("Speaking through standard TTSSpeaker");
+                }
+            }
+            
+            if (!speechTriggered)
+            {
+                Debug.LogError("Failed to trigger TTS speech - no working speech component found");
+            }
+            
+            // Wait for a reasonable time for the speech to finish
+            float estimatedDuration = Mathf.Max(3.0f, message.Length * 0.05f); // ~50ms per character, min 3 seconds
+            yield return new WaitForSeconds(estimatedDuration);
+            
+            // Reset talking animation
+            if (animator != null)
+            {
+                animator.SetBool("isTalking", false);
+            }
+        }
+        else
+        {
+            Debug.LogError("DialogueController has no _dialogueText component");
         }
     }
 
