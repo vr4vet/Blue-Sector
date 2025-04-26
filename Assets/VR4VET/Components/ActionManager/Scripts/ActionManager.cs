@@ -451,35 +451,26 @@ public class ActionManager : MonoBehaviour
             return;
         }
         
-        Debug.Log($"Making NPC {nearestNPC.name} speak idle response");
+        Debug.Log($"Making NPC {nearestNPC.name} speak idle response: {message}");
         
-        // Check if we can create a dynamic dialogue or use existing
-        // This approach may need to be adapted based on your dialogue system
+        // Instead of directly accessing protected fields, use the public DisplayResponse method
         try
         {
-            // Try setting dialogue text directly if possible
-            if (dialogueBoxController._dialogueText != null)
-            {
-                // Show the dialogue UI
-                dialogueBoxController.gameObject.SetActive(true);
-                
-                // Set the NPC name and message
-                dialogueBoxController._dialogueText.text = message;
-                dialogueBoxController._name.text = npcTrigger.npcName;
-                
-                Debug.Log($"Set dialogue text directly for NPC {npcTrigger.npcName}");
-            }
+            // Use the public DisplayResponse method which is meant for displaying NPC responses
+            dialogueBoxController.StartCoroutine(dialogueBoxController.DisplayResponse(message));
+            
+            Debug.Log($"Started DisplayResponse coroutine for NPC {npcTrigger.npcName}");
         }
         catch (Exception e)
         {
             Debug.LogError($"Error making NPC speak: {e.Message}");
             
-            // Fallback: Try to use an existing method from the NPC
+            // Fallback: Try to use a default response method from the NpcTriggerDialogue
             if (npcTrigger != null)
             {
-                // Try to use a default response method if available
                 try
                 {
+                    // Use Response1 as a fallback (this will use a predefined dialogue instead of the dynamic message)
                     npcTrigger.Response1();
                     Debug.Log($"Used fallback Response1() for NPC {npcTrigger.npcName}");
                 }
