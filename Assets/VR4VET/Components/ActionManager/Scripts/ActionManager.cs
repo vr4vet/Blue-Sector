@@ -70,7 +70,6 @@ public class ActionManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
-
         Debug.Log("ActionManager initialized.");
     }
 
@@ -152,8 +151,6 @@ public class ActionManager : MonoBehaviour
         // Add to the user actions list with position information
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
         /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
-
-
 
         // Reset idle timer when user drops an object
         idleTimer?.ResetIdleTimer();
@@ -334,11 +331,164 @@ public class ActionManager : MonoBehaviour
     /// <summary>
     /// Sends a prompt through IdleTimer when the user has been idle for too long.
     /// </summary>
-    /// <param name="timeoutMessage"></param>
+    /// <param name="timeoutMessage">The message describing the idle state</param>
     public void SendIdleTimeoutReport(string timeoutMessage)
     {
-        SetQuestion(timeoutMessage);
-        /*StartCoroutine(SendUploadData(uploadData));*/
+        Debug.Log($"Sending idle timeout report: {timeoutMessage}");
+        
+        // Create a new user message for the idle prompt
+        Message idleMessage = new Message
+        {
+            role = "user",
+            content = timeoutMessage
+        };
+        
+        // Add it to chat logs
+        AddChatMessage(idleMessage);
+        
+        // Set the upload data
+        uploadData.chatLog = new List<Message>(globalChatLogs);
+        
+        // Set the current NPC (you may want to find the nearest NPC and set its ID instead)
+        // For now we're using 0 as default
+        uploadData.NPC = 0;
+        
+        // Send the data to the chat service and handle the response
+        StartCoroutine(SendIdlePromptToLLM(uploadData));
+    }
+    
+    /// <summary>
+    /// Sends an idle prompt to the LLM and handles the response
+    /// </summary>
+    private IEnumerator SendIdlePromptToLLM(UploadDataDTO data)
+    {
+        string json = JsonUtility.ToJson(data);
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/ask", "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Failed to send idle prompt to chat service: {request.error}");
+            }
+            else
+            {
+                string response = request.downloadHandler.text;
+                Debug.Log($"LLM response to idle prompt: {response}");
+                
+                // Add the assistant response to chat logs
+                Message assistantMessage = new Message
+                {
+                    role = "assistant",
+                    content = response
+                };
+                AddChatMessage(assistantMessage);
+                
+                // Find the nearest NPC and make it speak
+                MakeNearestNPCSpeak(response);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Find the nearest NPC and make it speak the given message
+    /// </summary>
+    private void MakeNearestNPCSpeak(string message)
+    {
+        // Find dialogue box controller
+        DialogueBoxController dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+        if (dialogueBoxController == null)
+        {
+            Debug.LogError("DialogueBoxController not found in scene");
+            return;
+        }
+        
+        // Find the nearest NPC with NpcTriggerDialogue component
+        GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPC");
+        if (npcs.Length == 0)
+        {
+            Debug.LogWarning("No NPCs found in scene with 'NPC' tag");
+            return;
+        }
+        
+        // Find nearest NPC to camera/player
+        GameObject nearestNPC = null;
+        float nearestDistance = float.MaxValue;
+        Vector3 playerPosition = Camera.main.transform.position;
+        
+        foreach (GameObject npc in npcs)
+        {
+            float distance = Vector3.Distance(playerPosition, npc.transform.position);
+            if (distance < nearestDistance)
+            {
+                nearestNPC = npc;
+                nearestDistance = distance;
+            }
+        }
+        
+        if (nearestNPC == null)
+        {
+            Debug.LogWarning("No valid NPC found");
+            return;
+        }
+        
+        // Get the NPC component
+        NpcTriggerDialogue npcTrigger = nearestNPC.GetComponent<NpcTriggerDialogue>();
+        if (npcTrigger == null)
+        {
+            npcTrigger = nearestNPC.GetComponentInChildren<NpcTriggerDialogue>();
+        }
+        
+        if (npcTrigger == null)
+        {
+            Debug.LogWarning($"NPC {nearestNPC.name} doesn't have NpcTriggerDialogue component");
+            return;
+        }
+        
+        Debug.Log($"Making NPC {nearestNPC.name} speak idle response");
+        
+        // Check if we can create a dynamic dialogue or use existing
+        // This approach may need to be adapted based on your dialogue system
+        try
+        {
+            // Try setting dialogue text directly if possible
+            if (dialogueBoxController._dialogueText != null)
+            {
+                // Show the dialogue UI
+                dialogueBoxController.gameObject.SetActive(true);
+                
+                // Set the NPC name and message
+                dialogueBoxController._dialogueText.text = message;
+                dialogueBoxController._name.text = npcTrigger.npcName;
+                
+                Debug.Log($"Set dialogue text directly for NPC {npcTrigger.npcName}");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error making NPC speak: {e.Message}");
+            
+            // Fallback: Try to use an existing method from the NPC
+            if (npcTrigger != null)
+            {
+                // Try to use a default response method if available
+                try
+                {
+                    npcTrigger.Response1();
+                    Debug.Log($"Used fallback Response1() for NPC {npcTrigger.npcName}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Failed to use fallback response: {ex.Message}");
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -348,6 +498,16 @@ public class ActionManager : MonoBehaviour
     public void SetQuestion(string question)
     {
         Debug.Log($"Question set: {question}");
+        
+        // Create user message
+        Message userMessage = new Message
+        {
+            role = "user",
+            content = question
+        };
+        
+        // Add to chat logs
+        AddChatMessage(userMessage);
     }
 
     public void AddChatMessage(Message message)

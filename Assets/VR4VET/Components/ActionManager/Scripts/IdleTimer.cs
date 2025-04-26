@@ -5,6 +5,7 @@
 using System;
 using UnityEngine;
 using Task;
+using UnityEngine.Events;
 
 /// <summary>
 /// Tracks user idle time and reports when the user has been idle for too long.
@@ -16,6 +17,10 @@ public class IdleTimer : MonoBehaviour
     private Task.Subtask lastProgressedSubtask;
     private Task.Step lastCompletedStep;
     private string timeoutPrompt;
+
+    // Event triggered when the idle threshold is reached
+    [Tooltip("Event triggered when the player has been idle for too long")]
+    public UnityEvent<string> OnIdleThresholdReached;
 
     // Default threshold (in seconds)
     [SerializeField] private float defaultIdleThresholdInSeconds; // Default 2 minutes
@@ -137,6 +142,9 @@ public class IdleTimer : MonoBehaviour
         {
             /*ActionManager.Instance.SendIdleTimeoutReport(timeoutPrompt);*/ // Uncomment this line if you want to send timeout prompt on idletimeout
         }
+
+        // Trigger the UnityEvent
+        OnIdleThresholdReached?.Invoke(timeoutPrompt);
     }
 
     /// <summary>
