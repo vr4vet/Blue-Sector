@@ -176,12 +176,14 @@ public class AIRequest : MonoBehaviour
     {
         if (_aiResponseToSpeech != null && _dialogueBoxController != null)
         {
-            // Always use WitAIDictate regardless of useWitAI flag
-            IEnumerator ttsCoroutine = _aiResponseToSpeech.WitAIDictate(responseText);
+            IEnumerator ttsCoroutine = _dialogueBoxController.useWitAI
+                ? _aiResponseToSpeech.WitAIDictate(responseText)
+                : _aiResponseToSpeech.OpenAIDictate(responseText);
 
             // Add Fix 4 & Fix 5: Synchronize Thinking Animation and Response Display
             StartCoroutine(ProcessResponseSequence(ttsCoroutine, responseText));
             Debug.Log($"HandleSuccessfulResponse: Passing response to DisplayResponse: '{responseText}'");
+
         }
         else
         {

@@ -3,6 +3,7 @@ using Meta.WitAi.TTS.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 public class NPCSpawner : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class NPCSpawner : MonoBehaviour
         StartCoroutine(FixAnimators());
     }
 
+    // Integrated from DialogueAnimatorFixer.cs - but keeping it simple
     private IEnumerator FixAnimators()
     {
         // Wait for NPCs to be spawned fully
@@ -66,27 +68,11 @@ public class NPCSpawner : MonoBehaviour
                 continue;
             }
 
-            // Update animator references in controllers
+            // Get the DialogueBoxController
             var dialogueBoxController = npc.GetComponent<DialogueBoxController>();
             if (dialogueBoxController != null)
             {
                 dialogueBoxController.updateAnimator(animator);
-
-                // Reset all animation parameters to ensure NPC is in idle state
-                try
-                {
-                    animator.SetBool("isTalking", false);
-                    animator.SetBool("hasNewDialogueOptions", false);
-                    animator.SetBool("isPointing", false);
-                    animator.SetBool("isListening", false);
-
-                    // Force update the animator to apply the changes immediately
-                    animator.Update(0);
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogWarning($"Error resetting animation parameters: {e.Message}");
-                }
             }
 
             // Also update any ConversationController components
@@ -107,7 +93,7 @@ public class NPCSpawner : MonoBehaviour
         // Rotate the NPC
         newNPC.transform.rotation = Quaternion.Euler(npcSO.SpawnRotation);
 
-        // --- Standard Setup ---
+        // --- Standard Setup (Keep as is) ---
         AttachTTSComponents(newNPC, npcSO.SpatialBlend, npcSO.MinDistance); // Attaches Wit TTSSpeaker
         SetAppearanceAnimationAndVoice(newNPC, npcSO.CharacterModel, npcSO.CharacterAvatar, npcSO.runtimeAnimatorController, npcSO.VoicePresetId); // Sets model & standard Wit voice
 
@@ -115,6 +101,7 @@ public class NPCSpawner : MonoBehaviour
         var dialogueBoxController = newNPC.GetComponent<DialogueBoxController>();
         if (dialogueBoxController != null)
         {
+            // Make sure animator reference is updated after model is loaded
             dialogueBoxController.updateAnimator();
         }
 
@@ -124,12 +111,14 @@ public class NPCSpawner : MonoBehaviour
 
         if (npcSO.WithoutDialogue)
         {
-            // Disable dialogue triggering
+            // Find the collider used for dialogue triggering (assuming it's on a child)
             var conversationController = newNPC.GetComponentInChildren<ConversationController>();
             if (conversationController != null)
             {
                 Collider triggerCollider = conversationController.GetComponent<Collider>();
                 if (triggerCollider != null) triggerCollider.enabled = false;
+                // Optionally disable the ConversationController itself
+                // conversationController.enabled = false;
             }
             else
             {
@@ -137,29 +126,32 @@ public class NPCSpawner : MonoBehaviour
             }
         }
 
-        // --- AI Setup ---
+        // --- AI Setup (Conditional) ---
+        AIConversationController aiConvCtrl = null; // Keep track if AI components are added/found
         if (npcSO.isAiNpc)
         {
             Debug.Log($"NPCSpawner: Setting up AI components for {newNPC.name}");
 
             // Ensure AI components exist on the root GameObject
-            var aiConvCtrl = newNPC.GetComponent<AIConversationController>();
+            aiConvCtrl = newNPC.GetComponent<AIConversationController>();
             if (aiConvCtrl == null) aiConvCtrl = newNPC.AddComponent<AIConversationController>();
 
             var aiResponse = newNPC.GetComponent<AIResponseToSpeech>();
             if (aiResponse == null) aiResponse = newNPC.AddComponent<AIResponseToSpeech>();
 
             var audioSrc = newNPC.GetComponent<AudioSource>();
-            if (audioSrc == null) audioSrc = newNPC.AddComponent<AudioSource>();
+            if (audioSrc == null) audioSrc = newNPC.AddComponent<AudioSource>(); // Needed for OpenAI TTS and fallback
 
             // Configure AI components
-            SetAIBehaviour(newNPC, npcSO.contextPrompt, npcSO.maxTokens, aiConvCtrl);
+            SetAIBehaviour(newNPC, npcSO.contextPrompt, npcSO.maxTokens, aiConvCtrl); // Pass component ref
+            SetTTSProvider(newNPC, npcSO.selectedTTSProvider, npcSO.OpenAiVoiceId, aiResponse); // Pass component ref
 
             // Link components (DialogueBoxController needs references to AI components)
-            if (dialogueBoxController != null)
+            var dialogueBoxCtrl = newNPC.GetComponent<DialogueBoxController>();
+            if (dialogueBoxCtrl != null)
             {
-                dialogueBoxController._AIConversationController = aiConvCtrl;
-                dialogueBoxController._AIResponseToSpeech = aiResponse;
+                dialogueBoxCtrl._AIConversationController = aiConvCtrl;
+                dialogueBoxCtrl._AIResponseToSpeech = aiResponse;
             }
             else
             {
@@ -170,7 +162,7 @@ public class NPCSpawner : MonoBehaviour
             var conversationCtrl = newNPC.GetComponentInChildren<ConversationController>();
             if (conversationCtrl != null)
             {
-                conversationCtrl._AIConversationController = aiConvCtrl;
+                conversationCtrl._AIConversationController = aiConvCtrl; // Link for HandleRecordButton
             }
             else
             {
@@ -178,10 +170,11 @@ public class NPCSpawner : MonoBehaviour
             }
         }
 
+        // return the NPC instance
         return newNPC;
     }
 
-    // Method to attach standard Wit TTS components
+    // Method to attach standard Wit TTS components (Unchanged from new repo version)
     public void AttachTTSComponents(GameObject npc, float spatialBlend, float minDistance)
     {
         GameObject ttsPrefab = Resources.Load<GameObject>("TTS"); // Assuming TTS prefab is in Resources
@@ -195,13 +188,18 @@ public class NPCSpawner : MonoBehaviour
 
             if (ttsSpeaker != null && dialogueController != null)
             {
+                // Assign the *GameObject* containing the TTSSpeaker
+                // DialogueBoxController can then GetComponentInChildren<TTSSpeaker>() if needed
                 dialogueController.TTSSpeaker = ttsSpeaker.gameObject;
 
                 AudioSource speakerAudio = ttsSpeaker.GetComponentInChildren<AudioSource>();
                 if (speakerAudio != null)
                 {
-                    speakerAudio.spatialBlend = Mathf.Clamp(spatialBlend, 0, 1); // Default to 3D audio
-                    speakerAudio.minDistance = Mathf.Max(minDistance, 1); // Default min distance
+                    // Use provided values or defaults
+                    speakerAudio.spatialBlend = (spatialBlend >= 0 && spatialBlend <= 1) ? spatialBlend : 1; // Default to 3D audio
+                    speakerAudio.minDistance = (minDistance > 0) ? minDistance : 5; // Default min distance
+                    // Add other audio source configurations if needed (volume, doppler, etc.)
+                    // speakerAudio.volume = 0.8f; // Example
                 }
                 else
                 {
@@ -221,7 +219,7 @@ public class NPCSpawner : MonoBehaviour
     }
 
     // Method to set appearance and *standard* Wit voice
-    public void SetAppearanceAnimationAndVoice(GameObject npc, GameObject characterModelPrefab, Avatar characterAvatar, RuntimeAnimatorController runtimeAnimatorController, int voicePresetId)
+    public void SetAppearanceAnimationAndVoice(GameObject npc, GameObject characterModelPrefab, Avatar characterAvatar, RuntimeAnimatorController runtimeAnimatorController, int voicePresetId) // voicePresetId is the standard Wit ID
     {
         SetCharacterModel setCharacterModel = npc.GetComponent<SetCharacterModel>();
         if (setCharacterModel == null)
@@ -230,11 +228,12 @@ public class NPCSpawner : MonoBehaviour
         }
         else
         {
+            // Ensure voicePresetId is valid for standard Wit TTS setup if needed by SetCharacterModel
             setCharacterModel.ChangeCharacter(characterModelPrefab, characterAvatar, runtimeAnimatorController, voicePresetId);
         }
     }
 
-    // Method to set standard following behavior
+    // Method to set standard following behaviour
     public void SetFollowingBehavior(GameObject npc, bool shouldFollow)
     {
         FollowThePlayerController followController = npc.GetComponent<FollowThePlayerController>();
@@ -265,7 +264,7 @@ public class NPCSpawner : MonoBehaviour
     // Method to set dialogue trees
     public void SetConversation(GameObject npc, DialogueTree[] dialogueTreesSO, TextAsset[] dialogueTreesJSON)
     {
-        ConversationController conversationController = npc.GetComponentInChildren<ConversationController>();
+        ConversationController conversationController = npc.GetComponentInChildren<ConversationController>(); // Find in children
         if (conversationController == null)
         {
             Debug.LogError($"NPCSpawner: The NPC {npc.name} is missing the ConversationController in its children", npc);
@@ -276,14 +275,17 @@ public class NPCSpawner : MonoBehaviour
         }
     }
 
+
+    // --- New AI Configuration Methods ---
+
     // Sets context and max tokens for the AI
     public void SetAIBehaviour(GameObject npc, string contextPrompt, int maxTokens, AIConversationController aiConvCtrl)
     {
         if (aiConvCtrl != null)
         {
             Debug.Log($"NPCSpawner: Setting AI behaviour for {npc.name}. MaxTokens: {maxTokens}");
-            aiConvCtrl.contextPrompt = contextPrompt;
-            aiConvCtrl.maxTokens = Mathf.Max(maxTokens, 1); // Ensure maxTokens is at least 1
+            aiConvCtrl.contextPrompt = contextPrompt; // Set specific context
+            aiConvCtrl.maxTokens = maxTokens > 0 ? maxTokens : 150; // Use provided or default
 
             // Clear any existing messages and add system prompts
             aiConvCtrl.messages.Clear();
@@ -296,23 +298,77 @@ public class NPCSpawner : MonoBehaviour
                 aiConvCtrl.AddMessage(new Message { role = "system", content = contextPrompt });
             }
 
-            // Add global chat memory to NPC if enabled
+            // Add global chat memory to npc if field is enabled
             foreach (var npcSO in _nPCs)
             {
                 if (npcSO != null && npcSO.NameOfNPC == npc.name)
                 {
+                    Debug.Log($"NPCSpawner: Found NPC data for {npc.name}. Setting globalChatMemory to {npcSO.GlobalChatMemory}");
                     if (npcSO.GlobalChatMemory)
                         aiConvCtrl.PopulateGlobalMemory();
                     break;
                 }
             }
         }
-        else
+        else { Debug.LogWarning($"NPCSpawner: AIConversationController missing on AI NPC: {npc.name}. Cannot set AI behaviour."); }
+    }
+
+    // Sets the TTS provider and specific voice ID for AI responses
+    // Method to set the TTS provider and specific voice ID for AI responses
+    public void SetTTSProvider(GameObject npc, TTSProvider ttsProvider, string openAiVoiceId, AIResponseToSpeech aiResponse)
+    {
+        var dialogueBoxCtrl = npc.GetComponent<DialogueBoxController>();
+        if (dialogueBoxCtrl == null)
         {
-            Debug.LogWarning($"NPCSpawner: AIConversationController missing on AI NPC: {npc.name}. Cannot set AI behaviour.");
+            Debug.LogError($"NPCSpawner: DialogueBoxController missing on NPC: {npc.name}. Cannot set TTS provider.");
+            return;
+        }
+
+        Debug.Log($"NPCSpawner: Setting TTS provider for {npc.name} to {ttsProvider}");
+
+        if (ttsProvider == TTSProvider.OpenAI)
+        {
+            dialogueBoxCtrl.useOpenAiTTS(); // Tell DialogueBoxController to use OpenAI via AIResponseToSpeech
+            if (aiResponse != null)
+            {
+                // Set the specific OpenAI voice
+                aiResponse.OpenAiVoiceId = string.IsNullOrEmpty(openAiVoiceId) ? "alloy" : openAiVoiceId;
+                Debug.Log($"NPCSpawner: Set OpenAI Voice ID to: {aiResponse.OpenAiVoiceId}");
+            }
+            else
+            {
+                Debug.LogWarning($"NPCSpawner: AIResponseToSpeech missing on AI NPC: {npc.name}. Cannot set OpenAI voice ID.");
+            }
+        }
+        else // TTSProvider.Wit
+        {
+            dialogueBoxCtrl.useWitTTS(); // Tell DialogueBoxController to use Wit via AIResponseToSpeech (which uses TTSSpeaker)
+
+            // Don't try to get an NPC component - instead use a different approach
+            NPC npcData = null;
+
+            // Find the NPC scriptable object in _nPCs array that matches this GameObject's name
+            foreach (var npcSO in _nPCs)
+            {
+                if (npcSO != null && npcSO.NameOfNPC == npc.name)
+                {
+                    npcData = npcSO;
+                    break;
+                }
+            }
+
+            if (npcData != null)
+            {
+                Debug.Log($"NPCSpawner: WitAI TTS selected. Voice will be determined by the attached TTSSpeaker's settings (Preset {npcData.VoicePresetId}).");
+            }
+            else
+            {
+                Debug.LogWarning($"NPCSpawner: NPC data not found for {npc.name}. Cannot determine VoicePresetId.");
+            }
         }
     }
 
+    // Optional: Method to get a specific spawned NPC if needed later
     public GameObject GetNpcInstance(string npcName)
     {
         return _npcInstances.Find(npc => npc != null && npc.name == npcName);

@@ -151,9 +151,11 @@ public class AIConversationController : MonoBehaviour
             request.query = transcript + " Please answer concisely and in the language: " + _Transcribe.currentLanguage; // Add language constraint
             request.maxTokens = this.maxTokens;
             request.requestPayload = actionManager.GetUploadData();
+            // References will be fetched by AIRequest's Start/Awake
         }
     }
 
+    // Handle cases where we don't call OpenAI (e.g., bad transcription)
     void HandleFallbackResponse(string fallbackText)
     {
         Debug.Log($"AIConversationController: Handling fallback response: '{fallbackText}'");
