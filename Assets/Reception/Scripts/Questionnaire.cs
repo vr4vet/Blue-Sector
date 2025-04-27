@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Questionnaire : MonoBehaviour
 {
-    private Dictionary<string, string> _userInfo;
+    private List<string> _userInfo;
     private NPCSpawner _npcSpawner;
     private GameObject _receptionistNpc;
     private ActionManager _actionManager;
@@ -25,13 +25,15 @@ public class Questionnaire : MonoBehaviour
 
         // Find NPC "Receptionist Rachel"
         _receptionistNpc = _npcSpawner._npcInstances[0];
-        _userInfo = new Dictionary<string, string>();
+        _userInfo = new List<string>();
         _actionManager = ActionManager.Instance;
         ButtonSpawner.OnAnswer += Questionnaire_OnAnswer;
+        DialogueBoxController.OnDialogueEnded += Questionnaire_OnDialogueEnded;
     }
 
     /// <summary>
     /// This method is called when the user answers a question in NPC Receptionist Rachel's dialogue tree.
+    /// Collects the user information that will be stored in ActionManager.
     /// </summary>
     /// <param name="answer"> The value of the button that the user presses</param>
     /// <param name="question"> The question connected to the answer </param>
@@ -41,34 +43,52 @@ public class Questionnaire : MonoBehaviour
         // Only listen to when the buttons belonging to Receptionist Rachel's dialogue tree are pressed
         if (name == _receptionistNpc.name)
         {
-            if (_userInfo.ContainsKey(question))
+            bool questionExists = false;
+
+            // Iterate through the list to check if the question already exists
+            for (int i = 0; i < _userInfo.Count; i++)
             {
-                _userInfo[question] = answer;
-                Debug.Log($"Answer to question {question} changed: {answer}");
+                if (_userInfo[i].StartsWith($"{question}:"))
+                {
+                    // Update the answer to the existing question with the new answer
+                    _userInfo[i] = $"{question}: {answer}";
+                    questionExists = true;
+                    break;
+                }
             }
 
-            else if (question == "Are you satisfied with your answers?" && answer == "Yes")
+            // If the question doesn't exist, add it to the list
+            if (!questionExists)
             {
-                /*_actionManager.SetUserInfo(_userInfo);*/
-                Debug.Log("Sending answers to ActionManager");
+                _userInfo.Add($"{question}: {answer}");
             }
+        }
+    
+    }
 
-            else
-            {
-                _userInfo.Add(question, answer);
-                Debug.Log($"{answer}, {question}, {name}");
-
-            }
-
+    /// <summary>
+    /// This method is called when the dialogue with NPC Receptionist Rachel ends.
+    /// Sets the user information in ActionManager.
+    /// </summary>
+    /// <param name="name"></param>
+    private void Questionnaire_OnDialogueEnded(string name)
+    {
+        // Only listen to when the buttons belonging to Receptionist Rachel's dialogue tree are pressed
+        if (name == _receptionistNpc.name)
+        {
+            _actionManager.SetUserInfo(_userInfo);
+            Debug.Log("Sending answers to ActionManager");
         }
     }
 
     /// <summary>
-    /// Stop listening for questionnaire answers when the user is no longer in Reception scene.
+    /// Stops listening for questionnaire answers when the user is no longer in Reception scene.
+    /// Stops listening to ended dialogue with NPC Receptionist Rachel when the user is no longer in Reception scene.
     /// </summary>
     void OnDestroy()
     {
         ButtonSpawner.OnAnswer -= Questionnaire_OnAnswer;
+        DialogueBoxController.OnDialogueEnded -= Questionnaire_OnDialogueEnded;
     }
 
 }

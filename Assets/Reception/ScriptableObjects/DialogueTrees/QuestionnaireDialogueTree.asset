@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e00f7924afa24219a5197b2a8fa8d48, type: 3}
-  m_Name: Questionnaire
+  m_Name: QuestionnaireDialogueTree
   m_EditorClassIdentifier: 
   shouldTriggerOnProximity: 1
   speakButtonOnExit: 1
@@ -47,19 +47,16 @@ MonoBehaviour:
         walkOrTurnTowardsAfterAnswer: 
     interruptableElements: 01010101
     dialogueEnd: 0
-  - dialogue: []
-    endAfterDialogue: 0
+  - dialogue:
+    - Understood. Good luck with your tasks!
+    endAfterDialogue: 1
     walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
     pointAt: 
     branchPoint:
-      question: Understood. Good luck with your tasks!
-      answers:
-      - answerLabel: Could you repeat that?
-        nextElement: 0
-        endAfterAnswer: 0
-        walkOrTurnTowardsAfterAnswer: 
-    interruptableElements: 
+      question: 
+      answers: []
+    interruptableElements: 00
     dialogueEnd: 0
   - dialogue: []
     endAfterDialogue: 0
@@ -67,14 +64,14 @@ MonoBehaviour:
     disabkeSkipLineButton: 0
     pointAt: 
     branchPoint:
-      question: How experienced are you with VR?
+      question: Have you finished secondary school?
       answers:
-      - answerLabel: A little experienced
+      - answerLabel: Yes
         nextElement: 3
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
-      - answerLabel: Well experienced
-        nextElement: 3
+      - answerLabel: No
+        nextElement: 4
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Don't want to answer
@@ -89,10 +86,10 @@ MonoBehaviour:
     disabkeSkipLineButton: 0
     pointAt: 
     branchPoint:
-      question: Are you in work or school?
+      question: Have you finished high school?
       answers:
       - answerLabel: Yes
-        nextElement: 4
+        nextElement: 5
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No
@@ -104,7 +101,103 @@ MonoBehaviour:
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Don't want to answer
+        nextElement: 5
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 
+    dialogueEnd: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Are you in employment as of today?
+      answers:
+      - answerLabel: Yes
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
+        nextElement: 6
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Don't want to answer
+        nextElement: 6
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 
+    dialogueEnd: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Which of the following have you finished?
+      answers:
+      - answerLabel: University
         nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Vocational School
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Go back
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Don't want to answer
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 
+    dialogueEnd: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Do you have earlier working experience?
+      answers:
+      - answerLabel: Yes
+        nextElement: 7
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Don't want to answer
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 
+    dialogueEnd: 0
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What kind of working experience do you have?
+      answers:
+      - answerLabel: Internship
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Apprentice
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: More than 1 month of experience
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Less than 1 month of experience
+        nextElement: 8
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
     interruptableElements: 
@@ -118,17 +211,17 @@ MonoBehaviour:
       question: Are you satisfied with your answers?
       answers:
       - answerLabel: Yes
-        nextElement: 5
+        nextElement: 9
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No
-        nextElement: 2
+        nextElement: 0
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
     interruptableElements: 
     dialogueEnd: 0
   - dialogue:
-    - That concludes the survey. Thank you, and good luck!
+    - That concludes the questionnaire. Thank you!
     endAfterDialogue: 1
     walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0

@@ -10,6 +10,7 @@ using UploadDTO;
 using ProgressDTO;
 using UnityEngine.SceneManagement;
 
+
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
 /// </summary>
@@ -45,7 +46,7 @@ public class ActionManager : MonoBehaviour
 
             uploadData = new UploadDataDTO
             {
-                user_information = new Dictionary<string, string>(),
+                user_information = new List<string>(),
                 user_actions = new List<string>(),
                 progress = new List<ProgressDataDTO>(),
                 NPC = 0,
@@ -152,7 +153,9 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object grabbed: {grabbable.name}");
 
         uploadData.user_actions.Add("grabbed: " + grabbable.name);
-
+        Debug.Log($"Before shortening actions count: {uploadData.user_actions.Count}");
+        ShortenList(uploadData.user_actions, 20);
+        Debug.Log($"After shortening actions count: {uploadData.user_actions.Count}");
         // Reset idle timer when user grabs an object
         idleTimer?.ResetIdleTimer();
     }
@@ -170,7 +173,10 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
 
         // Add to the user actions list with position information
+        Debug.Log($"Before shortening actions count: {uploadData.user_actions.Count}");
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        ShortenList(uploadData.user_actions, 20); // Keep the last 20 actions in the list
+        Debug.Log($"After shortening actions count: {uploadData.user_actions.Count}");
         /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
 
 
@@ -346,9 +352,14 @@ public class ActionManager : MonoBehaviour
         }
     }
 
-    public void SetUserInfo(Dictionary<string, string> userInfo)
+
+    public void SetUserInfo(List<string> userInfo)
     {
         uploadData.user_information = userInfo;
+        Debug.Log("User information set, sending to Chat-Service.");
+        string combinedString = string.Join(",", uploadData.user_information);
+        Debug.Log($"User information: {combinedString}");
+
     }
 
     /// <summary>
@@ -373,6 +384,9 @@ public class ActionManager : MonoBehaviour
     public void AddChatMessage(Message message)
     {
         globalChatLogs.Add(message);
+        Debug.Log($"Before shortening chatlog: {globalChatLogs.Count}");
+        ShortenList(globalChatLogs, 20);
+        Debug.Log($"After shortening chatlog: {globalChatLogs.Count}");
     }
 
     public List<Message> GetGlobalChatLogs()
@@ -383,5 +397,20 @@ public class ActionManager : MonoBehaviour
     public UploadDataDTO GetUploadData()
     {
         return uploadData;
+    }
+
+    /// <summary>
+    /// Shortens a list to a specified limit by removing excess elements from the start.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list">The list that needs to be shortened</param>
+    /// <param name="limit">How many elements the list can have</param>
+    private void ShortenList<T>(List<T> list, int limit)
+    {
+        if (list.Count > limit)
+        {
+            list.RemoveRange(0, list.Count - limit);
+        }
+        
     }
 }
