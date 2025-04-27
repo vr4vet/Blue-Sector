@@ -154,9 +154,11 @@ public class AIRequest : MonoBehaviour
                             Debug.Log($"AIRequest: Function call detected: {response.function_call.function_name}");
                             ExecuteFunction(response.function_call.function_name, response.function_call.function_parameters);
                         }
-
-                        // Trigger TTS and UI Update
-                        HandleSuccessfulResponse(sanitizedResponseText);
+                        if (response.function_call.function_name != "teleport")
+                        {
+                            // Trigger TTS and UI Update
+                            HandleSuccessfulResponse(sanitizedResponseText);
+                        }
                     }
                 }
                 catch (Exception e)
