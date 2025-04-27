@@ -149,8 +149,16 @@ public class AIRequest : MonoBehaviour
 
                         Debug.Log($"AI Response: {sanitizedResponseText}");
 
-                        // Trigger TTS and UI Update
-                        HandleSuccessfulResponse(sanitizedResponseText);
+                        if (response.function_call != null)
+                        {
+                            Debug.Log($"AIRequest: Function call detected: {response.function_call.function_name}");
+                            ExecuteFunction(response.function_call.function_name, response.function_call.function_parameters);
+                        }
+                        if (response.function_call.function_name != "teleport")
+                        {
+                            // Trigger TTS and UI Update
+                            HandleSuccessfulResponse(sanitizedResponseText);
+                        }
                     }
                 }
                 catch (Exception e)
@@ -220,5 +228,41 @@ public class AIRequest : MonoBehaviour
             "nl" => " Sorry, er is iets misgegaan. Probeer het opnieuw.",
             _ => " I'm sorry, something went wrong. Please try again.",
         };
+    }
+
+    private void ExecuteFunction(string functionName, string[] parameters)
+    {
+        switch (functionName)
+        {
+            case "teleport":
+                string location = parameters[0];
+                Debug.Log($"Function case teleport to {location}");
+                TeleportPlayer(location);
+                break;
+
+            case "showObject":
+                string objectId = parameters[0];
+                Debug.Log($"Showing object");
+                /*HighlightObject(objectId);*/
+                break;
+
+            default:
+                Debug.LogWarning($"Unknown function: {functionName}");
+                break;
+        }
+    }
+
+    private void TeleportPlayer(string location)
+    {
+        Debug.Log($"Teleporting player to {location}");
+        SceneController sceneController = FindObjectOfType<SceneController>();
+        if (sceneController != null)
+        {
+            sceneController.ChangeScene(location);
+        }
+        else
+        {
+            Debug.LogError("SceneController not found. Cannot teleport player.");
+        }
     }
 }
