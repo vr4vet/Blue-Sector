@@ -326,6 +326,163 @@ public class ActionManager : MonoBehaviour
         }
     }
 
+    private void TaskSummary()
+    {
+        StringBuilder summary = new StringBuilder();
+        summary.AppendLine("=== TASK PROGRESS SUMMARY ===");
+        summary.AppendLine($"Time: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+        summary.AppendLine();
+        // Debug.Log($"Task list contains {(taskList == null ? "NULL" : taskList.Count.ToString())} tasks");
+
+        int completedTasks = 0;
+        int totalTasks = taskList.Count;
+        int completedSubtasks = 0;
+        int totalSubtasks = 0;
+        int completedSteps = 0;
+        int totalSteps = 0;
+
+        // Generate detailed summary
+        foreach (var task in taskList)
+        {
+            bool taskCompleted = task.Compleated();
+            if (taskCompleted) completedTasks++;
+
+            summary.AppendLine($"Task: {task.TaskName} - {(taskCompleted ? "COMPLETED" : "IN PROGRESS")}");
+
+            foreach (var subtask in task.Subtasks)
+            {
+                totalSubtasks++;
+                bool subtaskCompleted = subtask.Compleated();
+                if (subtaskCompleted) completedSubtasks++;
+
+                summary.AppendLine($"  Subtask: {subtask.SubtaskName} - {(subtaskCompleted ? "COMPLETED" : "IN PROGRESS")}");
+
+                foreach (var step in subtask.StepList)
+                {
+                    totalSteps++;
+                    bool stepCompleted = step.IsCompeleted();
+                    if (stepCompleted) completedSteps++;
+
+                    summary.AppendLine($"    Step: {step.StepName} - {(stepCompleted ? "COMPLETED" : "PENDING")}");
+                }
+            }
+            summary.AppendLine();
+        }
+
+        // Add summary statistics
+        summary.AppendLine("=== PROGRESS STATISTICS ===");
+        summary.AppendLine($"Tasks: {completedTasks}/{totalTasks} completed ({(totalTasks > 0 ? (completedTasks * 100f / totalTasks).ToString("0.0") : "0")}%)");
+        summary.AppendLine($"Subtasks: {completedSubtasks}/{totalSubtasks} completed ({(totalSubtasks > 0 ? (completedSubtasks * 100f / totalSubtasks).ToString("0.0") : "0")}%)");
+        summary.AppendLine($"Steps: {completedSteps}/{totalSteps} completed ({(totalSteps > 0 ? (completedSteps * 100f / totalSteps).ToString("0.0") : "0")}%)");
+
+        Debug.Log(summary.ToString());
+
+        // Store the summary in user actions for later review
+        uploadData.user_actions.Add("TASK_SUMMARY: " + summary.ToString());
+    }
+
+    // private void TaskSummary()
+    // {
+    //     StringBuilder summary = new StringBuilder();
+    //     summary.AppendLine("=== TASK PROGRESS SUMMARY ===");
+    //     summary.AppendLine($"Time: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+    //     summary.AppendLine();
+    //     // Debug.Log($"Task list contains {(taskList == null ? "NULL" : taskList.Count.ToString())} tasks");
+
+    //     try
+    //     {
+    //         int completedTasks = 0;
+    //         int totalTasks = taskList.Count;
+    //         int completedSubtasks = 0;
+    //         int totalSubtasks = 0;
+    //         int completedSteps = 0;
+    //         int totalSteps = 0;
+
+    //         // Generate detailed summary
+    //         foreach (var task in taskList)
+    //         {
+    //             if (task == null)
+    //             {
+    //                 Debug.LogWarning("Null task found in task list");
+    //                 continue;
+    //             }
+
+    //             bool taskCompleted = task.Compleated();
+    //             if (taskCompleted) completedTasks++;
+
+    //             summary.AppendLine($"Task: {task.TaskName} - {(taskCompleted ? "COMPLETED" : "IN PROGRESS")}");
+
+    //             if (task.Subtasks == null)
+    //             {
+    //                 Debug.LogWarning($"Task {task.TaskName} has null Subtasks list");
+    //                 continue;
+    //             }
+
+    //             foreach (var subtask in task.Subtasks)
+    //             {
+    //                 if (subtask == null)
+    //                 {
+    //                     Debug.LogWarning($"Null subtask found in task {task.TaskName}");
+    //                     continue;
+    //                 }
+
+    //                 totalSubtasks++;
+    //                 bool subtaskCompleted = subtask.Compleated();
+    //                 if (subtaskCompleted) completedSubtasks++;
+
+    //                 summary.AppendLine($"  Subtask: {subtask.SubtaskName} - {(subtaskCompleted ? "COMPLETED" : "IN PROGRESS")}");
+
+    //                 if (subtask.StepList == null)
+    //                 {
+    //                     Debug.LogWarning($"Subtask {subtask.SubtaskName} has null StepList");
+    //                     continue;
+    //                 }
+
+    //                 foreach (var step in subtask.StepList)
+    //                 {
+    //                     if (step == null)
+    //                     {
+    //                         Debug.LogWarning($"Null step found in subtask {subtask.SubtaskName}");
+    //                         continue;
+    //                     }
+
+    //                     totalSteps++;
+    //                     bool stepCompleted = step.IsCompeleted();
+    //                     if (stepCompleted) completedSteps++;
+
+    //                     summary.AppendLine($"    Step: {step.StepName} - {(stepCompleted ? "COMPLETED" : "PENDING")}");
+    //                 }
+    //             }
+    //             summary.AppendLine();
+    //         }
+
+    //         // Add summary statistics
+    //         summary.AppendLine("=== PROGRESS STATISTICS ===");
+    //         // summary.AppendLine($"Tasks: {completedTasks}/{totalTasks} completed");
+    //         summary.AppendLine($"Tasks: {completedTasks}/{totalTasks} completed ({(totalTasks > 0 ? (completedTasks * 100f / totalTasks).ToString("0.0") : "0")}%)");
+    //         summary.AppendLine($"Subtasks: {completedSubtasks}/{totalSubtasks} completed ({(totalSubtasks > 0 ? (completedSubtasks * 100f / totalSubtasks).ToString("0.0") : "0")}%)");
+    //         summary.AppendLine($"Steps: {completedSteps}/{totalSteps} completed ({(totalSteps > 0 ? (completedSteps * 100f / totalSteps).ToString("0.0") : "0")}%)");
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         summary.AppendLine($"Error generating task summary: {e.Message}");
+    //         Debug.LogError($"Error in TaskSummary: {e.Message}\n{e.StackTrace}");
+    //     }
+    //     Debug.Log(summary.ToString());
+
+    //     // Store the summary in user actions for later review
+    //     uploadData.user_actions.Add("TASK_SUMMARY: " + summary.ToString());
+    // }
+
+    private void Update()
+    {
+        // For testing - press F5 to generate task summary 
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            TaskSummary();
+        }
+    }
+
     public void SetUserInfo(Dictionary<string, string> userInfo)
     {
         uploadData.user_information = userInfo;
