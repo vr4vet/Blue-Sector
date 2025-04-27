@@ -11,6 +11,11 @@ namespace UploadDTO
     public class UploadDataDTO
     {
         /// <summary>
+        /// The name of the scene where the user is currently located.
+        /// </summary>
+        public string scene_name;
+
+        /// <summary>
         /// Dictionary containing information about the user.
         /// </summary>
         public Dictionary<string, string> user_information;
