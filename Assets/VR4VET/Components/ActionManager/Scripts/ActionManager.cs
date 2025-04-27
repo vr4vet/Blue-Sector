@@ -19,6 +19,7 @@ public class ActionManager : MonoBehaviour
     private UploadDataDTO uploadData;
     private List<Message> globalChatLogs;
     private List<Task.Task> taskList;
+    private bool _isAiEnabled;
 
     // Reference to the idle timer
     private IdleTimer idleTimer;
@@ -36,6 +37,7 @@ public class ActionManager : MonoBehaviour
 
             globalChatLogs = new List<Message>();
             taskList = new List<Task.Task>();
+            _isAiEnabled = false;
             idleTimer = GetComponent<IdleTimer>();
             if (idleTimer == null)
             {
@@ -70,14 +72,15 @@ public class ActionManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
-
         Debug.Log("ActionManager initialized.");
+
     }
 
     private void InheritValuesFromOldInstance(ActionManager oldInstance)
     {
         uploadData = oldInstance.uploadData;
         taskList = oldInstance.taskList;
+        _isAiEnabled = oldInstance._isAiEnabled;
     }
 
     /// <summary>
@@ -92,7 +95,7 @@ public class ActionManager : MonoBehaviour
     /// Unregister grab event listeners when the component is disabled
     /// </summary>
     private void OnDisable()
-    {
+    {   
         UnregisterGrabListeners();
     }
 
@@ -214,7 +217,7 @@ public class ActionManager : MonoBehaviour
                             idleTimer.StartIdleTracking(subtask, step);
                         }
 
-                        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after step completion
+                        StartCoroutine(SendUploadData(uploadData)); // Uncomment this line to send data immediately after step completion
 
                         return;
                     }
@@ -329,6 +332,7 @@ public class ActionManager : MonoBehaviour
     public void SetUserInfo(Dictionary<string, string> userInfo)
     {
         uploadData.user_information = userInfo;
+        Debug.Log("User information set.");
     }
 
     /// <summary>
@@ -363,5 +367,10 @@ public class ActionManager : MonoBehaviour
     public UploadDataDTO GetUploadData()
     {
         return uploadData;
+    }
+
+    public void SetAIEnabled(bool enabled)
+    {
+        _isAiEnabled = enabled;
     }
 }

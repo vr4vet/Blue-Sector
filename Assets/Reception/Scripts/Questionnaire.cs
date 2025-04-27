@@ -13,6 +13,7 @@ public class Questionnaire : MonoBehaviour
     /// <summary>
     /// NPC Receptionist Rachel will ask the user questions about themselves.
     /// The information will be sent to ActionManager, and the LLM in Chat-Service will make use of it.
+    /// D:\utpassering november 2024\Blue-Sector\Assets\Reception\Scripts\Questionnaire.cs
     /// </summary>
     void Start()
     {
@@ -28,13 +29,24 @@ public class Questionnaire : MonoBehaviour
         _userInfo = new Dictionary<string, string>();
         _actionManager = ActionManager.Instance;
         ButtonSpawner.OnAnswer += Questionnaire_OnAnswer;
+        DialogueBoxController.OnDialogueEnded += Questionnaire_OnDialogueEnded;
+    }
+
+    private void Questionnaire_OnDialogueEnded(string obj)
+    {
+        if (obj == _receptionistNpc.name)
+        {
+            Debug.Log("Dialogue ended with Receptionist Rachel"); 
+            _actionManager.SetUserInfo(_userInfo);
+        }
+       
     }
 
     /// <summary>
     /// This method is called when the user answers a question in NPC Receptionist Rachel's dialogue tree.
     /// </summary>
     /// <param name="answer"> The value of the button that the user presses</param>
-    /// <param name="question"> The question connected to the answer </param>
+    /// <param name="question"> The question connected to the answer </parsam>
     /// <param name="name"> The name of the NPC whose dialogue button was clicked </param>
     private void Questionnaire_OnAnswer(string answer, string question, string name)
     {
@@ -47,19 +59,12 @@ public class Questionnaire : MonoBehaviour
                 Debug.Log($"Answer to question {question} changed: {answer}");
             }
 
-            else if (question == "Are you satisfied with your answers?" && answer == "Yes")
-            {
-                /*_actionManager.SetUserInfo(_userInfo);*/
-                Debug.Log("Sending answers to ActionManager");
-            }
-
             else
             {
                 _userInfo.Add(question, answer);
                 Debug.Log($"{answer}, {question}, {name}");
 
             }
-
         }
     }
 
@@ -69,6 +74,7 @@ public class Questionnaire : MonoBehaviour
     void OnDestroy()
     {
         ButtonSpawner.OnAnswer -= Questionnaire_OnAnswer;
+        DialogueBoxController.OnDialogueEnded -= Questionnaire_OnDialogueEnded;
     }
 
 }
