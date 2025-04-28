@@ -72,7 +72,6 @@ public class ActionManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
-
         Debug.Log("ActionManager initialized.");
     }
 
@@ -178,8 +177,6 @@ public class ActionManager : MonoBehaviour
         ShortenList(uploadData.user_actions, 20); // Keep the last 20 actions in the list
         Debug.Log($"After shortening actions count: {uploadData.user_actions.Count}");
         /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
-
-
 
         // Reset idle timer when user drops an object
         idleTimer?.ResetIdleTimer();
@@ -365,11 +362,327 @@ public class ActionManager : MonoBehaviour
     /// <summary>
     /// Sends a prompt through IdleTimer when the user has been idle for too long.
     /// </summary>
-    /// <param name="timeoutMessage"></param>
+    /// <param name="timeoutMessage">The message describing the idle state</param>
     public void SendIdleTimeoutReport(string timeoutMessage)
     {
-        SetQuestion(timeoutMessage);
-        /*StartCoroutine(SendUploadData(uploadData));*/
+        Debug.Log($"Sending idle timeout report: {timeoutMessage}");
+        
+        // Create a new user message for the idle prompt
+        Message idleMessage = new Message
+        {
+            role = "user",
+            content = timeoutMessage
+        };
+        
+        // Add it to chat logs
+        AddChatMessage(idleMessage);
+        
+        // Set the upload data
+        uploadData.chatLog = new List<Message>(globalChatLogs);
+        
+        // Set the current NPC (you may want to find the nearest NPC and set its ID instead)
+        // For now we're using 0 as default
+        uploadData.NPC = 0;
+        
+        // Send the data to the chat service and handle the response
+        StartCoroutine(SendIdlePromptToLLM(uploadData));
+    }
+    
+    /// <summary>
+    /// Sends an idle prompt to the LLM and handles the response
+    /// </summary>
+    private IEnumerator SendIdlePromptToLLM(UploadDataDTO data)
+    {
+        string json = JsonUtility.ToJson(data);
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/ask", "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Failed to send idle prompt to chat service: {request.error}");
+            }
+            else
+            {
+                string jsonResponse = request.downloadHandler.text;
+                Debug.Log($"Raw LLM response to idle prompt: {jsonResponse}");
+                
+                // Parse the response to extract the actual message
+                string responseMessage = ExtractMessageFromResponse(jsonResponse);
+                Debug.Log($"Extracted message: {responseMessage}");
+                
+                // Add the assistant response to chat logs
+                Message assistantMessage = new Message
+                {
+                    role = "assistant",
+                    content = responseMessage
+                };
+                AddChatMessage(assistantMessage);
+                
+                // Find the nearest NPC and make it speak
+                MakeNearestNPCSpeak(responseMessage);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Extract the message content from the JSON response
+    /// </summary>
+    private string ExtractMessageFromResponse(string jsonResponse)
+    {
+        try
+        {
+            // Try to parse as a JSON object with a "response" field
+            if (jsonResponse.Contains("\"response\""))
+            {
+                // Simple parsing to extract the "response" field value
+                int startIndex = jsonResponse.IndexOf("\"response\"");
+                if (startIndex >= 0)
+                {
+                    startIndex = jsonResponse.IndexOf(":", startIndex) + 1;
+                    // Skip whitespace
+                    while (startIndex < jsonResponse.Length && char.IsWhiteSpace(jsonResponse[startIndex]))
+                    {
+                        startIndex++;
+                    }
+                    
+                    // Check if response is enclosed in quotes
+                    bool hasQuotes = startIndex < jsonResponse.Length && jsonResponse[startIndex] == '"';
+                    int endIndex;
+                    
+                    if (hasQuotes)
+                    {
+                        startIndex++; // Skip the opening quote
+                        endIndex = jsonResponse.IndexOf("\"", startIndex);
+                    }
+                    else
+                    {
+                        // Find the end of the value (comma or closing brace)
+                        endIndex = jsonResponse.IndexOfAny(new[] { ',', '}' }, startIndex);
+                    }
+                    
+                    if (endIndex > startIndex)
+                    {
+                        return jsonResponse.Substring(startIndex, endIndex - startIndex);
+                    }
+                }
+            }
+            
+            // Fallback: try to get a "content" field from "choices" array
+            if (jsonResponse.Contains("\"content\""))
+            {
+                int contentIndex = jsonResponse.IndexOf("\"content\"");
+                if (contentIndex >= 0)
+                {
+                    contentIndex = jsonResponse.IndexOf(":", contentIndex) + 1;
+                    // Skip whitespace
+                    while (contentIndex < jsonResponse.Length && char.IsWhiteSpace(jsonResponse[contentIndex]))
+                    {
+                        contentIndex++;
+                    }
+                    
+                    // Check if content is enclosed in quotes
+                    bool hasQuotes = contentIndex < jsonResponse.Length && jsonResponse[contentIndex] == '"';
+                    int endContentIndex;
+                    
+                    if (hasQuotes)
+                    {
+                        contentIndex++; // Skip the opening quote
+                        endContentIndex = jsonResponse.IndexOf("\"", contentIndex);
+                    }
+                    else
+                    {
+                        // Find the end of the value (comma or closing brace)
+                        endContentIndex = jsonResponse.IndexOfAny(new[] { ',', '}' }, contentIndex);
+                    }
+                    
+                    if (endContentIndex > contentIndex)
+                    {
+                        return jsonResponse.Substring(contentIndex, endContentIndex - contentIndex);
+                    }
+                }
+            }
+            
+            // If all parsing attempts fail, return the raw response
+            return jsonResponse;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error parsing LLM response: {e.Message}");
+            return jsonResponse; // Return the original response if parsing fails
+        }
+    }
+    
+    /// <summary>
+    /// Find the nearest NPC and make it speak the given message
+    /// </summary>
+    private void MakeNearestNPCSpeak(string message)
+    {
+        Debug.Log($"Making nearest NPC speak: {message}");
+        
+        // Find all AIConversationController components instead of using tags
+        AIConversationController[] aiControllers = FindObjectsOfType<AIConversationController>();
+        
+        if (aiControllers == null || aiControllers.Length == 0)
+        {
+            Debug.LogWarning("No AIConversationController found in scene. Falling back to DialogueBoxController...");
+            
+            // Fallback to DialogueBoxController if no AIConversationController is found
+            DialogueBoxController dialogueBoxController = FindObjectOfType<DialogueBoxController>();
+            if (dialogueBoxController != null)
+            {
+                // Create a method to speak through DialogueBoxController
+                StartCoroutine(SpeakThroughDialogueController(dialogueBoxController, message));
+                Debug.Log("Used DialogueBoxController fallback to display idle message");
+            }
+            else
+            {
+                Debug.LogError("No DialogueBoxController found either. Cannot display idle message.");
+            }
+            
+            return;
+        }
+        
+        // Find nearest NPC to camera/player
+        AIConversationController nearestController = null;
+        float nearestDistance = float.MaxValue;
+        Vector3 playerPosition = Camera.main.transform.position;
+        
+        foreach (AIConversationController controller in aiControllers)
+        {
+            if (controller.gameObject.activeInHierarchy)
+            {
+                float distance = Vector3.Distance(playerPosition, controller.transform.position);
+                if (distance < nearestDistance)
+                {
+                    nearestController = controller;
+                    nearestDistance = distance;
+                }
+            }
+        }
+        
+        if (nearestController != null)
+        {
+            Debug.Log($"Found nearest NPC with AIConversationController: {nearestController.gameObject.name} at distance {nearestDistance}m");
+            
+            // Get the DialogueBoxController that's on the same GameObject
+            DialogueBoxController dialogueBoxController = nearestController.GetComponent<DialogueBoxController>();
+            if (dialogueBoxController != null)
+            {
+                // Stop thinking animation if it's active
+                dialogueBoxController.stopThinking();
+                
+                // Method 1: Use SpeakLine private method through reflection
+                StartCoroutine(SpeakThroughDialogueController(dialogueBoxController, message));
+                
+                // Add the message to the NPC's conversation context
+                nearestController.AddMessage(new Message { role = "assistant", content = message });
+                
+                Debug.Log($"Successfully triggered idle speech through {nearestController.gameObject.name}");
+            }
+            else
+            {
+                Debug.LogError($"DialogueBoxController not found on {nearestController.gameObject.name}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No active AIConversationController found in scene");
+        }
+    }
+    
+    /// <summary>
+    /// Helper method to speak a message through a DialogueBoxController
+    /// Works by simulating what happens during normal NPC dialogue
+    /// </summary>
+    private IEnumerator SpeakThroughDialogueController(DialogueBoxController dialogueController, string message)
+    {
+        // First, ensure dialogueBox is active
+        if (dialogueController._dialogueText != null)
+        {
+            // Emulate how normal dialogue speaking works
+            
+            // 1. Set the text in the UI
+            dialogueController._dialogueText.text = message;
+            
+            // 2. Make the dialogue box visible
+            System.Reflection.FieldInfo dialogueBoxField = typeof(DialogueBoxController).GetField("_dialogueBox", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (dialogueBoxField != null)
+            {
+                GameObject dialogueBox = (GameObject)dialogueBoxField.GetValue(dialogueController);
+                if (dialogueBox != null) dialogueBox.SetActive(true);
+            }
+            
+            System.Reflection.FieldInfo dialogueCanvasField = typeof(DialogueBoxController).GetField("_dialogueCanvas", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (dialogueCanvasField != null)
+            {
+                GameObject dialogueCanvas = (GameObject)dialogueCanvasField.GetValue(dialogueController);
+                if (dialogueCanvas != null) dialogueCanvas.SetActive(true);
+            }
+            
+            // 3. Animation handling - set talking animation
+            Animator animator = dialogueController.GetComponentInChildren<Animator>();
+            if (animator != null)
+            {
+                animator.SetBool("isTalking", true);
+            }
+            
+            // 4. Use TTSSpeaker directly to speak the message
+            bool speechTriggered = false;
+            
+            // Try AI-specific speaking first
+            if (dialogueController._AIResponseToSpeech != null)
+            {
+                if (dialogueController.useWitAI)
+                {
+                    dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.WitAIDictate(message));
+                }
+                else
+                {
+                    dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.OpenAIDictate(message));
+                }
+                speechTriggered = true;
+                Debug.Log($"Speaking through AIResponseToSpeech with {(dialogueController.useWitAI ? "WitAI" : "OpenAI")} TTS");
+            }
+            // Fallback to standard TTSSpeaker
+            else if (dialogueController.TTSSpeaker != null)
+            {
+                var ttsSpeaker = dialogueController.TTSSpeaker.GetComponentInChildren<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
+                if (ttsSpeaker != null)
+                {
+                    ttsSpeaker.Speak(message);
+                    speechTriggered = true;
+                    Debug.Log("Speaking through standard TTSSpeaker");
+                }
+            }
+            
+            if (!speechTriggered)
+            {
+                Debug.LogError("Failed to trigger TTS speech - no working speech component found");
+            }
+            
+            // Wait for a reasonable time for the speech to finish
+            float estimatedDuration = Mathf.Max(3.0f, message.Length * 0.05f); // ~50ms per character, min 3 seconds
+            yield return new WaitForSeconds(estimatedDuration);
+            
+            // Reset talking animation
+            if (animator != null)
+            {
+                animator.SetBool("isTalking", false);
+            }
+        }
+        else
+        {
+            Debug.LogError("DialogueController has no _dialogueText component");
+        }
     }
 
     /// <summary>
@@ -379,6 +692,16 @@ public class ActionManager : MonoBehaviour
     public void SetQuestion(string question)
     {
         Debug.Log($"Question set: {question}");
+        
+        // Create user message
+        Message userMessage = new Message
+        {
+            role = "user",
+            content = question
+        };
+        
+        // Add to chat logs
+        AddChatMessage(userMessage);
     }
 
     public void AddChatMessage(Message message)

@@ -5,6 +5,7 @@
 using System;
 using UnityEngine;
 using Task;
+using UnityEngine.Events;
 
 /// <summary>
 /// Tracks user idle time and reports when the user has been idle for too long.
@@ -16,6 +17,10 @@ public class IdleTimer : MonoBehaviour
     private Task.Subtask lastProgressedSubtask;
     private Task.Step lastCompletedStep;
     private string timeoutPrompt;
+
+    // Event triggered when the idle threshold is reached
+    [Tooltip("Event triggered when the player has been idle for too long")]
+    public UnityEvent<string> OnIdleThresholdReached;
 
     // Default threshold (in seconds)
     [SerializeField] private float defaultIdleThresholdInSeconds; // Default 2 minutes
@@ -95,6 +100,49 @@ public class IdleTimer : MonoBehaviour
         Debug.Log($"Started idle tracking for subtask: {subtask.SubtaskName}, step: {step.StepName}, timeout: {idleThresholdInSeconds}s");
     }
 
+    /// <summary>
+    /// Starts idle tracking immediately without requiring a subtask/step.
+    /// Use this for general idle detection when task tracking isn't available.
+    /// </summary>
+    public void StartGeneralIdleTracking()
+    {
+        isTrackingIdleTime = true;
+        idleTimer = 0f;
+        thresholdReached = false;
+        idleThresholdInSeconds = defaultIdleThresholdInSeconds;
+        nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
+        
+        // Use generic values when no specific task/step is tracked
+        lastProgressedSubtask = new Task.Subtask { SubtaskName = "General Activity" };
+        lastCompletedStep = new Task.Step { StepName = "No Specific Step" };
+        
+        Debug.Log($"Started general idle tracking with timeout: {idleThresholdInSeconds}s");
+    }
+    
+    private void Start()
+    {
+        // Initialize the event if it's null
+        if (OnIdleThresholdReached == null)
+        {
+            OnIdleThresholdReached = new UnityEngine.Events.UnityEvent<string>();
+        }
+        
+        // If the default threshold is not set, use a reasonable default
+        if (defaultIdleThresholdInSeconds <= 0)
+        {
+            defaultIdleThresholdInSeconds = 120f; // 2 minutes as default
+            Debug.LogWarning("IdleTimer defaultIdleThresholdInSeconds not set, using 120 seconds as default");
+        }
+        
+        if (idleCheckIntervalInSeconds <= 0)
+        {
+            idleCheckIntervalInSeconds = 30f; // 30 seconds as default interval
+            Debug.LogWarning("IdleTimer idleCheckIntervalInSeconds not set, using 30 seconds as default");
+        }
+        
+        // Auto-start general idle tracking if no specific tasks are tracked yet
+        StartGeneralIdleTracking();
+    }
 
     /// <summary>
     /// Stops tracking idle time.
@@ -122,7 +170,6 @@ public class IdleTimer : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Handles the idle threshold exceeded event from IdleTimer
     /// </summary>
@@ -135,8 +182,11 @@ public class IdleTimer : MonoBehaviour
         
         if (ActionManager.Instance != null)
         {
-            /*ActionManager.Instance.SendIdleTimeoutReport(timeoutPrompt);*/ // Uncomment this line if you want to send timeout prompt on idletimeout
+            ActionManager.Instance.SendIdleTimeoutReport(timeoutPrompt); // Uncomment this line if you want to send timeout prompt on idletimeout
         }
+
+        // Trigger the UnityEvent
+        OnIdleThresholdReached?.Invoke(timeoutPrompt);
     }
 
     /// <summary>
