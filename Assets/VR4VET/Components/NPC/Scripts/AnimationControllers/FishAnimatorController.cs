@@ -64,7 +64,7 @@ public class FishAnimatorController : MonoBehaviour
     }
     
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // Guard against animator errors - only check parameters if we have a valid controller
         if (animator != null)
@@ -72,10 +72,12 @@ public class FishAnimatorController : MonoBehaviour
             // Check if DialogueBoxController's isTalking parameter is set
             if (CheckAnimatorBool(IS_TALKING_BOOL))
             {
-                // Tell the fish to animate talking
+                // Tell the fish to animate talking but DISABLE MOVEMENT while talking
                 if (fishController != null)
                 {
                     fishController.SetTalking(true);
+                    // Critical fix: Disable follow behavior while talking
+                    fishController.SetFollowPlayerEnabled(false);
                 }
             }
             else
@@ -84,6 +86,8 @@ public class FishAnimatorController : MonoBehaviour
                 if (fishController != null)
                 {
                     fishController.SetTalking(false);
+                    // Re-enable follow if needed (with moderate distance)
+                    fishController.SetFollowPlayerEnabled(true);
                 }
             }
             
@@ -94,6 +98,8 @@ public class FishAnimatorController : MonoBehaviour
                 if (fishController != null)
                 {
                     fishController.SetIntensity(1.5f);
+                    // Critical fix: Disable follow during listening as well
+                    fishController.SetFollowPlayerEnabled(false);
                 }
             }
             else
@@ -112,6 +118,8 @@ public class FishAnimatorController : MonoBehaviour
                 if (fishController != null)
                 {
                     fishController.SetTalking(true);
+                    // Critical fix: Disable follow behavior while talking
+                    fishController.SetFollowPlayerEnabled(false);
                 }
                 
                 // Reset the trigger after detecting it

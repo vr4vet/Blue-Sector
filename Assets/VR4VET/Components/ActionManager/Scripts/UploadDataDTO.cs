@@ -11,9 +11,9 @@ namespace UploadDTO
     public class UploadDataDTO
     {
         /// <summary>
-        /// Dictionary containing information about the user.
+        /// List of strings containing information about the user.
         /// </summary>
-        public Dictionary<string, string> user_information;
+        public List<string> user_information;
 
         /// <summary>
         /// List of user actions such as grabbed/dropped objects.
@@ -32,7 +32,12 @@ namespace UploadDTO
 
         /// <summary>
         /// The chat history between user and current NPC.
-        /// /summary>
+        /// </summary>
         public List<Message> chatLog;
+
+        /// <summary>
+        /// The name of the current scene.
+        /// </summary>
+        public string scene_name;
     }
 }

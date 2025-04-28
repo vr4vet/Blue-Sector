@@ -203,23 +203,35 @@ public class SimpleFishController : MonoBehaviour
             playerTransform = Camera.main.transform;
         }
         
-        // Handle fish animation
+        // Handle fish animation (bobbing and head rotation)
         AnimateFish();
         
-        // Handle flying/swimming toward player when enabled
-        if (followPlayer && playerTransform != null)
+        // Only follow player if explicitly enabled and not talking
+        // For Chatbot fish, we typically don't want it to move when not talking
+        if (followPlayer && playerTransform != null && !isTalking)
         {
-            timeSincePositionUpdate += Time.deltaTime;
-            
-            // Check if we need to update target position
-            if (timeSincePositionUpdate >= positionUpdateInterval || Vector3.Distance(transform.position, playerTransform.position) > preferredPlayerDistance * 2f)
+            // If we're very far from player (e.g., player teleported), teleport to catch up
+            float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            if (distanceToPlayer > preferredPlayerDistance * 3f)
             {
-                UpdateTargetPositionNearPlayer();
-                timeSincePositionUpdate = 0f;
+                TeleportToPlayer();
             }
-            
-            // Move toward target position
-            FlyTowardTargetPosition();
+            // Otherwise only update position occasionally
+            else if (timeSincePositionUpdate >= positionUpdateInterval)
+            {
+                timeSincePositionUpdate = 0f;
+                UpdateTargetPositionNearPlayer();
+                FlyTowardTargetPosition();
+            }
+            else
+            {
+                timeSincePositionUpdate += Time.deltaTime;
+            }
+        }
+        else
+        {
+            // When talking, always face the player but don't change position
+            LookAtPlayerHorizontal();
         }
     }
     
@@ -257,7 +269,8 @@ public class SimpleFishController : MonoBehaviour
         playerForward.y = 0; // Keep it horizontal
         playerForward.Normalize();
         
-        // Calculate distance from player to desired position
+        // Calculate position directly in front of player with fixed distance
+        // No randomness to prevent the fish from wandering too much
         float distance = preferredPlayerDistance;
         
         // If we're far away, move closer more quickly
@@ -285,19 +298,20 @@ public class SimpleFishController : MonoBehaviour
             }
         }
         
-        // Add some randomness to the position for natural movement
-        float randomAngle = Random.Range(-45f, 45f);
-        Vector3 randomizedDirection = Quaternion.Euler(0, randomAngle, 0) * playerForward;
+        // Calculate position directly in front of player - very limited randomness
+        // This keeps the fish more consistently in front of the player
+        float smallRandomAngle = Random.Range(-15f, 15f); // Much smaller random angle
+        Vector3 randomizedDirection = Quaternion.Euler(0, smallRandomAngle, 0) * playerForward;
         
-        // Calculate position based on player's forward direction with some offset
+        // Position fish in front of player
         Vector3 targetPos = playerPosition + randomizedDirection * distance;
         
-        // Add slight side offset so fish isn't directly in front of player
-        targetPos += playerTransform.right * Random.Range(-0.5f, 0.5f);
+        // Add slight side offset so fish isn't directly blocking view (smaller offset)
+        targetPos += playerTransform.right * Random.Range(-0.3f, 0.3f);
         
         // Set proper height
         float eyeHeight = playerPosition.y;
-        targetPos.y = eyeHeight + heightOffset + Random.Range(-0.2f, 0.2f); // Add small random height variation
+        targetPos.y = eyeHeight + heightOffset; // No random height variation to keep it stable
         
         // If flying is enabled and the position is inside terrain, adjust height
         if (canFly && Physics.CheckSphere(targetPos, 0.2f, LayerMask.GetMask("Terrain", "Default")))
@@ -324,7 +338,7 @@ public class SimpleFishController : MonoBehaviour
     /// </summary>
     private void FlyTowardTargetPosition()
     {
-        if (currentTargetPosition == Vector3.zero) return;
+        if (currentTargetPosition == Vector3.zero || playerTransform == null) return;
         
         // Calculate distance to target
         float distanceToTarget = Vector3.Distance(transform.position, currentTargetPosition);
@@ -343,12 +357,54 @@ public class SimpleFishController : MonoBehaviour
             // Move toward target position
             transform.position = Vector3.Lerp(transform.position, currentTargetPosition, speed * Time.deltaTime);
             
-            // Look in the direction of movement
-            Vector3 direction = (currentTargetPosition - transform.position).normalized;
-            if (direction != Vector3.zero)
+            // Always face player rather than movement direction
+            LookAtPlayerHorizontal();
+        }
+        else
+        {
+            // Even when we're at the target position, keep facing the player
+            LookAtPlayerHorizontal();
+        }
+    }
+    
+    private void LateUpdate()
+    {
+        // If talking, at rest, or no current target, always face player
+        if (isTalking || playerTransform == null)
+        {
+            LookAtPlayerHorizontal();
+        }
+    }
+    
+    /// <summary>
+    /// Makes the fish face the player on the horizontal plane (no tilt)
+    /// </summary>
+    private void LookAtPlayerHorizontal()
+    {
+        if (playerTransform == null) return;
+        
+        // Calculate direction to player on horizontal plane
+        Vector3 targetPosition = playerTransform.position;
+        Vector3 directionToPlayer = targetPosition - transform.position;
+        directionToPlayer.y = 0; // Keep fish level horizontally
+        
+        if (directionToPlayer != Vector3.zero)
+        {
+            // Create rotation that looks at player without tilting
+            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+            
+            // Apply rotation directly for talking fish to ensure it always faces player
+            if (isTalking) 
             {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                transform.rotation = targetRotation;
+            }
+            // Otherwise smooth rotation for natural movement
+            else
+            {
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation, 
+                    targetRotation, 
+                    lookSpeed * Time.deltaTime);
             }
         }
     }

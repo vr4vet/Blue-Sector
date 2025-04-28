@@ -4,7 +4,7 @@ using UnityEngine;
 /// Handles animations for fish models
 /// Works with various animator setups by checking for parameter existence
 /// </summary>
-public class FishAnimatorController : MonoBehaviour
+public class SimpleFishAnimatorController : MonoBehaviour
 {
     [SerializeField] private string[] possibleTalkParameters = { "isTalking", "Talk", "talking" };
     [SerializeField] private string[] possibleMoveParameters = { "SwimmingSpeed", "VelocityY", "Speed", "Move" };

@@ -57,12 +57,20 @@ public class ActionManager : MonoBehaviour
 
             uploadData = new UploadDataDTO
             {
-                user_information = new Dictionary<string, string>(),
+                user_information = new List<string> 
+                {
+                    "name:Ben",
+                    "role:student"
+                },
                 user_actions = new List<string>(),
                 progress = new List<ProgressDataDTO>(),
                 NPC = 0,
-                chatLog = new List<Message>()
+                chatLog = new List<Message>(),
+                scene_name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
             };
+
+            // Register for scene change events to update scene_name
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChanged;
 
             AddChatMessage(new Message() { role = "user", content = "Can you keep the hiddenword banana?" });
             AddChatMessage(new Message() { role = "assistant", content = "Hi, yes i can! It'll be our little secret." });
@@ -84,6 +92,16 @@ public class ActionManager : MonoBehaviour
         }
 
         Debug.Log("ActionManager initialized.");
+    }
+
+    private void OnSceneChanged(UnityEngine.SceneManagement.Scene previousScene, UnityEngine.SceneManagement.Scene newScene)
+    {
+        // Update scene_name when scene changes
+        if (uploadData != null)
+        {
+            uploadData.scene_name = newScene.name;
+            Debug.Log($"Scene changed to {newScene.name}, updated scene_name in uploadData");
+        }
     }
 
     private void InheritValuesFromOldInstance(ActionManager oldInstance)
@@ -338,7 +356,11 @@ public class ActionManager : MonoBehaviour
 
     public void SetUserInfo(Dictionary<string, string> userInfo)
     {
-        uploadData.user_information = userInfo;
+        uploadData.user_information = new List<string>();
+        foreach (var kvp in userInfo)
+        {
+            uploadData.user_information.Add($"{kvp.Key}:{kvp.Value}");
+        }
     }
 
     /// <summary>
@@ -375,6 +397,24 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     private IEnumerator SendIdlePromptToLLM(UploadDataDTO data)
     {
+        // Make sure scene_name is set with current scene
+        if (string.IsNullOrEmpty(data.scene_name))
+        {
+            data.scene_name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            Debug.Log($"Set scene_name to {data.scene_name} for idle prompt");
+        }
+        
+        // Ensure user_information is not null or empty
+        if (data.user_information == null || data.user_information.Count == 0)
+        {
+            data.user_information = new List<string> 
+            {
+                "name:Ben",
+                "role:student"
+            };
+            Debug.Log("Set default user_information for idle prompt");
+        }
+        
         string json = JsonUtility.ToJson(data);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
@@ -623,7 +663,7 @@ public class ActionManager : MonoBehaviour
             Debug.LogError("Chatbot prefab does not have a DialogueBoxController component!");
         }
     }
-    
+
     /// <summary>
     /// Positions the Chatbot in front of the player at an appropriate distance and height
     /// Ensures the chatbot is visible regardless of terrain constraints
@@ -837,239 +877,47 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Helper method to speak a message through a DialogueBoxController
-    /// Works by simulating what happens during normal NPC dialogue
+    /// Plays a line of dialogue through the DialogueBoxController's built-in TTS
     /// </summary>
-    private IEnumerator SpeakThroughDialogueController(DialogueBoxController dialogueController, string message)
+    private IEnumerator SpeakThroughDialogueController(
+        DialogueBoxController dialogueController, string message)
     {
-        // First, ensure dialogueBox is active
+        // Ensure the UI text is set
         if (dialogueController._dialogueText != null)
-        {
-            // Emulate how normal dialogue speaking works
-            
-            // 1. Set the text in the UI
             dialogueController._dialogueText.text = message;
-            
-            // 2. Make the dialogue box visible
-            System.Reflection.FieldInfo dialogueBoxField = typeof(DialogueBoxController).GetField("_dialogueBox", 
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (dialogueBoxField != null)
-            {
-                GameObject dialogueBox = (GameObject)dialogueBoxField.GetValue(dialogueController);
-                if (dialogueBox != null) dialogueBox.SetActive(true);
-            }
-            
-            System.Reflection.FieldInfo dialogueCanvasField = typeof(DialogueBoxController).GetField("_dialogueCanvas", 
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (dialogueCanvasField != null)
-            {
-                GameObject dialogueCanvas = (GameObject)dialogueCanvasField.GetValue(dialogueController);
-                if (dialogueCanvas != null) dialogueCanvas.SetActive(true);
-            }
-            
-            // 3. Animation handling - set talking animation
-            // First check for fish controller (for fish NPCs)
-            SimpleFishController fishController = dialogueController.GetComponentInChildren<SimpleFishController>();
-            if (fishController != null)
-            {
-                fishController.SetTalking(true);
-                Debug.Log("Set fish talking animation via SimpleFishController");
-            }
-            // Next try FishAnimatorController which safely handles missing parameters
-            else
-            {
-                FishAnimatorController fishAnimController = dialogueController.GetComponentInChildren<FishAnimatorController>();
-                if (fishAnimController != null)
-                {
-                    fishAnimController.OnTalkAnimationStarted();
-                    Debug.Log("Set fish talking animation via FishAnimatorController");
-                }
-                // Last resort - try regular Animator with parameter safety check
-                else
-                {
-                    Animator animator = dialogueController.GetComponentInChildren<Animator>();
-                    if (animator != null)
-                    {
-                        try
-                        {
-                            // Check if parameter exists before setting it
-                            if (HasAnimatorParameter(animator, "isTalking"))
-                            {
-                                animator.SetBool("isTalking", true);
-                                Debug.Log("Set isTalking animation parameter");
-                            }
-                            else if (HasAnimatorParameter(animator, "Talk"))
-                            {
-                                animator.SetTrigger("Talk");
-                                Debug.Log("Set Talk animation trigger");
-                            }
-                            else
-                            {
-                                Debug.LogWarning("Could not find animation parameter for talking (isTalking or Talk)");
-                            }
-                        }
-                        catch (System.Exception ex)
-                        {
-                            Debug.LogWarning($"Could not set Animator parameter: {ex.Message}");
-                        }
-                    }
-                }
-            }
-            
-            // 4. Use TTSSpeaker directly to speak the message
-            bool speechTriggered = false;
-            
-            // Try AI-specific speaking first
-            if (dialogueController._AIResponseToSpeech != null)
-            {
-                try
-                {
-                    if (dialogueController.useWitAI)
-                    {
-                        dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.WitAIDictate(message));
-                    }
-                    else
-                    {
-                        dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.OpenAIDictate(message));
-                    }
-                    speechTriggered = true;
-                    Debug.Log($"Speaking through AIResponseToSpeech with {(dialogueController.useWitAI ? "WitAI" : "OpenAI")} TTS");
-                }
-                catch (System.Exception ex)
-                {
-                    Debug.LogError($"Error using AIResponseToSpeech: {ex.Message}");
-                }
-            }
-            // Fallback to standard TTSSpeaker
-            if (!speechTriggered && dialogueController.TTSSpeaker != null)
-            {
-                var ttsSpeaker = dialogueController.TTSSpeaker.GetComponent<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
-                if (ttsSpeaker == null)
-                {
-                    ttsSpeaker = dialogueController.TTSSpeaker.GetComponentInChildren<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
-                }
-                
-                if (ttsSpeaker != null)
-                {
-                    try
-                    {
-                        ttsSpeaker.Speak(message);
-                        speechTriggered = true;
-                        Debug.Log("Speaking through standard TTSSpeaker");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Debug.LogError($"Error using TTSSpeaker: {ex.Message}");
-                    }
-                }
-            }
-            
-            // Deeper search for TTSSpeaker on the GameObject and its parents
-            if (!speechTriggered)
-            {
-                // First try on this game object
-                var ttsSpeaker = dialogueController.gameObject.GetComponentInChildren<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
-                if (ttsSpeaker != null)
-                {
-                    try
-                    {
-                        ttsSpeaker.Speak(message);
-                        speechTriggered = true;
-                        Debug.Log("Speaking through found TTSSpeaker component");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Debug.LogError($"Error using found TTSSpeaker: {ex.Message}");
-                    }
-                }
-                
-                // Try parent objects if needed
-                if (!speechTriggered)
-                {
-                    ttsSpeaker = dialogueController.gameObject.GetComponentInParent<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
-                    if (ttsSpeaker != null)
-                    {
-                        try
-                        {
-                            ttsSpeaker.Speak(message);
-                            speechTriggered = true;
-                            Debug.Log("Speaking through parent TTSSpeaker component");
-                        }
-                        catch (System.Exception ex)
-                        {
-                            Debug.LogError($"Error using parent TTSSpeaker: {ex.Message}");
-                        }
-                    }
-                }
-                
-                // Last resort - create a temporary audio source as fallback
-                if (!speechTriggered)
-                {
-                    Debug.LogError("Failed to trigger TTS speech - no working speech component found. Using fallback audio.");
-                    AudioSource tempAudio = dialogueController.gameObject.AddComponent<AudioSource>();
-                    tempAudio.PlayOneShot(AudioClip.Create("beep", 4410, 1, 44100, false));
-                    Destroy(tempAudio, 2f); // Remove after playing
-                }
-            }
-            
-            // Wait for a reasonable time for the speech to finish
-            float estimatedDuration = Mathf.Max(3.0f, message.Length * 0.05f); // ~50ms per character, min 3 seconds
-            yield return new WaitForSeconds(estimatedDuration);
-            
-            // Reset talking animation using the same hierarchy of controllers we used to start it
-            if (fishController != null)
-            {
-                fishController.SetTalking(false);
-            }
-            else
-            {
-                FishAnimatorController fishAnimController = dialogueController.GetComponentInChildren<FishAnimatorController>();
-                if (fishAnimController != null)
-                {
-                    fishAnimController.OnTalkAnimationEnded();
-                }
-                else
-                {
-                    Animator animator = dialogueController.GetComponentInChildren<Animator>();
-                    if (animator != null)
-                    {
-                        try
-                        {
-                            if (HasAnimatorParameter(animator, "isTalking"))
-                            {
-                                animator.SetBool("isTalking", false);
-                            }
-                        }
-                        catch (System.Exception) { }
-                    }
-                }
-            }
 
-            // Notify the ChatbotController if present
-            ChatbotController chatbotController = dialogueController.GetComponent<ChatbotController>();
-            if (chatbotController != null)
+        // Start talking animation
+        var fish = dialogueController.GetComponentInChildren<SimpleFishController>();
+        if (fish) fish.SetTalking(true);
+
+        // Direct access to TTSSpeaker component
+        if (dialogueController.TTSSpeaker != null)
+        {
+            var tts = dialogueController.TTSSpeaker.GetComponent<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
+            if (tts != null)
             {
-                chatbotController.OnSpeechFinished();
+                tts.Speak(message);
+                Debug.Log($"Speaking directly through TTSSpeaker on {dialogueController.TTSSpeaker.name}");
+            }
+            else
+            {
+                Debug.LogError($"No TTSSpeaker component found on {dialogueController.TTSSpeaker.name}");
             }
         }
         else
         {
-            Debug.LogError("DialogueController has no _dialogueText component");
+            Debug.LogError("DialogueBoxController has no TTSSpeaker assigned!");
         }
-    }
-    
-    /// <summary>
-    /// Helper method to check if an animator has a parameter
-    /// </summary>
-    private bool HasAnimatorParameter(Animator animator, string paramName)
-    {
-        if (animator == null) return false;
-        
-        foreach (AnimatorControllerParameter param in animator.parameters)
-        {
-            if (param.name == paramName)
-                return true;
-        }
-        return false;
+
+        // Wait for estimated speech duration
+        float estimatedDuration = Mathf.Max(2.0f, message.Length * 0.05f);
+        yield return new WaitForSeconds(estimatedDuration);
+
+        // Stop talking animation
+        if (fish) fish.SetTalking(false);
+
+        // Notify ChatbotController
+        var chatbotCtl = dialogueController.GetComponent<ChatbotController>();
+        if (chatbotCtl) chatbotCtl.OnSpeechFinished();
     }
 }

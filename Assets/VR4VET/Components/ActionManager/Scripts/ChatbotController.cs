@@ -19,9 +19,6 @@ public class ChatbotController : MonoBehaviour
     // Reference to the SimpleFishController for fish-specific animations
     private SimpleFishController fishController;
     
-    // Reference to the TTSSpeaker component for voice output
-    private TTSSpeaker ttsSpeaker;
-    
     // Track if the Chatbot is currently speaking
     private bool isSpeaking = false;
     
@@ -40,22 +37,14 @@ public class ChatbotController : MonoBehaviour
         // Get fish controller if present
         fishController = GetComponent<SimpleFishController>();
         
-        // Get TTSSpeaker component
-        ttsSpeaker = GetComponentInChildren<TTSSpeaker>();
-        if (ttsSpeaker == null)
-        {
-            Debug.LogWarning("TTSSpeaker not found on Chatbot or its children. Voice output won't be available.");
-        }
-        
-        // Check for NavMeshAgent and remove/disable if we're using flying fish
+        // Check for NavMeshAgent and remove it for flying fish
         if (fishController != null && fishController.CanFly)
         {
             UnityEngine.AI.NavMeshAgent navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
             if (navAgent != null)
             {
-                // Disable immediately to prevent any position reset
                 navAgent.enabled = false;
-                Destroy(navAgent); // Remove completely
+                Destroy(navAgent);
                 Debug.Log("Removed NavMeshAgent from flying fish chatbot");
             }
         }
@@ -66,7 +55,7 @@ public class ChatbotController : MonoBehaviour
         // Force teleport to player at startup to ensure correct positioning
         if (fishController != null)
         {
-            // Execute in the next frame to ensure everything is initialized
+            // Execute with a delay to ensure everything is initialized
             StartCoroutine(TeleportWithDelay(0.2f));
             
             // Ensure flying is enabled
@@ -82,49 +71,32 @@ public class ChatbotController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         
-        // Double-check that we still have a valid fish controller
         if (fishController != null)
         {
             // Force teleport to player
             fishController.TeleportToPlayer();
             Debug.Log("Fish teleported to player from ChatbotController");
             
-            // Additional check - if position is at origin 0,0,0 then try again
+            // If still at origin, force manual position
             yield return new WaitForSeconds(0.2f);
             
-            if (transform.position == Vector3.zero)
+            if (transform.position == Vector3.zero && Camera.main != null)
             {
-                Debug.LogWarning("Fish is at 0,0,0 - attempting second teleport");
-                fishController.TeleportToPlayer();
+                Vector3 playerPos = Camera.main.transform.position;
+                Vector3 playerForward = Camera.main.transform.forward;
+                playerForward.y = 0;
+                playerForward.Normalize();
                 
-                // If still at origin, force manual position
-                yield return new WaitForSeconds(0.2f);
-                if (transform.position == Vector3.zero && Camera.main != null)
-                {
-                    Vector3 playerPos = Camera.main.transform.position;
-                    Vector3 playerForward = Camera.main.transform.forward;
-                    playerForward.y = 0;
-                    playerForward.Normalize();
-                    
-                    // Position directly in front of player
-                    transform.position = playerPos + playerForward * 1.5f;
-                    transform.LookAt(new Vector3(playerPos.x, transform.position.y, playerPos.z));
-                    Debug.Log("Forced fish position directly in front of player");
-                }
+                // Position directly in front of player
+                transform.position = playerPos + playerForward * 1.5f;
+                transform.LookAt(new Vector3(playerPos.x, transform.position.y, playerPos.z));
+                Debug.Log("Forced fish position directly in front of player");
             }
         }
     }
     
     private void OnEnable()
     {
-        // Register for TTS events if available
-        if (ttsSpeaker != null)
-        {
-            // Connect to the TextPlaybackStart/Finished events
-            ttsSpeaker.Events.OnTextPlaybackStart.AddListener(OnTTSStarted);
-            ttsSpeaker.Events.OnTextPlaybackFinished.AddListener(OnTTSFinished);
-        }
-        
         // Start checking for dialogue end
         if (dialogueController != null)
         {
@@ -140,28 +112,8 @@ public class ChatbotController : MonoBehaviour
     
     private void OnDisable()
     {
-        // Unregister from TTS events
-        if (ttsSpeaker != null)
-        {
-            ttsSpeaker.Events.OnTextPlaybackStart.RemoveListener(OnTTSStarted);
-            ttsSpeaker.Events.OnTextPlaybackFinished.RemoveListener(OnTTSFinished);
-        }
-        
         // Stop all coroutines when disabled
         StopAllCoroutines();
-    }
-    
-    // TTS event handlers
-    private void OnTTSStarted(string text)
-    {
-        Debug.Log("Chatbot TTS started: " + text);
-        OnStartSpeaking();
-    }
-    
-    private void OnTTSFinished(string text)
-    {
-        Debug.Log("Chatbot TTS finished: " + text);
-        // Speech finished, but we'll let the dialogue end detection handle the cleanup
     }
     
     /// <summary>
@@ -235,10 +187,7 @@ public class ChatbotController : MonoBehaviour
         // Only disappear if not currently speaking
         if (!isSpeaking)
         {
-            // Option 1: Destroy the gameObject completely
-            // Destroy(gameObject);
-            
-            // Option 2: Just deactivate it so it can be reused later
+            // Just deactivate it so it can be reused later
             gameObject.SetActive(false);
         }
     }
