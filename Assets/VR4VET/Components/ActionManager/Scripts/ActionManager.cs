@@ -393,40 +393,91 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     private IEnumerator SendIdlePromptToLLM(UploadDataDTO data)
     {
-        string json = JsonUtility.ToJson(data);
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+        // Ensure required fields are set before sending
+        if (data.chatLog == null || data.chatLog.Count == 0)
+        {
+            Debug.LogWarning("Chat log is empty, adding a default message");
+            // Add a default message if chat log is empty
+            if (data.chatLog == null) data.chatLog = new List<Message>();
+            data.chatLog.Add(new Message { role = "user", content = "The user has been idle for a while. Please provide assistance." });
+        }
+        
+        // Ensure scene_name is set
+        if (string.IsNullOrEmpty(data.scene_name))
+        {
+            data.scene_name = SceneManager.GetActiveScene().name;
+            Debug.Log($"Setting scene_name to active scene: {data.scene_name}");
+        }
 
+        // Log the data being sent for debugging
+        Debug.Log($"Sending idle prompt with {data.chatLog.Count} chat messages and {data.user_actions.Count} user actions");
+        
+        // Convert to JSON and log for debugging
+        string json = "";
+        byte[] jsonBytes;
+        
+        try
+        {
+            json = JsonUtility.ToJson(data);
+            Debug.Log($"Request JSON: {json.Substring(0, Mathf.Min(200, json.Length))}..."); // Log first 200 chars
+            jsonBytes = Encoding.UTF8.GetBytes(json);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error serializing request data: {e.Message}");
+            // Fallback behavior when exception occurs during serialization
+            MakeNearestNPCSpeak("I notice you've been idle for a while. Can I help you with anything?");
+            yield break; // Exit the coroutine
+        }
+
+        // Create and send the web request
         using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/ask", "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(jsonBytes);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
 
+            // This yield is outside of any try-catch block
             yield return request.SendWebRequest();
 
+            // Process the response
             if (request.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"Failed to send idle prompt to chat service: {request.error}");
+                Debug.LogError($"Response code: {request.responseCode}");
+                Debug.LogError($"Response: {request.downloadHandler?.text}");
+                
+                // Fallback behavior when request fails
+                MakeNearestNPCSpeak("I notice you've been idle for a while. Can I help you with anything?");
             }
             else
             {
-                string jsonResponse = request.downloadHandler.text;
-                Debug.Log($"Raw LLM response to idle prompt: {jsonResponse}");
-                
-                // Parse the response to extract the actual message
-                string responseMessage = ExtractMessageFromResponse(jsonResponse);
-                Debug.Log($"Extracted message: {responseMessage}");
-                
-                // Add the assistant response to chat logs
-                Message assistantMessage = new Message
+                try
                 {
-                    role = "assistant",
-                    content = responseMessage
-                };
-                AddChatMessage(assistantMessage);
-                
-                // Find the nearest NPC and make it speak
-                MakeNearestNPCSpeak(responseMessage);
+                    string jsonResponse = request.downloadHandler.text;
+                    Debug.Log($"Raw LLM response to idle prompt: {jsonResponse}");
+                    
+                    // Parse the response to extract the actual message
+                    string responseMessage = ExtractMessageFromResponse(jsonResponse);
+                    Debug.Log($"Extracted message: {responseMessage}");
+                    
+                    // Add the assistant response to chat logs
+                    Message assistantMessage = new Message
+                    {
+                        role = "assistant",
+                        content = responseMessage
+                    };
+                    AddChatMessage(assistantMessage);
+                    
+                    // Find the nearest NPC and make it speak
+                    MakeNearestNPCSpeak(responseMessage);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Error processing response: {e.Message}\n{e.StackTrace}");
+                    // Fallback behavior when exception occurs during response processing
+                    MakeNearestNPCSpeak("I notice you've been idle for a while. Can I help you with anything?");
+                }
             }
         }
     }
@@ -644,13 +695,17 @@ public class ActionManager : MonoBehaviour
                 if (dialogueController.useWitAI)
                 {
                     dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.WitAIDictate(message));
+                    speechTriggered = true;
+                    Debug.Log("Speaking through AIResponseToSpeech with WitAI TTS");
                 }
                 else
                 {
-                    dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.OpenAIDictate(message));
+                    // MODIFIED: Instead of calling the missing OpenAIDictate method, use WitAIDictate as fallback
+                    Debug.LogWarning("OpenAIDictate method not available in AIResponseToSpeech, falling back to WitAIDictate");
+                    dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.WitAIDictate(message));
+                    speechTriggered = true;
+                    Debug.Log("Speaking through AIResponseToSpeech with WitAI TTS (as fallback)");
                 }
-                speechTriggered = true;
-                Debug.Log($"Speaking through AIResponseToSpeech with {(dialogueController.useWitAI ? "WitAI" : "OpenAI")} TTS");
             }
             // Fallback to standard TTSSpeaker
             else if (dialogueController.TTSSpeaker != null)
