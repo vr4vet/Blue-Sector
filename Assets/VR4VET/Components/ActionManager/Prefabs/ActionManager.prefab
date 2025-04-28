@@ -45,6 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eaa29c124bae8249834ed0f9353aa16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chatbotPrefab: {fileID: 8007275087250480957, guid: 50bacf3575ad95a4bb7d6669ca885314,
+    type: 3}
+  maxNpcDetectionDistance: 2
 --- !u!114 &4385685848594281097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,5 +60,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de2056de147e678479c942cf5501acc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultIdleThresholdInSeconds: 120
-  idleCheckIntervalInSeconds: 20
+  OnIdleThresholdReached:
+    m_PersistentCalls:
+      m_Calls: []
+  defaultIdleThresholdInSeconds: 5
+  idleCheckIntervalInSeconds: 30

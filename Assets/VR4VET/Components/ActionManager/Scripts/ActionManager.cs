@@ -22,6 +22,19 @@ public class ActionManager : MonoBehaviour
 
     // Reference to the idle timer
     private IdleTimer idleTimer;
+    
+    // Reference to the Chatbot prefab
+    [SerializeField]
+    [Tooltip("The Chatbot prefab that will be spawned when the player is idle and no NPCs are nearby")]
+    private GameObject chatbotPrefab;
+    
+    // Maximum distance to check for nearby NPCs
+    [SerializeField]
+    [Tooltip("Maximum distance in meters to check for nearby NPCs")]
+    private float maxNpcDetectionDistance = 4f;
+    
+    // Reference to the currently spawned chatbot instance
+    private GameObject currentChatbotInstance;
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -490,38 +503,21 @@ public class ActionManager : MonoBehaviour
     
     /// <summary>
     /// Find the nearest NPC and make it speak the given message
+    /// If no NPC is within range, spawn the Chatbot prefab
     /// </summary>
     private void MakeNearestNPCSpeak(string message)
     {
         Debug.Log($"Making nearest NPC speak: {message}");
         
-        // Find all AIConversationController components instead of using tags
-        AIConversationController[] aiControllers = FindObjectsOfType<AIConversationController>();
+        // Get the player's position
+        Vector3 playerPosition = Camera.main.transform.position;
         
-        if (aiControllers == null || aiControllers.Length == 0)
-        {
-            Debug.LogWarning("No AIConversationController found in scene. Falling back to DialogueBoxController...");
-            
-            // Fallback to DialogueBoxController if no AIConversationController is found
-            DialogueBoxController dialogueBoxController = FindObjectOfType<DialogueBoxController>();
-            if (dialogueBoxController != null)
-            {
-                // Create a method to speak through DialogueBoxController
-                StartCoroutine(SpeakThroughDialogueController(dialogueBoxController, message));
-                Debug.Log("Used DialogueBoxController fallback to display idle message");
-            }
-            else
-            {
-                Debug.LogError("No DialogueBoxController found either. Cannot display idle message.");
-            }
-            
-            return;
-        }
+        // Find all AIConversationController components
+        AIConversationController[] aiControllers = FindObjectsOfType<AIConversationController>();
         
         // Find nearest NPC to camera/player
         AIConversationController nearestController = null;
         float nearestDistance = float.MaxValue;
-        Vector3 playerPosition = Camera.main.transform.position;
         
         foreach (AIConversationController controller in aiControllers)
         {
@@ -536,121 +532,273 @@ public class ActionManager : MonoBehaviour
             }
         }
         
-        if (nearestController != null)
+        // Check if we found a nearby NPC within the specified range
+        if (nearestController != null && nearestDistance <= maxNpcDetectionDistance)
         {
-            Debug.Log($"Found nearest NPC with AIConversationController: {nearestController.gameObject.name} at distance {nearestDistance}m");
+            Debug.Log($"Found nearby NPC: {nearestController.gameObject.name} at distance {nearestDistance}m");
             
-            // Get the DialogueBoxController that's on the same GameObject
+            // Use the existing NPC to speak the message
             DialogueBoxController dialogueBoxController = nearestController.GetComponent<DialogueBoxController>();
             if (dialogueBoxController != null)
             {
-                // Stop thinking animation if it's active
                 dialogueBoxController.stopThinking();
-                
-                // Method 1: Use SpeakLine private method through reflection
                 StartCoroutine(SpeakThroughDialogueController(dialogueBoxController, message));
-                
-                // Add the message to the NPC's conversation context
                 nearestController.AddMessage(new Message { role = "assistant", content = message });
-                
-                Debug.Log($"Successfully triggered idle speech through {nearestController.gameObject.name}");
+                Debug.Log($"Using existing NPC at {nearestDistance}m distance to deliver idle message");
             }
             else
             {
                 Debug.LogError($"DialogueBoxController not found on {nearestController.gameObject.name}");
+                SpawnChatbotAndSpeak(message, playerPosition);
             }
         }
         else
         {
-            Debug.LogWarning("No active AIConversationController found in scene");
+            // No NPC within range - spawn Chatbot
+            if (nearestController != null)
+            {
+                Debug.Log($"Nearest NPC is too far away ({nearestDistance}m > {maxNpcDetectionDistance}m). Spawning Chatbot instead.");
+            }
+            else
+            {
+                Debug.Log("No active NPCs found in scene. Spawning Chatbot instead.");
+            }
+            
+            SpawnChatbotAndSpeak(message, playerPosition);
         }
     }
     
     /// <summary>
-    /// Helper method to speak a message through a DialogueBoxController
-    /// Works by simulating what happens during normal NPC dialogue
+    /// Spawns the Chatbot prefab at an appropriate position near the player and makes it speak
     /// </summary>
-    private IEnumerator SpeakThroughDialogueController(DialogueBoxController dialogueController, string message)
+    /// <param name="message">The message for the Chatbot to speak</param>
+    /// <param name="playerPosition">The position of the player</param>
+    private void SpawnChatbotAndSpeak(string message, Vector3 playerPosition)
     {
-        // First, ensure dialogueBox is active
-        if (dialogueController._dialogueText != null)
+        if (chatbotPrefab == null)
         {
-            // Emulate how normal dialogue speaking works
+            Debug.LogError("Chatbot prefab is not assigned in the ActionManager!");
+            return;
+        }
+
+        // If we already have a Chatbot instance, use it
+        if (currentChatbotInstance != null && currentChatbotInstance.activeInHierarchy)
+        {
+            Debug.Log("Using existing Chatbot instance");
             
-            // 1. Set the text in the UI
-            dialogueController._dialogueText.text = message;
-            
-            // 2. Make the dialogue box visible
-            System.Reflection.FieldInfo dialogueBoxField = typeof(DialogueBoxController).GetField("_dialogueBox", 
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (dialogueBoxField != null)
+            // Position the existing Chatbot
+            PositionChatbotNearPlayer(currentChatbotInstance, playerPosition);
+        }
+        else
+        {
+            // Clean up any previous instance
+            if (currentChatbotInstance != null)
             {
-                GameObject dialogueBox = (GameObject)dialogueBoxField.GetValue(dialogueController);
-                if (dialogueBox != null) dialogueBox.SetActive(true);
+                Destroy(currentChatbotInstance);
             }
+
+            // Spawn a new Chatbot prefab in front of the player
+            currentChatbotInstance = Instantiate(chatbotPrefab);
+            Debug.Log("Spawned new Chatbot instance");
             
-            System.Reflection.FieldInfo dialogueCanvasField = typeof(DialogueBoxController).GetField("_dialogueCanvas", 
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (dialogueCanvasField != null)
+            // Position the Chatbot in front of the player
+            PositionChatbotNearPlayer(currentChatbotInstance, playerPosition);
+        }
+
+        // Make the Chatbot speak
+        DialogueBoxController chatbotDialog = currentChatbotInstance.GetComponent<DialogueBoxController>();
+        if (chatbotDialog != null)
+        {
+            StartCoroutine(SpeakThroughDialogueController(chatbotDialog, message));
+            
+            // If it has an AIConversationController, add the message to its conversation context
+            AIConversationController aiController = currentChatbotInstance.GetComponent<AIConversationController>();
+            if (aiController != null)
             {
-                GameObject dialogueCanvas = (GameObject)dialogueCanvasField.GetValue(dialogueController);
-                if (dialogueCanvas != null) dialogueCanvas.SetActive(true);
-            }
-            
-            // 3. Animation handling - set talking animation
-            Animator animator = dialogueController.GetComponentInChildren<Animator>();
-            if (animator != null)
-            {
-                animator.SetBool("isTalking", true);
-            }
-            
-            // 4. Use TTSSpeaker directly to speak the message
-            bool speechTriggered = false;
-            
-            // Try AI-specific speaking first
-            if (dialogueController._AIResponseToSpeech != null)
-            {
-                if (dialogueController.useWitAI)
-                {
-                    dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.WitAIDictate(message));
-                }
-                else
-                {
-                    dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.OpenAIDictate(message));
-                }
-                speechTriggered = true;
-                Debug.Log($"Speaking through AIResponseToSpeech with {(dialogueController.useWitAI ? "WitAI" : "OpenAI")} TTS");
-            }
-            // Fallback to standard TTSSpeaker
-            else if (dialogueController.TTSSpeaker != null)
-            {
-                var ttsSpeaker = dialogueController.TTSSpeaker.GetComponentInChildren<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
-                if (ttsSpeaker != null)
-                {
-                    ttsSpeaker.Speak(message);
-                    speechTriggered = true;
-                    Debug.Log("Speaking through standard TTSSpeaker");
-                }
-            }
-            
-            if (!speechTriggered)
-            {
-                Debug.LogError("Failed to trigger TTS speech - no working speech component found");
-            }
-            
-            // Wait for a reasonable time for the speech to finish
-            float estimatedDuration = Mathf.Max(3.0f, message.Length * 0.05f); // ~50ms per character, min 3 seconds
-            yield return new WaitForSeconds(estimatedDuration);
-            
-            // Reset talking animation
-            if (animator != null)
-            {
-                animator.SetBool("isTalking", false);
+                aiController.AddMessage(new Message { role = "assistant", content = message });
             }
         }
         else
         {
-            Debug.LogError("DialogueController has no _dialogueText component");
+            Debug.LogError("Chatbot prefab does not have a DialogueBoxController component!");
+        }
+    }
+    
+    /// <summary>
+    /// Positions the Chatbot in front of the player at an appropriate distance and height
+    /// Ensures the chatbot is visible regardless of terrain constraints
+    /// </summary>
+    private void PositionChatbotNearPlayer(GameObject chatbot, Vector3 playerPosition)
+    {
+        if (chatbot == null || Camera.main == null) return;
+        
+        // Get reference to player camera rig to position relative to it
+        GameObject playerRig = GameObject.FindWithTag("Player");
+        if (playerRig == null)
+        {
+            // Fallback to main camera if player rig not found
+            playerRig = Camera.main.gameObject;
+        }
+        
+        // Get player's head position and forward direction
+        Vector3 playerEyePosition = Camera.main.transform.position;
+        Vector3 playerForward = Camera.main.transform.forward;
+        playerForward.y = 0; // Flatten to horizontal plane
+        playerForward.Normalize();
+        
+        // Position the Chatbot 1.5 meters in front of the player and slightly to the side
+        float chatbotDistance = 1.5f;
+        float sideOffset = 0.3f; // Slight offset to the side so it's not directly in the way
+        
+        Vector3 spawnPosition = playerEyePosition + (playerForward * chatbotDistance);
+        spawnPosition += Camera.main.transform.right * sideOffset; // Offset to the right side
+        
+        // Make sure the Chatbot is at a proper height for visibility
+        float eyeHeight = playerEyePosition.y;
+        float chatbotHeight = eyeHeight - 0.3f; // Place slightly below eye level
+        spawnPosition.y = chatbotHeight;
+        
+        Debug.Log($"Attempting to position Chatbot at {spawnPosition}");
+        
+        // Check if this position would be valid (not inside terrain)
+        if (Physics.CheckSphere(spawnPosition, 0.2f, LayerMask.GetMask("Terrain", "Default")))
+        {
+            // Position is inside terrain/collider - try alternative positioning
+            Debug.Log("Initial position inside terrain/collider, trying alternative position");
+            
+            // Try positions at different offsets until we find a clear spot
+            float[] distanceOptions = { 1.2f, 1.8f, 2.5f, 3.0f };
+            float[] heightOptions = { -0.1f, -0.5f, 0f, 0.5f };
+            bool foundValidPosition = false;
+            
+            foreach (float distance in distanceOptions)
+            {
+                foreach (float heightOffset in heightOptions)
+                {
+                    Vector3 testPosition = playerEyePosition + (playerForward * distance);
+                    testPosition += Camera.main.transform.right * sideOffset;
+                    testPosition.y = eyeHeight + heightOffset;
+                    
+                    if (!Physics.CheckSphere(testPosition, 0.2f, LayerMask.GetMask("Terrain", "Default")))
+                    {
+                        spawnPosition = testPosition;
+                        foundValidPosition = true;
+                        Debug.Log($"Found valid position at distance {distance}m, height offset {heightOffset}m");
+                        break;
+                    }
+                }
+                if (foundValidPosition) break;
+            }
+            
+            // If we still can't find a good position, force teleport right in front of player
+            if (!foundValidPosition)
+            {
+                Debug.LogWarning("Could not find valid position - forcing teleport directly in front of player");
+                spawnPosition = playerEyePosition + (playerForward * 1.0f);
+                spawnPosition.y = playerEyePosition.y;
+            }
+        }
+        
+        // Check if the chatbot has a CharacterController and disable it temporarily to prevent position conflicts
+        CharacterController characterController = chatbot.GetComponent<CharacterController>();
+        if (characterController != null)
+        {
+            characterController.enabled = false;
+        }
+        
+        // Force navmeshagent to teleport if present
+        UnityEngine.AI.NavMeshAgent navAgent = chatbot.GetComponent<UnityEngine.AI.NavMeshAgent>();
+        if (navAgent != null)
+        {
+            navAgent.enabled = false;
+            chatbot.transform.position = spawnPosition;
+            StartCoroutine(ReenableNavAgent(navAgent, 0.2f));
+        }
+        else
+        {
+            // Direct position setting
+            chatbot.transform.position = spawnPosition;
+        }
+        
+        // Reset physics state and re-enable character controller after positioning
+        Rigidbody rb = chatbot.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.position = spawnPosition;
+        }
+        
+        if (characterController != null)
+        {
+            StartCoroutine(ReenableCharacterController(characterController, spawnPosition, 0.1f));
+        }
+        
+        // Make Chatbot look at player's horizontal position (don't tilt up/down)
+        Vector3 lookTarget = new Vector3(playerEyePosition.x, chatbot.transform.position.y, playerEyePosition.z);
+        chatbot.transform.LookAt(lookTarget);
+        
+        Debug.Log($"Successfully positioned Chatbot at {chatbot.transform.position}, facing player");
+    }
+    
+    /// <summary>
+    /// Re-enables a NavMeshAgent after a short delay
+    /// </summary>
+    private IEnumerator ReenableNavAgent(UnityEngine.AI.NavMeshAgent agent, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (agent != null)
+        {
+            // Save the current position before re-enabling the agent
+            Vector3 currentPosition = agent.transform.position;
+            
+            // Temporarily make the agent not auto-update its position
+            bool originalUpdatePosition = agent.updatePosition;
+            agent.updatePosition = false;
+            
+            // Re-enable the agent
+            agent.enabled = true;
+            
+            // For flying fish, we need to handle differently - check if we're on a NavMesh
+            if (!agent.isOnNavMesh)
+            {
+                // Option 1: Keep the agent disabled if we're not on NavMesh
+                // This works for flying fish that don't need navigation
+                Debug.LogWarning("NavMeshAgent enabled but not on NavMesh. Disabling NavMeshAgent for flying fish.");
+                agent.enabled = false;
+                
+                // Check if this is a fish that should fly
+                SimpleFishController fishController = agent.GetComponent<SimpleFishController>();
+                if (fishController != null)
+                {
+                    // This is a fish - make sure it can fly and follows player
+                    fishController.SetFlyingEnabled(true);
+                    fishController.SetFollowPlayerEnabled(true);
+                    Debug.Log("Fish controller detected - enabled flying mode");
+                }
+            }
+            else
+            {
+                // We're on a valid NavMesh - restore the position explicitly
+                agent.Warp(currentPosition);
+                Debug.Log("Re-enabled NavMeshAgent after positioning");
+            }
+            
+            // Restore the agent's settings
+            agent.updatePosition = originalUpdatePosition;
+        }
+    }
+    
+    /// <summary>
+    /// Re-enables a CharacterController after positioning
+    /// </summary>
+    private IEnumerator ReenableCharacterController(CharacterController controller, Vector3 position, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (controller != null)
+        {
+            controller.enabled = true;
+            Debug.Log("Re-enabled CharacterController after positioning");
         }
     }
 
@@ -686,5 +834,242 @@ public class ActionManager : MonoBehaviour
     public UploadDataDTO GetUploadData()
     {
         return uploadData;
+    }
+
+    /// <summary>
+    /// Helper method to speak a message through a DialogueBoxController
+    /// Works by simulating what happens during normal NPC dialogue
+    /// </summary>
+    private IEnumerator SpeakThroughDialogueController(DialogueBoxController dialogueController, string message)
+    {
+        // First, ensure dialogueBox is active
+        if (dialogueController._dialogueText != null)
+        {
+            // Emulate how normal dialogue speaking works
+            
+            // 1. Set the text in the UI
+            dialogueController._dialogueText.text = message;
+            
+            // 2. Make the dialogue box visible
+            System.Reflection.FieldInfo dialogueBoxField = typeof(DialogueBoxController).GetField("_dialogueBox", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (dialogueBoxField != null)
+            {
+                GameObject dialogueBox = (GameObject)dialogueBoxField.GetValue(dialogueController);
+                if (dialogueBox != null) dialogueBox.SetActive(true);
+            }
+            
+            System.Reflection.FieldInfo dialogueCanvasField = typeof(DialogueBoxController).GetField("_dialogueCanvas", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (dialogueCanvasField != null)
+            {
+                GameObject dialogueCanvas = (GameObject)dialogueCanvasField.GetValue(dialogueController);
+                if (dialogueCanvas != null) dialogueCanvas.SetActive(true);
+            }
+            
+            // 3. Animation handling - set talking animation
+            // First check for fish controller (for fish NPCs)
+            SimpleFishController fishController = dialogueController.GetComponentInChildren<SimpleFishController>();
+            if (fishController != null)
+            {
+                fishController.SetTalking(true);
+                Debug.Log("Set fish talking animation via SimpleFishController");
+            }
+            // Next try FishAnimatorController which safely handles missing parameters
+            else
+            {
+                FishAnimatorController fishAnimController = dialogueController.GetComponentInChildren<FishAnimatorController>();
+                if (fishAnimController != null)
+                {
+                    fishAnimController.OnTalkAnimationStarted();
+                    Debug.Log("Set fish talking animation via FishAnimatorController");
+                }
+                // Last resort - try regular Animator with parameter safety check
+                else
+                {
+                    Animator animator = dialogueController.GetComponentInChildren<Animator>();
+                    if (animator != null)
+                    {
+                        try
+                        {
+                            // Check if parameter exists before setting it
+                            if (HasAnimatorParameter(animator, "isTalking"))
+                            {
+                                animator.SetBool("isTalking", true);
+                                Debug.Log("Set isTalking animation parameter");
+                            }
+                            else if (HasAnimatorParameter(animator, "Talk"))
+                            {
+                                animator.SetTrigger("Talk");
+                                Debug.Log("Set Talk animation trigger");
+                            }
+                            else
+                            {
+                                Debug.LogWarning("Could not find animation parameter for talking (isTalking or Talk)");
+                            }
+                        }
+                        catch (System.Exception ex)
+                        {
+                            Debug.LogWarning($"Could not set Animator parameter: {ex.Message}");
+                        }
+                    }
+                }
+            }
+            
+            // 4. Use TTSSpeaker directly to speak the message
+            bool speechTriggered = false;
+            
+            // Try AI-specific speaking first
+            if (dialogueController._AIResponseToSpeech != null)
+            {
+                try
+                {
+                    if (dialogueController.useWitAI)
+                    {
+                        dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.WitAIDictate(message));
+                    }
+                    else
+                    {
+                        dialogueController.StartCoroutine(dialogueController._AIResponseToSpeech.OpenAIDictate(message));
+                    }
+                    speechTriggered = true;
+                    Debug.Log($"Speaking through AIResponseToSpeech with {(dialogueController.useWitAI ? "WitAI" : "OpenAI")} TTS");
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"Error using AIResponseToSpeech: {ex.Message}");
+                }
+            }
+            // Fallback to standard TTSSpeaker
+            if (!speechTriggered && dialogueController.TTSSpeaker != null)
+            {
+                var ttsSpeaker = dialogueController.TTSSpeaker.GetComponent<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
+                if (ttsSpeaker == null)
+                {
+                    ttsSpeaker = dialogueController.TTSSpeaker.GetComponentInChildren<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
+                }
+                
+                if (ttsSpeaker != null)
+                {
+                    try
+                    {
+                        ttsSpeaker.Speak(message);
+                        speechTriggered = true;
+                        Debug.Log("Speaking through standard TTSSpeaker");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"Error using TTSSpeaker: {ex.Message}");
+                    }
+                }
+            }
+            
+            // Deeper search for TTSSpeaker on the GameObject and its parents
+            if (!speechTriggered)
+            {
+                // First try on this game object
+                var ttsSpeaker = dialogueController.gameObject.GetComponentInChildren<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
+                if (ttsSpeaker != null)
+                {
+                    try
+                    {
+                        ttsSpeaker.Speak(message);
+                        speechTriggered = true;
+                        Debug.Log("Speaking through found TTSSpeaker component");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"Error using found TTSSpeaker: {ex.Message}");
+                    }
+                }
+                
+                // Try parent objects if needed
+                if (!speechTriggered)
+                {
+                    ttsSpeaker = dialogueController.gameObject.GetComponentInParent<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
+                    if (ttsSpeaker != null)
+                    {
+                        try
+                        {
+                            ttsSpeaker.Speak(message);
+                            speechTriggered = true;
+                            Debug.Log("Speaking through parent TTSSpeaker component");
+                        }
+                        catch (System.Exception ex)
+                        {
+                            Debug.LogError($"Error using parent TTSSpeaker: {ex.Message}");
+                        }
+                    }
+                }
+                
+                // Last resort - create a temporary audio source as fallback
+                if (!speechTriggered)
+                {
+                    Debug.LogError("Failed to trigger TTS speech - no working speech component found. Using fallback audio.");
+                    AudioSource tempAudio = dialogueController.gameObject.AddComponent<AudioSource>();
+                    tempAudio.PlayOneShot(AudioClip.Create("beep", 4410, 1, 44100, false));
+                    Destroy(tempAudio, 2f); // Remove after playing
+                }
+            }
+            
+            // Wait for a reasonable time for the speech to finish
+            float estimatedDuration = Mathf.Max(3.0f, message.Length * 0.05f); // ~50ms per character, min 3 seconds
+            yield return new WaitForSeconds(estimatedDuration);
+            
+            // Reset talking animation using the same hierarchy of controllers we used to start it
+            if (fishController != null)
+            {
+                fishController.SetTalking(false);
+            }
+            else
+            {
+                FishAnimatorController fishAnimController = dialogueController.GetComponentInChildren<FishAnimatorController>();
+                if (fishAnimController != null)
+                {
+                    fishAnimController.OnTalkAnimationEnded();
+                }
+                else
+                {
+                    Animator animator = dialogueController.GetComponentInChildren<Animator>();
+                    if (animator != null)
+                    {
+                        try
+                        {
+                            if (HasAnimatorParameter(animator, "isTalking"))
+                            {
+                                animator.SetBool("isTalking", false);
+                            }
+                        }
+                        catch (System.Exception) { }
+                    }
+                }
+            }
+
+            // Notify the ChatbotController if present
+            ChatbotController chatbotController = dialogueController.GetComponent<ChatbotController>();
+            if (chatbotController != null)
+            {
+                chatbotController.OnSpeechFinished();
+            }
+        }
+        else
+        {
+            Debug.LogError("DialogueController has no _dialogueText component");
+        }
+    }
+    
+    /// <summary>
+    /// Helper method to check if an animator has a parameter
+    /// </summary>
+    private bool HasAnimatorParameter(Animator animator, string paramName)
+    {
+        if (animator == null) return false;
+        
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.name == paramName)
+                return true;
+        }
+        return false;
     }
 }

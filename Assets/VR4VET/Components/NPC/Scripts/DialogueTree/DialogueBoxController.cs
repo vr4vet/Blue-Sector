@@ -94,9 +94,26 @@ public class DialogueBoxController : MonoBehaviour
         if (_skipLineButton == null) Debug.LogError("DialogueBoxController: _skipLineButton not assigned!", this);
         if (_exitButton == null) Debug.LogError("DialogueBoxController: _exitButton not assigned!", this); // Assuming still used by non-AI?
         if (_speakButton == null) Debug.LogError("DialogueBoxController: _speakButton not assigned!", this);
-        if (holdBToTalkMessage == null) Debug.LogWarning("DialogueBoxController: holdBToTalkMessage not assigned. AI interrupt message won't show.", this);
+        
+        // Create a fallback for the hold to talk message if not assigned
+        if (holdBToTalkMessage == null) 
+        {
+            Debug.LogWarning("DialogueBoxController: holdBToTalkMessage not assigned. Creating a simple fallback.", this);
+            // Check if we can find a child object that might serve as the hold message
+            Transform msgTransform = transform.Find("HoldBToTalkMessage");
+            if (msgTransform != null && msgTransform.GetComponent<SpriteRenderer>() != null)
+            {
+                holdBToTalkMessage = msgTransform.GetComponent<SpriteRenderer>();
+                Debug.Log("Found holdBToTalkMessage in children: " + msgTransform.name);
+            }
+            else
+            {
+                // We can't show the message, but we won't block functionality
+                Debug.LogWarning("Could not find a suitable replacement for holdBToTalkMessage. AI interrupt prompt won't be visible.");
+            }
+        }
+        
         if (_restartConversationButton == null) Debug.LogWarning("DialogueBoxController: _restartConversationButton not assigned. AI restart function won't show.", this);
-
 
         ResetBox(); // Initial UI state
     }

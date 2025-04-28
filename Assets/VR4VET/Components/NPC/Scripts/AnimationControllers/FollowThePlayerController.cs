@@ -48,6 +48,24 @@ public class FollowThePlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Check if target is available
+        if (_target == null) return;
+        
+        // Check if NavMeshAgent is still valid
+        if (_agent == null || !_agent.isActiveAndEnabled)
+        {
+            // Try to get NavMeshAgent if it was missing
+            if (_agent == null)
+            {
+                _agent = GetComponent<NavMeshAgent>();
+                if (_agent == null) return; // Still missing, so exit
+            }
+            else if (!_agent.isActiveAndEnabled)
+            {
+                return; // Agent is disabled, so exit to prevent errors
+            }
+        }
+
         float distance = Vector3.Distance(_target.position, transform.position);
         if (_animator != null)
         {
@@ -58,11 +76,24 @@ public class FollowThePlayerController : MonoBehaviour
                 {
                     Vector3 direction = (_target.position - transform.position).normalized;
                     _agent.SetDestination(_target.position - direction * PersonalSpaceFactor);
-                    _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
+                    
+                    // Check agent velocity is valid before using it
+                    if (_agent.isActiveAndEnabled)
+                    {
+                        _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
+                    }
                 }
                 else
                 {
-                    _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
+                    // Check agent velocity is valid before using it
+                    if (_agent.isActiveAndEnabled)
+                    {
+                        _animator.SetFloat(_velocityYHash, _agent.velocity.magnitude);
+                    }
+                    else
+                    {
+                        _animator.SetFloat(_velocityYHash, 0);
+                    }
                 }
             }
         } else {

@@ -105,7 +105,16 @@ public class ConversationController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"ConversationController on {transform.parent?.name}: No dialogue trees assigned.", this);
+            // Check if this is an AI NPC (chatbot) which might not need dialogue trees
+            if (_AIConversationController != null)
+            {
+                // For AI NPCs like chatbot, no dialogue trees is a valid configuration
+                Debug.Log($"ConversationController on {transform.parent?.name}: AI NPC with no dialogue trees. Will use AI conversation only.");
+            }
+            else
+            {
+                Debug.LogWarning($"ConversationController on {transform.parent?.name}: No dialogue trees assigned.", this);
+            }
         }
     }
 
