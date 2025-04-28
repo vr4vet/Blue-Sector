@@ -64,10 +64,18 @@ public class  LLMResponse
     public Usage usage;
     public string system_fingerprint;
 
+    public FunctionCall function_call;
     public string response => choices?.FirstOrDefault()?.message.content;
 
     public List<string> context_used;
     public Dictionary<string, object> metadata;
+}
+
+[Serializable]
+public class FunctionCall
+{
+    public string function_name;
+    public string[] function_parameters;
 }
 
 [Serializable]

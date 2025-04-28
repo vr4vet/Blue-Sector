@@ -63,7 +63,7 @@ public class SceneController : MonoBehaviour
     /// Change the scene. If the player is currently in the HSE room the requirements has to be fulfilled first.
     /// </summary>
     /// <param name="scene">The name of the scene to change to</param>
-    private void ChangeScene(string scene)
+    public void ChangeScene(string scene)
     {
 
         // Check if the player is in the HSE room and if the requirements are fulfilled. Player should only be able to progress after the HSE room is completed or if going to a non-factory scene.
