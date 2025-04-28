@@ -298,16 +298,9 @@ public class SimpleFishController : MonoBehaviour
             }
         }
         
-        // Calculate position directly in front of player - very limited randomness
-        // This keeps the fish more consistently in front of the player
-        float smallRandomAngle = Random.Range(-15f, 15f); // Much smaller random angle
-        Vector3 randomizedDirection = Quaternion.Euler(0, smallRandomAngle, 0) * playerForward;
-        
-        // Position fish in front of player
-        Vector3 targetPos = playerPosition + randomizedDirection * distance;
-        
-        // Add slight side offset so fish isn't directly blocking view (smaller offset)
-        targetPos += playerTransform.right * Random.Range(-0.3f, 0.3f);
+        // Calculate position directly in front of player - NO randomness
+        // This keeps the fish stable in front of the player
+        Vector3 targetPos = playerPosition + playerForward * distance;
         
         // Set proper height
         float eyeHeight = playerPosition.y;

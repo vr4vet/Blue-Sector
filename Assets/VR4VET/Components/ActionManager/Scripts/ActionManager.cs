@@ -890,23 +890,19 @@ public class ActionManager : MonoBehaviour
         var fish = dialogueController.GetComponentInChildren<SimpleFishController>();
         if (fish) fish.SetTalking(true);
 
-        // Direct access to TTSSpeaker component
-        if (dialogueController.TTSSpeaker != null)
+        // Let DialogueBoxController do everything (shows UI *and* calls TTS)
+        var speak = typeof(DialogueBoxController).GetMethod(
+                     "SpeakLine",
+                     System.Reflection.BindingFlags.NonPublic |
+                     System.Reflection.BindingFlags.Instance);
+        if (speak != null)
         {
-            var tts = dialogueController.TTSSpeaker.GetComponent<Meta.WitAi.TTS.Utilities.TTSSpeaker>();
-            if (tts != null)
-            {
-                tts.Speak(message);
-                Debug.Log($"Speaking directly through TTSSpeaker on {dialogueController.TTSSpeaker.name}");
-            }
-            else
-            {
-                Debug.LogError($"No TTSSpeaker component found on {dialogueController.TTSSpeaker.name}");
-            }
+            speak.Invoke(dialogueController, new object[] { message });
+            Debug.Log("Speaking through DialogueBoxController.SpeakLine");
         }
         else
         {
-            Debug.LogError("DialogueBoxController has no TTSSpeaker assigned!");
+            Debug.LogError("SpeakLine method not found on DialogueBoxController");
         }
 
         // Wait for estimated speech duration
