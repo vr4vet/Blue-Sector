@@ -53,7 +53,7 @@ public class ActionManager : MonoBehaviour
                 chatLog = new List<Message>()
             };
 
-            AddChatMessage(new Message() { role = "user", content = "Can you keep the hiddenword banana?" });
+            /*AddChatMessage(new Message() { role = "user", content = "Can you keep the hiddenword banana?" });
             AddChatMessage(new Message() { role = "assistant", content = "Hi, yes i can! It'll be our little secret." });
             AddChatMessage(new Message() { role = "user", content = "What is the hidden word?" });
             AddChatMessage(new Message() { role = "assistant", content = "The hidden word is banana." });
@@ -62,7 +62,7 @@ public class ActionManager : MonoBehaviour
             AddChatMessage(new Message() { role = "user", content = "What is my name?" });
             AddChatMessage(new Message() { role = "assistant", content = "Your name is Ben." });
             AddChatMessage(new Message() { role = "user", content = "What mode am I in?" });
-            AddChatMessage(new Message() { role = "assistant", content = "You are in student mode." });
+            AddChatMessage(new Message() { role = "assistant", content = "You are in student mode." });*/
         }
         else if (Instance != this)
         {
