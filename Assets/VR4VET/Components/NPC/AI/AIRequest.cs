@@ -255,14 +255,14 @@ public class AIRequest : MonoBehaviour
     private void TeleportPlayer(string location)
     {
         Debug.Log($"Teleporting player to {location}");
-        SceneController sceneController = FindObjectOfType<SceneController>();
-        if (sceneController != null)
+        AISceneController aiSceneController = GetComponent<AISceneController>();
+        if (aiSceneController != null)
         {
-            sceneController.ChangeScene(location);
+            aiSceneController.ChangeScene(location);
         }
         else
         {
-            Debug.LogError("SceneController not found. Cannot teleport player.");
+            Debug.LogError("AISceneController not found. Cannot teleport player.");
         }
     }
 }

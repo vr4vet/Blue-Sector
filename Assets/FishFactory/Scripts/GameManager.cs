@@ -290,8 +290,14 @@ public class GameManager : MonoBehaviour
             case "door":
                 audioSource.clip = _soundEffects[3];
                 break;
+            case "metal":
+                audioSource.clip = _soundEffects[4];
+                break;
             case "MotorBoatDriving":
                 audioSource.clip = _soundEffects[5];
+                break;
+            case "drop-reverse":
+                audioSource.clip = _soundEffects[6];
                 break;
         }
         audioSource.Play();

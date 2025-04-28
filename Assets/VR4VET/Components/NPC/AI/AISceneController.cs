@@ -4,27 +4,16 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using BNG;
 
-public class SceneController : MonoBehaviour
+public class AISceneController : MonoBehaviour
 {
     // ----------------- Editor Fields -----------------
 
-    [Header("Scene Controller")]
-    [Tooltip("The name of the scene to change to")]
-    [SerializeField]
-    private string sceneName;
-    public string SceneName
-    {
-        set { sceneName = value; }
-        get { return sceneName; }
-    }
-
     [Tooltip("Whether the trigger is a door or boat. The appropriate sound is played.")]
     [SerializeField]
-    private MeansOfTransportation meansOfTransportation = MeansOfTransportation.Door;
+    private MeansOfTransportation meansOfTransportation = MeansOfTransportation.Teleport;
     private enum MeansOfTransportation
     {
-        Door,
-        Boat
+        Teleport
     }
 
     [Tooltip("The loading screen that appears when a new scene is loading.")]
@@ -34,28 +23,6 @@ public class SceneController : MonoBehaviour
 
     public UnityEvent OnChangeScene;
 
-    // ----------------- Unity Functions -----------------
-
-    /// <summary>
-    /// When the player collides with the scene controller, change the scene
-    /// </summary>
-    /// <param name="collisionObject">The player collider</param>
-    private void OnTriggerEnter(Collider collisionObject)
-    {
-        if (sceneName != "" && sceneName != null)
-        {
-            if (
-                meansOfTransportation == MeansOfTransportation.Door && collisionObject.gameObject.name == "Grabber" 
-                || 
-                meansOfTransportation == MeansOfTransportation.Boat && collisionObject.gameObject.CompareTag("Player")
-                )
-            {
-                OnChangeScene.Invoke();
-                ChangeScene(sceneName);
-                Debug.Log("Player entered");
-            }
-        }
-    }
 
     // ----------------- Private Functions -----------------
 
@@ -63,7 +30,7 @@ public class SceneController : MonoBehaviour
     /// Change the scene. If the player is currently in the HSE room the requirements has to be fulfilled first.
     /// </summary>
     /// <param name="scene">The name of the scene to change to</param>
-    private void ChangeScene(string scene)
+    public void ChangeScene(string scene)
     {
 
         // Check if the player is in the HSE room and if the requirements are fulfilled. Player should only be able to progress after the HSE room is completed or if going to a non-factory scene.
@@ -79,16 +46,14 @@ public class SceneController : MonoBehaviour
 
         // Set the target location (exit door) the player should be placed by after the scene change
         SetPlayerTargetLocation(scene);
-        
+
         // Adds a delegate to trigger when the scene is loaded
         // The delegate will move the player to the correct location
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         // Play the appropriate transportation sound
-        if (meansOfTransportation == MeansOfTransportation.Door)
-            GameManager.Instance.PlaySound("door");
-        if (meansOfTransportation == MeansOfTransportation.Boat)
-            GameManager.Instance.PlaySound("MotorBoatDriving");
+        if (meansOfTransportation == MeansOfTransportation.Teleport)
+            GameManager.Instance.PlaySound("drop-reverse");
 
         // Load scene
         // Display loading screen if set in inspector
