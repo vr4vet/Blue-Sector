@@ -14,18 +14,19 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     [SerializeReference] GameObject SubtaskAboutMenu;
     [SerializeReference] GameObject SkillListMenu;
     [SerializeReference] GameObject NotificationAlertMenu;
+    [SerializeReference] GameObject TaskSummaryPanel;
 
     private AddInstructionsToWatch watch;
     private MaintenanceManager manager;
     private WatchManager watchManager;
     private List<GameObject> allMenus = new();
 
-    private bool taskPageOpen = false; 
+    private bool taskPageOpen = false;
     private bool subtaskPageOpen = false;
 
     void Start()
     {
-        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu });
+        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu, TaskSummaryPanel });
         watchManager = WatchManager.Instance;
 
         foreach (var item in allMenus)
@@ -41,7 +42,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             manager.CurrentSubtask.AddListener(OnCurrentSubtaskChanged);
             manager.SkillCompleted.AddListener(OnSkillCompleted);
         }
-        else 
+        else
         {
             watchManager.CurrentSubtask.AddListener(OnCurrentSubtaskChanged);
             watchManager.SkillCompleted.AddListener(OnSkillCompleted);
@@ -85,7 +86,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             TaskListMenu.SetActive(false);
             taskPageOpen = false;
             watchManager.UIChanged.Invoke();
-            return; 
+            return;
         }
     }
 
@@ -109,7 +110,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             TaskAboutMenu.SetActive(false);
             subtaskPageOpen = false;
             watchManager.UIChanged.Invoke();
-            return; 
+            return;
         }
     }
 
@@ -152,6 +153,18 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         watchManager.UIChanged.Invoke();
     }
 
+    public void OnClickShowTaskSummary()
+    {
+        SwitchMenuTo(TaskSummaryPanel);
+        watchManager.UIChanged.Invoke();
+
+
+    }
+
+    public void OnClickBackFromTaskSummary()
+    {
+        OnClickMenuTask();
+    }
     public void SetAlertMenu()
     {
         if (gameObject.activeInHierarchy)

@@ -397,7 +397,7 @@ public class ActionManager : MonoBehaviour
 
         Debug.Log(summary.ToString());
 
-        // Store the summary in user actions for later review
+        // Store the summary
         uploadData.user_actions.Add("TASK_SUMMARY: " + summary.ToString());
     }
     private void Update()
