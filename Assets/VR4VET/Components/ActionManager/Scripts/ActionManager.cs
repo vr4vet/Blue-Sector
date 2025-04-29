@@ -11,6 +11,7 @@ using ProgressDTO;
 using UnityEngine.SceneManagement;
 
 
+
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
 /// </summary>
@@ -21,6 +22,7 @@ public class ActionManager : MonoBehaviour
     private UploadDataDTO uploadData;
     private List<Message> globalChatLogs;
     private List<Task.Task> taskList;
+    public bool _isAiNpcToggled;
 
     // Reference to the idle timer
     private IdleTimer idleTimer;
@@ -39,6 +41,8 @@ public class ActionManager : MonoBehaviour
             globalChatLogs = new List<Message>();
             taskList = new List<Task.Task>();
             idleTimer = GetComponent<IdleTimer>();
+            _isAiNpcToggled = false;
+
             if (idleTimer == null)
             {
                 Debug.LogWarning("IdleTimer component not found on ActionManager GameObject");
@@ -81,6 +85,7 @@ public class ActionManager : MonoBehaviour
         uploadData = oldInstance.uploadData;
         globalChatLogs = oldInstance.globalChatLogs;
         taskList = oldInstance.taskList;
+        _isAiNpcToggled = oldInstance._isAiNpcToggled;
     }
 
     /// <summary>
@@ -153,9 +158,7 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object grabbed: {grabbable.name}");
 
         uploadData.user_actions.Add("grabbed: " + grabbable.name);
-        Debug.Log($"Before shortening actions count: {uploadData.user_actions.Count}");
         ShortenList(uploadData.user_actions, 20);
-        Debug.Log($"After shortening actions count: {uploadData.user_actions.Count}");
         // Reset idle timer when user grabs an object
         idleTimer?.ResetIdleTimer();
     }
@@ -173,10 +176,8 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
 
         // Add to the user actions list with position information
-        Debug.Log($"Before shortening actions count: {uploadData.user_actions.Count}");
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
         ShortenList(uploadData.user_actions, 20); // Keep the last 20 actions in the list
-        Debug.Log($"After shortening actions count: {uploadData.user_actions.Count}");
         /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
 
 
@@ -413,4 +414,10 @@ public class ActionManager : MonoBehaviour
         }
         
     }
+
+    public void SetToggleBool(bool toggle)
+    {
+        _isAiNpcToggled = toggle;
+    }
+
 }
