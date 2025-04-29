@@ -33,6 +33,11 @@ public class ActionManager : MonoBehaviour
     [Tooltip("Maximum distance in meters to check for nearby NPCs")]
     private float maxNpcDetectionDistance = 4f;
     
+    // Reference to a default DialogueTree for the Chatbot
+    [SerializeField]
+    [Tooltip("Default DialogueTree to use for dynamically spawned Chatbot")]
+    private DialogueTree chatbotDialogueTree;
+    
     // Reference to the currently spawned chatbot instance
     private GameObject currentChatbotInstance;
 
@@ -643,6 +648,33 @@ public class ActionManager : MonoBehaviour
             
             // Position the Chatbot in front of the player
             PositionChatbotNearPlayer(currentChatbotInstance, playerPosition);
+            
+            // Set up the ConversationController with a DialogueTree
+            ConversationController conversationController = currentChatbotInstance.GetComponentInChildren<ConversationController>();
+            if (conversationController != null)
+            {
+                if (chatbotDialogueTree != null)
+                {
+                    // Use the serialized DialogueTree
+                    Debug.Log("Assigning DialogueTree to Chatbot's ConversationController");
+                    conversationController.SetDialogueTreeList(chatbotDialogueTree);
+                }
+                else
+                {
+                    Debug.LogWarning("No DialogueTree assigned in ActionManager! Chatbot may not show dialogue properly.");
+                }
+                
+                // Check for DialogueCanvas - enable if found
+                Transform dialogueCanvas = currentChatbotInstance.transform.Find("DialogueCanvasV2");
+                if (dialogueCanvas != null)
+                {
+                    dialogueCanvas.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                Debug.LogError("No ConversationController found on Chatbot prefab!");
+            }
         }
 
         // Make the Chatbot speak
