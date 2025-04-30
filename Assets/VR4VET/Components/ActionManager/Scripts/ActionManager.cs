@@ -24,6 +24,8 @@ public class ActionManager : MonoBehaviour
     // Reference to the idle timer
     private IdleTimer idleTimer;
 
+    private string latestSummary;
+
     /// <summary>
     /// Creates a singleton object of the ActionManager.
     /// Adds mock userdata.
@@ -346,6 +348,11 @@ public class ActionManager : MonoBehaviour
         }
     }
 
+    public string LatestSummary
+    {
+        get { return latestSummary; }
+    }
+
     private void TaskSummary()
     {
         StringBuilder summary = new StringBuilder();
@@ -396,6 +403,8 @@ public class ActionManager : MonoBehaviour
         summary.AppendLine($"Steps: {completedSteps}/{totalSteps} completed ({(totalSteps > 0 ? (completedSteps * 100f / totalSteps).ToString("0.0") : "0")}%)");
 
         Debug.Log(summary.ToString());
+
+        latestSummary = summary.ToString();
 
         // Store the summary
         uploadData.user_actions.Add("TASK_SUMMARY: " + summary.ToString());
