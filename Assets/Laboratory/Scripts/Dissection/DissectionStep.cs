@@ -55,7 +55,6 @@ public class DissectionStep : MonoBehaviour
         {
             if (_currentCutPoint < transforms.Count && Vector3.Distance(transforms[_currentCutPoint].position, _scalpel.transform.position) < .01f) // cut if close enough to current cutpoint in path
             {
-                Debug.Log("Cut");
                 UpdateCutline(_currentCutPoint);
                 _currentCutPoint++;
             }
