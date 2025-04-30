@@ -37,7 +37,13 @@ namespace UploadDTO
 
         /// <summary>
         /// The chat history between user and current NPC.
-        /// /summary>
+        /// </summary>
         public List<Message> chatLog;
+
+        /// <summary>
+        /// The type of idle prompt to use ('initial' or 'interval').
+        /// Initial is used for the first idle detection, interval for subsequent ones.
+        /// </summary>
+        public string idle_type;
     }
 }

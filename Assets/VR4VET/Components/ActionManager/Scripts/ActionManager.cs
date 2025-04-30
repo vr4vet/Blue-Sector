@@ -384,14 +384,34 @@ public class ActionManager : MonoBehaviour
         // For now we're using 0 as default
         uploadData.NPC = 0;
         
+        // Track whether this is the first idle notification by counting idle messages
+        bool isFirstIdleNotification = CountIdleMessages() <= 1;
+        
         // Send the data to the chat service and handle the response
-        StartCoroutine(SendIdlePromptToLLM(uploadData));
+        StartCoroutine(SendIdlePromptToLLM(uploadData, isFirstIdleNotification));
+    }
+    
+    /// <summary>
+    /// Count how many idle-related messages exist in the chat log
+    /// </summary>
+    private int CountIdleMessages()
+    {
+        int count = 0;
+        foreach (var message in globalChatLogs)
+        {
+            if (message.role == "user" && message.content.Contains("idle") && 
+                (message.content.Contains("minutes") || message.content.Contains("seconds")))
+            {
+                count++;
+            }
+        }
+        return count;
     }
     
     /// <summary>
     /// Sends an idle prompt to the LLM and handles the response
     /// </summary>
-    private IEnumerator SendIdlePromptToLLM(UploadDataDTO data)
+    private IEnumerator SendIdlePromptToLLM(UploadDataDTO data, bool isFirstIdleNotification)
     {
         // Ensure required fields are set before sending
         if (data.chatLog == null || data.chatLog.Count == 0)
@@ -408,9 +428,14 @@ public class ActionManager : MonoBehaviour
             data.scene_name = SceneManager.GetActiveScene().name;
             Debug.Log($"Setting scene_name to active scene: {data.scene_name}");
         }
+        
+        // Set the idle_type based on whether this is the first idle notification or a subsequent one
+        // This is the key addition to fix the issue with idle_type being None
+        data.idle_type = isFirstIdleNotification ? "initial" : "interval";
+        Debug.Log($"Setting idle_type to '{data.idle_type}' for idle notification");
 
         // Log the data being sent for debugging
-        Debug.Log($"Sending idle prompt with {data.chatLog.Count} chat messages and {data.user_actions.Count} user actions");
+        Debug.Log($"Sending idle prompt with {data.chatLog.Count} chat messages, {data.user_actions.Count} user actions, and idle_type: {data.idle_type}");
         
         // Convert to JSON and log for debugging
         string json = "";
