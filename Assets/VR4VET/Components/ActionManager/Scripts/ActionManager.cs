@@ -356,10 +356,9 @@ public class ActionManager : MonoBehaviour
     private void TaskSummary()
     {
         StringBuilder summary = new StringBuilder();
-        summary.AppendLine("=== TASK PROGRESS SUMMARY ===");
-        summary.AppendLine($"Time: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+        summary.AppendLine("<b>=== TASK PROGRESS SUMMARY ===</b>");
+        summary.AppendLine($"<b>Time: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}</b>");
         summary.AppendLine();
-        // Debug.Log($"Task list contains {(taskList == null ? "NULL" : taskList.Count.ToString())} tasks");
 
         int completedTasks = 0;
         int totalTasks = taskList.Count;
@@ -374,7 +373,9 @@ public class ActionManager : MonoBehaviour
             bool taskCompleted = task.Compleated();
             if (taskCompleted) completedTasks++;
 
-            summary.AppendLine($"Task: {task.TaskName} - {(taskCompleted ? "COMPLETED" : "IN PROGRESS")}");
+            // Color task names based on completion status
+            string taskColor = taskCompleted ? "#3CB371" : "#DDAA00"; // Green for completed, Yellow for in progress
+            summary.AppendLine($"Task: <color={taskColor}><i>{task.TaskName}</i></color>");
 
             foreach (var subtask in task.Subtasks)
             {
@@ -382,7 +383,9 @@ public class ActionManager : MonoBehaviour
                 bool subtaskCompleted = subtask.Compleated();
                 if (subtaskCompleted) completedSubtasks++;
 
-                summary.AppendLine($"  Subtask: {subtask.SubtaskName} - {(subtaskCompleted ? "COMPLETED" : "IN PROGRESS")}");
+                // Color subtask names based on completion status
+                string subtaskColor = subtaskCompleted ? "#3CB371" : "#DDAA00";
+                summary.AppendLine($"  Subtask: <color={subtaskColor}><i>{subtask.SubtaskName}</i></color>");
 
                 foreach (var step in subtask.StepList)
                 {
@@ -390,32 +393,45 @@ public class ActionManager : MonoBehaviour
                     bool stepCompleted = step.IsCompeleted();
                     if (stepCompleted) completedSteps++;
 
-                    summary.AppendLine($"    Step: {step.StepName} - {(stepCompleted ? "COMPLETED" : "PENDING")}");
+                    // Color step names based on completion status
+                    string stepColor = stepCompleted ? "#3CB371" : "#FF0000"; // Green for completed, Red for pending
+                    summary.AppendLine($"    Step: <color={stepColor}><i>{step.StepName}</i></color>");
                 }
             }
             summary.AppendLine();
         }
 
-        // Add summary statistics
-        summary.AppendLine("=== PROGRESS STATISTICS ===");
-        summary.AppendLine($"Tasks: {completedTasks}/{totalTasks} completed ({(totalTasks > 0 ? (completedTasks * 100f / totalTasks).ToString("0.0") : "0")}%)");
-        summary.AppendLine($"Subtasks: {completedSubtasks}/{totalSubtasks} completed ({(totalSubtasks > 0 ? (completedSubtasks * 100f / totalSubtasks).ToString("0.0") : "0")}%)");
-        summary.AppendLine($"Steps: {completedSteps}/{totalSteps} completed ({(totalSteps > 0 ? (completedSteps * 100f / totalSteps).ToString("0.0") : "0")}%)");
+        // Add summary statistics with colors - bold header, normal text for statistics
+        summary.AppendLine("<b>=== PROGRESS STATISTICS ===</b>");
+
+        // Calculate percentages
+        float taskPercentage = totalTasks > 0 ? (completedTasks * 100f / totalTasks) : 0;
+        float subtaskPercentage = totalSubtasks > 0 ? (completedSubtasks * 100f / totalSubtasks) : 0;
+        float stepPercentage = totalSteps > 0 ? (completedSteps * 100f / totalSteps) : 0;
+
+        // Choose colors for percentages (red < 33%, yellow < 66%, green >= 66%)
+        string taskPercentColor = taskPercentage < 33 ? "#FF0000" : (taskPercentage < 66 ? "#DDAA00" : "#3CB371");
+        string subtaskPercentColor = subtaskPercentage < 33 ? "#FF0000" : (subtaskPercentage < 66 ? "#DDAA00" : "#3CB371");
+        string stepPercentColor = stepPercentage < 33 ? "#FF0000" : (stepPercentage < 66 ? "#DDAA00" : "#3CB371");
+
+        summary.AppendLine($"Tasks: {completedTasks}/{totalTasks} completed (<color={taskPercentColor}>{taskPercentage.ToString("0.0")}%</color>)");
+        summary.AppendLine($"Subtasks: {completedSubtasks}/{totalSubtasks} completed (<color={subtaskPercentColor}>{subtaskPercentage.ToString("0.0")}%</color>)");
+        summary.AppendLine($"Steps: {completedSteps}/{totalSteps} completed (<color={stepPercentColor}>{stepPercentage.ToString("0.0")}%</color>)");
 
         Debug.Log(summary.ToString());
 
         latestSummary = summary.ToString();
 
-        // Store the summary
-        uploadData.user_actions.Add("TASK_SUMMARY: " + summary.ToString());
-    }
-    private void Update()
-    {
-        // For testing - press F5 to generate task summary 
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            TaskSummary();
-        }
+        // Store the summary (without formatting for the server upload)
+        uploadData.user_actions.Add("TASK_SUMMARY: " + summary.ToString().Replace("<color=#00FFFF>", "")
+                                                               .Replace("<color=#3CB371>", "")
+                                                               .Replace("<color=#DDAA00>", "")
+                                                               .Replace("<color=#FF0000>", "")
+                                                               .Replace("</color>", "")
+                                                               .Replace("<b>", "")
+                                                               .Replace("</b>", "")
+                                                               .Replace("<i>", "")
+                                                               .Replace("</i>", ""));
     }
 
     private void OnSceneUnloaded(UnityEngine.SceneManagement.Scene scene)

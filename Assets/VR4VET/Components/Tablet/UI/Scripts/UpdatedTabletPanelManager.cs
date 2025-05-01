@@ -55,7 +55,6 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             watch = GameObject.FindObjectsOfType<AddInstructionsToWatch>()[0];
             watch.IncomingMessage.AddListener(SetAlertMenu);
         }
-        AddHoverSupport();
     }
 
     private void OnCurrentSubtaskChanged(Task.Subtask subtask)
@@ -190,73 +189,44 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         // Add some padding
         preferredHeight += 50f;
 
-        // Set the height of the content area - make sure it's larger than the viewport
+        // Set the content height - IMPORTANT: This line was missing
         Vector2 sizeDelta = contentRectTransform.sizeDelta;
-        sizeDelta.y = Mathf.Max(preferredHeight, 200f); // Ensure minimum height
+        sizeDelta.y = preferredHeight;
         contentRectTransform.sizeDelta = sizeDelta;
 
-        // Make sure the ScrollRect knows the content size has changed
-        ScrollRect scrollRect = contentRectTransform.GetComponentInParent<ScrollRect>();
-        if (scrollRect != null)
+        // Find and hide the scrollbar
+        ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
+        if (scrollRect != null && scrollRect.verticalScrollbar != null)
         {
-            Canvas.ForceUpdateCanvases();
-            scrollRect.normalizedPosition = new Vector2(0, 1); // Scroll to top
+            scrollRect.verticalScrollbar.gameObject.SetActive(false);
 
-            // Ensure scroll sensitivity is high enough for finger interactions
-            scrollRect.scrollSensitivity = 10f;
-
-            // Make sure ScrollRect is set to vertical
+            // Keep scrolling functionality
             scrollRect.vertical = true;
+            scrollRect.verticalScrollbar = null;
         }
-    }
+    } // Remove the extra closing brace that was here
 
-    public void AddHoverSupport()
+    public void ScrollSummaryDown()
     {
-        // Find the ScrollRect component in the TaskSummaryPanel
         ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
         if (scrollRect != null)
         {
-            // Make sure the scroll view is interactable
-            var eventTrigger = scrollRect.gameObject.AddComponent<UnityEngine.EventSystems.EventTrigger>();
+            // Move view up (content moves down)
+            Vector2 position = scrollRect.normalizedPosition;
+            position.y = Mathf.Clamp01(position.y - 0.5f); // Adjust the 0.1f value to control scroll amount
+            scrollRect.normalizedPosition = position;
+        }
+    }
 
-            // Add entry for pointer down events
-            var pointerDownEntry = new UnityEngine.EventSystems.EventTrigger.Entry();
-            pointerDownEntry.eventID = UnityEngine.EventSystems.EventTriggerType.PointerDown;
-            pointerDownEntry.callback.AddListener((data) => { /* Debug here */ Debug.Log("Pointer Down on ScrollRect"); });
-            eventTrigger.triggers.Add(pointerDownEntry);
-
-            // Add entry for pointer drag events
-            var dragEntry = new UnityEngine.EventSystems.EventTrigger.Entry();
-            dragEntry.eventID = UnityEngine.EventSystems.EventTriggerType.Drag;
-            dragEntry.callback.AddListener((data) => { /* Debug here */ Debug.Log("Dragging on ScrollRect"); });
-            eventTrigger.triggers.Add(dragEntry);
-
-            // Set the scroll sensitivity higher for VR
-            scrollRect.scrollSensitivity = 25f;
-            scrollRect.inertia = true;
-            scrollRect.decelerationRate = 0.1f; // More responsive deceleration
-
-            // Make sure the content is larger than the viewport
-            RectTransform contentRect = scrollRect.content;
-            RectTransform viewportRect = scrollRect.viewport;
-            if (contentRect && viewportRect)
-            {
-                // Ensure content is taller than viewport for vertical scrolling
-                if (contentRect.rect.height <= viewportRect.rect.height)
-                {
-                    contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, viewportRect.rect.height * 1.5f);
-                }
-            }
-
-            // Ensure XR Interaction Toolkit components
-            Canvas canvas = TaskSummaryPanel.GetComponentInParent<Canvas>();
-            if (canvas != null)
-            {
-                if (!canvas.gameObject.GetComponent<UnityEngine.XR.Interaction.Toolkit.UI.TrackedDeviceGraphicRaycaster>())
-                {
-                    canvas.gameObject.AddComponent<UnityEngine.XR.Interaction.Toolkit.UI.TrackedDeviceGraphicRaycaster>();
-                }
-            }
+    public void ScrollSummaryUp()
+    {
+        ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
+        if (scrollRect != null)
+        {
+            // Move view down (content moves up)
+            Vector2 position = scrollRect.normalizedPosition;
+            position.y = Mathf.Clamp01(position.y + 0.5f); // Adjust the 0.1f value to control scroll amount
+            scrollRect.normalizedPosition = position;
         }
     }
 
