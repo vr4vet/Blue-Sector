@@ -1,4 +1,4 @@
-// Purpose: Sends request to OpenAI API, handles response and fallback.
+// Purpose: Sends request to Server Backend
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 using System.Text; // For UTF8Encoding
 using ProgressDTO;
 using UploadDTO;
-// Note: Uses Message, OpenAIRequest, OpenAIResponse from OpenAIResponseSerializer.cs
 
 public class AIRequest : MonoBehaviour
 {
@@ -22,22 +21,12 @@ public class AIRequest : MonoBehaviour
     private AIConversationController _aiConversationController;
 
     // Internal State
-    private string _apiKey;
-    private const string CHATBOT_API_URL = "http://46.9.154.144:8000/ask";
+    private const string CHATBOT_API_URL = "http://localhost:8000/ask";
     private List<Message> _messagesToSend = new(); // Local copy for request
     private AudioSource _audioSource; // For fallback audio
 
     void Start()
     {
-        // Get API Key
-        _apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
-        if (string.IsNullOrEmpty(_apiKey))
-        {
-            Debug.LogError("AIRequest: OpenAI API key not found. Make sure it's set in the .env file and EnvLoader is working.", this);
-            Destroy(this); // Destroy self if key is missing
-            return;
-        }
-
         // Get Component References
         _aiConversationController = GetComponent<AIConversationController>();
         if (_aiConversationController == null)
@@ -80,10 +69,10 @@ public class AIRequest : MonoBehaviour
         _messagesToSend.Add(userMessage);
 
         // Start the API call
-        StartCoroutine(SendOpenAIRequest());
+        StartCoroutine(SendLLMRequest());
     }
 
-    IEnumerator SendOpenAIRequest()
+    IEnumerator SendLLMRequest()
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -94,12 +83,6 @@ public class AIRequest : MonoBehaviour
 
         Debug.Log($"AIRequest: Sending request to Chatbot. Query: '{query}'");
 
-        /*OpenAIRequest requestPayload = new()
-        {
-            model = "gpt-3.5-turbo",
-            messages = _messagesToSend,
-            max_tokens = maxTokens > 0 ? maxTokens : 150
-        };*/
 
         requestPayload.chatLog = _messagesToSend;
 
@@ -112,7 +95,6 @@ public class AIRequest : MonoBehaviour
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-            request.SetRequestHeader("Authorization", $"Bearer {_apiKey}");
 
             yield return request.SendWebRequest();
 

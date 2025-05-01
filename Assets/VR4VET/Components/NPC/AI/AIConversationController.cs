@@ -148,7 +148,7 @@ public class AIConversationController : MonoBehaviour
             Debug.Log($"AIConversationController: Creating AIRequest with transcript: '{transcript}'");
             // Add components and create OpenAI query based on transcript
             AIRequest request = gameObject.AddComponent<AIRequest>(); // Add dynamically
-            request.query = transcript + " Please answer concisely and in the language: " + _Transcribe.currentLanguage; // Add language constraint
+            request.query = transcript;
             request.maxTokens = this.maxTokens;
             request.requestPayload = actionManager.GetUploadData();
         }
@@ -172,11 +172,6 @@ public class AIConversationController : MonoBehaviour
     // Called by NPCSpawner and AIRequest to manage context
     public void AddMessage(Message message)
     {
-        // Optional: Limit context window size
-        // const int maxMessages = 10; // Example limit
-        // if (messages.Count >= maxMessages) {
-        //    messages.RemoveAt(1); // Remove oldest user/assistant message (keep system prompts at index 0)
-        // }
         if (actionManager != null)
         {
             actionManager.AddChatMessage(message); // Add message to global chatlog
