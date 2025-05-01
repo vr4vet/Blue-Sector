@@ -23,7 +23,7 @@ public class AIRequest : MonoBehaviour
 
     // Internal State
     private string _apiKey;
-    private const string CHATBOT_API_URL = "http://localhost:8000/ask";
+    private const string CHATBOT_API_URL = "http://46.9.154.144:8000/ask";
     private List<Message> _messagesToSend = new(); // Local copy for request
     private AudioSource _audioSource; // For fallback audio
 

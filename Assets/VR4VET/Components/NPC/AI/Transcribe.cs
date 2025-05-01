@@ -1,126 +1,174 @@
 using System;
 using System.Collections;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using System.Threading.Tasks;
-using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem; // Assuming use of Input System for VR input
+using UnityEngine.UI;        // Required for Image
+using TMPro;               // Required for TextMeshProUGUI
+using Debug = UnityEngine.Debug; // Explicitly use UnityEngine.Debug
 
-// Ensure Whisper namespace is available
+// Ensure Whisper and ServerTranscription namespaces are available
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
 using Whisper;
 using Whisper.Utils;
-using WhisperResultType = Whisper.WhisperResult; // Type alias to avoid conflict
+using VR4VET.Transcription; // <<< ADJUST THIS NAMESPACE if your ServerTranscriptionManager is elsewhere
 #else
 // Define dummy types if Whisper package is missing
-namespace Whisper
-{
-    public class WhisperManager : MonoBehaviour { }
-    public class MicrophoneRecord : MonoBehaviour { }
-    public class AudioChunk { }
-    public class WhisperResult { public string Result; }
-    public class WhisperStream
-    {
-        public event Action<string> OnResultUpdated;
-        public event Action<WhisperResultType> OnSegmentUpdated;
-        public event Action<WhisperResultType> OnSegmentFinished;
-        public event Action<string> OnStreamFinished;
-        public void StartStream() { }
-        public void StopStream() { }
-    }
+namespace Whisper {
+    public class WhisperManager : MonoBehaviour { public string language; public bool translateToEnglish; public async Task<WhisperResult> GetTextAsync(float[] d, int f, int c) => await Task.FromResult<WhisperResult>(null); }
+    public class MicrophoneRecord : MonoBehaviour { public string SelectedMicDevice; public bool vadStop; public event Action<AudioChunk> OnRecordStop; public bool IsRecording; public void StartRecord() {} public void StopRecord() {} }
+    public class AudioChunk { public float[] Data; public int Frequency; public int Channels; public float Length; }
+    public class WhisperResult { public string Result; public string Language; }
 }
 namespace Whisper.Utils { public static class AudioUtils { } }
+namespace VR4VET.Transcription {
+    public class ServerTranscriptionManager : MonoBehaviour {
+        public class ServerTranscriptionInfo { public bool IsServerProcessed; public float ProcessingTimeSeconds; public string Processor; public override string ToString() => ""; }
+        public event Action<string, string, ServerTranscriptionInfo> OnTranscriptionComplete;
+        public event Action<int> OnProgress;
+        public event Action<string> OnTranscriptionError;
+        public void ProcessAudioChunk(AudioChunk ac) {}
+        public void SetLanguage(string lang) {}
+    }
+}
 #endif
 
-/*
-    This script resides on the TranscriptionManager GameObject, which needs to be present in the scene for transcription
-    to work. Subtitles also require a GameObject in the scene. It handles all transcription locally, and updates the
-    subtitles text (even if they are active or not). Currently English, Norwegian, German and Dutch can be switched
-    between using the 'L' key on the keyboard. It also runs the AIConversationController class 'CreateRequest' method
-    once transcription has been completed. Subtitles can be toggled by pressing the 'U' key on the keyboard.
- */
+// *** REMOVED Placeholder AIConversationController definition ***
+// The script now assumes AIConversationController is defined in its own file.
 
+
+/// <summary>
+/// Handles voice transcription using local Whisper or a remote server,
+/// updating subtitles and interacting with an AI Controller.
+/// Based on the original Transcribe.cs structure, but adapted for async/server processing.
+/// </summary>
+[RequireComponent(typeof(WhisperManager), typeof(MicrophoneRecord))]
 public class Transcribe : MonoBehaviour
 {
+    [Header("Core Dependencies")]
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
+    [Tooltip("WhisperManager component for local transcription.")]
     public WhisperManager whisper;
+    [Tooltip("MicrophoneRecord component for audio capture.")]
     public MicrophoneRecord microphoneRecord;
+    [Tooltip("Optional: Assign ServerTranscriptionManager for server-side transcription.")]
+    public ServerTranscriptionManager serverTranscription;
 #endif
+    [Tooltip("Assign the TextMeshProUGUI for displaying subtitles.")]
     public TextMeshProUGUI subtitleText;
+    [Tooltip("Assign the Image for the subtitle background.")]
     public Image subtitleBackground;
 
-    // A list of supported language codes, if you allow manual cycling
-    private readonly string[] languages = { "en", "no", "de", "nl" };
+    [Header("Configuration")]
+    [Tooltip("Enable to use server-side transcription instead of local Whisper.")]
+    public bool useServerTranscription = false;
+    [Tooltip("List of supported language codes for cycling (e.g., 'en', 'no', 'de', 'nl').")]
+    public string[] availableLanguages = { "en", "no", "de", "nl" };
+    [Tooltip("Assign the Input Action Reference for the record button (e.g., Trigger Press).")]
+    public InputActionReference recordAction; // <<< ASSIGN YOUR VR INPUT ACTION HERE
+    [Tooltip("Delay in seconds before automatically hiding the final subtitle.")]
+    public float subtitleFadeDelay = 5.0f;
+    [Tooltip("Initial state of subtitles visibility.")]
+    public bool subtitlesInitiallyEnabled = true;
+    [Tooltip("Enable Voice Activity Detection to automatically stop recording on silence. Usually FALSE for hold-to-record.")]
+    public bool enableVAD = false;
 
-    // Instead of defaulting to "en", let the manager handle it or start empty
-    public string currentLanguage { get; private set; } = "";
-
-#if WHISPER_UNITY_PACKAGE_AVAILABLE
-    private WhisperStream _stream;
-#endif
-    private AIConversationController _currentAIController;
+    // --- Private State ---
+    private AIConversationController _currentAIController; // Uses the externally defined class
     private Coroutine _subtitleFadeCoroutine;
     private Coroutine _processingIndicatorCoroutine;
     private bool _isSubtitlesEnabled = true;
     private bool _isInitialized = false;
-    private bool _isRecording = false;
+    private bool _isRecording = false; // Internal recording state
+    private string _currentLanguage = "";
 
-    async void Start()
+    // --- Properties ---
+    public string currentLanguage => _currentLanguage;
+    public bool IsRecording => _isRecording;
+
+    // --- Initialization ---
+
+    void Awake()
     {
+        // Component checks in Awake
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
         if (whisper == null) whisper = GetComponent<WhisperManager>();
         if (microphoneRecord == null) microphoneRecord = GetComponent<MicrophoneRecord>();
+        // Server transcription is optional
+        if (serverTranscription == null) serverTranscription = GetComponent<ServerTranscriptionManager>();
 
         if (whisper == null || microphoneRecord == null)
         {
-            Debug.LogError("Transcribe: Missing WhisperManager or MicrophoneRecord.", this);
+            Debug.LogError("Transcribe: Missing WhisperManager or MicrophoneRecord component!", this);
+            enabled = false; // Disable script
             return;
         }
+
+        // Check for essential UI
         if (subtitleText == null) Debug.LogError("Transcribe: subtitleText not assigned!", this);
         if (subtitleBackground == null) Debug.LogError("Transcribe: subtitleBackground not assigned!", this);
 
-        // Now we only set the language if not already specified by the manager
-        // or if an empty string is detected
-        if (string.IsNullOrEmpty(whisper.language) || whisper.language.Equals("auto", StringComparison.OrdinalIgnoreCase))
+        // Subscribe to the microphone record stop event -> This replaces the WhisperStream events
+        microphoneRecord.OnRecordStop += HandleRecordStop;
+
+        // Subscribe to server events if server manager exists
+        if (serverTranscription != null)
         {
-            // Fall back to local "languages" array if not set
-            currentLanguage = languages[0];
-            whisper.language = currentLanguage;
+            serverTranscription.OnTranscriptionComplete += HandleServerTranscriptionComplete;
+            serverTranscription.OnProgress += HandleServerProgress;
+            serverTranscription.OnTranscriptionError += HandleServerTranscriptionError;
+        }
+#else
+         Debug.LogError("Transcribe: Whisper package missing. Transcription disabled.", this);
+         enabled = false;
+#endif
+    }
+
+    void Start()
+    {
+#if WHISPER_UNITY_PACKAGE_AVAILABLE
+        // -- Language Setup --
+        // TODO: Replace this with logic to get language from your settings menu
+        string initialLanguage = whisper.language;
+        if (string.IsNullOrEmpty(initialLanguage) || initialLanguage.Equals("auto", StringComparison.OrdinalIgnoreCase))
+        {
+            if (availableLanguages.Length > 0) _currentLanguage = availableLanguages[0];
+            else { Debug.LogError("Transcribe: No available languages defined!", this); _currentLanguage = "en"; }
+            whisper.language = _currentLanguage;
         }
         else
         {
-            // Use manager's existing language
-            currentLanguage = whisper.language;
+            // Check if language is in our list
+            bool found = Array.Exists(availableLanguages, lang => lang.Equals(initialLanguage, StringComparison.OrdinalIgnoreCase));
+            if (!found) Debug.LogWarning($"Transcribe: Language '{initialLanguage}' set in WhisperManager is not in the availableLanguages list. Using it anyway.", this);
+            _currentLanguage = initialLanguage; // Use the one from WhisperManager
         }
+        if (serverTranscription != null) serverTranscription.SetLanguage(_currentLanguage);
+        Debug.Log($"Transcribe: Initial language set to: {_currentLanguage}");
 
-        // Continue with microphone checks, etc.
+        // -- Microphone Setup --
         if (Microphone.devices.Length == 0)
         {
             Debug.LogError("Transcribe: No microphone found!", this);
-            UpdateSubtitleDisplay("Error: No Microphone Found", true);
+            UpdateSubtitleDisplay("Error: No Microphone Found", true, 5f);
+            enabled = false;
             return;
         }
-        microphoneRecord.SelectedMicDevice = Microphone.devices[0];
+        microphoneRecord.SelectedMicDevice = Microphone.devices[0]; // Use default device
+        Debug.Log($"Transcribe: Using Microphone: {microphoneRecord.SelectedMicDevice}");
 
-        _stream = await whisper.CreateStream(microphoneRecord);
-        if (_stream == null)
-        {
-            Debug.LogError("Transcribe: Failed to create Whisper stream!", this);
-            UpdateSubtitleDisplay("Error: Failed to initialize", true);
-            return;
-        }
+        // -- VAD Setup --
+        microphoneRecord.vadStop = enableVAD;
 
-        // Subscribe to events
-        _stream.OnResultUpdated += OnResult;
-        _stream.OnStreamFinished += OnStreamFinished;
-
-        UpdateSubtitleDisplay("", false);
+        // -- Subtitle Setup --
+        _isSubtitlesEnabled = subtitlesInitiallyEnabled;
+        UpdateSubtitleDisplay("", false); // Start hidden
 
         _isInitialized = true;
         Debug.Log("Transcribe: Initialization complete.");
 #else
-        Debug.LogError("Transcribe: Whisper package missing. Transcription disabled.", this);
-        UpdateSubtitleDisplay("Transcription Unavailable", true);
+         // Already logged error in Awake
+         UpdateSubtitleDisplay("Transcription Unavailable", true, 5f);
 #endif
     }
 
@@ -128,124 +176,359 @@ public class Transcribe : MonoBehaviour
     {
         if (!_isInitialized) return;
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            CycleLanguage();
-        }
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            ToggleSubtitles();
-        }
+        HandleInput(); // Handle VR and Keyboard input
     }
 
-    public void CycleLanguage()
+    void OnEnable()
     {
-        // Example: cycle local languages array
-        int index = Array.IndexOf(languages, currentLanguage);
-        index = (index + 1) % languages.Length;
-        currentLanguage = languages[index];
-        Debug.Log("Transcribe: Language changed to: " + currentLanguage);
-        UpdateSubtitleDisplay($"Language: {currentLanguage.ToUpper()}", true, 2.0f);
+        if (recordAction != null) recordAction.action.Enable();
+    }
 
+    void OnDisable()
+    {
+        if (recordAction != null) recordAction.action.Disable();
+        if (_isRecording) ForceStopRecording(); // Stop if disabled while recording
+    }
+
+    void OnDestroy()
+    {
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
-        if (whisper != null)
+        // Unsubscribe from events
+        if (microphoneRecord != null) microphoneRecord.OnRecordStop -= HandleRecordStop;
+        if (serverTranscription != null)
         {
-            whisper.language = currentLanguage;
+            serverTranscription.OnTranscriptionComplete -= HandleServerTranscriptionComplete;
+            serverTranscription.OnProgress -= HandleServerProgress;
+            serverTranscription.OnTranscriptionError -= HandleServerTranscriptionError;
         }
 #endif
+        // Stop coroutines
+        if (_subtitleFadeCoroutine != null) StopCoroutine(_subtitleFadeCoroutine);
+        if (_processingIndicatorCoroutine != null) StopCoroutine(_processingIndicatorCoroutine);
     }
 
-    public void ToggleSubtitles()
+
+    // --- Input Handling ---
+
+    private void HandleInput()
     {
-        _isSubtitlesEnabled = !_isSubtitlesEnabled;
-        UpdateSubtitleDisplay($"Subtitles {(_isSubtitlesEnabled ? "ON" : "OFF")}", true, 2.0f);
-        if (!_isSubtitlesEnabled)
+        // --- VR Input (Primary) ---
+        // <<< Replace checks with your actual Input System logic >>>
+        if (recordAction != null && recordAction.action.WasPressedThisFrame())
         {
-            UpdateSubtitleDisplay("", false);
+            // This assumes the context (like interacting with an NPC)
+            // already knows which AIController to use and calls StartRecording.
+            // If the button press itself should initiate recording, you need
+            // to determine the AIController context here.
+            Debug.LogWarning("Transcribe: VR record button pressed. Call StartRecording(AIConversationController) to begin.");
+            // Example placeholder to allow testing button press directly:
+            // AIConversationController controller = FindObjectOfType<AIConversationController>();
+            // if (controller != null) StartRecording(controller);
+            // else Debug.LogError("Transcribe: Record button pressed but no AIController found!");
         }
+        else if (recordAction != null && recordAction.action.WasReleasedThisFrame())
+        {
+            if (_isRecording)
+            {
+                EndRecording(); // Call the public EndRecording method
+            }
+        }
+
+        // --- Keyboard Input (Secondary/Debug) ---
+        if (Input.GetKeyDown(KeyCode.L)) CycleLanguage();
+        if (Input.GetKeyDown(KeyCode.U)) ToggleSubtitles();
     }
 
+
+    // --- Public Control Methods ---
+
+    /// <summary>
+    /// Starts the recording process. Requires the AI controller that should receive the final transcript.
+    /// </summary>
+    /// <param name="aiController">The AI controller to send the result to.</param>
     public void StartRecording(AIConversationController aiController)
     {
         if (!_isInitialized) { Debug.LogError("Transcribe: Not initialized.", this); return; }
         if (_isRecording) { Debug.LogWarning("Transcribe: Already recording.", this); return; }
         if (aiController == null) { Debug.LogError("Transcribe: AIController is null.", this); return; }
 
-#if WHISPER_UNITY_PACKAGE_AVAILABLE
         _currentAIController = aiController;
-        Debug.Log($"Transcribe: Starting recording for {aiController.gameObject.name}");
         _isRecording = true;
+        microphoneRecord.vadStop = enableVAD; // Ensure VAD setting is current
 
         try
         {
+#if WHISPER_UNITY_PACKAGE_AVAILABLE
             microphoneRecord.StartRecord();
-            _stream.StartStream();
+            Debug.Log($"Transcribe: Starting recording for {_currentAIController.gameObject.name}");
             if (_processingIndicatorCoroutine != null) StopCoroutine(_processingIndicatorCoroutine);
             _processingIndicatorCoroutine = StartCoroutine(DisplayTranscriptionProcessing());
+#endif
         }
         catch (Exception e)
         {
             Debug.LogError($"Transcribe: Error starting recording: {e.Message}", this);
-            UpdateSubtitleDisplay("Error: Mic/Transcription Start Failed", true);
+            UpdateSubtitleDisplay("Error: Mic Start Failed", true, 3.0f);
             _isRecording = false;
+            _currentAIController = null;
         }
-#endif
     }
 
+    /// <summary>
+    /// Stops the current recording session and triggers processing.
+    /// </summary>
     public void EndRecording()
     {
         if (!_isInitialized || !_isRecording) return;
 
-#if WHISPER_UNITY_PACKAGE_AVAILABLE
         Debug.Log("Transcribe: Stopping recording.");
-        _isRecording = false;
-
-        try
-        {
-            microphoneRecord.StopRecord();
-            _stream.StopStream();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Transcribe: Error stopping recording: {e.Message}", this);
-        }
-#endif
-    }
-
-    public bool IsRecording() { return _isRecording; }
-
-#if WHISPER_UNITY_PACKAGE_AVAILABLE
-    private void OnResult(string result) { }
-    private void OnStreamFinished(string finalResult)
-    {
-        _isRecording = false;
-        Debug.Log($"Transcribe: Stream finished. Final result: '{finalResult}'");
-
+        // Stop the "Listening..." indicator immediately
         if (_processingIndicatorCoroutine != null)
         {
             StopCoroutine(_processingIndicatorCoroutine);
             _processingIndicatorCoroutine = null;
         }
+        UpdateSubtitleDisplay("Processing...", true); // Show processing message
 
-        string processed = SanitizeWhisperResult(finalResult);
-
-        if (_isSubtitlesEnabled)
+        try
         {
-            UpdateSubtitleDisplay(processed, true, 5f);
+#if WHISPER_UNITY_PACKAGE_AVAILABLE
+            microphoneRecord.StopRecord(); // This will trigger HandleRecordStop for processing
+#else
+            // If package missing, just reset state
+             _isRecording = false;
+             _currentAIController = null;
+            UpdateSubtitleDisplay("", false); // Clear processing message
+#endif
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Transcribe: Error stopping microphone: {e.Message}", this);
+            UpdateSubtitleDisplay("Error: Mic Stop Failed", true, 3.0f);
+            _isRecording = false; // Reset state as processing won't happen
+            _currentAIController = null;
+        }
+        // _isRecording = false; // Set in HandleRecordStop *after* getting the callback
+    }
+
+    /// <summary>
+    /// Forces recording to stop immediately without processing.
+    /// </summary>
+    private void ForceStopRecording()
+    {
+        Debug.LogWarning("Transcribe: Forcing recording stop.");
+        if (_processingIndicatorCoroutine != null) StopCoroutine(_processingIndicatorCoroutine);
+        _processingIndicatorCoroutine = null;
+        UpdateSubtitleDisplay("", false); // Clear subtitles
+
+#if WHISPER_UNITY_PACKAGE_AVAILABLE
+        try { if (microphoneRecord != null && microphoneRecord.IsRecording) microphoneRecord.StopRecord(); } catch { }
+#endif
+        _isRecording = false;
+        _currentAIController = null;
+    }
+
+
+    /// <summary>
+    /// Sets the transcription language.
+    /// </summary>
+    /// <param name="languageCode">The language code (e.g., "en", "no").</param>
+    public void SetLanguage(string languageCode)
+    {
+        if (!_isInitialized) return;
+
+        string validLanguage = languageCode;
+        bool found = Array.Exists(availableLanguages, lang => lang.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+
+        if (!found)
+        {
+            Debug.LogWarning($"Transcribe: Language '{languageCode}' not in availableLanguages list. Using anyway.", this);
         }
         else
         {
-            UpdateSubtitleDisplay("", false);
+            // Use the correctly cased version from our list if found
+            validLanguage = Array.Find(availableLanguages, lang => lang.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
         }
 
+        if (_currentLanguage == validLanguage) return; // No change
+
+        _currentLanguage = validLanguage;
+        Debug.Log("Transcribe: Language changed to: " + _currentLanguage);
+        UpdateSubtitleDisplay($"Language: {_currentLanguage.ToUpper()}", true, 2.0f);
+
+#if WHISPER_UNITY_PACKAGE_AVAILABLE
+        if (whisper != null) whisper.language = _currentLanguage;
+        if (serverTranscription != null) serverTranscription.SetLanguage(_currentLanguage);
+#endif
+    }
+
+    /// <summary>
+    /// Cycles through the available languages.
+    /// </summary>
+    public void CycleLanguage()
+    {
+        if (availableLanguages.Length == 0) return;
+        int index = Array.IndexOf(availableLanguages, _currentLanguage);
+        if (index < 0) index = 0; // If current lang not in list, start from first
+        index = (index + 1) % availableLanguages.Length;
+        SetLanguage(availableLanguages[index]);
+    }
+
+    /// <summary>
+    /// Toggles the visibility of subtitles.
+    /// </summary>
+    public void ToggleSubtitles()
+    {
+        _isSubtitlesEnabled = !_isSubtitlesEnabled;
+        UpdateSubtitleDisplay($"Subtitles {(_isSubtitlesEnabled ? "ON" : "OFF")}", true, 2.0f);
+        if (!_isSubtitlesEnabled)
+        {
+            // Immediately hide if toggled off
+            if (subtitleText != null) subtitleText.enabled = false;
+            if (subtitleBackground != null) subtitleBackground.enabled = false;
+            if (_subtitleFadeCoroutine != null) { StopCoroutine(_subtitleFadeCoroutine); _subtitleFadeCoroutine = null; }
+        }
+    }
+
+
+    // --- Transcription Event Handlers ---
+
+#if WHISPER_UNITY_PACKAGE_AVAILABLE
+    /// <summary>
+    /// Called by MicrophoneRecord when recording finishes and audio data is ready.
+    /// This is the main entry point for processing the audio.
+    /// </summary>
+    private async void HandleRecordStop(AudioChunk recordedAudio)
+    {
+        // Check if we were actively recording with an assigned AI controller
+        if (_currentAIController == null)
+        {
+            Debug.LogWarning("Transcribe: OnRecordStop called, but no AI Controller was assigned. Ignoring audio chunk.");
+            _isRecording = false; // Ensure state is reset if VAD stopped early etc.
+            UpdateSubtitleDisplay("", false); // Clear "Processing..."
+            return;
+        }
+
+        _isRecording = false; // Mark recording as logically finished NOW.
+
+        if (recordedAudio.Data == null || recordedAudio.Data.Length == 0)
+        {
+            Debug.LogWarning("Transcribe: No audio data recorded.", this);
+            UpdateSubtitleDisplay("No audio detected", true, 2.0f);
+            // Call CreateRequest with empty string for AI to handle no input? Or just return?
+            // Let's call CreateRequest with an empty string for consistency, AI can handle it.
+            ProcessTranscriptionResult("", null, false, null, true); // Treat as non-error, but empty result
+            return;
+        }
+
+        Debug.Log($"Transcribe: Audio Chunk received. Length: {recordedAudio.Length:F2}s. Processing...");
+
+        // --- Choose Processing Path ---
+        if (useServerTranscription && serverTranscription != null)
+        {
+            UpdateSubtitleDisplay("Sending to server...", true);
+            serverTranscription.ProcessAudioChunk(recordedAudio); // Server manager will call back
+        }
+        else
+        {
+            if (whisper == null)
+            { // Safety check
+                ProcessTranscriptionResult(null, null, true, "WhisperManager not available for local processing.");
+                return;
+            }
+            UpdateSubtitleDisplay("Processing locally...", true);
+            try
+            {
+                var result = await whisper.GetTextAsync(recordedAudio.Data, recordedAudio.Frequency, recordedAudio.Channels);
+                ProcessTranscriptionResult(result?.Result, result?.Language); // Handle null result
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Transcribe: Local transcription error: {e.Message}", this);
+                ProcessTranscriptionResult(null, null, true, $"Local transcription error: {e.Message}");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Called by ServerTranscriptionManager when server processing is complete.
+    /// </summary>
+    private void HandleServerTranscriptionComplete(string text, string language, ServerTranscriptionManager.ServerTranscriptionInfo info)
+    {
+        Debug.Log($"Transcribe: Server result received. Language: {language ?? "Unknown"}. Info: {info}");
+        ProcessTranscriptionResult(text, language, false, null); // Pass result to central processor
+    }
+
+    /// <summary>
+    /// Called by ServerTranscriptionManager on error.
+    /// </summary>
+    private void HandleServerTranscriptionError(string errorMessage)
+    {
+        Debug.LogError($"Transcribe: Server transcription error: {errorMessage}", this);
+        ProcessTranscriptionResult(null, null, true, errorMessage); // Pass error to central processor
+    }
+
+    /// <summary>
+    /// Called by ServerTranscriptionManager with progress updates (optional).
+    /// </summary>
+    private void HandleServerProgress(int progressPercent)
+    {
+        UpdateSubtitleDisplay($"Server Processing: {progressPercent}%", true);
+    }
+#endif
+
+    // --- Result Processing ---
+
+    /// <summary>
+    /// Central method to handle the final transcription result (from local or server).
+    /// </summary>
+    private void ProcessTranscriptionResult(string rawText, string detectedLanguage, bool isError = false, string errorMessage = null, bool isEmptyAudio = false)
+    {
+        string finalResult = "";
+
+        // Clear processing message immediately if showing
+        if (subtitleText != null && subtitleText.text == "Processing...") UpdateSubtitleDisplay("", false);
+
+
+        if (isError)
+        {
+            finalResult = $"Error: {errorMessage ?? "Transcription failed"}";
+            UpdateSubtitleDisplay(finalResult, true, 5.0f); // Show error longer
+        }
+        else if (isEmptyAudio)
+        {
+            finalResult = ""; // No result to show for empty audio
+            UpdateSubtitleDisplay("No audio detected", true, 2.0f); // Inform user
+        }
+        else
+        {
+            finalResult = SanitizeWhisperResult(rawText);
+            Debug.Log($"Transcribe: Final Result: '{finalResult}' (Language: {detectedLanguage ?? "Unknown"})");
+
+            if (_isSubtitlesEnabled)
+            {
+                UpdateSubtitleDisplay(finalResult, true, subtitleFadeDelay);
+            }
+            else
+            {
+                UpdateSubtitleDisplay("", false); // Ensure hidden
+            }
+        }
+
+        // --- Send to AI Controller ---
+        // Send even if error or empty, let AIController handle it
         if (_currentAIController != null)
         {
-            _currentAIController.CreateRequest(processed);
+            // Let AIController decide how to handle errors/empty strings
+            _currentAIController.CreateRequest(isError ? $"[Error: {errorMessage}]" : finalResult);
+
+            // Clear the controller reference for the next interaction
+            _currentAIController = null;
         }
         else
         {
-            Debug.LogError("Transcribe: _currentAIController is null.", this);
+            // This case should be less likely now with the check in HandleRecordStop
+            Debug.LogWarning("Transcribe: Processing finished, but _currentAIController was already null.");
         }
     }
 
@@ -254,18 +537,29 @@ public class Transcribe : MonoBehaviour
         if (string.IsNullOrWhiteSpace(result)) return "";
         return result.Replace("[ Inaudible ]", "").Replace("[BLANK_AUDIO]", "").Trim();
     }
-#endif
+
+    // --- UI Update Methods (from original Transcribe.cs) ---
 
     private void UpdateSubtitleDisplay(string text, bool showBackground, float fadeDelay = -1f)
     {
+        bool shouldDisplay = _isSubtitlesEnabled || fadeDelay > 0;
+        bool hasText = !string.IsNullOrEmpty(text);
+
+        if (!shouldDisplay && hasText)
+        {
+            if (subtitleText != null && subtitleText.enabled) subtitleText.enabled = false;
+            if (subtitleBackground != null && subtitleBackground.enabled) subtitleBackground.enabled = false;
+            return;
+        }
+
         if (subtitleText != null)
         {
             subtitleText.text = text;
-            subtitleText.enabled = !string.IsNullOrEmpty(text);
+            subtitleText.enabled = hasText;
         }
         if (subtitleBackground != null)
         {
-            subtitleBackground.enabled = showBackground && !string.IsNullOrEmpty(text);
+            subtitleBackground.enabled = showBackground && hasText;
         }
 
         if (_subtitleFadeCoroutine != null)
@@ -273,40 +567,43 @@ public class Transcribe : MonoBehaviour
             StopCoroutine(_subtitleFadeCoroutine);
             _subtitleFadeCoroutine = null;
         }
-        if (fadeDelay > 0 && showBackground && !string.IsNullOrEmpty(text))
+        if (fadeDelay > 0 && hasText)
         {
             _subtitleFadeCoroutine = StartCoroutine(FadeOutSubtitle(fadeDelay));
+        }
+        else if (!hasText)
+        {
+            // Ensure hidden immediately if text is empty
+            if (subtitleText != null) subtitleText.enabled = false;
+            if (subtitleBackground != null) subtitleBackground.enabled = false;
         }
     }
 
     private IEnumerator FadeOutSubtitle(float delay)
     {
         yield return new WaitForSeconds(delay);
-        UpdateSubtitleDisplay("", false);
+        if (_subtitleFadeCoroutine == null) yield break; // Coroutine was stopped/replaced
+
+        // No need to check _isSubtitlesEnabled here, UpdateSubtitleDisplay handles it
+        if (subtitleText != null) { subtitleText.text = ""; subtitleText.enabled = false; }
+        if (subtitleBackground != null) subtitleBackground.enabled = false;
+
         _subtitleFadeCoroutine = null;
     }
 
     private IEnumerator DisplayTranscriptionProcessing()
     {
-        // Show “...” while waiting
+        // Shows "Listening..." while _isRecording is true
         string baseText = "Listening";
         int dotCount = 0;
-        while (true)
+        while (_isRecording)
         {
             dotCount = (dotCount + 1) % 4;
-            UpdateSubtitleDisplay(baseText + new string('.', dotCount), true);
+            // Use UpdateSubtitleDisplay to show temporally even if subtitles are off
+            UpdateSubtitleDisplay(baseText + new string('.', dotCount), true, 0.5f);
             yield return new WaitForSeconds(0.4f);
         }
-    }
-
-    void OnDestroy()
-    {
-#if WHISPER_UNITY_PACKAGE_AVAILABLE
-        if (_stream != null)
-        {
-            _stream.OnResultUpdated -= OnResult;
-            _stream.OnStreamFinished -= OnStreamFinished;
-        }
-#endif
+        _processingIndicatorCoroutine = null;
+        // "Processing..." or final result will overwrite this in UpdateSubtitleDisplay calls
     }
 }

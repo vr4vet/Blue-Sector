@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2485336376668602485}
   - component: {fileID: 2485336376668602490}
   - component: {fileID: 2485336376668602491}
+  - component: {fileID: 5895592686840732147}
   m_Layer: 0
   m_Name: TranscriptionManager
   m_TagString: Untagged
@@ -48,8 +49,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   whisper: {fileID: 2485336376668602490}
   microphoneRecord: {fileID: 2485336376668602491}
+  serverTranscription: {fileID: 5895592686840732147}
   subtitleText: {fileID: 0}
   subtitleBackground: {fileID: 0}
+  useServerTranscription: 1
+  availableLanguages:
+  - en
+  - no
+  - de
+  - nl
+  recordAction: {fileID: 0}
+  subtitleFadeDelay: 8
+  subtitlesInitiallyEnabled: 1
+  enableVAD: 1
 --- !u!114 &2485336376668602490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,11 +106,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc03a4c19604ea394e364f8fc632928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLengthSec: 60
+  maxLengthSec: 45
   loop: 0
   frequency: 16000
   chunksLengthSec: 0.5
-  echo: 1
+  echo: 0
   useVad: 1
   vadUpdateRateSec: 0.1
   vadContextSec: 30
@@ -106,8 +118,22 @@ MonoBehaviour:
   vadThd: 1
   vadFreqThd: 100
   vadIndicatorImage: {fileID: 0}
-  vadStop: 0
+  vadStop: 1
   dropVadPart: 1
   vadStopTime: 3
   microphoneDropdown: {fileID: 0}
   microphoneDefaultLabel: Default microphone
+--- !u!114 &5895592686840732147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2485336376668602488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929806416e1af4e4f9f5f80a831f9c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transcriptionApiUrl: http://46.9.154.144:8000/transcribe
+  languageCode: 
