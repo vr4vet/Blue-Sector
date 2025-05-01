@@ -267,7 +267,7 @@ public class AISceneController : MonoBehaviour
     /// </summary>
     /// <param name="scene"></param>
     /// <returns></returns>
-    private IEnumerator LoadSceneWithLoadingScreen(string scene)
+    public IEnumerator LoadSceneWithLoadingScreen(string scene)
     {
         GameObject loadingScreen = Instantiate(LoadingScreen);
         AsyncOperation loadLevel = SceneManager.LoadSceneAsync(scene);
