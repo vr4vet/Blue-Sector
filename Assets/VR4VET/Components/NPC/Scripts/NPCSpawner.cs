@@ -12,9 +12,11 @@ public class NPCSpawner : MonoBehaviour
     [Header("Global AI Settings")]
     [TextArea(3, 10)]
     public string globalContextPrompt = "You are interacting with a user in a virtual reality training simulation."; // Added global context
-
+    private ActionManager _actionManager;
     private void Awake()
     {
+        _actionManager = ActionManager.Instance;
+
         if (_nPCs == null || _nPCs.Length == 0)
         {
             Debug.LogWarning("NPCSpawner: No NPC Scriptable Objects assigned.", this);
@@ -39,6 +41,7 @@ public class NPCSpawner : MonoBehaviour
 
         // Start the coroutine to fix animator references after all NPCs are spawned
         StartCoroutine(FixAnimators());
+        
     }
 
     private IEnumerator FixAnimators()
@@ -104,6 +107,7 @@ public class NPCSpawner : MonoBehaviour
         GameObject newNPC = Instantiate(npcSO.NpcPrefab, npcSO.SpawnPosition, Quaternion.identity);
         newNPC.name = npcSO.NameOfNPC; // Set GameObject name for easier identification
 
+
         // Rotate the NPC
         newNPC.transform.rotation = Quaternion.Euler(npcSO.SpawnRotation);
 
@@ -138,7 +142,8 @@ public class NPCSpawner : MonoBehaviour
         }
 
         // --- AI Setup ---
-        if (npcSO.isAiNpc)
+        // Checks for whether AI features are enabled
+        if (npcSO.isAiNpc && _actionManager.GetToggleBool())
         {
             Debug.Log($"NPCSpawner: Setting up AI components for {newNPC.name}");
 
