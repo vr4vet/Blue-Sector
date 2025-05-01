@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+
 
 
 public class ConsentForm : MonoBehaviour
@@ -10,12 +8,13 @@ public class ConsentForm : MonoBehaviour
     private NPCSpawner _npcSpawner;
     private GameObject _aiConsentNpc;
     private ActionManager _actionManager;
+    private bool _isEnabled;
 
-    // Start is called before the first frame update
     void Start()
     {
         _npcSpawner = GetComponent<NPCSpawner>();
         _actionManager = ActionManager.Instance;
+        _isEnabled = _actionManager.GetToggleBool();
   
         if (_npcSpawner == null)
         {
@@ -32,31 +31,51 @@ public class ConsentForm : MonoBehaviour
         DialogueBoxController.OnDialogueEnded += ConsentForm_SetAIFeatures;
     }
 
+    /// <summary>
+    /// Listens to player's answer to the AI consent question.
+    /// </summary>
+    /// <param name="answer"></param>
+    /// <param name="question"></param>
+    /// <param name="name"></param>
     private void ConsentForm_OnAnswer(string answer, string question, string name)
     {
         if (name == _aiConsentNpc.name)
         {
             if (answer == "Yes") 
             { 
-                _actionManager.SetToggleBool(true); 
-                Debug.Log(name + " has consented to AI features");
+                _isEnabled = true; 
+                Debug.Log("User has consented to AI features");
             }
             else 
             { 
-                _actionManager.SetToggleBool(false);
-                Debug.Log(name + " has not consented to AI features");
+                _isEnabled = false;
+                Debug.Log("User has not consented to AI features");
             }
         }
     }
 
     private void ConsentForm_SetAIFeatures(string name)
     {
+        AISceneController sceneController = _npcSpawner.GetComponent<AISceneController>();
         if (name == _aiConsentNpc.name)
         {
-            Debug.Log("Before reloading scene!");
-            Scene currentScene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(currentScene.name);
-            Debug.Log("Reloading scene to apply AI features");
+            // Check if AI features are already set to preferred state
+            // If they are, do nothing
+            if (_isEnabled == _actionManager.GetToggleBool())
+            {
+                Debug.Log("AI features are already set to " + _isEnabled);
+                return;
+            }
+            else
+            {
+                _actionManager.SetToggleBool(_isEnabled);
+                Debug.Log("Before reloading scene!");
+                Scene currentScene = SceneManager.GetActiveScene();
+                StartCoroutine(sceneController.LoadSceneWithLoadingScreen(currentScene.name));
+                Debug.Log("Reloading scene to apply AI features");
+                
+            }
+            
         }
     }
 

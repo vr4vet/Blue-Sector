@@ -142,7 +142,8 @@ public class NPCSpawner : MonoBehaviour
         }
 
         // --- AI Setup ---
-        if (npcSO.isAiNpc && _actionManager._isAiNpcToggled)
+        // Checks for whether AI features are enabled
+        if (npcSO.isAiNpc && _actionManager.GetToggleBool())
         {
             Debug.Log($"NPCSpawner: Setting up AI components for {newNPC.name}");
 

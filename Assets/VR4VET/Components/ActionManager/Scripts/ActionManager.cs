@@ -22,7 +22,7 @@ public class ActionManager : MonoBehaviour
     private UploadDataDTO uploadData;
     private List<Message> globalChatLogs;
     private List<Task.Task> taskList;
-    public bool _isAiNpcToggled;
+    private bool _isAiNpcToggled;
 
     // Reference to the idle timer
     private IdleTimer idleTimer;
@@ -177,7 +177,9 @@ public class ActionManager : MonoBehaviour
 
         // Add to the user actions list with position information
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        Debug.Log("Before shortening list: " + uploadData.user_actions.Count);
         ShortenList(uploadData.user_actions, 20); // Keep the last 20 actions in the list
+        Debug.Log("After shortening list: " + uploadData.user_actions.Count);
         /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
 
 
@@ -353,7 +355,10 @@ public class ActionManager : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Sets the user information in the upload data.
+    /// </summary>
+    /// <param name="userInfo">The list of information retrieved from NPC dialogue.</param>
     public void SetUserInfo(List<string> userInfo)
     {
         uploadData.user_information = userInfo;
@@ -415,9 +420,18 @@ public class ActionManager : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Sets the AI feature state for the NPCs.
+    /// </summary>
+    /// <param name="toggle">Boolean for toggling AI features</param>
     public void SetToggleBool(bool toggle)
     {
         _isAiNpcToggled = toggle;
+    }
+
+    public bool GetToggleBool()
+    {
+        return _isAiNpcToggled;
     }
 
 }
