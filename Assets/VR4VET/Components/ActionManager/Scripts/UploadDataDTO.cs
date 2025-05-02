@@ -18,7 +18,7 @@ namespace UploadDTO
         /// <summary>
         /// Dictionary containing information about the user.
         /// </summary>
-        public Dictionary<string, string> user_information;
+        public List<string> user_information;
 
         /// <summary>
         /// List of user actions such as grabbed/dropped objects.
