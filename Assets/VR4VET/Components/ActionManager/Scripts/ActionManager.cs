@@ -24,9 +24,8 @@ public class ActionManager : MonoBehaviour
     private List<Task.Task> taskList;
     private bool _isAiNpcToggled;
 
+    // Reference to the idle timer
     private IdleTimer idleTimer;
-
-    public string latestSummary;
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -77,6 +76,7 @@ public class ActionManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
+
         Debug.Log("ActionManager initialized.");
     }
 
@@ -89,7 +89,7 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Register event listeners when the component is enabled
+    /// Register grab event listeners when the component is enabled
     /// </summary>
     private void OnEnable()
     {
@@ -170,16 +170,21 @@ public class ActionManager : MonoBehaviour
     /// <param name="grabbable">The object that was released</param>
     public void OnReleaseEvent(Grabbable grabbable)
     {
+        // Get the position where the object was dropped
         Vector3 dropPosition = grabbable.transform.position;
 
         Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
 
+        // Add to the user actions list with position information
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
         Debug.Log("Before shortening list: " + uploadData.user_actions.Count);
         ShortenList(uploadData.user_actions, 20); // Keep the last 20 actions in the list
         Debug.Log("After shortening list: " + uploadData.user_actions.Count);
         /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
 
+
+
+        // Reset idle timer when user drops an object
         idleTimer?.ResetIdleTimer();
     }
 
@@ -231,6 +236,7 @@ public class ActionManager : MonoBehaviour
                         var progressData = ConvertTaskToProgressData(task);
                         UpdateProgressData(progressData);
 
+                        // Update idle tracking with last progressed subtask
                         if (idleTimer != null)
                         {
                             idleTimer.ResetIdleTimer();
@@ -256,6 +262,7 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
+        // Stop idle tracking when a subtask is completed
         idleTimer?.StopIdleTracking();
 
         Debug.LogWarning($"Could not find task {task.TaskName}");
@@ -346,69 +353,6 @@ public class ActionManager : MonoBehaviour
                 return;
             }
         }
-    }
-
-    public void TaskSummary()
-    {
-        StringBuilder summary = new StringBuilder();
-        summary.AppendLine("<b>=== TASK PROGRESS SUMMARY ===</b>");
-        summary.AppendLine($"<b>Time: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}</b>");
-        summary.AppendLine();
-
-        int completedTasks = 0;
-        int totalTasks = taskList.Count;
-        int completedSubtasks = 0;
-        int totalSubtasks = 0;
-        int completedSteps = 0;
-        int totalSteps = 0;
-
-        foreach (var task in taskList)
-        {
-            bool taskCompleted = task.Compleated();
-            if (taskCompleted) completedTasks++;
-
-            string taskColor = taskCompleted ? "#3CB371" : "#DDAA00";
-            summary.AppendLine($"Task: <color={taskColor}>{task.TaskName}</color>");
-
-            foreach (var subtask in task.Subtasks)
-            {
-                totalSubtasks++;
-                bool subtaskCompleted = subtask.Compleated();
-                if (subtaskCompleted) completedSubtasks++;
-
-                string subtaskColor = subtaskCompleted ? "#3CB371" : "#DDAA00";
-                summary.AppendLine($"  Subtask: <color={subtaskColor}>{subtask.SubtaskName}</color>");
-
-                foreach (var step in subtask.StepList)
-                {
-                    totalSteps++;
-                    bool stepCompleted = step.IsCompeleted();
-                    if (stepCompleted) completedSteps++;
-
-                    string stepColor = stepCompleted ? "#3CB371" : "#FF0000";
-                    summary.AppendLine($"    Step: <color={stepColor}>{step.StepName}</color>");
-                }
-            }
-            summary.AppendLine();
-        }
-
-        summary.AppendLine("<b>=== PROGRESS STATISTICS ===</b>");
-
-        float taskPercentage = totalTasks > 0 ? (completedTasks * 100f / totalTasks) : 0;
-        float subtaskPercentage = totalSubtasks > 0 ? (completedSubtasks * 100f / totalSubtasks) : 0;
-        float stepPercentage = totalSteps > 0 ? (completedSteps * 100f / totalSteps) : 0;
-
-        string taskPercentColor = taskPercentage < 33 ? "#FF0000" : (taskPercentage < 66 ? "#DDAA00" : "#3CB371");
-        string subtaskPercentColor = subtaskPercentage < 33 ? "#FF0000" : (subtaskPercentage < 66 ? "#DDAA00" : "#3CB371");
-        string stepPercentColor = stepPercentage < 33 ? "#FF0000" : (stepPercentage < 66 ? "#DDAA00" : "#3CB371");
-
-        summary.AppendLine($"Tasks: {completedTasks}/{totalTasks} completed (<color={taskPercentColor}>{taskPercentage.ToString("0.0")}%</color>)");
-        summary.AppendLine($"Subtasks: {completedSubtasks}/{totalSubtasks} completed (<color={subtaskPercentColor}>{subtaskPercentage.ToString("0.0")}%</color>)");
-        summary.AppendLine($"Steps: {completedSteps}/{totalSteps} completed (<color={stepPercentColor}>{stepPercentage.ToString("0.0")}%</color>)");
-
-        Debug.Log(summary.ToString());
-
-        latestSummary = summary.ToString();
     }
 
     /// <summary>

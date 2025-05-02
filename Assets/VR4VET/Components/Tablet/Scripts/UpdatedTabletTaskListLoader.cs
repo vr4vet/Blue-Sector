@@ -23,7 +23,6 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
     public GameObject subtaskPageCanvas;
     public GameObject TaskPageCanvas;
     public GameObject skillsListPageCanvas;
-    public GameObject TaskSummaryCanvas;
 
     //parents objects to load the buttons in
     [Header("Content Spaces")]
@@ -86,7 +85,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             watchManager.SkillCompleted.AddListener(HandleSkillUnlocked);
         }
         panelManager = gameObject.GetComponent<UpdatedTabletPanelManager>();
-
+        
         originalTransform = StatusBar.GetComponent<RectTransform>().sizeDelta;
 
         LoadSkillsPage();
@@ -166,7 +165,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
         }
         UpdateProgressBar(activeTask);
     }
-
+    
     //gets called on Start since the list of task is always the same
     public void LoadTaskPage()
     {
@@ -188,9 +187,9 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             GameObject item = Instantiate(_taskListEntry, Vector3.zero, Quaternion.identity);
             item.transform.SetParent(taskContent.transform);
             item.transform.localPosition = Vector3.zero;
-            item.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+            item.transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
             item.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
+            
             TaskUI taskUI = item.transform.GetComponentInChildren<TaskUI>();
             taskUI.InitializeInterface(task);
             TMP_Text caption = item.transform.Find("txt_TaskNr").GetComponent<TMP_Text>();
@@ -211,28 +210,6 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
 
             button.onClick.AddListener(() => SubtaskPageLoader(activeTask));
         }
-        GameObject summaryButton = Instantiate(_taskListEntry, Vector3.zero, Quaternion.identity);
-        summaryButton.transform.SetParent(taskContent.transform);
-        summaryButton.transform.localPosition = Vector3.zero;
-        summaryButton.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-        summaryButton.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-        // Configure the button appearance
-        TMP_Text captionSummary = summaryButton.transform.Find("txt_TaskNr").GetComponent<TMP_Text>();
-        captionSummary.text = "Task Summary";
-
-        // Remove any checkmark or completed UI
-        GameObject checkmarkSummary = summaryButton.transform.Find("img_Checkmark").gameObject;
-        checkmarkSummary.SetActive(false);
-
-        GameObject completedButtonSummary = summaryButton.transform.Find("btn_TaskComplete").gameObject;
-        completedButtonSummary.SetActive(false);
-
-        // Set up button click handler
-        Button buttonSummary = summaryButton.transform.Find("btn_Task").GetComponent<Button>();
-        buttonSummary.onClick.AddListener(() => panelManager.OnClickShowTaskSummary());
-
-
     }
 
     public void SubtaskPageLoader(Task.Task task)
@@ -252,7 +229,7 @@ public class UpdatedTabletTaskListLoader : MonoBehaviour
             GameObject item = Instantiate(_subtaskListEntry, Vector3.zero, Quaternion.identity);
             item.transform.SetParent(TaskSubtaskContent.transform);
             item.transform.localPosition = Vector3.zero;
-            item.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+            item.transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
             item.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
             TMP_Text caption = item.transform.Find("txt_SubTaskNr").GetComponent<TMP_Text>();
