@@ -16,8 +16,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     [SerializeReference] GameObject SkillListMenu;
     [SerializeReference] GameObject NotificationAlertMenu;
     [SerializeReference] GameObject TaskSummaryPanel;
-
-    [SerializeField] private TMP_Text summaryText;
+    [SerializeReference] TMP_Text summaryText;
 
     private AddInstructionsToWatch watch;
     private MaintenanceManager manager;
@@ -164,56 +163,52 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         ActionManager actionManager = ActionManager.Instance;
         if (actionManager != null)
         {
-            actionManager.SendMessage("TaskSummary", SendMessageOptions.DontRequireReceiver);
+            actionManager.TaskSummary();
 
             if (summaryText != null)
             {
-                summaryText.text = actionManager.LatestSummary;
+                summaryText.text = actionManager.latestSummary;
 
 
                 StartCoroutine(ResizeScrollViewContent());
+            }
+            else
+            {
+                Debug.LogError("Summary text is not assigned.");
             }
         }
     }
     private IEnumerator ResizeScrollViewContent()
     {
-        // Wait for the end of the frame to ensure text has been updated and measured
         yield return new WaitForEndOfFrame();
 
-        // Get the Content RectTransform (parent of summaryText)
         RectTransform contentRectTransform = summaryText.transform.parent.GetComponent<RectTransform>();
 
-        // Get the preferred height of the text after it's been updated
         float preferredHeight = summaryText.preferredHeight;
 
-        // Add some padding
         preferredHeight += 50f;
 
-        // Set the content height - IMPORTANT: This line was missing
         Vector2 sizeDelta = contentRectTransform.sizeDelta;
         sizeDelta.y = preferredHeight;
         contentRectTransform.sizeDelta = sizeDelta;
 
-        // Find and hide the scrollbar
         ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
         if (scrollRect != null && scrollRect.verticalScrollbar != null)
         {
             scrollRect.verticalScrollbar.gameObject.SetActive(false);
 
-            // Keep scrolling functionality
             scrollRect.vertical = true;
             scrollRect.verticalScrollbar = null;
         }
-    } // Remove the extra closing brace that was here
+    }
 
     public void ScrollSummaryDown()
     {
         ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
         if (scrollRect != null)
         {
-            // Move view up (content moves down)
             Vector2 position = scrollRect.normalizedPosition;
-            position.y = Mathf.Clamp01(position.y - 0.5f); // Adjust the 0.1f value to control scroll amount
+            position.y = Mathf.Clamp01(position.y - 0.5f);
             scrollRect.normalizedPosition = position;
         }
     }
@@ -223,9 +218,8 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
         if (scrollRect != null)
         {
-            // Move view down (content moves up)
             Vector2 position = scrollRect.normalizedPosition;
-            position.y = Mathf.Clamp01(position.y + 0.5f); // Adjust the 0.1f value to control scroll amount
+            position.y = Mathf.Clamp01(position.y + 0.5f);
             scrollRect.normalizedPosition = position;
         }
     }
