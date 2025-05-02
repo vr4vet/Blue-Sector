@@ -10,7 +10,9 @@ public class DissectionStateFinished : UnityEvent<DissectionStep>
 
 public class DissectionStep : MonoBehaviour
 {
+    [Tooltip("The width of the cut path line.")]
     [SerializeField] private float lineWidth = 1f;
+    [Tooltip("The objects which make up the cut path. A line will be drawn along these transforms.")]
     [SerializeField] private List<Transform> transforms = new();
 
     public DissectionStateFinished m_DissectionStateFinished = new();
@@ -28,8 +30,6 @@ public class DissectionStep : MonoBehaviour
 
     void Start()
     {
-        //m_DissectionStateFinished ??= new();
-
         _lineRenderer = GetComponent<LineRenderer>();
         _lineRenderer.widthMultiplier = lineWidth;
         _lineRenderer.colorGradient.mode = GradientMode.Fixed;
@@ -41,7 +41,7 @@ public class DissectionStep : MonoBehaviour
         _colorKeys = _colorGradient.colorKeys;
         _alphaKeys = _colorGradient.alphaKeys;
 
-        // storing total cut path distance, and distance at each point
+        // storing total cut path distance, and distance to each point from the first
         for (int i = 0; i < transforms.Count - 1; i++)
         {
             _totalDistance += Vector3.Distance(transforms[i].position, transforms[i + 1].position);
@@ -53,7 +53,8 @@ public class DissectionStep : MonoBehaviour
     {
         if (_scalpelEntered)
         {
-            if (_currentCutPoint < transforms.Count && Vector3.Distance(transforms[_currentCutPoint].position, _scalpel.transform.position) < .01f) // cut if close enough to current cutpoint in path
+            // progress to next cutpoint in path if scalpel is close enough to current cutpoint
+            if (_currentCutPoint < transforms.Count && Vector3.Distance(transforms[_currentCutPoint].position, _scalpel.transform.position) < .01f) 
             {
                 UpdateCutline(_currentCutPoint);
                 _currentCutPoint++;
@@ -63,7 +64,7 @@ public class DissectionStep : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Knife"))
+        if (other.CompareTag("Knife"))  // blade of scalpel has tag "Knife"
         {
             _scalpel = other;
             _scalpelEntered = true;
@@ -72,7 +73,7 @@ public class DissectionStep : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Knife"))
+        if (other.CompareTag("Knife"))  // blade of scalpel has tag "Knife"
             _scalpelEntered = false;
     }
 
