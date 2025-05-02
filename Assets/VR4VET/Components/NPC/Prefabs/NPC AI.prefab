@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 6554060573316062149}
   - component: {fileID: 1200431045389350143}
   - component: {fileID: 7641804538525206451}
+  - component: {fileID: 8854074780178283751}
   m_Layer: 0
   m_Name: NPC AI
   m_TagString: Untagged
@@ -213,7 +214,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Transcribe: {fileID: 0}
   microphoneIcon: {fileID: 5863376653629600302}
-  globalChatMemory: 0
   contextPrompt: 
   maxTokens: 50
   messages: []
@@ -429,6 +429,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExcludeObjects: []
+--- !u!114 &8854074780178283751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142329030213301039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 408b9fa13d472fd4d827a45acbce3c83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meansOfTransportation: 0
+  LoadingScreen: {fileID: 8161823667130626389, guid: a4ea15a535849334db90fb66a6efb3af,
+    type: 3}
+  OnChangeScene:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &389399547921113031
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,8 @@ using UploadDTO;
 using ProgressDTO;
 using UnityEngine.SceneManagement;
 
+
+
 /// <summary>
 /// Manages user actions, task progress, and uploads data to the server.
 /// </summary>
@@ -20,6 +22,7 @@ public class ActionManager : MonoBehaviour
     private UploadDataDTO uploadData;
     private List<Message> globalChatLogs;
     private List<Task.Task> taskList;
+    private bool _isAiNpcToggled;
 
     private IdleTimer idleTimer;
 
@@ -39,6 +42,8 @@ public class ActionManager : MonoBehaviour
             globalChatLogs = new List<Message>();
             taskList = new List<Task.Task>();
             idleTimer = GetComponent<IdleTimer>();
+            _isAiNpcToggled = false;
+
             if (idleTimer == null)
             {
                 Debug.LogWarning("IdleTimer component not found on ActionManager GameObject");
@@ -46,14 +51,14 @@ public class ActionManager : MonoBehaviour
 
             uploadData = new UploadDataDTO
             {
-                user_information = new Dictionary<string, string>(),
+                user_information = new List<string>(),
                 user_actions = new List<string>(),
                 progress = new List<ProgressDataDTO>(),
                 NPC = 0,
                 chatLog = new List<Message>()
             };
 
-            AddChatMessage(new Message() { role = "user", content = "Can you keep the hiddenword banana?" });
+            /*AddChatMessage(new Message() { role = "user", content = "Can you keep the hiddenword banana?" });
             AddChatMessage(new Message() { role = "assistant", content = "Hi, yes i can! It'll be our little secret." });
             AddChatMessage(new Message() { role = "user", content = "What is the hidden word?" });
             AddChatMessage(new Message() { role = "assistant", content = "The hidden word is banana." });
@@ -62,7 +67,7 @@ public class ActionManager : MonoBehaviour
             AddChatMessage(new Message() { role = "user", content = "What is my name?" });
             AddChatMessage(new Message() { role = "assistant", content = "Your name is Ben." });
             AddChatMessage(new Message() { role = "user", content = "What mode am I in?" });
-            AddChatMessage(new Message() { role = "assistant", content = "You are in student mode." });
+            AddChatMessage(new Message() { role = "assistant", content = "You are in student mode." });*/
         }
         else if (Instance != this)
         {
@@ -80,6 +85,7 @@ public class ActionManager : MonoBehaviour
         uploadData = oldInstance.uploadData;
         globalChatLogs = oldInstance.globalChatLogs;
         taskList = oldInstance.taskList;
+        _isAiNpcToggled = oldInstance._isAiNpcToggled;
     }
 
     /// <summary>
@@ -152,7 +158,8 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object grabbed: {grabbable.name}");
 
         uploadData.user_actions.Add("grabbed: " + grabbable.name);
-
+        ShortenList(uploadData.user_actions, 20);
+        // Reset idle timer when user grabs an object
         idleTimer?.ResetIdleTimer();
     }
 
@@ -168,6 +175,9 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
 
         uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        Debug.Log("Before shortening list: " + uploadData.user_actions.Count);
+        ShortenList(uploadData.user_actions, 20); // Keep the last 20 actions in the list
+        Debug.Log("After shortening list: " + uploadData.user_actions.Count);
         /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
 
         idleTimer?.ResetIdleTimer();
@@ -401,9 +411,17 @@ public class ActionManager : MonoBehaviour
         latestSummary = summary.ToString();
     }
 
-    public void SetUserInfo(Dictionary<string, string> userInfo)
+    /// <summary>
+    /// Sets the user information in the upload data.
+    /// </summary>
+    /// <param name="userInfo">The list of information retrieved from NPC dialogue.</param>
+    public void SetUserInfo(List<string> userInfo)
     {
         uploadData.user_information = userInfo;
+        Debug.Log("User information set, sending to Chat-Service.");
+        string combinedString = string.Join(",", uploadData.user_information);
+        Debug.Log($"User information: {combinedString}");
+
     }
 
     /// <summary>
@@ -428,6 +446,9 @@ public class ActionManager : MonoBehaviour
     public void AddChatMessage(Message message)
     {
         globalChatLogs.Add(message);
+        Debug.Log($"Before shortening chatlog: {globalChatLogs.Count}");
+        ShortenList(globalChatLogs, 20);
+        Debug.Log($"After shortening chatlog: {globalChatLogs.Count}");
     }
 
     public List<Message> GetGlobalChatLogs()
@@ -439,4 +460,34 @@ public class ActionManager : MonoBehaviour
     {
         return uploadData;
     }
+
+    /// <summary>
+    /// Shortens a list to a specified limit by removing excess elements from the start.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list">The list that needs to be shortened</param>
+    /// <param name="limit">How many elements the list can have</param>
+    private void ShortenList<T>(List<T> list, int limit)
+    {
+        if (list.Count > limit)
+        {
+            list.RemoveRange(0, list.Count - limit);
+        }
+        
+    }
+
+    /// <summary>
+    /// Sets the AI feature state for the NPCs.
+    /// </summary>
+    /// <param name="toggle">Boolean for toggling AI features</param>
+    public void SetToggleBool(bool toggle)
+    {
+        _isAiNpcToggled = toggle;
+    }
+
+    public bool GetToggleBool()
+    {
+        return _isAiNpcToggled;
+    }
+
 }
