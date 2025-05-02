@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,18 +15,20 @@ public class UpdatedTabletPanelManager : MonoBehaviour
     [SerializeReference] GameObject SubtaskAboutMenu;
     [SerializeReference] GameObject SkillListMenu;
     [SerializeReference] GameObject NotificationAlertMenu;
+    [SerializeReference] GameObject TaskSummaryPanel;
+    [SerializeReference] TMP_Text summaryText;
 
     private AddInstructionsToWatch watch;
     private MaintenanceManager manager;
     private WatchManager watchManager;
     private List<GameObject> allMenus = new();
 
-    private bool taskPageOpen = false; 
+    private bool taskPageOpen = false;
     private bool subtaskPageOpen = false;
 
     void Start()
     {
-        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu });
+        allMenus.AddRange(new List<GameObject>() { TaskListMenu, TaskAboutMenu, SubtaskAboutMenu, SkillListMenu, TaskSummaryPanel });
         watchManager = WatchManager.Instance;
 
         foreach (var item in allMenus)
@@ -41,7 +44,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             manager.CurrentSubtask.AddListener(OnCurrentSubtaskChanged);
             manager.SkillCompleted.AddListener(OnSkillCompleted);
         }
-        else 
+        else
         {
             watchManager.CurrentSubtask.AddListener(OnCurrentSubtaskChanged);
             watchManager.SkillCompleted.AddListener(OnSkillCompleted);
@@ -85,7 +88,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             TaskListMenu.SetActive(false);
             taskPageOpen = false;
             watchManager.UIChanged.Invoke();
-            return; 
+            return;
         }
     }
 
@@ -109,7 +112,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
             TaskAboutMenu.SetActive(false);
             subtaskPageOpen = false;
             watchManager.UIChanged.Invoke();
-            return; 
+            return;
         }
     }
 
@@ -152,6 +155,79 @@ public class UpdatedTabletPanelManager : MonoBehaviour
         watchManager.UIChanged.Invoke();
     }
 
+    public void OnClickShowTaskSummary()
+    {
+        SwitchMenuTo(TaskSummaryPanel);
+        watchManager.UIChanged.Invoke();
+
+        ActionManager actionManager = ActionManager.Instance;
+        if (actionManager != null)
+        {
+            actionManager.TaskSummary();
+
+            if (summaryText != null)
+            {
+                summaryText.text = actionManager.latestSummary;
+
+
+                StartCoroutine(ResizeScrollViewContent());
+            }
+            else
+            {
+                Debug.LogError("Summary text is not assigned.");
+            }
+        }
+    }
+    private IEnumerator ResizeScrollViewContent()
+    {
+        yield return new WaitForEndOfFrame();
+
+        RectTransform contentRectTransform = summaryText.transform.parent.GetComponent<RectTransform>();
+
+        float preferredHeight = summaryText.preferredHeight;
+
+        preferredHeight += 50f;
+
+        Vector2 sizeDelta = contentRectTransform.sizeDelta;
+        sizeDelta.y = preferredHeight;
+        contentRectTransform.sizeDelta = sizeDelta;
+
+        ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
+        if (scrollRect != null && scrollRect.verticalScrollbar != null)
+        {
+            scrollRect.verticalScrollbar.gameObject.SetActive(false);
+
+            scrollRect.vertical = true;
+            scrollRect.verticalScrollbar = null;
+        }
+    }
+
+    public void ScrollSummaryDown()
+    {
+        ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
+        if (scrollRect != null)
+        {
+            Vector2 position = scrollRect.normalizedPosition;
+            position.y = Mathf.Clamp01(position.y - 0.5f);
+            scrollRect.normalizedPosition = position;
+        }
+    }
+
+    public void ScrollSummaryUp()
+    {
+        ScrollRect scrollRect = TaskSummaryPanel.GetComponentInChildren<ScrollRect>();
+        if (scrollRect != null)
+        {
+            Vector2 position = scrollRect.normalizedPosition;
+            position.y = Mathf.Clamp01(position.y + 0.5f);
+            scrollRect.normalizedPosition = position;
+        }
+    }
+
+    public void OnClickBackFromTaskSummary()
+    {
+        OnClickMenuTask();
+    }
     public void SetAlertMenu()
     {
         if (gameObject.activeInHierarchy)
