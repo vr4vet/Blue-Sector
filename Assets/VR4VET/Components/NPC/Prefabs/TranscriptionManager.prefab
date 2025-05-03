@@ -52,7 +52,7 @@ MonoBehaviour:
   serverTranscription: {fileID: 5895592686840732147}
   subtitleText: {fileID: 0}
   subtitleBackground: {fileID: 0}
-  useServerTranscription: 0
+  useServerTranscription: 1
   availableLanguages:
   - en
   - no
@@ -61,7 +61,7 @@ MonoBehaviour:
   recordAction: {fileID: 0}
   subtitleFadeDelay: 5
   subtitlesInitiallyEnabled: 1
-  enableVAD: 1
+  enableVAD: 0
 --- !u!114 &2485336376668602490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,7 +80,7 @@ MonoBehaviour:
   initOnAwake: 1
   language: en
   translateToEnglish: 0
-  strategy: 0
+  strategy: 1
   noContext: 1
   singleSegment: 0
   enableTokens: 0
@@ -110,7 +110,7 @@ MonoBehaviour:
   loop: 0
   frequency: 16000
   chunksLengthSec: 0.5
-  echo: 0
+  echo: 1
   useVad: 1
   vadUpdateRateSec: 0.1
   vadContextSec: 30
@@ -118,9 +118,9 @@ MonoBehaviour:
   vadThd: 1
   vadFreqThd: 100
   vadIndicatorImage: {fileID: 0}
-  vadStop: 1
-  dropVadPart: 1
-  vadStopTime: 3
+  vadStop: 0
+  dropVadPart: 0
+  vadStopTime: 0
   microphoneDropdown: {fileID: 0}
   microphoneDefaultLabel: Default microphone
 --- !u!114 &5895592686840732147

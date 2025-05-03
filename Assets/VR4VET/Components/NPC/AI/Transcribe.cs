@@ -115,7 +115,6 @@ public class Transcribe : MonoBehaviour
         if (serverTranscription != null)
         {
             serverTranscription.OnTranscriptionComplete += HandleServerTranscriptionComplete;
-            serverTranscription.OnProgress += HandleServerProgress;
             serverTranscription.OnTranscriptionError += HandleServerTranscriptionError;
         }
 #else
@@ -128,7 +127,7 @@ public class Transcribe : MonoBehaviour
     {
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
         // -- Language Setup --
-        // TODO: Replace this with logic to get language from your settings menu
+        // TODO: Replace this with logic to get language from settings menu??
         string initialLanguage = whisper.language;
         if (string.IsNullOrEmpty(initialLanguage) || initialLanguage.Equals("auto", StringComparison.OrdinalIgnoreCase))
         {
@@ -198,7 +197,6 @@ public class Transcribe : MonoBehaviour
         if (serverTranscription != null)
         {
             serverTranscription.OnTranscriptionComplete -= HandleServerTranscriptionComplete;
-            serverTranscription.OnProgress -= HandleServerProgress;
             serverTranscription.OnTranscriptionError -= HandleServerTranscriptionError;
         }
 #endif
@@ -468,13 +466,6 @@ public class Transcribe : MonoBehaviour
         ProcessTranscriptionResult(null, null, true, errorMessage); // Pass error to central processor
     }
 
-    /// <summary>
-    /// Called by ServerTranscriptionManager with progress updates (optional).
-    /// </summary>
-    private void HandleServerProgress(int progressPercent)
-    {
-        UpdateSubtitleDisplay($"Server Processing: {progressPercent}%", true);
-    }
 #endif
 
     // --- Result Processing ---
