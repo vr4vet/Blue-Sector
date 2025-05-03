@@ -115,25 +115,6 @@ public class AIConversationController : MonoBehaviour
         return this._Transcribe;
     }
 
-    // --- Deprecated Direct Input Handling (Keep for reference, but use TriggerRecording via ConversationController) ---
-    // public void PressButton(InputAction.CallbackContext context)
-    // {
-    //     if (_conversationController == null || _dialogueBoxController == null) return;
-
-    //     bool canTalk = _conversationController.playerInsideTrigger && _dialogueBoxController.isTalkable && !_dialogueBoxController.dialogueEnded;
-
-    //     if (context.started && canTalk)
-    //     {
-    //         TriggerRecording(true);
-    //     }
-
-    //     if (context.canceled && _Transcribe != null && _Transcribe.IsRecording()) // Check if actually recording before stopping
-    //     {
-    //         TriggerRecording(false);
-    //     }
-    // }
-    // --- End Deprecated Input Handling ---
-
     // Called by Transcribe when transcription is finished
     public void CreateRequest(string transcript)
     {
@@ -142,6 +123,12 @@ public class AIConversationController : MonoBehaviour
             // Handle poor transcription - maybe provide canned response?
             transcript = "I'm sorry, I couldn't understand what you said. Could you please try again? Make sure to hold the button while speaking.";
             Debug.Log("Transcription was empty or inaudible. Using fallback prompt.");
+            HandleFallbackResponse(transcript);
+            return;
+        }
+        else if (transcript.Equals("[Error: FAILED TO TRANSCRIBE]"))
+        {
+            transcript = "Transcription failed!";
             HandleFallbackResponse(transcript);
             return;
         }

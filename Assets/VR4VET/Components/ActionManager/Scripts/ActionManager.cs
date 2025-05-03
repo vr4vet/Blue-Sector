@@ -445,9 +445,7 @@ public class ActionManager : MonoBehaviour
     public void AddChatMessage(Message message)
     {
         globalChatLogs.Add(message);
-        Debug.Log($"Before shortening chatlog: {globalChatLogs.Count}");
         ShortenList(globalChatLogs, 20);
-        Debug.Log($"After shortening chatlog: {globalChatLogs.Count}");
     }
 
     public List<Message> GetGlobalChatLogs()

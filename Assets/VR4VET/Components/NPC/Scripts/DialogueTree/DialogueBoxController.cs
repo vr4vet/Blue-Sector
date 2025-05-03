@@ -909,7 +909,7 @@ public class DialogueBoxController : MonoBehaviour
     // Adds dialogue line to AI context if AI is enabled
     private void AddDialogueToContext(string dialogue)
     {
-        if (_AIConversationController != null && !_AIConversationController.messages[-1].Equals(dialogue))
+        if (_AIConversationController != null)
         {
             // Only add assistant messages (NPC speech) here. User messages added in AIRequest.
             _AIConversationController.AddMessage(new Message { role = "assistant", content = dialogue });
