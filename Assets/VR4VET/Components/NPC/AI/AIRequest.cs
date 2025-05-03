@@ -13,7 +13,7 @@ public class AIRequest : MonoBehaviour
     // Configuration (Set by AIConversationController)
     public string query;
     [HideInInspector] public int maxTokens;
-    public UploadDataDTO requestPayload;
+    [HideInInspector] public UploadDataDTO requestPayload;
 
     // Dependencies (Fetched dynamically)
     private AIResponseToSpeech _aiResponseToSpeech;
