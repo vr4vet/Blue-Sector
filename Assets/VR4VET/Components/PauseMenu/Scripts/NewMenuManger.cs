@@ -34,6 +34,7 @@ public class NewMenuManger : MonoBehaviour
     [SerializeField] private GameObject _remapCanvas;
     [SerializeField] private GameObject _audioCanvas;
     [SerializeField] private GameObject _accessibilityCanvas;
+    [SerializeField] private GameObject _aiSettingsCanvas;
     // public GameObject stateSaverComponent;
 
     private GameObject _savedStates;
@@ -78,7 +79,7 @@ public class NewMenuManger : MonoBehaviour
         c.a = 1f;
         _wallsMaterial.color = c;
 
-        allMenus.AddRange(new List<GameObject>() { _menuCanvas, _settingsCanvas, _aboutCanvas, _languagesCanvas, _remapCanvas, _audioCanvas, _accessibilityCanvas });
+        allMenus.AddRange(new List<GameObject>() { _menuCanvas, _settingsCanvas, _aboutCanvas, _languagesCanvas, _remapCanvas, _audioCanvas, _accessibilityCanvas, _aiSettingsCanvas });
         AdjustCanvasDistances();
 
         foreach (var item in allMenus)
