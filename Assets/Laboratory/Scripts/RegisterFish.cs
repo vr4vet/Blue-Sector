@@ -23,9 +23,9 @@ public class RegisterFish : MonoBehaviour
     {
         if (collisionObject.GetComponent<Weight>() && collisionObject.gameObject.CompareTag("Bone"))
         {
-            if (_dialogueBoxController.dialogueTreeRestart != null && _dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+            if (_dialogueBoxController.DialogueTreeRestart != null && _dialogueBoxController.DialogueTreeRestart.name == "LarsDialogue")
             {
-                if (_dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[1])
+                if (_dialogueBoxController._dialogueText.text == _dialogueBoxController.DialogueTreeRestart.sections[5].dialogue[1])
                 {
                     _dialogueBoxController.SkipLine();
                     m_OnFishPlacedOnPlate.Invoke();

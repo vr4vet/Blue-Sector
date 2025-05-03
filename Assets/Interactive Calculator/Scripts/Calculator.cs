@@ -195,9 +195,9 @@ namespace InteractiveCalculator
                 InputDecimals = 0;
                 CurrentDisplayMode = DisplayMode.value;
 
-                if (dialogueBoxController.dialogueTreeRestart != null && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue")
+                if (dialogueBoxController.DialogueTreeRestart != null && dialogueBoxController.DialogueTreeRestart.name == "LarsDialogue")
                 {
-                    if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[0] && currentOperator == "*" && (int)Input == 100)
+                    if (dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[5].dialogue[0] && currentOperator == "*" && (int)Input == 100)
                     {
                         dialogueBoxController.SkipLine();
                         m_OnConditionFactorCalculated.Invoke();

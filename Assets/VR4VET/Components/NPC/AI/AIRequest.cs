@@ -1,19 +1,20 @@
-// Purpose: Sends request to Server Backend
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Text; // For UTF8Encoding
-using ProgressDTO;
+using System.Text;
 using UploadDTO;
 
+/// <summary>
+/// Handles sending requests to the AI backend in runtime.
+/// </summary>
 public class AIRequest : MonoBehaviour
 {
     // Configuration (Set by AIConversationController)
-    public string query;
-    [HideInInspector] public int maxTokens;
-    [HideInInspector] public UploadDataDTO requestPayload;
+    public string Query;
+    [HideInInspector] public int MaxTokens;
+    [HideInInspector] public UploadDataDTO RequestPayload;
 
     // Dependencies (Fetched dynamically)
     private AIResponseToSpeech _aiResponseToSpeech;
@@ -25,9 +26,11 @@ public class AIRequest : MonoBehaviour
     private List<Message> _messagesToSend = new(); // Local copy for request
     private AudioSource _audioSource; // For fallback audio
 
+    /// <summary>
+    /// Initializes the AIRequest component and sends LLM request.
+    /// </summary>
     void Start()
     {
-        // Get Component References
         _aiConversationController = GetComponent<AIConversationController>();
         if (_aiConversationController == null)
         {
@@ -42,7 +45,7 @@ public class AIRequest : MonoBehaviour
             Destroy(this); return;
         }
 
-        // Add Fix 1: Ensure DialogueBoxController Reference
+        // Ensure DialogueBoxController Reference
         _dialogueBoxController = GetComponent<DialogueBoxController>();
         if (_dialogueBoxController == null)
         {
@@ -63,30 +66,36 @@ public class AIRequest : MonoBehaviour
             _audioSource = gameObject.AddComponent<AudioSource>();
         }
 
-        // Prepare messages for the request
-        _messagesToSend = new List<Message>(_aiConversationController.messages);
-        Message userMessage = new() { role = "user", content = query };
+        _messagesToSend = new List<Message>(_aiConversationController.Messages);
+        Message userMessage = new() { role = "user", content = Query };
         _messagesToSend.Add(userMessage);
 
-        // Start the API call
         StartCoroutine(SendLLMRequest());
     }
 
+    /// <summary>
+    /// Sends a request chat-service containing the user's query and logged data from ActionManager.
+    /// Data structure is defined in UploadDataDTO.cs, and needs to match the server-side code.
+    /// Returns a json response matching the LLMResponse class.
+    /// User message and LLM response are added to chat history with successful request and response.
+    /// LLM may return a function call, which is then executed. (Currently only teleporting works)
+    /// </summary>
+    /// <returns></returns>
     IEnumerator SendLLMRequest()
     {
-        if (string.IsNullOrWhiteSpace(query))
+        if (string.IsNullOrWhiteSpace(Query))
         {
             Debug.LogError("AIRequest: Query is empty, aborting request.", this);
             HandleErrorOrFallback("My query was empty.");
             yield break;
         }
 
-        Debug.Log($"AIRequest: Sending request to Chatbot. Query: '{query}'");
+        Debug.Log($"AIRequest: Sending request to Chatbot. Query: '{Query}'");
 
 
-        requestPayload.chatLog = _messagesToSend;
+        RequestPayload.chatLog = _messagesToSend;
 
-        string jsonData = JsonUtility.ToJson(requestPayload);
+        string jsonData = JsonUtility.ToJson(RequestPayload);
         Debug.Log($"AIRequest: Sending payload: {jsonData}");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
@@ -100,7 +109,7 @@ public class AIRequest : MonoBehaviour
 
             Debug.Log($"AIRequest: Server response: {request.downloadHandler.text}");
 
-            _aiConversationController.AddMessage(new Message { role = "user", content = query });
+            _aiConversationController.AddMessage(new Message { role = "user", content = Query });
 
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
@@ -153,6 +162,11 @@ public class AIRequest : MonoBehaviour
         yield return null;
     }
 
+    /// <summary>
+    /// Sanitizes the response text to ensure it is clean and ready for display.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns>Sanitized response text</returns>
     string SanitizeResponse(string text)
     {
         return text
@@ -166,10 +180,8 @@ public class AIRequest : MonoBehaviour
     {
         if (_aiResponseToSpeech != null && _dialogueBoxController != null)
         {
-            // Always use WitAIDictate regardless of useWitAI flag
             IEnumerator ttsCoroutine = _aiResponseToSpeech.WitAIDictate(responseText);
 
-            // Add Fix 4 & Fix 5: Synchronize Thinking Animation and Response Display
             StartCoroutine(ProcessResponseSequence(ttsCoroutine, responseText));
             Debug.Log($"HandleSuccessfulResponse: Passing response to DisplayResponse: '{responseText}'");
         }
@@ -192,7 +204,7 @@ public class AIRequest : MonoBehaviour
     void HandleErrorOrFallback(string error, long responseCode = -1)
     {
         Debug.Log($"Handling Error/Fallback. Code: {responseCode}, Error: {error}");
-        string fallbackMessage = GetGenericErrorMessage(_aiConversationController?.GetTranscribe()?.currentLanguage ?? "en");
+        string fallbackMessage = GetGenericErrorMessage(_aiConversationController?.GetTranscribe()?.CurrentLanguage ?? "en");
 
         if (_dialogueBoxController != null)
         {
@@ -212,6 +224,12 @@ public class AIRequest : MonoBehaviour
         };
     }
 
+    /// <summary>
+    /// If LLM response contains a function call, it is then executed if it matches the ones from the list.
+    /// Should be fairly easy to add more functions in the future. But make sure to define it on the server-side as well.
+    /// </summary>
+    /// <param name="functionName"></param>
+    /// <param name="parameters"></param>
     private void ExecuteFunction(string functionName, string[] parameters)
     {
         switch (functionName)
@@ -234,6 +252,10 @@ public class AIRequest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Teleport the player to another scene using AISceneController.
+    /// </summary>
+    /// <param name="location"></param>
     private void TeleportPlayer(string location)
     {
         Debug.Log($"Teleporting player to {location}");

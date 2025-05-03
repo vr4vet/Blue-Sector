@@ -17,7 +17,7 @@ public class ConversationController : MonoBehaviour
     // --- Component References ---
     [HideInInspector] private Animator _animator; // Found on parent's child model
     [HideInInspector] private DialogueBoxController _dialogueBoxController; // Found on parent
-    [HideInInspector] public AIConversationController _AIConversationController; // Found on parent (Set by NPCSpawner)
+    [HideInInspector] public AIConversationController AIConversationController; // Found on parent (Set by NPCSpawner)
 
     // --- Input System ---
     [Header("Input Settings")]
@@ -25,8 +25,8 @@ public class ConversationController : MonoBehaviour
     [SerializeField] private InputActionReference voiceRecordAction;
 
     // --- State ---
-    [HideInInspector] public bool playerInsideTrigger = false;
-    [HideInInspector] public bool isRecording = false; // Track active recording state
+    [HideInInspector] public bool PlayerInsideTrigger = false;
+    [HideInInspector] public bool IsRecording = false; // Track active recording state
 
     // --- Animation Hashes ---
     [HideInInspector] private int _hasNewDialogueOptionsHash;
@@ -51,7 +51,7 @@ public class ConversationController : MonoBehaviour
         }
 
         // Ensure we stop recording if component is disabled while recording
-        if (isRecording)
+        if (IsRecording)
         {
             HandleRecordButton(false);
         }
@@ -61,7 +61,7 @@ public class ConversationController : MonoBehaviour
     private void OnVoiceRecordPerformed(InputAction.CallbackContext context)
     {
         // Only handle input if this NPC is the one the player is interacting with
-        if (playerInsideTrigger && CanStartRecording())
+        if (PlayerInsideTrigger && CanStartRecording())
         {
             Debug.Log($"VoiceRecord button pressed down on {transform.parent?.name}");
             HandleRecordButton(true);
@@ -72,7 +72,7 @@ public class ConversationController : MonoBehaviour
     private void OnVoiceRecordCanceled(InputAction.CallbackContext context)
     {
         // Check if we're the active recorder to avoid stopping recordings that weren't started by us
-        if (isRecording)
+        if (IsRecording)
         {
             Debug.Log($"VoiceRecord button released on {transform.parent?.name}");
             HandleRecordButton(false);
@@ -143,22 +143,22 @@ public class ConversationController : MonoBehaviour
 
     public bool isDialogueActive()
     {
-        return _dialogueBoxController != null && _dialogueBoxController.dialogueIsActive;
+        return _dialogueBoxController != null && _dialogueBoxController.DialogueIsActive;
     }
 
     // Method for external systems (like VR Input) to check if interaction is possible
     public bool CanStartRecording()
     {
-        return playerInsideTrigger &&
+        return PlayerInsideTrigger &&
                _dialogueBoxController != null &&
-               _dialogueBoxController.isTalkable && // Check talkable state from DialogueBoxController
-               !_dialogueBoxController.dialogueEnded;
+               _dialogueBoxController.IsTalkable && // Check talkable state from DialogueBoxController
+               !_dialogueBoxController.DialogueEnded;
     }
 
     // --- Public method for VR Input System to call ---
     public void HandleRecordButton(bool pressed)
     {
-        if (_AIConversationController == null)
+        if (AIConversationController == null)
         {
             Debug.Log("HandleRecordButton called, but this is not an AI NPC.");
             return; // Ignore if not an AI NPC
@@ -166,24 +166,24 @@ public class ConversationController : MonoBehaviour
 
         if (pressed) // Button Press Down
         {
-            if (CanStartRecording() && !isRecording) // Only start if not already recording
+            if (CanStartRecording() && !IsRecording) // Only start if not already recording
             {
                 Debug.Log($"ConversationController ({transform.parent.name}): Record button pressed & valid state. Starting recording.");
-                _AIConversationController.TriggerRecording(true);
-                isRecording = true;
+                AIConversationController.TriggerRecording(true);
+                IsRecording = true;
             }
             else
             {
-                Debug.Log($"ConversationController ({transform.parent.name}): Record button pressed but cannot start recording (Inside: {playerInsideTrigger}, Talkable: {_dialogueBoxController?.isTalkable}, Ended: {_dialogueBoxController?.dialogueEnded}).");
+                Debug.Log($"ConversationController ({transform.parent.name}): Record button pressed but cannot start recording (Inside: {PlayerInsideTrigger}, Talkable: {_dialogueBoxController?.IsTalkable}, Ended: {_dialogueBoxController?.DialogueEnded}).");
             }
         }
         else // Button Release
         {
-            if (isRecording && _AIConversationController.GetTranscribe() != null)
+            if (IsRecording && AIConversationController.GetTranscribe() != null)
             {
                 Debug.Log($"ConversationController ({transform.parent.name}): Record button released. Stopping recording.");
-                _AIConversationController.TriggerRecording(false);
-                isRecording = false;
+                AIConversationController.TriggerRecording(false);
+                IsRecording = false;
             }
         }
     }
@@ -195,14 +195,14 @@ public class ConversationController : MonoBehaviour
         // Check if the collider belongs to the player (using the singleton reference)
         if (NPCToPlayerReferenceManager.Instance != null && other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider))
         {
-            playerInsideTrigger = true;
+            PlayerInsideTrigger = true;
             Debug.Log($"ConversationController ({transform.parent.name}): Player entered trigger range.");
 
             // Show the dialogue UI canvas (DialogueBoxController handles actual content visibility)
             if (_dialogueBoxController != null) _dialogueBoxController.ShowDialogueBox();
 
             // Start dialogue automatically ONLY if proximity trigger is enabled, not already active, and it's a new tree
-            if (_dialogueTree != null && _dialogueTree.shouldTriggerOnProximity && !isDialogueActive() && _oldDialogueTree != _dialogueTree)
+            if (_dialogueTree != null && _dialogueTree.ShouldTriggerOnProximity && !isDialogueActive() && _oldDialogueTree != _dialogueTree)
             {
                 Debug.Log($"ConversationController ({transform.parent.name}): Proximity trigger starting dialogue tree '{_dialogueTree.name}'.");
                 _oldDialogueTree = _dialogueTree; // Mark as seen
@@ -219,14 +219,14 @@ public class ConversationController : MonoBehaviour
     {
         if (NPCToPlayerReferenceManager.Instance != null && other.Equals(NPCToPlayerReferenceManager.Instance.PlayerCollider))
         {
-            playerInsideTrigger = false;
+            PlayerInsideTrigger = false;
             Debug.Log($"ConversationController ({transform.parent.name}): Player exited trigger range.");
 
             // Hide the dialogue canvas if dialogue is not active
             if (_dialogueBoxController != null) _dialogueBoxController.HideDialogueBox();
 
             // If the player leaves while recording, stop recording
-            if (isRecording)
+            if (IsRecording)
             {
                 HandleRecordButton(false); // Trigger stop
             }
@@ -487,12 +487,12 @@ public class ConversationController : MonoBehaviour
     {
         Debug.Log("Testing voice recording connection:");
         Debug.Log($"- Input Action Reference: {(voiceRecordAction != null ? "Assigned" : "Missing")}");
-        Debug.Log($"- AI Controller: {(_AIConversationController != null ? "Connected" : "Missing")}");
+        Debug.Log($"- AI Controller: {(AIConversationController != null ? "Connected" : "Missing")}");
         Debug.Log($"- DialogueBox Controller: {(_dialogueBoxController != null ? "Connected" : "Missing")}");
-        Debug.Log($"- Transcribe Component: {(_AIConversationController != null && _AIConversationController.GetTranscribe() != null ? "Available" : "Missing")}");
-        Debug.Log($"- Player Inside Trigger: {playerInsideTrigger}");
-        Debug.Log($"- Talkable State: {(_dialogueBoxController != null ? _dialogueBoxController.isTalkable.ToString() : "N/A")}");
-        Debug.Log($"- Dialogue Ended: {(_dialogueBoxController != null ? _dialogueBoxController.dialogueEnded.ToString() : "N/A")}");
+        Debug.Log($"- Transcribe Component: {(AIConversationController != null && AIConversationController.GetTranscribe() != null ? "Available" : "Missing")}");
+        Debug.Log($"- Player Inside Trigger: {PlayerInsideTrigger}");
+        Debug.Log($"- Talkable State: {(_dialogueBoxController != null ? _dialogueBoxController.IsTalkable.ToString() : "N/A")}");
+        Debug.Log($"- Dialogue Ended: {(_dialogueBoxController != null ? _dialogueBoxController.DialogueEnded.ToString() : "N/A")}");
     }
 #endif
 }

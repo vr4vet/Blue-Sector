@@ -1,59 +1,60 @@
 /* Developer: Erik Le Blanc
  * Ask your questions on github: https://github.com/erikleblanc
  */
-
 using System;
 using UnityEngine;
 using Task;
 
 /// <summary>
 /// Tracks user idle time and reports when the user has been idle for too long.
+/// Should be connected to send requests through NPCs when the user is idle.
+/// Some parts might be deprecated or not used.
 /// </summary
 public class IdleTimer : MonoBehaviour
 {
-    private float idleTimer = 0f;
-    private bool isTrackingIdleTime = false;
-    private Task.Subtask lastProgressedSubtask;
-    private Task.Step lastCompletedStep;
-    private string timeoutPrompt;
+    private float _idleTimer = 0f;
+    private bool _isTrackingIdleTime = false;
+    private Task.Subtask _lastProgressedSubtask;
+    private Task.Step _lastCompletedStep;
+    private string _timeoutPrompt;
 
     // Default threshold (in seconds)
-    [SerializeField] private float defaultIdleThresholdInSeconds; // Default 2 minutes
+    [SerializeField] private float _defaultIdleThresholdInSeconds; // Default 2 minutes
 
     // How often to check if the user is still idle (in seconds)
-    [SerializeField] private float idleCheckIntervalInSeconds;
+    [SerializeField] private float _idleCheckIntervalInSeconds;
 
     // Current idle threshold for the active subtask
-    private float idleThresholdInSeconds;
+    private float _idleThresholdInSeconds;
 
-    private float nextIdleCheckTime = 0f;
+    private float _nextIdleCheckTime = 0f;
 
-    private bool thresholdReached = false;
+    private bool _thresholdReached = false;
 
     /// <summary>
     /// Update is called once per frame and handles the idle timer tracking.
     /// </summary>
     private void Update()
     {
-        if (isTrackingIdleTime && lastProgressedSubtask != null && lastCompletedStep != null)
+        if (_isTrackingIdleTime && _lastProgressedSubtask != null && _lastCompletedStep != null)
         {
             // Increment idle timer
-            idleTimer += Time.deltaTime;
+            _idleTimer += Time.deltaTime;
 
             // First time threshold is reached
-            if (!thresholdReached && idleTimer >= idleThresholdInSeconds)
+            if (!_thresholdReached && _idleTimer >= _idleThresholdInSeconds)
             {
                 // Send idle report immediately when threshold is first reached
                 SendIdleReport();
-                thresholdReached = true;
-                nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
+                _thresholdReached = true;
+                _nextIdleCheckTime = Time.time + _idleCheckIntervalInSeconds;
             }
             // Subsequent interval checks after threshold was already reached
-            else if (thresholdReached && Time.time >= nextIdleCheckTime)
+            else if (_thresholdReached && Time.time >= _nextIdleCheckTime)
             {
                 // Send additional idle reports at the specified intervals
                 SendIdleReport();
-                nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
+                _nextIdleCheckTime = Time.time + _idleCheckIntervalInSeconds;
             }
         }
     }
@@ -65,44 +66,42 @@ public class IdleTimer : MonoBehaviour
     /// <param name="step">The last step the user completed.</param>
     public void StartIdleTracking(Task.Subtask subtask, Task.Step step)
     {
-        lastProgressedSubtask = subtask;
-        lastCompletedStep = step;
+        _lastProgressedSubtask = subtask;
+        _lastCompletedStep = step;
 
-        float stepTimeout = defaultIdleThresholdInSeconds;
+        float stepTimeout = _defaultIdleThresholdInSeconds;
 
         if (subtask.Compleated())
         {
             stepTimeout = 0f;
         }
 
-
         // If timeout is 0, disable tracking until new subtask has started progress
         if (stepTimeout <= 0)
         {
-            isTrackingIdleTime = false;
-            idleTimer = 0f;
+            _isTrackingIdleTime = false;
+            _idleTimer = 0f;
             Debug.Log($"Idle tracking disabled for subtask: {subtask.SubtaskName}, step: {step.StepName}");
             return;
         }
 
         // Otherwise, start tracking with the specified timeout
-        isTrackingIdleTime = true;
-        idleTimer = 0f;
-        thresholdReached = false;
-        idleThresholdInSeconds = stepTimeout;
-        nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
+        _isTrackingIdleTime = true;
+        _idleTimer = 0f;
+        _thresholdReached = false;
+        _idleThresholdInSeconds = stepTimeout;
+        _nextIdleCheckTime = Time.time + _idleCheckIntervalInSeconds;
 
-        Debug.Log($"Started idle tracking for subtask: {subtask.SubtaskName}, step: {step.StepName}, timeout: {idleThresholdInSeconds}s");
+        Debug.Log($"Started idle tracking for subtask: {subtask.SubtaskName}, step: {step.StepName}, timeout: {_idleThresholdInSeconds}s");
     }
-
 
     /// <summary>
     /// Stops tracking idle time.
     /// </summary>
     public void StopIdleTracking()
     {
-        isTrackingIdleTime = false;
-        idleTimer = 0f;
+        _isTrackingIdleTime = false;
+        _idleTimer = 0f;
 
         Debug.Log("Stopped idle tracking");
     }
@@ -113,15 +112,14 @@ public class IdleTimer : MonoBehaviour
     /// </summary>
     public void ResetIdleTimer()
     {
-        if (isTrackingIdleTime)
+        if (_isTrackingIdleTime)
         {
-            idleTimer = 0f;
-            thresholdReached = false;
-            nextIdleCheckTime = Time.time + idleCheckIntervalInSeconds;
+            _idleTimer = 0f;
+            _thresholdReached = false;
+            _nextIdleCheckTime = Time.time + _idleCheckIntervalInSeconds;
             Debug.Log("Idle timer reset due to user activity");
         }
     }
-
 
     /// <summary>
     /// Handles the idle threshold exceeded event from IdleTimer
@@ -131,7 +129,7 @@ public class IdleTimer : MonoBehaviour
     {
         Debug.Log($"Idle threshold reached: {idleData.idleTimeSeconds} seconds on subtask: {idleData.currentSubtaskName}, step: {idleData.lastActiveStep}");
         // Update the question to reflect the idle state
-        timeoutPrompt = $"User might need assistance with subtask '{lastProgressedSubtask.SubtaskName}'. They recently completed step '{lastCompletedStep.StepName}'. They have been idle for {Math.Round(idleTimer / 60, 1)} minutes.";
+        _timeoutPrompt = $"User might need assistance with subtask '{_lastProgressedSubtask.SubtaskName}'. They recently completed step '{_lastCompletedStep.StepName}'. They have been idle for {Math.Round(_idleTimer / 60, 1)} minutes.";
         
         if (ActionManager.Instance != null)
         {
@@ -144,19 +142,19 @@ public class IdleTimer : MonoBehaviour
     /// </summary>
     private void SendIdleReport()
     {
-        if (lastProgressedSubtask == null || lastCompletedStep == null)
+        if (_lastProgressedSubtask == null || _lastCompletedStep == null)
             return;
 
-        Debug.Log($"Idle threshold reached with timeout of {idleThresholdInSeconds} seconds");
+        Debug.Log($"Idle threshold reached with timeout of {_idleThresholdInSeconds} seconds");
 
         // Create idle data
         IdleData idleData = new IdleData
         {
-            currentSubtaskName = lastProgressedSubtask.SubtaskName,
-            idleTimeSeconds = idleTimer,
-            idleThresholdSeconds = idleThresholdInSeconds,
-            lastActiveStep = lastCompletedStep.StepName,
-            subtaskStartTime = DateTime.Now.AddSeconds(-idleTimer).ToString("yyyy-MM-dd HH:mm:ss")
+            currentSubtaskName = _lastProgressedSubtask.SubtaskName,
+            idleTimeSeconds = _idleTimer,
+            idleThresholdSeconds = _idleThresholdInSeconds,
+            lastActiveStep = _lastCompletedStep.StepName,
+            subtaskStartTime = DateTime.Now.AddSeconds(-_idleTimer).ToString("yyyy-MM-dd HH:mm:ss")
         };
 
         // Fire the event

@@ -15,7 +15,7 @@ public class NPCInspector : Editor
         DrawDefaultInspector();
 
         // --- AI Configuration Section ---
-        if (npc.isAiNpc)
+        if (npc.IsAiNpc)
         {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("AI Configuration", EditorStyles.boldLabel);
@@ -25,10 +25,10 @@ public class NPCInspector : Editor
 
             // Context Prompt
             EditorGUILayout.LabelField("Context Prompt (Instructions for AI)");
-            npc.contextPrompt = EditorGUILayout.TextArea(npc.contextPrompt, GUILayout.Height(60));
+            npc.ContextPrompt = EditorGUILayout.TextArea(npc.ContextPrompt, GUILayout.Height(60));
 
             // Max Tokens
-            npc.maxTokens = EditorGUILayout.IntField("Max Response Tokens", npc.maxTokens);
+            npc.MaxTokens = EditorGUILayout.IntField("Max Response Tokens", npc.MaxTokens);
         }
 
         // Apply changes if GUI was modified

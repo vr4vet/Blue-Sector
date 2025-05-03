@@ -4,13 +4,19 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using BNG;
 
+
+/// <summary>
+/// This script is essentially identical to the SceneController script, but needed a consistently
+/// reachable class to change scenes for teleporting through LLM calls,
+/// and couldn't be bothered to change much of it. :P
+/// </summary>
 public class AISceneController : MonoBehaviour
 {
     // ----------------- Editor Fields -----------------
 
-    [Tooltip("Whether the trigger is a door or boat. The appropriate sound is played.")]
+    [Tooltip("Plays teleporting sound when changing scene.")]
     [SerializeField]
-    private MeansOfTransportation meansOfTransportation = MeansOfTransportation.Teleport;
+    private MeansOfTransportation _meansOfTransportation = MeansOfTransportation.Teleport;
     private enum MeansOfTransportation
     {
         Teleport
@@ -18,7 +24,7 @@ public class AISceneController : MonoBehaviour
 
     [Tooltip("The loading screen that appears when a new scene is loading.")]
     [SerializeField]
-    private GameObject LoadingScreen;
+    private GameObject _loadingScreen;   // This sometimes doesn't work. No clue why, but you might be smarter than me.
 
 
     public UnityEvent OnChangeScene;
@@ -32,7 +38,6 @@ public class AISceneController : MonoBehaviour
     /// <param name="scene">The name of the scene to change to</param>
     public void ChangeScene(string scene)
     {
-
         // Check if the player is in the HSE room and if the requirements are fulfilled. Player should only be able to progress after the HSE room is completed or if going to a non-factory scene.
         if (
             !GameManager.Instance.HSERoomCompleted
@@ -52,12 +57,12 @@ public class AISceneController : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         // Play the appropriate transportation sound
-        if (meansOfTransportation == MeansOfTransportation.Teleport)
+        if (_meansOfTransportation == MeansOfTransportation.Teleport)
             GameManager.Instance.PlaySound("drop-reverse");
 
         // Load scene
         // Display loading screen if set in inspector
-        if (LoadingScreen == null)
+        if (_loadingScreen == null)
             SceneManager.LoadScene(scene);
         else
             StartCoroutine(LoadSceneWithLoadingScreen(scene));
@@ -269,7 +274,7 @@ public class AISceneController : MonoBehaviour
     /// <returns></returns>
     public IEnumerator LoadSceneWithLoadingScreen(string scene)
     {
-        GameObject loadingScreen = Instantiate(LoadingScreen);
+        GameObject loadingScreen = Instantiate(_loadingScreen);
         AsyncOperation loadLevel = SceneManager.LoadSceneAsync(scene);
         while (!loadLevel.isDone)
         {

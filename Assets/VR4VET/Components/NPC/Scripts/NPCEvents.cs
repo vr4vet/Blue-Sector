@@ -16,14 +16,14 @@ public class NPCEvents : MonoBehaviour
 
     void Start() 
     { 
-        npcIn = gameObject.GetComponent<NPCSpawner>()._npcInstances[0];
+        npcIn = gameObject.GetComponent<NPCSpawner>().NpcInstances[0];
         dialogueBoxController = npcIn.GetComponent<DialogueBoxController>();
         StartCoroutine(CheckForEnd());
     }
 
     IEnumerator CheckForEnd()
     {
-        while (!dialogueBoxController.dialogueEnded)
+        while (!dialogueBoxController.DialogueEnded)
         {
             yield return new WaitForSeconds(0.1f);
         }

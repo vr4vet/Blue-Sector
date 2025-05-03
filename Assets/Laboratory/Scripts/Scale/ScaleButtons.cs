@@ -37,9 +37,9 @@ public class ScaleButtons : MonoBehaviour
                 scale.displayText.SetText("000.0");
                 scale.Audio.Play();
                 scale.scaleOn = true;
-                if (dialogueBoxController.dialogueTreeRestart != null)
+                if (dialogueBoxController.DialogueTreeRestart != null)
                 {
-                    if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
+                    if (dialogueBoxController.DialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[0])
                     {
                         dialogueBoxController.SkipLine();
                     }
@@ -60,7 +60,7 @@ public class ScaleButtons : MonoBehaviour
                     scale.displayText.SetText("000.0");
                     scale.Audio.Play();
 
-                    if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2]) 
+                    if (dialogueBoxController.DialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[2]) 
                     {
                         dialogueBoxController.SkipLine();
                         m_OnScaleReady.Invoke();

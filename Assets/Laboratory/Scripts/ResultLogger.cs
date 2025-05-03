@@ -106,7 +106,7 @@ public class ResultLogger : MonoBehaviour
             // skip dialogue ahead when player registers weight or length
             if (_currentAttribute == Attributes.Weight)
             {
-                if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[4])
+                if (dialogueBoxController.DialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[4])
                 {
                     dialogueBoxController.SkipLine();
                     m_OnWeightRegistered.Invoke();
@@ -114,7 +114,7 @@ public class ResultLogger : MonoBehaviour
             }
             else if (_currentAttribute == Attributes.Length)
             {
-                if (dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[1])
+                if (dialogueBoxController.DialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[3].dialogue[1])
                 {
                     dialogueBoxController.SkipLine();
                     m_OnLengthRegistered.Invoke();

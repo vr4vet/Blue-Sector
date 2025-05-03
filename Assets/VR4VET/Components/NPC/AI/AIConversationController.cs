@@ -1,57 +1,58 @@
-// Purpose: Manages AI context, recording trigger, and AI request initiation.
 using System.Collections;
 using System.Collections.Generic;
 using Meta.WitAi;
 using UnityEngine;
-using UnityEngine.InputSystem; // Keep for potential future direct input mapping
-
-// Note: Ensure Whisper namespace exists if Transcribe uses it directly
-#if WHISPER_UNITY_PACKAGE_AVAILABLE // Example conditional compile
-using Whisper;
-#endif
 
 public class AIConversationController : MonoBehaviour
 {
-    private ActionManager actionManager;
+    private ActionManager _actionManager;
 
     // Dependencies (Assign in Inspector or find dynamically)
-    [SerializeField] private Transcribe _Transcribe;
-    [SerializeField] public SpriteRenderer microphoneIcon; // Assign the mic icon child object in Inspector
+    [SerializeField] private Transcribe _transcribe;
+    [SerializeField] public SpriteRenderer MicrophoneIcon; // Assign the mic icon child object in Inspector
     private AIRequest _aiRequest;
 
     // Configuration (Set via NPCSpawner from NPC Scriptable Object)
     [TextArea(3, 10)]
-    public string contextPrompt;
-    public int maxTokens = 150; // Adjusted default
-    public List<Message> messages = new List<Message>();
+    public string ContextPrompt;
+    public int MaxTokens = 150; // Currently unused, but kept for future use
+    public List<Message> Messages = new List<Message>();
 
     // Internal References
-    private ConversationController _conversationController; // Found on child object
-    private DialogueBoxController _dialogueBoxController; // Found on same object
+    private ConversationController _conversationController;
+    private DialogueBoxController _dialogueBoxController;
 
-    // Mic Animation State
-    public float animationSpeed = 1.0f;
-    public float minScale = 0.8f; // Adjusted scale
-    public float maxScale = 1.2f; // Adjusted scale
-    private bool growing = true;
-    private float currentScale;
-    private bool isAnimating = false;
+    /// <summary>
+    /// Mic animation state.
+    /// </summary>
+    public float AnimationSpeed = 1.0f;
+    public float MinScale = 0.8f;
+    public float MaxScale = 1.2f;
+    private bool _growing = true;
+    private float _currentScale;
+    private bool _isAnimating = false;
 
+    /// <summary>
+    /// Initializes the ActionManager instance before the rest of the script is ran.
+    /// </summary>
     void Awake()
     {
-        actionManager = ActionManager.Instance;
+        _actionManager = ActionManager.Instance;
     }
+
+    /// <summary>
+    /// Initializes the AIConversationController.
+    /// </summary>
     void Start()
     {
-        // Find required components dynamically if not assigned
-        if (_Transcribe == null)
+        if (_transcribe == null)
         {
-            GameObject transcriptionManager = GameObject.Find("TranscriptionManager"); // Or use a singleton pattern
+            GameObject transcriptionManager = GameObject.Find("TranscriptionManager");
             if (transcriptionManager != null)
             {
-                _Transcribe = transcriptionManager.GetComponent<Transcribe>();
+                _transcribe = transcriptionManager.GetComponent<Transcribe>();
             }
-            if (_Transcribe == null)
+            if (_transcribe == null)
             {
                 Debug.LogError("AIConversationController: Transcribe component not found on TranscriptionManager GameObject.", this);
             }
@@ -71,22 +72,22 @@ public class AIConversationController : MonoBehaviour
 
 
         // Set up microphone animation state
-        currentScale = maxScale;
-        if (microphoneIcon != null)
+        _currentScale = MaxScale;
+        if (MicrophoneIcon != null)
         {
-            microphoneIcon.enabled = false; // Initially hide
+            MicrophoneIcon.enabled = false; // Initially hide
         }
         else
         {
             Debug.LogWarning("AIConversationController: microphoneIcon SpriteRenderer is not assigned.", this);
         }
-        isAnimating = false;
+        _isAnimating = false;
     }
 
     // Called by ConversationController when VR input is detected
     public void TriggerRecording(bool start)
     {
-        if (_Transcribe == null)
+        if (_transcribe == null)
         {
             Debug.LogError("Cannot trigger recording: Transcribe component is missing.", this);
             return;
@@ -95,27 +96,36 @@ public class AIConversationController : MonoBehaviour
         if (start)
         {
             Debug.Log("AIConversationController: Starting Recording");
-            _Transcribe.StartRecording(this); // Start transcribing and set reference to this conversation
-            if (microphoneIcon != null) microphoneIcon.enabled = true;
-            isAnimating = true; // Start mic animation
+            _transcribe.StartRecording(this); // Start transcribing and set reference to this conversation
+            if (MicrophoneIcon != null) MicrophoneIcon.enabled = true;
+            _isAnimating = true; // Start mic animation
             if (_dialogueBoxController != null) _dialogueBoxController.startThinking(); // Show listening animation
         }
         else
         {
             Debug.Log("AIConversationController: Ending Recording");
-            isAnimating = false; // Stop mic animation
-            if (microphoneIcon != null) microphoneIcon.enabled = false; // Hide the microphone icon
-            _Transcribe.EndRecording(); // Stop transcribing
+            _isAnimating = false; // Stop mic animation
+            if (MicrophoneIcon != null) MicrophoneIcon.enabled = false; // Hide the microphone icon
+            _transcribe.EndRecording(); // Stop transcribing
             // Listening animation stopped in DialogueBoxController via AIRequest->DisplayResponse/Thinking flow
         }
     }
 
+    /// <summary>
+    /// Returns the Transcribe component.
+    /// </summary>
+    /// <returns>Transcribe component</returns>
     public Transcribe GetTranscribe()
     {
-        return this._Transcribe;
+        return this._transcribe;
     }
 
-    // Called by Transcribe when transcription is finished
+    /// <summary>
+    /// Creates an AIRequest based on the provided transcript.
+    /// Populates AIRequest payload with data logged from ActionManager.
+    /// Gets called when transcription is finished.
+    /// </summary>
+    /// <param name="transcript"></param>
     public void CreateRequest(string transcript)
     {
         if (string.IsNullOrWhiteSpace(transcript) || transcript.ToLowerInvariant().Contains("inaudible") || transcript.ToLowerInvariant().Contains("blank_audio"))
@@ -135,16 +145,20 @@ public class AIConversationController : MonoBehaviour
         else
         {
             Debug.Log($"AIConversationController: Creating AIRequest with transcript: '{transcript}'");
-            // Add components and create LLM query based on transcript
+
             if (_aiRequest != null)
                 Destroy(_aiRequest);
-            _aiRequest = gameObject.AddComponent<AIRequest>(); // Add dynamically
-            _aiRequest.query = transcript;
-            _aiRequest.maxTokens = this.maxTokens;
-            _aiRequest.requestPayload = actionManager.GetUploadData();
+            _aiRequest = gameObject.AddComponent<AIRequest>();
+            _aiRequest.Query = transcript;
+            _aiRequest.MaxTokens = this.MaxTokens;
+            _aiRequest.RequestPayload = _actionManager.GetUploadData();
         }
     }
 
+    /// <summary>
+    /// NPC response if transcript fails.
+    /// </summary>
+    /// <param name="fallbackText"></param>
     void HandleFallbackResponse(string fallbackText)
     {
         Debug.Log($"AIConversationController: Handling fallback response: '{fallbackText}'");
@@ -160,22 +174,32 @@ public class AIConversationController : MonoBehaviour
     }
 
 
-    // Called by NPCSpawner and AIRequest to manage context
+    /// <summary>
+    /// Adds a message to the local context and global chatlog.
+    /// </summary>
+    /// <param name="message"></param>
     public void AddMessage(Message message)
     {
-        if (actionManager != null)
+        if (_actionManager != null)
         {
-            actionManager.AddChatMessage(message); // Add message to global chatlog
+            _actionManager.AddChatMessage(message); // Add message to global chatlog
         }
         else
         {
             Debug.LogWarning("AIConversationController: actionManager is null, message will only be added to local context", this);
         }
-        messages.Add(message);
-        ShortenList(messages, 20);
-        Debug.Log($"AIContext: Added '{message.role}' message. Total messages: {messages.Count}");
+        Messages.Add(message);
+        ShortenList(Messages, 20);
+        Debug.Log($"AIContext: Added '{message.role}' message. Total messages: {Messages.Count}");
     }
 
+    /// <summary>
+    /// Shortens the list to a specified limit.
+    /// Identical logic to the one in ActionManager.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="limit"></param>
     private void ShortenList<T>(List<T> list, int limit)
     {
         if (list.Count >= limit)
@@ -188,7 +212,7 @@ public class AIConversationController : MonoBehaviour
     void Update()
     {
         // Animation of microphone
-        if (isAnimating && microphoneIcon != null)
+        if (_isAnimating && MicrophoneIcon != null)
         {
             AnimateMicrophoneIcon();
         }
@@ -196,29 +220,33 @@ public class AIConversationController : MonoBehaviour
 
     private void AnimateMicrophoneIcon()
     {
-        if (growing)
+        if (_growing)
         {
-            currentScale += animationSpeed * Time.deltaTime * 2f; // Use Time.deltaTime
-            if (currentScale >= maxScale)
+            _currentScale += AnimationSpeed * Time.deltaTime * 2f; // Use Time.deltaTime
+            if (_currentScale >= MaxScale)
             {
-                currentScale = maxScale;
-                growing = false;
+                _currentScale = MaxScale;
+                _growing = false;
             }
         }
         else
         {
-            currentScale -= animationSpeed * Time.deltaTime * 2f; // Use Time.deltaTime
-            if (currentScale <= minScale)
+            _currentScale -= AnimationSpeed * Time.deltaTime * 2f; // Use Time.deltaTime
+            if (_currentScale <= MinScale)
             {
-                currentScale = minScale;
-                growing = true;
+                _currentScale = MinScale;
+                _growing = true;
             }
         }
-        microphoneIcon.transform.localScale = new Vector3(currentScale, currentScale, 1);
+        MicrophoneIcon.transform.localScale = new Vector3(_currentScale, _currentScale, 1);
     }
 
+    /// <summary>
+    /// Populates the global memory with chat logs.
+    /// Called when NPC is spawned and has global memory toggled on.
+    /// </summary>
     public void PopulateGlobalMemory()
     {
-        messages = actionManager.GetGlobalChatLogs();
+        Messages = _actionManager.GetGlobalChatLogs();
     }
 }

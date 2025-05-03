@@ -35,7 +35,7 @@ public class BreakTask : MonoBehaviour
             Debug.LogError("No NPCSpawner found");
             return;
         }
-        _npc = _npcSpawner._npcInstances[0];
+        _npc = _npcSpawner.NpcInstances[0];
         dialogueController = _npc.GetComponent<DialogueBoxController>();
 
         ButtonSpawner.OnAnswer += ButtonSpawner_OnAnswer;
@@ -44,7 +44,7 @@ public class BreakTask : MonoBehaviour
 
     private void ButtonSpawner_OnAnswer(string answer, string question, string npcName)
     {
-        if (dialogueController.dialogueTreeRestart == dialogueTree)
+        if (dialogueController.DialogueTreeRestart == dialogueTree)
         {
             if (answer == "I'm ready!") // move on to dead fish set up dialogue if player answered "I'm ready!"
             {

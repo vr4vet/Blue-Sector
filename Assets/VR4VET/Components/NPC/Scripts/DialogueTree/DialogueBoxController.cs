@@ -22,14 +22,14 @@ public class DialogueBoxController : MonoBehaviour
     [SerializeField] private GameObject _speakButton; // Spawned by ButtonSpawner in new flow
 
     // --- New/Modified AI UI References (Ensure assigned in Inspector/Prefab) ---
-    [SerializeField] public SpriteRenderer holdBToTalkMessage; // Assign the SpriteRenderer for "Hold B to Talk" message
-    [SerializeField] public GameObject _restartConversationButton; // Assign the "Restart" button GameObject
+    [SerializeField] public SpriteRenderer HoldBToTalkMessage; // Assign the SpriteRenderer for "Hold B to Talk" message
+    [SerializeField] public GameObject RestartConversationButton; // Assign the "Restart" button GameObject
 
     // --- Component References ---
     [SerializeField] public GameObject TTSSpeaker; // Reference to GameObject containing Wit TTSSpeaker (Set by NPCSpawner)
-    [HideInInspector] public ButtonSpawner buttonSpawner; // Get in Awake (Uses NEW ButtonSpawner)
-    [HideInInspector] public AIConversationController _AIConversationController; // Set by NPCSpawner for AI NPCs
-    [HideInInspector] public AIResponseToSpeech _AIResponseToSpeech; // Set by NPCSpawner for AI NPCs
+    [HideInInspector] public ButtonSpawner ButtonSpawner; // Get in Awake (Uses NEW ButtonSpawner)
+    [HideInInspector] public AIConversationController AIConversationController; // Set by NPCSpawner for AI NPCs
+    [HideInInspector] public AIResponseToSpeech AIResponseToSpeech; // Set by NPCSpawner for AI NPCs
 
     // --- Events ---
     [HideInInspector] public static event Action<string> OnDialogueStarted;
@@ -40,15 +40,15 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] private bool _skipLineTriggered;
     [HideInInspector] private bool _answerTriggered;
     [HideInInspector] private int _answerIndex;
-    [HideInInspector] public bool dialogueIsActive;
-    [HideInInspector] public DialogueTree dialogueTreeRestart; // Keep track of the current tree for restart/speak button
-    [HideInInspector] public bool dialogueEnded;
-    [HideInInspector] public int timesEnded = 0; // Track how many times dialogue ended
+    [HideInInspector] public bool DialogueIsActive;
+    [HideInInspector] public DialogueTree DialogueTreeRestart; // Keep track of the current tree for restart/speak button
+    [HideInInspector] public bool DialogueEnded;
+    [HideInInspector] public int TimesEnded = 0; // Track how many times dialogue ended
     [HideInInspector] private int _activatedCount = 0; // Track answer activations?
 
     // --- AI State Variables ---
-    [HideInInspector] public bool useWitAI = true; // Default to WitAI (set by NPCSpawner based on SO)
-    [HideInInspector] public bool isTalkable = false; // Can the player interrupt with voice?
+    [HideInInspector] public bool UseWitAI = true; // Default to WitAI (set by NPCSpawner based on SO)
+    [HideInInspector] public bool IsTalkable = false; // Can the player interrupt with voice?
     private Coroutine _thinkingCoroutine; // Reference to the "..." coroutine
 
     // --- Animation Hashes ---
@@ -67,16 +67,16 @@ public class DialogueBoxController : MonoBehaviour
 
     private void Awake()
     {
-        buttonSpawner = GetComponent<ButtonSpawner>(); // Get reference to the NEW ButtonSpawner
-        if (buttonSpawner == null)
+        ButtonSpawner = GetComponent<ButtonSpawner>(); // Get reference to the NEW ButtonSpawner
+        if (ButtonSpawner == null)
         {
             Debug.LogError("DialogueBoxController: ButtonSpawner component not found!", this);
         }
 
         // Initialize state
-        dialogueIsActive = false;
-        dialogueEnded = true; // Start as ended
-        isTalkable = false;
+        DialogueIsActive = false;
+        DialogueEnded = true; // Start as ended
+        IsTalkable = false;
 
         // Get Animator reference
         updateAnimator(); // Find animator in children
@@ -94,8 +94,8 @@ public class DialogueBoxController : MonoBehaviour
         if (_skipLineButton == null) Debug.LogError("DialogueBoxController: _skipLineButton not assigned!", this);
         if (_exitButton == null) Debug.LogError("DialogueBoxController: _exitButton not assigned!", this); // Assuming still used by non-AI?
         if (_speakButton == null) Debug.LogError("DialogueBoxController: _speakButton not assigned!", this);
-        if (holdBToTalkMessage == null) Debug.LogWarning("DialogueBoxController: holdBToTalkMessage not assigned. AI interrupt message won't show.", this);
-        if (_restartConversationButton == null) Debug.LogWarning("DialogueBoxController: _restartConversationButton not assigned. AI restart function won't show.", this);
+        if (HoldBToTalkMessage == null) Debug.LogWarning("DialogueBoxController: holdBToTalkMessage not assigned. AI interrupt message won't show.", this);
+        if (RestartConversationButton == null) Debug.LogWarning("DialogueBoxController: _restartConversationButton not assigned. AI restart function won't show.", this);
 
 
         ResetBox(); // Initial UI state
@@ -144,16 +144,16 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         // Add listener for the restart button if it exists
-        if (_restartConversationButton != null)
+        if (RestartConversationButton != null)
         {
-            Button restartBtnComp = _restartConversationButton.GetComponent<Button>();
+            Button restartBtnComp = RestartConversationButton.GetComponent<Button>();
             if (restartBtnComp != null)
             {
                 restartBtnComp.onClick.AddListener(RestartConversation);
             }
             else
             {
-                Debug.LogError("DialogueBoxController: _restartConversationButton is missing Button component!", _restartConversationButton);
+                Debug.LogError("DialogueBoxController: _restartConversationButton is missing Button component!", RestartConversationButton);
             }
         }
 
@@ -201,10 +201,10 @@ public class DialogueBoxController : MonoBehaviour
         if (dialogueTree == null) { Debug.LogError("StartDialogue called with null DialogueTree!", this); return; }
         if (_animator == null) { Debug.LogError("StartDialogue called but Animator is null!", this); return; }
 
-        dialogueIsActive = true;
-        dialogueEnded = false;
-        isTalkable = false; // Reset talkable state
-        timesEnded = 0; // Reset end counter
+        DialogueIsActive = true;
+        DialogueEnded = false;
+        IsTalkable = false; // Reset talkable state
+        TimesEnded = 0; // Reset end counter
 
         _animator.SetBool(_hasNewDialogueOptionsHash, false); // Stop "new dialogue" animation
 
@@ -218,7 +218,7 @@ public class DialogueBoxController : MonoBehaviour
         OnDialogueStarted?.Invoke(name); // Notify listeners
         _activatedCount = 0; // Reset answer count
 
-        dialogueTreeRestart = dialogueTree; // Store for potential restart
+        DialogueTreeRestart = dialogueTree; // Store for potential restart
 
         // Start the dialogue coroutine
         StartCoroutine(RunDialogue(dialogueTree, startSection, element)); // Pass element
@@ -251,13 +251,13 @@ public class DialogueBoxController : MonoBehaviour
             _dialogueText.text = TruncateForDisplay(lineText); // Use helper for consistent truncation
 
             // Determine if this line is interruptable (Check array bounds)
-            isTalkable = (_AIConversationController != null && // Only AI NPCs can be talkable
+            IsTalkable = (AIConversationController != null && // Only AI NPCs can be talkable
                           currentSection.interruptableElements != null &&
                           i < currentSection.interruptableElements.Length &&
                           currentSection.interruptableElements[i]);
 
             // Show/Hide "Hold B to Talk" message
-            if (holdBToTalkMessage != null) holdBToTalkMessage.enabled = isTalkable;
+            if (HoldBToTalkMessage != null) HoldBToTalkMessage.enabled = IsTalkable;
 
             // Trigger standard talking animation
             if (_animator != null)
@@ -270,7 +270,7 @@ public class DialogueBoxController : MonoBehaviour
 
             // --- TTS ---
             SpeakLine(lineText); // Use helper to handle TTS provider logic
-            yield return new WaitUntil(() => _AIResponseToSpeech == null || _AIResponseToSpeech.readyToAnswer); // Wait for TTS to start playing
+            yield return new WaitUntil(() => AIResponseToSpeech == null || AIResponseToSpeech.readyToAnswer); // Wait for TTS to start playing
 
 
             // --- UI Buttons ---
@@ -289,7 +289,7 @@ public class DialogueBoxController : MonoBehaviour
 
             // Deactivate exit button during line display? Or keep active?
             _exitButton.SetActive(false); // Deactivate standard exit button during lines/questions
-            _restartConversationButton.SetActive(false); // Deactivate restart button
+            RestartConversationButton.SetActive(false); // Deactivate restart button
 
 
             // --- Pointing (Logic kept from new repo, but disabled for now) ---
@@ -323,8 +323,8 @@ public class DialogueBoxController : MonoBehaviour
         } // End of dialogue lines loop
 
         // --- Post-Dialogue Actions ---
-        isTalkable = false; // Cannot interrupt after lines are done, before question/end
-        if (holdBToTalkMessage != null) holdBToTalkMessage.enabled = false;
+        IsTalkable = false; // Cannot interrupt after lines are done, before question/end
+        if (HoldBToTalkMessage != null) HoldBToTalkMessage.enabled = false;
         _skipLineButton.SetActive(false); // Hide skip button
 
         // Handle NPC movement after dialogue lines (From new repo version)
@@ -343,12 +343,12 @@ public class DialogueBoxController : MonoBehaviour
         // --- Check if Dialogue Ends Here ---
         if (currentSection.endAfterDialogue)
         {
-            dialogueEnded = true;
-            timesEnded++;
+            DialogueEnded = true;
+            TimesEnded++;
             OnDialogueEnded?.Invoke(name); // Use the name passed to StartDialogue
 
             // Check AI-specific end behaviour
-            if (_AIConversationController != null && currentSection.dialogueEnd == DialogueEnd.EndWithRestartButton)
+            if (AIConversationController != null && currentSection.dialogueEnd == DialogueEnd.EndWithRestartButton)
             {
                 StartDynamicQuery(dialogueTree); // Show restart button and generic message
             }
@@ -374,7 +374,7 @@ public class DialogueBoxController : MonoBehaviour
 
         // Speak question
         SpeakLine(questionText);
-        yield return new WaitUntil(() => _AIResponseToSpeech == null || _AIResponseToSpeech.readyToAnswer); // Wait for TTS to start playing
+        yield return new WaitUntil(() => AIResponseToSpeech == null || AIResponseToSpeech.readyToAnswer); // Wait for TTS to start playing
 
         // Invoke the dialogue changed event for the question (-1 indicates question) (From new repo version)
         m_DialogueChanged?.Invoke(transform.name, dialogueTree.name, section, -1);
@@ -408,8 +408,8 @@ public class DialogueBoxController : MonoBehaviour
         // Check if conversation ends after this answer
         if (selectedAnswer.endAfterAnswer)
         {
-            dialogueEnded = true;
-            timesEnded++;
+            DialogueEnded = true;
+            TimesEnded++;
             OnDialogueEnded?.Invoke(name);
 
             // Check AI-specific end behaviour again? Or always default end here?
@@ -430,7 +430,7 @@ public class DialogueBoxController : MonoBehaviour
         if (string.IsNullOrWhiteSpace(text)) return;
 
         // Stop any previous speech first
-        if (_AIResponseToSpeech != null) _AIResponseToSpeech.StopPlayback();
+        if (AIResponseToSpeech != null) AIResponseToSpeech.StopPlayback();
         else if (TTSSpeaker != null)
         {
             var witSpeaker = TTSSpeaker.GetComponentInChildren<TTSSpeaker>();
@@ -438,13 +438,13 @@ public class DialogueBoxController : MonoBehaviour
         }
 
 
-        if (_AIConversationController != null && _AIResponseToSpeech != null) // If AI NPC
+        if (AIConversationController != null && AIResponseToSpeech != null) // If AI NPC
         {
             // Add dialogue to AI context *before* speaking it
             AddDialogueToContext(text);
 
             Debug.Log("DialogueBoxController: Speaking line via WitAI TTS.");
-            StartCoroutine(_AIResponseToSpeech.WitAIDictate(text));
+            StartCoroutine(AIResponseToSpeech.WitAIDictate(text));
         }
         else if (TTSSpeaker != null) // If standard NPC (or AI fallback?)
         {
@@ -454,7 +454,7 @@ public class DialogueBoxController : MonoBehaviour
             {
                 witSpeaker.Speak(text);
                 // For standard Wit, set readyToAnswer immediately for flow control
-                if (_AIResponseToSpeech != null)
+                if (AIResponseToSpeech != null)
                 {
                     // Hacky: If AIResponseToSpeech exists but we're using standard TTS, manually set flag
                     // StartCoroutine(SetReadyAfterDelay(0.1f));
@@ -482,7 +482,7 @@ public class DialogueBoxController : MonoBehaviour
     {
         Debug.Log("Dialogue ended. Showing restart button and generic message.", this);
         // Stop previous NPC speech if any is still playing
-        if (_AIResponseToSpeech != null) _AIResponseToSpeech.StopPlayback();
+        if (AIResponseToSpeech != null) AIResponseToSpeech.StopPlayback();
         else if (TTSSpeaker != null)
         {
             var witSpeaker = TTSSpeaker.GetComponentInChildren<TTSSpeaker>();
@@ -495,7 +495,7 @@ public class DialogueBoxController : MonoBehaviour
         RestoreCanvasSize();
 
         // Show restart button instead of speak button
-        if (_restartConversationButton != null) _restartConversationButton.SetActive(true);
+        if (RestartConversationButton != null) RestartConversationButton.SetActive(true);
 
         // Set and speak generic closing message
         string genericEndMessage = "Is there anything else I can help you with?"; // Or load from config/tree?
@@ -509,8 +509,8 @@ public class DialogueBoxController : MonoBehaviour
     IEnumerator EnableTalkableAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        isTalkable = true; // Allow player to speak again
-        if (holdBToTalkMessage != null) holdBToTalkMessage.enabled = true;
+        IsTalkable = true; // Allow player to speak again
+        if (HoldBToTalkMessage != null) HoldBToTalkMessage.enabled = true;
         Debug.Log("DialogueBoxController: Re-enabled talkable state after dynamic query end.");
     }
 
@@ -565,13 +565,13 @@ public class DialogueBoxController : MonoBehaviour
             }
 
             // Show restart button
-            if (_restartConversationButton != null)
-                _restartConversationButton.SetActive(true);
+            if (RestartConversationButton != null)
+                RestartConversationButton.SetActive(true);
 
             // Enable talkable state
-            isTalkable = true;
-            if (holdBToTalkMessage != null)
-                holdBToTalkMessage.enabled = true;
+            IsTalkable = true;
+            if (HoldBToTalkMessage != null)
+                HoldBToTalkMessage.enabled = true;
 
             // Revert to idle animation after delay (without storing reference)
             StartCoroutine(SafeRevertToIdleAnimation(9.0f));
@@ -709,13 +709,13 @@ public class DialogueBoxController : MonoBehaviour
 
     public void AnswerQuestion(int answer)
     {
-        if (dialogueIsActive && !_answerTriggered) // Prevent double clicks
+        if (DialogueIsActive && !_answerTriggered) // Prevent double clicks
         {
             _answerIndex = answer;
             _answerTriggered = true;
             _activatedCount++;
             // remove the buttons immediately (using NEW ButtonSpawner)
-            if (buttonSpawner != null) buttonSpawner.removeAllButtons();
+            if (ButtonSpawner != null) ButtonSpawner.removeAllButtons();
             else { Debug.LogError("ButtonSpawner reference is null in AnswerQuestion!", this); }
 
             // Stop TTS if it was the question being spoken
@@ -728,9 +728,9 @@ public class DialogueBoxController : MonoBehaviour
     {
         Debug.Log("Restarting conversation.", this);
         StopSpeech(); // Stop any ongoing speech
-        if (dialogueTreeRestart != null)
+        if (DialogueTreeRestart != null)
         {
-            StartDialogue(dialogueTreeRestart, 0, name); // Restart from section 0, element 0
+            StartDialogue(DialogueTreeRestart, 0, name); // Restart from section 0, element 0
         }
         else
         {
@@ -755,17 +755,17 @@ public class DialogueBoxController : MonoBehaviour
 
 
         // Reset state
-        dialogueIsActive = false;
-        isTalkable = false;
+        DialogueIsActive = false;
+        IsTalkable = false;
         ResetBox(); // Clean up UI
 
         // Reset pointing direction if pointing was enabled
         // if (_pointingScript != null) _pointingScript.ResetDirection(_animator.transform);
 
         // Show speak button if configured in the DialogueTree
-        if (dialogueTreeRestart != null && dialogueTreeRestart.speakButtonOnExit)
+        if (DialogueTreeRestart != null && DialogueTreeRestart.SpeakButtonOnExit)
         {
-            StartSpeakCanvas(dialogueTreeRestart);
+            StartSpeakCanvas(DialogueTreeRestart);
         }
         else
         {
@@ -777,16 +777,16 @@ public class DialogueBoxController : MonoBehaviour
     public void ResetAfterAIInteraction()
     {
         // Keep dialogue active but allow normal progression
-        dialogueIsActive = true;
-        isTalkable = false; // Reset temporarily
+        DialogueIsActive = true;
+        IsTalkable = false; // Reset temporarily
 
         // If the dialogue tree has a next step, enable skip button
         _skipLineButton.SetActive(true);
 
         // Alternatively, if this is the end of a dialogue section, show answers or restart
-        if (dialogueEnded)
+        if (DialogueEnded)
         {
-            if (_restartConversationButton != null) _restartConversationButton.SetActive(true);
+            if (RestartConversationButton != null) RestartConversationButton.SetActive(true);
         }
     }
 
@@ -812,9 +812,9 @@ public class DialogueBoxController : MonoBehaviour
         }
 
         // Use the NEW Button Spawner to create the speak button
-        if (buttonSpawner != null)
+        if (ButtonSpawner != null)
         {
-            buttonSpawner.spawnSpeakButton(dialogueTree); // Assumes new ButtonSpawner has this method
+            ButtonSpawner.spawnSpeakButton(dialogueTree); // Assumes new ButtonSpawner has this method
         }
         else { Debug.LogError("Cannot spawn Speak button, ButtonSpawner is missing!", this); }
 
@@ -829,16 +829,16 @@ public class DialogueBoxController : MonoBehaviour
         if (_dialogueBox != null) _dialogueBox.SetActive(false);
         if (_skipLineButton != null) _skipLineButton.SetActive(false);
         if (_exitButton != null) _exitButton.SetActive(false); // Hide standard exit
-        if (_restartConversationButton != null) _restartConversationButton.SetActive(false); // Hide restart button
-        if (holdBToTalkMessage != null) holdBToTalkMessage.enabled = false; // Hide AI message
+        if (RestartConversationButton != null) RestartConversationButton.SetActive(false); // Hide restart button
+        if (HoldBToTalkMessage != null) HoldBToTalkMessage.enabled = false; // Hide AI message
 
         // Use the NEW ButtonSpawner to remove buttons
-        if (buttonSpawner != null) buttonSpawner.removeAllButtons();
+        if (ButtonSpawner != null) ButtonSpawner.removeAllButtons();
 
         // Reset internal state flags
         _skipLineTriggered = false;
         _answerTriggered = false;
-        isTalkable = false; // Reset talkable state
+        IsTalkable = false; // Reset talkable state
 
         // Restore original canvas size if needed (might interfere if called before RunDialogue)
         // RestoreCanvasSize(); // Call this at the START of RunDialogue instead
@@ -847,9 +847,9 @@ public class DialogueBoxController : MonoBehaviour
     // Displays the answer buttons using the NEW ButtonSpawner
     void ShowAnswers(BranchPoint branchPoint)
     {
-        if (buttonSpawner == null) { Debug.LogError("Cannot show answers, ButtonSpawner is missing!", this); return; }
-        buttonSpawner.removeAllButtons(); // Clear any previous buttons (like speak button)
-        buttonSpawner.spawnAnswerButtons(branchPoint.answers); // Spawn new answer buttons
+        if (ButtonSpawner == null) { Debug.LogError("Cannot show answers, ButtonSpawner is missing!", this); return; }
+        ButtonSpawner.removeAllButtons(); // Clear any previous buttons (like speak button)
+        ButtonSpawner.spawnAnswerButtons(branchPoint.answers); // Spawn new answer buttons
 
         // Reset pointing animation if it was active
         if (_animator != null) _animator.SetBool(_isPointingHash, false);
@@ -862,9 +862,9 @@ public class DialogueBoxController : MonoBehaviour
     // Stops any ongoing TTS
     private void StopSpeech()
     {
-        if (_AIResponseToSpeech != null)
+        if (AIResponseToSpeech != null)
         {
-            _AIResponseToSpeech.StopPlayback();
+            AIResponseToSpeech.StopPlayback();
         }
         else if (TTSSpeaker != null)
         {
@@ -909,13 +909,13 @@ public class DialogueBoxController : MonoBehaviour
     // Adds dialogue line to AI context if AI is enabled
     private void AddDialogueToContext(string dialogue)
     {
-        if (_AIConversationController != null)
+        if (AIConversationController != null)
         {
-            if (_AIConversationController.messages.Count > 1)
-                if (_AIConversationController.messages[_AIConversationController.messages.Count - 1].content.Equals(dialogue))  // Ew, but works (I hope)
+            if (AIConversationController.Messages.Count > 1)
+                if (AIConversationController.Messages[AIConversationController.Messages.Count - 1].content.Equals(dialogue))  // Ew, but works (I hope)
                     return; // Don't add message if it is immediate duplicate
             // Only add assistant messages (NPC speech) here. User messages added in AIRequest.
-            _AIConversationController.AddMessage(new Message { role = "assistant", content = dialogue });
+            AIConversationController.AddMessage(new Message { role = "assistant", content = dialogue });
         }
     }
 
@@ -934,7 +934,7 @@ public class DialogueBoxController : MonoBehaviour
 
 
     // Public methods for NPCSpawner to set TTS mode
-    public void useWitTTS() { useWitAI = true; Debug.Log("DialogueBoxController: Set to use WitAI TTS.", this); }
+    public void useWitTTS() { UseWitAI = true; Debug.Log("DialogueBoxController: Set to use WitAI TTS.", this); }
 
     // Public methods for ConversationController to control UI visibility based on proximity
     public void ShowDialogueBox()
@@ -947,7 +947,7 @@ public class DialogueBoxController : MonoBehaviour
     public void HideDialogueBox()
     {
         // Only hide if a dialogue isn't actively running
-        if (!dialogueIsActive)
+        if (!DialogueIsActive)
         {
             if (_dialogueCanvas != null) _dialogueCanvas.SetActive(false);
             if (_dialogueBox != null) _dialogueBox.SetActive(false); // Hide the content box too

@@ -7,11 +7,11 @@ using System.Collections.Generic;
 public class NPCSpawner : MonoBehaviour
 {
     [SerializeField] private NPC[] _nPCs;
-    [HideInInspector] public List<GameObject> _npcInstances = new List<GameObject>(); // Initialize list
+    [HideInInspector] public List<GameObject> NpcInstances = new List<GameObject>(); // Initialize list
 
     [Header("Global AI Settings")]
     [TextArea(3, 10)]
-    public string globalContextPrompt = "You are interacting with a user in a virtual reality training simulation."; // Added global context
+    public string GlobalContextPrompt = "You are interacting with a user in a virtual reality training simulation."; // Added global context
     private ActionManager _actionManager;
     private void Awake()
     {
@@ -35,7 +35,7 @@ public class NPCSpawner : MonoBehaviour
                 Debug.LogError($"NPCSpawner: NpcPrefab is null for NPC SO '{npcSO.name}'. Skipping.", this);
                 continue;
             }
-            _npcInstances.Add(SpawnNPC(npcSO));
+            NpcInstances.Add(SpawnNPC(npcSO));
 
         }
 
@@ -50,14 +50,14 @@ public class NPCSpawner : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         // Check if NPCs were spawned
-        if (_npcInstances == null || _npcInstances.Count == 0)
+        if (NpcInstances == null || NpcInstances.Count == 0)
         {
             Debug.LogWarning("NPCSpawner: No NPCs were spawned to fix animators");
             yield break;
         }
 
         // Loop through all spawned NPCs
-        foreach (var npc in _npcInstances)
+        foreach (var npc in NpcInstances)
         {
             if (npc == null) continue;
 
@@ -113,7 +113,7 @@ public class NPCSpawner : MonoBehaviour
 
         // --- Standard Setup ---
         AttachTTSComponents(newNPC, npcSO.SpatialBlend, npcSO.MinDistance); // Attaches Wit TTSSpeaker
-        SetAppearanceAnimationAndVoice(newNPC, npcSO.CharacterModel, npcSO.CharacterAvatar, npcSO.runtimeAnimatorController, npcSO.VoicePresetId); // Sets model & standard Wit voice
+        SetAppearanceAnimationAndVoice(newNPC, npcSO.CharacterModel, npcSO.CharacterAvatar, npcSO.RuntimeAnimatorController, npcSO.VoicePresetId); // Sets model & standard Wit voice
 
         // Make sure animator reference is updated after model is loaded
         var dialogueBoxController = newNPC.GetComponent<DialogueBoxController>();
@@ -143,7 +143,7 @@ public class NPCSpawner : MonoBehaviour
 
         // --- AI Setup ---
         // Checks for whether AI features are enabled
-        if (npcSO.isAiNpc && _actionManager.GetToggleBool())
+        if (npcSO.IsAiNpc && _actionManager.GetToggleBool())
         {
             Debug.Log($"NPCSpawner: Setting up AI components for {newNPC.name}");
 
@@ -158,13 +158,13 @@ public class NPCSpawner : MonoBehaviour
             if (audioSrc == null) audioSrc = newNPC.AddComponent<AudioSource>();
 
             // Configure AI components
-            SetAIBehaviour(npcSO, newNPC, npcSO.contextPrompt, npcSO.maxTokens, aiConvCtrl);
+            SetAIBehaviour(npcSO, newNPC, npcSO.ContextPrompt, npcSO.MaxTokens, aiConvCtrl);
 
             // Link components (DialogueBoxController needs references to AI components)
             if (dialogueBoxController != null)
             {
-                dialogueBoxController._AIConversationController = aiConvCtrl;
-                dialogueBoxController._AIResponseToSpeech = aiResponse;
+                dialogueBoxController.AIConversationController = aiConvCtrl;
+                dialogueBoxController.AIResponseToSpeech = aiResponse;
             }
             else
             {
@@ -175,7 +175,7 @@ public class NPCSpawner : MonoBehaviour
             var conversationCtrl = newNPC.GetComponentInChildren<ConversationController>();
             if (conversationCtrl != null)
             {
-                conversationCtrl._AIConversationController = aiConvCtrl;
+                conversationCtrl.AIConversationController = aiConvCtrl;
             }
             else
             {
@@ -287,14 +287,14 @@ public class NPCSpawner : MonoBehaviour
         if (aiConvCtrl != null)
         {
             Debug.Log($"NPCSpawner: Setting AI behaviour for {npc.name}. MaxTokens: {maxTokens}");
-            aiConvCtrl.contextPrompt = contextPrompt;
-            aiConvCtrl.maxTokens = Mathf.Max(maxTokens, 1); // Ensure maxTokens is at least 1
+            aiConvCtrl.ContextPrompt = contextPrompt;
+            aiConvCtrl.MaxTokens = Mathf.Max(maxTokens, 1); // Ensure maxTokens is at least 1
 
             // Clear any existing messages and add system prompts
-            aiConvCtrl.messages.Clear();
-            if (!string.IsNullOrWhiteSpace(globalContextPrompt))
+            aiConvCtrl.Messages.Clear();
+            if (!string.IsNullOrWhiteSpace(GlobalContextPrompt))
             {
-                aiConvCtrl.AddMessage(new Message { role = "system", content = globalContextPrompt });
+                aiConvCtrl.AddMessage(new Message { role = "system", content = GlobalContextPrompt });
             }
             if (!string.IsNullOrWhiteSpace(contextPrompt))
             {
@@ -313,6 +313,6 @@ public class NPCSpawner : MonoBehaviour
 
     public GameObject GetNpcInstance(string npcName)
     {
-        return _npcInstances.Find(npc => npc != null && npc.name == npcName);
+        return NpcInstances.Find(npc => npc != null && npc.name == npcName);
     }
 }

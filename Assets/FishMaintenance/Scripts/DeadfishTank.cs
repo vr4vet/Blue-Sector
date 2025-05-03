@@ -20,7 +20,7 @@ public class DeadfishTank : MonoBehaviour
     void Start()
     {
         dropItem = gameObject.GetComponent<DropItem>();
-        _npc = FindObjectOfType<NPCSpawner>()._npcInstances[0];
+        _npc = FindObjectOfType<NPCSpawner>().NpcInstances[0];
         dialogueController = _npc.GetComponent<DialogueBoxController>();
     }
 

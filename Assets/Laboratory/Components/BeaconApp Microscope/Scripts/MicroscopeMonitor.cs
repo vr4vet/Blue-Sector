@@ -153,11 +153,11 @@ public class MicroscopeMonitor : MonoBehaviour
             SetDefaultTexture();
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully changes the magnification
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[3])
             dialogueBoxController.SkipLine();
     }
 
@@ -218,11 +218,11 @@ public class MicroscopeMonitor : MonoBehaviour
             SetDefaultTexture();
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully changes the magnification
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[3])
             dialogueBoxController.SkipLine();
     }
 
@@ -253,11 +253,11 @@ public class MicroscopeMonitor : MonoBehaviour
         }
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully scrolls
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[1])
             dialogueBoxController.SkipLine();
     }
 
@@ -277,11 +277,11 @@ public class MicroscopeMonitor : MonoBehaviour
         }
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully scrolls
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[1])
             dialogueBoxController.SkipLine();
     }
 
@@ -301,11 +301,11 @@ public class MicroscopeMonitor : MonoBehaviour
         }
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully scrolls
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[1])
             dialogueBoxController.SkipLine();
     }
 
@@ -325,11 +325,11 @@ public class MicroscopeMonitor : MonoBehaviour
         }
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully scrolls
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[1])
             dialogueBoxController.SkipLine();
     }
 
@@ -378,11 +378,11 @@ public class MicroscopeMonitor : MonoBehaviour
         }
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully places sample under the scope
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[0])
             dialogueBoxController.SkipLine();
     }
 
@@ -393,11 +393,11 @@ public class MicroscopeMonitor : MonoBehaviour
         HasSlide = true;
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully places sample under the scope
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[0])
             dialogueBoxController.SkipLine();
     }
 
@@ -469,11 +469,11 @@ public class MicroscopeMonitor : MonoBehaviour
         }
         
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully adjusts scrolling speed
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[2])
             dialogueBoxController.SkipLine();
     }
 
@@ -487,11 +487,11 @@ public class MicroscopeMonitor : MonoBehaviour
         }
 
         // ensure that the correct dialogue tree is playing to prevent access of non-existent dialogues in if sentences
-        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
             return;
 
         // skip NPC dialogue forwards when player successfully adjusts scrolling speed
-        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[2])
+        if (dialogueBoxController != null && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[2])
             dialogueBoxController.SkipLine();
     }
 

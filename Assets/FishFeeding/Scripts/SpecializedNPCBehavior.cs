@@ -139,7 +139,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
 
     private void SetFalseNPCTrigger(Grabber grabber)
     {
-        _conversationController.GetDialogueTree().shouldTriggerOnProximity = false;
+        _conversationController.GetDialogueTree().ShouldTriggerOnProximity = false;
     }
 
     private void SetTrueNPCTrigger()
@@ -150,7 +150,7 @@ public class SpecializedNPCBehavior : MonoBehaviour
     private IEnumerator Timer()
     {
         yield return new WaitForSeconds(1f);
-        _conversationController.GetDialogueTree().shouldTriggerOnProximity = true;
+        _conversationController.GetDialogueTree().ShouldTriggerOnProximity = true;
     }
 
     void OnDestroy()
