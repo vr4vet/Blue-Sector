@@ -22,7 +22,7 @@ public class ActionManager : MonoBehaviour
     private UploadDataDTO uploadData;
     private List<Message> globalChatLogs;
     private List<Task.Task> taskList;
-    [SerializeField] private bool _isAiNpcToggled = false;
+    private bool _isAiNpcToggled = false;   // For some reason this has to be false. I have no clue why, but otherwise all chat messages are logged double. Works in runtime though!
 
     private IdleTimer idleTimer;
 
