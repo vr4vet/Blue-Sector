@@ -22,11 +22,11 @@ public class ActionManager : MonoBehaviour
     private UploadDataDTO uploadData;
     private List<Message> globalChatLogs;
     private List<Task.Task> taskList;
-    private bool _isAiNpcToggled;
+    [SerializeField] private bool _isAiNpcToggled = false;
 
     private IdleTimer idleTimer;
 
-    public string latestSummary;
+    [HideInInspector] public string latestSummary;
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -42,7 +42,6 @@ public class ActionManager : MonoBehaviour
             globalChatLogs = new List<Message>();
             taskList = new List<Task.Task>();
             idleTimer = GetComponent<IdleTimer>();
-            _isAiNpcToggled = false;
 
             if (idleTimer == null)
             {
@@ -469,11 +468,10 @@ public class ActionManager : MonoBehaviour
     /// <param name="limit">How many elements the list can have</param>
     private void ShortenList<T>(List<T> list, int limit)
     {
-        if (list.Count > limit)
+        if (list.Count >= limit)
         {
             list.RemoveRange(0, list.Count - limit);
         }
-        
     }
 
     /// <summary>
