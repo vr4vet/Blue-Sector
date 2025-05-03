@@ -911,6 +911,9 @@ public class DialogueBoxController : MonoBehaviour
     {
         if (_AIConversationController != null)
         {
+            if (_AIConversationController.messages.Count > 1)
+                if (_AIConversationController.messages[_AIConversationController.messages.Count - 1].content.Equals(dialogue))  // Ew, but works (I hope)
+                    return; // Don't add message if it is immediate duplicate
             // Only add assistant messages (NPC speech) here. User messages added in AIRequest.
             _AIConversationController.AddMessage(new Message { role = "assistant", content = dialogue });
         }
