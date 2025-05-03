@@ -12,7 +12,7 @@ public class AIRequest : MonoBehaviour
 {
     // Configuration (Set by AIConversationController)
     public string query;
-    public int maxTokens;
+    [HideInInspector] public int maxTokens;
     public UploadDataDTO requestPayload;
 
     // Dependencies (Fetched dynamically)
@@ -21,7 +21,7 @@ public class AIRequest : MonoBehaviour
     private AIConversationController _aiConversationController;
 
     // Internal State
-    private const string CHATBOT_API_URL = "http://localhost:8000/ask";
+    private const string CHATBOT_API_URL = "http://46.9.154.144:8000/ask";
     private List<Message> _messagesToSend = new(); // Local copy for request
     private AudioSource _audioSource; // For fallback audio
 

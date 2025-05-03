@@ -511,7 +511,7 @@ public class Transcribe : MonoBehaviour
         if (_currentAIController != null)
         {
             // Let AIController decide how to handle errors/empty strings
-            _currentAIController.CreateRequest(isError ? $"[Error: {errorMessage}]" : finalResult);
+            _currentAIController.CreateRequest(isError ? $"[Error: FAILED TO TRANSCRIBE]" : finalResult);
 
             // Clear the controller reference for the next interaction
             _currentAIController = null;

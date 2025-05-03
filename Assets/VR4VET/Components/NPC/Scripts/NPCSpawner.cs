@@ -158,7 +158,7 @@ public class NPCSpawner : MonoBehaviour
             if (audioSrc == null) audioSrc = newNPC.AddComponent<AudioSource>();
 
             // Configure AI components
-            SetAIBehaviour(newNPC, npcSO.contextPrompt, npcSO.maxTokens, aiConvCtrl);
+            SetAIBehaviour(npcSO, newNPC, npcSO.contextPrompt, npcSO.maxTokens, aiConvCtrl);
 
             // Link components (DialogueBoxController needs references to AI components)
             if (dialogueBoxController != null)
@@ -282,7 +282,7 @@ public class NPCSpawner : MonoBehaviour
     }
 
     // Sets context and max tokens for the AI
-    public void SetAIBehaviour(GameObject npc, string contextPrompt, int maxTokens, AIConversationController aiConvCtrl)
+    public void SetAIBehaviour(NPC npcSO, GameObject npc, string contextPrompt, int maxTokens, AIConversationController aiConvCtrl)
     {
         if (aiConvCtrl != null)
         {
@@ -302,15 +302,8 @@ public class NPCSpawner : MonoBehaviour
             }
 
             // Add global chat memory to NPC if enabled
-            foreach (var npcSO in _nPCs)
-            {
-                if (npcSO != null && npcSO.NameOfNPC == npc.name)
-                {
-                    if (npcSO.GlobalChatMemory)
-                        aiConvCtrl.PopulateGlobalMemory();
-                    break;
-                }
-            }
+            if (npcSO.GlobalChatMemory)
+                aiConvCtrl.PopulateGlobalMemory();
         }
         else
         {

@@ -22,11 +22,11 @@ public class ActionManager : MonoBehaviour
     private UploadDataDTO uploadData;
     private List<Message> globalChatLogs;
     private List<Task.Task> taskList;
-    private bool _isAiNpcToggled;
+    private bool _isAiNpcToggled = false;   // For some reason this has to be false. I have no clue why, but otherwise all chat messages are logged double. Works in runtime though!
 
     private IdleTimer idleTimer;
 
-    public string latestSummary;
+    [HideInInspector] public string latestSummary;
 
     /// <summary>
     /// Creates a singleton object of the ActionManager.
@@ -42,7 +42,6 @@ public class ActionManager : MonoBehaviour
             globalChatLogs = new List<Message>();
             taskList = new List<Task.Task>();
             idleTimer = GetComponent<IdleTimer>();
-            _isAiNpcToggled = false;
 
             if (idleTimer == null)
             {
@@ -446,9 +445,7 @@ public class ActionManager : MonoBehaviour
     public void AddChatMessage(Message message)
     {
         globalChatLogs.Add(message);
-        Debug.Log($"Before shortening chatlog: {globalChatLogs.Count}");
         ShortenList(globalChatLogs, 20);
-        Debug.Log($"After shortening chatlog: {globalChatLogs.Count}");
     }
 
     public List<Message> GetGlobalChatLogs()
@@ -469,11 +466,10 @@ public class ActionManager : MonoBehaviour
     /// <param name="limit">How many elements the list can have</param>
     private void ShortenList<T>(List<T> list, int limit)
     {
-        if (list.Count > limit)
+        if (list.Count >= limit)
         {
             list.RemoveRange(0, list.Count - limit);
         }
-        
     }
 
     /// <summary>

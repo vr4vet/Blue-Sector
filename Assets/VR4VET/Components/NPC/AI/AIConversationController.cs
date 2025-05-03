@@ -1,6 +1,7 @@
 // Purpose: Manages AI context, recording trigger, and AI request initiation.
 using System.Collections;
 using System.Collections.Generic;
+using Meta.WitAi;
 using UnityEngine;
 using UnityEngine.InputSystem; // Keep for potential future direct input mapping
 
@@ -16,6 +17,7 @@ public class AIConversationController : MonoBehaviour
     // Dependencies (Assign in Inspector or find dynamically)
     [SerializeField] private Transcribe _Transcribe;
     [SerializeField] public SpriteRenderer microphoneIcon; // Assign the mic icon child object in Inspector
+    private AIRequest _aiRequest;
 
     // Configuration (Set via NPCSpawner from NPC Scriptable Object)
     [TextArea(3, 10)]
@@ -113,25 +115,6 @@ public class AIConversationController : MonoBehaviour
         return this._Transcribe;
     }
 
-    // --- Deprecated Direct Input Handling (Keep for reference, but use TriggerRecording via ConversationController) ---
-    // public void PressButton(InputAction.CallbackContext context)
-    // {
-    //     if (_conversationController == null || _dialogueBoxController == null) return;
-
-    //     bool canTalk = _conversationController.playerInsideTrigger && _dialogueBoxController.isTalkable && !_dialogueBoxController.dialogueEnded;
-
-    //     if (context.started && canTalk)
-    //     {
-    //         TriggerRecording(true);
-    //     }
-
-    //     if (context.canceled && _Transcribe != null && _Transcribe.IsRecording()) // Check if actually recording before stopping
-    //     {
-    //         TriggerRecording(false);
-    //     }
-    // }
-    // --- End Deprecated Input Handling ---
-
     // Called by Transcribe when transcription is finished
     public void CreateRequest(string transcript)
     {
@@ -143,14 +126,22 @@ public class AIConversationController : MonoBehaviour
             HandleFallbackResponse(transcript);
             return;
         }
+        else if (transcript.Equals("[Error: FAILED TO TRANSCRIBE]"))
+        {
+            transcript = "Transcription failed!";
+            HandleFallbackResponse(transcript);
+            return;
+        }
         else
         {
             Debug.Log($"AIConversationController: Creating AIRequest with transcript: '{transcript}'");
-            // Add components and create OpenAI query based on transcript
-            AIRequest request = gameObject.AddComponent<AIRequest>(); // Add dynamically
-            request.query = transcript;
-            request.maxTokens = this.maxTokens;
-            request.requestPayload = actionManager.GetUploadData();
+            // Add components and create LLM query based on transcript
+            if (_aiRequest != null)
+                Destroy(_aiRequest);
+            _aiRequest = gameObject.AddComponent<AIRequest>(); // Add dynamically
+            _aiRequest.query = transcript;
+            _aiRequest.maxTokens = this.maxTokens;
+            _aiRequest.requestPayload = actionManager.GetUploadData();
         }
     }
 
@@ -181,7 +172,16 @@ public class AIConversationController : MonoBehaviour
             Debug.LogWarning("AIConversationController: actionManager is null, message will only be added to local context", this);
         }
         messages.Add(message);
+        ShortenList(messages, 20);
         Debug.Log($"AIContext: Added '{message.role}' message. Total messages: {messages.Count}");
+    }
+
+    private void ShortenList<T>(List<T> list, int limit)
+    {
+        if (list.Count >= limit)
+        {
+            list.RemoveRange(0, list.Count - limit);
+        }
     }
 
     // Update is used for animations only now
