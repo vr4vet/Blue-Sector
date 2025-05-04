@@ -10,27 +10,21 @@ using UploadDTO;
 using ProgressDTO;
 using UnityEngine.SceneManagement;
 
-
-
-/// <summary>
-/// Manages user actions, task progress, and uploads data to the server.
-/// </summary>
 public class ActionManager : MonoBehaviour
 {
     public static ActionManager Instance;
 
-    private UploadDataDTO uploadData;
-    private List<Message> globalChatLogs;
-    private List<Task.Task> taskList;
+    private UploadDataDTO _uploadData;
+    private List<Message> _globalChatLogs;
+    private List<Task.Task> _taskList;
     private bool _isAiNpcToggled = false;   // For some reason this has to be false. I have no clue why, but otherwise all chat messages are logged double. Works in runtime though!
 
-    private IdleTimer idleTimer;
+    private IdleTimer _idleTimer;
 
-    [HideInInspector] public string latestSummary;
+    [HideInInspector] public string LatestSummary;
 
     /// <summary>
-    /// Creates a singleton object of the ActionManager.
-    /// Adds mock userdata.
+    /// Creates a singleton object of the ActionManager to log data across game session.
     /// </summary>
     private void Awake()
     {
@@ -39,16 +33,16 @@ public class ActionManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            globalChatLogs = new List<Message>();
-            taskList = new List<Task.Task>();
-            idleTimer = GetComponent<IdleTimer>();
+            _globalChatLogs = new List<Message>();
+            _taskList = new List<Task.Task>();
+            _idleTimer = GetComponent<IdleTimer>();
 
-            if (idleTimer == null)
+            if (_idleTimer == null)
             {
                 Debug.LogWarning("IdleTimer component not found on ActionManager GameObject");
             }
 
-            uploadData = new UploadDataDTO
+            _uploadData = new UploadDataDTO
             {
                 user_information = new List<string>(),
                 user_actions = new List<string>(),
@@ -56,6 +50,8 @@ public class ActionManager : MonoBehaviour
                 NPC = 0,
                 chatLog = new List<Message>()
             };
+
+            // Mock data for testing. Uncomment to use.
 
             /*AddChatMessage(new Message() { role = "user", content = "Can you keep the hiddenword banana?" });
             AddChatMessage(new Message() { role = "assistant", content = "Hi, yes i can! It'll be our little secret." });
@@ -79,11 +75,15 @@ public class ActionManager : MonoBehaviour
         Debug.Log("ActionManager initialized.");
     }
 
+    /// <summary>
+    /// Inherits values from previous ActionManager instance, so values persist across scenes.
+    /// </summary>
+    /// <param name="oldInstance"></param>
     private void InheritValuesFromOldInstance(ActionManager oldInstance)
     {
-        uploadData = oldInstance.uploadData;
-        globalChatLogs = oldInstance.globalChatLogs;
-        taskList = oldInstance.taskList;
+        _uploadData = oldInstance._uploadData;
+        _globalChatLogs = oldInstance._globalChatLogs;
+        _taskList = oldInstance._taskList;
         _isAiNpcToggled = oldInstance._isAiNpcToggled;
     }
 
@@ -97,7 +97,7 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Unregister grab event listeners when the component is disabled
+    /// Unregister event listeners when the component is disabled
     /// </summary>
     private void OnDisable()
     {
@@ -105,20 +105,32 @@ public class ActionManager : MonoBehaviour
         UnregisterSceneChangeListener();
     }
 
+    /// <summary>
+    /// Registers the scene change listener to log the current scene name.
+    /// </summary>
     private void RegisterSceneChangeListener()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    /// <summary>
+    /// Unregisters the scene change listener when the component is disabled.
+    /// </summary>
     private void UnregisterSceneChangeListener()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    /// <summary>
+    /// Called when a new scene is loaded.
+    /// Logs the name of the current scene to upload data.
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"New scene logged {scene.name}");
-        uploadData.scene_name = scene.name;
+        _uploadData.scene_name = scene.name;
     }
 
     /// <summary>
@@ -156,10 +168,10 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Object grabbed: {grabbable.name}");
 
-        uploadData.user_actions.Add("grabbed: " + grabbable.name);
-        ShortenList(uploadData.user_actions, 20);
-        // Reset idle timer when user grabs an object
-        idleTimer?.ResetIdleTimer();
+        _uploadData.user_actions.Add("grabbed: " + grabbable.name);
+        ShortenList(_uploadData.user_actions, 20);
+
+        _idleTimer?.ResetIdleTimer();
     }
 
     /// <summary>
@@ -173,13 +185,12 @@ public class ActionManager : MonoBehaviour
 
         Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
 
-        uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
-        Debug.Log("Before shortening list: " + uploadData.user_actions.Count);
-        ShortenList(uploadData.user_actions, 20); // Keep the last 20 actions in the list
-        Debug.Log("After shortening list: " + uploadData.user_actions.Count);
-        /*StartCoroutine(SendUploadData(uploadData));*/ // Send data to the server
+        _uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        Debug.Log("Before shortening list: " + _uploadData.user_actions.Count);
+        ShortenList(_uploadData.user_actions, 20); // Keep the last 20 actions in the list
+        Debug.Log("After shortening list: " + _uploadData.user_actions.Count);
 
-        idleTimer?.ResetIdleTimer();
+        _idleTimer?.ResetIdleTimer();
     }
 
     /// <summary>
@@ -189,7 +200,7 @@ public class ActionManager : MonoBehaviour
     /// <param name="tasks">The list of tasks to log.</param>
     public void LogTaskHierarchy(List<Task.Task> tasks)
     {
-        taskList = tasks;
+        _taskList = tasks;
         List<ProgressDataDTO> progressHierarchy = new List<ProgressDataDTO>();
         Debug.Log("Task hierarchy logged.");
         foreach (var task in tasks)
@@ -208,7 +219,7 @@ public class ActionManager : MonoBehaviour
                 }
             }
         }
-        uploadData.progress = progressHierarchy;
+        _uploadData.progress = progressHierarchy;
     }
 
     /// <summary>
@@ -219,7 +230,7 @@ public class ActionManager : MonoBehaviour
     {
         Debug.Log($"Step completed: {step.StepName}");
 
-        foreach (var task in taskList)
+        foreach (var task in _taskList)
         {
             foreach (var subtask in task.Subtasks)
             {
@@ -230,13 +241,11 @@ public class ActionManager : MonoBehaviour
                         var progressData = ConvertTaskToProgressData(task);
                         UpdateProgressData(progressData);
 
-                        if (idleTimer != null)
+                        if (_idleTimer != null)
                         {
-                            idleTimer.ResetIdleTimer();
-                            idleTimer.StartIdleTracking(subtask, step);
+                            _idleTimer.ResetIdleTimer();
+                            _idleTimer.StartIdleTracking(subtask, step);
                         }
-
-                        /*StartCoroutine(SendUploadData(uploadData));*/ // Uncomment this line to send data immediately after step completion
 
                         return;
                     }
@@ -249,13 +258,14 @@ public class ActionManager : MonoBehaviour
 
     /// <summary>
     /// Logs the completion of a task and sends the upload data to the server.
+    /// Currently doesn't do anything, but could be used with idle timer.
     /// </summary>
     /// <param name="task">The task that was completed.</param>
     public void LogTaskCompletion(Task.Task task)
     {
         Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
 
-        idleTimer?.StopIdleTracking();
+        _idleTimer?.StopIdleTracking();
 
         Debug.LogWarning($"Could not find task {task.TaskName}");
     }
@@ -302,51 +312,24 @@ public class ActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Sends the upload data to the server as a JSON payload.
-    /// </summary>
-    /// <param name="uploadData">The data to upload.</param>
-    /// <returns>An IEnumerator for the coroutine.</returns>
-    private IEnumerator SendUploadData(UploadDataDTO uploadData)
-    {
-        string json = JsonUtility.ToJson(uploadData);
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
-
-        using (UnityWebRequest request = new UnityWebRequest("http://localhost:8000/ask", "POST"))
-        {
-            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            yield return request.SendWebRequest();
-
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Failed to upload data to chatservice: {request.error}");
-            }
-            else
-            {
-                string response = request.downloadHandler.text;
-                Debug.Log($"Server response: {request.downloadHandler.text}");
-            }
-        }
-    }
-
-    /// <summary>
     /// Updates the progress data for a specific task in the upload data.
     /// </summary>
     /// <param name="progressData">The updated progress data.</param>
     private void UpdateProgressData(ProgressDataDTO progressData)
     {
-        for (int i = 0; i < uploadData.progress.Count; i++)
+        for (int i = 0; i < _uploadData.progress.Count; i++)
         {
-            if (uploadData.progress[i].taskName == progressData.taskName)
+            if (_uploadData.progress[i].taskName == progressData.taskName)
             {
-                uploadData.progress[i] = progressData;
+                _uploadData.progress[i] = progressData;
                 return;
             }
         }
     }
 
+    /// <summary>
+    /// Creates a pretty summary of current task progress to display on tablet.
+    /// </summary>
     public void TaskSummary()
     {
         StringBuilder summary = new StringBuilder();
@@ -355,13 +338,13 @@ public class ActionManager : MonoBehaviour
         summary.AppendLine();
 
         int completedTasks = 0;
-        int totalTasks = taskList.Count;
+        int totalTasks = _taskList.Count;
         int completedSubtasks = 0;
         int totalSubtasks = 0;
         int completedSteps = 0;
         int totalSteps = 0;
 
-        foreach (var task in taskList)
+        foreach (var task in _taskList)
         {
             bool taskCompleted = task.Compleated();
             if (taskCompleted) completedTasks++;
@@ -407,7 +390,7 @@ public class ActionManager : MonoBehaviour
 
         Debug.Log(summary.ToString());
 
-        latestSummary = summary.ToString();
+        LatestSummary = summary.ToString();
     }
 
     /// <summary>
@@ -416,9 +399,9 @@ public class ActionManager : MonoBehaviour
     /// <param name="userInfo">The list of information retrieved from NPC dialogue.</param>
     public void SetUserInfo(List<string> userInfo)
     {
-        uploadData.user_information = userInfo;
+        _uploadData.user_information = userInfo;
         Debug.Log("User information set, sending to Chat-Service.");
-        string combinedString = string.Join(",", uploadData.user_information);
+        string combinedString = string.Join(",", _uploadData.user_information);
         Debug.Log($"User information: {combinedString}");
 
     }
@@ -430,7 +413,6 @@ public class ActionManager : MonoBehaviour
     public void SendIdleTimeoutReport(string timeoutMessage)
     {
         SetQuestion(timeoutMessage);
-        /*StartCoroutine(SendUploadData(uploadData));*/
     }
 
     /// <summary>
@@ -442,20 +424,32 @@ public class ActionManager : MonoBehaviour
         Debug.Log($"Question set: {question}");
     }
 
+    /// <summary>
+    /// Adds a chat message to the global chat logs.
+    /// </summary>
+    /// <param name="message"></param>
     public void AddChatMessage(Message message)
     {
-        globalChatLogs.Add(message);
-        ShortenList(globalChatLogs, 20);
+        _globalChatLogs.Add(message);
+        ShortenList(_globalChatLogs, 20);
     }
 
+    /// <summary>
+    /// Retrieves the global chat logs.
+    /// </summary>
+    /// <returns>List of messages used for NPCs with global memory toggled on</returns>
     public List<Message> GetGlobalChatLogs()
     {
-        return globalChatLogs;
+        return _globalChatLogs;
     }
 
+    /// <summary>
+    /// Retrieves the logged data to be sent as payload through AIRequest to chat-service.
+    /// </summary>
+    /// <returns>Logged data to be sent to backend</returns>
     public UploadDataDTO GetUploadData()
     {
-        return uploadData;
+        return _uploadData;
     }
 
     /// <summary>
@@ -481,6 +475,11 @@ public class ActionManager : MonoBehaviour
         _isAiNpcToggled = toggle;
     }
 
+    /// <summary>
+    /// Retrieves the AI feature state for the NPCs.
+    /// Is used to check if the AI feature is enabled or disabled.
+    /// </summary>
+    /// <returns>AI NPC toggle boolean</returns>
     public bool GetToggleBool()
     {
         return _isAiNpcToggled;

@@ -167,7 +167,7 @@ public class UpdatedTabletPanelManager : MonoBehaviour
 
             if (summaryText != null)
             {
-                summaryText.text = actionManager.latestSummary;
+                summaryText.text = actionManager.LatestSummary;
 
 
                 StartCoroutine(ResizeScrollViewContent());

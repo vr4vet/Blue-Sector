@@ -9,7 +9,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs;
 public class WatchManager : MonoBehaviour
 {
     public static WatchManager Instance;
-    private ActionManager actionManager;
+    private ActionManager _actionManager;
     [SerializeField] public Task.TaskHolder taskHolder;
     [SerializeField] private UpdatedTabletTaskListLoader taskListLoader;
     [SerializeField] public UpdatedTabletPanelManager panelManager;
@@ -40,7 +40,7 @@ public class WatchManager : MonoBehaviour
         else if (Instance != this)
             Destroy(gameObject);
             
-        actionManager = ActionManager.Instance;
+        _actionManager = ActionManager.Instance;
         Debug.Log("WatchManager initialized.");
     }
 
@@ -71,9 +71,9 @@ public class WatchManager : MonoBehaviour
         }
         UpdateCurrentSubtask(FirstSubTask);
 
-        if (actionManager != null)
+        if (_actionManager != null)
         {
-            actionManager.LogTaskHierarchy(taskHolder.taskList);
+            _actionManager.LogTaskHierarchy(taskHolder.taskList);
         }
     }
 
@@ -115,9 +115,9 @@ public class WatchManager : MonoBehaviour
                 UpdateCurrentSubtask(sub);
             }
 
-            if (actionManager != null)
+            if (_actionManager != null)
             {
-                actionManager.LogStepCompletion(step);
+                _actionManager.LogStepCompletion(step);
             }
         }
         

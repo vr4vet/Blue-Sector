@@ -48,30 +48,30 @@ public class Transcribe : MonoBehaviour
     [Header("Core Dependencies")]
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
     [Tooltip("WhisperManager component for local transcription.")]
-    public WhisperManager whisper;
+    public WhisperManager Whisper;
     [Tooltip("MicrophoneRecord component for audio capture.")]
-    public MicrophoneRecord microphoneRecord;
+    public MicrophoneRecord MicrophoneRecord;
     [Tooltip("Optional: Assign ServerTranscriptionManager for server-side transcription.")]
-    public ServerTranscriptionManager serverTranscription;
+    public ServerTranscriptionManager ServerTranscription;
 #endif
     [Tooltip("Assign the TextMeshProUGUI for displaying subtitles.")]
-    public TextMeshProUGUI subtitleText;
+    public TextMeshProUGUI SubtitleText;
     [Tooltip("Assign the Image for the subtitle background.")]
-    public Image subtitleBackground;
+    public Image SubtitleBackground;
 
     [Header("Configuration")]
     [Tooltip("Enable to use server-side transcription instead of local Whisper.")]
-    public bool useServerTranscription = false;
+    public bool UseServerTranscription = false;
     [Tooltip("List of supported language codes for cycling (e.g., 'en', 'no', 'de', 'nl').")]
-    public string[] availableLanguages = { "en", "no", "de", "nl" };
+    public string[] AvailableLanguages = { "en", "no", "de", "nl" };
     [Tooltip("Assign the Input Action Reference for the record button (e.g., Trigger Press).")]
-    public InputActionReference recordAction; // <<< ASSIGN YOUR VR INPUT ACTION HERE
+    public InputActionReference RecordAction; // <<< ASSIGN YOUR VR INPUT ACTION HERE
     [Tooltip("Delay in seconds before automatically hiding the final subtitle.")]
-    public float subtitleFadeDelay = 5.0f;
+    public float SubtitleFadeDelay = 5.0f;
     [Tooltip("Initial state of subtitles visibility.")]
-    public bool subtitlesInitiallyEnabled = true;
+    public bool SubtitlesInitiallyEnabled = true;
     [Tooltip("Enable Voice Activity Detection to automatically stop recording on silence. Usually FALSE for hold-to-record.")]
-    public bool enableVAD = false;
+    public bool EnableVAD = false;
 
     // --- Private State ---
     private AIConversationController _currentAIController; // Uses the externally defined class
@@ -83,7 +83,7 @@ public class Transcribe : MonoBehaviour
     private string _currentLanguage = "";
 
     // --- Properties ---
-    public string currentLanguage => _currentLanguage;
+    public string CurrentLanguage => _currentLanguage;
     public bool IsRecording => _isRecording;
 
     // --- Initialization ---
@@ -92,12 +92,12 @@ public class Transcribe : MonoBehaviour
     {
         // Component checks in Awake
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
-        if (whisper == null) whisper = GetComponent<WhisperManager>();
-        if (microphoneRecord == null) microphoneRecord = GetComponent<MicrophoneRecord>();
+        if (Whisper == null) Whisper = GetComponent<WhisperManager>();
+        if (MicrophoneRecord == null) MicrophoneRecord = GetComponent<MicrophoneRecord>();
         // Server transcription is optional
-        if (serverTranscription == null) serverTranscription = GetComponent<ServerTranscriptionManager>();
+        if (ServerTranscription == null) ServerTranscription = GetComponent<ServerTranscriptionManager>();
 
-        if (whisper == null || microphoneRecord == null)
+        if (Whisper == null || MicrophoneRecord == null)
         {
             Debug.LogError("Transcribe: Missing WhisperManager or MicrophoneRecord component!", this);
             enabled = false; // Disable script
@@ -105,17 +105,17 @@ public class Transcribe : MonoBehaviour
         }
 
         // Check for essential UI
-        if (subtitleText == null) Debug.LogError("Transcribe: subtitleText not assigned!", this);
-        if (subtitleBackground == null) Debug.LogError("Transcribe: subtitleBackground not assigned!", this);
+        if (SubtitleText == null) Debug.LogError("Transcribe: subtitleText not assigned!", this);
+        if (SubtitleBackground == null) Debug.LogError("Transcribe: subtitleBackground not assigned!", this);
 
         // Subscribe to the microphone record stop event -> This replaces the WhisperStream events
-        microphoneRecord.OnRecordStop += HandleRecordStop;
+        MicrophoneRecord.OnRecordStop += HandleRecordStop;
 
         // Subscribe to server events if server manager exists
-        if (serverTranscription != null)
+        if (ServerTranscription != null)
         {
-            serverTranscription.OnTranscriptionComplete += HandleServerTranscriptionComplete;
-            serverTranscription.OnTranscriptionError += HandleServerTranscriptionError;
+            ServerTranscription.OnTranscriptionComplete += HandleServerTranscriptionComplete;
+            ServerTranscription.OnTranscriptionError += HandleServerTranscriptionError;
         }
 #else
          Debug.LogError("Transcribe: Whisper package missing. Transcription disabled.", this);
@@ -128,21 +128,21 @@ public class Transcribe : MonoBehaviour
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
         // -- Language Setup --
         // TODO: Replace this with logic to get language from settings menu??
-        string initialLanguage = whisper.language;
+        string initialLanguage = Whisper.language;
         if (string.IsNullOrEmpty(initialLanguage) || initialLanguage.Equals("auto", StringComparison.OrdinalIgnoreCase))
         {
-            if (availableLanguages.Length > 0) _currentLanguage = availableLanguages[0];
+            if (AvailableLanguages.Length > 0) _currentLanguage = AvailableLanguages[0];
             else { Debug.LogError("Transcribe: No available languages defined!", this); _currentLanguage = "en"; }
-            whisper.language = _currentLanguage;
+            Whisper.language = _currentLanguage;
         }
         else
         {
             // Check if language is in our list
-            bool found = Array.Exists(availableLanguages, lang => lang.Equals(initialLanguage, StringComparison.OrdinalIgnoreCase));
+            bool found = Array.Exists(AvailableLanguages, lang => lang.Equals(initialLanguage, StringComparison.OrdinalIgnoreCase));
             if (!found) Debug.LogWarning($"Transcribe: Language '{initialLanguage}' set in WhisperManager is not in the availableLanguages list. Using it anyway.", this);
             _currentLanguage = initialLanguage; // Use the one from WhisperManager
         }
-        if (serverTranscription != null) serverTranscription.SetLanguage(_currentLanguage);
+        if (ServerTranscription != null) ServerTranscription.SetLanguage(_currentLanguage);
         Debug.Log($"Transcribe: Initial language set to: {_currentLanguage}");
 
         // -- Microphone Setup --
@@ -153,14 +153,14 @@ public class Transcribe : MonoBehaviour
             enabled = false;
             return;
         }
-        microphoneRecord.SelectedMicDevice = Microphone.devices[0]; // Use default device
-        Debug.Log($"Transcribe: Using Microphone: {microphoneRecord.SelectedMicDevice}");
+        MicrophoneRecord.SelectedMicDevice = Microphone.devices[0]; // Use default device
+        Debug.Log($"Transcribe: Using Microphone: {MicrophoneRecord.SelectedMicDevice}");
 
         // -- VAD Setup --
-        microphoneRecord.vadStop = enableVAD;
+        MicrophoneRecord.vadStop = EnableVAD;
 
         // -- Subtitle Setup --
-        _isSubtitlesEnabled = subtitlesInitiallyEnabled;
+        _isSubtitlesEnabled = SubtitlesInitiallyEnabled;
         UpdateSubtitleDisplay("", false); // Start hidden
 
         _isInitialized = true;
@@ -180,12 +180,12 @@ public class Transcribe : MonoBehaviour
 
     void OnEnable()
     {
-        if (recordAction != null) recordAction.action.Enable();
+        if (RecordAction != null) RecordAction.action.Enable();
     }
 
     void OnDisable()
     {
-        if (recordAction != null) recordAction.action.Disable();
+        if (RecordAction != null) RecordAction.action.Disable();
         if (_isRecording) ForceStopRecording(); // Stop if disabled while recording
     }
 
@@ -193,11 +193,11 @@ public class Transcribe : MonoBehaviour
     {
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
         // Unsubscribe from events
-        if (microphoneRecord != null) microphoneRecord.OnRecordStop -= HandleRecordStop;
-        if (serverTranscription != null)
+        if (MicrophoneRecord != null) MicrophoneRecord.OnRecordStop -= HandleRecordStop;
+        if (ServerTranscription != null)
         {
-            serverTranscription.OnTranscriptionComplete -= HandleServerTranscriptionComplete;
-            serverTranscription.OnTranscriptionError -= HandleServerTranscriptionError;
+            ServerTranscription.OnTranscriptionComplete -= HandleServerTranscriptionComplete;
+            ServerTranscription.OnTranscriptionError -= HandleServerTranscriptionError;
         }
 #endif
         // Stop coroutines
@@ -212,7 +212,7 @@ public class Transcribe : MonoBehaviour
     {
         // --- VR Input (Primary) ---
         // <<< Replace checks with your actual Input System logic >>>
-        if (recordAction != null && recordAction.action.WasPressedThisFrame())
+        if (RecordAction != null && RecordAction.action.WasPressedThisFrame())
         {
             // This assumes the context (like interacting with an NPC)
             // already knows which AIController to use and calls StartRecording.
@@ -224,7 +224,7 @@ public class Transcribe : MonoBehaviour
             // if (controller != null) StartRecording(controller);
             // else Debug.LogError("Transcribe: Record button pressed but no AIController found!");
         }
-        else if (recordAction != null && recordAction.action.WasReleasedThisFrame())
+        else if (RecordAction != null && RecordAction.action.WasReleasedThisFrame())
         {
             if (_isRecording)
             {
@@ -252,12 +252,12 @@ public class Transcribe : MonoBehaviour
 
         _currentAIController = aiController;
         _isRecording = true;
-        microphoneRecord.vadStop = enableVAD; // Ensure VAD setting is current
+        MicrophoneRecord.vadStop = EnableVAD; // Ensure VAD setting is current
 
         try
         {
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
-            microphoneRecord.StartRecord();
+            MicrophoneRecord.StartRecord();
             Debug.Log($"Transcribe: Starting recording for {_currentAIController.gameObject.name}");
             if (_processingIndicatorCoroutine != null) StopCoroutine(_processingIndicatorCoroutine);
             _processingIndicatorCoroutine = StartCoroutine(DisplayTranscriptionProcessing());
@@ -291,7 +291,7 @@ public class Transcribe : MonoBehaviour
         try
         {
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
-            microphoneRecord.StopRecord(); // This will trigger HandleRecordStop for processing
+            MicrophoneRecord.StopRecord(); // This will trigger HandleRecordStop for processing
 #else
             // If package missing, just reset state
              _isRecording = false;
@@ -320,7 +320,7 @@ public class Transcribe : MonoBehaviour
         UpdateSubtitleDisplay("", false); // Clear subtitles
 
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
-        try { if (microphoneRecord != null && microphoneRecord.IsRecording) microphoneRecord.StopRecord(); } catch { }
+        try { if (MicrophoneRecord != null && MicrophoneRecord.IsRecording) MicrophoneRecord.StopRecord(); } catch { }
 #endif
         _isRecording = false;
         _currentAIController = null;
@@ -336,7 +336,7 @@ public class Transcribe : MonoBehaviour
         if (!_isInitialized) return;
 
         string validLanguage = languageCode;
-        bool found = Array.Exists(availableLanguages, lang => lang.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+        bool found = Array.Exists(AvailableLanguages, lang => lang.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
 
         if (!found)
         {
@@ -345,7 +345,7 @@ public class Transcribe : MonoBehaviour
         else
         {
             // Use the correctly cased version from our list if found
-            validLanguage = Array.Find(availableLanguages, lang => lang.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+            validLanguage = Array.Find(AvailableLanguages, lang => lang.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
         }
 
         if (_currentLanguage == validLanguage) return; // No change
@@ -355,8 +355,8 @@ public class Transcribe : MonoBehaviour
         UpdateSubtitleDisplay($"Language: {_currentLanguage.ToUpper()}", true, 2.0f);
 
 #if WHISPER_UNITY_PACKAGE_AVAILABLE
-        if (whisper != null) whisper.language = _currentLanguage;
-        if (serverTranscription != null) serverTranscription.SetLanguage(_currentLanguage);
+        if (Whisper != null) Whisper.language = _currentLanguage;
+        if (ServerTranscription != null) ServerTranscription.SetLanguage(_currentLanguage);
 #endif
     }
 
@@ -365,11 +365,11 @@ public class Transcribe : MonoBehaviour
     /// </summary>
     public void CycleLanguage()
     {
-        if (availableLanguages.Length == 0) return;
-        int index = Array.IndexOf(availableLanguages, _currentLanguage);
+        if (AvailableLanguages.Length == 0) return;
+        int index = Array.IndexOf(AvailableLanguages, _currentLanguage);
         if (index < 0) index = 0; // If current lang not in list, start from first
-        index = (index + 1) % availableLanguages.Length;
-        SetLanguage(availableLanguages[index]);
+        index = (index + 1) % AvailableLanguages.Length;
+        SetLanguage(AvailableLanguages[index]);
     }
 
     /// <summary>
@@ -382,8 +382,8 @@ public class Transcribe : MonoBehaviour
         if (!_isSubtitlesEnabled)
         {
             // Immediately hide if toggled off
-            if (subtitleText != null) subtitleText.enabled = false;
-            if (subtitleBackground != null) subtitleBackground.enabled = false;
+            if (SubtitleText != null) SubtitleText.enabled = false;
+            if (SubtitleBackground != null) SubtitleBackground.enabled = false;
             if (_subtitleFadeCoroutine != null) { StopCoroutine(_subtitleFadeCoroutine); _subtitleFadeCoroutine = null; }
         }
     }
@@ -422,14 +422,14 @@ public class Transcribe : MonoBehaviour
         Debug.Log($"Transcribe: Audio Chunk received. Length: {recordedAudio.Length:F2}s. Processing...");
 
         // --- Choose Processing Path ---
-        if (useServerTranscription && serverTranscription != null)
+        if (UseServerTranscription && ServerTranscription != null)
         {
             UpdateSubtitleDisplay("Sending to server...", true);
-            serverTranscription.ProcessAudioChunk(recordedAudio); // Server manager will call back
+            ServerTranscription.ProcessAudioChunk(recordedAudio); // Server manager will call back
         }
         else
         {
-            if (whisper == null)
+            if (Whisper == null)
             { // Safety check
                 ProcessTranscriptionResult(null, null, true, "WhisperManager not available for local processing.");
                 return;
@@ -437,7 +437,7 @@ public class Transcribe : MonoBehaviour
             UpdateSubtitleDisplay("Processing locally...", true);
             try
             {
-                var result = await whisper.GetTextAsync(recordedAudio.Data, recordedAudio.Frequency, recordedAudio.Channels);
+                var result = await Whisper.GetTextAsync(recordedAudio.Data, recordedAudio.Frequency, recordedAudio.Channels);
                 ProcessTranscriptionResult(result?.Result, result?.Language); // Handle null result
             }
             catch (Exception e)
@@ -478,7 +478,7 @@ public class Transcribe : MonoBehaviour
         string finalResult = "";
 
         // Clear processing message immediately if showing
-        if (subtitleText != null && subtitleText.text == "Processing...") UpdateSubtitleDisplay("", false);
+        if (SubtitleText != null && SubtitleText.text == "Processing...") UpdateSubtitleDisplay("", false);
 
 
         if (isError)
@@ -498,7 +498,7 @@ public class Transcribe : MonoBehaviour
 
             if (_isSubtitlesEnabled)
             {
-                UpdateSubtitleDisplay(finalResult, true, subtitleFadeDelay);
+                UpdateSubtitleDisplay(finalResult, true, SubtitleFadeDelay);
             }
             else
             {
@@ -538,19 +538,19 @@ public class Transcribe : MonoBehaviour
 
         if (!shouldDisplay && hasText)
         {
-            if (subtitleText != null && subtitleText.enabled) subtitleText.enabled = false;
-            if (subtitleBackground != null && subtitleBackground.enabled) subtitleBackground.enabled = false;
+            if (SubtitleText != null && SubtitleText.enabled) SubtitleText.enabled = false;
+            if (SubtitleBackground != null && SubtitleBackground.enabled) SubtitleBackground.enabled = false;
             return;
         }
 
-        if (subtitleText != null)
+        if (SubtitleText != null)
         {
-            subtitleText.text = text;
-            subtitleText.enabled = hasText;
+            SubtitleText.text = text;
+            SubtitleText.enabled = hasText;
         }
-        if (subtitleBackground != null)
+        if (SubtitleBackground != null)
         {
-            subtitleBackground.enabled = showBackground && hasText;
+            SubtitleBackground.enabled = showBackground && hasText;
         }
 
         if (_subtitleFadeCoroutine != null)
@@ -565,8 +565,8 @@ public class Transcribe : MonoBehaviour
         else if (!hasText)
         {
             // Ensure hidden immediately if text is empty
-            if (subtitleText != null) subtitleText.enabled = false;
-            if (subtitleBackground != null) subtitleBackground.enabled = false;
+            if (SubtitleText != null) SubtitleText.enabled = false;
+            if (SubtitleBackground != null) SubtitleBackground.enabled = false;
         }
     }
 
@@ -576,8 +576,8 @@ public class Transcribe : MonoBehaviour
         if (_subtitleFadeCoroutine == null) yield break; // Coroutine was stopped/replaced
 
         // No need to check _isSubtitlesEnabled here, UpdateSubtitleDisplay handles it
-        if (subtitleText != null) { subtitleText.text = ""; subtitleText.enabled = false; }
-        if (subtitleBackground != null) subtitleBackground.enabled = false;
+        if (SubtitleText != null) { SubtitleText.text = ""; SubtitleText.enabled = false; }
+        if (SubtitleBackground != null) SubtitleBackground.enabled = false;
 
         _subtitleFadeCoroutine = null;
     }
