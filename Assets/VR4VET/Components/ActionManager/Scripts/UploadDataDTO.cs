@@ -5,7 +5,8 @@ using ProgressDTO;
 namespace UploadDTO
 {
     /// <summary>
-    /// Data structure for uploading user progress and interactions.
+    /// Data structure for uploading logged data to chat-service through AIRequest.
+    /// Changes made to this class will need to be reflected in the server-side code.
     /// </summary>
     [Serializable]
     public class UploadDataDTO
@@ -16,7 +17,7 @@ namespace UploadDTO
         public string scene_name;
 
         /// <summary>
-        /// Dictionary containing information about the user.
+        /// Information about the user logged through Questionaire in reception.
         /// </summary>
         public List<string> user_information;
 
@@ -32,11 +33,12 @@ namespace UploadDTO
 
         /// <summary>
         /// The ID of the NPC that the user is interacting with.
+        /// This currently serves no purpose but is included for future use.
         /// </summary>
         public int NPC;
 
         /// <summary>
-        /// The chat history between user and current NPC.
+        /// The chat history between user and NPC.
         /// /summary>
         public List<Message> chatLog;
     }

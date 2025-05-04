@@ -14,7 +14,8 @@ public class Questionnaire : MonoBehaviour
 
     /// <summary>
     /// NPC Receptionist Rachel will ask the user questions about themselves.
-    /// The information will be sent to ActionManager, and the LLM in Chat-Service will make use of it.
+    /// The information will be sent to ActionManager, and the LLM in Chat-Service will make use of it
+    /// to adjust responses.
     /// </summary>
     void Start()
     {
@@ -135,7 +136,6 @@ public class Questionnaire : MonoBehaviour
         
     }
 
-
     /// <summary>
     /// Gets the specified DialogueTree from NPC Receptionist Rachel's ConversationController.
     /// </summary>
@@ -162,11 +162,6 @@ public class Questionnaire : MonoBehaviour
     /// </summary>
     void OnDestroy()
     {
-        //if (_actionManager.GetToggleBool() == false)
-        //{
-        //    ButtonSpawner.OnAnswer -= Questionnaire_OnAnswer;
-        //    DialogueBoxController.OnDialogueEnded -= Questionnaire_OnDialogueEnded;
-        //}
         ButtonSpawner.OnAnswer -= Questionnaire_OnAnswer;
         DialogueBoxController.OnDialogueEnded -= Questionnaire_OnDialogueEnded;
     }
