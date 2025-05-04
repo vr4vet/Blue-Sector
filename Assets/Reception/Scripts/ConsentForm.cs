@@ -26,7 +26,6 @@ public class ConsentForm : MonoBehaviour
 
         // Moves the dialogue canvas to the receptionist higher
         Transform dialogueCanvas = _aiConsentNpc.transform.GetChild(1);
-        dialogueCanvas.localPosition = new Vector3(dialogueCanvas.localPosition.x, 1.68f, dialogueCanvas.localPosition.z);
         ButtonSpawner.OnAnswer += ConsentForm_OnAnswer;
         DialogueBoxController.OnDialogueEnded += ConsentForm_SetAIFeatures;
     }
