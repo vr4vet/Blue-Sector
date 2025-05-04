@@ -192,19 +192,19 @@ public class NpcTriggerDialogue : MonoBehaviour
         }
        
         // Moving to the appropriate dialogue depending on the current state
-        if (dialogueTree == "ErrorFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[0]) // return to the step where the player failed
+        if (dialogueTree == "ErrorFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0]) // return to the step where the player failed
             ReturnAfterFeedback(dialogueTree);
-        else if (dialogueTree == "MicroscopeDialogue" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.DialogueTreeRestart.sections[2].dialogue[0])
+        else if (dialogueTree == "MicroscopeDialogue" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[0])
             ReturnToIntroduction();
-        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.DialogueTreeRestart.sections[3].dialogue[0])
+        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[3].dialogue[0])
             ReturnToMeasuringWeight();
-        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.DialogueTreeRestart.sections[4].dialogue[0])
+        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
             ReturnToMeasuringLength();
-        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.DialogueTreeRestart.sections[6].dialogue[0])
+        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[6].dialogue[0])
             ReturnToConditionFactorCalculation();
-        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.DialogueTreeRestart.sections[7].dialogue[0])
+        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[0])
             ResetConditionFactorDialogue();
-        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.DialogueTreeRestart.sections[8].dialogue[0])
+        else if (dialogueTree == "NpcFeedback" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[8].dialogue[0])
             ReturnToIntroduction();
     }
 

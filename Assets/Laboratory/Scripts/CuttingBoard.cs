@@ -20,7 +20,7 @@ public class CuttingBoard : MonoBehaviour
       
         if (collision.GetType() == typeof(CapsuleCollider) && collision.GetComponent<Weight>())
         {
-            if (dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[5].dialogue[0]) 
+            if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[5].dialogue[0]) 
             {
                 dialogueBoxController.SkipLine();
             }

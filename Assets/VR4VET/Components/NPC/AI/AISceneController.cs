@@ -16,7 +16,7 @@ public class AISceneController : MonoBehaviour
 
     [Tooltip("Plays teleporting sound when changing scene.")]
     [SerializeField]
-    private MeansOfTransportation _meansOfTransportation = MeansOfTransportation.Teleport;
+    private MeansOfTransportation meansOfTransportation = MeansOfTransportation.Teleport;
     private enum MeansOfTransportation
     {
         Teleport
@@ -24,7 +24,7 @@ public class AISceneController : MonoBehaviour
 
     [Tooltip("The loading screen that appears when a new scene is loading.")]
     [SerializeField]
-    private GameObject _loadingScreen;   // This sometimes doesn't work. No clue why, but you might be smarter than me.
+    private GameObject LoadingScreen;   // This sometimes doesn't work. No clue why, but you might be smarter than me.
 
 
     public UnityEvent OnChangeScene;
@@ -57,12 +57,12 @@ public class AISceneController : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         // Play the appropriate transportation sound
-        if (_meansOfTransportation == MeansOfTransportation.Teleport)
+        if (meansOfTransportation == MeansOfTransportation.Teleport)
             GameManager.Instance.PlaySound("drop-reverse");
 
         // Load scene
         // Display loading screen if set in inspector
-        if (_loadingScreen == null)
+        if (LoadingScreen == null)
             SceneManager.LoadScene(scene);
         else
             StartCoroutine(LoadSceneWithLoadingScreen(scene));
@@ -274,7 +274,7 @@ public class AISceneController : MonoBehaviour
     /// <returns></returns>
     public IEnumerator LoadSceneWithLoadingScreen(string scene)
     {
-        GameObject loadingScreen = Instantiate(_loadingScreen);
+        GameObject loadingScreen = Instantiate(LoadingScreen);
         AsyncOperation loadLevel = SceneManager.LoadSceneAsync(scene);
         while (!loadLevel.isDone)
         {

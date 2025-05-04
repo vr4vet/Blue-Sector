@@ -5,8 +5,8 @@ using UnityEngine;
 [Serializable]
 public class DialogueTree : ScriptableObject
 {
-    public bool ShouldTriggerOnProximity = true;
-    public bool SpeakButtonOnExit = true;
+    public bool shouldTriggerOnProximity = true;
+    public bool speakButtonOnExit = true;
     public DialogueSection[] sections;
 
 #if UNITY_EDITOR

@@ -26,7 +26,7 @@ public class InspectionNPCBehavior : MonoBehaviour
         _npcSpawner = GetComponent<NPCSpawner>();
 
         // Get the second NPC, which is the guide that will receive inspection input
-        _npc = _npcSpawner.NpcInstances[1];
+        _npc = _npcSpawner._npcInstances[1];
 
         dialogueCanvasObject = _npc.transform.Find("DialogueCanvasV2").gameObject;
         dialogueCanvas = _npc.transform.Find("DialogueCanvasV2");

@@ -17,7 +17,7 @@ public class SpecializedBehaviourReceptionist : MonoBehaviour
             return;
         }
 
-        _receptionistNpc = _npcSpawner.NpcInstances[0];
+        _receptionistNpc = _npcSpawner._npcInstances[0];
 
         // Moves the dialogue canvas to the receptionist higher
         Transform dialogueCanvas = _receptionistNpc.transform.GetChild(1);

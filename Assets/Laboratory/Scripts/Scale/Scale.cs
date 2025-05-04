@@ -70,7 +70,7 @@ public class Scale : MonoBehaviour
             StopAllCoroutines();
             corutine = SetScaleText(totalWeight - collisionObject.GetComponent<Weight>().ObjectWeight);
             StartCoroutine(corutine);
-            if (collisionObject.gameObject.name == "basket_plastic" && dialogueBoxController.DialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[1])
+            if (collisionObject.gameObject.name == "basket_plastic" && dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[1])
             {
                 dialogueBoxController.SkipLine();
             }

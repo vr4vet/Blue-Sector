@@ -16,7 +16,7 @@ public class InvokeEventOnNPCLine : MonoBehaviour
         if (m_OnDialogueLine == null)
             m_OnDialogueLine = new UnityEvent();
         
-        _npc = GetComponent<NPCSpawner>().NpcInstances.Find(x => x.name.Contains(NPCName)); // look for NPC with name containing provided string in spawner list
+        _npc = GetComponent<NPCSpawner>()._npcInstances.Find(x => x.name.Contains(NPCName)); // look for NPC with name containing provided string in spawner list
         if (_npc == null)
             Debug.LogError("Could not find NPC with name containing '" + NPCName + "'!");
 

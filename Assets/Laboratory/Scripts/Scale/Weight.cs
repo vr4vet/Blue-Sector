@@ -58,7 +58,7 @@ public class Weight : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bone") && collision.GetComponent<Weight>())
         {
-            if ( dialogueBoxController.DialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[3])
+            if ( dialogueBoxController.dialogueTreeRestart.name == "LarsDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[3])
             {
                 dialogueBoxController.SkipLine();
                 m_OnWeighingFish.Invoke();

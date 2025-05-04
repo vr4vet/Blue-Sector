@@ -60,7 +60,7 @@ public class ButtonSpawner : MonoBehaviour
     {
         if (answers.Length > 4)
         {
-            Debug.LogError("There is not room for more than 4 answer buttons in the dialogue canvas, but there are " + answers.Length + " answers in the dialogue tree '" + _dialogueBoxController.DialogueTreeRestart.name + "'!");
+            Debug.LogError("There is not room for more than 4 answer buttons in the dialogue canvas, but there are " + answers.Length + " answers in the dialogue tree '" + _dialogueBoxController.dialogueTreeRestart.name + "'!");
             return;
         }
 

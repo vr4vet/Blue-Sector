@@ -98,7 +98,7 @@ public class WalkingNpc : MonoBehaviour
 
     private void SetFalseNPCTrigger(Grabber grabber)
     {
-        _conversationController.GetDialogueTree().ShouldTriggerOnProximity = false;
+        _conversationController.GetDialogueTree().shouldTriggerOnProximity = false;
     }
 
     private void SetTrueNPCTrigger()
@@ -109,7 +109,7 @@ public class WalkingNpc : MonoBehaviour
     private IEnumerator Timer()
     {
         yield return new WaitForSeconds(1f);
-        _conversationController.GetDialogueTree().ShouldTriggerOnProximity = true;
+        _conversationController.GetDialogueTree().shouldTriggerOnProximity = true;
     }
 
     /// <summary>

@@ -28,7 +28,7 @@ public class Questionnaire : MonoBehaviour
         _actionManager = ActionManager.Instance;
 
         // Find NPC "Receptionist Rachel"
-        _receptionistNpc = _npcSpawner.NpcInstances[0];
+        _receptionistNpc = _npcSpawner._npcInstances[0];
         _dialogueBoxController = _receptionistNpc.GetComponent<DialogueBoxController>();
         _conversationController = GetConversationController(_receptionistNpc);
         Debug.Log("DialogueBoxController found: " + _dialogueBoxController);

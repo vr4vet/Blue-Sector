@@ -22,7 +22,7 @@ public class ConsentForm : MonoBehaviour
             return;
         }
 
-        _aiConsentNpc = _npcSpawner.NpcInstances[2];
+        _aiConsentNpc = _npcSpawner._npcInstances[2];
 
         // Moves the dialogue canvas to the receptionist higher
         Transform dialogueCanvas = _aiConsentNpc.transform.GetChild(1);

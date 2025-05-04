@@ -25,7 +25,7 @@ public class SpecializedBehaviourLarry : MonoBehaviour
             return;
         }
 
-        _larryNpc = _npcSpawner.NpcInstances[0];
+        _larryNpc = _npcSpawner._npcInstances[0];
 
         // Reduce dialogue trigger radius to avoid TTSSpeaker component missing error from spawning inside NPC dialogue trigger distance
         CapsuleCollider capsuleCollider = _larryNpc.GetNamedChild("CollisionTriggerHandler").GetComponent<CapsuleCollider>();

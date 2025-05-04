@@ -46,11 +46,11 @@ public class NPCMicroscopeTask : MonoBehaviour
     {
 
         // checking if NPC is currently letting the player select task, or if the player wants to try again. if so, reset the microscope task. 
-        if ((dialogueBoxController.DialogueTreeRestart.name == "Introduction" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[2].dialogue[0])
+        if ((dialogueBoxController.dialogueTreeRestart.name == "Introduction" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[2].dialogue[0])
             ||
-            (dialogueBoxController.DialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[1].dialogue[0])
+            (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[1].dialogue[0])
             || 
-            (dialogueBoxController.DialogueTreeRestart.name == "MicroscopeDialogue") && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[3].branchPoint.question && _correctAnswer)
+            (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue") && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[3].branchPoint.question && _correctAnswer)
         {
             // resetting water sample, counter, note sheet, and informational posters
             ResetWaterSample();
@@ -61,11 +61,11 @@ public class NPCMicroscopeTask : MonoBehaviour
         }
 
         // checking if NPC is currently verifying plankton count. jump to the appropriate dialogue section depending on if correct or incorrect.
-        if (dialogueBoxController.DialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[4].dialogue[0])
+        if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
             StartCoroutine(nameof(NPCVerifyAnswer));
 
         // checking if NPC is attempting to highlight plankton
-        if (dialogueBoxController.DialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[10].dialogue[0])
+        if (dialogueBoxController.dialogueTreeRestart.name == "MicroscopeDialogue" && dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[10].dialogue[0])
             StartCoroutine(nameof(NPCHighlightPlankton));
     }
 
@@ -84,7 +84,7 @@ public class NPCMicroscopeTask : MonoBehaviour
         // checking if player has placed slide onto microscope
         if (slide == null)
         {
-            dialogueBoxController.StartDialogue(dialogueBoxController.DialogueTreeRestart, 8, "MicroscopeDialogue", 0);
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue", 0);
             yield break;
         }
 
@@ -100,19 +100,19 @@ public class NPCMicroscopeTask : MonoBehaviour
         if (correct)
         {
             OnPlanktonCountCorrect.Invoke(); // complete step in tablet
-            dialogueBoxController.StartDialogue(dialogueBoxController.DialogueTreeRestart, 5, "MicroscopeDialogue", 0);
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 5, "MicroscopeDialogue", 0);
             if (tries < 2)
                 OnPlanktonCountCorrectFirstTry.Invoke();
         }
         else
         {
             // dynamically adding dialogue with correct answers. this could be a risky operation!
-            dialogueBoxController.DialogueTreeRestart.sections[7].dialogue[0] =
+            dialogueBoxController.dialogueTreeRestart.sections[7].dialogue[0] =
                 $"I counted {slide.GetTotalAmountOfChaetoceros()} Chaetoceros diatom, " +
                 $"{slide.GetTotalAmountOfPseudoNitzschia()} Pseudo-nitzschia diatom, " +
                 $"and {slide.GetTotalAmountOfSkeletonema()} Skeletonema diatom.";
 
-            dialogueBoxController.StartDialogue(dialogueBoxController.DialogueTreeRestart, 6, "MicroscopeDialogue", 0);
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 6, "MicroscopeDialogue", 0);
         }
     }
 
@@ -127,7 +127,7 @@ public class NPCMicroscopeTask : MonoBehaviour
         // checking if player has placed slide onto microscope
         if (slide == null)
         {
-            dialogueBoxController.StartDialogue(dialogueBoxController.DialogueTreeRestart, 8, "MicroscopeDialogue", 0);
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 8, "MicroscopeDialogue", 0);
             yield break;
         }
 
@@ -135,12 +135,12 @@ public class NPCMicroscopeTask : MonoBehaviour
         if (HighLightPlankton)
         {
             EnablePlanktonHighlights.Invoke();
-            dialogueBoxController.StartDialogue(dialogueBoxController.DialogueTreeRestart, 11, "MicroscopeDialogue", 0);
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 11, "MicroscopeDialogue", 0);
         }
         else
         {
             DisablePlanktonHighlights.Invoke();
-            dialogueBoxController.StartDialogue(dialogueBoxController.DialogueTreeRestart, 12, "MicroscopeDialogue", 0);
+            dialogueBoxController.StartDialogue(dialogueBoxController.dialogueTreeRestart, 12, "MicroscopeDialogue", 0);
         }
     }
 
@@ -193,9 +193,9 @@ public class NPCMicroscopeTask : MonoBehaviour
     /// <param name="answer"></param>
     private void ButtonSpawner_OnAnswer(string answer, string question, string name)
     {
-        if (dialogueBoxController.DialogueTreeRestart.name != "MicroscopeDialogue")
+        if (dialogueBoxController.dialogueTreeRestart.name != "MicroscopeDialogue")
             return;
-        if (dialogueBoxController._dialogueText.text == dialogueBoxController.DialogueTreeRestart.sections[9].branchPoint.question)
+        if (dialogueBoxController._dialogueText.text == dialogueBoxController.dialogueTreeRestart.sections[9].branchPoint.question)
         {
             if (answer == "Yes")
                 HighLightPlankton = true;

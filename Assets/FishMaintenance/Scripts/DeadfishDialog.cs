@@ -24,7 +24,7 @@ public class DeadfishDialog : MonoBehaviour
             return;
         }
 
-        _npc = _npcSpawner.NpcInstances[0];
+        _npc = _npcSpawner._npcInstances[0];
         task = mm.MaintenanceTask;
         dialogueController = _npc.gameObject.GetComponent<DialogueBoxController>();
         infoStep = mm.GetStep("Handling of dead fish", "Get info from Laila");
@@ -32,11 +32,11 @@ public class DeadfishDialog : MonoBehaviour
 
     void Update()
     { 
-        if (dialogueController.TimesEnded == 2)
+        if (dialogueController.timesEnded == 2)
         {
             mm.CompleteStep(infoStep);
         }
-        if (dialogueController.TimesEnded == 2 && dialogueController.DialogueEnded)
+        if (dialogueController.timesEnded == 2 && dialogueController.dialogueEnded)
         {
             ConversationController conversationController = _npc.GetComponentInChildren<ConversationController>();
             if (conversationController == null)
