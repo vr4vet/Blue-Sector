@@ -135,7 +135,7 @@ public class DialogueBoxController : MonoBehaviour
         // Reset the dialogue box dimensions from "Speak" button dimensionsww
         _dialogueCanvas.GetComponent<RectTransform>().sizeDelta = _oldDialogueCanvasSizeDelta;
         
-        int dialogueSection = 0;
+        //int dialogueSection = 0;
         
         // -1 means that the dialogue was a branchpoint and the script will skip to loading the branchpoint, instead of the standard dialogue when returning to the section
         if (element != -1)
@@ -186,7 +186,7 @@ public class DialogueBoxController : MonoBehaviour
                     yield return null;
                 }
                 _skipLineTriggered = false;
-                dialogueSection = section;
+                //dialogueSection = section;
             }   
         }
 
@@ -207,7 +207,7 @@ public class DialogueBoxController : MonoBehaviour
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
         TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
         // Invoke the dialogue changed event
-        m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, dialogueSection, -1);
+        m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, -1);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
         while (_answerTriggered == false)
         {

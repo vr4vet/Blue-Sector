@@ -7,6 +7,8 @@ public class NPCDissectionTask : MonoBehaviour
     [SerializeField] private FishDissectionGroup dissectionGroup;
 
     private DialogueBoxController _dialogueBoxController;
+    private ConversationController _conversationController;
+    private int _questionSection, _questionIndex;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +19,11 @@ public class NPCDissectionTask : MonoBehaviour
         {
             dissectionGroup.m_OnSalmonEntered.AddListener(OnSalmonPlacedOnCuttingBoard);
             dissectionGroup.m_OnFirstCutComplete.AddListener(OnFirstCutComplete);
+            _dialogueBoxController.m_DialogueChanged.AddListener(OnDialogueChanged);
         }
+
+        if (!(_conversationController = FindObjectOfType<ConversationController>()))
+            Debug.LogError("Could not find ConversationController!");
     }
 
     private void OnSalmonPlacedOnCuttingBoard()
@@ -36,6 +42,41 @@ public class NPCDissectionTask : MonoBehaviour
         {
             if (_dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[0].dialogue[1])
                 _dialogueBoxController.SkipLine();
+        }
+    }
+
+    private void OnDialogueChanged(string name, string dialogueTree, int section, int index)
+    {
+        //Debug.Log("Name: " + name + "\nDialogue tree: " + dialogueTree + "\nSection: " + section + "\nIndex: " + index);
+
+        if (dialogueTree.ToLower().Contains("dissection"))
+        {
+            if (index == -1)  // index == -1 means question/branch point
+            {
+                if (_dialogueBoxController._dialogueText.text.Equals("What is this organ called?"))
+                {
+                    _questionSection = section;
+                    _questionIndex = index;
+                    //Debug.Log(_questionSection);
+                    //Debug.Log(_questionIndex);
+                }
+            }
+            else
+            {
+                if (_dialogueBoxController._dialogueText.text.Equals("Return to question")) // return to failed question
+                {
+                    //Debug.Log("Returning to question " + _questionSection + " index " + _questionIndex);
+                    _dialogueBoxController.StartDialogue(_dialogueBoxController.dialogueTreeRestart, _questionSection, name, _questionIndex);
+                }
+                else if (_dialogueBoxController._dialogueText.text.Equals("Practice"))
+                {
+                    Debug.Log("Practice chosen");
+                }
+                else if (_dialogueBoxController._dialogueText.text.Equals("Do another task"))
+                {
+                    _dialogueBoxController.StartDialogue(_conversationController.GetDialogueTrees()[0], 2, name, 0);
+                }
+            }
         }
     }
 

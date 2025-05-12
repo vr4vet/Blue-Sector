@@ -34,6 +34,54 @@ MonoBehaviour:
         nextElement: 1
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 1
+    pointAt: 
+    branchPoint:
+      question: Now that the salmon is dissected, we can learn what the different
+        organs are called. Do so by pointing at them with your right hand. Try to
+        remember what they are called, and tell me when you're ready.
+      answers:
+      - answerLabel: I'm ready!
+        nextElement: 2
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Great! I will now test your knowledge. I will highlight one of the
+        salmon's organs and ask for the right name. I will provide three options,
+        and you will have to pick the correct one.
+      answers:
+      - answerLabel: Got it!
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Liver
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Splinky
+        nextElement: 5
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Boink
+        nextElement: 5
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
     - Now, we dissect further to expose the heart. Cut according to the instructions
       of the superimposed arrows.
@@ -57,3 +105,63 @@ MonoBehaviour:
         nextElement: 1
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: That wasn't quite correct. Do you want to try again?
+      answers:
+      - answerLabel: Yes
+        nextElement: 6
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
+        nextElement: 7
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - Return to question
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Do you want to look at the organs and practice their names again,
+        or do you want to do another task?
+      answers:
+      - answerLabel: Practice
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Do another task
+        nextElement: 9
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - Practice
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue:
+    - Do another task
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: 
+      answers: []
