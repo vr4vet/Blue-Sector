@@ -12,8 +12,12 @@ public class DissectionStep : MonoBehaviour
 {
     [Tooltip("The width of the cut path line.")]
     [SerializeField] private float lineWidth = 1f;
+
+    [SerializeField] private float lineTiling = -13.3f;
+    
     [Tooltip("The objects which make up the cut path. A line will be drawn along these transforms.")]
     [SerializeField] private List<Transform> transforms = new();
+
 
     public DissectionStateFinished m_DissectionStateFinished = new();
 
@@ -23,6 +27,7 @@ public class DissectionStep : MonoBehaviour
     private int _currentCutPoint = 0;
     private float _totalDistance = 0;
     private List<float> _distances = new() { 0 };
+    private Material _lineMaterial;
 
     private Gradient _colorGradient;
     private GradientColorKey[] _colorKeys;
@@ -30,11 +35,13 @@ public class DissectionStep : MonoBehaviour
 
     void Start()
     {
+
         _lineRenderer = GetComponent<LineRenderer>();
         _lineRenderer.widthMultiplier = lineWidth;
         _lineRenderer.colorGradient.mode = GradientMode.Fixed;
         _lineRenderer.positionCount = transforms.Count;
         _lineRenderer.SetPositions(transforms.Select(t => t.position).ToArray()); // passing an array of all the transform's positions
+        _lineRenderer.material.mainTextureScale = new Vector2(lineTiling, 1);
 
         // storing gradient data so arrows can be filled in when cutting
         _colorGradient = _lineRenderer.colorGradient;
@@ -94,7 +101,7 @@ public class DissectionStep : MonoBehaviour
     // drawing cut point in Scene view for debugging purposes
     private void OnDrawGizmos()
     {
-        if (_currentCutPoint < transforms.Count)
+        if (transforms.Count > 0 && _currentCutPoint < transforms.Count)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transforms[_currentCutPoint].position, .01f);

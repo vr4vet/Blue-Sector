@@ -15,21 +15,33 @@ public class MeshOutline : MonoBehaviour
     [SerializeField] private MeshType meshType;
     [SerializeField] private float outlineThickness = 1f;
     [SerializeField] private Material outlineMaterial;
+    [SerializeField] private Material alternativeMeshMaterial;
     [SerializeField] private bool enabledOnStart = false;
 
     private GameObject _duplicateMeshObject;
     private Mesh _mesh;
+    private Material _material;
     private Vector3[] _vertices; // array storing outline duplicate mesh vertices
     private bool _outlineReady;
 
     private void OnEnable()
     {
         if (meshType == MeshType.MeshFilter)
+        {
             _mesh = GetComponent<MeshFilter>().mesh;
+            _material = GetComponent<MeshRenderer>().material;
+        }
         else
+        {
             _mesh = GetComponent<SkinnedMeshRenderer>().sharedMesh;
+            _material = GetComponent<SkinnedMeshRenderer>().material;
+        }
 
         _vertices = new Vector3[_mesh.vertexCount];
+        _material.SetFloat("_Mode", 3);
+        _material.color = new Color32(0xFF, 0xFF, 0xFF, 0x7F);
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<MeshRenderer>().enabled = true;
 
         StartCoroutine(nameof(MakeOutline));
     }
@@ -48,7 +60,7 @@ public class MeshOutline : MonoBehaviour
         while (index < vertexCount)
         {
             // process a chunk of the array
-            int end = Mathf.Min(index + 40, vertexCount);
+            int end = Mathf.Min(index + 10, vertexCount);
             for (int i = index; i < end; i++)
             {
                 // process each element in the chunk
@@ -98,4 +110,8 @@ public class MeshOutline : MonoBehaviour
 
         _duplicateMeshObject.GetComponent<MeshRenderer>().enabled = enable;
     }
+
+    //public void EnableAlternativeMaterial() => return;
+
+
 }
