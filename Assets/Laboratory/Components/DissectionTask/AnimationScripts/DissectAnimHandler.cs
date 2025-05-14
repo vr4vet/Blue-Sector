@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DissectAnimHandler : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class DissectAnimHandler : MonoBehaviour
 
     private float _skinFlapSpeed, _gillFlapSpeed, _swimBladderSpeed;
 
+    public UnityEvent m_SkinFlapAnimationCompleted;
+    public UnityEvent m_GillFlapAnimationCompleted;
+    public UnityEvent m_SwimBladderAnimationCompleted;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +27,10 @@ public class DissectAnimHandler : MonoBehaviour
 
         if (!skinFlap || !gillFlap || !swimBladder)
             Debug.LogError("SkinnedMeshRenderer components not set in inspector");
+
+        m_SkinFlapAnimationCompleted ??= new();
+        m_GillFlapAnimationCompleted ??= new();
+        m_SwimBladderAnimationCompleted ??= new();
     }
 
     private void Update()
@@ -47,7 +56,10 @@ public class DissectAnimHandler : MonoBehaviour
                     skinFlap.SetBlendShapeWeight(1, _skinFlapBlend1);
                 }
                 else
+                {
                     _animatingSkinFlap = false;
+                    m_SkinFlapAnimationCompleted.Invoke();
+                }
             }
         }
 
@@ -61,7 +73,10 @@ public class DissectAnimHandler : MonoBehaviour
                 gillFlap.SetBlendShapeWeight(0, _gillFlapBlend);
             }
             else
+            {
                 _animatingGillFlap = false;
+                m_GillFlapAnimationCompleted.Invoke();
+            }
         }
 
         // The swim bladder has one blend shape. The animation goes as follows:
@@ -74,7 +89,10 @@ public class DissectAnimHandler : MonoBehaviour
                 swimBladder.SetBlendShapeWeight(0, _swimBladderBlend);
             }
             else
+            {
                 _animatingSwimBladder = false;
+                m_SwimBladderAnimationCompleted.Invoke();
+            }
         }
     }
 

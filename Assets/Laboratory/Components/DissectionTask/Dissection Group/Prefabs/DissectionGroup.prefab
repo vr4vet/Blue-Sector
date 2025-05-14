@@ -804,6 +804,98 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2406251113401157723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &551639744046115951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2793192532441375796, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &997889498
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551639744046115951}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3676728085192693422, guid: 2e31c1413e5c30f4bb1125b162e64136, type: 3}
+--- !u!114 &997889499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551639744046115951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744b3611da944e54da5e532e02ae2454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxDistance: 100
+  Enabled: 1
+  OnPointerClickEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 997889503}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: EnableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 997889503}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnPointerDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &997889503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551639744046115951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshType: 0
+  outlineThickness: 2
+  pulseSpeed: 1
+  highlightMaterial: {fileID: 2100000, guid: 9b3c1fe2afd402441b990db707375644, type: 2}
+  alternativeMeshMaterial: {fileID: 2100000, guid: eecc1ed0f8a5cf948a4da253f49e2f39,
+    type: 2}
+  enabledOnStart: 0
 --- !u!1 &645037530341125244 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2996893303626867751, guid: bfc4dfd52857a254986b467feda3f422,
@@ -826,18 +918,407 @@ MonoBehaviour:
   skinFlap: {fileID: 2877169865401607395}
   gillFlap: {fileID: 2707665158459359972}
   swimBladder: {fileID: 4541748174402294522}
+  m_SkinFlapAnimationCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  m_GillFlapAnimationCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SwimBladderAnimationCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1024612245}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: RemakeHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!137 &2707665158459359972 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 357815985153379007, guid: bfc4dfd52857a254986b467feda3f422,
     type: 3}
   m_PrefabInstance: {fileID: 2406251113401157723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2723083447540718046 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 337467968588026245, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1024612246
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2723083447540718046}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!114 &1024612245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2723083447540718046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshType: 1
+  outlineThickness: 2
+  pulseSpeed: 1
+  highlightMaterial: {fileID: 2100000, guid: 9b3c1fe2afd402441b990db707375644, type: 2}
+  alternativeMeshMaterial: {fileID: 2100000, guid: eecc1ed0f8a5cf948a4da253f49e2f39,
+    type: 2}
+  enabledOnStart: 0
+--- !u!114 &1024612247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2723083447540718046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744b3611da944e54da5e532e02ae2454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxDistance: 100
+  Enabled: 1
+  OnPointerClickEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1024612245}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: EnableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1024612245}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1 &2793053605655534308 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 551220188441399999, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1585610551
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2793053605655534308}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3008246292707459220, guid: 2e31c1413e5c30f4bb1125b162e64136, type: 3}
+--- !u!114 &1585610550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2793053605655534308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744b3611da944e54da5e532e02ae2454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxDistance: 100
+  Enabled: 1
+  OnPointerClickEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1585610555}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: EnableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1585610555}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnPointerDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1585610555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2793053605655534308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshType: 0
+  outlineThickness: 2
+  pulseSpeed: 1
+  highlightMaterial: {fileID: 2100000, guid: 9b3c1fe2afd402441b990db707375644, type: 2}
+  alternativeMeshMaterial: {fileID: 2100000, guid: eecc1ed0f8a5cf948a4da253f49e2f39,
+    type: 2}
+  enabledOnStart: 0
 --- !u!137 &2877169865401607395 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 471041897504353464, guid: bfc4dfd52857a254986b467feda3f422,
     type: 3}
   m_PrefabInstance: {fileID: 2406251113401157723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4189893798955151400 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1964069258111449203, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1903446779
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4189893798955151400}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3139755380807352254, guid: 2e31c1413e5c30f4bb1125b162e64136, type: 3}
+--- !u!114 &1903446778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4189893798955151400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744b3611da944e54da5e532e02ae2454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxDistance: 100
+  Enabled: 1
+  OnPointerClickEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1903446783}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: EnableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1903446783}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnPointerDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1903446783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4189893798955151400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshType: 0
+  outlineThickness: 2
+  pulseSpeed: 1
+  highlightMaterial: {fileID: 2100000, guid: 9b3c1fe2afd402441b990db707375644, type: 2}
+  alternativeMeshMaterial: {fileID: 2100000, guid: eecc1ed0f8a5cf948a4da253f49e2f39,
+    type: 2}
+  enabledOnStart: 0
+--- !u!1 &4488337656984693417 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2246592466926887666, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &839877090
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4488337656984693417}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8516313922049089662, guid: 2e31c1413e5c30f4bb1125b162e64136, type: 3}
+--- !u!114 &839877089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4488337656984693417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744b3611da944e54da5e532e02ae2454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxDistance: 100
+  Enabled: 1
+  OnPointerClickEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 839877094}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: EnableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 839877094}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnPointerDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &839877094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4488337656984693417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshType: 0
+  outlineThickness: 2
+  pulseSpeed: 1
+  highlightMaterial: {fileID: 2100000, guid: 9b3c1fe2afd402441b990db707375644, type: 2}
+  alternativeMeshMaterial: {fileID: 2100000, guid: eecc1ed0f8a5cf948a4da253f49e2f39,
+    type: 2}
+  enabledOnStart: 0
 --- !u!137 &4541748174402294522 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2189663410561292961, guid: bfc4dfd52857a254986b467feda3f422,
@@ -850,6 +1331,190 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 2406251113401157723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8550431612300633313 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6326858858314149050, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2001444539
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8550431612300633313}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6360384865556782114, guid: 2e31c1413e5c30f4bb1125b162e64136, type: 3}
+--- !u!114 &2001444538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8550431612300633313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744b3611da944e54da5e532e02ae2454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxDistance: 100
+  Enabled: 1
+  OnPointerClickEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2001444543}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: EnableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2001444543}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnPointerDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2001444543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8550431612300633313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshType: 0
+  outlineThickness: 2
+  pulseSpeed: 1
+  highlightMaterial: {fileID: 2100000, guid: 9b3c1fe2afd402441b990db707375644, type: 2}
+  alternativeMeshMaterial: {fileID: 2100000, guid: eecc1ed0f8a5cf948a4da253f49e2f39,
+    type: 2}
+  enabledOnStart: 0
+--- !u!1 &8770009697821608516 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6400158200477860383, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1159608520
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770009697821608516}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2709185121526241441, guid: 2e31c1413e5c30f4bb1125b162e64136, type: 3}
+--- !u!114 &1159608516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770009697821608516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744b3611da944e54da5e532e02ae2454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxDistance: 100
+  Enabled: 1
+  OnPointerClickEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1159608524}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: EnableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPointerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1159608524}
+        m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
+        m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnPointerDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPointerUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1159608524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770009697821608516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshType: 0
+  outlineThickness: 2
+  pulseSpeed: 1
+  highlightMaterial: {fileID: 2100000, guid: 9b3c1fe2afd402441b990db707375644, type: 2}
+  alternativeMeshMaterial: {fileID: 2100000, guid: 5b48a884151ab334a8fb3b5781eeabb6,
+    type: 2}
+  enabledOnStart: 0
 --- !u!1001 &8117705052575473019
 PrefabInstance:
   m_ObjectHideFlags: 0

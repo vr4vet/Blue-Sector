@@ -38,11 +38,6 @@ public class MeshOutline : MonoBehaviour
         }
 
         _vertices = new Vector3[_mesh.vertexCount];
-        _material.SetFloat("_Mode", 3);
-        _material.color = new Color32(0xFF, 0xFF, 0xFF, 0x7F);
-        GetComponent<MeshRenderer>().enabled = false;
-        GetComponent<MeshRenderer>().enabled = true;
-
         StartCoroutine(nameof(MakeOutline));
     }
 
@@ -113,5 +108,11 @@ public class MeshOutline : MonoBehaviour
 
     //public void EnableAlternativeMaterial() => return;
 
-
+    public void ToggleAlternativeMaterial(bool enable)
+    {
+        if (meshType == MeshType.MeshFilter)
+            GetComponent<MeshRenderer>().material = enable ? alternativeMeshMaterial : _material;
+        else
+            GetComponent<SkinnedMeshRenderer>().material = enable ? alternativeMeshMaterial : _material;
+    }
 }
