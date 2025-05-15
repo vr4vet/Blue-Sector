@@ -21,16 +21,19 @@ MonoBehaviour:
     - 'The next step is inspecting the internal areas of the salmon. Pick up the
       scalpel and cut open the fish according to the instructions of the superimposed
       arrows '
+    - Now we need to expose the heart. Do so by cutting forwards according to the
+      instructions.
+    - Lastly, we need to expose the kidney. To do this, we need to open the swim
+      bladder. Cut according to the instructions.
     endAfterDialogue: 0
     walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 1
     pointAt: 
     branchPoint:
       question: Wow, just like a professional! Now that the salmon is cut open, we
-        can see its internal organs, like the ding and the dong. I especially like
-        the thingythong over there.
+        can see its internal organs. Tell me when you are ready to progress.
       answers:
-      - answerLabel: Same here
+      - answerLabel: I'm ready!
         nextElement: 1
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
@@ -74,35 +77,132 @@ MonoBehaviour:
         nextElement: 4
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
-      - answerLabel: Splinky
-        nextElement: 5
+      - answerLabel: Gill
+        nextElement: 10
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
-      - answerLabel: Boink
-        nextElement: 5
+      - answerLabel: Ovary
+        nextElement: 10
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
-  - dialogue:
-    - Now, we dissect further to expose the heart. Cut according to the instructions
-      of the superimposed arrows.
-    - "Look for any internal bleeding, blood spots, discoloration to the fish\u2019s
-      organs or any other damage. "
-    - ' Remember to press the lower button on the weight to reset it and make sure
-      it is set zero. '
-    - Remember to be careful when handling the fish to avoid causing any damage.
+  - dialogue: []
     endAfterDialogue: 0
     walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
     pointAt: 
     branchPoint:
-      question: Are you ready to continue
+      question: What is this organ called?
       answers:
-      - answerLabel: Yes
-        nextElement: 0
+      - answerLabel: Brain
+        nextElement: 10
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
-      - answerLabel: No
-        nextElement: 1
+      - answerLabel: Swim bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Heart
+        nextElement: 5
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Liver
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Kidney
+        nextElement: 6
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Swim bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Intestine
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Spleen
+        nextElement: 7
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ovary
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Stomach
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ovary
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Gall bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Gall bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Brain
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Swim bladder
+        nextElement: 9
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Gall bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Intestine
+        nextElement: 15
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ovary
+        nextElement: 10
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
   - dialogue: []
@@ -114,11 +214,11 @@ MonoBehaviour:
       question: That wasn't quite correct. Do you want to try again?
       answers:
       - answerLabel: Yes
-        nextElement: 6
+        nextElement: 11
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
       - answerLabel: No
-        nextElement: 7
+        nextElement: 12
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
   - dialogue:
@@ -140,11 +240,11 @@ MonoBehaviour:
         or do you want to do another task?
       answers:
       - answerLabel: Practice
-        nextElement: 8
+        nextElement: 13
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Do another task
-        nextElement: 9
+        nextElement: 14
         endAfterAnswer: 0
         walkOrTurnTowardsAfterAnswer: 
   - dialogue:
@@ -165,3 +265,15 @@ MonoBehaviour:
     branchPoint:
       question: 
       answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: 'Excellent! '
+      answers:
+      - answerLabel: Wow!
+        nextElement: 14
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 

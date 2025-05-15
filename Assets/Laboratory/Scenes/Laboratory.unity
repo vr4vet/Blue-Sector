@@ -59636,6 +59636,18 @@ Transform:
   m_Father: {fileID: 799083036}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1121305673 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 839877094, guid: dd9cb2f99bdd0324f90dd605512391de,
+    type: 3}
+  m_PrefabInstance: {fileID: 578256856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1122306026
 GameObject:
   m_ObjectHideFlags: 0
@@ -62182,6 +62194,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1173173063}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1173521816 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3009471287151742540, guid: dd9cb2f99bdd0324f90dd605512391de,
+    type: 3}
+  m_PrefabInstance: {fileID: 578256856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fe4de193b639474bae583234ada8d64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1173860724
 GameObject:
   m_ObjectHideFlags: 0
@@ -65319,6 +65343,18 @@ Transform:
   m_Father: {fileID: 777486838}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1227590253 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1585610555, guid: dd9cb2f99bdd0324f90dd605512391de,
+    type: 3}
+  m_PrefabInstance: {fileID: 578256856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1228049747
 GameObject:
   m_ObjectHideFlags: 0
@@ -70376,6 +70412,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9e91f3a6c2abf446b74bea971a79adf, type: 3}
+--- !u!114 &1305621199 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2001444543, guid: dd9cb2f99bdd0324f90dd605512391de,
+    type: 3}
+  m_PrefabInstance: {fileID: 578256856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1306990009
 GameObject:
   m_ObjectHideFlags: 0
@@ -77556,6 +77604,124 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dissectionGroup: {fileID: 413268901}
+  incorrectOrganSection: 10
+  m_OnQuizLiver:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1173521816}
+        m_TargetAssemblyTypeName: MeshHighlightGroup, Assembly-CSharp
+        m_MethodName: BlockLaserPointerAllOrgans
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1173521816}
+        m_TargetAssemblyTypeName: MeshHighlightGroup, Assembly-CSharp
+        m_MethodName: EnableMeshHighlightExclusive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1305621199}
+          m_ObjectArgumentAssemblyTypeName: MeshHighlight, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnQuizKidney:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1173521816}
+        m_TargetAssemblyTypeName: MeshHighlightGroup, Assembly-CSharp
+        m_MethodName: EnableMeshHighlightExclusive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1640438125}
+          m_ObjectArgumentAssemblyTypeName: MeshHighlight, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnQuizHeart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1173521816}
+        m_TargetAssemblyTypeName: MeshHighlightGroup, Assembly-CSharp
+        m_MethodName: EnableMeshHighlightExclusive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2032206757}
+          m_ObjectArgumentAssemblyTypeName: MeshHighlight, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnQuizSpleen:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1173521816}
+        m_TargetAssemblyTypeName: MeshHighlightGroup, Assembly-CSharp
+        m_MethodName: EnableMeshHighlightExclusive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2018709272}
+          m_ObjectArgumentAssemblyTypeName: MeshHighlight, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnQuizStomach:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1173521816}
+        m_TargetAssemblyTypeName: MeshHighlightGroup, Assembly-CSharp
+        m_MethodName: EnableMeshHighlightExclusive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1227590253}
+          m_ObjectArgumentAssemblyTypeName: MeshHighlight, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnQuizSwimBladder:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1173521816}
+        m_TargetAssemblyTypeName: MeshHighlightGroup, Assembly-CSharp
+        m_MethodName: EnableMeshHighlightExclusive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1730398181}
+          m_ObjectArgumentAssemblyTypeName: MeshHighlight, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnQuizIntestine:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1173521816}
+        m_TargetAssemblyTypeName: MeshHighlightGroup, Assembly-CSharp
+        m_MethodName: EnableMeshHighlightExclusive
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1121305673}
+          m_ObjectArgumentAssemblyTypeName: MeshHighlight, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1455755823
 GameObject:
   m_ObjectHideFlags: 0
@@ -87673,6 +87839,18 @@ Transform:
   m_Father: {fileID: 522097578}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1640438125 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1903446783, guid: dd9cb2f99bdd0324f90dd605512391de,
+    type: 3}
+  m_PrefabInstance: {fileID: 578256856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1641615944
 GameObject:
   m_ObjectHideFlags: 0
@@ -91673,6 +91851,18 @@ Transform:
   m_Father: {fileID: 1069462937}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1730398181 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1024612245, guid: dd9cb2f99bdd0324f90dd605512391de,
+    type: 3}
+  m_PrefabInstance: {fileID: 578256856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1731069724
 GameObject:
   m_ObjectHideFlags: 0
@@ -107275,6 +107465,18 @@ CapsuleCollider:
   m_Height: 0.035
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2018709272 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1159608524, guid: dd9cb2f99bdd0324f90dd605512391de,
+    type: 3}
+  m_PrefabInstance: {fileID: 578256856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2018918293
 GameObject:
   m_ObjectHideFlags: 0
@@ -107714,6 +107916,18 @@ Transform:
   m_Father: {fileID: 240690111}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2032206757 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 997889503, guid: dd9cb2f99bdd0324f90dd605512391de,
+    type: 3}
+  m_PrefabInstance: {fileID: 578256856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106a349f6bca6c34b90554b23d087f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2033186685
 GameObject:
   m_ObjectHideFlags: 0
