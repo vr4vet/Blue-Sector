@@ -84,25 +84,19 @@ public class NpcTriggerDialogue : MonoBehaviour
     public void Error2() => _dialogueBoxController.StartDialogue(GetDialogueTreeFromName("ErrorFeedback"), 2, npcName, 0);
    
     // When the player places the fish without using the basket
-    public void Error3() {
+    public void Error3() 
+    {
         // Destroy the fish to return it to its original position
-            GameObject[] instances = GameObject.FindGameObjectsWithTag("Fish");
-            foreach (GameObject instance in instances)
-            {
-                Destroy(instance);
-            }
-            Instantiate(fishPrefab, _fishPosition, _fishRotation);
-            _dialogueBoxController.StartDialogue(GetDialogueTreeFromName("ErrorFeedback"), 3, npcName, 0);
+        Destroy(fish);
+        fish = Instantiate(fishPrefab, _fishPosition, _fishRotation);
+        _dialogueBoxController.StartDialogue(GetDialogueTreeFromName("ErrorFeedback"), 3, npcName, 0);
     }
    
     // When the player places the fish before turning on the weight
-    public void Error4() {
-        GameObject[] instances = GameObject.FindGameObjectsWithTag("Fish");
-        foreach (GameObject instance in instances)
-        {
-            Destroy(instance);
-        }
-        Instantiate(fishPrefab, _fishPosition, _fishRotation);
+    public void Error4() 
+    {
+        Destroy(fish);
+        fish = Instantiate(fishPrefab, _fishPosition, _fishRotation);
         _dialogueBoxController.StartDialogue(GetDialogueTreeFromName("ErrorFeedback"), 0, npcName, 0);
     }
    
@@ -140,12 +134,12 @@ public class NpcTriggerDialogue : MonoBehaviour
     private void ReturnToMeasuringLength() => _dialogueBoxController.StartDialogue(GetDialogueTreeFromName("LarsDialogue"), 3, npcName, 0);
 
     // Reset all task-related objects
-    private void ResetObjects()
+    public void ResetObjects()
     {
         basket.transform.SetPositionAndRotation(_basketPosition, _basketRotation);
         
         Destroy(fish);
-        Instantiate(fishPrefab, _fishPosition, _fishRotation);
+        fish = Instantiate(fishPrefab, _fishPosition, _fishRotation);
 
         scale.GetComponent<Scale>().totalWeight = 0;
         

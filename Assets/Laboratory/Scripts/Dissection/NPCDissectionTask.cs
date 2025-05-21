@@ -138,6 +138,7 @@ public class NPCDissectionTask : MonoBehaviour
                     break;
                 case "Do another task":
                     _dialogueBoxController.StartDialogue(_conversationController.GetDialogueTrees()[0], 2, name, 0);
+                    m_OnQuizEnd.Invoke();
                     break;
             }
         }

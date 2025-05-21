@@ -13,6 +13,7 @@ public class FishDissectionGroup : MonoBehaviour
     public UnityEvent m_OnFirstCutComplete;
     public UnityEvent m_OnSecondCutComplete;
     public UnityEvent m_OnThirdCutComplete;
+    public UnityEvent m_OnTaskReset;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,7 @@ public class FishDissectionGroup : MonoBehaviour
         m_OnFirstCutComplete ??= new();
         m_OnSecondCutComplete ??= new();
         m_OnThirdCutComplete ??= new();
+        m_OnTaskReset ??= new();
 
         // add listener to invidual dissection steps completion, and hide/disable them
         foreach (DissectionStep step in dissectionSteps)
@@ -35,6 +37,7 @@ public class FishDissectionGroup : MonoBehaviour
         // set up the first dissection step if the salmon is placed in trigger (this is set in inspector)
         if (other.CompareTag("Bone"))
         {
+            other.transform.root.gameObject.SetActive(false);
             m_OnSalmonEntered.Invoke();
         }
     }
@@ -71,6 +74,16 @@ public class FishDissectionGroup : MonoBehaviour
             case 3:
                 m_OnThirdCutComplete.Invoke(); break;
         }
+    }
+
+    public void ResetDissectionGroup()
+    {
+        _currentDisectionStep = 0;
+        
+        foreach (DissectionStep step in dissectionSteps)
+            step.gameObject.SetActive(false);
+        
+        m_OnTaskReset.Invoke();
     }
 
     private void OnDestroy()

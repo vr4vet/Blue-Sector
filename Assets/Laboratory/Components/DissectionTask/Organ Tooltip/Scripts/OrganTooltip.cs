@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class OrganTooltip : MonoBehaviour
 {
+    [SerializeField] private Transform closedPosition;
+
     private bool _moving = false;
 
     private Vector3 _targetPosition;
     private Vector3 _targetScale;
     private Vector3 _openPosition;
     private Vector3 _openScale;
+    private Vector3 _closedPosition;
     private Vector3 _velocityPosition;
     private Vector3 _velocityScale;
 
@@ -18,6 +21,8 @@ public class OrganTooltip : MonoBehaviour
     {
         _openPosition = transform.localPosition;
         _openScale = transform.localScale;
+        _closedPosition = closedPosition ? closedPosition.localPosition : Vector3.zero;
+        GetComponent<LineRenderer>().widthMultiplier = .004f;
         CloseImmediately();
     }
 
@@ -44,7 +49,7 @@ public class OrganTooltip : MonoBehaviour
 
     public void CloseImmediately()
     {
-        transform.localPosition = Vector3.zero;
+        transform.localPosition = _closedPosition;
         transform.localScale = Vector3.zero;
         Close();
     }
@@ -59,7 +64,7 @@ public class OrganTooltip : MonoBehaviour
 
     public void ToggleOpen()
     {
-        if (_targetPosition == Vector3.zero)
+        if (_targetPosition == _closedPosition)
             Open();
         else
             Close();
@@ -69,7 +74,7 @@ public class OrganTooltip : MonoBehaviour
     {
         _moving = false;
 
-        if (_targetPosition == Vector3.zero)
+        if (_targetPosition == _closedPosition)
         {
             GetComponent<Canvas>().enabled = false;
             GetComponent<LineRenderer>().enabled = false;
@@ -85,7 +90,7 @@ public class OrganTooltip : MonoBehaviour
         }
         else
         {
-            _targetPosition = Vector3.zero;
+            _targetPosition = _closedPosition;
             _targetScale = Vector3.zero;
         }
 

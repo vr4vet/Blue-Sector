@@ -113,4 +113,12 @@ public class DissectAnimHandler : MonoBehaviour
         _swimBladderSpeed = speed;
         _animatingSwimBladder = true;
     }
+
+    public void ResetAnimations()
+    {
+        skinFlap.SetBlendShapeWeight(0, 0);
+        skinFlap.SetBlendShapeWeight(1, 0);
+        gillFlap.SetBlendShapeWeight(0, 0);
+        swimBladder.SetBlendShapeWeight(0, 0);
+    }
 }

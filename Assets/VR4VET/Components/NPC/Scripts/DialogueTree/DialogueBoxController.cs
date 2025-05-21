@@ -206,6 +206,8 @@ public class DialogueBoxController : MonoBehaviour
         }
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
         TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+        _animator.SetBool(_isTalkingHash, true);
+        StartCoroutine(revertToIdleAnimation());
         // Invoke the dialogue changed event
         m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, -1);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
@@ -220,8 +222,8 @@ public class DialogueBoxController : MonoBehaviour
 
         _skipLineButton.transform.GetChild(0).GetComponent<Image>().color = _skipLineButtonComponent.colors.normalColor; // give arrow icon child same colour
         _answerTriggered = false;
-        _exitButton.SetActive(false);
-        _skipLineButton.SetActive(false);
+        //_exitButton.SetActive(false);
+        //_skipLineButton.SetActive(false);
 
         walkTurnDestination = dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer;
         if (walkTurnDestination != null && !walkTurnDestination.Equals(string.Empty))
