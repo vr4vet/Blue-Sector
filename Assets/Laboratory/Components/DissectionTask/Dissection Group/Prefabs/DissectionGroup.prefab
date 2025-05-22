@@ -436,18 +436,6 @@ MonoBehaviour:
   m_OnSalmonEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 3353399482191747880}
         m_TargetAssemblyTypeName: FishDissectionGroup, Assembly-CSharp
         m_MethodName: SetUpDissectionStep
@@ -514,6 +502,45 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 50
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnTaskReset:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 578256861}
+        m_TargetAssemblyTypeName: DissectAnimHandler, Assembly-CSharp
+        m_MethodName: ResetAnimations
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: NpcTriggerDialogue, Assembly-CSharp
+        m_MethodName: ResetObjects
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 645037530341125244}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -706,6 +733,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3353399482191747862}
     m_Modifications:
+    - target: {fileID: 31663744810236003, guid: bfc4dfd52857a254986b467feda3f422,
+        type: 3}
+      propertyPath: closedPosition
+      value: 
+      objectReference: {fileID: 8030196396640688587}
     - target: {fileID: 2512105035154685597, guid: bfc4dfd52857a254986b467feda3f422,
         type: 3}
       propertyPath: m_RootOrder
@@ -791,13 +823,49 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3365777405489096088, guid: bfc4dfd52857a254986b467feda3f422,
+        type: 3}
+      propertyPath: closedPosition
+      value: 
+      objectReference: {fileID: 52359427637575393}
+    - target: {fileID: 3375333247239778895, guid: bfc4dfd52857a254986b467feda3f422,
+        type: 3}
+      propertyPath: closedPosition
+      value: 
+      objectReference: {fileID: 2712695292716905210}
+    - target: {fileID: 4627474245976354341, guid: bfc4dfd52857a254986b467feda3f422,
+        type: 3}
+      propertyPath: closedPosition
+      value: 
+      objectReference: {fileID: 565476215465297783}
+    - target: {fileID: 7078436004983826798, guid: bfc4dfd52857a254986b467feda3f422,
+        type: 3}
+      propertyPath: closedPosition
+      value: 
+      objectReference: {fileID: 696480778207373467}
     - target: {fileID: 8291400756389692569, guid: bfc4dfd52857a254986b467feda3f422,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9017617144580395518, guid: bfc4dfd52857a254986b467feda3f422,
+        type: 3}
+      propertyPath: closedPosition
+      value: 
+      objectReference: {fileID: 2685099258951526422}
+    - target: {fileID: 9089770491511603773, guid: bfc4dfd52857a254986b467feda3f422,
+        type: 3}
+      propertyPath: closedPosition
+      value: 
+      objectReference: {fileID: 8969474274451565361}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfc4dfd52857a254986b467feda3f422, type: 3}
+--- !u!4 &52359427637575393 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2440595017091315386, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &268090191170205382 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2512105035154685597, guid: bfc4dfd52857a254986b467feda3f422,
@@ -856,12 +924,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2383748500044525624}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPointerExitEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 997889503}
         m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
         m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2383748500044525624}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -896,6 +988,12 @@ MonoBehaviour:
   alternativeMeshMaterial: {fileID: 2100000, guid: eecc1ed0f8a5cf948a4da253f49e2f39,
     type: 2}
   enabledOnStart: 0
+--- !u!4 &565476215465297783 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2791177597987835692, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &645037530341125244 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2996893303626867751, guid: bfc4dfd52857a254986b467feda3f422,
@@ -959,9 +1057,63 @@ MonoBehaviour:
   - {fileID: 1585610555}
   - {fileID: 1024612245}
   - {fileID: 839877094}
+--- !u!4 &696480778207373467 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2940530806681641152, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1131299707346287124 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3375333247239778895, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034fec1b3e83ac74cbccbbdf8e202b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1139723053758721475 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3365777405489096088, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034fec1b3e83ac74cbccbbdf8e202b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2383748500044525624 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 31663744810236003, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034fec1b3e83ac74cbccbbdf8e202b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2685099258951526422 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 299448896140238925, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &2707665158459359972 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 357815985153379007, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2712695292716905210 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 342789640134720161, guid: bfc4dfd52857a254986b467feda3f422,
     type: 3}
   m_PrefabInstance: {fileID: 2406251113401157723}
   m_PrefabAsset: {fileID: 0}
@@ -1036,12 +1188,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1131299707346287124}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPointerExitEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1024612245}
         m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
         m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1131299707346287124}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1109,12 +1285,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7015675750503835262}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPointerExitEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1585610555}
         m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
         m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 7015675750503835262}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1207,12 +1407,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1139723053758721475}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPointerExitEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1903446783}
         m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
         m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1139723053758721475}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1299,12 +1523,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6864016594285791846}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPointerExitEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 839877094}
         m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
         m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 6864016594285791846}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1345,9 +1593,63 @@ SkinnedMeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 2406251113401157723}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4854617239700070709 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7078436004983826798, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034fec1b3e83ac74cbccbbdf8e202b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &5941446021332159682 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 8291400756389692569, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6647800822883539365 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9017617144580395518, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034fec1b3e83ac74cbccbbdf8e202b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6864016594285791846 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9089770491511603773, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034fec1b3e83ac74cbccbbdf8e202b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7015675750503835262 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4627474245976354341, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034fec1b3e83ac74cbccbbdf8e202b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &8030196396640688587 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5626198457594794384, guid: bfc4dfd52857a254986b467feda3f422,
     type: 3}
   m_PrefabInstance: {fileID: 2406251113401157723}
   m_PrefabAsset: {fileID: 0}
@@ -1403,12 +1705,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6647800822883539365}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPointerExitEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2001444543}
         m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
         m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 6647800822883539365}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1495,12 +1821,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4854617239700070709}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPointerExitEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1159608524}
         m_TargetAssemblyTypeName: MeshHighlight, Assembly-CSharp
         m_MethodName: DisableHighlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 4854617239700070709}
+        m_TargetAssemblyTypeName: OrganTooltip, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1535,6 +1885,12 @@ MonoBehaviour:
   alternativeMeshMaterial: {fileID: 2100000, guid: 5b48a884151ab334a8fb3b5781eeabb6,
     type: 2}
   enabledOnStart: 0
+--- !u!4 &8969474274451565361 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6709591549100598122, guid: bfc4dfd52857a254986b467feda3f422,
+    type: 3}
+  m_PrefabInstance: {fileID: 2406251113401157723}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8117705052575473019
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,7 +17,9 @@ public class NPCDissectionTask : MonoBehaviour
     public UnityEvent m_OnQuizStomach;
     public UnityEvent m_OnQuizSwimBladder;
     public UnityEvent m_OnQuizIntestine;
+    public UnityEvent m_OnQuizPassed;
     public UnityEvent m_OnQuizEnd;
+    public UnityEvent m_OnQuizPractice;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +45,9 @@ public class NPCDissectionTask : MonoBehaviour
         m_OnQuizStomach ??= new();
         m_OnQuizSwimBladder ??= new();
         m_OnQuizIntestine ??= new();
+        m_OnQuizPassed ??= new();
         m_OnQuizEnd ??= new();
+        m_OnQuizPractice ??= new();
     }
 
     private void OnSalmonPlacedOnCuttingBoard()
@@ -97,7 +99,7 @@ public class NPCDissectionTask : MonoBehaviour
 
             foreach (Answer answer in _dialogueBoxController.dialogueTreeRestart.sections[section].branchPoint.answers)
             {
-                if (answer.nextElement != incorrectOrganSection)
+                if (answer.nextElement != incorrectOrganSection) // the correct answer button tells us which organ is currently "quizzed"
                 {
                     switch (answer.answerLabel)
                     {
@@ -134,7 +136,11 @@ public class NPCDissectionTask : MonoBehaviour
                     _dialogueBoxController.StartDialogue(_dialogueBoxController.dialogueTreeRestart, _questionSection, name, _questionIndex);
                     break;
                 case "Practice":
-                    Debug.Log("Practice chosen");
+                    _dialogueBoxController.StartDialogue(_dialogueBoxController.dialogueTreeRestart, 1, name, _questionIndex);
+                    m_OnQuizPractice.Invoke();
+                    break;
+                case "Excellent! You named all the organs correctly. Tell me when you want to do another task.":
+                    m_OnQuizPassed.Invoke();
                     break;
                 case "Do another task":
                     _dialogueBoxController.StartDialogue(_conversationController.GetDialogueTrees()[0], 2, name, 0);

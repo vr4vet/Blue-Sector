@@ -1,5 +1,4 @@
 using BNG;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +15,12 @@ public class MeshHighlightGroup : MonoBehaviour
             else
                 m.EnableHighlight();
         }
+    }
+
+    public void DisableMeshHighlightAll()
+    {
+        foreach (MeshHighlight m in meshHighlights)
+            m.DisableHighlight();
     }
 
     public void BlockLaserPointerAllOrgans(bool block)
