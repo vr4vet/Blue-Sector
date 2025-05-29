@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,7 +26,6 @@ public class DissectionStep : MonoBehaviour
     private int _currentCutPoint = 0;
     private float _totalDistance = 0;
     private List<float> _distances = new() { 0 };
-    private Material _lineMaterial;
 
     private Gradient _colorGradient;
     private GradientColorKey[] _colorKeys;
@@ -96,6 +94,14 @@ public class DissectionStep : MonoBehaviour
         {
             m_DissectionStateFinished.Invoke(this);
         }
+    }
+
+    public void ResetCutline()
+    {
+        _currentCutPoint = 0;
+        _colorKeys[0].time = 0;
+        _colorGradient.SetKeys(_colorKeys, _alphaKeys);
+        _lineRenderer.colorGradient = _colorGradient;
     }
 
     // drawing cut point in Scene view for debugging purposes

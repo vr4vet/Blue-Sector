@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -116,6 +114,11 @@ public class DissectAnimHandler : MonoBehaviour
 
     public void ResetAnimations()
     {
+        _skinFlapBlend0 = 0;
+        _skinFlapBlend1 = 0;
+        _gillFlapBlend = 0;
+        _swimBladderBlend = 0;
+
         skinFlap.SetBlendShapeWeight(0, 0);
         skinFlap.SetBlendShapeWeight(1, 0);
         gillFlap.SetBlendShapeWeight(0, 0);

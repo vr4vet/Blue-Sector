@@ -91,7 +91,10 @@ public class FishDissectionGroup : MonoBehaviour
         _currentDisectionStep = 0;
         
         foreach (DissectionStep step in dissectionSteps)
+        {
+            step.ResetCutline();
             step.gameObject.SetActive(false);
+        }
         
         m_OnTaskReset.Invoke();
     }
