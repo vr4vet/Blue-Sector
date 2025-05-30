@@ -23,7 +23,7 @@ public class StopConveyorButton : MonoBehaviour
     public void ToggleTaskOn()
     {
         GameManager.Instance.ToggleTaskOn();
-        if (_dialogueBoxController.dialogueTreeRestart && _dialogueBoxController.dialogueTreeRestart.name == "BleedingInstruction" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
+        if (_dialogueBoxController && _dialogueBoxController.dialogueTreeRestart && _dialogueBoxController.dialogueTreeRestart.name == "BleedingInstruction" && _dialogueBoxController._dialogueText.text == _dialogueBoxController.dialogueTreeRestart.sections[4].dialogue[0])
         {
             _dialogueBoxController.SkipLine();
         }
