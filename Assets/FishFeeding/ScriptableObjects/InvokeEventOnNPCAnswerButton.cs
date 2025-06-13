@@ -50,7 +50,7 @@ public class InvokeEventOnNPCAnswerButton : MonoBehaviour
                 m_OnConditionFactorClicked.Invoke();
             if (answer.Equals("Analysing plankton samples"))
                 m_OnPlanktonSampleClicked.Invoke();
-            if (answer.Equals("Dissecting the fish (Still in development)"))
+            if (answer.Equals("Dissecting the salmon"))
                 m_OnDissectingFishClicked.Invoke();
         }
     }
