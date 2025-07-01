@@ -56,12 +56,11 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     private void FixedUpdate()
     {
         // need to wait a bit before setting fetching the CenterEyeAnchor camera
-        if (Time.time - StartTime > 1 && !CameraSet)
+        if (!CameraSet)
         {
-            GetComponent<Canvas>().worldCamera = PlayerCamera;
-            CameraSet = true;
+            if (GetComponent<Canvas>().worldCamera = PlayerCamera)
+                CameraSet = true;
         }
-        //Debug.Log(PlayerController.name);
     }
 
     private void Update()
