@@ -1,6 +1,7 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VRTemplate;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -20,8 +21,6 @@ public class ControllerTooltipManager : MonoBehaviour
     [SerializeField] private NewMenuManger MainMenu;
     [Tooltip("Select the Controller Tooltips Localization Table")]
     [SerializeField] private LocalizedStringTable LocalizedTooltipsStringTable;
-    [Tooltip("Set this to true if left hand should show tooltip for left hand stick teleportation when not intersecting with objects")]
-    [SerializeField] private bool AlwaysShowTeleport = true;
 
     // variables for configuring each tooltip's position relative to its button on the left controller using the inspector
     [Header("Left controller button tooltip offsets")]
@@ -53,9 +52,13 @@ public class ControllerTooltipManager : MonoBehaviour
     private ControllerButtonsTransforms _controllerButtonsLeft = new(), _controllerButtonsRight = new();
     private GameObject _controllerModelLeft, _controllerModelRight;
     private GameObject _handModelLeft, _handModelRight;
+    private Grabber _grabberLeft, _grabberRight;
+
+    // pre-allocated array for storing surrounding colliders
+    private Collider[] _surroundingColliders = new Collider[10]; 
 
     // controls whether close objects will be scanned, controller models enabled/disabled etc., and is set in main menu/pause menu.
-    private bool _accessibilityEnabled = true;
+    private bool _accessibilityEnabled = true, _alwaysLabelTeleport = true;
 
     private List<ButtonActionMapping> _defaultButtonMappingsLeft = new()
     {
@@ -74,14 +77,17 @@ public class ControllerTooltipManager : MonoBehaviour
         GameManager.Instance.PlayerHandModelsLoaded.AddListener(OnHandModelsReady);
 
         if (MainMenu != null)
-            MainMenu.m_ControllerTooltipsToggled.AddListener(OnPauseMenuToggle);
+        {
+            MainMenu.m_ControllerTooltipsToggled.AddListener(OnPauseMenuToggledTooltips);
+            MainMenu.m_AlwaysLabelTeleportToggled.AddListener(OnPauseMenuToggledLabelTeleport);
+        }
 
         if (LocalizedTooltipsStringTable.IsEmpty)
             Debug.LogWarning("Localized string table not set. Localization of controller tooltips will not work!");
     }
 
     /// <summary>
-    /// Scans through objects in each hand's list of objects in its vicinity (those activating tooltips)
+    /// Looks for tooltip activators within a 0.05 radius of the player's grabber
     /// and decides which one is closest. It then activates that object's relevant tooltips.
     /// Runs several times a second.
     /// </summary>
@@ -98,28 +104,30 @@ public class ControllerTooltipManager : MonoBehaviour
             yield return null;
         }
 
-        GameObject controllerModel = controllerHand == ControllerHand.Left ? _controllerModelLeft : _controllerModelRight; // figure out which hand
+        Grabber grabber = controllerHand == ControllerHand.Left ? _grabberLeft : _grabberRight; // figure out which hand
+
+        // once hand is figured out the following code (targeting that hand) runs several times a second
         while (true)
         {
-            if (_accessibilityEnabled)
+            if (_accessibilityEnabled && !grabber.HeldGrabbable) // if tooltips are disabled or this hand holds something -> don't look for surrounding objects, close all tooltips
             {
                 bool deactivated = false;
+                int numOverlaps = Physics.OverlapSphereNonAlloc(grabber.transform.position, .05f, _surroundingColliders); // finding surrounding colliders (radius .05 is the same as grabber), and storing the amount to not iterate to "invalid" indicies
 
-                Collider[] surroundingColliders = new Collider[8];
-                Physics.OverlapSphereNonAlloc(controllerModel.transform.position, .1f, surroundingColliders);
-
-                List<ControllerTooltipActivator> activators = new();
-                foreach (Collider surroundingCollider in surroundingColliders)
+                List<ControllerTooltipActivator> activators = new(); 
+                for (int i = 0; i < numOverlaps; i++)
                 {
-                    if (surroundingCollider && surroundingCollider.CompareTag("ControllerTooltipDeactivator")) // hand intersects with a deactivator, prepare to deactivate all tooltips
+                    // hand has entered a deactivator and should not display any tooltips
+                    if (_surroundingColliders[i].CompareTag("ControllerTooltipDeactivator")) 
                     {
-                        activators.Clear();
                         deactivated = true;
                         break;
                     }
 
-                    if (surroundingCollider && surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>()) // add all activators to list
-                        activators.Add(surroundingCollider.GetComponentInChildren<ControllerTooltipActivator>());
+                    // find controller tooltip activators among colliders
+                    ControllerTooltipActivator activator;
+                    if (activator = _surroundingColliders[i].GetComponentInChildren<ControllerTooltipActivator>())
+                        activators.Add(activator);
                 }
 
                 if (activators.Count > 0) // there are activators in player hand's vicinity
@@ -128,9 +136,10 @@ public class ControllerTooltipManager : MonoBehaviour
                     ControllerTooltipActivator closestActivator = activators[0];
                     foreach (ControllerTooltipActivator activator in activators) // find closest activator
                     {
-                        if (Vector3.Distance(controllerModel.transform.position, activator.transform.position) < shortestDistance)
+                        float distance = Vector3.Distance(grabber.transform.position, activator.transform.position);
+                        if (distance < shortestDistance)
                         {
-                            shortestDistance = Vector3.Distance(controllerModel.transform.position, activator.transform.position);
+                            shortestDistance = distance;
                             closestActivator = activator;
                         }
                     }
@@ -147,16 +156,16 @@ public class ControllerTooltipManager : MonoBehaviour
                 }
                 else
                 {
-                    if (deactivated || controllerHand != ControllerHand.Left)
-                        CloseAllTooltips(controllerHand);
-                    else
+                    // the left hand is special, since it has the option of always labelling the teleport stick
+                    if (controllerHand == ControllerHand.Left)
                     {
-                        if (InputBridge.Instance.LeftThumbstickAxis.magnitude > 0)
-                            CloseAllTooltips(controllerHand);
-                        else
+                        if (!deactivated && _alwaysLabelTeleport && (InputBridge.Instance.LeftThumbstickAxis.magnitude <= .5f) && !(_grabberRight.HeldGrabbable && _grabberRight.HeldGrabbable.CompareTag("Tablet")))
                             SetUpTooltips(_defaultButtonMappingsLeft, controllerHand);
-                    } 
-
+                        else
+                            CloseAllTooltips(controllerHand);
+                    }
+                    else if (controllerHand == ControllerHand.Right)
+                        CloseAllTooltips(controllerHand);
                 }
             }
             else
@@ -171,6 +180,7 @@ public class ControllerTooltipManager : MonoBehaviour
     /// This is used to hide tooltips and Quest hand controller models when the player presses one of the related buttons.
     /// Note: the oculus system buttons (the recessed buttons used to navigate the operating system or device) will not trigger this behaviour!
     /// </summary>
+    /// <param name="activator"></param>
     /// <param name="controllerHand"></param>
     /// <returns></returns>
     private bool TooltippedButtonsDown(ControllerTooltipActivator activator, ControllerHand controllerHand)
@@ -205,7 +215,7 @@ public class ControllerTooltipManager : MonoBehaviour
     /// Takes a list of mappings between Quest controller buttons and their actions.
     /// Activates tooltips that hover above each button showing their actions for an object.
     /// </summary>
-    /// <param name="interractableObject"></param>
+    /// <param name="buttonActionMappings"></param>
     /// <param name="controllerHand"></param>
     private void SetUpTooltips(List<ButtonActionMapping> buttonActionMappings, ControllerHand controllerHand)
     {
@@ -217,7 +227,7 @@ public class ControllerTooltipManager : MonoBehaviour
 
         foreach (ButtonActionMapping mapping in buttonActionMappings)
         {
-            // find the correct button model before configuring its tooltip
+            // find the correct button model (on the provided hand) before configuring its tooltip
             Transform button = controllerHand == ControllerHand.Left
             ?
             mapping.Button switch
@@ -308,6 +318,7 @@ public class ControllerTooltipManager : MonoBehaviour
 
     /// <summary>
     /// Activates Quest hand controller models
+    /// <param name="controllerHand"/>
     /// </summary>
     private void SetQuestControllerModels(ControllerHand controllerHand)
     {
@@ -353,6 +364,11 @@ public class ControllerTooltipManager : MonoBehaviour
         _player = GameManager.Instance.GetPlayerRig();
         _handModelLeft = GameManager.Instance.LeftHandGameObj;
         _handModelRight = GameManager.Instance.RightHandGameObj;
+
+        // the hand grabbers are used to set the Physics Sphere's location in the function FindClosestObject (in other words, the center point from which interactible objects are detected)
+        List<Grabber> grabbers = _player.GetComponentsInChildren<Grabber>().ToList();
+        _grabberLeft = grabbers.Find(x => x.transform.parent.name == "LeftController");
+        _grabberRight = grabbers.Find(x => x.transform.parent.name == "RightController");
 
         // checking if two and only two Quest controller models are provided (one for each hand)
         if (OculusControllerModels.Count != 2)
@@ -560,6 +576,11 @@ public class ControllerTooltipManager : MonoBehaviour
             return distY >= 0 ? tooltipScript.AnchorBottom() : tooltipScript.AnchorTop(); // return bottom edge if positioned above, top otherwise
     }
 
+    /// <summary>
+    /// Keeps track of how many tooltips are currently open
+    /// and enable Quest controller hand model
+    /// </summary>
+    /// <param name="controllerHand"></param>
     public void OnTooltipStartOpening(ControllerHand controllerHand)
     {
         if (controllerHand == ControllerHand.None)
@@ -574,16 +595,6 @@ public class ControllerTooltipManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This is called when a tooltip has finished moving "out of" the controller.
-    /// </summary>
-    /// <param name="controllerHand"></param>
-    public void OnTooltipOpened(ControllerHand controllerHand)
-    {
-        if (controllerHand == ControllerHand.None)
-            Debug.LogError("Tooltip must have HandSide set to either left or right, but was " + controllerHand.ToString() + "!");
-    }
-
-    /// <summary>
     /// This is called when a tooltip has moved "back into" the controller, signalling that it may be time to hide the Quest controller
     /// and show the player's hand again (if the player's hand is not intersecting with any ControllerTooltipActivators).
     /// </summary>
@@ -593,11 +604,13 @@ public class ControllerTooltipManager : MonoBehaviour
         if (controllerHand == ControllerHand.None)
             Debug.LogError("Tooltip must have HandSide set to either left or right, but was " + controllerHand.ToString() + "!");
 
+        // decrease active tooltips by one, but make sure it is not negative
         if (controllerHand == ControllerHand.Left)
-            _tooltipsActiveLeft = (_tooltipsActiveLeft - 1 >= 0) ? _tooltipsActiveLeft - 1 : 0;
+            _tooltipsActiveLeft = Mathf.Max(_tooltipsActiveLeft - 1, 0);
         if (controllerHand == ControllerHand.Right)
-            _tooltipsActiveRight = (_tooltipsActiveRight - 1 >= 0) ? _tooltipsActiveRight - 1 : 0;
+            _tooltipsActiveRight = Mathf.Max(_tooltipsActiveRight - 1, 0);
 
+        // show standard hand model if no tooltips
         if (_tooltipsActiveLeft <= 0)
             SetDefaultHandModel(ControllerHand.Left);
         if (_tooltipsActiveRight <= 0)
@@ -614,7 +627,7 @@ public class ControllerTooltipManager : MonoBehaviour
     /// Is triggered when this accessibility feature is toggled in pause menu. Controls whether tooltips appear or not.
     /// </summary>
     /// <param name="isOn"></param>
-    public void OnPauseMenuToggle(bool isOn)
+    public void OnPauseMenuToggledTooltips(bool isOn)
     {
         _accessibilityEnabled = isOn;
 
@@ -635,5 +648,14 @@ public class ControllerTooltipManager : MonoBehaviour
             StartCoroutine(FindClosestObject(ControllerHand.Left));
             StartCoroutine(FindClosestObject(ControllerHand.Right));
         }  
+    }
+
+    /// <summary>
+    /// This is called when setting is changed or loaded from Pause Menu.
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void OnPauseMenuToggledLabelTeleport(bool isOn)
+    {
+        _alwaysLabelTeleport = isOn;
     }
 }

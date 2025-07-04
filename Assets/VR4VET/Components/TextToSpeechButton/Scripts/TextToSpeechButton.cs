@@ -16,6 +16,8 @@ public class TextToSpeechButton : MonoBehaviour
     [SerializeField] private GameObject TTSSpeaker;
     private TTSSpeaker _speaker;
 
+    private Button _button;
+
     [Tooltip("Place children speaker icons here in increasing order (speaker without sound waves at index 0)")]
     [SerializeField] private List<Image> SpeakerIcons;
 
@@ -49,6 +51,7 @@ public class TextToSpeechButton : MonoBehaviour
     {
         // fetching the text-to-speech object
         _speaker = TTSSpeaker.GetComponentInChildren<TTSSpeaker>();
+        _button = GetComponent<Button>();
     }
 
     /// <summary>
@@ -57,6 +60,10 @@ public class TextToSpeechButton : MonoBehaviour
     private float buttonPressTime = Mathf.NegativeInfinity;
     public void PlayTTS()
     {
+        // doing this makes highlighting (when hovering pointer on button) work again after pressing button
+        _button.interactable = false;
+        _button.interactable = true;
+
         // Prevent unwanted double clicks
         if (Time.realtimeSinceStartup - buttonPressTime < .4)
             return;

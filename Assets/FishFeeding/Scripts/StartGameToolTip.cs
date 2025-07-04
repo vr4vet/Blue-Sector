@@ -2,35 +2,20 @@ using UnityEngine;
 
 public class StartGameToolTip : MonoBehaviour
 {
-    public GameObject Controller;
-    Game script;
-    GameObject canvas;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        script = FindObjectOfType<Game>();
-        canvas = transform.GetChild(0).gameObject;
-        canvas.GetComponent<Canvas>().enabled = false;
-        foreach (var renderer in Controller.GetComponentsInChildren<Renderer>())
-        {
-            renderer.enabled = false;
-        }
-    }
+    [SerializeField] private GameObject _controller;
+    [SerializeField] private GameObject _arrow;
+    [SerializeField] private Game _gameScript;
+    [SerializeField] private GameObject _canvas;
 
     // Update is called once per frame
     void Update()
     {
-        var canvasComponent = canvas.GetComponent<Canvas>();
-        bool visible = script.CanStartGame && !script.startGame;
-        if (canvasComponent.enabled != visible)
+        bool visible = _gameScript.CanStartGame && !_gameScript.startGame;
+        if (_canvas.activeSelf != visible)
         {
-            canvasComponent.enabled = visible;
-            foreach (var renderer in Controller.GetComponentsInChildren<Renderer>())
-            {
-                renderer.enabled = visible;
-            }
+            _canvas.SetActive(visible);
+            _controller.SetActive(visible);
+            _arrow.SetActive(visible);
         }
     }
-
 }

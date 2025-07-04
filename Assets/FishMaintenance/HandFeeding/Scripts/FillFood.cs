@@ -6,14 +6,15 @@ public class FillFood : MonoBehaviour
 {
 
     [SerializeField] private GameObject spawnPellet;
-    [SerializeField] private MaintenanceManager manager;
     [SerializeField] private Task.Subtask subtask;
     // [SerializeField] private BNG.Grabber grabber;
     private GameObject foods;
     private Vector3 velocity;
+    private WatchManager watchManager;
 
     void Awake()
     {
+        watchManager = WatchManager.Instance;
         foods = transform.GetChild(0).gameObject;
     }
 
@@ -53,7 +54,7 @@ public class FillFood : MonoBehaviour
             spawnNumber++;
         }
         Task.Step step = subtask.GetStep("Throw food to the fish");
-        manager.CompleteStep(step);
+        watchManager.CompleteStep(step);
 
 
     }

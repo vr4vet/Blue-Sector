@@ -30,9 +30,9 @@ public class Game : MonoBehaviour
 
     [SerializeField] private List<TextMeshProUGUI> staticText;
 
-    private Color32 redColor = new Color32(202, 18, 7, 242);
-    private Color32 yellowColor = new Color32(205, 157, 0, 255);
-    private Color32 greenColor = new Color32(1, 159, 28, 255);
+    private Color32 redColor = new(202, 18, 7, 242);
+    private Color32 yellowColor = new(205, 157, 0, 255);
+    private Color32 greenColor = new(1, 159, 28, 255);
 
 
     [HideInInspector] public Scoring scoring;
@@ -56,14 +56,16 @@ public class Game : MonoBehaviour
         scoring = FindObjectOfType<Scoring>();
         scoreTablet = FindObjectOfType<ScoreTablet>();
         endScoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
+        
         GameObject canvas = GameObject.FindGameObjectWithTag("MonitorMerdCanvas");
-        timeLeft = canvas.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-        currentScore = canvas.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
-        deadFishText = canvas.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
-        foodWasteText = canvas.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
-        foodWasteSlider = canvas.transform.GetChild(4).gameObject.GetComponent<UnityEngine.UI.Slider>();
-        currentMerdText = canvas.transform.GetChild(5).gameObject.GetComponent<TextMeshProUGUI>();
-        foodWasteFillImage = foodWasteSlider.GetComponentsInChildren<UnityEngine.UI.Image>()[1];
+        List<TextMeshProUGUI> textComponents = canvas.GetComponentsInChildren<TextMeshProUGUI>().ToList();
+        timeLeft = textComponents.Find(x => x.name == "Time left");
+        currentScore = textComponents.Find(x => x.name == "Score");
+        deadFishText = textComponents.Find(x => x.name == "Dead fish");
+        foodWasteText = textComponents.Find(x => x.name == "Food wasted");
+        currentMerdText = textComponents.Find(x => x.name == "Merd");
+        foodWasteSlider = canvas.GetComponentsInChildren<UnityEngine.UI.Slider>().ToList().Find(x => x.name == "Slider");
+        foodWasteFillImage = foodWasteSlider.GetComponentsInChildren<UnityEngine.UI.Image>().ToList().Find(x => x.name == "Fill");
 
         modesClass = FindObjectOfType<Modes>();
         modesList = modesClass.modesList; // reassign
@@ -74,11 +76,8 @@ public class Game : MonoBehaviour
 
         ButtonSpawner.OnAnswer += SetLevel;
 
-        if (m_OnGameStart == null)
-            m_OnGameStart = new UnityEvent();
-
-        if (m_OnGameEnd == null)
-            m_OnGameEnd = new UnityEvent();
+        m_OnGameStart ??= new UnityEvent();
+        m_OnGameEnd ??= new UnityEvent();
     }
 
     /* Update is called once per frame. If the key 'g' is pressed or the A button on the controller is pressed and the
@@ -142,7 +141,7 @@ public class Game : MonoBehaviour
             FishSystemScript merdScript = merd.GetComponent<FishSystemScript>();
             merdScript.SetIdle();
         }
-        //scoreTablet.GiveFinalTabletScore();
+
         endScoreText.text = scoring.Score.ToString();
     }
 
@@ -174,7 +173,7 @@ public class Game : MonoBehaviour
             foodWasteFillImage.enabled = true;
             foodWasteFillImage.color = yellowColor;
         }
-        else if (foodWasteSlider.value == 0.2f || foodWasteSlider.value == 0.0f)
+        else if (foodWasteSlider.value <= 0.2f)
         {
             foodWasteFillImage.enabled = true;
             foodWasteFillImage.color = greenColor;

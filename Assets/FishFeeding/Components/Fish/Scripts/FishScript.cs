@@ -1,6 +1,5 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
-using UnityEngine.XR.OpenXR.Input;
 
 public class FishScript : MonoBehaviour
 {
@@ -28,7 +27,7 @@ public class FishScript : MonoBehaviour
     void Start()
     {
         // unique seed per fish for rng, and invoke PeriodicUpdates() with random offset
-        Random.InitState(GetInstanceID());
+        //UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
 
         // get properties of parent fish cage
         fishSystem = gameObject.transform.parent.gameObject;
@@ -97,22 +96,22 @@ public class FishScript : MonoBehaviour
         {
             if (feedingIntensity == FishSystemScript.FeedingIntensity.High && (state == FishSystemScript.FishState.Hungry || state == FishSystemScript.FishState.Dying))
             {
-                destinationY = Random.Range(fullnessDivider, top - 0.5f);
+                destinationY = UnityEngine.Random.Range(fullnessDivider, top - 0.5f);
             }
             else if (state == FishSystemScript.FishState.Full)
             {
                 if (returnedAfterEating)
-                    destinationY = Mathf.Clamp(Random.Range(fishPosition.y - verticalLimit, fishPosition.y + verticalLimit), bottom, fullnessDivider);
+                    destinationY = Mathf.Clamp(UnityEngine.Random.Range(fishPosition.y - verticalLimit, fishPosition.y + verticalLimit), bottom, fullnessDivider);
                 else
-                    destinationY = Mathf.Clamp(Random.Range(bottom, fishPosition.y + verticalLimit), bottom, fullnessDivider);
+                    destinationY = Mathf.Clamp(UnityEngine.Random.Range(bottom, fishPosition.y + verticalLimit), bottom, fullnessDivider);
 
             }
         } 
         else
         {
-            destinationY = Mathf.Clamp(Random.Range(fishPosition.y - verticalLimit, fishPosition.y + verticalLimit), bottom, top);
+            destinationY = Mathf.Clamp(UnityEngine.Random.Range(fishPosition.y - verticalLimit, fishPosition.y + verticalLimit), bottom, top);
         }
-        Vector2 destinationXZ = Random.insideUnitCircle * radius;   // generate random point in a circle (horizontal cross section of cage)
+        Vector2 destinationXZ = UnityEngine.Random.insideUnitCircle * radius;   // generate random point in a circle (horizontal cross section of cage)
         destination = new Vector3(destinationXZ.x, destinationY , destinationXZ.y);
     }
 

@@ -14,8 +14,6 @@ Virtual Reality app for exploring blue sector workplaces and professions.
 1. Ensure Unity `2021.3.5f1` is installed
 1. `git clone git@github.com:vr4vet/Blue-Sector.git`
 1. Obtain and download [BNG framework](BNG) and put it in the `Assets/` folder
-1. Obtain FishMerd component and put it in the `Assets/FishFeeding/Components/`
-   folder
 
 ## Documentation
 

@@ -3230,6 +3230,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c28bde26140a49449938f72af79c1411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_OnEnoughAnaesthetic:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7669557173734799059
 GameObject:
   m_ObjectHideFlags: 0
@@ -3872,6 +3875,7 @@ GameObject:
   - component: {fileID: 7669557174018652596}
   - component: {fileID: 7669557174018652597}
   - component: {fileID: 7669557174018652598}
+  - component: {fileID: 5715386878628707809}
   m_Layer: 0
   m_Name: FishTankStart
   m_TagString: Untagged
@@ -4016,6 +4020,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5715386878628707809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7669557174018652586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f5d153ad7d5d384e8c8c574efb91b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphicRaycasters:
+  - {fileID: 7669557173583891869}
+  - {fileID: 7669557174228578144}
+  - {fileID: 7669557172828188563}
+  - {fileID: 7669557173024411675}
+  - {fileID: 7669557172477679509}
 --- !u!1 &7669557174120117688
 GameObject:
   m_ObjectHideFlags: 0

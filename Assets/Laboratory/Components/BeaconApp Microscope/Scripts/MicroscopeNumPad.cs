@@ -18,7 +18,6 @@ public class MicroscopeNumPad : MonoBehaviour
             {
                 RemoveCurrentInputField();
             }
-                //RemoveIndicator();
 
             currentInputField = value;
             StartIndicatorCycle();
@@ -26,7 +25,6 @@ public class MicroscopeNumPad : MonoBehaviour
     }
 
     private bool IndicatedLast = false;
-    private int IndicatorPos;
 
     public void EnterDigit(int digit)
     {
@@ -90,12 +88,12 @@ public class MicroscopeNumPad : MonoBehaviour
 
     private void StopIndicatorCycle()
     {
-        if (IsInvoking("IndicateCurrentInputField"))
-            CancelInvoke("IndicateCurrentInputField");
+        if (IsInvoking(nameof(IndicateCurrentInputField)))
+            CancelInvoke(nameof(IndicateCurrentInputField));
     }
 
     private void StartIndicatorCycle()
     {
-        InvokeRepeating("IndicateCurrentInputField", 0, 0.5f);
+        InvokeRepeating(nameof(IndicateCurrentInputField), 0, 0.5f);
     }
 }

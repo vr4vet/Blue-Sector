@@ -276,7 +276,7 @@ public class ResultLogger : MonoBehaviour
         if (loggedAnswers.Count >= fishNumber)
         {
             activeFish = loggedAnswers[fishNumber-1];
-            activeFishText.SetText("Fish "+ fishNumber.ToString());
+            activeFishText.SetText(fishNumber.ToString());
             plate.activeFishChanged(activeFish.fishObject);
         }
     }

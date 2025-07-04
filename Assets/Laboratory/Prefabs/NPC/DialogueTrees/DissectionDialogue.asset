@@ -16,42 +16,265 @@ MonoBehaviour:
   speakButtonOnExit: 1
   sections:
   - dialogue:
-    - ' Next you will dissect the fish. Place the fish on the dissection board to
-      the right of the length measuring board. The fish has been humanely culled.'
-    - The first step is to check for any external damage to the fish. Check for scale
-      loss, blood spots, lesions, fin damage, and gill condition to make sure there
-      are no health issues.
+    - ' Now you will dissect the salmon. Place it on the dissection board to the
+      right of the length measuring board. The fish has been humanely culled.'
+    - 'The next step is inspecting the internal areas of the salmon. Pick up the
+      scalpel and cut open the fish according to the instructions of the superimposed
+      arrows '
+    - Now we need to expose the heart. Do so by cutting forwards according to the
+      instructions.
+    - Lastly, we need to expose the kidney. To do this, we need to open the swim
+      bladder. Cut according to the instructions.
     endAfterDialogue: 0
-    disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 1
+    pointAt: 
     branchPoint:
-      question: Are you ready to start?
+      question: Wow, just like a professional! Now that the salmon is cut open, we
+        can see its internal organs. Tell me when you are ready to progress.
       answers:
-      - answerLabel: Yes
+      - answerLabel: I'm ready!
         nextElement: 1
         endAfterAnswer: 0
-      - answerLabel: No
-        nextElement: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 1
+    pointAt: 
+    branchPoint:
+      question: Now that the salmon is dissected, we can learn what the different
+        organs are called. Do so by pointing at them with your right hand. Try to
+        remember what they are called, and tell me when you're ready.
+      answers:
+      - answerLabel: I'm ready!
+        nextElement: 2
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Great! I will now test your knowledge. I will highlight one of the
+        salmon's organs and ask for the right name. I will provide three options,
+        and you will have to pick the correct one.
+      answers:
+      - answerLabel: Got it!
+        nextElement: 3
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Liver
+        nextElement: 4
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Gill
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ovary
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Brain
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Swim bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Heart
+        nextElement: 5
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Liver
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Kidney
+        nextElement: 6
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Swim bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Intestine
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Spleen
+        nextElement: 7
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ovary
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Stomach
+        nextElement: 8
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ovary
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Gall bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Gall bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Brain
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Swim bladder
+        nextElement: 9
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: What is this organ called?
+      answers:
+      - answerLabel: Gall bladder
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Intestine
+        nextElement: 15
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Ovary
+        nextElement: 10
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: That wasn't quite correct. Do you want to try again?
+      answers:
+      - answerLabel: Yes
+        nextElement: 11
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: No
+        nextElement: 12
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
   - dialogue:
-    - The next step is inspecting the internal areas of the fish. Cut open the fish
-      according to the instructions.
-    - "Look for any internal bleeding, blood spots, discoloration to the fish\u2019s
-      organs or any other damage. "
-    - ' Remember to press the lower button on the weight to reset it and make sure
-      it is set zero. '
-    - Remember to be careful when handling the fish to avoid causing any damage.
+    - Return to question
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
-    point: 0
-    objectToLookAt: {fileID: 0}
+    pointAt: 
     branchPoint:
-      question: Are you ready to continue
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Do you want to look at the organs and practice their names again,
+        or do you want to do another task?
       answers:
-      - answerLabel: Yes
-        nextElement: 0
+      - answerLabel: Practice
+        nextElement: 13
         endAfterAnswer: 0
-      - answerLabel: No
-        nextElement: 1
+        walkOrTurnTowardsAfterAnswer: 
+      - answerLabel: Do another task
+        nextElement: 14
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+  - dialogue:
+    - Practice
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue:
+    - Do another task
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: 
+      answers: []
+  - dialogue: []
+    endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
+    disabkeSkipLineButton: 0
+    pointAt: 
+    branchPoint:
+      question: Excellent! You named all the organs correctly. Tell me when you want
+        to do another task.
+      answers:
+      - answerLabel: I'm ready!
+        nextElement: 14
+        endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 

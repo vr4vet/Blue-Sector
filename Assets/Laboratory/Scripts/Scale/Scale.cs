@@ -32,6 +32,9 @@ public class Scale : MonoBehaviour
 
     private void OnTriggerEnter(Collider collisionObject)
     {
+        if (dialogueBoxController.dialogueTreeRestart.name != "LarsDialogue")
+            return;
+
         if (!scaleOn)
         {
             if (collisionObject.gameObject.name is "basket_plastic" or "counter_handheld" or "MicroscopeSlideModel" || collisionObject.gameObject.CompareTag("Bone"))

@@ -69,8 +69,6 @@ public class HandControllerToolTip : MonoBehaviour
             GetComponent<LineRenderer>().enabled = false;
             _controllerTooltipManager.OnTooltipClosed(HandSide);
         }
-        else
-            _controllerTooltipManager.OnTooltipOpened(HandSide);
     }
 
     /// <summary>
