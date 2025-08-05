@@ -9,6 +9,14 @@ Virtual Reality app for exploring blue sector workplaces and professions.
 
 ## Screenshots
 
+## ⚠ WARNING (If you already have the BNG package from before 05.08.2025) ⚠
+
+The old BNG package used for the project is obsolete, causing the materials from the BNG Framework to not work properly. There are two possible ways to fix this:
+
+- Ask for the updated package. Delete the existing "BNG Framework" folder and then repeat step 3 from the "Getting Started" instructions. (Recomended)
+- Use the custom tool under "Tools/URP Converter", then press "Convert to URP" in the window that pops up. (Not recomended. Though it will fix all the materials that are currently required for a functioning game, it will not fix all the unused materials yet)
+
+
 ## Getting started
 
 1. Ensure Unity `2021.3.5f1` is installed
