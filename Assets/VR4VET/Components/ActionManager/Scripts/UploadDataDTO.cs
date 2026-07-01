@@ -8,38 +8,19 @@ namespace UploadDTO
     /// Data structure for uploading logged data to chat-service through AIRequest.
     /// Changes made to this class will need to be reflected in the server-side code.
     /// </summary>
+
+    /// All of this needs to be reformatted to match RAGdoll body
+
     [Serializable]
     public class UploadDataDTO
     {
-        /// <summary>
-        /// The name of the scene where the user is currently located.
-        /// </summary>
-        public string scene_name;
-
-        /// <summary>
-        /// Information about the user logged through Questionaire in reception.
-        /// </summary>
+        public string agent_id = "6a3d0d73e3d056dad668064c"; // The agent name of which to communicate
+        public string active_agent_role_id; // the agent role to use for current query
+        public string access_key = "sbPZ2p_AKcKpXTkKW1XwG1x5TK_FFSRnVm0MNm-n6S0="; //RAGdoll agent access key
+        public List<Message> chat_log; // chat log so far to give the LLM context
         public List<string> user_information;
-
-        /// <summary>
-        /// List of user actions such as grabbed/dropped objects.
-        /// </summary>
         public List<string> user_actions;
 
-        /// <summary>
-        /// A list of progress data for tasks.
-        /// </summary>
-        public List<ProgressDataDTO> progress;
-
-        /// <summary>
-        /// The ID of the NPC that the user is interacting with.
-        /// This currently serves no purpose but is included for future use.
-        /// </summary>
-        public int NPC;
-
-        /// <summary>
-        /// The chat history between user and NPC.
-        /// /summary>
-        public List<Message> chatLog;
+        // more RAGdoll fields to be added, just required ones for now
     }
 }

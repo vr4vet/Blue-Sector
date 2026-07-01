@@ -44,11 +44,10 @@ public class ActionManager : MonoBehaviour
 
             _uploadData = new UploadDataDTO
             {
+                active_agent_role_id = "Blue-sector-NPC-06-2026",
+                chat_log = new List<Message>(),
                 user_information = new List<string>(),
-                user_actions = new List<string>(),
-                progress = new List<ProgressDataDTO>(),
-                NPC = 0,
-                chatLog = new List<Message>()
+                user_actions = new List<string>()
             };
 
             // Mock data for testing. Uncomment to use.
@@ -127,11 +126,13 @@ public class ActionManager : MonoBehaviour
     /// </summary>
     /// <param name="scene"></param>
     /// <param name="mode"></param>
+    
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"New scene logged {scene.name}");
-        _uploadData.scene_name = scene.name;
+        _uploadData.user_information.Add("User entered new scene: "+ scene.name);
     }
+    
 
     /// <summary>
     /// Find all Grabbers in the scene and register for their events
@@ -219,7 +220,7 @@ public class ActionManager : MonoBehaviour
                 }
             }
         }
-        _uploadData.progress = progressHierarchy;
+        //_uploadData.progress = progressHierarchy;
     }
 
     /// <summary>
@@ -317,6 +318,7 @@ public class ActionManager : MonoBehaviour
     /// <param name="progressData">The updated progress data.</param>
     private void UpdateProgressData(ProgressDataDTO progressData)
     {
+        /*
         for (int i = 0; i < _uploadData.progress.Count; i++)
         {
             if (_uploadData.progress[i].taskName == progressData.taskName)
@@ -325,6 +327,7 @@ public class ActionManager : MonoBehaviour
                 return;
             }
         }
+        */
     }
 
     /// <summary>

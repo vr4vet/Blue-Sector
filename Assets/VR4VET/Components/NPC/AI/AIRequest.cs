@@ -22,7 +22,7 @@ public class AIRequest : MonoBehaviour
     private AIConversationController _aiConversationController;
 
     // Internal State
-    private const string CHATBOT_API_URL = "http://46.9.154.144:8000/ask";
+    private const string CHATBOT_API_URL = "https://iplvr.it.ntnu.no/backend/api/chat/ask";
     private List<Message> _messagesToSend = new(); // Local copy for request
     private AudioSource _audioSource; // For fallback audio
 
@@ -93,7 +93,7 @@ public class AIRequest : MonoBehaviour
         Debug.Log($"AIRequest: Sending request to Chatbot. Query: '{Query}'");
 
 
-        RequestPayload.chatLog = _messagesToSend;
+        RequestPayload.chat_log = _messagesToSend;
 
         string jsonData = JsonUtility.ToJson(RequestPayload);
         Debug.Log($"AIRequest: Sending payload: {jsonData}");
@@ -121,25 +121,25 @@ public class AIRequest : MonoBehaviour
                 Debug.Log("AIRequest Success: Received response from OpenAI.");
                 try
                 {
-                    LLMResponse response = JsonUtility.FromJson<LLMResponse>(request.downloadHandler.text);
-
+                    RAGRoot response = JsonUtility.FromJson<RAGRoot>(request.downloadHandler.text);
+                    Debug.Log(response.response);
                     Debug.Log($"LLMResponse JSON: {JsonUtility.ToJson(response, true)}");
 
-                    if (response == null || response.choices == null || response.choices.Count == 0 || string.IsNullOrWhiteSpace(response.response))
+                    if (response == null || string.IsNullOrWhiteSpace(response.response.response))
                     {
                         Debug.LogError("AIRequest Error: Invalid or empty response from OpenAI.");
                         HandleErrorOrFallback("Received an empty response from the AI.");
                     }
                     else
                     {
-                        string rawResponseText = response.response;
+                        string rawResponseText = response.response.response;
                         string sanitizedResponseText = SanitizeResponse(rawResponseText);
 
                         Message assistantMessage = new() { role = "assistant", content = sanitizedResponseText };
                         _aiConversationController.AddMessage(assistantMessage);
 
                         Debug.Log($"AI Response: {sanitizedResponseText}");
-
+                        /*
                         if (response.function_call != null)
                         {
                             Debug.Log($"AIRequest: Function call detected: {response.function_call.function_name}");
@@ -150,6 +150,7 @@ public class AIRequest : MonoBehaviour
                             // Trigger TTS and UI Update
                             HandleSuccessfulResponse(sanitizedResponseText);
                         }
+                        */
                     }
                 }
                 catch (Exception e)
@@ -173,6 +174,7 @@ public class AIRequest : MonoBehaviour
             .Replace("\n", " ")
             .Replace("\r", "")
             .Replace("\\\"", "'")
+            .Replace("**Svar**:/textbf","")
             .Trim();
     }
 
