@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
 using System.Text;
+using System.Text.RegularExpressions;
+using UnityEngine;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Networking;
 using UploadDTO;
 
 /// <summary>
@@ -67,7 +69,7 @@ public class AIRequest : MonoBehaviour
         }
 
         _messagesToSend = new List<Message>(_aiConversationController.messages);
-        Message userMessage = new() { role = "user", content = Query };
+        Message userMessage = new() { role = "user", content = $"translate to {Regex.Replace(LocalizationSettings.ProjectLocale.LocaleName, " .*", "")}" + Query };
         _messagesToSend.Add(userMessage);
 
         StartCoroutine(SendLLMRequest());

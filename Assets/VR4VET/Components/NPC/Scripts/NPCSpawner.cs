@@ -1,8 +1,10 @@
-using UnityEngine;
 using Meta.WitAi.TTS.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 public class NPCSpawner : MonoBehaviour
 {
@@ -294,7 +296,7 @@ public class NPCSpawner : MonoBehaviour
             aiConvCtrl.messages.Clear();
             if (!string.IsNullOrWhiteSpace(globalContextPrompt))
             {
-                aiConvCtrl.AddMessage(new Message { role = "system", content = globalContextPrompt });
+                aiConvCtrl.AddMessage(new Message { role = "system", content = $"translate to {Regex.Replace(LocalizationSettings.ProjectLocale.LocaleName, " .*", "")}, " + globalContextPrompt });
             }
             if (!string.IsNullOrWhiteSpace(contextPrompt))
             {
