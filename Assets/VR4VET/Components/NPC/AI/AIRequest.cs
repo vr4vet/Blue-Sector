@@ -145,12 +145,13 @@ public class AIRequest : MonoBehaviour
                             Debug.Log($"AIRequest: Function call detected: {response.function_call.function_name}");
                             ExecuteFunction(response.function_call.function_name, response.function_call.function_parameters);
                         }
-                        if (response.function_call.function_name != "teleport")
+                        */
+                        if (response.response.function_call != "teleport")
                         {
                             // Trigger TTS and UI Update
                             HandleSuccessfulResponse(sanitizedResponseText);
                         }
-                        */
+                        
                     }
                 }
                 catch (Exception e)
@@ -174,7 +175,8 @@ public class AIRequest : MonoBehaviour
             .Replace("\n", " ")
             .Replace("\r", "")
             .Replace("\\\"", "'")
-            .Replace("**Svar**:/textbf","")
+            .Replace("**Svar**: \textbf{", "")
+            .Replace("}","")
             .Trim();
     }
 
