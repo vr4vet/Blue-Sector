@@ -228,7 +228,15 @@ public class DialogueBoxController : MonoBehaviour
 
     IEnumerator RunDialogue(DialogueTree dialogueTree, int section, int element) // Added element parameter
     {
-        if (section < 0 || section >= dialogueTree.sections.Length)
+        // Make the "Speak" restart tree the current tree
+        dialogueTreeRestart = dialogueTree;
+        // Reset the dialogue box dimensions from "Speak" button dimensionsww
+        _dialogueCanvas.GetComponent<RectTransform>().sizeDelta = _oldDialogueCanvasSizeDelta;
+        
+        //int dialogueSection = 0;
+        
+        // -1 means that the dialogue was a branchpoint and the script will skip to loading the branchpoint, instead of the standard dialogue when returning to the section
+        if (element != -1)
         {
             Debug.LogError($"RunDialogue: Invalid section index {section} for DialogueTree '{dialogueTree.name}'", this);
             ExitConversation(); yield break;
@@ -287,9 +295,15 @@ public class DialogueBoxController : MonoBehaviour
                 }
             }
 
-            // Deactivate exit button during line display? Or keep active?
-            _exitButton.SetActive(false); // Deactivate standard exit button during lines/questions
-            _restartConversationButton.SetActive(false); // Deactivate restart button
+                while (!_skipLineTriggered)
+                {
+                    _exitButton.SetActive(true);
+                    yield return null;
+                }
+                _skipLineTriggered = false;
+                //dialogueSection = section;
+            }   
+        }
 
 
             // --- Pointing (Logic kept from new repo, but disabled for now) ---
@@ -367,24 +381,14 @@ public class DialogueBoxController : MonoBehaviour
             ExitConversation();
             yield break;
         }
-
-        // Display question
-        string questionText = currentSection.branchPoint.question;
-        _dialogueText.text = TruncateForDisplay(questionText);
-
-        // Speak question
-        SpeakLine(questionText);
-        yield return new WaitUntil(() => _AIResponseToSpeech == null || _AIResponseToSpeech.readyToAnswer); // Wait for TTS to start playing
-
-        // Invoke the dialogue changed event for the question (-1 indicates question) (From new repo version)
-        m_DialogueChanged?.Invoke(transform.name, dialogueTree.name, section, -1);
-
-        // Show answer buttons (Using NEW ButtonSpawner)
-        ShowAnswers(currentSection.branchPoint);
-
-        // Wait for player to select an answer
-        _answerTriggered = false; // Reset trigger
-        while (!_answerTriggered)
+        _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
+        TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+        _animator.SetBool(_isTalkingHash, true);
+        StartCoroutine(revertToIdleAnimation());
+        // Invoke the dialogue changed event
+        m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, -1);
+        ShowAnswers(dialogueTree.sections[section].branchPoint);
+        while (_answerTriggered == false)
         {
             // Allow exit/restart? For now, only allow answering.
             yield return null; // Wait for AnswerQuestion() to be called
@@ -393,9 +397,13 @@ public class DialogueBoxController : MonoBehaviour
         // --- Process Selected Answer ---
         Answer selectedAnswer = currentSection.branchPoint.answers[_answerIndex];
 
-        // Handle NPC movement after answer (From new repo version)
-        string walkTurnAfterAnswer = selectedAnswer.walkOrTurnTowardsAfterAnswer;
-        if (!string.IsNullOrEmpty(walkTurnAfterAnswer))
+        _skipLineButton.transform.GetChild(0).GetComponent<Image>().color = _skipLineButtonComponent.colors.normalColor; // give arrow icon child same colour
+        _answerTriggered = false;
+        //_exitButton.SetActive(false);
+        //_skipLineButton.SetActive(false);
+
+        walkTurnDestination = dialogueTree.sections[section].branchPoint.answers[_answerIndex].walkOrTurnTowardsAfterAnswer;
+        if (walkTurnDestination != null && !walkTurnDestination.Equals(string.Empty))
         {
             WalkingNpc walker = GetComponent<WalkingNpc>();
             if (walker != null)

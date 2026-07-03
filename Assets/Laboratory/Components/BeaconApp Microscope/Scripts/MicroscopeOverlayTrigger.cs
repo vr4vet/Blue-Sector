@@ -1,13 +1,18 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.UI;
 
 public class MicroscopeOverlayTrigger : MonoBehaviour
 {
     private MicroscopeScreenSpaceOverlay MicroscopeOverlay;
-    private PostProcessVolume VignetteVolume;
-    private PostProcessVolume DarkenVolume;
+    [SerializeField] private GameObject VignetteCanvas;
+    [SerializeField] private Image Vignette;
+    [SerializeField] private Image Overlay;
+    private bool _cameraSet = false;
+
     public UnityEvent m_OnEyepiecesUsed;
+
 
     // Start is called before the first frame update
     void Start()
@@ -15,8 +20,16 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
         m_OnEyepiecesUsed ??= new UnityEvent();
 
         MicroscopeOverlay = GetComponentInChildren<MicroscopeScreenSpaceOverlay>();
-        VignetteVolume = transform.Find("Vignette").GetComponent<PostProcessVolume>();
-        DarkenVolume = transform.Find("Darken").GetComponent<PostProcessVolume>();
+    }
+
+    private void Update()
+    {
+        // need to wait a bit before setting fetching the CenterEyeAnchor camera
+        if (!_cameraSet)
+        {
+            if (VignetteCanvas.GetComponent<Canvas>().worldCamera = Camera.main)
+                _cameraSet = true;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,8 +38,7 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
         {
             MicroscopeOverlay.SetHeadCollider(other); 
             MicroscopeOverlay.EnableOverlay();
-            VignetteVolume.isGlobal = true;
-            DarkenVolume.isGlobal = true;
+            VignetteCanvas.GetComponent<Canvas>().enabled = true;
 
             m_OnEyepiecesUsed.Invoke();
         }        
@@ -38,18 +50,19 @@ public class MicroscopeOverlayTrigger : MonoBehaviour
         {
             MicroscopeOverlay.SetHeadCollider(null);
             MicroscopeOverlay.DisableOverlay();
-            VignetteVolume.isGlobal = false;
-            DarkenVolume.isGlobal = false;
+            VignetteCanvas.GetComponent<Canvas>().enabled = false;
         }
     }
 
     public void AdjustDarkening(float adjustment)
     {
-        DarkenVolume.weight = adjustment;
+        Color overlayColor = Overlay.color;
+        overlayColor.a = adjustment;
+        Overlay.color = overlayColor;
     }
 
     public float GetCurrentDarkening()
     {
-        return DarkenVolume.weight;
+        return Overlay.color.a;
     }
 }

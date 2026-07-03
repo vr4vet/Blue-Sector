@@ -27,10 +27,6 @@ public class ScrollingTexture : MonoBehaviour
     {
         // Rotates the texture, making it seem like the object is moving
         if (belt.IsBeltOn)
-        {
-            float offsetX = Time.time * scrollSpeedX;
-            float offsetY = Time.time * scrollSpeedY;
-            rend.material.SetTextureOffset("_MainTex", new Vector2(offsetX, offsetY));
-        }
+            rend.material.mainTextureOffset += new Vector2(scrollSpeedX, scrollSpeedY);
     }
 }

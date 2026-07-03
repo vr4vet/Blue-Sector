@@ -92,8 +92,8 @@ public class FishSortingTrigger : MonoBehaviour
     {
         
             yield return new WaitForSeconds(1);
-            door.transform.Translate(Vector3.back * 0.177f);
+            door.transform.localEulerAngles = new Vector3(-50, 0, 0);
             yield return new WaitForSeconds(2);
-            door.transform.Translate(Vector3.forward * 0.177f);
+            door.transform.localEulerAngles = Vector3.zero;
     }
 }
