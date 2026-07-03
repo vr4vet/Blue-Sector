@@ -232,11 +232,11 @@ public class DialogueBoxController : MonoBehaviour
         dialogueTreeRestart = dialogueTree;
         // Reset the dialogue box dimensions from "Speak" button dimensionsww
         _dialogueCanvas.GetComponent<RectTransform>().sizeDelta = _oldDialogueCanvasSizeDelta;
-        
+
         //int dialogueSection = 0;
-        
+
         // -1 means that the dialogue was a branchpoint and the script will skip to loading the branchpoint, instead of the standard dialogue when returning to the section
-        if (element != -1)
+        if (section < 0 || section >= dialogueTree.sections.Length)
         {
             Debug.LogError($"RunDialogue: Invalid section index {section} for DialogueTree '{dialogueTree.name}'", this);
             ExitConversation(); yield break;
@@ -302,8 +302,8 @@ public class DialogueBoxController : MonoBehaviour
                 }
                 _skipLineTriggered = false;
                 //dialogueSection = section;
-            }   
-        }
+              
+        
 
 
             // --- Pointing (Logic kept from new repo, but disabled for now) ---
@@ -384,7 +384,7 @@ public class DialogueBoxController : MonoBehaviour
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
         TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
         _animator.SetBool(_isTalkingHash, true);
-        StartCoroutine(revertToIdleAnimation());
+        //StartCoroutine(revertToIdleAnimation());
         // Invoke the dialogue changed event
         m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, -1);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
@@ -397,7 +397,7 @@ public class DialogueBoxController : MonoBehaviour
         // --- Process Selected Answer ---
         Answer selectedAnswer = currentSection.branchPoint.answers[_answerIndex];
 
-        _skipLineButton.transform.GetChild(0).GetComponent<Image>().color = _skipLineButtonComponent.colors.normalColor; // give arrow icon child same colour
+        //_skipLineButton.transform.GetChild(0).GetComponent<Image>().color = _skipLineButtonComponent.colors.normalColor; // give arrow icon child same colour
         _answerTriggered = false;
         //_exitButton.SetActive(false);
         //_skipLineButton.SetActive(false);
@@ -408,9 +408,9 @@ public class DialogueBoxController : MonoBehaviour
             WalkingNpc walker = GetComponent<WalkingNpc>();
             if (walker != null)
             {
-                walker.WalkPath(walkTurnAfterAnswer);
+                //walker.WalkPath(walkTurnAfterAnswer);
             }
-            else { Debug.LogWarning($"NPC {name} should walk/turn towards '{walkTurnAfterAnswer}' after answer but WalkingNpc component is missing.", this); }
+            //else { Debug.LogWarning($"NPC {name} should walk/turn towards '{walkTurnAfterAnswer}' after answer but WalkingNpc component is missing.", this); }
         }
 
         // Check if conversation ends after this answer
