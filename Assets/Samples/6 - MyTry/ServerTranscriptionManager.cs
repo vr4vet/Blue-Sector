@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using UnityEngine.Networking;
 using Whisper.Utils;
 
@@ -160,15 +162,19 @@ namespace VR4VET.Transcription
             // Create a form with the audio data
             WWWForm form = new WWWForm();
             form.AddBinaryData("audio", wavData, "recording.wav", "audio/wav");
-
+            /*
             // Add language if specified
             if (!string.IsNullOrEmpty(languageCode))
             {
                 form.AddField("language", languageCode);
-            }
+            }*/
+                var LangCode = Regex.Match(LocalizationSettings.ProjectLocale.LocaleName, @"(?<=\()[^)]*(?=\))");
+                Debug.Log("Language Code: " + LangCode.Value);
+                form.AddField("language",LangCode.Value);
+            
 
-            // Use coroutine-based approach with TaskCompletionSource
-            TaskCompletionSource<(string, ServerTranscriptionInfo)> tcs = new TaskCompletionSource<(string, ServerTranscriptionInfo)>();
+                // Use coroutine-based approach with TaskCompletionSource
+                TaskCompletionSource<(string, ServerTranscriptionInfo)> tcs = new TaskCompletionSource<(string, ServerTranscriptionInfo)>();
 
             // Start coroutine to handle the web request
             StartCoroutine(SendWebRequestCoroutine(transcriptionApiUrl, form, tcs));
