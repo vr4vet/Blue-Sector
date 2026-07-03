@@ -11,7 +11,7 @@ Virtual Reality app for exploring blue sector workplaces and professions.
 
 ## Getting started
 
-1. Ensure Unity `2021.3.5f1` is installed
+1. Ensure Unity `2021.3.45f2` is installed
 1. `git clone git@github.com:vr4vet/Blue-Sector.git`
 1. Obtain and download [BNG framework](BNG) and put it in the `Assets/` folder
 
