@@ -215,7 +215,7 @@ public class SceneController : MonoBehaviour
                 break;
             case "HSERoomToQAStation":
                 GameManager.Instance.NextScenePlayerPosition = new Vector3(
-                    -10.191f,
+                    -8.697f,
                     1.06599998f,
                     -10.0489998f
                 );

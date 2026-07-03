@@ -36,8 +36,8 @@ public class TerrainToggle : MonoBehaviour
             TerrainDetailed.GetComponent<Terrain>().drawHeightmap = true;
             TerrainDetailed.GetComponent<Terrain>().drawTreesAndFoliage = true;
             TerrainSimple.SetActive(false);
+            DistantRoads.SetActive(true);
+            SimplifiedRoads.SetActive(false);
         }
-        DistantRoads.SetActive(true);
-        SimplifiedRoads.SetActive(false);
     }
 }

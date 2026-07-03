@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 public class MicroscopeScreenSpaceOverlay : MonoBehaviour
@@ -11,8 +10,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     private GameObject Grid;
     private Collider HeadCollider;
     MicroscopeOverlayTrigger trigger;
-    private PostProcessLayer _postProcessLayer;
-    private Canvas _canvas;
 
     [SerializeField] private MicroscopeMonitor MicroscopeMonitor;
 
@@ -26,13 +23,9 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     void Start()
     {
         PlayerCamera = Camera.main;
-        _postProcessLayer = PlayerCamera.GetComponent<PostProcessLayer>();
-
-        _postProcessLayer.enabled = false; // disable post process layer used for vignette effect when not looking into microscope eye pieces to maintain 72 fps
 
         Image = GetComponent<Canvas>().transform.GetComponentInChildren<Image>();
         trigger = transform.parent.GetComponent<MicroscopeOverlayTrigger>();
-        _canvas = GetComponent<Canvas>();
 
         // disable the microscope overlay so the player can see their environment
         PlayerCamera.cullingMask = LayerMask.GetMask(
@@ -58,12 +51,10 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
     private void Update()
     {
-        // canvas' world camera won't be set immidiately for some reason
+        // need to wait a bit before setting fetching the CenterEyeAnchor camera
         if (!CameraSet)
         {
-            if (_canvas.worldCamera != PlayerCamera)
-                _canvas.worldCamera = PlayerCamera;
-            else
+            if (GetComponent<Canvas>().worldCamera = PlayerCamera)
                 CameraSet = true;
         }
 
@@ -100,7 +91,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
     {
         GetComponent<Canvas>().enabled = true;
         OverlayEnabled = true;
-        _postProcessLayer.enabled = true;
 
         // need this to correct water sample seen through microscope's eye pieces while playing on Quest 2, Quest 3 and Quest Pro (positioned too high, but by different amounts)
         float OffsetY = 0f;
@@ -168,8 +158,6 @@ public class MicroscopeScreenSpaceOverlay : MonoBehaviour
 
     public void DisableOverlay()
     {
-        _postProcessLayer.enabled = false;
-
         if (Grid  != null)
             GameObject.Destroy(Grid);
 
