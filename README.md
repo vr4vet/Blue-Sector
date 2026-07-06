@@ -19,7 +19,7 @@ The old BNG package used for the project is obsolete, causing the materials from
 
 ## Getting started
 
-1. Ensure Unity `2021.3.45f2` is installed
+1. Ensure Unity `2023.1.22f1` is installed
 1. `git clone git@github.com:vr4vet/Blue-Sector.git`
 1. Obtain and download [BNG framework](BNG) and put it in the `Assets/` folder
 
