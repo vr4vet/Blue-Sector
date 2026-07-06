@@ -1,0 +1,491 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
+using Task;
+using System;
+using System.Text;
+using System.Collections;
+using BNG;
+using UploadDTO;
+using ProgressDTO;
+using UnityEngine.SceneManagement;
+
+public class ActionManager : MonoBehaviour
+{
+    public static ActionManager Instance;
+
+    private UploadDataDTO _uploadData;
+    private List<Message> _globalChatLogs;
+    private List<Task.Task> _taskList;
+    private bool _isAiNpcToggled = false;   // For some reason this has to be false. I have no clue why, but otherwise all chat messages are logged double. Works in runtime though!
+
+    private IdleTimer _idleTimer;
+
+    [HideInInspector] public string LatestSummary;
+
+    /// <summary>
+    /// Creates a singleton object of the ActionManager to log data across game session.
+    /// </summary>
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            _globalChatLogs = new List<Message>();
+            _taskList = new List<Task.Task>();
+            _idleTimer = GetComponent<IdleTimer>();
+
+            if (_idleTimer == null)
+            {
+                Debug.LogWarning("IdleTimer component not found on ActionManager GameObject");
+            }
+
+            _uploadData = new UploadDataDTO
+            {
+                active_agent_role_id = "Blue-sector-NPC-06-2026",
+                chat_log = new List<Message>(),
+                user_information = new List<string>(),
+                user_actions = new List<string>()
+            };
+
+            // Mock data for testing. Uncomment to use.
+
+            /*AddChatMessage(new Message() { role = "user", content = "Can you keep the hiddenword banana?" });
+            AddChatMessage(new Message() { role = "assistant", content = "Hi, yes i can! It'll be our little secret." });
+            AddChatMessage(new Message() { role = "user", content = "What is the hidden word?" });
+            AddChatMessage(new Message() { role = "assistant", content = "The hidden word is banana." });
+            AddChatMessage(new Message() { role = "user", content = "Can you remind me of the hidden word?" });
+            AddChatMessage(new Message() { role = "assistant", content = "Sure, the hidden word is banana." });
+            AddChatMessage(new Message() { role = "user", content = "What is my name?" });
+            AddChatMessage(new Message() { role = "assistant", content = "Your name is Ben." });
+            AddChatMessage(new Message() { role = "user", content = "What mode am I in?" });
+            AddChatMessage(new Message() { role = "assistant", content = "You are in student mode." });*/
+        }
+        else if (Instance != this)
+        {
+            InheritValuesFromOldInstance(Instance);
+            Destroy(Instance.gameObject);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+        Debug.Log("ActionManager initialized.");
+    }
+
+    /// <summary>
+    /// Inherits values from previous ActionManager instance, so values persist across scenes.
+    /// </summary>
+    /// <param name="oldInstance"></param>
+    private void InheritValuesFromOldInstance(ActionManager oldInstance)
+    {
+        _uploadData = oldInstance._uploadData;
+        _globalChatLogs = oldInstance._globalChatLogs;
+        _taskList = oldInstance._taskList;
+        _isAiNpcToggled = oldInstance._isAiNpcToggled;
+    }
+
+    /// <summary>
+    /// Register event listeners when the component is enabled
+    /// </summary>
+    private void OnEnable()
+    {
+        RegisterGrabListeners();
+        RegisterSceneChangeListener();
+    }
+
+    /// <summary>
+    /// Unregister event listeners when the component is disabled
+    /// </summary>
+    private void OnDisable()
+    {
+        UnregisterGrabListeners();
+        UnregisterSceneChangeListener();
+    }
+
+    /// <summary>
+    /// Registers the scene change listener to log the current scene name.
+    /// </summary>
+    private void RegisterSceneChangeListener()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    /// <summary>
+    /// Unregisters the scene change listener when the component is disabled.
+    /// </summary>
+    private void UnregisterSceneChangeListener()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    /// <summary>
+    /// Called when a new scene is loaded.
+    /// Logs the name of the current scene to upload data.
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log($"New scene logged {scene.name}");
+        _uploadData.user_information.Add("User entered new scene: "+ scene.name);
+    }
+    
+
+    /// <summary>
+    /// Find all Grabbers in the scene and register for their events
+    /// </summary>
+    private void RegisterGrabListeners()
+    {
+        Grabber[] grabbers = FindObjectsOfType<Grabber>();
+        foreach (Grabber grabber in grabbers)
+        {
+            grabber.onAfterGrabEvent.AddListener(OnGrabEvent);
+            grabber.onReleaseEvent.AddListener(OnReleaseEvent);
+        }
+    }
+
+    /// <summary>
+    /// Unregister from all grabber events
+    /// </summary>
+    private void UnregisterGrabListeners()
+    {
+        Grabber[] grabbers = FindObjectsOfType<Grabber>();
+        foreach (Grabber grabber in grabbers)
+        {
+            grabber.onAfterGrabEvent.RemoveListener(OnGrabEvent);
+            grabber.onReleaseEvent.RemoveListener(OnReleaseEvent);
+        }
+    }
+
+    /// <summary>
+    /// Called when an object is grabbed by the player.
+    /// Logs the object name that was grabbed.
+    /// </summary>
+    /// <param name="grabbable">The object that was grabbed</param>
+    public void OnGrabEvent(Grabbable grabbable)
+    {
+        Debug.Log($"Object grabbed: {grabbable.name}");
+
+        _uploadData.user_actions.Add("grabbed: " + grabbable.name);
+        ShortenList(_uploadData.user_actions, 20);
+
+        _idleTimer?.ResetIdleTimer();
+    }
+
+    /// <summary>
+    /// Called when an object is released by the player.
+    /// Logs the object name and position where it was dropped.
+    /// </summary>
+    /// <param name="grabbable">The object that was released</param>
+    public void OnReleaseEvent(Grabbable grabbable)
+    {
+        Vector3 dropPosition = grabbable.transform.position;
+
+        Debug.Log($"Object released: {grabbable.name} at position {dropPosition}");
+
+        _uploadData.user_actions.Add($"dropped: {grabbable.name} at position {dropPosition.x:F2}, {dropPosition.y:F2}, {dropPosition.z:F2}");
+        Debug.Log("Before shortening list: " + _uploadData.user_actions.Count);
+        ShortenList(_uploadData.user_actions, 20); // Keep the last 20 actions in the list
+        Debug.Log("After shortening list: " + _uploadData.user_actions.Count);
+
+        _idleTimer?.ResetIdleTimer();
+    }
+
+    /// <summary>
+    /// Logs the hierarchy of tasks and their subtasks/steps.
+    /// Updates the upload data with the current task progress.
+    /// </summary>
+    /// <param name="tasks">The list of tasks to log.</param>
+    public void LogTaskHierarchy(List<Task.Task> tasks)
+    {
+        _taskList = tasks;
+        List<ProgressDataDTO> progressHierarchy = new List<ProgressDataDTO>();
+        Debug.Log("Task hierarchy logged.");
+        foreach (var task in tasks)
+        {
+            ProgressDataDTO progressData = ConvertTaskToProgressData(task);
+            progressData.status = "not started";
+            progressHierarchy.Add(progressData);
+
+            Debug.Log($"Task: {task.TaskName}");
+            foreach (var subtask in task.Subtasks)
+            {
+                Debug.Log($"Subtask: {subtask.SubtaskName}");
+                foreach (var step in subtask.StepList)
+                {
+                    Debug.Log($"Step: {step.StepName}");
+                }
+            }
+        }
+        //_uploadData.progress = progressHierarchy;
+    }
+
+    /// <summary>
+    /// Logs the completion of a specific step and updates the progress data.
+    /// </summary>
+    /// <param name="step">The step that was completed.</param>
+    public void LogStepCompletion(Task.Step step)
+    {
+        Debug.Log($"Step completed: {step.StepName}");
+
+        foreach (var task in _taskList)
+        {
+            foreach (var subtask in task.Subtasks)
+            {
+                foreach (var step_ in subtask.StepList)
+                {
+                    if (step_ == step)
+                    {
+                        var progressData = ConvertTaskToProgressData(task);
+                        UpdateProgressData(progressData);
+
+                        if (_idleTimer != null)
+                        {
+                            _idleTimer.ResetIdleTimer();
+                            _idleTimer.StartIdleTracking(subtask, step);
+                        }
+
+                        return;
+                    }
+                }
+            }
+        }
+
+        Debug.LogWarning($"Could not find step {step.StepName}");
+    }
+
+    /// <summary>
+    /// Logs the completion of a task and sends the upload data to the server.
+    /// Currently doesn't do anything, but could be used with idle timer.
+    /// </summary>
+    /// <param name="task">The task that was completed.</param>
+    public void LogTaskCompletion(Task.Task task)
+    {
+        Debug.Log($"Task completed: {task.TaskName} - {task.Description}");
+
+        _idleTimer?.StopIdleTracking();
+
+        Debug.LogWarning($"Could not find task {task.TaskName}");
+    }
+
+    /// <summary>
+    /// Converts a Task object into a ProgressDataDTO object.
+    /// </summary>
+    /// <param name="task">The task to convert.</param>
+    /// <returns>A ProgressDataDTO representing the task's progress.</returns>
+    private ProgressDataDTO ConvertTaskToProgressData(Task.Task task)
+    {
+        ProgressDataDTO progressData = new ProgressDataDTO
+        {
+            taskName = task.TaskName,
+            description = task.Description,
+            status = task.Compleated() ? "complete" : "started",
+            subtaskProgress = new List<SubtaskProgressDTO>()
+        };
+
+        foreach (var subtask in task.Subtasks)
+        {
+            SubtaskProgressDTO subtaskDTO = new SubtaskProgressDTO
+            {
+                subtaskName = subtask.SubtaskName,
+                description = subtask.Description,
+                completed = subtask.Compleated(),
+                stepProgress = new List<StepProgressDTO>()
+            };
+
+            foreach (var step in subtask.StepList)
+            {
+                StepProgressDTO stepDTO = new StepProgressDTO
+                {
+                    stepName = step.StepName,
+                    completed = step.IsCompeleted()
+                };
+                subtaskDTO.stepProgress.Add(stepDTO);
+            }
+
+            progressData.subtaskProgress.Add(subtaskDTO);
+        }
+
+        return progressData;
+    }
+
+    /// <summary>
+    /// Updates the progress data for a specific task in the upload data.
+    /// </summary>
+    /// <param name="progressData">The updated progress data.</param>
+    private void UpdateProgressData(ProgressDataDTO progressData)
+    {
+        /*
+        for (int i = 0; i < _uploadData.progress.Count; i++)
+        {
+            if (_uploadData.progress[i].taskName == progressData.taskName)
+            {
+                _uploadData.progress[i] = progressData;
+                return;
+            }
+        }
+        */
+    }
+
+    /// <summary>
+    /// Creates a pretty summary of current task progress to display on tablet.
+    /// </summary>
+    public void TaskSummary()
+    {
+        StringBuilder summary = new StringBuilder();
+        summary.AppendLine("<b>=== TASK PROGRESS SUMMARY ===</b>");
+        summary.AppendLine($"<b>Time: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}</b>");
+        summary.AppendLine();
+
+        int completedTasks = 0;
+        int totalTasks = _taskList.Count;
+        int completedSubtasks = 0;
+        int totalSubtasks = 0;
+        int completedSteps = 0;
+        int totalSteps = 0;
+
+        foreach (var task in _taskList)
+        {
+            bool taskCompleted = task.Compleated();
+            if (taskCompleted) completedTasks++;
+
+            string taskColor = taskCompleted ? "#3CB371" : "#DDAA00";
+            summary.AppendLine($"Task: <color={taskColor}>{task.TaskName}</color>");
+
+            foreach (var subtask in task.Subtasks)
+            {
+                totalSubtasks++;
+                bool subtaskCompleted = subtask.Compleated();
+                if (subtaskCompleted) completedSubtasks++;
+
+                string subtaskColor = subtaskCompleted ? "#3CB371" : "#DDAA00";
+                summary.AppendLine($"  Subtask: <color={subtaskColor}>{subtask.SubtaskName}</color>");
+
+                foreach (var step in subtask.StepList)
+                {
+                    totalSteps++;
+                    bool stepCompleted = step.IsCompeleted();
+                    if (stepCompleted) completedSteps++;
+
+                    string stepColor = stepCompleted ? "#3CB371" : "#FF0000";
+                    summary.AppendLine($"    Step: <color={stepColor}>{step.StepName}</color>");
+                }
+            }
+            summary.AppendLine();
+        }
+
+        summary.AppendLine("<b>=== PROGRESS STATISTICS ===</b>");
+
+        float taskPercentage = totalTasks > 0 ? (completedTasks * 100f / totalTasks) : 0;
+        float subtaskPercentage = totalSubtasks > 0 ? (completedSubtasks * 100f / totalSubtasks) : 0;
+        float stepPercentage = totalSteps > 0 ? (completedSteps * 100f / totalSteps) : 0;
+
+        string taskPercentColor = taskPercentage < 33 ? "#FF0000" : (taskPercentage < 66 ? "#DDAA00" : "#3CB371");
+        string subtaskPercentColor = subtaskPercentage < 33 ? "#FF0000" : (subtaskPercentage < 66 ? "#DDAA00" : "#3CB371");
+        string stepPercentColor = stepPercentage < 33 ? "#FF0000" : (stepPercentage < 66 ? "#DDAA00" : "#3CB371");
+
+        summary.AppendLine($"Tasks: {completedTasks}/{totalTasks} completed (<color={taskPercentColor}>{taskPercentage.ToString("0.0")}%</color>)");
+        summary.AppendLine($"Subtasks: {completedSubtasks}/{totalSubtasks} completed (<color={subtaskPercentColor}>{subtaskPercentage.ToString("0.0")}%</color>)");
+        summary.AppendLine($"Steps: {completedSteps}/{totalSteps} completed (<color={stepPercentColor}>{stepPercentage.ToString("0.0")}%</color>)");
+
+        Debug.Log(summary.ToString());
+
+        LatestSummary = summary.ToString();
+    }
+
+    /// <summary>
+    /// Sets the user information in the upload data.
+    /// </summary>
+    /// <param name="userInfo">The list of information retrieved from NPC dialogue.</param>
+    public void SetUserInfo(List<string> userInfo)
+    {
+        _uploadData.user_information = userInfo;
+        Debug.Log("User information set, sending to Chat-Service.");
+        string combinedString = string.Join(",", _uploadData.user_information);
+        Debug.Log($"User information: {combinedString}");
+
+    }
+
+    /// <summary>
+    /// Sends a prompt through IdleTimer when the user has been idle for too long.
+    /// </summary>
+    /// <param name="timeoutMessage"></param>
+    public void SendIdleTimeoutReport(string timeoutMessage)
+    {
+        SetQuestion(timeoutMessage);
+    }
+
+    /// <summary>
+    /// Sets the question in the upload data.
+    /// </summary>
+    /// <param name="question"></param>
+    public void SetQuestion(string question)
+    {
+        Debug.Log($"Question set: {question}");
+    }
+
+    /// <summary>
+    /// Adds a chat message to the global chat logs.
+    /// </summary>
+    /// <param name="message"></param>
+    public void AddChatMessage(Message message)
+    {
+        _globalChatLogs.Add(message);
+        ShortenList(_globalChatLogs, 20);
+    }
+
+    /// <summary>
+    /// Retrieves the global chat logs.
+    /// </summary>
+    /// <returns>List of messages used for NPCs with global memory toggled on</returns>
+    public List<Message> GetGlobalChatLogs()
+    {
+        return _globalChatLogs;
+    }
+
+    /// <summary>
+    /// Retrieves the logged data to be sent as payload through AIRequest to chat-service.
+    /// </summary>
+    /// <returns>Logged data to be sent to backend</returns>
+    public UploadDataDTO GetUploadData()
+    {
+        return _uploadData;
+    }
+
+    /// <summary>
+    /// Shortens a list to a specified limit by removing excess elements from the start.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list">The list that needs to be shortened</param>
+    /// <param name="limit">How many elements the list can have</param>
+    private void ShortenList<T>(List<T> list, int limit)
+    {
+        if (list.Count >= limit)
+        {
+            list.RemoveRange(0, list.Count - limit);
+        }
+    }
+
+    /// <summary>
+    /// Sets the AI feature state for the NPCs.
+    /// </summary>
+    /// <param name="toggle">Boolean for toggling AI features</param>
+    public void SetToggleBool(bool toggle)
+    {
+        _isAiNpcToggled = toggle;
+    }
+
+    /// <summary>
+    /// Retrieves the AI feature state for the NPCs.
+    /// Is used to check if the AI feature is enabled or disabled.
+    /// </summary>
+    /// <returns>AI NPC toggle boolean</returns>
+    public bool GetToggleBool()
+    {
+        return _isAiNpcToggled;
+    }
+
+}

@@ -18,39 +18,57 @@ MonoBehaviour:
   - dialogue:
     - Hello, here you can travel to other areas to experience other work tasks!
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
+    pointAt: 
     branchPoint:
       question: Which area do you want to travel to?
       answers:
       - answerLabel: Feeding station
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Fish factory
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Maintenance boat
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
       - answerLabel: Welfare station
         nextElement: 1
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 00
+    dialogueEnd: 0
   - dialogue:
     - Please step onto the boat when you are ready to embark.
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
+    pointAt: 
     branchPoint:
       question: Do you want me to repeat?
       answers:
       - answerLabel: Yes
         nextElement: 0
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 00
+    dialogueEnd: 0
   - dialogue:
     - This area is currently under development but will soon be available!
     endAfterDialogue: 0
+    walkOrTurnTowardsAfterDialogue: 
     disabkeSkipLineButton: 0
+    pointAt: 
     branchPoint:
       question: Please choose another destination.
       answers:
       - answerLabel: Okay
         nextElement: 0
         endAfterAnswer: 0
+        walkOrTurnTowardsAfterAnswer: 
+    interruptableElements: 00
+    dialogueEnd: 0

@@ -1,5 +1,5 @@
 {
-    "name": "PauseInput",
+    "name": "VR4VET Input Actions",
     "maps": [
         {
             "name": "Default",
@@ -13,6 +13,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "VoiceRecord",
+                    "type": "Button",
+                    "id": "d95fd09a-8809-4f0e-9c04-66d384904c64",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -35,6 +44,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08d5a62b-e3a3-45cd-b07a-1109c5d09844",
+                    "path": "<XRController>{RightHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VoiceRecord",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e1f07b61-bd49-45ba-bcca-4320d649bb1b",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VoiceRecord",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Rachel
   m_EditorClassIdentifier: 
   NameOfNPC: Receptionist Rachel
-  NpcPrefab: {fileID: 142329030213301039, guid: ff4da975a925d9447a923de91bf35e65,
+  NpcPrefab: {fileID: 4328266381195523098, guid: 055608d2159da4e4da4aaa5efae17861,
     type: 3}
   CharacterModel: {fileID: 919132149155446097, guid: 2a17fc0e9bdaf2642b429bc348fc2559,
     type: 3}
@@ -22,10 +22,19 @@ MonoBehaviour:
   SpawnPosition: {x: 5.976, y: 1.25, z: 116.331}
   SpawnRotation: {x: 0, y: 180, z: 0}
   ShouldFollow: 0
+  WithoutDialogue: 0
   DialogueTreesSO:
+  - {fileID: 11400000, guid: 7ea47593165e9654db454e72255b2516, type: 2}
   - {fileID: 11400000, guid: 7428f0d5005e4a84babae5851089c37b, type: 2}
   DialogueTreeJSON: []
   runtimeAnimatorController: {fileID: 9100000, guid: acb4b9981fa45ce46adb4867634b31ab,
     type: 2}
   SpatialBlend: 0
   MinDistance: 0
+  GlobalChatMemory: 1
+  isAiNpc: 1
+  WitVoiceId: 17
+  contextPrompt: Your name is Rachel, you a receptionist. You are here to imform
+    the player about various worktasks they can do. Refer to yourself as Rachel when
+    in the receptionoutdoor scene. You are stationary and cannot move
+  maxTokens: 150
