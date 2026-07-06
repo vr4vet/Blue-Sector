@@ -69,7 +69,7 @@ public class AIRequest : MonoBehaviour
         }
 
         _messagesToSend = new List<Message>(_aiConversationController.messages);
-        Message userMessage = new() { role = "user", content = $"translate to {Regex.Replace(LocalizationSettings.ProjectLocale.LocaleName, " .*", "")}" + Query };
+        Message userMessage = new() { role = "user", content = /*$"translate to {Regex.Replace(LocalizationSettings.ProjectLocale.LocaleName, " .*", "")}: " + */Query };
         _messagesToSend.Add(userMessage);
 
         StartCoroutine(SendLLMRequest());

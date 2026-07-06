@@ -44,7 +44,7 @@ public class ActionManager : MonoBehaviour
 
             _uploadData = new UploadDataDTO
             {
-                active_agent_role_id = "Blue-sector-NPC-06-2026",
+                active_agent_role_id = "idun-agent1",
                 chat_log = new List<Message>(),
                 user_information = new List<string>(),
                 user_actions = new List<string>()

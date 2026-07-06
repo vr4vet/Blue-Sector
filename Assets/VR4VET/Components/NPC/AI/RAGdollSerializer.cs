@@ -22,7 +22,7 @@ public class RAGRoot
         public string[] context_used;
         public MetaDataClass metadata;
         public string function_call;
-        public string[] function_calls;
+        public function_call[] function_calls;
         public string response;
     }
 [Serializable]
@@ -32,4 +32,11 @@ public class MetaDataClass
     public string agent_name;
     public int num_context_retrieved;
     public int num_progress_items;
+}
+
+[Serializable]
+public class function_call
+{
+    public string name;
+    public string arguments;
 }
