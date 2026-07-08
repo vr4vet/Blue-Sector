@@ -14,9 +14,9 @@ namespace UploadDTO
     [Serializable]
     public class UploadDataDTO
     {
-        public string agent_id = "6a3d0d73e3d056dad668064c"; // The agent name of which to communicate
-        public string active_agent_role_id; // the agent role to use for current query
-        public string access_key = "SSuEKoMZdBBHrGQY60xQw2T7udTla3PmrcG-vd_5HR8="; //RAGdoll agent access key
+        public string agent_id = "6a21869b09b148f9a74e66f4"; // The agent name of which to communicate
+        public string active_role_id; // the agent role to use for current query
+        public string access_key = "<YOUR_KEY_HERE>"; //RAGdoll agent access key
         public List<Message> chat_log; // chat log so far to give the LLM context
         public List<string> user_information;
         public List<string> user_actions;
