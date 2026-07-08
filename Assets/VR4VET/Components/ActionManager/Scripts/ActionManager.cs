@@ -21,6 +21,7 @@ public class ActionManager : MonoBehaviour
 
     private IdleTimer _idleTimer;
 
+
     [HideInInspector] public string LatestSummary;
 
     /// <summary>
@@ -44,11 +45,12 @@ public class ActionManager : MonoBehaviour
 
             _uploadData = new UploadDataDTO
             {
-                active_agent_role_id = "idun-agent1",
+                active_role_id = "idun-agent1",
                 chat_log = new List<Message>(),
                 user_information = new List<string>(),
                 user_actions = new List<string>()
             };
+
 
             // Mock data for testing. Uncomment to use.
 

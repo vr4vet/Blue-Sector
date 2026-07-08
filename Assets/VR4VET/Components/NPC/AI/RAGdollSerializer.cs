@@ -21,8 +21,8 @@ public class RAGRoot
         public string[] accessible_documents;
         public string[] context_used;
         public MetaDataClass metadata;
-        public string function_call;
-        public function_call[] function_calls;
+        public function_call function_call;
+        public string function_calls;
         public string response;
     }
 [Serializable]
@@ -37,6 +37,12 @@ public class MetaDataClass
 [Serializable]
 public class function_call
 {
-    public string name;
-    public string arguments;
+    public string function_name;
+    public CallParameters[] function_parameters;
+}
+
+[Serializable]
+public class CallParameters
+{
+    public string Coords;
 }

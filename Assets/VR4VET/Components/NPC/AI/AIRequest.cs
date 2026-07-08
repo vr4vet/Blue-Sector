@@ -141,14 +141,14 @@ public class AIRequest : MonoBehaviour
                         _aiConversationController.AddMessage(assistantMessage);
 
                         Debug.Log($"AI Response: {sanitizedResponseText}");
-                        /*
-                        if (response.function_call != null)
+                        
+                        if (response.response.function_call.function_name != null)
                         {
-                            Debug.Log($"AIRequest: Function call detected: {response.function_call.function_name}");
-                            ExecuteFunction(response.function_call.function_name, response.function_call.function_parameters);
+                            Debug.Log($"AIRequest: Function call detected: {response.response.function_call.function_name}");
+                            ExecuteFunction(response.response.function_call.function_name, response.response.function_call.function_parameters[0].Coords);
                         }
-                        */
-                        if (response.response.function_call != "teleport")
+                        
+                        if (response.response.function_call.function_name != "teleport")
                         {
                             // Trigger TTS and UI Update
                             HandleSuccessfulResponse(sanitizedResponseText);
@@ -236,22 +236,22 @@ public class AIRequest : MonoBehaviour
     /// </summary>
     /// <param name="functionName"></param>
     /// <param name="parameters"></param>
-    private void ExecuteFunction(string functionName, string[] parameters)
+    private void ExecuteFunction(string functionName, string parameters)
     {
         switch (functionName)
         {
-            case "teleport":
-                string location = parameters[0];
+            case "Teleport":
+                string location = parameters;
                 Debug.Log($"Function case teleport to {location}");
                 TeleportPlayer(location);
                 break;
 
-            case "showObject":
+            /*case "showObject":
                 string objectId = parameters[0];
                 Debug.Log($"Showing object");
-                /*HighlightObject(objectId);*/
-                break;
-
+                HighlightObject(objectId);
+                break;*/
+                
             default:
                 Debug.LogWarning($"Unknown function: {functionName}");
                 break;
