@@ -3,8 +3,10 @@ using ProgressDTO;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Task;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
@@ -22,7 +24,11 @@ public class ActionManager : MonoBehaviour
 
     private IdleTimer _idleTimer;
 
-    [HideInInspector] public UnityEvent<string, CallParameters> FunctionCallEvent;
+    public void FunctionCall(string functionName, CallParameters callParameters)
+    {
+        CallableFunctions[functionName](callParameters);
+    }
+    [SerializeField] public Dictionary<string, Action<CallParameters>> CallableFunctions = new Dictionary<string, Action<CallParameters>>();
     [HideInInspector] public string LatestSummary;
 
     /// <summary>

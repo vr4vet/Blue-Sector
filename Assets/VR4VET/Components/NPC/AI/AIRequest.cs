@@ -242,9 +242,8 @@ public class AIRequest : MonoBehaviour
 
     private void ExecuteFunction(string functionName, CallParameters parameters)
     {
-        ActionManager.Instance.FunctionCallEvent.AddListener(TeleportPlayer);
-
-        ActionManager.Instance.FunctionCallEvent.Invoke(functionName, parameters);
+        ActionManager.Instance.CallableFunctions.Add("Teleport", TeleportPlayer);
+        ActionManager.Instance.FunctionCall(functionName, parameters);
         /*
         switch (functionName)
         {
@@ -272,9 +271,8 @@ public class AIRequest : MonoBehaviour
     /// Teleport the player to another scene using AISceneController.
     /// </summary>
     /// <param name="location"></param>
-    private void TeleportPlayer(string functionName, CallParameters parameters)
+    private void TeleportPlayer(CallParameters parameters)
     {
-        if (functionName != "Teleport") return;
         var location = parameters.Coords;
         Debug.Log($"Teleporting player to {location}");
         AISceneController aiSceneController = GetComponent<AISceneController>();

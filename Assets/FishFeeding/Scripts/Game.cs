@@ -75,8 +75,7 @@ public class Game : MonoBehaviour
         modesClass.OnFinishedLoading += InitializeMode;
 
         ButtonSpawner.OnAnswer += SetLevel;
-        ActionManager.Instance.FunctionCallEvent.AddListener(SetLevel);
-
+        ActionManager.Instance.CallableFunctions.Add("SetLevel", SetLevel);
         m_OnGameStart ??= new UnityEvent();
         m_OnGameEnd ??= new UnityEvent();
     }
@@ -123,9 +122,8 @@ public class Game : MonoBehaviour
         else if (level.Equals("Advanced"))
             modesClass.ChangeTo(1);
     }
-    private void SetLevel(string functionName, CallParameters parameters)
+    private void SetLevel(CallParameters parameters)
     {
-        if (functionName != "SetLevel") return;
         var level = parameters.Difficulty;
             Debug.Log($"Difficulty set to {level}");
         if (level.Equals("Basic"))
