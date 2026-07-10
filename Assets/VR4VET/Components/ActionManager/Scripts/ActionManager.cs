@@ -22,7 +22,7 @@ public class ActionManager : MonoBehaviour
 
     private IdleTimer _idleTimer;
 
-    [HideInInspector] public UnityEvent<string, string> FunctionCallEvent;
+    [HideInInspector] public UnityEvent<string, CallParameters> FunctionCallEvent;
     [HideInInspector] public string LatestSummary;
 
     /// <summary>

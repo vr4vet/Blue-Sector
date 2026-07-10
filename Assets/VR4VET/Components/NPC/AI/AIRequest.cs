@@ -146,7 +146,7 @@ public class AIRequest : MonoBehaviour
                         if (response.response.function_call.function_name != null)
                         {
                             Debug.Log($"AIRequest: Function call detected: {response.response.function_call.function_name}");
-                            ExecuteFunction(response.response.function_call.function_name, response.response.function_call.function_parameters[0].Coords);
+                            ExecuteFunction(response.response.function_call.function_name, response.response.function_call.function_parameters[0]);
                         }
                         
                         if (response.response.function_call.function_name != "teleport")
@@ -240,7 +240,7 @@ public class AIRequest : MonoBehaviour
     /// 
 
 
-    private void ExecuteFunction(string functionName, string parameters)
+    private void ExecuteFunction(string functionName, CallParameters parameters)
     {
         ActionManager.Instance.FunctionCallEvent.AddListener(TeleportPlayer);
 
@@ -272,10 +272,10 @@ public class AIRequest : MonoBehaviour
     /// Teleport the player to another scene using AISceneController.
     /// </summary>
     /// <param name="location"></param>
-    private void TeleportPlayer(string functionName, string location)
+    private void TeleportPlayer(string functionName, CallParameters parameters)
     {
         if (functionName != "Teleport") return;
-
+        var location = parameters.Coords;
         Debug.Log($"Teleporting player to {location}");
         AISceneController aiSceneController = GetComponent<AISceneController>();
         if (aiSceneController != null)

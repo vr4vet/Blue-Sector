@@ -45,4 +45,5 @@ public class function_call
 public class CallParameters
 {
     public string Coords;
+    public string Difficulty;
 }
