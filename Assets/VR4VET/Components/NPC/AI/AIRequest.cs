@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Networking;
 using UploadDTO;
@@ -236,8 +237,15 @@ public class AIRequest : MonoBehaviour
     /// </summary>
     /// <param name="functionName"></param>
     /// <param name="parameters"></param>
+    /// 
+
+
     private void ExecuteFunction(string functionName, string parameters)
     {
+        ActionManager.Instance.FunctionCallEvent.AddListener(TeleportPlayer);
+
+        ActionManager.Instance.FunctionCallEvent.Invoke(functionName, parameters);
+        /*
         switch (functionName)
         {
             case "Teleport":
@@ -246,24 +254,28 @@ public class AIRequest : MonoBehaviour
                 TeleportPlayer(location);
                 break;
 
-            /*case "showObject":
+            case "showObject":
                 string objectId = parameters[0];
                 Debug.Log($"Showing object");
                 HighlightObject(objectId);
-                break;*/
+                break;
                 
             default:
                 Debug.LogWarning($"Unknown function: {functionName}");
                 break;
-        }
+        }*/
     }
+    
+
 
     /// <summary>
     /// Teleport the player to another scene using AISceneController.
     /// </summary>
     /// <param name="location"></param>
-    private void TeleportPlayer(string location)
+    private void TeleportPlayer(string functionName, string location)
     {
+        if (functionName != "Teleport") return;
+
         Debug.Log($"Teleporting player to {location}");
         AISceneController aiSceneController = GetComponent<AISceneController>();
         if (aiSceneController != null)
