@@ -1,14 +1,15 @@
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
-using Task;
-using System;
-using System.Text;
-using System.Collections;
 using BNG;
-using UploadDTO;
 using ProgressDTO;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+using Task;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UploadDTO;
 
 public class ActionManager : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class ActionManager : MonoBehaviour
 
     private IdleTimer _idleTimer;
 
-
+    [HideInInspector] public UnityEvent<string, string> FunctionCallEvent;
     [HideInInspector] public string LatestSummary;
 
     /// <summary>
