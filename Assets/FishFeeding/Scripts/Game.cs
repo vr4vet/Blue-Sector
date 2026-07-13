@@ -259,3 +259,8 @@ public class Game : MonoBehaviour
         ButtonSpawner.OnAnswer -= SetLevel;
     }
 }
+
+public partial class CallParameters
+{
+    public string Difficulty;
+}

@@ -42,8 +42,7 @@ public class function_call
 }
 
 [Serializable]
-public class CallParameters
+public partial class CallParameters
 {
-    public string Coords;
-    public string Difficulty;
+    
 }

@@ -286,3 +286,7 @@ public class AIRequest : MonoBehaviour
         }
     }
 }
+public partial class CallParameters
+{
+    public string Coords;
+}
