@@ -63,7 +63,11 @@ public class DialogueBoxController : MonoBehaviour
 
     // --- Pointing ---
     private bool _isThinking = false; // Flag to track thinking state
-
+    private void dialogueOption(CallParameters parameters)
+    {
+        var option = parameters.Option;
+        Debug.Log($"Chosen option:{option}");
+    }
 
     private void Awake()
     {
@@ -96,6 +100,7 @@ public class DialogueBoxController : MonoBehaviour
         if (_speakButton == null) Debug.LogError("DialogueBoxController: _speakButton not assigned!", this);
         if (holdBToTalkMessage == null) Debug.LogWarning("DialogueBoxController: holdBToTalkMessage not assigned. AI interrupt message won't show.", this);
         if (_restartConversationButton == null) Debug.LogWarning("DialogueBoxController: _restartConversationButton not assigned. AI restart function won't show.", this);
+
 
 
         ResetBox(); // Initial UI state
@@ -382,12 +387,16 @@ public class DialogueBoxController : MonoBehaviour
             yield break;
         }
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
-        TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+        //TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+        SpeakLine(_dialogueText.text);
         _animator.SetBool(_isTalkingHash, true);
         //StartCoroutine(revertToIdleAnimation());
         // Invoke the dialogue changed event
         m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, -1);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
+        isTalkable = true;
+        if (holdBToTalkMessage != null) holdBToTalkMessage.enabled = isTalkable;
+        ActionManager.Instance.CallableFunctions.Add("PromptOptionSelect", dialogueOption);
         while (_answerTriggered == false)
         {
             // Allow exit/restart? For now, only allow answering.

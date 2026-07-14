@@ -49,3 +49,7 @@ public class DialogueTree : ScriptableObject
     }
 #endif // UNITY_EDITOR
 }
+public partial class CallParameters
+{
+    public bool Option;
+}
