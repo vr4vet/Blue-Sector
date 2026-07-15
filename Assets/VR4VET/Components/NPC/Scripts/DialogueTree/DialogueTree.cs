@@ -51,5 +51,5 @@ public class DialogueTree : ScriptableObject
 }
 public partial class CallParameters
 {
-    public bool Option;
+    public int Option;
 }

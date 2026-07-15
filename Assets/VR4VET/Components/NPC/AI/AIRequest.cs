@@ -137,10 +137,7 @@ public class AIRequest : MonoBehaviour
                     {
                         string rawResponseText = response.response.response;
                         string sanitizedResponseText = SanitizeResponse(rawResponseText);
-
-                        Message assistantMessage = new() { role = "assistant", content = sanitizedResponseText };
-                        _aiConversationController.AddMessage(assistantMessage);
-
+                        
                         Debug.Log($"AI Response: {sanitizedResponseText}");
                         
                         if (response.response.function_call.function_name != null)
@@ -149,9 +146,11 @@ public class AIRequest : MonoBehaviour
                             ExecuteFunction(response.response.function_call.function_name, response.response.function_call.function_parameters[0]);
                         }
                         
-                        if (response.response.function_call.function_name != "teleport")
+                        if (response.response.function_call.function_name == null)
                         {
                             // Trigger TTS and UI Update
+                            Message assistantMessage = new() { role = "assistant", content = sanitizedResponseText };
+                            _aiConversationController.AddMessage(assistantMessage);
                             HandleSuccessfulResponse(sanitizedResponseText);
                         }
                         
@@ -242,7 +241,7 @@ public class AIRequest : MonoBehaviour
 
     private void ExecuteFunction(string functionName, CallParameters parameters)
     {
-        ActionManager.Instance.CallableFunctions.Add("Teleport", TeleportPlayer);
+        if(functionName == "Teleport") ActionManager.Instance.CallableFunctions.Add("Teleport", TeleportPlayer);
         ActionManager.Instance.FunctionCall(functionName, parameters);
         /*
         switch (functionName)
