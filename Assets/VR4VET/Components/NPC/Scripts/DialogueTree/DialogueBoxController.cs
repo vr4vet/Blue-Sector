@@ -50,6 +50,7 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] public bool useWitAI = true; // Default to WitAI (set by NPCSpawner based on SO)
     [HideInInspector] public bool isTalkable = false; // Can the player interrupt with voice?
     private Coroutine _thinkingCoroutine; // Reference to the "..." coroutine
+    public bool WaitingForAnswer{get; private set;} = false; //Used to tell whether the NPC is waiting for an answer to a scripted question
 
     // --- Animation Hashes ---
     [HideInInspector] private Animator _animator;
@@ -272,7 +273,7 @@ public class DialogueBoxController : MonoBehaviour
                           currentSection.interruptableElements[i]);
 
             // Show/Hide "Hold B to Talk" message
-            if (holdBToTalkMessage != null) holdBToTalkMessage.enabled = isTalkable;
+            if (holdBToTalkMessage != null && ActionManager.Instance.GetToggleBool()) holdBToTalkMessage.enabled = isTalkable;
 
             // Trigger standard talking animation
             if (_animator != null)
@@ -397,13 +398,18 @@ public class DialogueBoxController : MonoBehaviour
         m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, -1);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
         isTalkable = true;
-        if (holdBToTalkMessage != null) holdBToTalkMessage.enabled = isTalkable;
+        if (holdBToTalkMessage != null && ActionManager.Instance.GetToggleBool())
+        {
+            holdBToTalkMessage.enabled = isTalkable;
+            WaitingForAnswer = true;
+        }
         if(ActionManager.Instance.CallableFunctions.ContainsKey("PromptOptionSelect") == false) ActionManager.Instance.CallableFunctions.Add("PromptOptionSelect", dialogueOption);
         while (_answerTriggered == false)
         {
             // Allow exit/restart? For now, only allow answering.
             yield return null; // Wait for AnswerQuestion() to be called
         }
+        WaitingForAnswer = false;
 
         // --- Process Selected Answer ---
         Answer selectedAnswer = currentSection.branchPoint.answers[_answerIndex];

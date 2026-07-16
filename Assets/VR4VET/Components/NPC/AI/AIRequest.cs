@@ -140,13 +140,13 @@ public class AIRequest : MonoBehaviour
                         
                         Debug.Log($"AI Response: {sanitizedResponseText}");
                         
-                        if (response.response.function_call.function_name != null)
+                        if ((response.response.function_call.function_name != null && !_dialogueBoxController.WaitingForAnswer) || response.response.function_call.function_name == "PromptOptionSelect")
                         {
-                            Debug.Log($"AIRequest: Function call detected: {response.response.function_call.function_name}");
+                                Debug.Log($"AIRequest: Function call detected: {response.response.function_call.function_name}");
                             ExecuteFunction(response.response.function_call.function_name, response.response.function_call.function_parameters[0]);
                         }
                         
-                        if (response.response.function_call.function_name == null)
+                        if (response.response.function_call.function_name == null && !_dialogueBoxController.WaitingForAnswer)
                         {
                             // Trigger TTS and UI Update
                             Message assistantMessage = new() { role = "assistant", content = sanitizedResponseText };
