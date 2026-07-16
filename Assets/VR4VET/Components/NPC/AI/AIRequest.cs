@@ -140,9 +140,14 @@ public class AIRequest : MonoBehaviour
                         
                         Debug.Log($"AI Response: {sanitizedResponseText}");
                         
+                        if (response.response.function_call.function_name != "PromptOptionSelect" && _dialogueBoxController.WaitingForAnswer)
+                        {
+                            StartCoroutine(_dialogueBoxController.DisplayResponse("Sorry, I didn't quite catch that"));
+                        }
+
                         if ((response.response.function_call.function_name != null && !_dialogueBoxController.WaitingForAnswer) || response.response.function_call.function_name == "PromptOptionSelect")
                         {
-                                Debug.Log($"AIRequest: Function call detected: {response.response.function_call.function_name}");
+                            Debug.Log($"AIRequest: Function call detected: {response.response.function_call.function_name}");
                             ExecuteFunction(response.response.function_call.function_name, response.response.function_call.function_parameters[0]);
                         }
                         
