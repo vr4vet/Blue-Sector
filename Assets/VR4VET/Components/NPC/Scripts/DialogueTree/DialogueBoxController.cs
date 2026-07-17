@@ -50,6 +50,7 @@ public class DialogueBoxController : MonoBehaviour
     [HideInInspector] public bool useWitAI = true; // Default to WitAI (set by NPCSpawner based on SO)
     [HideInInspector] public bool isTalkable = false; // Can the player interrupt with voice?
     private Coroutine _thinkingCoroutine; // Reference to the "..." coroutine
+    public bool WaitingForAnswer{get; private set;} = false; //Used to tell whether the NPC is waiting for an answer to a scripted question
 
     // --- Animation Hashes ---
     [HideInInspector] private Animator _animator;
@@ -63,7 +64,13 @@ public class DialogueBoxController : MonoBehaviour
 
     // --- Pointing ---
     private bool _isThinking = false; // Flag to track thinking state
-
+    private void dialogueOption(CallParameters parameters)
+    {
+        var option = parameters.Option;
+        AnswerQuestion(option);
+        StartCoroutine(DisplayResponse());
+        ActionManager.Instance.CallableFunctions.Remove("PromptOptionSelect");
+    }
 
     private void Awake()
     {
@@ -96,6 +103,7 @@ public class DialogueBoxController : MonoBehaviour
         if (_speakButton == null) Debug.LogError("DialogueBoxController: _speakButton not assigned!", this);
         if (holdBToTalkMessage == null) Debug.LogWarning("DialogueBoxController: holdBToTalkMessage not assigned. AI interrupt message won't show.", this);
         if (_restartConversationButton == null) Debug.LogWarning("DialogueBoxController: _restartConversationButton not assigned. AI restart function won't show.", this);
+
 
 
         ResetBox(); // Initial UI state
@@ -199,14 +207,14 @@ public class DialogueBoxController : MonoBehaviour
     public void StartDialogue(DialogueTree dialogueTree, int startSection, string name, int element = 0) // Add element param from new sig
     {
         if (dialogueTree == null) { Debug.LogError("StartDialogue called with null DialogueTree!", this); return; }
-        if (_animator == null) { Debug.LogError("StartDialogue called but Animator is null!", this); return; }
+        //if (_animator == null) { Debug.LogError("StartDialogue called but Animator is null!", this); return; }
 
         dialogueIsActive = true;
         dialogueEnded = false;
         isTalkable = false; // Reset talkable state
         timesEnded = 0; // Reset end counter
 
-        _animator.SetBool(_hasNewDialogueOptionsHash, false); // Stop "new dialogue" animation
+        if (_animator != null) _animator.SetBool(_hasNewDialogueOptionsHash, false); // Stop "new dialogue" animation
 
         ResetBox(); // Clear previous buttons/state
         _dialogueBox.SetActive(true); // Show dialogue UI container
@@ -265,7 +273,7 @@ public class DialogueBoxController : MonoBehaviour
                           currentSection.interruptableElements[i]);
 
             // Show/Hide "Hold B to Talk" message
-            if (holdBToTalkMessage != null) holdBToTalkMessage.enabled = isTalkable;
+            if (holdBToTalkMessage != null && ActionManager.Instance.GetToggleBool()) holdBToTalkMessage.enabled = isTalkable;
 
             // Trigger standard talking animation
             if (_animator != null)
@@ -382,17 +390,26 @@ public class DialogueBoxController : MonoBehaviour
             yield break;
         }
         _dialogueText.text = dialogueTree.sections[section].branchPoint.question;
-        TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
-        _animator.SetBool(_isTalkingHash, true);
+        //TTSSpeaker.GetComponent<TTSSpeaker>().Speak(_dialogueText.text);
+        SpeakLine(_dialogueText.text);
+        if (_animator != null) _animator.SetBool(_isTalkingHash, true);
         //StartCoroutine(revertToIdleAnimation());
         // Invoke the dialogue changed event
         m_DialogueChanged.Invoke(transform.name, dialogueTreeRestart.name, section, -1);
         ShowAnswers(dialogueTree.sections[section].branchPoint);
+        isTalkable = true;
+        if (holdBToTalkMessage != null && ActionManager.Instance.GetToggleBool())
+        {
+            holdBToTalkMessage.enabled = isTalkable;
+            WaitingForAnswer = true;
+        }
+        if(ActionManager.Instance.CallableFunctions.ContainsKey("PromptOptionSelect") == false) ActionManager.Instance.CallableFunctions.Add("PromptOptionSelect", dialogueOption);
         while (_answerTriggered == false)
         {
             // Allow exit/restart? For now, only allow answering.
             yield return null; // Wait for AnswerQuestion() to be called
         }
+        WaitingForAnswer = false;
 
         // --- Process Selected Answer ---
         Answer selectedAnswer = currentSection.branchPoint.answers[_answerIndex];
@@ -522,8 +539,26 @@ public class DialogueBoxController : MonoBehaviour
         Debug.Log("DialogueBoxController: Re-enabled talkable state after dynamic query end.");
     }
 
+    public IEnumerator DisplayResponse()
+    {
+        // Stop thinking mode first
+        _isThinking = false;
+
+        // Stop coroutine if it exists
+        if (_thinkingCoroutine != null)
+        {
+            StopCoroutine(_thinkingCoroutine);
+            _thinkingCoroutine = null;
+        }
+
+        // Ensure the dialogue UI is active
+        _dialogueBox.SetActive(true);
+        if (_dialogueCanvas != null) _dialogueCanvas.SetActive(true);
+        yield return null;
+
+    }
     // Displays AI response text in the box
-    public IEnumerator DisplayResponse(string response)
+    public IEnumerator DisplayResponse(string response, bool restartTree = true)
     {
         Debug.Log($"DisplayResponse called with response: '{response}'");
 
@@ -572,10 +607,16 @@ public class DialogueBoxController : MonoBehaviour
                 catch { /* Ignore animation errors */ }
             }
 
-            // Show restart button
-            if (_restartConversationButton != null)
-                _restartConversationButton.SetActive(true);
+            if (restartTree)
+            {
 
+            }
+            else
+            {
+                // Show next line button
+                if (_skipLineButton != null)
+                    _skipLineButton.SetActive(true);
+            }
             // Enable talkable state
             isTalkable = true;
             if (holdBToTalkMessage != null)
@@ -725,7 +766,7 @@ public class DialogueBoxController : MonoBehaviour
             // remove the buttons immediately (using NEW ButtonSpawner)
             if (buttonSpawner != null) buttonSpawner.removeAllButtons();
             else { Debug.LogError("ButtonSpawner reference is null in AnswerQuestion!", this); }
-
+            Debug.Log($"Answered option:{_answerIndex}");
             // Stop TTS if it was the question being spoken
             StopSpeech();
         }
