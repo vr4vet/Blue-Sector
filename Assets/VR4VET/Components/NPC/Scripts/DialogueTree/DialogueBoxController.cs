@@ -558,7 +558,7 @@ public class DialogueBoxController : MonoBehaviour
 
     }
     // Displays AI response text in the box
-    public IEnumerator DisplayResponse(string response)
+    public IEnumerator DisplayResponse(string response, bool restartTree = true)
     {
         Debug.Log($"DisplayResponse called with response: '{response}'");
 
@@ -607,10 +607,16 @@ public class DialogueBoxController : MonoBehaviour
                 catch { /* Ignore animation errors */ }
             }
 
-            // Show restart button
-            if (_restartConversationButton != null)
-                _restartConversationButton.SetActive(true);
+            if (restartTree)
+            {
 
+            }
+            else
+            {
+                // Show next line button
+                if (_skipLineButton != null)
+                    _skipLineButton.SetActive(true);
+            }
             // Enable talkable state
             isTalkable = true;
             if (holdBToTalkMessage != null)
